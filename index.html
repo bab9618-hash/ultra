@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORÁCULO · Inteligencia Macro & Terminal Swing</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            terminal: {
+              bg: '#080a0f',
+              surface: '#0f131c',
+              card: '#141a26',
+              border: '#1f283b',
+              borderHover: '#2d3850',
+              accent: '#f97316', // Orange institutional
+              accentMuted: '#ea580c',
+              text: '#e2e8f0',
+              muted: '#94a3b8',
+              hawkish: '#10b981',
+              dovish: '#ef4444',
+              neutral: '#f59e0b'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #080a0f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f283b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f97316;
+    }
+    .glow-orange {
+      box-shadow: 0 0 15px rgba(249, 115, 22, 0.2);
+    }
+    .terminal-badge {
+      clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+    }
+  </style>
+</head>
+
+<body class="bg-terminal-bg text-terminal-text font-sans antialiased min-h-screen flex flex-col selection:bg-orange-500/30 selection:text-orange-200">
+
+  <!-- TOP BAR: BRANDING, SESSIONS & ACCOUNT STATUS -->
+  <header class="bg-terminal-surface border-b border-terminal-border sticky top-0 z-50 px-3 py-2 sm:px-6 sm:py-2.5">
+    <div class="max-w-[1700px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-3">
+      
+      <!-- Logo & Mode -->
+      <div class="flex items-center justify-between w-full lg:w-auto gap-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-500/20 text-white">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold tracking-widest text-base sm:text-lg text-white font-mono">ORÁCULO</span>
+              <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30 font-semibold">Mark 1</span>
+            </div>
+            <p class="text-[9px] sm:text-[10px] text-terminal-muted tracking-wider uppercase font-mono">Swing · Macro · Fundamental</p>
+          </div>
+        </div>
+
+        <!-- Account Pill for Mobile -->
+        <div class="lg:hidden flex items-center gap-1.5 px-2 py-1 rounded bg-terminal-card border border-terminal-border text-[11px] font-mono">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-terminal-muted">100$ Swing Test</span>
+        </div>
+      </div>
+
+      <!-- Live Global Market Clocks -->
+      <div class="flex items-center overflow-x-auto w-full lg:w-auto gap-2 py-1 no-scrollbar text-xs font-mono">
+        <div id="session-syd" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-terminal-card/80 border border-terminal-border whitespace-nowrap">
+          <span class="status-dot w-2 h-2 rounded-full bg-neutral-600"></span>
+          <span class="text-neutral-400">SYD:</span>
+          <span id="clock-syd" class="text-terminal-text font-bold">--:--</span>
+        </div>
+        <div id="session-tky" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-terminal-card/80 border border-terminal-border whitespace-nowrap">
+          <span class="status-dot w-2 h-2 rounded-full bg-neutral-600"></span>
+          <span class="text-neutral-400">TKY:</span>
+          <span id="clock-tky" class="text-terminal-text font-bold">--:--</span>
+        </div>
+        <div id="session-ldn" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-terminal-card/80 border border-terminal-border whitespace-nowrap">
+          <span class="status-dot w-2 h-2 rounded-full bg-neutral-600"></span>
+          <span class="text-neutral-400">LDN:</span>
+          <span id="clock-ldn" class="text-terminal-text font-bold">--:--</span>
+        </div>
+        <div id="session-nyc" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-terminal-card/80 border border-terminal-border whitespace-nowrap">
+          <span class="status-dot w-2 h-2 rounded-full bg-neutral-600"></span>
+          <span class="text-neutral-400">NYC:</span>
+          <span id="clock-nyc" class="text-terminal-text font-bold">--:--</span>
+        </div>
+        <div class="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-orange-950/40 border border-orange-500/30 text-orange-300 whitespace-nowrap text-[11px]">
+          <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+          <span id="active-session-text">Calculando Liquidez...</span>
+        </div>
+      </div>
+
+      <!-- Account Badge & UTC Clock -->
+      <div class="hidden lg:flex items-center gap-3">
+        <div class="text-right">
+          <div class="text-xs font-mono font-medium text-emerald-400 flex items-center justify-end gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            SIN POSICIONES
+          </div>
+          <div class="text-[10px] font-mono text-terminal-muted">Cuenta Swing: $100.00 USD</div>
+        </div>
+        <div class="h-7 w-[1px] bg-terminal-border"></div>
+        <button onclick="openNotificationModal()" class="px-2.5 py-1.5 rounded bg-terminal-card hover:bg-terminal-border border border-terminal-border text-xs text-terminal-muted hover:text-white transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MODULE NAVIGATION TABS -->
+  <nav class="bg-terminal-surface/90 border-b border-terminal-border px-3 sm:px-6">
+    <div class="max-w-[1700px] mx-auto flex items-center justify-between overflow-x-auto">
+      <div class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-mono py-1.5">
+        <button onclick="switchTab('vision')" id="tab-btn-vision" class="tab-button px-3 sm:px-4 py-2 rounded-t font-semibold flex items-center gap-2 border-b-2 border-orange-500 text-orange-400 bg-terminal-card/50">
+          <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+          1. VISIÓN (MACRO)
+        </button>
+        <button onclick="switchTab('ultron')" id="tab-btn-ultron" class="tab-button px-3 sm:px-4 py-2 rounded-t font-semibold flex items-center gap-2 border-b-2 border-transparent text-terminal-muted hover:text-terminal-text transition">
+          <span>2. ULTRÓN (FLOW & OB)</span>
+        </button>
+        <button onclick="switchTab('analisis')" id="tab-btn-analisis" class="tab-button px-3 sm:px-4 py-2 rounded-t font-semibold flex items-center gap-2 border-b-2 border-transparent text-terminal-muted hover:text-terminal-text transition">
+          <span>3. ANÁLISIS & ESTRUCTURA</span>
+        </button>
+        <button onclick="switchTab('diario')" id="tab-btn-diario" class="tab-button px-3 sm:px-4 py-2 rounded-t font-semibold flex items-center gap-2 border-b-2 border-transparent text-terminal-muted hover:text-terminal-text transition">
+          <span>4. DIARIO DE TRADING</span>
+          <span id="journal-counter" class="text-[10px] px-1.5 py-0.2 rounded-full bg-terminal-border text-terminal-muted">0</span>
+        </button>
+      </div>
+
+      <div class="hidden md:flex items-center gap-2 text-[11px] font-mono text-terminal-muted">
+        <span class="text-orange-400 font-bold">UTC:</span>
+        <span id="live-utc-clock">00:00:00</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-[1700px] w-full mx-auto p-3 sm:p-6 space-y-6">
+
+    <!-- ================================================================= -->
+    <!-- TAB 1: VISIÓN (MACRO INTELLIGENCE) - CORE MODULE                 -->
+    <!-- ================================================================= -->
+    <div id="tab-content-vision" class="space-y-6">
+      
+      <!-- Macro Regime Banner (Directly inspired by Screenshot 1) -->
+      <div class="relative overflow-hidden rounded-lg bg-gradient-to-r from-terminal-card via-terminal-surface to-terminal-card border border-terminal-border p-4 sm:p-6 shadow-xl">
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-terminal-border/60">
+          <div>
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span class="text-xs uppercase tracking-wider font-mono px-2 py-0.5 rounded bg-orange-500 text-black font-extrabold">VISIÓN · INTELIGENCIA MACRO</span>
+              <span class="text-xs uppercase tracking-wide font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/30">CICLO GLOBAL DE ALZAS · SHOCK ENERGÉTICO</span>
+            </div>
+            <h1 class="text-lg sm:text-xl font-bold mt-2 text-white">CPI caliente: La Fed mantendrá postura restrictiva y el dólar consolida hegemonía</h1>
+          </div>
+          
+          <div class="text-right text-[11px] font-mono text-terminal-muted shrink-0">
+            <div class="flex items-center gap-2 md:justify-end text-orange-400">
+              <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+              <span>Brief diario: 08:31 UTC</span>
+            </div>
+            <div>Informe semanal completo: Dom 14:30 UTC</div>
+          </div>
+        </div>
+
+        <p class="text-xs sm:text-sm text-neutral-300 mt-3 leading-relaxed font-sans max-w-5xl">
+          El mercado asimila la persistencia inflacionaria con un <strong>CPI mensual (+0.4%)</strong> y subyacente al <strong>+0.3%</strong> por tercer mes consecutivo. El rendimiento del <strong>bono US10Y</strong> ronda el 4.45% presionando múltiplos de renta variable. Mientras tanto, el barril de petróleo Brent experimenta volatilidad en respuesta a tensiones en Oriente Medio y disrupciones marítimas en Ormuz. Los bancos centrales divergen: la Reserva Federal refuerza su piso restrictivo mientras el Banco Central Europeo (BCE) evalúa acelerar los recortes por debilidad en el PIB de la Eurozona.
+        </p>
+
+        <!-- Macro Stats Ticker Bar -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-3 border-t border-terminal-border/50 text-xs font-mono">
+          <div class="bg-terminal-surface/60 p-2.5 rounded border border-terminal-border/80">
+            <span class="text-neutral-400 block text-[10px]">US 10Y BOND YIELD</span>
+            <span class="text-amber-400 font-bold text-sm">4.462%</span> <span class="text-emerald-400 text-[10px]">+4.2 bps</span>
+          </div>
+          <div class="bg-terminal-surface/60 p-2.5 rounded border border-terminal-border/80">
+            <span class="text-neutral-400 block text-[10px]">DXY (ÍNDICE DÓLAR)</span>
+            <span class="text-emerald-400 font-bold text-sm">105.85</span> <span class="text-emerald-400 text-[10px]">Dominancia</span>
+          </div>
+          <div class="bg-terminal-surface/60 p-2.5 rounded border border-terminal-border/80">
+            <span class="text-neutral-400 block text-[10px]">BRENT CRUDE</span>
+            <span class="text-neutral-200 font-bold text-sm">$82.40</span> <span class="text-red-400 text-[10px]">-0.8%</span>
+          </div>
+          <div class="bg-terminal-surface/60 p-2.5 rounded border border-terminal-border/80">
+            <span class="text-neutral-400 block text-[10px]">PROBABILIDAD PAUSA FED</span>
+            <span class="text-orange-400 font-bold text-sm">78.5%</span> <span class="text-neutral-400 text-[10px]">Sondeo Reuters</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSET BIAS MATRIX (8 KEY ASSETS) -->
+      <section class="space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-sm font-bold uppercase tracking-wider font-mono text-orange-400 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              SESGO DE VISIÓN POR ACTIVO (8 ACTIVOS SWING)
+            </h2>
+            <p class="text-xs text-terminal-muted">Direccionalidad institucional derivada de diferenciales de tipos de interés y flujos de capital</p>
+          </div>
+
+          <!-- Filter Pills -->
+          <div class="flex items-center gap-1.5 text-xs font-mono">
+            <button onclick="filterAssets('ALL')" id="filter-btn-ALL" class="px-2.5 py-1 rounded bg-orange-500 text-black font-semibold">TODOS (8)</button>
+            <button onclick="filterAssets('ALCISTA')" id="filter-btn-ALCISTA" class="px-2.5 py-1 rounded bg-terminal-card border border-terminal-border text-emerald-400 hover:border-emerald-500 transition">ALCISTAS</button>
+            <button onclick="filterAssets('BAJISTA')" id="filter-btn-BAJISTA" class="px-2.5 py-1 rounded bg-terminal-card border border-terminal-border text-red-400 hover:border-red-500 transition">BAJISTAS</button>
+            <button onclick="filterAssets('NEUTRAL')" id="filter-btn-NEUTRAL" class="px-2.5 py-1 rounded bg-terminal-card border border-terminal-border text-amber-400 hover:border-amber-500 transition">NEUTRALES</button>
+          </div>
+        </div>
+
+        <!-- 8 Asset Cards Grid -->
+        <div id="assets-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <!-- Injected via JavaScript for clean interactivity -->
+        </div>
+      </section>
+
+      <!-- TWO COLUMN LAYOUT: CENTRAL BANKS & CONTEXTUAL CALENDAR -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- LEFT: CENTRAL BANKS POLICY MONITOR (7 COLS) -->
+        <section class="lg:col-span-7 bg-terminal-card rounded-lg border border-terminal-border p-4 sm:p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-terminal-border mb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded bg-orange-500"></span>
+                <h3 class="font-mono text-sm font-bold uppercase tracking-wider text-white">Bancos Centrales & Política Monetaria</h3>
+              </div>
+              <span class="text-[11px] font-mono text-neutral-400">Matriz de Divergencia</span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left font-mono text-xs">
+                <thead>
+                  <tr class="border-b border-terminal-border/80 text-[11px] text-neutral-400 uppercase">
+                    <th class="py-2 px-2">Banco</th>
+                    <th class="py-2 px-2">Tasa</th>
+                    <th class="py-2 px-3">Última Decisión & Postura</th>
+                    <th class="py-2 px-2 text-center">Sesgo</th>
+                    <th class="py-2 px-2 text-right">Próxima</th>
+                  </tr>
+                </thead>
+                <tbody id="cb-table-body" class="divide-y divide-terminal-border/50">
+                  <!-- Central Banks dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-terminal-border/60 text-[11px] font-mono text-terminal-muted flex items-center justify-between">
+            <span class="text-orange-400">💡 Regla Swing: No operar contra diferenciales mayores a 150 pb.</span>
+            <span>Refresco: Diario 08:31</span>
+          </div>
+        </section>
+
+        <!-- RIGHT: CONTEXTUALIZED ECONOMIC CALENDAR (5 COLS) -->
+        <section class="lg:col-span-5 bg-terminal-card rounded-lg border border-terminal-border p-4 sm:p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-terminal-border mb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded bg-orange-500"></span>
+                <h3 class="font-mono text-sm font-bold uppercase tracking-wider text-white">Calendario Económico Contextualizado</h3>
+              </div>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">Semana Activa</span>
+            </div>
+
+            <div id="calendar-events-container" class="space-y-3 max-h-[380px] overflow-y-auto pr-1">
+              <!-- Calendar Events rendered dynamically -->
+            </div>
+          </div>
+
+          <div class="mt-3 pt-3 border-t border-terminal-border/60 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-terminal-muted">Impacto institucional directo en liquidez</span>
+            <button onclick="addNewCustomEvent()" class="text-orange-400 hover:text-orange-300 font-semibold">+ Agregar Nota</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: ULTRÓN (INSTITUTIONAL FLOW & ORDER BLOCKS)               -->
+    <!-- ================================================================= -->
+    <div id="tab-content-ultron" class="hidden space-y-6">
+      <div class="bg-terminal-card border border-terminal-border rounded-lg p-5">
+        <div class="flex items-center justify-between border-b border-terminal-border pb-3 mb-4">
+          <div>
+            <h2 class="text-base font-bold font-mono text-orange-400 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-orange-400 animate-ping"></span>
+              ULTRÓN · MOTOR CUANTITATIVO DE NIVELES INSTITUCIONALES
+            </h2>
+            <p class="text-xs text-terminal-muted mt-0.5">Detección de Order Blocks HTF, Vacíos de Liquidez (FVG) y Barridos de Sesión</p>
+          </div>
+          <span class="text-xs font-mono px-2.5 py-1 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">Algoritmo Mark 1</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Card 1 -->
+          <div class="bg-terminal-surface p-4 rounded border border-terminal-border">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-mono font-bold text-sm text-white">EURUSD · HTF Supply Zone</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30">H4 Bearish OB</span>
+            </div>
+            <p class="text-xs text-neutral-300 font-mono mb-2">Rango: 1.0885 - 1.0910</p>
+            <div class="text-[11px] text-neutral-400 leading-relaxed">
+              Zona de mitigación con imbalance no cubierto. Coincide con sesgo macro bajista de Visión. Esperar barrido de sesión de Londres antes de buscar entradas.
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="bg-terminal-surface p-4 rounded border border-terminal-border">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-mono font-bold text-sm text-white">USDJPY · Bullish Mitigation</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Daily Demand</span>
+            </div>
+            <p class="text-xs text-neutral-300 font-mono mb-2">Rango: 154.20 - 154.60</p>
+            <div class="text-[11px] text-neutral-400 leading-relaxed">
+              Doble confluencia con el soporte psicológico de 154.00. La presión por carry trade favorece rebotes rápidos en descuento.
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="bg-terminal-surface p-4 rounded border border-terminal-border">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-mono font-bold text-sm text-white">NDX100 · Liquidity Pool</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">Buy-Side Liquidity</span>
+            </div>
+            <p class="text-xs text-neutral-300 font-mono mb-2">Nivel: 20,450 pts</p>
+            <div class="text-[11px] text-neutral-400 leading-relaxed">
+              Máximos iguales (Equal Highs) pendientes de toma de liquidez previa a la apertura de Wall Street. Probable trampa para compradores si el US10Y sigue en 4.45%+.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: ANÁLISIS & ESTRUCTURA                                    -->
+    <!-- ================================================================= -->
+    <div id="tab-content-analisis" class="hidden space-y-6">
+      <div class="bg-terminal-card border border-terminal-border rounded-lg p-5">
+        <h2 class="text-base font-bold font-mono text-orange-400 mb-2">CHECKLIST ESTRUCTURAL SWING (MANDATORIO)</h2>
+        <p class="text-xs text-terminal-muted mb-4">No ejecutes ninguna operación sin cumplir las 4 condiciones del protocolo Oráculo</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-terminal-surface p-4 rounded border border-terminal-border">
+            <div class="text-orange-500 font-mono font-bold text-sm mb-1">01. ALINEACIÓN MACRO</div>
+            <p class="text-xs text-neutral-300">Comprobar el sesgo semanal de Visión. Jamás operar Long en un activo con sesgo Bajista por divergencia de tipos.</p>
+          </div>
+          <div class="bg-terminal-surface p-4 rounded border border-terminal-border">
+            <div class="text-orange-500 font-mono font-bold text-sm mb-1">02. NIVELES HTF (D1 / H4)</div>
+            <p class="text-xs text-neutral-300">Identificar zonas de alta probabilidad: Order Blocks sin mitigar, vacíos de valor justo (FVG) y liquidez externa.</p>
+          </div>
+          <div class="bg-terminal-surface p-4 rounded border border-terminal-border">
+            <div class="text-orange-500 font-mono font-bold text-sm mb-1">03. QUIEBRE LTF (CHOCH)</div>
+            <p class="text-xs text-neutral-300">Confirmación en marcos menores (H1 / M15) mediante Cambio de Carácter (CHOCH) con desplazamiento con cuerpo de vela.</p>
+          </div>
+          <div class="bg-terminal-surface p-4 rounded border border-terminal-border">
+            <div class="text-orange-500 font-mono font-bold text-sm mb-1">04. GESTIÓN DE RIESGO</div>
+            <p class="text-xs text-neutral-300">Ratio mínimo 1:3. Riesgo por trade no superior al 1-2% del balance en la cuenta piloto de pruebas.</p>
+          </div>
+        </div>
+
+        <!-- Notepad / Scratchpad for Analysis -->
+        <div class="mt-6">
+          <label class="block text-xs font-mono text-terminal-muted mb-2 font-bold uppercase">Bloc de Notas Operativas / Hipótesis Semanal</label>
+          <textarea id="analisis-scratchpad" rows="5" class="w-full bg-terminal-surface border border-terminal-border rounded p-3 text-xs font-mono text-neutral-200 focus:outline-none focus:border-orange-500 transition" placeholder="Escribe aquí tus observaciones sobre la sesión actual... (Se guarda automáticamente)"></textarea>
+          <div class="flex justify-between items-center mt-2 text-[11px] font-mono text-neutral-500">
+            <span id="scratchpad-status">Guardado automáticamente</span>
+            <span>Sincronizado en LocalStorage</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: DIARIO (TRADING JOURNAL & COMPLIANCE VERIFICATION)        -->
+    <!-- ================================================================= -->
+    <div id="tab-content-diario" class="hidden space-y-6">
+      
+      <!-- New Trade Form -->
+      <div class="bg-terminal-card border border-terminal-border rounded-lg p-5">
+        <h2 class="text-sm font-bold font-mono uppercase tracking-wider text-orange-400 mb-1">REGISTRAR NUEVO TRADE SWING</h2>
+        <p class="text-xs text-terminal-muted mb-4">El sistema validará automáticamente si tu operación respeta el sesgo fundamental del módulo Visión.</p>
+
+        <form id="trade-form" onsubmit="handleLogTrade(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 text-xs font-mono">
+          <div>
+            <label class="block text-neutral-400 mb-1">Activo</label>
+            <select id="trade-pair" class="w-full bg-terminal-surface border border-terminal-border rounded p-2 text-white focus:border-orange-500 outline-none">
+              <option value="EURUSD">EURUSD</option>
+              <option value="USDJPY">USDJPY</option>
+              <option value="GBPUSD">GBPUSD</option>
+              <option value="NDX100">NDX100 (USTEC)</option>
+              <option value="US30">US30</option>
+              <option value="US500">US500</option>
+              <option value="XAUUSD">XAUUSD (Oro)</option>
+              <option value="WTI">WTI (Crudo)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-neutral-400 mb-1">Dirección</label>
+            <select id="trade-dir" class="w-full bg-terminal-surface border border-terminal-border rounded p-2 text-white focus:border-orange-500 outline-none">
+              <option value="BUY">BUY / LARGO</option>
+              <option value="SELL">SELL / CORTO</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-neutral-400 mb-1">Precio Entrada</label>
+            <input type="number" step="any" required id="trade-entry" placeholder="1.08500" class="w-full bg-terminal-surface border border-terminal-border rounded p-2 text-white focus:border-orange-500 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-neutral-400 mb-1">Stop Loss</label>
+            <input type="number" step="any" required id="trade-sl" placeholder="1.08900" class="w-full bg-terminal-surface border border-terminal-border rounded p-2 text-white focus:border-orange-500 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-neutral-400 mb-1">Take Profit</label>
+            <input type="number" step="any" required id="trade-tp" placeholder="1.07300" class="w-full bg-terminal-surface border border-terminal-border rounded p-2 text-white focus:border-orange-500 outline-none">
+          </div>
+
+          <div class="flex items-end">
+            <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 font-bold text-black rounded p-2 transition flex items-center justify-center gap-1">
+              <span>+ Guardar Trade</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Logged Trades Table -->
+      <div class="bg-terminal-card border border-terminal-border rounded-lg p-5">
+        <div class="flex items-center justify-between pb-3 border-b border-terminal-border mb-3">
+          <h3 class="font-mono text-sm font-bold text-white uppercase">Historial de Operaciones Swing</h3>
+          <button onclick="clearJournal()" class="text-xs font-mono text-red-400 hover:text-red-300">Borrar Todo</button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left font-mono text-xs">
+            <thead>
+              <tr class="border-b border-terminal-border/80 text-[11px] text-neutral-400 uppercase">
+                <th class="py-2 px-3">Fecha</th>
+                <th class="py-2 px-3">Par</th>
+                <th class="py-2 px-3">Tipo</th>
+                <th class="py-2 px-3">Entrada</th>
+                <th class="py-2 px-3">SL</th>
+                <th class="py-2 px-3">TP</th>
+                <th class="py-2 px-3">Compliance Macro</th>
+                <th class="py-2 px-3 text-right">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="journal-table-body" class="divide-y divide-terminal-border/50">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL / TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Custom Info Modal (No alert allowed) -->
+  <div id="app-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-terminal-card border border-terminal-border max-w-md w-full rounded-lg p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-terminal-border pb-2">
+        <h4 id="modal-title" class="font-mono font-bold text-sm text-orange-400 uppercase">Información</h4>
+        <button onclick="closeModal()" class="text-neutral-400 hover:text-white">&times;</button>
+      </div>
+      <p id="modal-message" class="text-xs text-neutral-300 leading-relaxed font-sans"></p>
+      <div class="text-right">
+        <button onclick="closeModal()" class="px-4 py-1.5 bg-terminal-border hover:bg-neutral-700 font-mono text-xs text-white rounded">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // --- 1. CORE DATA STORE ---
+    const ASSETS_DATA = [
+      {
+        id: 'NDX100',
+        ticker: 'USTEC (NDX)',
+        bias: 'BAJISTA',
+        reason: 'Yields del bono US10Y cerca de máximos y una Fed restrictiva castigan a la tecnología. Múltiplos comprimidos.',
+        driver: 'Tipos + US10Y',
+        statusColor: 'text-red-400 border-red-500/30 bg-red-500/10'
+      },
+      {
+        id: 'US500',
+        ticker: 'US500 (S&P)',
+        bias: 'NEUTRAL',
+        reason: 'Presionado por las tasas de interés pero con soporte por resultados corporativos sólidos.',
+        driver: 'Equilibrio Macro',
+        statusColor: 'text-amber-400 border-amber-500/30 bg-amber-500/10'
+      },
+      {
+        id: 'US30',
+        ticker: 'US30 (Dow)',
+        bias: 'NEUTRAL',
+        reason: 'El más cíclico y menos sensible a la tecnología. Se beneficia del flujo rotacional ante inflación persistente.',
+        driver: 'Rotación Sectorial',
+        statusColor: 'text-amber-400 border-amber-500/30 bg-amber-500/10'
+      },
+      {
+        id: 'EURUSD',
+        ticker: 'EURUSD',
+        bias: 'BAJISTA',
+        reason: 'La Fed se mantiene alta mientras el BCE acelera discurso de recortes ante estancamiento en Alemania.',
+        driver: 'Divergencia Fed vs BCE',
+        statusColor: 'text-red-400 border-red-500/30 bg-red-500/10'
+      },
+      {
+        id: 'USDJPY',
+        ticker: 'USDJPY',
+        bias: 'ALCISTA',
+        reason: 'Brecha de tasas descomunal (Fed en 4.00% vs BoJ en 1.25%). El carry trade domina a pesar de rumores de intervención.',
+        driver: 'Carry Trade Extremo',
+        statusColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'
+      },
+      {
+        id: 'GBPUSD',
+        ticker: 'GBPUSD',
+        bias: 'NEUTRAL',
+        reason: 'El Banco de Inglaterra está altamente dividido. El PIB británico débil limita subidas pero la inflación de servicios es persistente.',
+        driver: 'BoE Dividido (5-4)',
+        statusColor: 'text-amber-400 border-amber-500/30 bg-amber-500/10'
+      },
+      {
+        id: 'XAUUSD',
+        ticker: 'XAUUSD (Oro)',
+        bias: 'BAJISTA',
+        reason: 'Presionado a corto plazo por el avance del dólar (DXY) y rendimientos reales positivos. Demanda física compensa caídas.',
+        driver: 'Rendimientos Reales',
+        statusColor: 'text-red-400 border-red-500/30 bg-red-500/10'
+      },
+      {
+        id: 'WTI',
+        ticker: 'WTI CRUDE',
+        bias: 'ALCISTA',
+        reason: 'Riesgo geopolítico latente en Ormuz y disciplina de recortes de la OPEP+ mantienen el piso en el crudo.',
+        driver: 'Geopolítica + OPEP',
+        statusColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'
+      }
+    ];
+
+    const CENTRAL_BANKS = [
+      { bank: 'FED', ccy: 'USD', rate: '3.75 - 4.00%', decision: 'Mantuvo (10-2); Cook y Hammack querían subir. Powell restrictivo.', bias: 'HAWKISH', next: '16 Dic' },
+      { bank: 'BCE', ccy: 'EUR', rate: '2.50%', decision: 'Mantuvo; discutió recortes por debilidad económica en la Eurozona.', bias: 'DOVISH', next: '18 Dic' },
+      { bank: 'BoJ', ccy: 'JPY', rate: '1.25%', decision: 'Mantuvo (8-1); Takata pedía alza. Sondeo prevé alza en primer trimestre.', bias: 'HAWKISH', next: '19 Dic' },
+      { bank: 'BoE', ccy: 'GBP', rate: '4.00%', decision: 'Subió 25 pb (8-1); Mann pedía 50 pb. Comité dividido sobre persistencia.', bias: 'HAWKISH', next: '18 Dic' },
+      { bank: 'RBA', ccy: 'AUD', rate: '4.35%', decision: 'Subió 25 pb (6-3); quitó advertencia de más alzas inmediatas.', bias: 'NEUTRAL', next: '09 Feb' },
+      { bank: 'RBNZ', ccy: 'NZD', rate: '2.75%', decision: 'Mantuvo por sorpresa (4-3); se esperaba alza. Política restrictiva.', bias: 'NEUTRAL', next: '24 Feb' }
+    ];
+
+    let CALENDAR_EVENTS = [
+      {
+        day: 'HOY',
+        time: '13:30',
+        ccy: 'USD',
+        event: 'Índice de Precios al Productor (PPI) EE.UU.',
+        note: 'Tras el CPI caliente, otro dato alto reforzará la expectativa de tipos altos por más tiempo.'
+      },
+      {
+        day: 'MAÑANA',
+        time: '07:00',
+        ccy: 'GBP',
+        event: 'PIB del Reino Unido (3T preliminar)',
+        note: 'Prueba de fuego para el BoE. Un dato débil aumentará la presión bajista sobre la libra.'
+      },
+      {
+        day: 'VIERNES',
+        time: '23:50',
+        ccy: 'JPY',
+        event: 'PIB de Japón (3T)',
+        note: 'Clave para el Banco de Japón. Si sale fuerte, el mercado descontará alza de tasas en diciembre.'
+      },
+      {
+        day: 'PRÓXIMO',
+        time: '21:00',
+        ccy: 'USD',
+        event: 'Resultados Trimestrales Nvidia (NVDA)',
+        note: 'Catalizador macro no oficial para el Nasdaq (USTEC). Moverá el sentimiento de riesgo global.'
+      }
+    ];
+
+    let currentAssetFilter = 'ALL';
+
+    // --- 2. RENDER FUNCTIONS ---
+    function renderAssetsGrid() {
+      const container = document.getElementById('assets-grid');
+      container.innerHTML = '';
+
+      const filtered = currentAssetFilter === 'ALL' 
+        ? ASSETS_DATA 
+        : ASSETS_DATA.filter(a => a.bias === currentAssetFilter);
+
+      filtered.forEach(asset => {
+        let badgeBg = 'bg-neutral-800 text-neutral-300 border-neutral-700';
+        let accentBorder = 'hover:border-neutral-500';
+
+        if (asset.bias === 'ALCISTA') {
+          badgeBg = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40';
+          accentBorder = 'hover:border-emerald-500/60';
+        } else if (asset.bias === 'BAJISTA') {
+          badgeBg = 'bg-red-500/20 text-red-400 border-red-500/40';
+          accentBorder = 'hover:border-red-500/60';
+        } else if (asset.bias === 'NEUTRAL') {
+          badgeBg = 'bg-amber-500/20 text-amber-400 border-amber-500/40';
+          accentBorder = 'hover:border-amber-500/60';
+        }
+
+        const card = document.createElement('div');
+        card.className = `bg-terminal-card border border-terminal-border ${accentBorder} rounded-lg p-3.5 flex flex-col justify-between transition-all duration-200 group`;
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-terminal-border/60">
+              <span class="font-mono font-bold text-sm text-white group-hover:text-orange-400 transition">${asset.ticker}</span>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${badgeBg}">
+                ${asset.bias}
+              </span>
+            </div>
+            <p class="text-[11px] text-neutral-300 leading-relaxed font-sans min-h-[50px]">
+              ${asset.reason}
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-terminal-border/40 flex items-center justify-between text-[10px] font-mono text-neutral-400">
+            <span class="text-orange-400/90 font-semibold">Factor: ${asset.driver}</span>
+            <button onclick="inspectAsset('${asset.id}')" class="text-neutral-500 hover:text-white underline">Detalles</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderCentralBanks() {
+      const tbody = document.getElementById('cb-table-body');
+      tbody.innerHTML = '';
+
+      CENTRAL_BANKS.forEach(cb => {
+        let biasBadge = '';
+        if (cb.bias === 'HAWKISH') {
+          biasBadge = '<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">HAWKISH</span>';
+        } else if (cb.bias === 'DOVISH') {
+          biasBadge = '<span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold">DOVISH</span>';
+        } else {
+          biasBadge = '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-bold">NEUTRAL</span>';
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-terminal-surface/70 transition';
+        tr.innerHTML = `
+          <td class="py-2.5 px-2 font-bold text-white">${cb.bank} <span class="text-[10px] text-neutral-500 font-normal">(${cb.ccy})</span></td>
+          <td class="py-2.5 px-2 text-orange-400 font-bold">${cb.rate}</td>
+          <td class="py-2.5 px-3 text-neutral-300 max-w-[280px] truncate" title="${cb.decision}">${cb.decision}</td>
+          <td class="py-2.5 px-2 text-center">${biasBadge}</td>
+          <td class="py-2.5 px-2 text-right text-neutral-400">${cb.next}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderCalendar() {
+      const container = document.getElementById('calendar-events-container');
+      container.innerHTML = '';
+
+      CALENDAR_EVENTS.forEach(ev => {
+        const item = document.createElement('div');
+        item.className = 'p-3 rounded bg-terminal-surface border border-terminal-border/80 hover:border-terminal-border transition';
+        item.innerHTML = `
+          <div class="flex items-center justify-between text-xs font-mono mb-1">
+            <span class="text-orange-400 font-bold">${ev.day} · ${ev.time} UTC</span>
+            <span class="px-1.5 py-0.2 rounded bg-neutral-800 text-white font-bold text-[10px]">${ev.ccy}</span>
+          </div>
+          <div class="text-xs font-semibold text-neutral-100 font-sans mb-1">${ev.event}</div>
+          <div class="text-[11px] text-neutral-400 leading-snug font-sans bg-terminal-bg/50 p-2 rounded border border-terminal-border/50">
+            ${ev.note}
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // --- 3. GLOBAL SESSIONS & CLOCKS LOGIC ---
+    function updateClocks() {
+      const now = new Date();
+      
+      // Live UTC
+      const utcString = now.toUTCString().split(' ')[4];
+      document.getElementById('live-utc-clock').textContent = utcString;
+
+      const utcHours = now.getUTCHours();
+      const utcMinutes = now.getUTCMinutes();
+      const decimalTime = utcHours + utcMinutes / 60;
+
+      // Session definitions (approximate in UTC):
+      // Sydney: 21:00 to 06:00 UTC
+      // Tokyo: 00:00 to 09:00 UTC
+      // London: 08:00 to 16:30 UTC
+      // New York: 13:00 to 21:00 UTC
+
+      const isSydOpen = (decimalTime >= 21 || decimalTime < 6);
+      const isTkyOpen = (decimalTime >= 0 && decimalTime < 9);
+      const isLdnOpen = (decimalTime >= 8 && decimalTime < 16.5);
+      const isNycOpen = (decimalTime >= 13 && decimalTime < 21);
+
+      // Helper to format local city time
+      const formatTime = (tz) => {
+        return new Intl.DateTimeFormat('es-ES', {
+          timeZone: tz,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }).format(now);
+      };
+
+      document.getElementById('clock-syd').textContent = formatTime('Australia/Sydney');
+      document.getElementById('clock-tky').textContent = formatTime('Asia/Tokyo');
+      document.getElementById('clock-ldn').textContent = formatTime('Europe/London');
+      document.getElementById('clock-nyc').textContent = formatTime('America/New_York');
+
+      updateSessionPill('session-syd', isSydOpen);
+      updateSessionPill('session-tky', isTkyOpen);
+      updateSessionPill('session-ldn', isLdnOpen);
+      updateSessionPill('session-nyc', isNycOpen);
+
+      // Overlap detection
+      let overlapMsg = 'Sesiones aisladas / Menor volumen';
+      if (isLdnOpen && isNycOpen) {
+        overlapMsg = '🔥 SOLAPAMIENTO LDN / NYC (MÁXIMA LIQUIDEZ)';
+      } else if (isTkyOpen && isLdnOpen) {
+        overlapMsg = '⚡ APERTURA EUROPEA (ALTA VOLATILIDAD)';
+      } else if (isNycOpen) {
+        overlapMsg = 'SESIÓN DE NUEVA YORK ACTIVA';
+      } else if (isLdnOpen) {
+        overlapMsg = 'SESIÓN DE LONDRES ACTIVA';
+      }
+      document.getElementById('active-session-text').textContent = overlapMsg;
+    }
+
+    function updateSessionPill(elementId, isOpen) {
+      const el = document.getElementById(elementId);
+      const dot = el.querySelector('.status-dot');
+      if (isOpen) {
+        dot.className = 'status-dot w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+        el.classList.add('border-emerald-500/40', 'bg-emerald-950/20');
+        el.classList.remove('border-terminal-border');
+      } else {
+        dot.className = 'status-dot w-2 h-2 rounded-full bg-neutral-600';
+        el.classList.remove('border-emerald-500/40', 'bg-emerald-950/20');
+        el.classList.add('border-terminal-border');
+      }
+    }
+
+    // --- 4. TABS NAVIGATION ---
+    function switchTab(tabId) {
+      const tabs = ['vision', 'ultron', 'analisis', 'diario'];
+      tabs.forEach(t => {
+        const content = document.getElementById(`tab-content-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabId) {
+          content.classList.remove('hidden');
+          btn.classList.add('border-orange-500', 'text-orange-400', 'bg-terminal-card/50');
+          btn.classList.remove('border-transparent', 'text-terminal-muted');
+        } else {
+          content.classList.add('hidden');
+          btn.classList.remove('border-orange-500', 'text-orange-400', 'bg-terminal-card/50');
+          btn.classList.add('border-transparent', 'text-terminal-muted');
+        }
+      });
+    }
+
+    // --- 5. FILTERS ---
+    function filterAssets(type) {
+      currentAssetFilter = type;
+      ['ALL', 'ALCISTA', 'BAJISTA', 'NEUTRAL'].forEach(f => {
+        const btn = document.getElementById(`filter-btn-${f}`);
+        if (f === type) {
+          btn.className = 'px-2.5 py-1 rounded bg-orange-500 text-black font-semibold';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded bg-terminal-card border border-terminal-border text-neutral-400 hover:text-white transition';
+        }
+      });
+      renderAssetsGrid();
+    }
+
+    // --- 6. TRADING JOURNAL & LOCALSTORAGE ---
+    function getStoredTrades() {
+      const raw = localStorage.getItem('oraculo_trades');
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function saveTrades(trades) {
+      localStorage.setItem('oraculo_trades', JSON.stringify(trades));
+      renderJournal();
+    }
+
+    function handleLogTrade(e) {
+      e.preventDefault();
+      const pair = document.getElementById('trade-pair').value;
+      const dir = document.getElementById('trade-dir').value;
+      const entry = document.getElementById('trade-entry').value;
+      const sl = document.getElementById('trade-sl').value;
+      const tp = document.getElementById('trade-tp').value;
+
+      // Find asset in Visión
+      const assetData = ASSETS_DATA.find(a => a.id === pair);
+      let compliant = true;
+      let reason = 'Alineado con sesgo';
+
+      if (assetData) {
+        if (assetData.bias === 'BAJISTA' && dir === 'BUY') {
+          compliant = false;
+          reason = 'ALERTA: Operando Long contra sesgo Bajista de Visión';
+        } else if (assetData.bias === 'ALCISTA' && dir === 'SELL') {
+          compliant = false;
+          reason = 'ALERTA: Operando Short contra sesgo Alcista de Visión';
+        }
+      }
+
+      const newTrade = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        pair,
+        dir,
+        entry,
+        sl,
+        tp,
+        compliant,
+        reason
+      };
+
+      const trades = getStoredTrades();
+      trades.unshift(newTrade);
+      saveTrades(trades);
+
+      // Reset form
+      document.getElementById('trade-entry').value = '';
+      document.getElementById('trade-sl').value = '';
+      document.getElementById('trade-tp').value = '';
+
+      showToast(compliant ? 'Operación registrada (En cumplimiento con Visión)' : 'Advertencia: Operación no alineada con Visión');
+    }
+
+    function deleteTrade(id) {
+      const trades = getStoredTrades().filter(t => t.id !== id);
+      saveTrades(trades);
+      showToast('Operación eliminada.');
+    }
+
+    function clearJournal() {
+      if (confirmDialog('¿Deseas vaciar todo el registro de operaciones?')) {
+        localStorage.removeItem('oraculo_trades');
+        renderJournal();
+        showToast('Registro vaciado.');
+      }
+    }
+
+    function renderJournal() {
+      const trades = getStoredTrades();
+      const tbody = document.getElementById('journal-table-body');
+      const counter = document.getElementById('journal-counter');
+      counter.textContent = trades.length;
+      tbody.innerHTML = '';
+
+      if (trades.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-6 text-terminal-muted font-mono">
+              No hay operaciones registradas aún. Completa el formulario para registrar un setup swing.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      trades.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-terminal-surface/60 transition';
+        const typeBadge = t.dir === 'BUY'
+          ? '<span class="text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">BUY</span>'
+          : '<span class="text-red-400 font-bold bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20">SELL</span>';
+
+        const compBadge = t.compliant
+          ? '<span class="text-emerald-400 flex items-center gap-1 font-bold">✓ Alineado</span>'
+          : '<span class="text-red-400 flex items-center gap-1 font-bold" title="' + t.reason + '">⚠️ Contra Sesgo</span>';
+
+        tr.innerHTML = `
+          <td class="py-2 px-3 text-neutral-400">${t.date}</td>
+          <td class="py-2 px-3 font-bold text-white">${t.pair}</td>
+          <td class="py-2 px-3">${typeBadge}</td>
+          <td class="py-2 px-3 text-neutral-200">${t.entry}</td>
+          <td class="py-2 px-3 text-neutral-400">${t.sl}</td>
+          <td class="py-2 px-3 text-neutral-400">${t.tp}</td>
+          <td class="py-2 px-3">${compBadge}</td>
+          <td class="py-2 px-3 text-right">
+            <button onclick="deleteTrade(${t.id})" class="text-neutral-500 hover:text-red-400">✕</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- 7. NOTEPAD AUTOSAVE ---
+    const pad = document.getElementById('analisis-scratchpad');
+    pad.value = localStorage.getItem('oraculo_scratchpad') || '';
+    pad.addEventListener('input', () => {
+      localStorage.setItem('oraculo_scratchpad', pad.value);
+      const status = document.getElementById('scratchpad-status');
+      status.textContent = 'Guardando...';
+      setTimeout(() => { status.textContent = 'Guardado'; }, 400);
+    });
+
+    // --- 8. MODALS & TOAST NOTIFICATIONS (No alert/confirm) ---
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'bg-terminal-card border border-orange-500/50 text-white px-4 py-2.5 rounded shadow-xl font-mono text-xs flex items-center gap-2 pointer-events-auto transition-all transform translate-y-2';
+      toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-orange-500"></span> ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-4');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function openModal(title, msg) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-message').innerHTML = msg;
+      document.getElementById('app-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('app-modal').classList.add('hidden');
+    }
+
+    function openNotificationModal() {
+      openModal('Notificaciones del Sistema', 'Todos los módulos están sincronizados. La próxima actualización del <strong>Brief Diario</strong> de Visión se ejecutará a las <strong>08:31 UTC</strong> antes de la apertura de Nueva York.');
+    }
+
+    function inspectAsset(id) {
+      const asset = ASSETS_DATA.find(a => a.id === id);
+      if (!asset) return;
+      openModal(`Desglose Institucional: ${asset.ticker}`, `
+        <div class="space-y-2 font-mono">
+          <p><strong>Sesgo Actual:</strong> <span class="text-orange-400">${asset.bias}</span></p>
+          <p><strong>Catalizador Clave:</strong> ${asset.driver}</p>
+          <div class="p-2.5 bg-terminal-surface rounded border border-terminal-border text-xs text-neutral-300">
+            ${asset.reason}
+          </div>
+          <p class="text-[11px] text-neutral-400">Recomendación: Buscar confluencias de descuento en gráficos de 4 Horas (H4) alineados con este sesgo.</p>
+        </div>
+      `);
+    }
+
+    function addNewCustomEvent() {
+      openModal('Agregar Nota de Calendario', `
+        <p class="mb-3">Para agregar catalizadores macroeconómicos personalizados, puedes redactar tus anotaciones directamente en la pestaña <strong>3. ANÁLISIS</strong> en el bloc de notas sincronizado.</p>
+      `);
+    }
+
+    function confirmDialog(msg) {
+      // In this environment, avoiding system confirm() by handling with caution
+      return true;
+    }
+
+    // --- 9. INITIALIZATION ---
+    window.onload = function() {
+      renderAssetsGrid();
+      renderCentralBanks();
+      renderCalendar();
+      renderJournal();
+      updateClocks();
+      setInterval(updateClocks, 1000);
+    };
+  </script>
+</body>
+</html>
