@@ -1,0 +1,180 @@
+{
+  "last_updated": "2026-11-12 13:47 UTC",
+  "regime": "FORTALEZA DEL DÓLAR · FLUJO DEFENSIVO",
+  "headline": "DXY consolida impulso alcista en 102.94 con bono US10Y en 5.048%",
+  "macro_body": "El índice del dólar (DXY) cotiza por encima de su media institucional (102.05) con variación diaria de 0.03%. Los rendimientos del Tesoro a 10 años en 5.048% sostienen la demanda institucional por USD frente a divisas con bancos centrales en ciclo de recortes.",
+  "metrics": {
+    "us10y": "5.048%",
+    "us10y_chg": "+1.0%",
+    "dxy": "102.94",
+    "dxy_chg": "+0.03%",
+    "brent": "$93.9",
+    "brent_chg": "+1.23%"
+  },
+  "assets": [
+    {
+      "symbol": "EURUSD",
+      "price": 1.10877,
+      "change_24h": -0.01,
+      "bias": "BAJISTA",
+      "summary": "Estructura bajista bajo EMA50/200 en 1H (1.11236). Presión vendedora domina rebotes a zona premium.",
+      "zone_type": "Oferta / OB Bajista 4H",
+      "zone_range": "1.11841 - 1.1217",
+      "liquidity_target": 1.10705,
+      "ultron_note": "Esperar mitigación en zona premium (1.11841 - 1.1217) tras barrido de máximos intradía hacia liquidez en 1.10705."
+    },
+    {
+      "symbol": "USDJPY",
+      "price": 159.775,
+      "change_24h": 0.02,
+      "bias": "ALCISTA",
+      "summary": "Estructura alcista sobre EMA50/200 en 1H (159.297). Flujo comprador prioriza retrocesos a descuento.",
+      "zone_type": "Demanda / OB Alcista 4H",
+      "zone_range": "158.12 - 158.531",
+      "liquidity_target": 159.946,
+      "ultron_note": "Esperar mitigación en zona de descuento (158.12 - 158.531) y confirmar CHOCH en 15m/30m hacia liquidez en 159.946."
+    },
+    {
+      "symbol": "GBPUSD",
+      "price": 1.32593,
+      "change_24h": -0.08,
+      "bias": "BAJISTA",
+      "summary": "Estructura bajista bajo EMA50/200 en 1H (1.3307). Presión vendedora domina rebotes a zona premium.",
+      "zone_type": "Oferta / OB Bajista 4H",
+      "zone_range": "1.33794 - 1.34169",
+      "liquidity_target": 1.32503,
+      "ultron_note": "Esperar mitigación en zona premium (1.33794 - 1.34169) tras barrido de máximos intradía hacia liquidez en 1.32503."
+    },
+    {
+      "symbol": "AUDUSD",
+      "price": 0.68287,
+      "change_24h": -0.31,
+      "bias": "BAJISTA",
+      "summary": "Estructura bajista bajo EMA50/200 en 1H (0.68579). Presión vendedora domina rebotes a zona premium.",
+      "zone_type": "Oferta / OB Bajista 4H",
+      "zone_range": "0.68891 - 0.69098",
+      "liquidity_target": 0.68176,
+      "ultron_note": "Esperar mitigación en zona premium (0.68891 - 0.69098) tras barrido de máximos intradía hacia liquidez en 0.68176."
+    },
+    {
+      "symbol": "NZDUSD",
+      "price": 0.55596,
+      "change_24h": -0.13,
+      "bias": "BAJISTA",
+      "summary": "Estructura bajista bajo EMA50/200 en 1H (0.55786). Presión vendedora domina rebotes a zona premium.",
+      "zone_type": "Oferta / OB Bajista 4H",
+      "zone_range": "0.56111 - 0.56299",
+      "liquidity_target": 0.55466,
+      "ultron_note": "Esperar mitigación en zona premium (0.56111 - 0.56299) tras barrido de máximos intradía hacia liquidez en 0.55466."
+    },
+    {
+      "symbol": "USDCAD",
+      "price": 1.42312,
+      "change_24h": -0.07,
+      "bias": "ALCISTA",
+      "summary": "Estructura alcista sobre EMA50/200 en 1H (1.42176). Flujo comprador prioriza retrocesos a descuento.",
+      "zone_type": "Demanda / OB Alcista 4H",
+      "zone_range": "1.4136 - 1.41729",
+      "liquidity_target": 1.43,
+      "ultron_note": "Esperar mitigación en zona de descuento (1.4136 - 1.41729) y confirmar CHOCH en 15m/30m hacia liquidez en 1.43."
+    },
+    {
+      "symbol": "USDCHF",
+      "price": 0.83292,
+      "change_24h": 0.02,
+      "bias": "ALCISTA",
+      "summary": "Estructura alcista sobre EMA50/200 en 1H (0.82931). Flujo comprador prioriza retrocesos a descuento.",
+      "zone_type": "Demanda / OB Alcista 4H",
+      "zone_range": "0.82064 - 0.82359",
+      "liquidity_target": 0.83374,
+      "ultron_note": "Esperar mitigación en zona de descuento (0.82064 - 0.82359) y confirmar CHOCH en 15m/30m hacia liquidez en 0.83374."
+    },
+    {
+      "symbol": "EURJPY",
+      "price": 177.096,
+      "change_24h": 0.0,
+      "bias": "NEUTRAL",
+      "summary": "Consolidación entre medias móviles 1H (177.138 / 177.032). Esperar ruptura con volumen en Londres/NY.",
+      "zone_type": "Rango de Equilibrio",
+      "zone_range": "177.111 - 177.386",
+      "liquidity_target": 177.708,
+      "ultron_note": "Evitar entradas en medio del rango (177.111 - 177.386); esperar toma de liquidez en extremos (176.78900146484375 / 177.70799255371094)."
+    }
+  ],
+  "central_banks": [
+    {
+      "bank": "Fed",
+      "currency": "USD",
+      "rate": "4.50%",
+      "stance": "HAWKISH",
+      "next_meeting": "Dic 2026",
+      "note": "Vigilando persistencia inflacionaria y fortaleza laboral."
+    },
+    {
+      "bank": "BCE",
+      "currency": "EUR",
+      "rate": "3.00%",
+      "stance": "DOVISH",
+      "next_meeting": "Dic 2026",
+      "note": "Presión por debilidad manufacturera en la Eurozona."
+    },
+    {
+      "bank": "BoJ",
+      "currency": "JPY",
+      "rate": "0.25%",
+      "stance": "NEUTRAL",
+      "next_meeting": "Dic 2026",
+      "note": "Normalización gradual condicionada a salarios internos."
+    },
+    {
+      "bank": "BoE",
+      "currency": "GBP",
+      "rate": "4.75%",
+      "stance": "NEUTRAL",
+      "next_meeting": "Dic 2026",
+      "note": "Inflación de servicios mantiene cautela en recortes."
+    },
+    {
+      "bank": "RBA",
+      "currency": "AUD",
+      "rate": "4.35%",
+      "stance": "HAWKISH",
+      "next_meeting": "Dic 2026",
+      "note": "Postura restrictiva hasta consolidar meta de inflación."
+    },
+    {
+      "bank": "RBNZ",
+      "currency": "NZD",
+      "rate": "4.25%",
+      "stance": "DOVISH",
+      "next_meeting": "Feb 2027",
+      "note": "Ciclo de flexibilización activo ante enfriamiento interno."
+    },
+    {
+      "bank": "BoC",
+      "currency": "CAD",
+      "rate": "3.75%",
+      "stance": "DOVISH",
+      "next_meeting": "Dic 2026",
+      "note": "Diferencial de tasas presionando al dólar canadiense."
+    },
+    {
+      "bank": "SNB",
+      "currency": "CHF",
+      "rate": "1.00%",
+      "stance": "DOVISH",
+      "next_meeting": "Dic 2026",
+      "note": "Busca contener apreciación excesiva del franco suizo."
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2026-11-12",
+      "time": "13:30 UTC",
+      "currency": "USD",
+      "impact": "ALTO IMPACTO",
+      "title": "Datos Macroeconómicos EE.UU. / Sesiones Activas",
+      "note": "Verificar calendario antes de apertura de Nueva York para evitar deslizamientos."
+    }
+  ]
+}
