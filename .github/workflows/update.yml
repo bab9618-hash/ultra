@@ -1,0 +1,36 @@
+name: Actualizacion Automatica Oraculo
+
+on:
+  schedule:
+    - cron: '0 7,12,16 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-macro-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          ref: principal
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar librerias financieras
+        run: pip install yfinance requests numpy pandas
+
+      - name: Ejecutar motor de datos
+        run: python update.py
+
+      - name: Guardar cambios en data.json
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Oraculo Bot"
+          git add data.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualizacion automatica de mercado" && git push origin principal)
