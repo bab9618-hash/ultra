@@ -1,104 +1,104 @@
 {
-  "last_updated": "2026-11-12 13:47 UTC",
+  "last_updated": "2026-11-12 16:58 UTC",
   "regime": "FORTALEZA DEL DÓLAR · FLUJO DEFENSIVO",
-  "headline": "DXY consolida impulso alcista en 102.94 con bono US10Y en 5.048%",
-  "macro_body": "El índice del dólar (DXY) cotiza por encima de su media institucional (102.05) con variación diaria de 0.03%. Los rendimientos del Tesoro a 10 años en 5.048% sostienen la demanda institucional por USD frente a divisas con bancos centrales en ciclo de recortes.",
+  "headline": "DXY consolida impulso alcista en 103.16 con bono US10Y en 5.085%",
+  "macro_body": "El índice del dólar (DXY) cotiza por encima de su media institucional (102.07) con variación diaria de 0.24%. Los rendimientos del Tesoro a 10 años en 5.085% sostienen la demanda institucional por USD frente a divisas con bancos centrales en ciclo de recortes.",
   "metrics": {
-    "us10y": "5.048%",
-    "us10y_chg": "+1.0%",
-    "dxy": "102.94",
-    "dxy_chg": "+0.03%",
-    "brent": "$93.9",
-    "brent_chg": "+1.23%"
+    "us10y": "5.085%",
+    "us10y_chg": "+1.74%",
+    "dxy": "103.16",
+    "dxy_chg": "+0.24%",
+    "brent": "$93.88",
+    "brent_chg": "+1.21%"
   },
   "assets": [
     {
       "symbol": "EURUSD",
-      "price": 1.10877,
-      "change_24h": -0.01,
+      "price": 1.10607,
+      "change_24h": -0.31,
       "bias": "BAJISTA",
-      "summary": "Estructura bajista bajo EMA50/200 en 1H (1.11236). Presión vendedora domina rebotes a zona premium.",
+      "summary": "Estructura bajista bajo EMA50/200 en 1H (1.11174). Presión vendedora domina rebotes a zona premium.",
       "zone_type": "Oferta / OB Bajista 4H",
-      "zone_range": "1.11841 - 1.1217",
-      "liquidity_target": 1.10705,
-      "ultron_note": "Esperar mitigación en zona premium (1.11841 - 1.1217) tras barrido de máximos intradía hacia liquidez en 1.10705."
+      "zone_range": "1.11789 - 1.12143",
+      "liquidity_target": 1.10571,
+      "ultron_note": "Esperar mitigación en zona premium (1.11789 - 1.12143) tras barrido de máximos intradía hacia liquidez en 1.10571."
     },
     {
       "symbol": "USDJPY",
-      "price": 159.775,
-      "change_24h": 0.02,
+      "price": 159.591,
+      "change_24h": -0.16,
       "bias": "ALCISTA",
-      "summary": "Estructura alcista sobre EMA50/200 en 1H (159.297). Flujo comprador prioriza retrocesos a descuento.",
+      "summary": "Estructura alcista sobre EMA50/200 en 1H (159.349). Flujo comprador prioriza retrocesos a descuento.",
       "zone_type": "Demanda / OB Alcista 4H",
-      "zone_range": "158.12 - 158.531",
-      "liquidity_target": 159.946,
-      "ultron_note": "Esperar mitigación en zona de descuento (158.12 - 158.531) y confirmar CHOCH en 15m/30m hacia liquidez en 159.946."
+      "zone_range": "158.139 - 158.568",
+      "liquidity_target": 160.044,
+      "ultron_note": "Esperar mitigación en zona de descuento (158.139 - 158.568) y confirmar CHOCH en 15m/30m hacia liquidez en 160.044."
     },
     {
       "symbol": "GBPUSD",
-      "price": 1.32593,
-      "change_24h": -0.08,
+      "price": 1.32392,
+      "change_24h": -0.27,
       "bias": "BAJISTA",
-      "summary": "Estructura bajista bajo EMA50/200 en 1H (1.3307). Presión vendedora domina rebotes a zona premium.",
+      "summary": "Estructura bajista bajo EMA50/200 en 1H (1.32997). Presión vendedora domina rebotes a zona premium.",
       "zone_type": "Oferta / OB Bajista 4H",
-      "zone_range": "1.33794 - 1.34169",
-      "liquidity_target": 1.32503,
-      "ultron_note": "Esperar mitigación en zona premium (1.33794 - 1.34169) tras barrido de máximos intradía hacia liquidez en 1.32503."
+      "zone_range": "1.33693 - 1.34116",
+      "liquidity_target": 1.32235,
+      "ultron_note": "Esperar mitigación en zona premium (1.33693 - 1.34116) tras barrido de máximos intradía hacia liquidez en 1.32235."
     },
     {
       "symbol": "AUDUSD",
-      "price": 0.68287,
-      "change_24h": -0.31,
+      "price": 0.68111,
+      "change_24h": -0.58,
       "bias": "BAJISTA",
-      "summary": "Estructura bajista bajo EMA50/200 en 1H (0.68579). Presión vendedora domina rebotes a zona premium.",
+      "summary": "Estructura bajista bajo EMA50/200 en 1H (0.68529). Presión vendedora domina rebotes a zona premium.",
       "zone_type": "Oferta / OB Bajista 4H",
-      "zone_range": "0.68891 - 0.69098",
-      "liquidity_target": 0.68176,
-      "ultron_note": "Esperar mitigación en zona premium (0.68891 - 0.69098) tras barrido de máximos intradía hacia liquidez en 0.68176."
+      "zone_range": "0.68827 - 0.69065",
+      "liquidity_target": 0.68009,
+      "ultron_note": "Esperar mitigación en zona premium (0.68827 - 0.69065) tras barrido de máximos intradía hacia liquidez en 0.68009."
     },
     {
       "symbol": "NZDUSD",
-      "price": 0.55596,
-      "change_24h": -0.13,
+      "price": 0.55491,
+      "change_24h": -0.28,
       "bias": "BAJISTA",
-      "summary": "Estructura bajista bajo EMA50/200 en 1H (0.55786). Presión vendedora domina rebotes a zona premium.",
+      "summary": "Estructura bajista bajo EMA50/200 en 1H (0.55754). Presión vendedora domina rebotes a zona premium.",
       "zone_type": "Oferta / OB Bajista 4H",
-      "zone_range": "0.56111 - 0.56299",
-      "liquidity_target": 0.55466,
-      "ultron_note": "Esperar mitigación en zona premium (0.56111 - 0.56299) tras barrido de máximos intradía hacia liquidez en 0.55466."
+      "zone_range": "0.56095 - 0.5629",
+      "liquidity_target": 0.55423,
+      "ultron_note": "Esperar mitigación en zona premium (0.56095 - 0.5629) tras barrido de máximos intradía hacia liquidez en 0.55423."
     },
     {
       "symbol": "USDCAD",
-      "price": 1.42312,
-      "change_24h": -0.07,
+      "price": 1.42539,
+      "change_24h": 0.04,
       "bias": "ALCISTA",
-      "summary": "Estructura alcista sobre EMA50/200 en 1H (1.42176). Flujo comprador prioriza retrocesos a descuento.",
+      "summary": "Estructura alcista sobre EMA50/200 en 1H (1.42226). Flujo comprador prioriza retrocesos a descuento.",
       "zone_type": "Demanda / OB Alcista 4H",
-      "zone_range": "1.4136 - 1.41729",
+      "zone_range": "1.41408 - 1.41766",
       "liquidity_target": 1.43,
-      "ultron_note": "Esperar mitigación en zona de descuento (1.4136 - 1.41729) y confirmar CHOCH en 15m/30m hacia liquidez en 1.43."
+      "ultron_note": "Esperar mitigación en zona de descuento (1.41408 - 1.41766) y confirmar CHOCH en 15m/30m hacia liquidez en 1.43."
     },
     {
       "symbol": "USDCHF",
-      "price": 0.83292,
-      "change_24h": 0.02,
+      "price": 0.83471,
+      "change_24h": 0.14,
       "bias": "ALCISTA",
-      "summary": "Estructura alcista sobre EMA50/200 en 1H (0.82931). Flujo comprador prioriza retrocesos a descuento.",
+      "summary": "Estructura alcista sobre EMA50/200 en 1H (0.82989). Flujo comprador prioriza retrocesos a descuento.",
       "zone_type": "Demanda / OB Alcista 4H",
-      "zone_range": "0.82064 - 0.82359",
-      "liquidity_target": 0.83374,
-      "ultron_note": "Esperar mitigación en zona de descuento (0.82064 - 0.82359) y confirmar CHOCH en 15m/30m hacia liquidez en 0.83374."
+      "zone_range": "0.82098 - 0.82422",
+      "liquidity_target": 0.8354,
+      "ultron_note": "Esperar mitigación en zona de descuento (0.82098 - 0.82422) y confirmar CHOCH en 15m/30m hacia liquidez en 0.8354."
     },
     {
       "symbol": "EURJPY",
-      "price": 177.096,
-      "change_24h": 0.0,
+      "price": 176.487,
+      "change_24h": -0.47,
       "bias": "NEUTRAL",
-      "summary": "Consolidación entre medias móviles 1H (177.138 / 177.032). Esperar ruptura con volumen en Londres/NY.",
+      "summary": "Consolidación entre medias móviles 1H (177.102 / 177.025). Esperar ruptura con volumen en Londres/NY.",
       "zone_type": "Rango de Equilibrio",
-      "zone_range": "177.111 - 177.386",
-      "liquidity_target": 177.708,
-      "ultron_note": "Evitar entradas en medio del rango (177.111 - 177.386); esperar toma de liquidez en extremos (176.78900146484375 / 177.70799255371094)."
+      "zone_range": "176.753 - 177.193",
+      "liquidity_target": 176.238,
+      "ultron_note": "Evitar entradas en medio del rango (176.753 - 177.193); esperar toma de liquidez en extremos (176.23800659179688 / 177.70799255371094)."
     }
   ],
   "central_banks": [
