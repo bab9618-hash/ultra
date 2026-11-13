@@ -1,33 +1,156 @@
 {
-  "last_updated": "Friday 2026-11-13 14:07 UTC",
+  "last_updated": "Friday 2026-11-13 14:11 UTC",
   "regime": "FORTALEZA DEL DÓLAR · FLUJO DEFENSIVO",
-  "headline": "DXY consolida impulso alcista en 103.22 con bono US10Y en 5.139%",
-  "macro_body": "El índice del dólar (DXY) cotiza por encima de su media institucional (102.18) con variación diaria de 0.05%. Los rendimientos del Tesoro a 10 años en 5.139% sostienen la demanda institucional por USD frente a divisas con bancos centrales en ciclo de recortes.",
+  "headline": "DXY consolida impulso alcista en 103.22 con bono US10Y en 5.137%",
+  "macro_body": "El índice del dólar (DXY) cotiza por encima de su media institucional (102.18) con variación diaria de 0.05%. Los rendimientos del Tesoro a 10 años en 5.137% sostienen la demanda institucional por USD frente a divisas con bancos centrales en ciclo de recortes.",
   "metrics": {
-    "us10y": "5.139%",
-    "us10y_chg": "+0.71%",
+    "us10y": "5.137%",
+    "us10y_chg": "+0.67%",
     "dxy": "103.22",
     "dxy_chg": "+0.05%",
-    "brent": "$96.74",
-    "brent_chg": "+0.96%"
+    "brent": "$96.64",
+    "brent_chg": "+0.86%"
   },
   "assets": [
+    {
+      "symbol": "US30",
+      "base": "USD",
+      "quote": "US30",
+      "decimals": 2,
+      "pip": 1.0,
+      "unit": "pts",
+      "price": 52586.0,
+      "change_24h": 0.16,
+      "bias": "ALCISTA",
+      "summary": "Estructura intradía alcista sobre EMA20/50 en 1H (52496.68). Priorizar compras en retroceso de sesión.",
+      "zone_type": "OB Demanda 1H (Friday)",
+      "zone_range": "52400.0 - 52473.0",
+      "liquidity_target": "52850.0 (High Friday)",
+      "ultron_note": "Esperar mitigación en OB intradía (52400.0 - 52473.0) y confirmar CHOCH en 15m/5m hacia liquidez en 52850.0.",
+      "jarvis_action": "ESPERAR RETROCESO (113.0 PTS)",
+      "jarvis_detail": "El precio está a 113.0 pts de tu Order Block de demanda (52400.0-52473.0). No compres arriba; espera el descuento.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 52676.0,
+          "low": 51385.0,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 52782.0,
+          "low": 52056.0,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 52692.0,
+          "low": 52141.0,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 52850.0,
+          "low": 52311.0,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 52722.0,
+          "low": 52289.0,
+          "direction": "ALCISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
+    },
     {
       "symbol": "EURUSD",
       "base": "EUR",
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.10546,
-      "change_24h": -0.12,
+      "unit": "pips",
+      "price": 1.10558,
+      "change_24h": -0.11,
       "bias": "BAJISTA",
-      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (1.10623). Priorizar ventas tras barrido de máximos.",
+      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (1.10624). Priorizar ventas tras barrido de máximos.",
       "zone_type": "OB Oferta 1H (Friday)",
       "zone_range": "1.10905 - 1.11",
       "liquidity_target": "1.10473 (Low Friday)",
       "ultron_note": "Esperar mitigación en OB de oferta (1.10905 - 1.11) tras barrido intradía hacia liquidez en 1.10473.",
-      "jarvis_action": "ESPERAR REBOTE (35.9 PIPS)",
-      "jarvis_detail": "El precio está a 35.9 pips por debajo de la oferta intradía (1.10905-1.11). Evita vender en suelos; espera mitigación arriba."
+      "jarvis_action": "ESPERAR REBOTE (34.7 PIPS)",
+      "jarvis_detail": "El precio está a 34.7 pips por debajo de la oferta intradía (1.10905-1.11). Evita vender en suelos; espera mitigación arriba.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 1.12284,
+          "low": 1.11495,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 1.12537,
+          "low": 1.11495,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 1.11732,
+          "low": 1.10865,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 1.11062,
+          "low": 1.10485,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 1.10742,
+          "low": 1.10473,
+          "direction": "ALCISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
     },
     {
       "symbol": "USDJPY",
@@ -35,16 +158,69 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
+      "unit": "pips",
       "price": 159.894,
       "change_24h": -0.0,
       "bias": "ALCISTA",
-      "summary": "Estructura intradía alcista sobre EMA20/50 en 1H (159.872). Priorizar compras en retroceso de sesión.",
+      "summary": "Estructura intradía alcista sobre EMA20/50 en 1H (159.873). Priorizar compras en retroceso de sesión.",
       "zone_type": "OB Demanda 1H (Friday)",
       "zone_range": "159.835 - 159.902",
       "liquidity_target": "160.188 (High Friday)",
       "ultron_note": "Esperar mitigación en OB intradía (159.835 - 159.902) y confirmar CHOCH en 15m/5m hacia liquidez en 160.188.",
       "jarvis_action": "EN ZONA DE GATILLO · BUSCAR CHOCH 15m/5m",
-      "jarvis_detail": "El precio está tocando tu Order Block intradía (159.835-159.902). Valida absorción en Delta y quiebre alcista antes de entrar."
+      "jarvis_detail": "El precio está tocando tu Order Block intradía (159.835-159.902). Valida absorción en Delta y quiebre alcista antes de entrar.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 158.391,
+          "low": 157.663,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 158.851,
+          "low": 157.866,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 159.938,
+          "low": 158.659,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 160.044,
+          "low": 159.303,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 160.188,
+          "low": 159.643,
+          "direction": "ALCISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
     },
     {
       "symbol": "GBPUSD",
@@ -52,16 +228,69 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.3231,
+      "unit": "pips",
+      "price": 1.32322,
       "change_24h": -0.04,
       "bias": "BAJISTA",
-      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (1.32363). Priorizar ventas tras barrido de máximos.",
+      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (1.32364). Priorizar ventas tras barrido de máximos.",
       "zone_type": "OB Oferta 1H (Friday)",
       "zone_range": "1.32368 - 1.32375",
       "liquidity_target": "1.322 (Low Friday)",
       "ultron_note": "Esperar mitigación en OB de oferta (1.32368 - 1.32375) tras barrido intradía hacia liquidez en 1.322.",
-      "jarvis_action": "ESPERAR REBOTE (5.8 PIPS)",
-      "jarvis_detail": "El precio está a 5.8 pips por debajo de la oferta intradía (1.32368-1.32375). Evita vender en suelos; espera mitigación arriba."
+      "jarvis_action": "EN ZONA DE GATILLO · BUSCAR CHOCH 15m/5m",
+      "jarvis_detail": "El precio está dentro de tu Order Block de oferta (1.32368-1.32375). Busca rechazo y CHOCH bajista en 15m/5m.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 1.34448,
+          "low": 1.33608,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 1.34586,
+          "low": 1.33138,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 1.33559,
+          "low": 1.32666,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 1.32809,
+          "low": 1.32224,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 1.32498,
+          "low": 1.322,
+          "direction": "ALCISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
     },
     {
       "symbol": "AUDUSD",
@@ -69,16 +298,69 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.67912,
-      "change_24h": -0.31,
+      "unit": "pips",
+      "price": 0.67935,
+      "change_24h": -0.28,
       "bias": "BAJISTA",
-      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (0.68024). Priorizar ventas tras barrido de máximos.",
+      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (0.68027). Priorizar ventas tras barrido de máximos.",
       "zone_type": "OB Oferta 1H (Friday)",
       "zone_range": "0.67912 - 0.67986",
       "liquidity_target": "0.67843 (Low Friday)",
       "ultron_note": "Esperar mitigación en OB de oferta (0.67912 - 0.67986) tras barrido intradía hacia liquidez en 0.67843.",
       "jarvis_action": "EN ZONA DE GATILLO · BUSCAR CHOCH 15m/5m",
-      "jarvis_detail": "El precio está dentro de tu Order Block de oferta (0.67912-0.67986). Busca rechazo y CHOCH bajista en 15m/5m."
+      "jarvis_detail": "El precio está dentro de tu Order Block de oferta (0.67912-0.67986). Busca rechazo y CHOCH bajista en 15m/5m.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 0.69329,
+          "low": 0.68695,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 0.69314,
+          "low": 0.6847,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 0.68871,
+          "low": 0.68423,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 0.68535,
+          "low": 0.68009,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 0.68166,
+          "low": 0.67843,
+          "direction": "BAJISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
     },
     {
       "symbol": "NZDUSD",
@@ -86,16 +368,69 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.55343,
-      "change_24h": -0.3,
+      "unit": "pips",
+      "price": 0.55356,
+      "change_24h": -0.28,
       "bias": "BAJISTA",
-      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (0.55421). Priorizar ventas tras barrido de máximos.",
+      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (0.55422). Priorizar ventas tras barrido de máximos.",
       "zone_type": "OB Oferta 1H (Friday)",
       "zone_range": "0.55389 - 0.55423",
       "liquidity_target": "0.5531 (Low Friday)",
       "ultron_note": "Esperar mitigación en OB de oferta (0.55389 - 0.55423) tras barrido intradía hacia liquidez en 0.5531.",
       "jarvis_action": "EN ZONA DE GATILLO · BUSCAR CHOCH 15m/5m",
-      "jarvis_detail": "El precio está dentro de tu Order Block de oferta (0.55389-0.55423). Busca rechazo y CHOCH bajista en 15m/5m."
+      "jarvis_detail": "El precio está dentro de tu Order Block de oferta (0.55389-0.55423). Busca rechazo y CHOCH bajista en 15m/5m.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 0.56386,
+          "low": 0.55596,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 0.56507,
+          "low": 0.55885,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 0.56155,
+          "low": 0.5563,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 0.5571,
+          "low": 0.55423,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 0.55485,
+          "low": 0.5531,
+          "direction": "BAJISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
     },
     {
       "symbol": "USDCAD",
@@ -103,16 +438,69 @@
       "quote": "CAD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.425,
-      "change_24h": -0.08,
+      "unit": "pips",
+      "price": 1.42489,
+      "change_24h": -0.09,
       "bias": "NEUTRAL",
-      "summary": "Rango intradía entre EMA20/50 1H (1.42551 / 1.42423). Esperar barrido de extremos de sesión.",
+      "summary": "Rango intradía entre EMA20/50 1H (1.4255 / 1.42422). Esperar barrido de extremos de sesión.",
       "zone_type": "Rango Intraday (Friday)",
       "zone_range": "1.42479 - 1.42589",
       "liquidity_target": "1.42718 (Friday)",
       "ultron_note": "Evitar operar en medio del rango (1.42479 - 1.42589); esperar toma de liquidez en extremos de sesión (1.4235 / 1.42718).",
       "jarvis_action": "NO OPERAR EN RANGO · ESPERAR BARRIDO",
-      "jarvis_detail": "Sin dirección clara en 1H. Espera a que el precio barra 1.42718 o 1.4235 y confirme reversión."
+      "jarvis_detail": "Sin dirección clara en 1H. Espera a que el precio barra 1.42718 o 1.4235 y confirme reversión.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 1.41366,
+          "low": 1.4073,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 1.42102,
+          "low": 1.4101,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 1.43,
+          "low": 1.4182,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 1.42718,
+          "low": 1.4221,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 1.4271,
+          "low": 1.4239,
+          "direction": "BAJISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
     },
     {
       "symbol": "USDCHF",
@@ -120,6 +508,7 @@
       "quote": "CHF",
       "decimals": 5,
       "pip": 0.0001,
+      "unit": "pips",
       "price": 0.83815,
       "change_24h": 0.42,
       "bias": "ALCISTA",
@@ -129,7 +518,59 @@
       "liquidity_target": "0.83899 (High Friday)",
       "ultron_note": "Esperar mitigación en OB intradía (0.83365 - 0.83522) y confirmar CHOCH en 15m/5m hacia liquidez en 0.83899.",
       "jarvis_action": "ESPERAR RETROCESO (29.3 PIPS)",
-      "jarvis_detail": "El precio está a 29.3 pips de tu Order Block de demanda (0.83365-0.83522). No compres arriba; espera el descuento."
+      "jarvis_detail": "El precio está a 29.3 pips de tu Order Block de demanda (0.83365-0.83522). No compres arriba; espera el descuento.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 0.82267,
+          "low": 0.81738,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 0.8268,
+          "low": 0.81737,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 0.83374,
+          "low": 0.82499,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 0.83614,
+          "low": 0.8311,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 0.83899,
+          "low": 0.83445,
+          "direction": "ALCISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
     },
     {
       "symbol": "EURJPY",
@@ -137,16 +578,69 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 176.707,
-      "change_24h": -0.14,
+      "unit": "pips",
+      "price": 176.726,
+      "change_24h": -0.13,
       "bias": "BAJISTA",
-      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (176.798). Priorizar ventas tras barrido de máximos.",
+      "summary": "Estructura intradía bajista bajo EMA20/50 en 1H (176.8). Priorizar ventas tras barrido de máximos.",
       "zone_type": "OB Oferta 1H (Friday)",
       "zone_range": "176.795 - 176.899",
       "liquidity_target": "176.238 (Low Friday)",
       "ultron_note": "Esperar mitigación en OB de oferta (176.795 - 176.899) tras barrido intradía hacia liquidez en 176.238.",
-      "jarvis_action": "ESPERAR REBOTE (8.8 PIPS)",
-      "jarvis_detail": "El precio está a 8.8 pips por debajo de la oferta intradía (176.795-176.899). Evita vender en suelos; espera mitigación arriba."
+      "jarvis_action": "ESPERAR REBOTE (6.9 PIPS)",
+      "jarvis_detail": "El precio está a 6.9 pips por debajo de la oferta intradía (176.795-176.899). Evita vender en suelos; espera mitigación arriba.",
+      "weekly_days": [
+        {
+          "day_en": "MONDAY",
+          "day_es": "Lunes",
+          "date": "2026-11-09",
+          "is_today": false,
+          "high": 177.336,
+          "low": 176.308,
+          "direction": "ALCISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "TUESDAY",
+          "day_es": "Martes",
+          "date": "2026-11-10",
+          "is_today": false,
+          "high": 177.708,
+          "low": 176.976,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "WEDNESDAY",
+          "day_es": "Miércoles",
+          "date": "2026-11-11",
+          "is_today": false,
+          "high": 177.478,
+          "low": 176.831,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "THURSDAY",
+          "day_es": "Jueves",
+          "date": "2026-11-12",
+          "is_today": false,
+          "high": 177.285,
+          "low": 176.238,
+          "direction": "BAJISTA",
+          "status": "CERRADO"
+        },
+        {
+          "day_en": "FRIDAY",
+          "day_es": "Viernes",
+          "date": "2026-11-13",
+          "is_today": true,
+          "high": 177.126,
+          "low": 176.585,
+          "direction": "ALCISTA",
+          "status": "HOY · ACTIVO"
+        }
+      ]
     }
   ],
   "central_banks": [
