@@ -127,11 +127,33 @@
         </div>
       </div>
 
-      <!-- Matriz de 8 Pares de Divisas -->
+      <!-- SECCIÓN DE LOS DÍAS (MONDAY - FRIDAY) -->
+      <div class="bg-panel border border-border rounded-lg p-5 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-sm font-mono font-bold text-accent uppercase tracking-wider">Mapa Semanal por Días (Monday – Friday)</h2>
+            <p class="text-xs text-slate-400">Máximos (High) y mínimos (Low) de liquidez institucional de cada día de la semana en curso</p>
+          </div>
+          <select id="days-pair-select" onchange="renderWeeklyDays()" class="bg-bg border border-accent/50 rounded px-3 py-1.5 text-xs font-mono text-white focus:outline-none">
+            <option value="US30">US30 (Dow Jones)</option>
+            <option value="EURUSD">EURUSD</option>
+            <option value="USDJPY">USDJPY</option>
+            <option value="GBPUSD">GBPUSD</option>
+            <option value="AUDUSD">AUDUSD</option>
+            <option value="NZDUSD">NZDUSD</option>
+            <option value="USDCAD">USDCAD</option>
+            <option value="USDCHF">USDCHF</option>
+            <option value="EURJPY">EURJPY</option>
+          </select>
+        </div>
+        <div id="weekly-days-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3"></div>
+      </div>
+
+      <!-- Matriz de Activos (8 Divisas + US30) -->
       <div class="space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 class="text-sm font-mono font-bold text-white uppercase tracking-wider">Sesgo de Visión por Par (8 Divisas Mayores)</h2>
+            <h2 class="text-sm font-mono font-bold text-white uppercase tracking-wider">Sesgo de Visión por Activo (8 Divisas + US30)</h2>
             <p class="text-xs text-slate-400">Direccionalidad derivada de estructura 1H/4H y flujo institucional</p>
           </div>
           <div class="flex flex-wrap gap-1.5 font-mono text-xs">
@@ -142,7 +164,7 @@
           </div>
         </div>
 
-        <div id="assets-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+        <div id="assets-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
       </div>
 
       <!-- Bancos Centrales y Calendario -->
@@ -175,8 +197,8 @@
     <section id="view-ultron" class="hidden space-y-6">
       <div class="bg-panel border border-border rounded-lg p-5 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 class="text-base font-mono font-bold text-accent uppercase">Ultrón · Zonas Institucionales Intraday (4H / 1H)</h2>
-          <p class="text-xs text-slate-400 mt-1">Rangos de mitigación (Order Blocks / Descuento-Premium) y objetivos de liquidez dinámicos por día</p>
+          <h2 class="text-base font-mono font-bold text-accent uppercase">Ultrón · Zonas Institucionales Intraday (1H / 15m)</h2>
+          <p class="text-xs text-slate-400 mt-1">Order Blocks intradía reales y objetivos de liquidez dinámicos por día</p>
         </div>
         <span class="px-3 py-1 rounded bg-bg border border-border text-xs font-mono text-slate-300">R:R Mínimo Exigido: 1:2 / 1:3</span>
       </div>
@@ -226,6 +248,7 @@
             </div>
           </div>
           <select id="jarvis-pair-select" onchange="updateJarvisPanel()" class="bg-bg border border-sky-500/40 rounded px-3 py-1.5 text-xs font-mono text-white focus:outline-none">
+            <option value="US30">US30 (Dow Jones)</option>
             <option value="EURUSD">EURUSD</option>
             <option value="USDJPY">USDJPY</option>
             <option value="GBPUSD">GBPUSD</option>
@@ -237,19 +260,17 @@
           </select>
         </div>
 
-        <!-- Diagnóstico en vivo de Jarvis -->
         <div class="bg-bg border border-border rounded-lg p-4 space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-slate-400">DIRECTIVA DE JARVIS PARA <strong id="j-active-pair" class="text-white">EURUSD</strong>:</span>
+            <span class="text-[11px] font-mono text-slate-400">DIRECTIVA DE JARVIS PARA <strong id="j-active-pair" class="text-white">US30</strong>:</span>
             <span id="j-verdict-badge" class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-sky-500/15 text-sky-400 border border-sky-500/40">ANALIZANDO...</span>
           </div>
-          <p id="j-verdict-text" class="text-sm text-slate-200 leading-relaxed">Cargando diagnóstico institucional del par...</p>
+          <p id="j-verdict-text" class="text-sm text-slate-200 leading-relaxed">Cargando diagnóstico institucional del activo...</p>
           <div id="j-news-alert" class="text-xs font-mono text-amber-400 bg-amber-500/10 border border-amber-500/30 rounded p-2.5">
-            Verificando catalizadores de noticias para las divisas de este par...
+            Verificando catalizadores de noticias para este activo...
           </div>
         </div>
 
-        <!-- Calculadora de Niveles 1:2 y 1:3 + Gestión de Parciales -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1">
           <div class="lg:col-span-5 bg-bg border border-border rounded-lg p-4 space-y-3">
             <h3 class="text-xs font-mono font-bold text-white uppercase">Proyector de Niveles (1:2 / 1:3)</h3>
@@ -266,8 +287,8 @@
                 <input id="calc-entry" type="number" step="any" oninput="calculateLevels()" class="w-full bg-panel border border-border rounded px-2.5 py-1.5 text-white" />
               </div>
               <div class="col-span-2">
-                <label class="text-[11px] text-slate-400 block mb-1">Stop Loss en Pips (ej. 12)</label>
-                <input id="calc-sl-pips" type="number" value="15" min="1" oninput="calculateLevels()" class="w-full bg-panel border border-border rounded px-2.5 py-1.5 text-white" />
+                <label id="calc-sl-label" class="text-[11px] text-slate-400 block mb-1">Stop Loss en Puntos / Pips</label>
+                <input id="calc-sl-pips" type="number" value="40" min="1" oninput="calculateLevels()" class="w-full bg-panel border border-border rounded px-2.5 py-1.5 text-white" />
               </div>
             </div>
           </div>
@@ -290,7 +311,7 @@
             </div>
             <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
               <span class="text-[11px] text-slate-400">Regla: Al tocar TP1 (1:2), toma parciales y mueve SL a Break Even.</span>
-              <button onclick="copyJarvisBrief()" id="copy-brief-btn" class="px-3 py-1.5 rounded bg-sky-500 hover:bg-sky-400 text-black font-mono font-bold text-xs">Copiar Briefing del Par</button>
+              <button onclick="copyJarvisBrief()" id="copy-brief-btn" class="px-3 py-1.5 rounded bg-sky-500 hover:bg-sky-400 text-black font-mono font-bold text-xs">Copiar Briefing del Activo</button>
             </div>
           </div>
         </div>
@@ -311,11 +332,11 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="space-y-1.5">
             <label class="text-xs font-mono text-accent">1. CONTEXTO HTF (4H / 1H)</label>
-            <textarea id="note-htf" rows="8" placeholder="Ej: EURUSD respetando oferta 4H. Liquidez pendiente por debajo de mínimos de Asia..." class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
+            <textarea id="note-htf" rows="8" placeholder="Ej: US30 respetando demanda 4H antes de apertura de Wall Street..." class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
           </div>
           <div class="space-y-1.5">
             <label class="text-xs font-mono text-accent">2. GATILLO INTRADAY (30m / 15m / 5m)</label>
-            <textarea id="note-ltf" rows="8" placeholder="Ej: Esperar barrido en apertura de NY, CHOCH bajista en 15m y entrada en FVG con delta vendedor..." class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
+            <textarea id="note-ltf" rows="8" placeholder="Ej: Esperar barrido en apertura de NY (09:30 EST), CHOCH en 15m y entrada en FVG..." class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
           </div>
           <div class="space-y-1.5">
             <label class="text-xs font-mono text-accent">3. GESTIÓN (PARCIALES & TRAILING)</label>
@@ -331,6 +352,7 @@
         <h2 class="text-sm font-mono font-bold text-white uppercase">Bitácora de Ejecución & Auditoría de Disciplina</h2>
         <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-3">
           <select id="j-pair" class="bg-bg border border-border rounded px-3 py-2 text-xs font-mono text-white">
+            <option value="US30">US30</option>
             <option value="EURUSD">EURUSD</option>
             <option value="USDJPY">USDJPY</option>
             <option value="GBPUSD">GBPUSD</option>
@@ -426,11 +448,40 @@
       document.getElementById('metric-brent').textContent = marketData.metrics.brent;
       document.getElementById('metric-brent-chg').textContent = marketData.metrics.brent_chg;
 
+      renderWeeklyDays();
       renderAssets();
       renderUltron();
       renderCentralBanks();
       renderCalendar();
       updateJarvisPanel();
+    }
+
+    function renderWeeklyDays() {
+      if (!marketData) return;
+      const sym = document.getElementById('days-pair-select').value;
+      const asset = marketData.assets.find(a => a.symbol === sym);
+      const grid = document.getElementById('weekly-days-grid');
+
+      if (!asset || !asset.weekly_days) {
+        grid.innerHTML = `<div class="col-span-5 text-xs font-mono text-amber-400 bg-bg border border-border rounded p-3">Ejecuta el flujo en la pestaña Acciones de GitHub para generar los niveles de Monday a Friday.</div>`;
+        return;
+      }
+
+      grid.innerHTML = asset.weekly_days.map(d => `
+        <div class="rounded-lg p-3.5 border ${d.is_today ? 'bg-accent/10 border-accent' : 'bg-bg border-border'} space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="font-mono font-bold text-xs ${d.is_today ? 'text-accent' : 'text-white'}">${d.day_en}</div>
+              <div class="text-[10px] font-mono text-slate-400">${d.day_es} · ${d.date.slice(5)}</div>
+            </div>
+            <span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded ${d.is_today ? 'bg-accent text-black' : 'bg-panel text-slate-400 border border-border'}">${d.status}</span>
+          </div>
+          <div class="space-y-1 pt-1 font-mono text-xs border-t border-border/60">
+            <div class="flex justify-between"><span class="text-slate-400">HIGH:</span> <span class="text-emerald-400 font-semibold">${d.high}</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">LOW:</span> <span class="text-red-400 font-semibold">${d.low}</span></div>
+          </div>
+        </div>
+      `).join('');
     }
 
     function badgeStyle(bias) {
@@ -513,7 +564,6 @@
       `).join('');
     }
 
-    // Lógica de JARVIS
     function updateJarvisPanel() {
       if (!marketData) return;
       const sym = document.getElementById('jarvis-pair-select').value;
@@ -530,12 +580,15 @@
       const alertBox = document.getElementById('j-news-alert');
       if (todayEvents.length > 0) {
         alertBox.className = 'text-xs font-mono text-red-300 bg-red-500/15 border border-red-500/40 rounded p-2.5';
-        alertBox.textContent = `⚠ ALERTA DE NOTICIA HOY (${asset.base}/${asset.quote}): ${todayEvents.map(e => `${e.title} (${e.time})`).join(' | ')}. Evita entrar 15 min antes.`;
+        alertBox.textContent = `⚠ ALERTA DE NOTICIA HOY (${asset.symbol}): ${todayEvents.map(e => `${e.title} (${e.time})`).join(' | ')}. Evita entrar 15 min antes.`;
       } else {
         alertBox.className = 'text-xs font-mono text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 rounded p-2.5';
-        alertBox.textContent = `✓ SIN NOTICIAS ROJAS INMINENTES HOY PARA ${asset.base}/${asset.quote}. Operativa técnica habilitada según sesión.`;
+        alertBox.textContent = `✓ SIN NOTICIAS ROJAS INMINENTES HOY PARA ${asset.symbol}. Operativa técnica habilitada según sesión.`;
       }
 
+      const isIndex = sym === 'US30';
+      document.getElementById('calc-sl-label').textContent = isIndex ? 'Stop Loss en Puntos (ej. 50)' : 'Stop Loss en Pips (ej. 15)';
+      document.getElementById('calc-sl-pips').value = isIndex ? 50 : 15;
       document.getElementById('calc-dir').value = asset.bias === 'BAJISTA' ? 'SELL' : 'BUY';
       document.getElementById('calc-entry').value = asset.price;
       calculateLevels();
@@ -544,8 +597,9 @@
     function calculateLevels() {
       const sym = document.getElementById('jarvis-pair-select').value;
       const asset = marketData ? marketData.assets.find(a => a.symbol === sym) : null;
-      const dec = asset ? asset.decimals : (sym.includes('JPY') ? 3 : 5);
-      const pip = asset ? asset.pip : (sym.includes('JPY') ? 0.01 : 0.0001);
+      const isIndex = sym === 'US30';
+      const dec = asset ? asset.decimals : (isIndex ? 2 : (sym.includes('JPY') ? 3 : 5));
+      const pip = asset ? asset.pip : (isIndex ? 1.0 : (sym.includes('JPY') ? 0.01 : 0.0001));
 
       const dir = document.getElementById('calc-dir').value;
       const entry = parseFloat(document.getElementById('calc-entry').value);
@@ -572,17 +626,15 @@
       navigator.clipboard.writeText(text);
       const btn = document.getElementById('copy-brief-btn');
       btn.textContent = '✓ Briefing Copiado';
-      setTimeout(() => btn.textContent = 'Copiar Briefing del Par', 2000);
+      setTimeout(() => btn.textContent = 'Copiar Briefing del Activo', 2000);
     }
 
-    // Notas persistentes
     ['htf', 'ltf', 'mgmt'].forEach(key => {
       const el = document.getElementById(`note-${key}`);
       el.value = localStorage.getItem(`oraculo_note_${key}`) || '';
       el.addEventListener('input', () => localStorage.setItem(`oraculo_note_${key}`, el.value));
     });
 
-    // Diario de Trading
     let trades = JSON.parse(localStorage.getItem('oraculo_trades') || '[]');
     function renderTrades() {
       document.getElementById('journal-count').textContent = trades.length;
