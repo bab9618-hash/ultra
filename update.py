@@ -47,60 +47,101 @@ def get_ticker_metrics(ticker_str, decimals=2):
     except Exception:
         return None
 
+def find_intraday_ob(df_1h, bias, price, day_high, day_low, dec):
+    # Busca el último Order Block real en 1H dentro de las últimas 28 horas
+    recent = df_1h.tail(28)
+    if bias == "BAJISTA":
+        for i in range(len(recent) - 2, 0, -1):
+            c_open = float(recent["Open"].iloc[i])
+            c_close = float(recent["Close"].iloc[i])
+            c_high = float(recent["High"].iloc[i])
+            next_close = float(recent["Close"].iloc[i + 1])
+            # Última vela alcista antes de impulso bajista por encima del precio actual
+            if c_close > c_open and next_close < c_open and c_high > price:
+                return round(c_open, dec), round(c_high, dec)
+        # Respaldo: techo intradía de las últimas 24h
+        rng = day_high - day_low
+        return round(day_high - rng * 0.18, dec), round(day_high, dec)
+
+    elif bias == "ALCISTA":
+        for i in range(len(recent) - 2, 0, -1):
+            c_open = float(recent["Open"].iloc[i])
+            c_close = float(recent["Close"].iloc[i])
+            c_low = float(recent["Low"].iloc[i])
+            next_close = float(recent["Close"].iloc[i + 1])
+            # Última vela bajista antes de impulso alcista por debajo del precio actual
+            if c_close < c_open and next_close > c_open and c_low < price:
+                return round(c_low, dec), round(c_open, dec)
+        # Respaldo: suelo intradía de las últimas 24h
+        rng = day_high - day_low
+        return round(day_low, dec), round(day_low + rng * 0.18, dec)
+
+    rng = day_high - day_low
+    return round(day_low + rng * 0.35, dec), round(day_high - rng * 0.35, dec)
+
 def analyze_pair(pair_cfg):
-    df_1h = yf.Ticker(pair_cfg["ticker"]).history(period="1mo", interval="1h")
+    df_1h = yf.Ticker(pair_cfg["ticker"]).history(period="15d", interval="1h")
+    df_15m = yf.Ticker(pair_cfg["ticker"]).history(period="5d", interval="15m")
     dec = pair_cfg["decimals"]
     pip = pair_cfg["pip"]
-    if df_1h.empty or len(df_1h) < 60:
+
+    if df_1h.empty or len(df_1h) < 50 or df_15m.empty:
         return None
 
-    price = float(df_1h["Close"].iloc[-1])
+    price = float(df_15m["Close"].iloc[-1])
     prev_24h = float(df_1h["Close"].iloc[-24])
     chg_24h = round(((price - prev_24h) / prev_24h) * 100, 2)
 
+    ema20 = float(df_1h["Close"].ewm(span=20).mean().iloc[-1])
     ema50 = float(df_1h["Close"].ewm(span=50).mean().iloc[-1])
-    ema200 = float(df_1h["Close"].ewm(span=200).mean().iloc[-1])
 
-    recent_high = float(df_1h["High"].tail(72).max())
-    recent_low = float(df_1h["Low"].tail(72).min())
-    rng = recent_high - recent_low
+    # Rango intradía real de las últimas 24 horas (96 velas de 15m)
+    day_high = float(df_15m["High"].tail(96).max())
+    day_low = float(df_15m["Low"].tail(96).min())
 
     today_idx = datetime.datetime.now(datetime.timezone.utc).weekday()
     day_en = DAYS_EN[today_idx]
 
-    if price > ema50 and ema50 > ema200:
+    if price > ema20 and ema20 > ema50:
         bias = "ALCISTA"
-        summary = f"Estructura alcista sobre EMA50/200 en 1H ({round(ema50, dec)}). Flujo comprador prioriza retrocesos a descuento."
-        zone_type = f"Demanda {day_en} / OB 4H"
-        zone_low = round(recent_low + rng * 0.20, dec)
-        zone_high = round(recent_low + rng * 0.38, dec)
-        target_liq = f"{round(recent_high, dec)} ({day_en})"
-        dist_pips = round((price - zone_high) / pip, 1)
-        ultron_note = f"Esperar mitigación en zona de descuento ({zone_low} - {zone_high}) y confirmar CHOCH en 15m/30m hacia liquidez de {day_en} en {round(recent_high, dec)}."
-        jarvis_action = "ESPERAR RETROCESO A DESCUENTO" if dist_pips > 15 else "ZONA DE GATILLO ACTIVA (BUSCAR CHOCH 15m/5m)"
-        jarvis_detail = f"El precio está a {dist_pips} pips por encima de tu zona de demanda. No persigas compras arriba; espera mitigación en {zone_low}-{zone_high} con absorción en Delta."
-    elif price < ema50 and ema50 < ema200:
+        summary = f"Estructura intradía alcista sobre EMA20/50 en 1H ({round(ema20, dec)}). Priorizar compras en retroceso de sesión."
+        zone_type = f"OB Demanda 1H ({day_en})"
+        zone_low, zone_high = find_intraday_ob(df_1h, bias, price, day_high, day_low, dec)
+        target_liq = f"{round(day_high, dec)} (High {day_en})"
+        dist_pips = max(0.0, round((price - zone_high) / pip, 1))
+        ultron_note = f"Esperar mitigación en OB intradía ({zone_low} - {zone_high}) y confirmar CHOCH en 15m/5m hacia liquidez en {round(day_high, dec)}."
+        if dist_pips <= 5:
+            jarvis_action = "EN ZONA DE GATILLO · BUSCAR CHOCH 15m/5m"
+            jarvis_detail = f"El precio está tocando tu Order Block intradía ({zone_low}-{zone_high}). Valida absorción en Delta y quiebre alcista antes de entrar."
+        else:
+            jarvis_action = f"ESPERAR RETROCESO ({dist_pips} PIPS)"
+            jarvis_detail = f"El precio está a {dist_pips} pips de tu Order Block de demanda ({zone_low}-{zone_high}). No compres arriba; espera el descuento."
+
+    elif price < ema20 and ema20 < ema50:
         bias = "BAJISTA"
-        summary = f"Estructura bajista bajo EMA50/200 en 1H ({round(ema50, dec)}). Presión vendedora domina rebotes a zona premium."
-        zone_type = f"Oferta {day_en} / OB 4H"
-        zone_low = round(recent_high - rng * 0.38, dec)
-        zone_high = round(recent_high - rng * 0.20, dec)
-        target_liq = f"{round(recent_low, dec)} ({day_en})"
-        dist_pips = round((zone_low - price) / pip, 1)
-        ultron_note = f"Esperar mitigación en zona premium ({zone_low} - {zone_high}) tras barrido intradía hacia liquidez de {day_en} en {round(recent_low, dec)}."
-        jarvis_action = "ESPERAR REBOTE A ZONA PREMIUM" if dist_pips > 15 else "ZONA DE GATILLO ACTIVA (BUSCAR CHOCH 15m/5m)"
-        jarvis_detail = f"El precio está a {dist_pips} pips por debajo de la oferta institucional. Evita vender en suelos; espera retroceso a {zone_low}-{zone_high} y quiebre bajista en 15m."
+        summary = f"Estructura intradía bajista bajo EMA20/50 en 1H ({round(ema20, dec)}). Priorizar ventas tras barrido de máximos."
+        zone_type = f"OB Oferta 1H ({day_en})"
+        zone_low, zone_high = find_intraday_ob(df_1h, bias, price, day_high, day_low, dec)
+        target_liq = f"{round(day_low, dec)} (Low {day_en})"
+        dist_pips = max(0.0, round((zone_low - price) / pip, 1))
+        ultron_note = f"Esperar mitigación en OB de oferta ({zone_low} - {zone_high}) tras barrido intradía hacia liquidez en {round(day_low, dec)}."
+        if dist_pips <= 5:
+            jarvis_action = "EN ZONA DE GATILLO · BUSCAR CHOCH 15m/5m"
+            jarvis_detail = f"El precio está dentro de tu Order Block de oferta ({zone_low}-{zone_high}). Busca rechazo y CHOCH bajista en 15m/5m."
+        else:
+            jarvis_action = f"ESPERAR REBOTE ({dist_pips} PIPS)"
+            jarvis_detail = f"El precio está a {dist_pips} pips por debajo de la oferta intradía ({zone_low}-{zone_high}). Evita vender en suelos; espera mitigación arriba."
+
     else:
         bias = "NEUTRAL"
-        summary = f"Consolidación entre medias móviles 1H ({round(ema50, dec)} / {round(ema200, dec)}). Esperar ruptura con volumen en Londres/NY."
-        zone_type = f"Rango {day_en}"
-        zone_low = round(recent_low + rng * 0.35, dec)
-        zone_high = round(recent_high - rng * 0.35, dec)
-        liq_val = round(recent_high if price > ema200 else recent_low, dec)
+        summary = f"Rango intradía entre EMA20/50 1H ({round(ema20, dec)} / {round(ema50, dec)}). Esperar barrido de extremos de sesión."
+        zone_type = f"Rango Intraday ({day_en})"
+        zone_low, zone_high = find_intraday_ob(df_1h, bias, price, day_high, day_low, dec)
+        liq_val = round(day_high if price > ema50 else day_low, dec)
         target_liq = f"{liq_val} ({day_en})"
-        ultron_note = f"Evitar entradas en medio del rango ({zone_low} - {zone_high}); esperar toma de liquidez de {day_en} en extremos ({recent_low} / {recent_high})."
+        ultron_note = f"Evitar operar en medio del rango ({zone_low} - {zone_high}); esperar toma de liquidez en extremos de sesión ({round(day_low, dec)} / {round(day_high, dec)})."
         jarvis_action = "NO OPERAR EN RANGO · ESPERAR BARRIDO"
-        jarvis_detail = f"Sin alineación clara entre 1H y 4H. Mantente fuera hasta que el precio barra {recent_high} o {recent_low} y confirme reversión."
+        jarvis_detail = f"Sin dirección clara en 1H. Espera a que el precio barra {round(day_high, dec)} o {round(day_low, dec)} y confirme reversión."
 
     return {
         "symbol": pair_cfg["symbol"],
