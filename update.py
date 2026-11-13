@@ -7,14 +7,15 @@ DAYS_EN = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "
 DAYS_ES = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 
 PAIRS = [
-    {"symbol": "EURUSD", "ticker": "EURUSD=X", "base": "EUR", "quote": "USD", "decimals": 5, "pip": 0.0001},
-    {"symbol": "USDJPY", "ticker": "USDJPY=X", "base": "USD", "quote": "JPY", "decimals": 3, "pip": 0.01},
-    {"symbol": "GBPUSD", "ticker": "GBPUSD=X", "base": "GBP", "quote": "USD", "decimals": 5, "pip": 0.0001},
-    {"symbol": "AUDUSD", "ticker": "AUDUSD=X", "base": "AUD", "quote": "USD", "decimals": 5, "pip": 0.0001},
-    {"symbol": "NZDUSD", "ticker": "NZDUSD=X", "base": "NZD", "quote": "USD", "decimals": 5, "pip": 0.0001},
-    {"symbol": "USDCAD", "ticker": "USDCAD=X", "base": "USD", "quote": "CAD", "decimals": 5, "pip": 0.0001},
-    {"symbol": "USDCHF", "ticker": "USDCHF=X", "base": "USD", "quote": "CHF", "decimals": 5, "pip": 0.0001},
-    {"symbol": "EURJPY", "ticker": "EURJPY=X", "base": "EUR", "quote": "JPY", "decimals": 3, "pip": 0.01},
+    {"symbol": "US30", "ticker": "YM=F", "base": "USD", "quote": "US30", "decimals": 2, "pip": 1.0, "unit": "pts"},
+    {"symbol": "EURUSD", "ticker": "EURUSD=X", "base": "EUR", "quote": "USD", "decimals": 5, "pip": 0.0001, "unit": "pips"},
+    {"symbol": "USDJPY", "ticker": "USDJPY=X", "base": "USD", "quote": "JPY", "decimals": 3, "pip": 0.01, "unit": "pips"},
+    {"symbol": "GBPUSD", "ticker": "GBPUSD=X", "base": "GBP", "quote": "USD", "decimals": 5, "pip": 0.0001, "unit": "pips"},
+    {"symbol": "AUDUSD", "ticker": "AUDUSD=X", "base": "AUD", "quote": "USD", "decimals": 5, "pip": 0.0001, "unit": "pips"},
+    {"symbol": "NZDUSD", "ticker": "NZDUSD=X", "base": "NZD", "quote": "USD", "decimals": 5, "pip": 0.0001, "unit": "pips"},
+    {"symbol": "USDCAD", "ticker": "USDCAD=X", "base": "USD", "quote": "CAD", "decimals": 5, "pip": 0.0001, "unit": "pips"},
+    {"symbol": "USDCHF", "ticker": "USDCHF=X", "base": "USD", "quote": "CHF", "decimals": 5, "pip": 0.0001, "unit": "pips"},
+    {"symbol": "EURJPY", "ticker": "EURJPY=X", "base": "EUR", "quote": "JPY", "decimals": 3, "pip": 0.01, "unit": "pips"},
 ]
 
 CENTRAL_BANKS = [
@@ -48,7 +49,6 @@ def get_ticker_metrics(ticker_str, decimals=2):
         return None
 
 def find_intraday_ob(df_1h, bias, price, day_high, day_low, dec):
-    # Busca el último Order Block real en 1H dentro de las últimas 28 horas
     recent = df_1h.tail(28)
     if bias == "BAJISTA":
         for i in range(len(recent) - 2, 0, -1):
@@ -56,10 +56,8 @@ def find_intraday_ob(df_1h, bias, price, day_high, day_low, dec):
             c_close = float(recent["Close"].iloc[i])
             c_high = float(recent["High"].iloc[i])
             next_close = float(recent["Close"].iloc[i + 1])
-            # Última vela alcista antes de impulso bajista por encima del precio actual
             if c_close > c_open and next_close < c_open and c_high > price:
                 return round(c_open, dec), round(c_high, dec)
-        # Respaldo: techo intradía de las últimas 24h
         rng = day_high - day_low
         return round(day_high - rng * 0.18, dec), round(day_high, dec)
 
@@ -69,38 +67,77 @@ def find_intraday_ob(df_1h, bias, price, day_high, day_low, dec):
             c_close = float(recent["Close"].iloc[i])
             c_low = float(recent["Low"].iloc[i])
             next_close = float(recent["Close"].iloc[i + 1])
-            # Última vela bajista antes de impulso alcista por debajo del precio actual
             if c_close < c_open and next_close > c_open and c_low < price:
                 return round(c_low, dec), round(c_open, dec)
-        # Respaldo: suelo intradía de las últimas 24h
         rng = day_high - day_low
         return round(day_low, dec), round(day_low + rng * 0.18, dec)
 
     rng = day_high - day_low
     return round(day_low + rng * 0.35, dec), round(day_high - rng * 0.35, dec)
 
+def build_weekly_days(df_1h, dec):
+    if df_1h.index.tz is None:
+        df_1h.index = df_1h.index.tz_localize("UTC")
+    else:
+        df_1h.index = df_1h.index.tz_convert("UTC")
+
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    monday_date = (now_utc - datetime.timedelta(days=now_utc.weekday())).date()
+    weekly_days = []
+
+    for i in range(5):
+        d_date = monday_date + datetime.timedelta(days=i)
+        day_df = df_1h[df_1h.index.date == d_date]
+        is_today = (d_date == now_utc.date())
+        if not day_df.empty:
+            d_high = round(float(day_df["High"].max()), dec)
+            d_low = round(float(day_df["Low"].min()), dec)
+            d_open = round(float(day_df["Open"].iloc[0]), dec)
+            d_close = round(float(day_df["Close"].iloc[-1]), dec)
+            dir_day = "ALCISTA" if d_close >= d_open else "BAJISTA"
+            status = "HOY · ACTIVO" if is_today else "CERRADO"
+        else:
+            d_high = "--"
+            d_low = "--"
+            dir_day = "PENDIENTE"
+            status = "HOY · ACTIVO" if is_today else "PENDIENTE"
+
+        weekly_days.append({
+            "day_en": DAYS_EN[i].upper(),
+            "day_es": DAYS_ES[i],
+            "date": str(d_date),
+            "is_today": is_today,
+            "high": d_high,
+            "low": d_low,
+            "direction": dir_day,
+            "status": status
+        })
+    return weekly_days
+
 def analyze_pair(pair_cfg):
     df_1h = yf.Ticker(pair_cfg["ticker"]).history(period="15d", interval="1h")
     df_15m = yf.Ticker(pair_cfg["ticker"]).history(period="5d", interval="15m")
     dec = pair_cfg["decimals"]
     pip = pair_cfg["pip"]
+    unit = pair_cfg["unit"]
 
     if df_1h.empty or len(df_1h) < 50 or df_15m.empty:
         return None
 
     price = float(df_15m["Close"].iloc[-1])
-    prev_24h = float(df_1h["Close"].iloc[-24])
+    prev_idx = -24 if len(df_1h) >= 24 else 0
+    prev_24h = float(df_1h["Close"].iloc[prev_idx])
     chg_24h = round(((price - prev_24h) / prev_24h) * 100, 2)
 
     ema20 = float(df_1h["Close"].ewm(span=20).mean().iloc[-1])
     ema50 = float(df_1h["Close"].ewm(span=50).mean().iloc[-1])
 
-    # Rango intradía real de las últimas 24 horas (96 velas de 15m)
     day_high = float(df_15m["High"].tail(96).max())
     day_low = float(df_15m["Low"].tail(96).min())
 
     today_idx = datetime.datetime.now(datetime.timezone.utc).weekday()
     day_en = DAYS_EN[today_idx]
+    trigger_thresh = 25.0 if unit == "pts" else 5.0
 
     if price > ema20 and ema20 > ema50:
         bias = "ALCISTA"
@@ -110,12 +147,12 @@ def analyze_pair(pair_cfg):
         target_liq = f"{round(day_high, dec)} (High {day_en})"
         dist_pips = max(0.0, round((price - zone_high) / pip, 1))
         ultron_note = f"Esperar mitigación en OB intradía ({zone_low} - {zone_high}) y confirmar CHOCH en 15m/5m hacia liquidez en {round(day_high, dec)}."
-        if dist_pips <= 5:
+        if dist_pips <= trigger_thresh:
             jarvis_action = "EN ZONA DE GATILLO · BUSCAR CHOCH 15m/5m"
             jarvis_detail = f"El precio está tocando tu Order Block intradía ({zone_low}-{zone_high}). Valida absorción en Delta y quiebre alcista antes de entrar."
         else:
-            jarvis_action = f"ESPERAR RETROCESO ({dist_pips} PIPS)"
-            jarvis_detail = f"El precio está a {dist_pips} pips de tu Order Block de demanda ({zone_low}-{zone_high}). No compres arriba; espera el descuento."
+            jarvis_action = f"ESPERAR RETROCESO ({dist_pips} {unit.upper()})"
+            jarvis_detail = f"El precio está a {dist_pips} {unit} de tu Order Block de demanda ({zone_low}-{zone_high}). No compres arriba; espera el descuento."
 
     elif price < ema20 and ema20 < ema50:
         bias = "BAJISTA"
@@ -125,12 +162,12 @@ def analyze_pair(pair_cfg):
         target_liq = f"{round(day_low, dec)} (Low {day_en})"
         dist_pips = max(0.0, round((zone_low - price) / pip, 1))
         ultron_note = f"Esperar mitigación en OB de oferta ({zone_low} - {zone_high}) tras barrido intradía hacia liquidez en {round(day_low, dec)}."
-        if dist_pips <= 5:
+        if dist_pips <= trigger_thresh:
             jarvis_action = "EN ZONA DE GATILLO · BUSCAR CHOCH 15m/5m"
             jarvis_detail = f"El precio está dentro de tu Order Block de oferta ({zone_low}-{zone_high}). Busca rechazo y CHOCH bajista en 15m/5m."
         else:
-            jarvis_action = f"ESPERAR REBOTE ({dist_pips} PIPS)"
-            jarvis_detail = f"El precio está a {dist_pips} pips por debajo de la oferta intradía ({zone_low}-{zone_high}). Evita vender en suelos; espera mitigación arriba."
+            jarvis_action = f"ESPERAR REBOTE ({dist_pips} {unit.upper()})"
+            jarvis_detail = f"El precio está a {dist_pips} {unit} por debajo de la oferta intradía ({zone_low}-{zone_high}). Evita vender en suelos; espera mitigación arriba."
 
     else:
         bias = "NEUTRAL"
@@ -149,6 +186,7 @@ def analyze_pair(pair_cfg):
         "quote": pair_cfg["quote"],
         "decimals": dec,
         "pip": pip,
+        "unit": unit,
         "price": round(price, dec),
         "change_24h": chg_24h,
         "bias": bias,
@@ -159,6 +197,7 @@ def analyze_pair(pair_cfg):
         "ultron_note": ultron_note,
         "jarvis_action": jarvis_action,
         "jarvis_detail": jarvis_detail,
+        "weekly_days": build_weekly_days(df_1h, dec),
     }
 
 def fetch_calendar():
@@ -223,17 +262,17 @@ def main():
         )
     elif dxy["price"] < dxy["ema20"] and dxy["change_pct"] <= 0:
         regime = "DEBILIDAD DEL DÓLAR · APETITO POR RIESGO"
-        headline = f"DXY cede presión hasta {dxy['price']} y favorece pares mayores contra el USD"
+        headline = f"DXY cede presión hasta {dxy['price']} y favorece pares mayores y renta variable"
         macro_body = (
             f"El índice del dólar retrocede por debajo de su referencia de 20 días ({dxy['ema20']}) con cambio de {dxy['change_pct']}%. "
-            f"La moderación en el bono US10Y ({us10y['price']}%) libera liquidez hacia divisas principales como EUR, GBP y AUD en sesiones de Londres y Nueva York."
+            f"La moderación en el bono US10Y ({us10y['price']}%) libera liquidez hacia divisas principales e índices como US30 en sesiones de Londres y Nueva York."
         )
     else:
         regime = "ROTACIÓN INTRADÍA · DIVERGENCIA DE TASAS"
         headline = f"Mercado en equilibrio táctico: DXY en {dxy['price']} y US10Y en {us10y['price']}%"
         macro_body = (
             f"El dólar muestra movimientos mixtos ({dxy['change_pct']}%) mientras el mercado evalúa los diferenciales de tasas entre la Fed, el BCE y el BoJ. "
-            f"Priorizar pares con divergencia monetaria clara y esperar barridos de liquidez en apertura de sesión."
+            f"Priorizar activos con estructura clara y esperar barridos de liquidez en apertura de sesión."
         )
 
     assets = []
