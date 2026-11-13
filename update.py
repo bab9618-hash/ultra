@@ -2,18 +2,19 @@ import json
 import datetime
 import requests
 import yfinance as yf
-import numpy as np
 
-# 8 pares principales de divisas (sin materias primas)
+DAYS_EN = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+DAYS_ES = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+
 PAIRS = [
-    {"symbol": "EURUSD", "ticker": "EURUSD=X", "base": "EUR", "quote": "USD", "decimals": 5},
-    {"symbol": "USDJPY", "ticker": "USDJPY=X", "base": "USD", "quote": "JPY", "decimals": 3},
-    {"symbol": "GBPUSD", "ticker": "GBPUSD=X", "base": "GBP", "quote": "USD", "decimals": 5},
-    {"symbol": "AUDUSD", "ticker": "AUDUSD=X", "base": "AUD", "quote": "USD", "decimals": 5},
-    {"symbol": "NZDUSD", "ticker": "NZDUSD=X", "base": "NZD", "quote": "USD", "decimals": 5},
-    {"symbol": "USDCAD", "ticker": "USDCAD=X", "base": "USD", "quote": "CAD", "decimals": 5},
-    {"symbol": "USDCHF", "ticker": "USDCHF=X", "base": "USD", "quote": "CHF", "decimals": 5},
-    {"symbol": "EURJPY", "ticker": "EURJPY=X", "base": "EUR", "quote": "JPY", "decimals": 3},
+    {"symbol": "EURUSD", "ticker": "EURUSD=X", "base": "EUR", "quote": "USD", "decimals": 5, "pip": 0.0001},
+    {"symbol": "USDJPY", "ticker": "USDJPY=X", "base": "USD", "quote": "JPY", "decimals": 3, "pip": 0.01},
+    {"symbol": "GBPUSD", "ticker": "GBPUSD=X", "base": "GBP", "quote": "USD", "decimals": 5, "pip": 0.0001},
+    {"symbol": "AUDUSD", "ticker": "AUDUSD=X", "base": "AUD", "quote": "USD", "decimals": 5, "pip": 0.0001},
+    {"symbol": "NZDUSD", "ticker": "NZDUSD=X", "base": "NZD", "quote": "USD", "decimals": 5, "pip": 0.0001},
+    {"symbol": "USDCAD", "ticker": "USDCAD=X", "base": "USD", "quote": "CAD", "decimals": 5, "pip": 0.0001},
+    {"symbol": "USDCHF", "ticker": "USDCHF=X", "base": "USD", "quote": "CHF", "decimals": 5, "pip": 0.0001},
+    {"symbol": "EURJPY", "ticker": "EURJPY=X", "base": "EUR", "quote": "JPY", "decimals": 3, "pip": 0.01},
 ]
 
 CENTRAL_BANKS = [
@@ -37,15 +38,11 @@ def get_ticker_metrics(ticker_str, decimals=2):
         change_pct = ((close - prev_close) / prev_close) * 100
         ema20 = float(df["Close"].ewm(span=20).mean().iloc[-1])
         ema50 = float(df["Close"].ewm(span=50).mean().iloc[-1])
-        high_20 = float(df["High"].tail(20).max())
-        low_20 = float(df["Low"].tail(20).min())
         return {
             "price": round(close, decimals),
             "change_pct": round(change_pct, 2),
             "ema20": round(ema20, decimals),
             "ema50": round(ema50, decimals),
-            "high_20": round(high_20, decimals),
-            "low_20": round(low_20, decimals),
         }
     except Exception:
         return None
@@ -53,6 +50,7 @@ def get_ticker_metrics(ticker_str, decimals=2):
 def analyze_pair(pair_cfg):
     df_1h = yf.Ticker(pair_cfg["ticker"]).history(period="1mo", interval="1h")
     dec = pair_cfg["decimals"]
+    pip = pair_cfg["pip"]
     if df_1h.empty or len(df_1h) < 60:
         return None
 
@@ -63,38 +61,53 @@ def analyze_pair(pair_cfg):
     ema50 = float(df_1h["Close"].ewm(span=50).mean().iloc[-1])
     ema200 = float(df_1h["Close"].ewm(span=200).mean().iloc[-1])
 
-    # Rango institucional de las últimas 72 horas (3 días intradía)
     recent_high = float(df_1h["High"].tail(72).max())
     recent_low = float(df_1h["Low"].tail(72).min())
     rng = recent_high - recent_low
 
+    today_idx = datetime.datetime.now(datetime.timezone.utc).weekday()
+    day_en = DAYS_EN[today_idx]
+
     if price > ema50 and ema50 > ema200:
         bias = "ALCISTA"
         summary = f"Estructura alcista sobre EMA50/200 en 1H ({round(ema50, dec)}). Flujo comprador prioriza retrocesos a descuento."
-        zone_type = "Demanda / OB Alcista 4H"
+        zone_type = f"Demanda {day_en} / OB 4H"
         zone_low = round(recent_low + rng * 0.20, dec)
         zone_high = round(recent_low + rng * 0.38, dec)
-        target_liq = round(recent_high, dec)
-        ultron_note = f"Esperar mitigación en zona de descuento ({zone_low} - {zone_high}) y confirmar CHOCH en 15m/30m hacia liquidez en {target_liq}."
+        target_liq = f"{round(recent_high, dec)} ({day_en})"
+        dist_pips = round((price - zone_high) / pip, 1)
+        ultron_note = f"Esperar mitigación en zona de descuento ({zone_low} - {zone_high}) y confirmar CHOCH en 15m/30m hacia liquidez de {day_en} en {round(recent_high, dec)}."
+        jarvis_action = "ESPERAR RETROCESO A DESCUENTO" if dist_pips > 15 else "ZONA DE GATILLO ACTIVA (BUSCAR CHOCH 15m/5m)"
+        jarvis_detail = f"El precio está a {dist_pips} pips por encima de tu zona de demanda. No persigas compras arriba; espera mitigación en {zone_low}-{zone_high} con absorción en Delta."
     elif price < ema50 and ema50 < ema200:
         bias = "BAJISTA"
         summary = f"Estructura bajista bajo EMA50/200 en 1H ({round(ema50, dec)}). Presión vendedora domina rebotes a zona premium."
-        zone_type = "Oferta / OB Bajista 4H"
+        zone_type = f"Oferta {day_en} / OB 4H"
         zone_low = round(recent_high - rng * 0.38, dec)
         zone_high = round(recent_high - rng * 0.20, dec)
-        target_liq = round(recent_low, dec)
-        ultron_note = f"Esperar mitigación en zona premium ({zone_low} - {zone_high}) tras barrido de máximos intradía hacia liquidez en {target_liq}."
+        target_liq = f"{round(recent_low, dec)} ({day_en})"
+        dist_pips = round((zone_low - price) / pip, 1)
+        ultron_note = f"Esperar mitigación en zona premium ({zone_low} - {zone_high}) tras barrido intradía hacia liquidez de {day_en} en {round(recent_low, dec)}."
+        jarvis_action = "ESPERAR REBOTE A ZONA PREMIUM" if dist_pips > 15 else "ZONA DE GATILLO ACTIVA (BUSCAR CHOCH 15m/5m)"
+        jarvis_detail = f"El precio está a {dist_pips} pips por debajo de la oferta institucional. Evita vender en suelos; espera retroceso a {zone_low}-{zone_high} y quiebre bajista en 15m."
     else:
         bias = "NEUTRAL"
         summary = f"Consolidación entre medias móviles 1H ({round(ema50, dec)} / {round(ema200, dec)}). Esperar ruptura con volumen en Londres/NY."
-        zone_type = "Rango de Equilibrio"
+        zone_type = f"Rango {day_en}"
         zone_low = round(recent_low + rng * 0.35, dec)
         zone_high = round(recent_high - rng * 0.35, dec)
-        target_liq = round(recent_high if price > ema200 else recent_low, dec)
-        ultron_note = f"Evitar entradas en medio del rango ({zone_low} - {zone_high}); esperar toma de liquidez en extremos ({recent_low} / {recent_high})."
+        liq_val = round(recent_high if price > ema200 else recent_low, dec)
+        target_liq = f"{liq_val} ({day_en})"
+        ultron_note = f"Evitar entradas en medio del rango ({zone_low} - {zone_high}); esperar toma de liquidez de {day_en} en extremos ({recent_low} / {recent_high})."
+        jarvis_action = "NO OPERAR EN RANGO · ESPERAR BARRIDO"
+        jarvis_detail = f"Sin alineación clara entre 1H y 4H. Mantente fuera hasta que el precio barra {recent_high} o {recent_low} y confirme reversión."
 
     return {
         "symbol": pair_cfg["symbol"],
+        "base": pair_cfg["base"],
+        "quote": pair_cfg["quote"],
+        "decimals": dec,
+        "pip": pip,
         "price": round(price, dec),
         "change_24h": chg_24h,
         "bias": bias,
@@ -103,11 +116,14 @@ def analyze_pair(pair_cfg):
         "zone_range": f"{zone_low} - {zone_high}",
         "liquidity_target": target_liq,
         "ultron_note": ultron_note,
+        "jarvis_action": jarvis_action,
+        "jarvis_detail": jarvis_detail,
     }
 
 def fetch_calendar():
     url = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
     allowed_currencies = {"USD", "EUR", "GBP", "JPY", "AUD", "NZD", "CAD", "CHF"}
+    today_utc = datetime.datetime.now(datetime.timezone.utc).date()
     events = []
     try:
         resp = requests.get(url, timeout=10)
@@ -116,8 +132,16 @@ def fetch_calendar():
             for item in raw:
                 if item.get("currency") in allowed_currencies and item.get("impact") in ("High", "Medium"):
                     dt_str = item.get("date", "")
-                    date_label = dt_str[:10] if len(dt_str) >= 10 else "Esta semana"
+                    date_iso = dt_str[:10] if len(dt_str) >= 10 else ""
                     time_label = dt_str[11:16] if len(dt_str) >= 16 else "--:--"
+                    try:
+                        d_obj = datetime.date.fromisoformat(date_iso)
+                        day_label = f"{DAYS_EN[d_obj.weekday()].upper()} ({DAYS_ES[d_obj.weekday()]})"
+                        hoy_tag = " · HOY" if d_obj == today_utc else ""
+                        date_label = f"{day_label} · {date_iso}{hoy_tag}"
+                    except Exception:
+                        date_label = date_iso or "Esta semana"
+
                     impact_es = "ALTO IMPACTO" if item.get("impact") == "High" else "MEDIO IMPACTO"
                     forecast = item.get("forecast") or "N/D"
                     previous = item.get("previous") or "N/D"
@@ -133,8 +157,9 @@ def fetch_calendar():
         pass
 
     if not events:
+        idx = today_utc.weekday()
         events = [{
-            "date": datetime.datetime.utcnow().strftime("%Y-%m-%d"),
+            "date": f"{DAYS_EN[idx].upper()} ({DAYS_ES[idx]}) · {today_utc} · HOY",
             "time": "13:30 UTC",
             "currency": "USD",
             "impact": "ALTO IMPACTO",
@@ -176,7 +201,9 @@ def main():
         if res:
             assets.append(res)
 
-    now_utc = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    now_dt = datetime.datetime.now(datetime.timezone.utc)
+    day_name = DAYS_EN[now_dt.weekday()]
+    now_utc = f"{day_name} {now_dt.strftime('%Y-%m-%d %H:%M UTC')}"
 
     output = {
         "last_updated": now_utc,
