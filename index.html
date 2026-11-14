@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Inteligencia Macro, Ultrón & Jarvis</title>
+  <title>ORÁCULO · Jarvis, Visión, Ultrón & F.R.I.D.A.Y.</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -15,672 +15,1101 @@
             mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
-            bg: '#090b0f',
-            panel: '#11151c',
-            panelHover: '#161b24',
-            border: '#1f2633',
-            accent: '#f97316',
-            jarvis: '#38bdf8',
-            bull: '#10b981',
-            bear: '#ef4444',
-            neutral: '#f59e0b'
+            bg: '#080a0e',
+            panel: '#10141c',
+            card: '#141923',
+            border: '#1e2533',
+            gold: '#f59e0b',
+            cyan: '#38bdf8',
+            crimson: '#ef4444',
+            violet: '#a855f7',
+            emerald: '#10b981'
           }
         }
       }
     }
   </script>
   <style>
-    body { background-color: #090b0f; color: #e2e8f0; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #090b0f; }
-    ::-webkit-scrollbar-thumb { background: #1f2633; border-radius: 3px; }
+    body { background-color: #080a0e; color: #e2e8f0; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #080a0e; }
+    ::-webkit-scrollbar-thumb { background: #1e2533; border-radius: 3px; }
+    @keyframes pulseRing {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.06); opacity: 0.4; }
+    }
+    .radar-ring { animation: pulseRing 2.6s infinite ease-in-out; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-orange-500 selection:text-white">
+<body class="min-h-screen flex flex-col pb-20 sm:pb-6 antialiased selection:bg-amber-500 selection:text-black">
 
-  <!-- BARRA SUPERIOR DE SESIONES -->
-  <header class="border-b border-border bg-panel/90 sticky top-0 z-30 backdrop-blur">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded bg-accent/20 border border-accent flex items-center justify-center text-accent font-mono font-bold">O</div>
+  <!-- PANTALLA DE ARRANQUE ORÁCULO (BOOT SCREEN DEL VIDEO) -->
+  <div id="boot-screen" class="fixed inset-0 z-50 bg-[#06080c] flex flex-col items-center justify-center p-6 text-center transition-opacity duration-500">
+    <div class="relative w-64 h-64 flex items-center justify-center mb-6">
+      <div class="absolute inset-0 rounded-full border border-amber-500/30 radar-ring"></div>
+      <div class="absolute inset-6 rounded-full border border-dashed border-cyan-400/40"></div>
+      <!-- Nodos orbitales -->
+      <div class="absolute -top-3 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-400 text-[10px] font-mono text-amber-300">JARVIS · MANDO</div>
+      <div class="absolute -left-5 px-2.5 py-1 rounded-full bg-sky-500/15 border border-sky-400 text-[10px] font-mono text-sky-300">VISIÓN · MACRO</div>
+      <div class="absolute -right-6 px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-400 text-[10px] font-mono text-purple-300">F.R.I.D.A.Y.</div>
+      <div class="absolute -bottom-3 px-2.5 py-1 rounded-full bg-red-500/15 border border-red-400 text-[10px] font-mono text-red-300">ULTRÓN · ESTRUCTURA</div>
+      <!-- Núcleo central -->
+      <div class="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500/30 to-sky-500/20 border-2 border-amber-400 flex flex-col items-center justify-center shadow-lg shadow-amber-500/20">
+        <span class="font-mono font-extrabold text-xl text-white">O</span>
+        <span class="text-[9px] font-mono text-amber-300">EN LÍNEA</span>
+      </div>
+    </div>
+    <h1 class="text-3xl font-extrabold tracking-[0.28em] text-white">ORÁCULO</h1>
+    <p class="text-xs font-mono tracking-[0.2em] text-amber-400 mt-2">TODOS LOS SISTEMAS · EN LÍNEA</p>
+    <button onclick="enterOraculo()" class="mt-7 px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-mono font-bold text-xs tracking-wider shadow-lg shadow-amber-500/20 transition">
+      ENTRAR AL SISTEMA →
+    </button>
+  </div>
+
+  <!-- BARRA SUPERIOR -->
+  <header class="border-b border-border bg-panel/95 sticky top-0 z-30 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <button onclick="showBoot()" title="Ver pantalla de sistemas" class="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-400 flex items-center justify-center text-amber-400 font-mono font-extrabold text-sm">O</button>
         <div>
           <div class="flex items-center gap-2">
-            <span class="font-bold tracking-wider text-white text-sm">ORÁCULO</span>
-            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/20 text-accent border border-accent/40">MARK 1</span>
-            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-500/30">+ JARVIS</span>
+            <span class="font-extrabold tracking-widest text-white text-sm">ORÁCULO</span>
+            <span id="killzone-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">VERIFICANDO SESIÓN</span>
           </div>
-          <p class="text-[10px] font-mono text-slate-400 tracking-widest">INTRADAY · MACRO · ORDEN INSTITUCIONAL</p>
+          <div id="last-updated" class="text-[10px] font-mono text-slate-400">Sincronizando motores...</div>
         </div>
       </div>
 
-      <!-- Relojes de Sesiones -->
-      <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
-        <div id="clock-syd" class="px-2.5 py-1 rounded bg-bg border border-border text-slate-300">SYD: --:--</div>
-        <div id="clock-tky" class="px-2.5 py-1 rounded bg-bg border border-border text-slate-300">TKY: --:--</div>
-        <div id="clock-ldn" class="px-2.5 py-1 rounded bg-bg border border-border text-slate-300">LDN: --:--</div>
-        <div id="clock-nyc" class="px-2.5 py-1 rounded bg-bg border border-border text-slate-300">NYC: --:--</div>
-        <div id="session-status" class="px-2.5 py-1 rounded bg-orange-500/10 border border-orange-500/30 text-orange-400">Calculando liquidez...</div>
-      </div>
-
-      <!-- Estado de actualización -->
-      <div class="text-right font-mono">
-        <div class="text-xs text-emerald-400 flex items-center justify-end gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>EN VIVO</span>
-        </div>
-        <div id="last-updated" class="text-[10px] text-slate-400">Sincronizando datos...</div>
+      <!-- Relojes mundiales -->
+      <div class="flex flex-wrap items-center gap-1.5 text-[11px] font-mono">
+        <span id="clk-syd" class="px-2 py-0.5 rounded bg-bg border border-border text-slate-400">SYD --:--</span>
+        <span id="clk-tky" class="px-2 py-0.5 rounded bg-bg border border-border text-slate-400">TKY --:--</span>
+        <span id="clk-ldn" class="px-2 py-0.5 rounded bg-bg border border-border text-slate-300">LDN --:--</span>
+        <span id="clk-nyc" class="px-2 py-0.5 rounded bg-bg border border-border text-slate-300">NYC --:--</span>
+        <span id="clk-utc" class="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400">UTC --:--:--</span>
       </div>
     </div>
 
-    <!-- Navegación -->
-    <nav class="max-w-7xl mx-auto px-4 flex items-center justify-between border-t border-border/60 overflow-x-auto">
-      <div class="flex space-x-1">
-        <button onclick="switchTab('vision')" id="tab-vision" class="tab-btn px-4 py-2.5 text-xs font-mono font-semibold border-b-2 border-accent text-accent whitespace-nowrap">1. VISIÓN (MACRO)</button>
-        <button onclick="switchTab('ultron')" id="tab-ultron" class="tab-btn px-4 py-2.5 text-xs font-mono font-semibold border-b-2 border-transparent text-slate-400 hover:text-white whitespace-nowrap">2. ULTRÓN (FLOW & OB)</button>
-        <button onclick="switchTab('jarvis')" id="tab-jarvis" class="tab-btn px-4 py-2.5 text-xs font-mono font-semibold border-b-2 border-transparent text-slate-400 hover:text-sky-400 whitespace-nowrap">3. JARVIS (ASESOR IA)</button>
-        <button onclick="switchTab('analisis')" id="tab-analisis" class="tab-btn px-4 py-2.5 text-xs font-mono font-semibold border-b-2 border-transparent text-slate-400 hover:text-white whitespace-nowrap">4. ANÁLISIS & ESTRUCTURA</button>
-        <button onclick="switchTab('diario')" id="tab-diario" class="tab-btn px-4 py-2.5 text-xs font-mono font-semibold border-b-2 border-transparent text-slate-400 hover:text-white whitespace-nowrap">5. DIARIO DE TRADING <span id="journal-count" class="ml-1 px-1.5 py-0.2 rounded bg-border text-slate-300">0</span></button>
-      </div>
-      <div id="clock-utc" class="text-xs font-mono text-slate-400 hidden sm:block">UTC: --:--:--</div>
+    <!-- Navegación Escritorio -->
+    <nav class="hidden sm:flex max-w-7xl mx-auto px-4 border-t border-border/60 gap-1">
+      <button onclick="switchModule('jarvis')" id="nav-jarvis" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-amber-400 text-amber-400">⚡ JARVIS · FUSIÓN</button>
+      <button onclick="switchModule('vision')" id="nav-vision" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-sky-400">🌐 VISIÓN · MACRO</button>
+      <button onclick="switchModule('ultron')" id="nav-ultron" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-red-400">🎯 ULTRÓN · GRÁFICO & ENTRADAS</button>
+      <button onclick="switchModule('friday')" id="nav-friday" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-purple-400">🧠 F.R.I.D.A.Y. · TUTORA</button>
+      <button onclick="switchModule('analisis')" id="nav-analisis" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-white">📐 ANÁLISIS</button>
+      <button onclick="switchModule('diario')" id="nav-diario" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-white">📓 DIARIO <span id="journal-badge" class="ml-1 px-1.5 rounded bg-border text-slate-300">0</span></button>
     </nav>
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-6">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 space-y-6">
 
-    <!-- PESTAÑA 1: VISIÓN -->
-    <section id="view-vision" class="space-y-6">
-      <div class="bg-panel border border-border rounded-lg p-5 space-y-4">
+    <!-- ========================================================= -->
+    <!-- MÓDULO 1: JARVIS · FUSIÓN (MESA DE SWING & ENTRADAS)      -->
+    <!-- ========================================================= -->
+    <section id="mod-jarvis" class="space-y-5">
+      <div class="bg-panel border border-amber-500/30 rounded-xl p-5 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 text-[11px] font-mono font-bold bg-accent text-black rounded">VISIÓN · INTELIGENCIA MACRO</span>
-            <span id="macro-regime" class="px-2 py-0.5 text-[11px] font-mono bg-bg border border-border text-orange-400 rounded">CARGANDO RÉGIMEN...</span>
-          </div>
-          <button onclick="loadMarketData(true)" class="text-[11px] font-mono text-slate-400 hover:text-accent underline">↻ Refrescar datos</button>
-        </div>
-
-        <h1 id="macro-headline" class="text-lg sm:text-xl font-bold text-white leading-snug">Cargando lectura institucional del mercado...</h1>
-        <p id="macro-body" class="text-sm text-slate-300 leading-relaxed">Obteniendo métricas de rendimiento de bonos, índice del dólar y diferenciales de política monetaria...</p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-          <div class="bg-bg border border-border rounded p-3">
-            <div class="text-[11px] font-mono text-slate-400">US 10Y BOND YIELD</div>
-            <div class="flex items-baseline gap-2 mt-1">
-              <span id="metric-us10y" class="text-lg font-mono font-bold text-white">--</span>
-              <span id="metric-us10y-chg" class="text-xs font-mono text-slate-400">--</span>
-            </div>
-          </div>
-          <div class="bg-bg border border-border rounded p-3">
-            <div class="text-[11px] font-mono text-slate-400">DXY (ÍNDICE DÓLAR)</div>
-            <div class="flex items-baseline gap-2 mt-1">
-              <span id="metric-dxy" class="text-lg font-mono font-bold text-emerald-400">--</span>
-              <span id="metric-dxy-chg" class="text-xs font-mono text-slate-400">--</span>
-            </div>
-          </div>
-          <div class="bg-bg border border-border rounded p-3">
-            <div class="text-[11px] font-mono text-slate-400">BRENT CRUDE (ENERGÍA)</div>
-            <div class="flex items-baseline gap-2 mt-1">
-              <span id="metric-brent" class="text-lg font-mono font-bold text-white">--</span>
-              <span id="metric-brent-chg" class="text-xs font-mono text-slate-400">--</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECCIÓN DE LOS DÍAS (MONDAY - FRIDAY) -->
-      <div class="bg-panel border border-border rounded-lg p-5 space-y-3">
-        <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 class="text-sm font-mono font-bold text-accent uppercase tracking-wider">Mapa Semanal por Días (Monday – Friday)</h2>
-            <p class="text-xs text-slate-400">Máximos (High) y mínimos (Low) de liquidez institucional de cada día de la semana en curso</p>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+              <h2 class="text-sm font-mono font-extrabold text-amber-400 tracking-wider">JARVIS · FUSIÓN</h2>
+            </div>
+            <p class="text-xs font-mono text-slate-300 mt-1">«VISIÓN VE EL MUNDO. ULTRÓN VE EL GRÁFICO. YO LOS UNO, SEÑOR.»</p>
           </div>
-          <select id="days-pair-select" onchange="renderWeeklyDays()" class="bg-bg border border-accent/50 rounded px-3 py-1.5 text-xs font-mono text-white focus:outline-none">
-            <option value="US30">US30 (Dow Jones)</option>
-            <option value="EURUSD">EURUSD</option>
-            <option value="USDJPY">USDJPY</option>
-            <option value="GBPUSD">GBPUSD</option>
-            <option value="AUDUSD">AUDUSD</option>
-            <option value="NZDUSD">NZDUSD</option>
-            <option value="USDCAD">USDCAD</option>
-            <option value="USDCHF">USDCHF</option>
-            <option value="EURJPY">EURJPY</option>
-          </select>
+          <div class="flex gap-1.5 font-mono text-xs">
+            <button onclick="filterJarvis('ALL')" class="j-filter px-3 py-1 rounded bg-amber-500 text-black font-bold" data-jf="ALL">TODOS (11)</button>
+            <button onclick="filterJarvis('ALIGNED')" class="j-filter px-3 py-1 rounded bg-bg border border-border text-emerald-400" data-jf="ALIGNED">✔ VAN JUNTOS</button>
+            <button onclick="filterJarvis('OPPOSED')" class="j-filter px-3 py-1 rounded bg-bg border border-border text-red-400" data-jf="OPPOSED">✖ SE CONTRADICEN</button>
+          </div>
         </div>
-        <div id="weekly-days-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3"></div>
+
+        <!-- Bloque ¿Dónde hay trade? del video -->
+        <div class="bg-bg border border-border rounded-lg p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-mono font-bold text-white">◆ ¿DÓNDE HAY TRADE?</span>
+            <span class="text-[11px] text-slate-400">La economía y su gráfico, lado a lado</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+            <div class="bg-panel border border-border rounded p-2.5 flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 font-mono font-bold flex items-center justify-center text-[11px]">1</span>
+              <span><strong class="text-sky-400">VISIÓN</strong> dice hacia dónde empuja la <strong>economía</strong></span>
+            </div>
+            <div class="bg-panel border border-border rounded p-2.5 flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-red-500/20 text-red-400 font-mono font-bold flex items-center justify-center text-[11px]">2</span>
+              <span><strong class="text-red-400">ULTRÓN</strong> marca hacia dónde va <strong>su gráfico</strong></span>
+            </div>
+            <div class="bg-panel border border-border rounded p-2.5 flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 font-mono font-bold flex items-center justify-center text-[11px]">3</span>
+              <span>Si van <strong class="text-emerald-400">juntos</strong>, abra el gráfico y ejecute el plan</span>
+            </div>
+          </div>
+
+          <!-- Mayor Confluencia & Mejores Hoy -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+            <div>
+              <div class="text-[10px] font-mono text-slate-400 uppercase mb-1.5">Mayor Confluencia</div>
+              <div id="jarvis-top-confluence" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div>
+              <div class="text-[10px] font-mono text-slate-400 uppercase mb-1.5">Mejores Hoy (Entradas Activas)</div>
+              <div id="jarvis-best-today" class="flex flex-wrap gap-1.5"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Matriz de Activos (8 Divisas + US30) -->
-      <div class="space-y-3">
-        <div class="flex flex-wrap items-center justify-between gap-3">
+      <!-- Tarjetas de Fusión Economía + Gráfico con Entradas Exactas -->
+      <div id="jarvis-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- MÓDULO 2: VISIÓN · INTELIGENCIA MACRO                     -->
+    <!-- ========================================================= -->
+    <section id="mod-vision" class="hidden space-y-5">
+      <div class="bg-panel border border-sky-500/30 rounded-xl p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2 class="text-sm font-mono font-bold text-white uppercase tracking-wider">Sesgo de Visión por Activo (8 Divisas + US30)</h2>
-            <p class="text-xs text-slate-400">Direccionalidad derivada de estructura 1H/4H y flujo institucional</p>
+            <h2 class="text-sm font-mono font-extrabold text-sky-400 tracking-wider">🌐 VISIÓN · INTELIGENCIA MACRO</h2>
+            <p class="text-xs font-mono text-slate-300 mt-0.5">«VEO EL MUNDO ANTES QUE EL GRÁFICO.»</p>
           </div>
-          <div class="flex flex-wrap gap-1.5 font-mono text-xs">
-            <button onclick="filterAssets('ALL')" class="filter-btn px-3 py-1 rounded bg-accent text-black font-semibold" data-filter="ALL">TODOS</button>
-            <button onclick="filterAssets('ALCISTA')" class="filter-btn px-3 py-1 rounded bg-panel border border-border text-slate-300 hover:border-bull" data-filter="ALCISTA">ALCISTAS</button>
-            <button onclick="filterAssets('BAJISTA')" class="filter-btn px-3 py-1 rounded bg-panel border border-border text-slate-300 hover:border-bear" data-filter="BAJISTA">BAJISTAS</button>
-            <button onclick="filterAssets('NEUTRAL')" class="filter-btn px-3 py-1 rounded bg-panel border border-border text-slate-300 hover:border-neutral" data-filter="NEUTRAL">NEUTRALES</button>
-          </div>
+          <button onclick="loadData()" class="px-3 py-1 rounded bg-bg border border-border text-xs font-mono text-sky-400 hover:border-sky-400">↻ Actualizar</button>
         </div>
 
-        <div id="assets-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        <!-- Brief Diario -->
+        <div class="bg-bg border border-border rounded-lg p-4 space-y-2.5">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">BRIEF DIARIO</span>
+            <span id="brief-date" class="text-slate-400">--</span>
+          </div>
+          <h3 id="brief-headline" class="text-base sm:text-lg font-bold text-white leading-snug">Cargando reporte macroeconómico...</h3>
+          <p id="brief-summary" class="text-xs sm:text-sm text-slate-300 leading-relaxed">--</p>
+
+          <div class="grid grid-cols-3 gap-2.5 pt-2">
+            <div class="bg-panel border border-border rounded p-2.5">
+              <div class="text-[10px] font-mono text-slate-400">US 10Y YIELD</div>
+              <div class="text-sm sm:text-base font-mono font-bold text-white mt-0.5"><span id="m-us10y">--</span> <span id="m-us10y-c" class="text-xs text-slate-400">--</span></div>
+            </div>
+            <div class="bg-panel border border-border rounded p-2.5">
+              <div class="text-[10px] font-mono text-slate-400">DXY DÓLAR</div>
+              <div class="text-sm sm:text-base font-mono font-bold text-emerald-400 mt-0.5"><span id="m-dxy">--</span> <span id="m-dxy-c" class="text-xs text-slate-400">--</span></div>
+            </div>
+            <div class="bg-panel border border-border rounded p-2.5">
+              <div class="text-[10px] font-mono text-slate-400">BRENT CRUDE</div>
+              <div class="text-sm sm:text-base font-mono font-bold text-white mt-0.5"><span id="m-brent">--</span> <span id="m-brent-c" class="text-xs text-slate-400">--</span></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Bancos Centrales y Calendario -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-2">
-        <div class="lg:col-span-6 bg-panel border border-border rounded-lg p-4 space-y-3">
-          <h3 class="text-xs font-mono font-bold text-accent uppercase tracking-wider">Matriz de Bancos Centrales</h3>
+      <!-- Cuadrante Macro por Activo -->
+      <div class="space-y-2.5">
+        <h3 class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider">Cuadrante de Empuje Económico por Activo</h3>
+        <div id="vision-assets-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+      </div>
+
+      <!-- Bancos Centrales & Calendario -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-6 bg-panel border border-border rounded-xl p-4 space-y-3">
+          <h3 class="text-xs font-mono font-bold text-sky-400 uppercase">Bancos Centrales (Tasas & Postura)</h3>
           <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
+            <table class="w-full text-left text-xs">
               <thead>
-                <tr class="border-b border-border text-[11px] font-mono text-slate-400">
-                  <th class="py-2 pr-2">BANCO</th>
-                  <th class="py-2 px-2">TASA</th>
-                  <th class="py-2 px-2">POSTURA</th>
-                  <th class="py-2 pl-2">ENFOQUE ACTUAL</th>
+                <tr class="border-b border-border text-[10px] font-mono text-slate-400">
+                  <th class="py-2">BANCO</th>
+                  <th class="py-2">TASA</th>
+                  <th class="py-2">POSTURA</th>
+                  <th class="py-2">LECTURA</th>
                 </tr>
               </thead>
-              <tbody id="cb-table" class="divide-y divide-border/50"></tbody>
+              <tbody id="vision-cb-table" class="divide-y divide-border/50"></tbody>
             </table>
           </div>
         </div>
 
-        <div class="lg:col-span-6 bg-panel border border-border rounded-lg p-4 space-y-3">
-          <h3 class="text-xs font-mono font-bold text-accent uppercase tracking-wider">Calendario Económico Contextualizado (Semana)</h3>
-          <div id="calendar-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1"></div>
+        <div class="lg:col-span-6 bg-panel border border-border rounded-xl p-4 space-y-3">
+          <h3 class="text-xs font-mono font-bold text-sky-400 uppercase">Calendario Económico (Semana)</h3>
+          <div id="vision-calendar-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1"></div>
         </div>
       </div>
     </section>
 
-    <!-- PESTAÑA 2: ULTRÓN -->
-    <section id="view-ultron" class="hidden space-y-6">
-      <div class="bg-panel border border-border rounded-lg p-5 flex flex-wrap items-center justify-between gap-4">
+    <!-- ========================================================= -->
+    <!-- MÓDULO 3: ULTRÓN · INTELIGENCIA TÉCNICA & GRÁFICO SMC     -->
+    <!-- ========================================================= -->
+    <section id="mod-ultron" class="hidden space-y-5">
+      <div class="bg-panel border border-red-500/30 rounded-xl p-5 space-y-4">
         <div>
-          <h2 class="text-base font-mono font-bold text-accent uppercase">Ultrón · Zonas Institucionales Intraday (1H / 15m)</h2>
-          <p class="text-xs text-slate-400 mt-1">Order Blocks intradía reales y objetivos de liquidez dinámicos por día</p>
+          <h2 class="text-sm font-mono font-extrabold text-red-400 tracking-wider">🎯 ULTRÓN · INTELIGENCIA TÉCNICA</h2>
+          <p class="text-xs font-mono text-slate-300 mt-0.5">«SIN EMOCIONES. SOLO ESTRUCTURA.»</p>
         </div>
-        <span class="px-3 py-1 rounded bg-bg border border-border text-xs font-mono text-slate-300">R:R Mínimo Exigido: 1:2 / 1:3</span>
-      </div>
 
-      <div id="ultron-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-
-      <div class="bg-panel border border-border rounded-lg p-5 space-y-3">
-        <h3 class="text-xs font-mono font-bold text-white uppercase tracking-wider">Protocolo de Ejecución Intraday (Validación Obligatoria)</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-          <label class="flex items-center gap-2.5 p-3 rounded bg-bg border border-border cursor-pointer hover:border-accent">
-            <input type="checkbox" class="accent-orange-500 w-4 h-4">
-            <span>Sesgo alineado con <strong>Visión</strong> o estructura 4H</span>
-          </label>
-          <label class="flex items-center gap-2.5 p-3 rounded bg-bg border border-border cursor-pointer hover:border-accent">
-            <input type="checkbox" class="accent-orange-500 w-4 h-4">
-            <span>Precio dentro de <strong>Order Block</strong> o zona FVG</span>
-          </label>
-          <label class="flex items-center gap-2.5 p-3 rounded bg-bg border border-border cursor-pointer hover:border-accent">
-            <input type="checkbox" class="accent-orange-500 w-4 h-4">
-            <span>Quiebre de estructura confirmado (<strong>CHOCH 15m/30m</strong>)</span>
-          </label>
-          <label class="flex items-center gap-2.5 p-3 rounded bg-bg border border-border cursor-pointer hover:border-accent">
-            <input type="checkbox" class="accent-orange-500 w-4 h-4">
-            <span>Absorción o impulso validado en <strong>Delta</strong></span>
-          </label>
-          <label class="flex items-center gap-2.5 p-3 rounded bg-bg border border-border cursor-pointer hover:border-accent">
-            <input type="checkbox" class="accent-orange-500 w-4 h-4">
-            <span>Fuera de ventana de noticia roja (±15 min)</span>
-          </label>
-          <label class="flex items-center gap-2.5 p-3 rounded bg-bg border border-border cursor-pointer hover:border-accent">
-            <input type="checkbox" class="accent-orange-500 w-4 h-4">
-            <span>Ratio Riesgo/Beneficio proyectado ≥ <strong>1:2</strong></span>
-          </label>
+        <!-- 01 · ELIJA EL ACTIVO (Cuadrícula idéntica al video) -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-red-400 font-bold">01 · ELIJA EL ACTIVO</span>
+            <span class="text-slate-400 text-[11px]">Ultrón lee velas reales y traza entradas</span>
+          </div>
+          <div id="ultron-asset-selector" class="grid grid-cols-3 sm:grid-cols-6 gap-2"></div>
         </div>
       </div>
-    </section>
 
-    <!-- PESTAÑA 3: JARVIS (ASESOR IA & RIESGO) -->
-    <section id="view-jarvis" class="hidden space-y-6">
-      <div class="bg-panel border border-sky-500/30 rounded-lg p-5 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded bg-sky-500/20 border border-sky-400 flex items-center justify-center text-sky-400 font-mono font-bold text-xs">J</div>
-            <div>
-              <h2 class="text-sm font-mono font-bold text-sky-400 uppercase tracking-wider">JARVIS · Copiloto de Ejecución & Disciplina Intraday</h2>
-              <p class="text-xs text-slate-400">Cruza sesgo macro + distancia a Order Block + calendario económico antes de abrir operación</p>
-            </div>
-          </div>
-          <select id="jarvis-pair-select" onchange="updateJarvisPanel()" class="bg-bg border border-sky-500/40 rounded px-3 py-1.5 text-xs font-mono text-white focus:outline-none">
-            <option value="US30">US30 (Dow Jones)</option>
-            <option value="EURUSD">EURUSD</option>
-            <option value="USDJPY">USDJPY</option>
-            <option value="GBPUSD">GBPUSD</option>
-            <option value="AUDUSD">AUDUSD</option>
-            <option value="NZDUSD">NZDUSD</option>
-            <option value="USDCAD">USDCAD</option>
-            <option value="USDCHF">USDCHF</option>
-            <option value="EURJPY">EURJPY</option>
-          </select>
-        </div>
-
-        <div class="bg-bg border border-border rounded-lg p-4 space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-slate-400">DIRECTIVA DE JARVIS PARA <strong id="j-active-pair" class="text-white">US30</strong>:</span>
-            <span id="j-verdict-badge" class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-sky-500/15 text-sky-400 border border-sky-500/40">ANALIZANDO...</span>
-          </div>
-          <p id="j-verdict-text" class="text-sm text-slate-200 leading-relaxed">Cargando diagnóstico institucional del activo...</p>
-          <div id="j-news-alert" class="text-xs font-mono text-amber-400 bg-amber-500/10 border border-amber-500/30 rounded p-2.5">
-            Verificando catalizadores de noticias para este activo...
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1">
-          <div class="lg:col-span-5 bg-bg border border-border rounded-lg p-4 space-y-3">
-            <h3 class="text-xs font-mono font-bold text-white uppercase">Proyector de Niveles (1:2 / 1:3)</h3>
-            <div class="grid grid-cols-2 gap-2.5 text-xs font-mono">
-              <div>
-                <label class="text-[11px] text-slate-400 block mb-1">Dirección</label>
-                <select id="calc-dir" onchange="calculateLevels()" class="w-full bg-panel border border-border rounded px-2.5 py-1.5 text-white">
-                  <option value="BUY">COMPRA (LONG)</option>
-                  <option value="SELL">VENTA (SHORT)</option>
-                </select>
-              </div>
-              <div>
-                <label class="text-[11px] text-slate-400 block mb-1">Precio Entrada</label>
-                <input id="calc-entry" type="number" step="any" oninput="calculateLevels()" class="w-full bg-panel border border-border rounded px-2.5 py-1.5 text-white" />
-              </div>
-              <div class="col-span-2">
-                <label id="calc-sl-label" class="text-[11px] text-slate-400 block mb-1">Stop Loss en Puntos / Pips</label>
-                <input id="calc-sl-pips" type="number" value="50" min="1" oninput="calculateLevels()" class="w-full bg-panel border border-border rounded px-2.5 py-1.5 text-white" />
-              </div>
-            </div>
-          </div>
-
-          <div class="lg:col-span-7 bg-bg border border-border rounded-lg p-4 flex flex-col justify-between space-y-3">
-            <h3 class="text-xs font-mono font-bold text-sky-400 uppercase">Plan de Salida & Gestión de Parciales</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 font-mono text-xs">
-              <div class="bg-panel border border-red-500/30 rounded p-2.5">
-                <div class="text-[10px] text-red-400">INVALIDACIÓN (SL)</div>
-                <div id="out-sl" class="text-sm font-bold text-white mt-0.5">--</div>
-              </div>
-              <div class="bg-panel border border-amber-500/30 rounded p-2.5">
-                <div class="text-[10px] text-amber-400">TP1 · 1:2 (PARCIAL + BE)</div>
-                <div id="out-tp2" class="text-sm font-bold text-white mt-0.5">--</div>
-              </div>
-              <div class="bg-panel border border-emerald-500/30 rounded p-2.5">
-                <div class="text-[10px] text-emerald-400">TP2 · 1:3 (OBJETIVO FINAL)</div>
-                <div id="out-tp3" class="text-sm font-bold text-white mt-0.5">--</div>
-              </div>
-            </div>
-            <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-              <span class="text-[11px] text-slate-400">Regla: Al tocar TP1 (1:2), toma parciales y mueve SL a Break Even.</span>
-              <button onclick="copyJarvisBrief()" id="copy-brief-btn" class="px-3 py-1.5 rounded bg-sky-500 hover:bg-sky-400 text-black font-mono font-bold text-xs">Copiar Briefing del Activo</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PESTAÑA 4: ANÁLISIS & ESTRUCTURA -->
-    <section id="view-analisis" class="hidden space-y-4">
-      <div class="bg-panel border border-border rounded-lg p-5 space-y-4">
-        <div class="flex items-center justify-between">
+      <!-- 02 · LECTURA AUTOMÁTICA & GRÁFICO CON ENTRADAS -->
+      <div class="bg-panel border border-border rounded-xl p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2 class="text-sm font-mono font-bold text-white uppercase">Planificación Multi-Temporalidad (Guardado Automático)</h2>
-            <p class="text-xs text-slate-400">Documenta tus niveles clave antes de la apertura de Londres o Nueva York</p>
+            <div class="text-xs font-mono font-bold text-white"><span id="u-title-sym" class="text-red-400">USTEC</span> · LECTURA AUTOMÁTICA</div>
+            <div class="text-[11px] text-slate-400">Estructura, Order Blocks, Liquidez (BSL/SSL) y Entrada Exacta</div>
           </div>
-          <span class="text-xs font-mono text-emerald-400">✓ Guardado localmente</span>
+          <!-- Selector de Temporalidad -->
+          <div class="flex gap-1.5 font-mono text-xs">
+            <button onclick="setUltronTF('1d')" class="utf-btn px-3 py-1 rounded bg-red-500 text-white font-bold" data-tf="1d">Diario</button>
+            <button onclick="setUltronTF('4h')" class="utf-btn px-3 py-1 rounded bg-bg border border-border text-slate-300" data-tf="4h">4 horas</button>
+            <button onclick="setUltronTF('1h')" class="utf-btn px-3 py-1 rounded bg-bg border border-border text-slate-300" data-tf="1h">1 hora</button>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="space-y-1.5">
-            <label class="text-xs font-mono text-accent">1. CONTEXTO HTF (4H / 1H)</label>
-            <textarea id="note-htf" rows="8" placeholder="Ej: US30 respetando demanda 4H antes de apertura de Wall Street..." class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
+        <!-- Barra de Zoom y Capas -->
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono bg-bg border border-border rounded-lg px-3 py-2">
+          <div class="flex items-center gap-2">
+            <button onclick="zoomChart(-6)" class="px-2.5 py-1 rounded bg-panel border border-border hover:border-red-400">- Alejar</button>
+            <span id="u-candle-count" class="text-slate-400 text-[11px]">42 velas</span>
+            <button onclick="zoomChart(6)" class="px-2.5 py-1 rounded bg-panel border border-border hover:border-red-400">+ Acercar</button>
           </div>
-          <div class="space-y-1.5">
-            <label class="text-xs font-mono text-accent">2. GATILLO INTRADAY (30m / 15m / 5m)</label>
-            <textarea id="note-ltf" rows="8" placeholder="Ej: Esperar barrido en apertura de NY (09:30 EST), CHOCH en 15m y entrada en FVG..." class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
+          <label class="flex items-center gap-2 cursor-pointer text-slate-300">
+            <input id="toggle-layers" type="checkbox" checked onchange="drawUltronChart()" class="accent-red-500">
+            <span>10 de 10 capas SMC activas</span>
+          </label>
+        </div>
+
+        <!-- CANVAS DEL GRÁFICO INSTITUCIONAL -->
+        <div class="relative w-full bg-[#07090d] border border-border rounded-lg overflow-hidden">
+          <canvas id="ultron-canvas" class="w-full h-[380px] sm:h-[430px] block"></canvas>
+        </div>
+
+        <!-- Tarjeta de Señal de Entrada Exacta del Activo Seleccionado -->
+        <div id="ultron-entry-box" class="bg-bg border border-red-500/40 rounded-lg p-4 grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono text-xs">
+          <div>
+            <div class="text-[10px] text-slate-400">SEÑAL ULTRÓN</div>
+            <div id="u-sig-dir" class="text-sm font-extrabold text-sky-400 mt-0.5">--</div>
           </div>
-          <div class="space-y-1.5">
-            <label class="text-xs font-mono text-accent">3. GESTIÓN (PARCIALES & TRAILING)</label>
-            <textarea id="note-mgmt" rows="8" placeholder="Ej: Cerrar 50% al llegar a 1:2 en POC intradía y mover Stop Loss a Break Even..." class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
+          <div>
+            <div class="text-[10px] text-slate-400">PRECIO ENTRADA (OB)</div>
+            <div id="u-sig-entry" class="text-sm font-bold text-white mt-0.5">--</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-red-400">STOP LOSS</div>
+            <div id="u-sig-sl" class="text-sm font-bold text-red-400 mt-0.5">--</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-emerald-400">TP1 (1:2 · PARCIAL)</div>
+            <div id="u-sig-tp1" class="text-sm font-bold text-emerald-400 mt-0.5">--</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-emerald-400">TP2 (1:3 · LIQUIDEZ)</div>
+            <div id="u-sig-tp2" class="text-sm font-bold text-emerald-400 mt-0.5">--</div>
+          </div>
+        </div>
+
+        <!-- Tarjetas de Temporalidades y Métricas (idénticas al frame 00:25 del video) -->
+        <div class="grid grid-cols-3 gap-2.5 font-mono text-xs">
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">SEMANAL</div>
+            <div id="u-tf-w" class="text-sm font-bold mt-1">--</div>
+          </div>
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">DIARIO</div>
+            <div id="u-tf-d" class="text-sm font-bold mt-1">--</div>
+          </div>
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">4 HORAS</div>
+            <div id="u-tf-4h" class="text-sm font-bold mt-1">--</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 font-mono text-xs">
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">PRECIO ACTUAL</div>
+            <div id="u-m-price" class="text-base font-bold text-white mt-0.5">--</div>
+          </div>
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">ÚLTIMO TECHO (BSL)</div>
+            <div id="u-m-high" class="text-base font-bold text-emerald-400 mt-0.5">--</div>
+          </div>
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">ÚLTIMO PISO (SSL)</div>
+            <div id="u-m-low" class="text-base font-bold text-red-400 mt-0.5">--</div>
+          </div>
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">MOVIMIENTO DIARIO (ATR)</div>
+            <div id="u-m-atr" class="text-base font-bold text-white mt-0.5">--</div>
+          </div>
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">ESTA SEMANA</div>
+            <div id="u-m-wk" class="text-base font-bold mt-0.5">--</div>
+          </div>
+          <div class="bg-bg border border-border rounded-lg p-3">
+            <div class="text-[10px] text-slate-400">RANGO 20 DÍAS</div>
+            <div id="u-m-r20" class="text-xs font-bold text-slate-200 mt-1">--</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PESTAÑA 5: DIARIO DE TRADING -->
-    <section id="view-diario" class="hidden space-y-4">
-      <div class="bg-panel border border-border rounded-lg p-5 space-y-4">
-        <h2 class="text-sm font-mono font-bold text-white uppercase">Bitácora de Ejecución & Auditoría de Disciplina</h2>
-        <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-3">
-          <select id="j-pair" class="bg-bg border border-border rounded px-3 py-2 text-xs font-mono text-white">
-            <option value="US30">US30</option>
-            <option value="EURUSD">EURUSD</option>
-            <option value="USDJPY">USDJPY</option>
-            <option value="GBPUSD">GBPUSD</option>
-            <option value="AUDUSD">AUDUSD</option>
-            <option value="NZDUSD">NZDUSD</option>
-            <option value="USDCAD">USDCAD</option>
-            <option value="USDCHF">USDCHF</option>
-            <option value="EURJPY">EURJPY</option>
-          </select>
-          <select id="j-dir" class="bg-bg border border-border rounded px-3 py-2 text-xs font-mono text-white">
-            <option value="COMPRA">COMPRA (LONG)</option>
-            <option value="VENTA">VENTA (SHORT)</option>
-          </select>
-          <input id="j-rr" type="text" placeholder="Resultado (ej. +2.5R o -1R)" required class="bg-bg border border-border rounded px-3 py-2 text-xs font-mono text-white" />
-          <input id="j-note" type="text" placeholder="Confluencia (ej. OB 1H + CHOCH 15m)" required class="bg-bg border border-border rounded px-3 py-2 text-xs text-white" />
-          <button type="submit" class="bg-accent hover:bg-orange-600 text-black font-mono font-bold text-xs rounded px-4 py-2">REGISTRAR</button>
-        </form>
+    <!-- ========================================================= -->
+    <!-- MÓDULO 4: F.R.I.D.A.Y. · TUTORA                           -->
+    <!-- ========================================================= -->
+    <section id="mod-friday" class="hidden space-y-5">
+      <div class="bg-panel border border-purple-500/30 rounded-xl p-5 space-y-4">
+        <div>
+          <h2 class="text-sm font-mono font-extrabold text-purple-400 tracking-wider">🧠 F.R.I.D.A.Y. · TUTORA</h2>
+          <p class="text-xs font-mono text-slate-300 mt-0.5">«JARVIS OPERA, SEÑOR. YO ME ASEGURO DE QUE USTED ENTIENDA POR QUÉ.»</p>
+        </div>
 
-        <div id="journal-list" class="space-y-2 pt-2"></div>
+        <!-- Sub-navegación de F.R.I.D.A.Y. -->
+        <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <button onclick="switchFridaySub('consulta')" class="f-sub px-3 py-1.5 rounded bg-purple-600 text-white font-bold" data-fsub="consulta">💬 CONSULTA</button>
+          <button onclick="switchFridaySub('nucleo')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="nucleo">🟣 NÚCLEO</button>
+          <button onclick="switchFridaySub('leccion')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="leccion">📘 LECCIÓN</button>
+          <button onclick="switchFridaySub('curso')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="curso">🎓 CURSO (<span id="course-progress">0</span>/10)</button>
+          <button onclick="switchFridaySub('glosario')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="glosario">📖 GLOSARIO</button>
+        </div>
+
+        <!-- Sub 1: CONSULTA -->
+        <div id="fsub-consulta" class="bg-bg border border-border rounded-lg p-4 space-y-3">
+          <div id="friday-chat-log" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1 text-xs">
+            <div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed">
+              <strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> Buenas tardes, señor. Estoy conectada en tiempo real a los datos de <strong>VISIÓN</strong>, <strong>ULTRÓN</strong> y el calendario económico. Pregúnteme por cualquier activo (ej. <em>«¿Qué ves en US30?»</em>, <em>«¿Hay entrada en EURUSD?»</em> o <em>«¿Qué noticias hay hoy?»</em>).
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="askFriday('¿Cuál es la mejor entrada hoy?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">¿Mejor entrada hoy?</button>
+            <button onclick="askFriday('Analiza US30')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">Analiza US30</button>
+            <button onclick="askFriday('Analiza EURUSD')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">Analiza EURUSD</button>
+            <button onclick="askFriday('¿Qué noticias hay hoy?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">Noticias hoy</button>
+          </div>
+          <form onsubmit="handleFridaySubmit(event)" class="flex gap-2">
+            <input id="friday-input" type="text" placeholder="Pregunte a F.R.I.D.A.Y. sobre macro, estructura o un par..." class="flex-1 bg-panel border border-border rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400" />
+            <button type="submit" class="px-4 py-2 rounded bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold text-xs">ENVIAR</button>
+          </form>
+        </div>
+
+        <!-- Sub 2: NÚCLEO -->
+        <div id="fsub-nucleo" class="hidden bg-bg border border-purple-500/30 rounded-lg p-5 text-center space-y-3">
+          <div class="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400 text-xs font-mono text-purple-300">EN LÍNEA · LISTA PARA SU CONSULTA</div>
+          <p class="text-xs text-slate-300 max-w-xl mx-auto">Experta en macroeconomía, política monetaria, liquidez institucional y estructura SMC. Cruza en vivo los datos de VISIÓN y ULTRÓN.</p>
+          <div class="flex flex-wrap justify-center gap-2 text-[11px] font-mono">
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">8 BANCOS CENTRALES</span>
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">11 ACTIVOS EN VIVO</span>
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">CALENDARIO SEMANAL</span>
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">SEÑALES SMC</span>
+          </div>
+        </div>
+
+        <!-- Sub 3: LECCIÓN DE LA SEMANA -->
+        <div id="fsub-leccion" class="hidden bg-bg border border-border rounded-lg p-5 space-y-3">
+          <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold">LECCIÓN DE LA SEMANA</span>
+          <h3 class="text-base font-bold text-white">¿Por qué los rendimientos del bono a 10 años (US10Y) mueven tanto al Dólar y al Nasdaq (USTEC)?</h3>
+          <div class="bg-panel border border-purple-500/20 rounded p-3.5 text-xs text-slate-300 leading-relaxed space-y-2">
+            <div class="text-[10px] font-mono text-purple-400 uppercase">● Como a un niño</div>
+            <p>Si el banco te paga 5 caramelos seguros por guardar tu plata, ¿para qué vas a comprar un árbol que dará frutas recién dentro de 10 años? Las empresas tecnológicas (USTEC) son árboles que darán mucha fruta en el futuro. Cuando el premio seguro sube, los inversores venden acciones y compran dólares para cobrar ese interés seguro.</p>
+          </div>
+        </div>
+
+        <!-- Sub 4: CURSO DE MACRO Y ESTRUCTURA (0/10) -->
+        <div id="fsub-curso" class="hidden bg-bg border border-border rounded-lg p-4 space-y-2.5">
+          <div class="text-xs font-mono text-purple-300 mb-2">CURSO BASE · MARCA LAS LECCIONES QUE DOMINES:</div>
+          <div id="friday-course-list" class="space-y-2"></div>
+        </div>
+
+        <!-- Sub 5: GLOSARIO -->
+        <div id="fsub-glosario" class="hidden bg-bg border border-border rounded-lg p-4 space-y-3">
+          <input id="glossary-search" oninput="renderGlossary()" type="text" placeholder="Buscar término (ej. BOS, CHoCH, Order Block, Hawkish, Yield)..." class="w-full bg-panel border border-border rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400" />
+          <div id="glossary-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
+        </div>
       </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- MÓDULO 5: ANÁLISIS                                        -->
+    <!-- ========================================================= -->
+    <section id="mod-analisis" class="hidden bg-panel border border-border rounded-xl p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-mono font-bold text-white uppercase">📐 Planificación Multi-Temporalidad (Guardado Local)</h2>
+        <span class="text-xs font-mono text-emerald-400">✓ Guardado automático</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="text-xs font-mono text-amber-400 block mb-1">1. CONTEXTO HTF (SEMANAL / DIARIO / 4H)</label>
+          <textarea id="note-htf" rows="8" class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200"></textarea>
+        </div>
+        <div>
+          <label class="text-xs font-mono text-amber-400 block mb-1">2. GATILLO INTRADAY (1H / 15m / 5m)</label>
+          <textarea id="note-ltf" rows="8" class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200"></textarea>
+        </div>
+        <div>
+          <label class="text-xs font-mono text-amber-400 block mb-1">3. GESTIÓN (PARCIALES 1:2 & BREAK EVEN)</label>
+          <textarea id="note-mgmt" rows="8" class="w-full bg-bg border border-border rounded p-3 text-xs text-slate-200"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- MÓDULO 6: DIARIO DE TRADING                               -->
+    <!-- ========================================================= -->
+    <section id="mod-diario" class="hidden bg-panel border border-border rounded-xl p-5 space-y-4">
+      <h2 class="text-sm font-mono font-bold text-white uppercase">📓 Bitácora de Ejecución & Auditoría</h2>
+      <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
+        <select id="j-pair" class="bg-bg border border-border rounded px-3 py-2 text-xs font-mono text-white"></select>
+        <select id="j-dir" class="bg-bg border border-border rounded px-3 py-2 text-xs font-mono text-white">
+          <option value="COMPRA">COMPRA (LONG)</option>
+          <option value="VENTA">VENTA (SHORT)</option>
+        </select>
+        <input id="j-rr" type="text" placeholder="Resultado (+2.5R / -1R)" required class="bg-bg border border-border rounded px-3 py-2 text-xs font-mono text-white" />
+        <input id="j-note" type="text" placeholder="Confluencia (OB + CHoCH)" required class="bg-bg border border-border rounded px-3 py-2 text-xs text-white" />
+        <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-black font-mono font-bold text-xs rounded px-4 py-2">REGISTRAR</button>
+      </form>
+      <div id="journal-list" class="space-y-2"></div>
     </section>
 
   </main>
 
+  <!-- BARRA INFERIOR MÓVIL (IDÉNTICA AL VIDEO) -->
+  <nav class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-panel/95 border-t border-border backdrop-blur grid grid-cols-6 text-[10px] font-mono">
+    <button onclick="switchModule('jarvis')" class="m-nav py-2.5 flex flex-col items-center text-amber-400 font-bold" data-m="jarvis"><span>⚡</span><span>JARVIS</span></button>
+    <button onclick="switchModule('vision')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="vision"><span>🌐</span><span>VISIÓN</span></button>
+    <button onclick="switchModule('ultron')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="ultron"><span>🎯</span><span>ULTRÓN</span></button>
+    <button onclick="switchModule('friday')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="friday"><span>🧠</span><span>F.R.I.D.A.Y.</span></button>
+    <button onclick="switchModule('analisis')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="analisis"><span>📐</span><span>ANÁLISIS</span></button>
+    <button onclick="switchModule('diario')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="diario"><span>📓</span><span>DIARIO</span></button>
+  </nav>
+
   <script>
-    let marketData = null;
-    let currentFilter = 'ALL';
+    let data = null;
+    let jarvisFilter = 'ALL';
+    let selectedSymbol = 'USTEC';
+    let selectedTF = '1d';
+    let visibleCandles = 42;
+
+    const COURSE_LESSONS = [
+      "1. Qué mueve el precio de una moneda (diferenciales de tasas)",
+      "2. Bancos centrales: Hawkish vs. Dovish",
+      "3. Inflación: CPI, PCE y su impacto en el USD",
+      "4. Empleo: NFP y tasa de desempleo",
+      "5. Bonos del Tesoro (US10Y) y apetito por riesgo",
+      "6. Estructura de mercado: HH, HL, LH, LL",
+      "7. Quiebres institucionales: BOS vs. CHoCH",
+      "8. Zonas Premium (Caro) vs. Discount (Barato) y EQ 50%",
+      "9. Order Blocks (OB) y Vacíos de Liquidez (FVG)",
+      "10. Liquidez externa: BSL, SSL y Killzones de Londres/NY"
+    ];
+
+    const GLOSSARY_ITEMS = [
+      { term: "BOS (Break of Structure)", def: "Ruptura de estructura a favor de la tendencia dominante que confirma continuación institucional." },
+      { term: "CHoCH (Change of Character)", def: "Primer quiebre estructural en contra de la tendencia previa; señala posible cambio de dirección." },
+      { term: "Order Block (OB)", def: "Última vela contraria antes de un movimiento impulsivo con desequilibrio donde instituciones dejaron órdenes." },
+      { term: "BSL / SSL", def: "Buy-Side Liquidity (liquidez sobre máximos) y Sell-Side Liquidity (liquidez bajo mínimos)." },
+      { term: "Premium / Discount", def: "Mitad superior (cara, para buscar ventas) e inferior (barata, para buscar compras) de un rango." },
+      { term: "Hawkish / Dovish", def: "Hawkish: postura restrictiva / tasas altas. Dovish: postura flexible / recortes de tasas." },
+      { term: "Yield (US10Y)", def: "Rendimiento del bono del Tesoro a 10 años; referencia clave para fortaleza del USD." },
+      { term: "ATR (Average True Range)", def: "Rango promedio de movimiento diario de un activo; útil para dimensionar Stop Loss." }
+    ];
+
+    function enterOraculo() {
+      const el = document.getElementById('boot-screen');
+      el.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => el.classList.add('hidden'), 500);
+    }
+    function showBoot() {
+      const el = document.getElementById('boot-screen');
+      el.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+    }
+    setTimeout(enterOraculo, 2600);
 
     function updateClocks() {
       const now = new Date();
       const fmt = (tz) => now.toLocaleTimeString('es-ES', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
-      document.getElementById('clock-syd').textContent = `SYD: ${fmt('Australia/Sydney')}`;
-      document.getElementById('clock-tky').textContent = `TKY: ${fmt('Asia/Tokyo')}`;
-      document.getElementById('clock-ldn').textContent = `LDN: ${fmt('Europe/London')}`;
-      document.getElementById('clock-nyc').textContent = `NYC: ${fmt('America/New_York')}`;
-      document.getElementById('clock-utc').textContent = `UTC: ${now.toISOString().substring(11, 19)}`;
+      document.getElementById('clk-syd').textContent = `SYD ${fmt('Australia/Sydney')}`;
+      document.getElementById('clk-tky').textContent = `TKY ${fmt('Asia/Tokyo')}`;
+      document.getElementById('clk-ldn').textContent = `LDN ${fmt('Europe/London')}`;
+      document.getElementById('clk-nyc').textContent = `NYC ${fmt('America/New_York')}`;
+      document.getElementById('clk-utc').textContent = `UTC ${now.toISOString().substring(11, 19)}`;
 
-      const utcHour = now.getUTCHours();
-      const statusEl = document.getElementById('session-status');
-      if (utcHour >= 12 && utcHour < 16) {
-        statusEl.textContent = 'SOLAPAMIENTO LDN + NYC · MÁXIMA LIQUIDEZ';
-        statusEl.className = 'px-2.5 py-1 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-400';
-      } else if (utcHour >= 7 && utcHour < 12) {
-        statusEl.textContent = 'SESIÓN LONDRES ACTIVA · FLUJO INSTITUCIONAL';
-        statusEl.className = 'px-2.5 py-1 rounded bg-orange-500/15 border border-orange-500/40 text-orange-400';
-      } else if (utcHour >= 16 && utcHour < 21) {
-        statusEl.textContent = 'SESIÓN NUEVA YORK · CONTINUACIÓN / REVERSIÓN';
-        statusEl.className = 'px-2.5 py-1 rounded bg-orange-500/15 border border-orange-500/40 text-orange-400';
+      const h = now.getUTCHours();
+      const kz = document.getElementById('killzone-badge');
+      if ((h >= 7 && h <= 10) || (h >= 12 && h <= 16)) {
+        kz.textContent = 'EN KILLZONE · ALTA LIQUIDEZ';
+        kz.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
       } else {
-        statusEl.textContent = 'SESIÓN ASIÁTICA / RANGO DE ACUMULACIÓN';
-        statusEl.className = 'px-2.5 py-1 rounded bg-bg border border-border text-slate-400';
+        kz.textContent = 'FUERA DE KILLZONE';
+        kz.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-bg text-slate-400 border border-border';
       }
     }
     setInterval(updateClocks, 1000);
     updateClocks();
 
-    function switchTab(tab) {
-      ['vision', 'ultron', 'jarvis', 'analisis', 'diario'].forEach(t => {
-        document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tab);
-        const btn = document.getElementById(`tab-${t}`);
-        const activeColor = t === 'jarvis' ? 'border-sky-400 text-sky-400' : 'border-accent text-accent';
-        if (t === tab) {
-          btn.className = `tab-btn px-4 py-2.5 text-xs font-mono font-semibold border-b-2 ${activeColor} whitespace-nowrap`;
-        } else {
-          btn.className = 'tab-btn px-4 py-2.5 text-xs font-mono font-semibold border-b-2 border-transparent text-slate-400 hover:text-white whitespace-nowrap';
+    function switchModule(mod) {
+      ['jarvis', 'vision', 'ultron', 'friday', 'analisis', 'diario'].forEach(m => {
+        document.getElementById(`mod-${m}`).classList.toggle('hidden', m !== mod);
+        const btn = document.getElementById(`nav-${m}`);
+        if (btn) {
+          const colors = { jarvis: 'border-amber-400 text-amber-400', vision: 'border-sky-400 text-sky-400', ultron: 'border-red-400 text-red-400', friday: 'border-purple-400 text-purple-400', analisis: 'border-white text-white', diario: 'border-white text-white' };
+          btn.className = m === mod
+            ? `nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 ${colors[m]}`
+            : 'nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-white';
         }
       });
+      document.querySelectorAll('.m-nav').forEach(b => {
+        b.className = b.dataset.m === mod
+          ? 'm-nav py-2.5 flex flex-col items-center text-amber-400 font-bold'
+          : 'm-nav py-2.5 flex flex-col items-center text-slate-400';
+      });
+      if (mod === 'ultron') setTimeout(drawUltronChart, 60);
     }
 
-    async function loadMarketData() {
+    function openAssetInUltron(symbol) {
+      selectedSymbol = symbol;
+      renderUltronSelector();
+      updateUltronDetails();
+      switchModule('ultron');
+    }
+
+    async function loadData() {
       try {
         const res = await fetch(`./data.json?t=${Date.now()}`);
-        if (!res.ok) throw new Error('Pendiente primera ejecución');
-        marketData = await res.json();
-        renderDashboard();
+        if (!res.ok) throw new Error('Pendiente data.json');
+        data = await res.json();
+        renderAll();
       } catch (e) {
-        document.getElementById('last-updated').textContent = 'Esperando ejecución de Actions';
-        document.getElementById('macro-headline').textContent = 'Motor listo: ejecuta el flujo en la pestaña Acciones de GitHub para cargar datos en vivo.';
+        document.getElementById('last-updated').textContent = 'Ejecuta Actions en GitHub para cargar velas';
       }
     }
 
-    function renderDashboard() {
-      if (!marketData) return;
-      document.getElementById('last-updated').textContent = `Act: ${marketData.last_updated}`;
-      document.getElementById('macro-regime').textContent = marketData.regime;
-      document.getElementById('macro-headline').textContent = marketData.headline;
-      document.getElementById('macro-body').textContent = marketData.macro_body;
+    function renderAll() {
+      if (!data) return;
+      document.getElementById('last-updated').textContent = `Act: ${data.last_updated}`;
+      document.getElementById('brief-date').textContent = data.last_updated;
+      document.getElementById('brief-headline').textContent = data.brief.headline;
+      document.getElementById('brief-summary').textContent = data.brief.summary;
+      document.getElementById('m-us10y').textContent = data.brief.us10y;
+      document.getElementById('m-us10y-c').textContent = data.brief.us10y_chg;
+      document.getElementById('m-dxy').textContent = data.brief.dxy;
+      document.getElementById('m-dxy-c').textContent = data.brief.dxy_chg;
+      document.getElementById('m-brent').textContent = data.brief.brent;
+      document.getElementById('m-brent-c').textContent = data.brief.brent_chg;
 
-      document.getElementById('metric-us10y').textContent = marketData.metrics.us10y;
-      document.getElementById('metric-us10y-chg').textContent = marketData.metrics.us10y_chg;
-      document.getElementById('metric-dxy').textContent = marketData.metrics.dxy;
-      document.getElementById('metric-dxy-chg').textContent = marketData.metrics.dxy_chg;
-      document.getElementById('metric-brent').textContent = marketData.metrics.brent;
-      document.getElementById('metric-brent-chg').textContent = marketData.metrics.brent_chg;
+      document.getElementById('j-pair').innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
 
-      renderWeeklyDays();
-      renderAssets();
-      renderUltron();
-      renderCentralBanks();
-      renderCalendar();
-      updateJarvisPanel();
+      renderJarvis();
+      renderVision();
+      renderUltronSelector();
+      updateUltronDetails();
     }
 
-    function renderWeeklyDays() {
-      if (!marketData) return;
-      const sym = document.getElementById('days-pair-select').value;
-      const asset = marketData.assets.find(a => a.symbol === sym);
-      const grid = document.getElementById('weekly-days-grid');
-
-      if (!asset || !asset.weekly_days) {
-        grid.innerHTML = `<div class="col-span-5 text-xs font-mono text-amber-400 bg-bg border border-border rounded p-3">Ejecuta el flujo en la pestaña Acciones de GitHub para generar los niveles de Monday a Friday.</div>`;
-        return;
-      }
-
-      grid.innerHTML = asset.weekly_days.map(d => `
-        <div class="rounded-lg p-3.5 border ${d.is_today ? 'bg-accent/10 border-accent' : 'bg-bg border-border'} space-y-2">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="font-mono font-bold text-xs ${d.is_today ? 'text-accent' : 'text-white'}">${d.day_en}</div>
-              <div class="text-[10px] font-mono text-slate-400">${d.day_es} · ${d.date.slice(5)}</div>
-            </div>
-            <span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded ${d.is_today ? 'bg-accent text-black' : 'bg-panel text-slate-400 border border-border'}">${d.status}</span>
-          </div>
-          <div class="space-y-1 pt-1 font-mono text-xs border-t border-border/60">
-            <div class="flex justify-between"><span class="text-slate-400">HIGH:</span> <span class="text-emerald-400 font-semibold">${d.high}</span></div>
-            <div class="flex justify-between"><span class="text-slate-400">LOW:</span> <span class="text-red-400 font-semibold">${d.low}</span></div>
-          </div>
-        </div>
-      `).join('');
+    function biasPill(bias) {
+      if (bias === 'SUBE') return '<span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[11px] font-bold">▲ SUBE</span>';
+      if (bias === 'BAJA') return '<span class="px-2 py-0.5 rounded bg-red-500/15 text-red-400 border border-red-500/30 font-mono text-[11px] font-bold">▼ BAJA</span>';
+      return '<span class="px-2 py-0.5 rounded bg-slate-500/15 text-slate-300 border border-slate-500/30 font-mono text-[11px] font-bold">● NEUTRAL</span>';
     }
 
-    function badgeStyle(bias) {
-      if (bias === 'ALCISTA' || bias === 'HAWKISH') return 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40';
-      if (bias === 'BAJISTA' || bias === 'DOVISH') return 'bg-red-500/15 text-red-400 border-red-500/40';
-      return 'bg-amber-500/15 text-amber-400 border-amber-500/40';
-    }
-
-    function filterAssets(filter) {
-      currentFilter = filter;
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        if (btn.dataset.filter === filter) {
-          btn.className = 'filter-btn px-3 py-1 rounded bg-accent text-black font-semibold';
-        } else {
-          btn.className = 'filter-btn px-3 py-1 rounded bg-panel border border-border text-slate-300';
-        }
+    function filterJarvis(f) {
+      jarvisFilter = f;
+      document.querySelectorAll('.j-filter').forEach(b => {
+        b.className = b.dataset.jf === f
+          ? 'j-filter px-3 py-1 rounded bg-amber-500 text-black font-bold'
+          : 'j-filter px-3 py-1 rounded bg-bg border border-border text-slate-300';
       });
-      renderAssets();
+      renderJarvis();
     }
 
-    function renderAssets() {
-      if (!marketData) return;
-      const grid = document.getElementById('assets-grid');
-      const filtered = currentFilter === 'ALL' ? marketData.assets : marketData.assets.filter(a => a.bias === currentFilter);
-      grid.innerHTML = filtered.map(a => `
-        <div class="bg-panel hover:bg-panelHover border border-border rounded-lg p-4 flex flex-col justify-between space-y-3 transition">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="font-mono font-bold text-white text-sm">${a.symbol}</div>
-              <div class="font-mono text-xs text-slate-400">${a.price} <span class="${a.change_24h >= 0 ? 'text-emerald-400' : 'text-red-400'}">(${a.change_24h >= 0 ? '+' : ''}${a.change_24h}%)</span></div>
+    function renderJarvis() {
+      if (!data) return;
+      const sorted = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score);
+      document.getElementById('jarvis-top-confluence').innerHTML = sorted.slice(0, 4).map(a => `
+        <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-panel border border-border hover:border-amber-400 text-xs font-mono flex items-center gap-1.5">
+          <span class="text-white font-bold">${a.symbol}</span>
+          <span class="${a.chart_bias === 'SUBE' ? 'text-emerald-400' : 'text-red-400'}">${a.chart_bias === 'SUBE' ? '▲' : '▼'} ${a.confluence.score}</span>
+        </button>
+      `).join('');
+
+      const aligned = sorted.filter(a => a.confluence.alignment === 'ALIGNED');
+      document.getElementById('jarvis-best-today').innerHTML = aligned.length > 0
+        ? aligned.map(a => `
+            <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded ${a.setup.direction === 'BUY' ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300' : 'bg-red-500/15 border-red-500/40 text-red-300'} border text-xs font-mono font-bold">
+              ${a.symbol} ${a.setup.direction === 'BUY' ? '▲ COMPRAS' : '▼ VENTAS'}
+            </button>
+          `).join('')
+        : '<span class="text-xs font-mono text-slate-400">Sin alineación fuerte en este corte; revisar niveles en Ultrón.</span>';
+
+      const list = jarvisFilter === 'ALL' ? sorted : sorted.filter(a => a.confluence.alignment === jarvisFilter);
+      document.getElementById('jarvis-cards-grid').innerHTML = list.map(a => {
+        const isAligned = a.confluence.alignment === 'ALIGNED';
+        const isOpposed = a.confluence.alignment === 'OPPOSED';
+        const ringColor = isAligned ? 'border-emerald-400 text-emerald-400' : (isOpposed ? 'border-amber-400 text-amber-400' : 'border-slate-500 text-slate-400');
+        const bannerBg = isAligned ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' : (isOpposed ? 'bg-red-500/10 border-red-500/40 text-red-300' : 'bg-bg border-border text-slate-300');
+
+        return `
+          <div class="bg-panel border ${isAligned ? 'border-emerald-500/40' : 'border-border'} rounded-xl p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono font-extrabold text-white text-base">${a.symbol}</span>
+                  <span class="text-xs font-mono text-slate-400">${a.price}</span>
+                </div>
+                <div class="text-[11px] text-slate-400">${a.name}</div>
+              </div>
+              <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-slate-300">Ver Gráfico →</button>
             </div>
-            <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded border ${badgeStyle(a.bias)}">${a.bias}</span>
+
+            <!-- Economía vs Su Gráfico -->
+            <div class="grid grid-cols-2 gap-2 text-center bg-bg border border-border rounded-lg p-2.5">
+              <div>
+                <div class="text-[10px] font-mono text-slate-400 mb-1">ECONOMÍA</div>
+                ${biasPill(a.economy_bias)}
+              </div>
+              <div class="border-l border-border">
+                <div class="text-[10px] font-mono text-slate-400 mb-1">SU GRÁFICO</div>
+                ${biasPill(a.chart_bias)}
+              </div>
+            </div>
+
+            <!-- Veredicto + Puntaje Circular -->
+            <div class="flex items-center gap-3 rounded-lg border p-2.5 ${bannerBg}">
+              <div class="w-11 h-11 rounded-full border-2 ${ringColor} flex flex-col items-center justify-center shrink-0 font-mono">
+                <span class="text-xs font-extrabold leading-none">${a.confluence.score}</span>
+                <span class="text-[8px] mt-0.5">${a.confluence.quality}</span>
+              </div>
+              <div class="text-xs">
+                <div class="font-bold">${isAligned ? '✔' : (isOpposed ? '✖' : '●')} ${a.confluence.verdict_title}</div>
+                <div class="text-[11px] opacity-80">${a.confluence.verdict_sub}</div>
+              </div>
+            </div>
+
+            <!-- Niveles de Entrada Exactos -->
+            <div class="grid grid-cols-4 gap-1.5 bg-bg border border-border rounded-lg p-2 text-center font-mono text-[11px]">
+              <div>
+                <div class="text-[9px] text-sky-400">${a.setup.signal_tag}</div>
+                <div class="font-bold text-white">${a.setup.entry}</div>
+              </div>
+              <div>
+                <div class="text-[9px] text-red-400">STOP</div>
+                <div class="font-bold text-red-400">${a.setup.sl}</div>
+              </div>
+              <div>
+                <div class="text-[9px] text-emerald-400">TP1 (1:2)</div>
+                <div class="font-bold text-emerald-400">${a.setup.tp1}</div>
+              </div>
+              <div>
+                <div class="text-[9px] text-emerald-400">TP2 (1:3)</div>
+                <div class="font-bold text-emerald-400">${a.setup.tp2}</div>
+              </div>
+            </div>
           </div>
-          <p class="text-xs text-slate-300 leading-relaxed">${a.summary}</p>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    function renderUltron() {
-      if (!marketData) return;
-      document.getElementById('ultron-grid').innerHTML = marketData.assets.map(a => `
-        <div class="bg-panel border border-border rounded-lg p-4 space-y-2.5">
+    function renderVision() {
+      if (!data) return;
+      document.getElementById('vision-assets-grid').innerHTML = data.assets.map(a => `
+        <div class="bg-panel border border-border rounded-lg p-3.5 space-y-2">
           <div class="flex items-center justify-between">
-            <div class="font-mono font-bold text-sm text-white">${a.symbol} · <span class="text-accent">${a.zone_type}</span></div>
-            <span class="px-2 py-0.5 text-[10px] font-mono rounded border ${badgeStyle(a.bias)}">${a.bias}</span>
+            <span class="font-mono font-bold text-white text-sm">${a.symbol} <span class="text-xs font-normal text-slate-400">${a.price}</span></span>
+            ${biasPill(a.economy_bias)}
           </div>
-          <div class="flex flex-wrap gap-4 text-xs font-mono bg-bg p-2.5 rounded border border-border">
-            <div><span class="text-slate-400">Precio:</span> <span class="text-white font-semibold">${a.price}</span></div>
-            <div><span class="text-slate-400">Zona Interés:</span> <span class="text-orange-400 font-semibold">${a.zone_range}</span></div>
-            <div><span class="text-slate-400">Liquidez:</span> <span class="text-slate-200">${a.liquidity_target}</span></div>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">${a.ultron_note}</p>
+          <p class="text-xs text-slate-300 leading-relaxed">${a.macro_reason}</p>
         </div>
       `).join('');
-    }
 
-    function renderCentralBanks() {
-      if (!marketData) return;
-      document.getElementById('cb-table').innerHTML = marketData.central_banks.map(cb => `
+      document.getElementById('vision-cb-table').innerHTML = data.central_banks.map(cb => `
         <tr>
-          <td class="py-2.5 pr-2 font-mono font-bold text-white">${cb.bank} <span class="text-slate-400 font-normal">(${cb.currency})</span></td>
-          <td class="py-2.5 px-2 font-mono text-slate-200">${cb.rate}</td>
-          <td class="py-2.5 px-2"><span class="px-1.5 py-0.5 text-[10px] font-mono rounded border ${badgeStyle(cb.stance)}">${cb.stance}</span></td>
-          <td class="py-2.5 pl-2 text-slate-300">${cb.note}</td>
+          <td class="py-2 font-mono font-bold text-white">${cb.bank} <span class="text-slate-400 font-normal">(${cb.currency})</span></td>
+          <td class="py-2 font-mono text-slate-200">${cb.rate}</td>
+          <td class="py-2"><span class="px-1.5 py-0.5 rounded text-[10px] font-mono ${cb.stance === 'HAWKISH' ? 'bg-emerald-500/20 text-emerald-400' : (cb.stance === 'DOVISH' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400')}">${cb.stance}</span></td>
+          <td class="py-2 text-slate-300">${cb.note}</td>
         </tr>
       `).join('');
-    }
 
-    function renderCalendar() {
-      if (!marketData) return;
-      document.getElementById('calendar-list').innerHTML = marketData.calendar.map(ev => `
-        <div class="bg-bg border border-border rounded p-3 space-y-1">
-          <div class="flex items-center justify-between text-[11px] font-mono">
-            <span class="text-orange-400">${ev.date} · ${ev.time} · <strong>${ev.currency}</strong></span>
-            <span class="px-1.5 py-0.5 rounded text-[10px] ${ev.impact.includes('ALTO') ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'}">${ev.impact}</span>
+      document.getElementById('vision-calendar-list').innerHTML = data.calendar.map(ev => `
+        <div class="bg-bg border ${ev.is_today ? 'border-sky-500/50' : 'border-border'} rounded p-2.5 text-xs space-y-1">
+          <div class="flex items-center justify-between font-mono text-[10px]">
+            <span class="text-sky-400">${ev.date} · ${ev.time} · <strong>${ev.currency}</strong> ${ev.is_today ? '· HOY' : ''}</span>
+            <span class="px-1.5 py-0.5 rounded ${ev.impact === 'ALTO' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'}">${ev.impact}</span>
           </div>
-          <div class="text-xs font-semibold text-white">${ev.title}</div>
-          <p class="text-[11px] text-slate-400">${ev.note}</p>
+          <div class="font-semibold text-white">${ev.title}</div>
+          <div class="text-[11px] text-slate-400 font-mono">Pronóstico: ${ev.forecast} | Anterior: ${ev.previous}</div>
         </div>
       `).join('');
     }
 
-    function updateJarvisPanel() {
-      if (!marketData) return;
-      const sym = document.getElementById('jarvis-pair-select').value;
-      const asset = marketData.assets.find(a => a.symbol === sym);
-      if (!asset) return;
+    // =========================================================
+    // ULTRÓN · SELECTOR + GRÁFICO CANVAS SMC CON ENTRADAS
+    // =========================================================
+    function renderUltronSelector() {
+      if (!data) return;
+      document.getElementById('ultron-asset-selector').innerHTML = data.assets.map(a => `
+        <button onclick="selectUltronAsset('${a.symbol}')" class="p-2 rounded-lg border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/15 border-red-500 text-white' : 'bg-bg border-border text-slate-300 hover:border-red-400/50'}">
+          <div class="font-mono font-extrabold text-xs">${a.symbol}</div>
+          <div class="text-[10px] text-slate-400 truncate">${a.name}</div>
+        </button>
+      `).join('');
+    }
 
-      document.getElementById('j-active-pair').textContent = `${asset.symbol} (${asset.price})`;
-      document.getElementById('j-verdict-badge').textContent = asset.jarvis_action;
-      document.getElementById('j-verdict-text').textContent = asset.jarvis_detail;
+    function selectUltronAsset(sym) {
+      selectedSymbol = sym;
+      renderUltronSelector();
+      updateUltronDetails();
+    }
 
-      const todayEvents = marketData.calendar.filter(ev =>
-        ev.date.includes('HOY') && (ev.currency === asset.base || ev.currency === asset.quote)
-      );
-      const alertBox = document.getElementById('j-news-alert');
-      if (todayEvents.length > 0) {
-        alertBox.className = 'text-xs font-mono text-red-300 bg-red-500/15 border border-red-500/40 rounded p-2.5';
-        alertBox.textContent = `⚠ ALERTA DE NOTICIA HOY (${asset.symbol}): ${todayEvents.map(e => `${e.title} (${e.time})`).join(' | ')}. Evita entrar 15 min antes.`;
-      } else {
-        alertBox.className = 'text-xs font-mono text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 rounded p-2.5';
-        alertBox.textContent = `✓ SIN NOTICIAS ROJAS INMINENTES HOY PARA ${asset.symbol}. Operativa técnica habilitada según sesión.`;
+    function setUltronTF(tf) {
+      selectedTF = tf;
+      document.querySelectorAll('.utf-btn').forEach(b => {
+        b.className = b.dataset.tf === tf
+          ? 'utf-btn px-3 py-1 rounded bg-red-500 text-white font-bold'
+          : 'utf-btn px-3 py-1 rounded bg-bg border border-border text-slate-300';
+      });
+      drawUltronChart();
+    }
+
+    function zoomChart(delta) {
+      visibleCandles = Math.max(18, Math.min(42, visibleCandles - delta));
+      document.getElementById('u-candle-count').textContent = `${visibleCandles} velas`;
+      drawUltronChart();
+    }
+
+    function formatBiasText(b) {
+      if (b === 'SUBE') return '<span class="text-emerald-400">▲ Alza</span>';
+      if (b === 'BAJA') return '<span class="text-red-400">▼ Baja</span>';
+      return '<span class="text-slate-300">● De lado</span>';
+    }
+
+    function updateUltronDetails() {
+      if (!data) return;
+      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      if (!a) return;
+      selectedSymbol = a.symbol;
+
+      document.getElementById('u-title-sym').textContent = a.symbol;
+      document.getElementById('u-sig-dir').textContent = `${a.setup.signal_tag} (${a.confluence.verdict_sub})`;
+      document.getElementById('u-sig-entry').textContent = a.setup.entry;
+      document.getElementById('u-sig-sl').textContent = a.setup.sl;
+      document.getElementById('u-sig-tp1').textContent = a.setup.tp1;
+      document.getElementById('u-sig-tp2').textContent = a.setup.tp2;
+
+      document.getElementById('u-tf-w').innerHTML = formatBiasText(a.tf_bias.weekly);
+      document.getElementById('u-tf-d').innerHTML = formatBiasText(a.tf_bias.daily);
+      document.getElementById('u-tf-4h').innerHTML = formatBiasText(a.tf_bias.h4);
+
+      document.getElementById('u-m-price').textContent = a.price;
+      document.getElementById('u-m-high').textContent = a.range_20_high;
+      document.getElementById('u-m-low').textContent = a.range_20_low;
+      document.getElementById('u-m-atr').textContent = a.atr;
+      document.getElementById('u-m-wk').innerHTML = `<span class="${a.chg_week >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_week >= 0 ? '+' : ''}${a.chg_week}%</span>`;
+      document.getElementById('u-m-r20').textContent = `${a.range_20_low} – ${a.range_20_high}`;
+
+      drawUltronChart();
+    }
+
+    function drawUltronChart() {
+      if (!data) return;
+      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      if (!a) return;
+
+      const canvas = document.getElementById('ultron-canvas');
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const W = rect.width;
+      const H = rect.height;
+      const padLeft = 14, padRight = 84, padTop = 24, padBottom = 26;
+      const plotW = W - padLeft - padRight;
+      const plotH = H - padTop - padBottom;
+
+      ctx.fillStyle = '#07090d';
+      ctx.fillRect(0, 0, W, H);
+
+      const rawCandles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF] : [];
+      const candles = rawCandles.slice(-visibleCandles);
+      if (candles.length === 0) return;
+
+      const showLayers = document.getElementById('toggle-layers').checked;
+
+      let highs = candles.map(c => c.h);
+      let lows = candles.map(c => c.l);
+      if (showLayers) {
+        highs.push(a.setup.sl, a.setup.tp2, a.intraday_high);
+        lows.push(a.setup.sl, a.setup.tp2, a.intraday_low);
+      }
+      const maxP = Math.max(...highs);
+      const minP = Math.min(...lows);
+      const span = (maxP - minP) || 1;
+      const yOf = (p) => padTop + ((maxP - p) / span) * plotH;
+
+      // Grid horizontal
+      ctx.strokeStyle = '#141a24';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 5; i++) {
+        const y = padTop + (plotH / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padLeft, y);
+        ctx.lineTo(W - padRight, y);
+        ctx.stroke();
+        const priceVal = maxP - (span / 5) * i;
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px JetBrains Mono';
+        ctx.fillText(priceVal.toFixed(a.decimals), W - padRight + 6, y + 3);
       }
 
-      const isIndex = sym === 'US30';
-      document.getElementById('calc-sl-label').textContent = isIndex ? 'Stop Loss en Puntos (ej. 50)' : 'Stop Loss en Pips (ej. 15)';
-      document.getElementById('calc-sl-pips').value = isIndex ? 50 : 15;
-      document.getElementById('calc-dir').value = asset.bias === 'BAJISTA' ? 'SELL' : 'BUY';
-      document.getElementById('calc-entry').value = asset.price;
-      calculateLevels();
+      if (showLayers) {
+        const yHigh = yOf(a.intraday_high);
+        const yLow = yOf(a.intraday_low);
+        const yEq = yOf((a.intraday_high + a.intraday_low) / 2);
+
+        // Zona CARO · PREMIUM
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
+        ctx.fillRect(padLeft, yHigh, plotW, Math.max(4, yEq - yHigh));
+        ctx.fillStyle = '#f87171';
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText('CARO · PREMIUM', padLeft + 6, yHigh + 11);
+
+        // Zona BARATO · DISCOUNT
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+        ctx.fillRect(padLeft, yEq, plotW, Math.max(4, yLow - yEq));
+        ctx.fillStyle = '#34d399';
+        ctx.fillText('BARATO · DISCOUNT', padLeft + 6, yLow - 5);
+
+        // Línea EQ 50%
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = '#64748b';
+        ctx.beginPath();
+        ctx.moveTo(padLeft, yEq);
+        ctx.lineTo(W - padRight, yEq);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText('EQ 50%', W - padRight - 42, yEq - 4);
+
+        // Order Block (OB)
+        const yObTop = yOf(a.ob_high);
+        const yObBot = yOf(a.ob_low);
+        ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16, 185, 129, 0.22)' : 'rgba(239, 68, 68, 0.22)';
+        ctx.fillRect(padLeft + plotW * 0.45, yObTop, plotW * 0.55, Math.max(6, yObBot - yObTop));
+        ctx.fillStyle = '#e2e8f0';
+        ctx.fillText('OB INSTITUCIONAL', padLeft + plotW * 0.47, yObTop + 10);
+      }
+
+      // Dibujar Velas Japonesas
+      const step = plotW / candles.length;
+      const cw = Math.max(3, step * 0.62);
+      let maxIdx = 0, minIdx = 0;
+
+      candles.forEach((c, i) => {
+        if (c.h > candles[maxIdx].h) maxIdx = i;
+        if (c.l < candles[minIdx].l) minIdx = i;
+
+        const x = padLeft + i * step + step / 2;
+        const bull = c.c >= c.o;
+        ctx.strokeStyle = bull ? '#10b981' : '#ef4444';
+        ctx.fillStyle = bull ? '#10b981' : '#ef4444';
+
+        // Mecha
+        ctx.beginPath();
+        ctx.moveTo(x, yOf(c.h));
+        ctx.lineTo(x, yOf(c.l));
+        ctx.stroke();
+
+        // Cuerpo
+        const top = yOf(Math.max(c.o, c.c));
+        const hBody = Math.max(2, Math.abs(yOf(c.o) - yOf(c.c)));
+        ctx.fillRect(x - cw / 2, top, cw, hBody);
+      });
+
+      if (showLayers) {
+        // Etiquetas HH / LL / BOS / CHoCH
+        ctx.font = 'bold 10px JetBrains Mono';
+        const xMax = padLeft + maxIdx * step + step / 2;
+        ctx.fillStyle = '#34d399';
+        ctx.fillText('HH · BSL', xMax - 18, Math.max(14, yOf(candles[maxIdx].h) - 5));
+
+        const xMin = padLeft + minIdx * step + step / 2;
+        ctx.fillStyle = '#f87171';
+        ctx.fillText('LL · SSL', xMin - 18, Math.min(H - 28, yOf(candles[minIdx].l) + 12));
+
+        const midIdx = Math.floor(candles.length * 0.65);
+        const xMid = padLeft + midIdx * step;
+        ctx.fillStyle = '#fbbf24';
+        ctx.fillText(a.chart_bias === 'SUBE' ? 'BOS ▲' : 'CHoCH ▼', xMid, yOf(candles[midIdx].h) - 6);
+
+        // Dibujar Líneas de Entrada Exactas (SU COMPRA/VENTA, STOP, TP1, TP2)
+        const drawTag = (priceVal, label, bgColor) => {
+          const y = yOf(priceVal);
+          ctx.setLineDash([3, 3]);
+          ctx.strokeStyle = bgColor;
+          ctx.lineWidth = 1.3;
+          ctx.beginPath();
+          ctx.moveTo(padLeft + plotW * 0.35, y);
+          ctx.lineTo(W - padRight, y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = bgColor;
+          ctx.fillRect(W - padRight + 2, y - 9, padRight - 4, 18);
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 9px JetBrains Mono';
+          ctx.fillText(priceVal.toFixed(a.decimals), W - padRight + 5, y + 3);
+
+          ctx.fillStyle = bgColor;
+          ctx.fillRect(padLeft + plotW * 0.35, y - 14, 96, 13);
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(label, padLeft + plotW * 0.35 + 4, y - 4);
+        };
+
+        drawTag(a.setup.entry, `${a.setup.signal_tag}`, '#0284c7');
+        drawTag(a.setup.sl, 'STOP LOSS', '#dc2626');
+        drawTag(a.setup.tp1, 'TP1 · 1:2', '#059669');
+        drawTag(a.setup.tp2, 'TP2 · 1:3', '#10b981');
+      }
+
+      // Fechas eje X
+      ctx.fillStyle = '#64748b';
+      ctx.font = '9px JetBrains Mono';
+      [0, Math.floor(candles.length / 2), candles.length - 1].forEach(idx => {
+        if (candles[idx]) {
+          const x = padLeft + idx * step;
+          ctx.fillText(candles[idx].t, x, H - 8);
+        }
+      });
+    }
+    window.addEventListener('resize', drawUltronChart);
+
+    // =========================================================
+    // F.R.I.D.A.Y. · TUTORA INTERACTIVA
+    // =========================================================
+    function switchFridaySub(sub) {
+      ['consulta', 'nucleo', 'leccion', 'curso', 'glosario'].forEach(s => {
+        document.getElementById(`fsub-${s}`).classList.toggle('hidden', s !== sub);
+      });
+      document.querySelectorAll('.f-sub').forEach(b => {
+        b.className = b.dataset.fsub === sub
+          ? 'f-sub px-3 py-1.5 rounded bg-purple-600 text-white font-bold'
+          : 'f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300';
+      });
     }
 
-    function calculateLevels() {
-      const sym = document.getElementById('jarvis-pair-select').value;
-      const asset = marketData ? marketData.assets.find(a => a.symbol === sym) : null;
-      const isIndex = sym === 'US30';
-      const dec = asset ? asset.decimals : (isIndex ? 2 : (sym.includes('JPY') ? 3 : 5));
-      const pip = asset ? asset.pip : (isIndex ? 1.0 : (sym.includes('JPY') ? 0.01 : 0.0001));
-
-      const dir = document.getElementById('calc-dir').value;
-      const entry = parseFloat(document.getElementById('calc-entry').value);
-      const slPips = parseFloat(document.getElementById('calc-sl-pips').value);
-
-      if (isNaN(entry) || isNaN(slPips) || slPips <= 0) return;
-      const dist = slPips * pip;
-
-      const sl = dir === 'BUY' ? entry - dist : entry + dist;
-      const tp2 = dir === 'BUY' ? entry + dist * 2 : entry - dist * 2;
-      const tp3 = dir === 'BUY' ? entry + dist * 3 : entry - dist * 3;
-
-      document.getElementById('out-sl').textContent = sl.toFixed(dec);
-      document.getElementById('out-tp2').textContent = tp2.toFixed(dec);
-      document.getElementById('out-tp3').textContent = tp3.toFixed(dec);
+    function handleFridaySubmit(e) {
+      e.preventDefault();
+      const inp = document.getElementById('friday-input');
+      if (!inp.value.trim()) return;
+      askFriday(inp.value.trim());
+      inp.value = '';
     }
 
-    function copyJarvisBrief() {
-      if (!marketData) return;
-      const sym = document.getElementById('jarvis-pair-select').value;
-      const asset = marketData.assets.find(a => a.symbol === sym);
-      if (!asset) return;
-      const text = `BRIEFING ORÁCULO/JARVIS · ${asset.symbol}\nPrecio: ${asset.price} | Sesgo: ${asset.bias}\nZona Ultrón: ${asset.zone_type} (${asset.zone_range})\nLiquidez Objetivo: ${asset.liquidity_target}\nDirectiva Jarvis: ${asset.jarvis_action} - ${asset.jarvis_detail}`;
-      navigator.clipboard.writeText(text);
-      const btn = document.getElementById('copy-brief-btn');
-      btn.textContent = '✓ Briefing Copiado';
-      setTimeout(() => btn.textContent = 'Copiar Briefing del Activo', 2000);
+    function askFriday(question) {
+      const log = document.getElementById('friday-chat-log');
+      log.innerHTML += `<div class="bg-panel border border-border rounded-lg p-2.5 text-right text-slate-200"><strong class="text-amber-400 font-mono">TÚ:</strong> ${question}</div>`;
+
+      let reply = 'Estoy analizando el contexto macro y técnico.';
+      const q = question.toUpperCase();
+
+      if (data) {
+        const foundAsset = data.assets.find(a => q.includes(a.symbol));
+        if (foundAsset) {
+          reply = `En <strong>${foundAsset.symbol}</strong> (${foundAsset.price}), <strong>VISIÓN</strong> marca <strong>${foundAsset.economy_bias}</strong> (${foundAsset.macro_reason}) y <strong>ULTRÓN</strong> marca <strong>${foundAsset.chart_bias}</strong>. Veredicto: <strong>${foundAsset.confluence.verdict_title}</strong>. Nivel de referencia: <strong>${foundAsset.setup.signal_tag} en ${foundAsset.setup.entry}</strong>, Stop en <strong>${foundAsset.setup.sl}</strong> y objetivos en <strong>${foundAsset.setup.tp1}</strong> (1:2) / <strong>${foundAsset.setup.tp2}</strong> (1:3).`;
+        } else if (q.includes('MEJOR') || q.includes('ENTRADA')) {
+          const best = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score)[0];
+          reply = `La mayor confluencia actual está en <strong>${best.symbol}</strong> con puntaje <strong>${best.confluence.score} (${best.confluence.quality})</strong>: ${best.confluence.verdict_title}. Entrada proyectada en <strong>${best.setup.entry}</strong> con Stop en <strong>${best.setup.sl}</strong> y TP1 en <strong>${best.setup.tp1}</strong>.`;
+        } else if (q.includes('NOTICIA') || q.includes('CALENDARIO')) {
+          const todayEv = data.calendar.filter(e => e.is_today);
+          reply = todayEv.length > 0
+            ? `Hoy tenemos eventos relevantes: ${todayEv.map(e => `<strong>${e.currency} - ${e.title}</strong> (${e.time})`).join('; ')}. Evite disparar entradas 15 minutos antes de la publicación.`
+            : `No hay noticias de alto impacto programadas para hoy en el calendario; puede operar la estructura técnica en Killzones de Londres y Nueva York.`;
+        } else {
+          reply = `${data.brief.headline}. Recomiendo revisar en la pestaña <strong>JARVIS</strong> los activos con etiqueta verde <em>«Van juntos»</em> antes de abrir posición.`;
+        }
+      }
+
+      log.innerHTML += `<div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed"><strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> ${reply}</div>`;
+      log.scrollTop = log.scrollHeight;
     }
 
-    ['htf', 'ltf', 'mgmt'].forEach(key => {
-      const el = document.getElementById(`note-${key}`);
-      el.value = localStorage.getItem(`oraculo_note_${key}`) || '';
-      el.addEventListener('input', () => localStorage.setItem(`oraculo_note_${key}`, el.value));
+    // Curso interactivo 0/10
+    let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
+    function renderCourse() {
+      document.getElementById('course-progress').textContent = completedLessons.length;
+      document.getElementById('friday-course-list').innerHTML = COURSE_LESSONS.map((title, i) => {
+        const done = completedLessons.includes(i);
+        return `
+          <label class="flex items-center gap-2.5 p-2.5 rounded bg-panel border ${done ? 'border-purple-500/50 text-purple-200' : 'border-border text-slate-300'} cursor-pointer text-xs">
+            <input type="checkbox" ${done ? 'checked' : ''} onchange="toggleLesson(${i})" class="accent-purple-500 w-4 h-4">
+            <span>${title}</span>
+          </label>
+        `;
+      }).join('');
+    }
+    function toggleLesson(idx) {
+      if (completedLessons.includes(idx)) completedLessons = completedLessons.filter(x => x !== idx);
+      else completedLessons.push(idx);
+      localStorage.setItem('oraculo_course', JSON.stringify(completedLessons));
+      renderCourse();
+    }
+    renderCourse();
+
+    function renderGlossary() {
+      const q = (document.getElementById('glossary-search').value || '').toLowerCase();
+      const filtered = GLOSSARY_ITEMS.filter(g => g.term.toLowerCase().includes(q) || g.def.toLowerCase().includes(q));
+      document.getElementById('glossary-list').innerHTML = filtered.map(g => `
+        <div class="bg-panel border border-border rounded p-3">
+          <div class="font-mono font-bold text-purple-300">${g.term}</div>
+          <p class="text-slate-400 mt-1">${g.def}</p>
+        </div>
+      `).join('');
+    }
+    renderGlossary();
+
+    // Notas & Diario
+    ['htf', 'ltf', 'mgmt'].forEach(k => {
+      const el = document.getElementById(`note-${k}`);
+      el.value = localStorage.getItem(`oraculo_note_${k}`) || '';
+      el.addEventListener('input', () => localStorage.setItem(`oraculo_note_${k}`, el.value));
     });
 
     let trades = JSON.parse(localStorage.getItem('oraculo_trades') || '[]');
     function renderTrades() {
-      document.getElementById('journal-count').textContent = trades.length;
+      document.getElementById('journal-badge').textContent = trades.length;
       document.getElementById('journal-list').innerHTML = trades.map((t, i) => `
-        <div class="bg-bg border border-border rounded p-3 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div class="space-y-0.5">
-            <div class="font-mono font-bold text-white">${t.pair} · <span class="${t.dir === 'COMPRA' ? 'text-emerald-400' : 'text-red-400'}">${t.dir}</span> · <span class="text-orange-400">${t.rr}</span></div>
-            <div class="text-slate-400">${t.note} <span class="text-[10px] font-mono">(${t.date})</span></div>
-            ${t.warning ? `<div class="text-amber-400 font-mono text-[11px]">⚠ ${t.warning}</div>` : ''}
+        <div class="bg-bg border border-border rounded p-3 flex items-center justify-between text-xs">
+          <div>
+            <strong class="font-mono text-white">${t.pair} · ${t.dir} · <span class="text-amber-400">${t.rr}</span></strong>
+            <div class="text-slate-400">${t.note} (${t.date})</div>
           </div>
-          <button onclick="deleteTrade(${i})" class="text-slate-500 hover:text-red-400 font-mono text-xs">Eliminar</button>
+          <button onclick="deleteTrade(${i})" class="text-red-400 font-mono text-xs">Eliminar</button>
         </div>
       `).join('');
     }
-
-    document.getElementById('journal-form').addEventListener('submit', (e) => {
+    document.getElementById('journal-form').addEventListener('submit', e => {
       e.preventDefault();
-      const pair = document.getElementById('j-pair').value;
-      const dir = document.getElementById('j-dir').value;
-      const rr = document.getElementById('j-rr').value;
-      const note = document.getElementById('j-note').value;
-
-      let warning = '';
-      if (marketData) {
-        const asset = marketData.assets.find(a => a.symbol === pair);
-        if (asset) {
-          if (dir === 'COMPRA' && asset.bias === 'BAJISTA') warning = `Operaste COMPRA contra sesgo macro BAJISTA en ${pair}.`;
-          if (dir === 'VENTA' && asset.bias === 'ALCISTA') warning = `Operaste VENTA contra sesgo macro ALCISTA en ${pair}.`;
-        }
-      }
-
-      trades.unshift({ pair, dir, rr, note, warning, date: new Date().toLocaleDateString('es-ES') });
+      trades.unshift({
+        pair: document.getElementById('j-pair').value,
+        dir: document.getElementById('j-dir').value,
+        rr: document.getElementById('j-rr').value,
+        note: document.getElementById('j-note').value,
+        date: new Date().toLocaleDateString('es-ES')
+      });
       localStorage.setItem('oraculo_trades', JSON.stringify(trades));
       e.target.reset();
       renderTrades();
     });
-
-    function deleteTrade(idx) {
-      trades.splice(idx, 1);
+    function deleteTrade(i) {
+      trades.splice(i, 1);
       localStorage.setItem('oraculo_trades', JSON.stringify(trades));
       renderTrades();
     }
-
     renderTrades();
-    loadMarketData();
-    setInterval(loadMarketData, 300000);
+    loadData();
   </script>
 </body>
 </html>
