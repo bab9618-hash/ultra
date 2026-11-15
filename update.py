@@ -8,6 +8,7 @@ ASSETS_CONFIG = [
     {"symbol": "USTEC", "name": "Nasdaq 100", "ticker": "NQ=F", "base": "USD", "quote": "USTEC", "decimals": 2, "pip": 1.0, "type": "index"},
     {"symbol": "US500", "name": "S&P 500", "ticker": "ES=F", "base": "USD", "quote": "US500", "decimals": 2, "pip": 0.25, "type": "index"},
     {"symbol": "US30", "name": "Dow Jones", "ticker": "YM=F", "base": "USD", "quote": "US30", "decimals": 2, "pip": 1.0, "type": "index"},
+    {"symbol": "BTCUSD", "name": "Bitcoin", "ticker": "BTC-USD", "base": "BTC", "quote": "USD", "decimals": 2, "pip": 1.0, "type": "crypto"},
     {"symbol": "EURUSD", "name": "Euro Dólar", "ticker": "EURUSD=X", "base": "EUR", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
     {"symbol": "USDJPY", "name": "Dólar Yen", "ticker": "USDJPY=X", "base": "USD", "quote": "JPY", "decimals": 3, "pip": 0.01, "type": "forex"},
     {"symbol": "GBPUSD", "name": "Cable", "ticker": "GBPUSD=X", "base": "GBP", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
@@ -78,13 +79,13 @@ def determine_tf_bias(df):
     return "NEUTRAL"
 
 def compute_macro_bias(cfg, dxy_bull, us10y_high):
-    if cfg["type"] == "index":
-        if us10y_high and cfg["symbol"] == "USTEC":
-            return "BAJA", "Yields altos comprimen múltiplos tecnológicos del Nasdaq."
-        elif not us10y_high:
-            return "SUBE", "Moderación de rendimientos impulsa flujo comprador en índices."
+    if cfg["type"] in ("index", "crypto"):
+        if us10y_high and cfg["symbol"] in ("USTEC", "BTCUSD"):
+            return "BAJA", "Yields altos drenan liquidez de activos de riesgo como tecnología y cripto."
+        elif not us10y_high or not dxy_bull:
+            return "SUBE", "Debilidad del dólar y liquidez global impulsan flujo comprador en riesgo y cripto."
         else:
-            return "SUBE", "Rotación hacia renta variable pese a tasas restrictivas."
+            return "SUBE", "Rotación hacia activos de crecimiento pese a tasas restrictivas."
     else:
         base_s = CURRENCY_SCORE.get(cfg["base"], 0) + (1 if (cfg["base"] == "USD" and dxy_bull) else (-1 if (cfg["base"] == "USD" and not dxy_bull) else 0))
         quote_s = CURRENCY_SCORE.get(cfg["quote"], 0) + (1 if (cfg["quote"] == "USD" and dxy_bull) else (-1 if (cfg["quote"] == "USD" and not dxy_bull) else 0))
@@ -299,16 +300,16 @@ def main():
             f"Mientras los bancos centrales de Europa y Oceanía mantienen sesgo acomodaticio, Jarvis prioriza ventas en pares mayores con confirmación estructural en Ultrón."
         )
     elif not dxy_bull:
-        headline = f"DXY retrocede a {dxy['price']} con US10Y en {us10y['price']}%: apetito por riesgo en índices y divisas mayores"
+        headline = f"DXY retrocede a {dxy['price']} con US10Y en {us10y['price']}%: apetito por riesgo en índices, cripto y divisas mayores"
         summary = (
-            f"La caída del índice del dólar por debajo de su media institucional ({dxy['ema20']}) libera liquidez hacia índices estadounidenses (USTEC, US500, US30) "
+            f"La caída del índice del dólar por debajo de su media institucional ({dxy['ema20']}) libera liquidez hacia índices estadounidenses (USTEC, US500, US30), Bitcoin "
             f"y favorece compras en EURUSD, GBPUSD y AUDUSD tras mitigación de bloques de demanda."
         )
     else:
         headline = f"Divergencia de tasas activa: DXY en {dxy['price']} y bono US10Y en {us10y['price']}%"
         summary = (
-            f"El mercado opera con rotación selectiva entre divisas e índices. Evitar entradas donde economía y gráfico se contradicen; "
-            f"priorizar únicamente activos con alineación confirmada en la Mesa de Swing de Jarvis."
+            f"El mercado opera con rotación selectiva entre divisas, índices y cripto. Evitar entradas donde economía y gráfico se contradicen; "
+            f"priorizar únicamente activos con alineación confirmada en la Mesa de Jarvis."
         )
 
     assets = []
