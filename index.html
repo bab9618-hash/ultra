@@ -39,6 +39,11 @@
       50% { transform: scale(1.06); opacity: 0.4; }
     }
     .radar-ring { animation: pulseRing 2.6s infinite ease-in-out; }
+    @keyframes soundWave {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; }
+    }
+    .eq-bar { animation: soundWave 0.6s infinite ease-in-out; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col pb-20 sm:pb-6 antialiased selection:bg-amber-500 selection:text-black">
@@ -50,7 +55,7 @@
       <div class="absolute inset-6 rounded-full border border-dashed border-cyan-400/40"></div>
       <div class="absolute -top-3 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-400 text-[10px] font-mono text-amber-300">JARVIS · MANDO</div>
       <div class="absolute -left-5 px-2.5 py-1 rounded-full bg-sky-500/15 border border-sky-400 text-[10px] font-mono text-sky-300">VISIÓN · MACRO</div>
-      <div class="absolute -right-6 px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-400 text-[10px] font-mono text-purple-300">F.R.I.D.A.Y.</div>
+      <div class="absolute -right-6 px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-400 text-[10px] font-mono text-purple-300">F.R.I.D.A.Y. · VOZ</div>
       <div class="absolute -bottom-3 px-2.5 py-1 rounded-full bg-red-500/15 border border-red-400 text-[10px] font-mono text-red-300">ULTRÓN · ESTRUCTURA</div>
       <div class="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500/30 to-sky-500/20 border-2 border-amber-400 flex flex-col items-center justify-center shadow-lg shadow-amber-500/20">
         <span class="font-mono font-extrabold text-xl text-white">O</span>
@@ -58,9 +63,9 @@
       </div>
     </div>
     <h1 class="text-3xl font-extrabold tracking-[0.28em] text-white">ORÁCULO</h1>
-    <p class="text-xs font-mono tracking-[0.2em] text-amber-400 mt-2">TODOS LOS SISTEMAS · EN LÍNEA</p>
-    <button onclick="enterOraculo()" class="mt-7 px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-mono font-bold text-xs tracking-wider shadow-lg shadow-amber-500/20 transition">
-      ENTRAR AL SISTEMA →
+    <p class="text-xs font-mono tracking-[0.2em] text-amber-400 mt-2">TODOS LOS SISTEMAS · VOZ IA ACTIVA</p>
+    <button onclick="enterOraculo(true)" class="mt-7 px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-mono font-bold text-xs tracking-wider shadow-lg shadow-amber-500/20 transition">
+      ENTRAR Y ACTIVAR VOZ →
     </button>
   </div>
 
@@ -78,12 +83,20 @@
         </div>
       </div>
 
-      <!-- Relojes mundiales -->
+      <!-- Controles de Voz IA + Relojes mundiales -->
       <div class="flex flex-wrap items-center gap-1.5 text-[11px] font-mono">
-        <span id="clk-syd" class="px-2 py-0.5 rounded bg-bg border border-border text-slate-400">SYD --:--</span>
-        <span id="clk-tky" class="px-2 py-0.5 rounded bg-bg border border-border text-slate-400">TKY --:--</span>
-        <span id="clk-ldn" class="px-2 py-0.5 rounded bg-bg border border-border text-slate-300">LDN --:--</span>
-        <span id="clk-nyc" class="px-2 py-0.5 rounded bg-bg border border-border text-slate-300">NYC --:--</span>
+        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-0.5 rounded bg-purple-600/25 border border-purple-400 text-purple-300 hover:bg-purple-600/40 font-bold flex items-center gap-1.5">
+          <span id="voice-icon">🔊</span>
+          <span id="voice-status-txt">VOZ IA: ON</span>
+        </button>
+        <button onclick="speakBriefing()" title="Escuchar resumen del día" class="px-2 py-0.5 rounded bg-bg border border-border hover:border-amber-400 text-amber-400">
+          ▶ BRIEFING
+        </button>
+        <button onclick="stopSpeaking()" id="stop-voice-btn" class="hidden px-2 py-0.5 rounded bg-red-500/20 border border-red-500 text-red-300">
+          ■ CALLAR
+        </button>
+        <span id="clk-ldn" class="hidden md:inline px-2 py-0.5 rounded bg-bg border border-border text-slate-300">LDN --:--</span>
+        <span id="clk-nyc" class="hidden md:inline px-2 py-0.5 rounded bg-bg border border-border text-slate-300">NYC --:--</span>
         <span id="clk-utc" class="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400">UTC --:--:--</span>
       </div>
     </div>
@@ -103,7 +116,7 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 space-y-6">
 
     <!-- ========================================================= -->
-    <!-- MÓDULO 1: JARVIS · FUSIÓN (MESA DE SWING & ENTRADAS)      -->
+    <!-- MÓDULO 1: JARVIS · FUSIÓN                                 -->
     <!-- ========================================================= -->
     <section id="mod-jarvis" class="space-y-5">
       <div class="bg-panel border border-amber-500/30 rounded-xl p-5 space-y-3">
@@ -115,8 +128,8 @@
             </div>
             <p class="text-xs font-mono text-slate-300 mt-1">«VISIÓN VE EL MUNDO. ULTRÓN VE EL GRÁFICO. YO LOS UNO, SEÑOR.»</p>
           </div>
-          <div class="flex gap-1.5 font-mono text-xs">
-            <button onclick="filterJarvis('ALL')" class="j-filter px-3 py-1 rounded bg-amber-500 text-black font-bold" data-jf="ALL">TODOS (11)</button>
+          <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+            <button onclick="filterJarvis('ALL')" class="j-filter px-3 py-1 rounded bg-amber-500 text-black font-bold" data-jf="ALL">TODOS (12)</button>
             <button onclick="filterJarvis('ALIGNED')" class="j-filter px-3 py-1 rounded bg-bg border border-border text-emerald-400" data-jf="ALIGNED">✔ VAN JUNTOS</button>
             <button onclick="filterJarvis('OPPOSED')" class="j-filter px-3 py-1 rounded bg-bg border border-border text-red-400" data-jf="OPPOSED">✖ SE CONTRADICEN</button>
           </div>
@@ -155,7 +168,6 @@
         </div>
       </div>
 
-      <!-- Tarjetas de Fusión Economía + Gráfico con Entradas Exactas -->
       <div id="jarvis-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
 
@@ -169,7 +181,10 @@
             <h2 class="text-sm font-mono font-extrabold text-sky-400 tracking-wider">🌐 VISIÓN · INTELIGENCIA MACRO</h2>
             <p class="text-xs font-mono text-slate-300 mt-0.5">«VEO EL MUNDO ANTES QUE EL GRÁFICO.»</p>
           </div>
-          <button onclick="loadData()" class="px-3 py-1 rounded bg-bg border border-border text-xs font-mono text-sky-400 hover:border-sky-400">↻ Actualizar</button>
+          <div class="flex gap-2">
+            <button onclick="speakBriefing()" class="px-3 py-1 rounded bg-sky-500/20 border border-sky-400 text-xs font-mono text-sky-300 hover:bg-sky-500/30">🔊 Escuchar Brief</button>
+            <button onclick="loadData()" class="px-3 py-1 rounded bg-bg border border-border text-xs font-mono text-sky-400 hover:border-sky-400">↻ Actualizar</button>
+          </div>
         </div>
 
         <div class="bg-bg border border-border rounded-lg p-4 space-y-2.5">
@@ -232,9 +247,14 @@
     <!-- ========================================================= -->
     <section id="mod-ultron" class="hidden space-y-5">
       <div class="bg-panel border border-red-500/30 rounded-xl p-5 space-y-4">
-        <div>
-          <h2 class="text-sm font-mono font-extrabold text-red-400 tracking-wider">🎯 ULTRÓN · INTELIGENCIA TÉCNICA</h2>
-          <p class="text-xs font-mono text-slate-300 mt-0.5">«SIN EMOCIONES. SOLO ESTRUCTURA.»</p>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-sm font-mono font-extrabold text-red-400 tracking-wider">🎯 ULTRÓN · INTELIGENCIA TÉCNICA</h2>
+            <p class="text-xs font-mono text-slate-300 mt-0.5">«SIN EMOCIONES. SOLO ESTRUCTURA.»</p>
+          </div>
+          <button onclick="speakCurrentUltron()" class="px-3 py-1.5 rounded bg-red-500/20 border border-red-400 text-xs font-mono font-bold text-red-300 hover:bg-red-500/30">
+            🔊 Dictar Entrada en Voz Alta
+          </button>
         </div>
 
         <div class="space-y-2">
@@ -343,66 +363,79 @@
     </section>
 
     <!-- ========================================================= -->
-    <!-- MÓDULO 4: F.R.I.D.A.Y. · TUTORA                           -->
+    <!-- MÓDULO 4: F.R.I.D.A.Y. · TUTORA CON VOZ IA                -->
     <!-- ========================================================= -->
     <section id="mod-friday" class="hidden space-y-5">
       <div class="bg-panel border border-purple-500/30 rounded-xl p-5 space-y-4">
-        <div>
-          <h2 class="text-sm font-mono font-extrabold text-purple-400 tracking-wider">🧠 F.R.I.D.A.Y. · TUTORA</h2>
-          <p class="text-xs font-mono text-slate-300 mt-0.5">«JARVIS OPERA, SEÑOR. YO ME ASEGURO DE QUE USTED ENTIENDA POR QUÉ.»</p>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-sm font-mono font-extrabold text-purple-400 tracking-wider">🧠 F.R.I.D.A.Y. · TUTORA IA</h2>
+            <p class="text-xs font-mono text-slate-300 mt-0.5">«JARVIS OPERA, SEÑOR. YO ME ASEGURO DE QUE USTED ENTIENDA POR QUÉ.»</p>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="text-slate-400">Voz:</span>
+            <select id="voice-select" onchange="savePreferredVoice()" class="bg-bg border border-border rounded px-2 py-1 text-purple-300 max-w-[180px]"></select>
+          </div>
         </div>
 
         <div class="flex flex-wrap gap-1.5 font-mono text-xs">
-          <button onclick="switchFridaySub('consulta')" class="f-sub px-3 py-1.5 rounded bg-purple-600 text-white font-bold" data-fsub="consulta">💬 CONSULTA</button>
+          <button onclick="switchFridaySub('consulta')" class="f-sub px-3 py-1.5 rounded bg-purple-600 text-white font-bold" data-fsub="consulta">💬 CONSULTA (VOZ)</button>
           <button onclick="switchFridaySub('nucleo')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="nucleo">🟣 NÚCLEO</button>
           <button onclick="switchFridaySub('leccion')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="leccion">📘 LECCIÓN</button>
           <button onclick="switchFridaySub('curso')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="curso">🎓 CURSO (<span id="course-progress">0</span>/10)</button>
           <button onclick="switchFridaySub('glosario')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="glosario">📖 GLOSARIO</button>
         </div>
 
+        <!-- Sub 1: CONSULTA -->
         <div id="fsub-consulta" class="bg-bg border border-border rounded-lg p-4 space-y-3">
           <div id="friday-chat-log" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1 text-xs">
             <div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed">
-              <strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> Buenas tardes, señor. Estoy conectada en tiempo real a los datos de <strong>VISIÓN</strong>, <strong>ULTRÓN</strong> y el calendario económico. Pregúnteme por cualquier activo (ej. <em>«¿Qué ves en US30?»</em>, <em>«¿Hay entrada en EURUSD?»</em> o <em>«¿Qué noticias hay hoy?»</em>).
+              <strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> Buenas tardes, señor. Mi módulo de voz está listo. Pregúnteme por <strong>BTCUSD</strong>, <strong>EURUSD</strong>, <strong>US30</strong> o pida la mejor entrada del día y se lo explicaré en voz alta.
             </div>
           </div>
           <div class="flex flex-wrap gap-1.5">
             <button onclick="askFriday('¿Cuál es la mejor entrada hoy?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">¿Mejor entrada hoy?</button>
-            <button onclick="askFriday('Analiza US30')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">Analiza US30</button>
+            <button onclick="askFriday('Analiza BTCUSD')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-amber-300 hover:border-amber-400">Analiza BTCUSD</button>
             <button onclick="askFriday('Analiza EURUSD')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">Analiza EURUSD</button>
             <button onclick="askFriday('¿Qué noticias hay hoy?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">Noticias hoy</button>
           </div>
           <form onsubmit="handleFridaySubmit(event)" class="flex gap-2">
-            <input id="friday-input" type="text" placeholder="Pregunte a F.R.I.D.A.Y. sobre macro, estructura o un par..." class="flex-1 bg-panel border border-border rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400" />
+            <input id="friday-input" type="text" placeholder="Escribe o pregunta a F.R.I.D.A.Y. (te responderá hablando)..." class="flex-1 bg-panel border border-border rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400" />
             <button type="submit" class="px-4 py-2 rounded bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold text-xs">ENVIAR</button>
           </form>
         </div>
 
+        <!-- Sub 2: NÚCLEO -->
         <div id="fsub-nucleo" class="hidden bg-bg border border-purple-500/30 rounded-lg p-5 text-center space-y-3">
-          <div class="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400 text-xs font-mono text-purple-300">EN LÍNEA · LISTA PARA SU CONSULTA</div>
+          <div class="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400 text-xs font-mono text-purple-300">EN LÍNEA · SÍNTESIS DE VOZ ACTIVA</div>
           <p class="text-xs text-slate-300 max-w-xl mx-auto">Experta en macroeconomía, política monetaria, liquidez institucional y estructura SMC. Cruza en vivo los datos de VISIÓN y ULTRÓN.</p>
           <div class="flex flex-wrap justify-center gap-2 text-[11px] font-mono">
             <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">8 BANCOS CENTRALES</span>
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">11 ACTIVOS EN VIVO</span>
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">12 ACTIVOS + BITCOIN</span>
             <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">CALENDARIO SEMANAL</span>
             <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">SEÑALES SMC</span>
           </div>
         </div>
 
+        <!-- Sub 3: LECCIÓN DE LA SEMANA -->
         <div id="fsub-leccion" class="hidden bg-bg border border-border rounded-lg p-5 space-y-3">
-          <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold">LECCIÓN DE LA SEMANA</span>
-          <h3 class="text-base font-bold text-white">¿Por qué los rendimientos del bono a 10 años (US10Y) mueven tanto al Dólar y al Nasdaq (USTEC)?</h3>
-          <div class="bg-panel border border-purple-500/20 rounded p-3.5 text-xs text-slate-300 leading-relaxed space-y-2">
-            <div class="text-[10px] font-mono text-purple-400 uppercase">● Como a un niño</div>
-            <p>Si el banco te paga 5 caramelos seguros por guardar tu plata, ¿para qué vas a comprar un árbol que dará frutas recién dentro de 10 años? Las empresas tecnológicas (USTEC) son árboles que darán mucha fruta en el futuro. Cuando el premio seguro sube, los inversores venden acciones y compran dólares para cobrar ese interés seguro.</p>
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold">LECCIÓN DE LA SEMANA</span>
+            <button onclick="speakText(document.getElementById('lesson-text').innerText)" class="px-2.5 py-1 rounded bg-purple-600/30 text-purple-200 text-[11px] font-mono">🔊 Escuchar lección</button>
+          </div>
+          <h3 class="text-base font-bold text-white">¿Por qué los rendimientos del bono a 10 años (US10Y) mueven tanto al Dólar, Bitcoin y Nasdaq?</h3>
+          <div id="lesson-text" class="bg-panel border border-purple-500/20 rounded p-3.5 text-xs text-slate-300 leading-relaxed space-y-2">
+            <p>Si el banco te paga 5 caramelos seguros por guardar tu plata, ¿para qué vas a comprar un árbol que dará frutas recién dentro de 10 años? Las empresas tecnológicas y Bitcoin son activos de crecimiento futuro. Cuando el premio seguro sube, los inversores venden riesgo y compran dólares para cobrar ese interés seguro.</p>
           </div>
         </div>
 
+        <!-- Sub 4: CURSO (0/10) -->
         <div id="fsub-curso" class="hidden bg-bg border border-border rounded-lg p-4 space-y-2.5">
           <div class="text-xs font-mono text-purple-300 mb-2">CURSO BASE · MARCA LAS LECCIONES QUE DOMINES:</div>
           <div id="friday-course-list" class="space-y-2"></div>
         </div>
 
+        <!-- Sub 5: GLOSARIO -->
         <div id="fsub-glosario" class="hidden bg-bg border border-border rounded-lg p-4 space-y-3">
           <input id="glossary-search" oninput="renderGlossary()" type="text" placeholder="Buscar término (ej. BOS, CHoCH, Order Block, Hawkish, Yield)..." class="w-full bg-panel border border-border rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400" />
           <div id="glossary-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
@@ -467,9 +500,147 @@
   <script>
     let data = null;
     let jarvisFilter = 'ALL';
-    let selectedSymbol = 'USTEC';
+    let selectedSymbol = 'BTCUSD';
     let selectedTF = '1d';
     let visibleCandles = 42;
+
+    // =========================================================
+    // MOTOR DE VOZ IA (WEB SPEECH API NATIVA EN ESPAÑOL)
+    // =========================================================
+    let voiceEnabled = localStorage.getItem('oraculo_voice') !== 'off';
+    let spanishVoices = [];
+
+    function loadVoices() {
+      if (!('speechSynthesis' in window)) return;
+      const all = window.speechSynthesis.getVoices();
+      spanishVoices = all.filter(v => v.lang.toLowerCase().startsWith('es'));
+      const sel = document.getElementById('voice-select');
+      if (sel && spanishVoices.length > 0) {
+        const saved = localStorage.getItem('oraculo_voice_name');
+        sel.innerHTML = spanishVoices.map(v => `<option value="${v.name}" ${v.name === saved ? 'selected' : ''}>${v.name}</option>`).join('');
+      }
+    }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      loadVoices();
+    }
+
+    function savePreferredVoice() {
+      const sel = document.getElementById('voice-select');
+      if (sel) localStorage.setItem('oraculo_voice_name', sel.value);
+    }
+
+    function updateVoiceButtonUI() {
+      const btn = document.getElementById('voice-toggle-btn');
+      const txt = document.getElementById('voice-status-txt');
+      const icon = document.getElementById('voice-icon');
+      if (voiceEnabled) {
+        btn.className = 'px-2.5 py-0.5 rounded bg-purple-600/25 border border-purple-400 text-purple-300 hover:bg-purple-600/40 font-bold flex items-center gap-1.5';
+        txt.textContent = 'VOZ IA: ON';
+        icon.textContent = '🔊';
+      } else {
+        btn.className = 'px-2.5 py-0.5 rounded bg-bg border border-border text-slate-400 font-bold flex items-center gap-1.5';
+        txt.textContent = 'VOZ IA: OFF';
+        icon.textContent = '🔇';
+      }
+    }
+
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      localStorage.setItem('oraculo_voice', voiceEnabled ? 'on' : 'off');
+      updateVoiceButtonUI();
+      if (!voiceEnabled) stopSpeaking();
+      else speakText('Sistema de voz en línea, señor.');
+    }
+
+    function stopSpeaking() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      document.getElementById('stop-voice-btn').classList.add('hidden');
+    }
+
+    function cleanTextForSpeech(raw) {
+      return raw
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/BTCUSD/g, 'Bitcoin')
+        .replace(/EURUSD/g, 'Euro Dólar')
+        .replace(/USDJPY/g, 'Dólar Yen')
+        .replace(/GBPUSD/g, 'Libra Dólar')
+        .replace(/AUDUSD/g, 'Dólar Australiano')
+        .replace(/NZDUSD/g, 'Dólar Neozelandés')
+        .replace(/USDCAD/g, 'Dólar Canadiense')
+        .replace(/USDCHF/g, 'Dólar Franco')
+        .replace(/EURJPY/g, 'Euro Yen')
+        .replace(/USTEC/g, 'Nasdaq')
+        .replace(/US500/g, 'S P 500')
+        .replace(/US30/g, 'Dow Jones')
+        .replace(/US10Y/g, 'bono a 10 años')
+        .replace(/DXY/g, 'índice del dólar')
+        .replace(/CHoCH/g, 'cambio de carácter')
+        .replace(/BOS/g, 'ruptura de estructura')
+        .replace(/TP1/g, 'Take Profit 1')
+        .replace(/TP2/g, 'Take Profit 2')
+        .replace(/SL/g, 'Stop Loss')
+        .replace(/OB/g, 'bloque institucional')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function speakText(rawText, force = false) {
+      if ((!voiceEnabled && !force) || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = cleanTextForSpeech(rawText);
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'es-ES';
+      utter.rate = 1.03;
+      utter.pitch = 1.02;
+
+      const savedName = localStorage.getItem('oraculo_voice_name');
+      const chosen = spanishVoices.find(v => v.name === savedName)
+        || spanishVoices.find(v => v.name.includes('Google') || v.name.includes('Helena') || v.name.includes('Sabina') || v.name.includes('Monica'))
+        || spanishVoices[0];
+      if (chosen) utter.voice = chosen;
+
+      const stopBtn = document.getElementById('stop-voice-btn');
+      utter.onstart = () => stopBtn.classList.remove('hidden');
+      utter.onend = () => stopBtn.classList.add('hidden');
+      utter.onerror = () => stopBtn.classList.add('hidden');
+
+      window.speechSynthesis.speak(utter);
+    }
+
+    function speakBriefing() {
+      if (!data) {
+        speakText('Aún no se han cargado los datos del mercado, señor.', true);
+        return;
+      }
+      const aligned = data.assets.filter(a => a.confluence.alignment === 'ALIGNED');
+      const alignedTxt = aligned.length > 0
+        ? `Actualmente tenemos ${aligned.length} activos con alineación confirmada: ${aligned.map(a => `${a.symbol} para ${a.setup.direction === 'BUY' ? 'compras' : 'ventas'}`).join(', ')}.`
+        : 'Por el momento ningún activo muestra alineación fuerte entre economía y gráfico; recomiendo esperar confirmación.';
+      speakText(`Reporte de Oráculo. ${data.brief.headline}. ${alignedTxt}`, true);
+    }
+
+    function speakAssetSetup(symbol) {
+      if (!data) return;
+      const a = data.assets.find(x => x.symbol === symbol);
+      if (!a) return;
+      const dirWord = a.setup.direction === 'BUY' ? 'compra' : 'venta';
+      speakText(
+        `Lectura de ${a.symbol}. La economía marca ${a.economy_bias} y el gráfico marca ${a.chart_bias}. ` +
+        `Veredicto: ${a.confluence.verdict_title}. ` +
+        `Plan sugerido: ${dirWord} en ${a.setup.entry}, Stop Loss en ${a.setup.sl}, ` +
+        `primer objetivo en ${a.setup.tp1}, y segundo objetivo en ${a.setup.tp2}.`,
+        true
+      );
+    }
+
+    function speakCurrentUltron() {
+      speakAssetSetup(selectedSymbol);
+    }
+
+    updateVoiceButtonUI();
 
     const COURSE_LESSONS = [
       "1. Qué mueve el precio de una moneda (diferenciales de tasas)",
@@ -495,22 +666,25 @@
       { term: "ATR (Average True Range)", def: "Rango promedio de movimiento diario de un activo; útil para dimensionar Stop Loss." }
     ];
 
-    function enterOraculo() {
+    function enterOraculo(withGreeting = false) {
       const el = document.getElementById('boot-screen');
+      if (el.classList.contains('hidden')) return;
       el.classList.add('opacity-0', 'pointer-events-none');
       setTimeout(() => el.classList.add('hidden'), 500);
+      if (withGreeting) {
+        if (data) speakBriefing();
+        else speakText('Todos los sistemas de Oráculo están en línea, señor.');
+      }
     }
     function showBoot() {
       const el = document.getElementById('boot-screen');
       el.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
     }
-    setTimeout(enterOraculo, 2600);
+    setTimeout(() => enterOraculo(false), 3200);
 
     function updateClocks() {
       const now = new Date();
       const fmt = (tz) => now.toLocaleTimeString('es-ES', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
-      document.getElementById('clk-syd').textContent = `SYD ${fmt('Australia/Sydney')}`;
-      document.getElementById('clk-tky').textContent = `TKY ${fmt('Asia/Tokyo')}`;
       document.getElementById('clk-ldn').textContent = `LDN ${fmt('Europe/London')}`;
       document.getElementById('clk-nyc').textContent = `NYC ${fmt('America/New_York')}`;
       document.getElementById('clk-utc').textContent = `UTC ${now.toISOString().substring(11, 19)}`;
@@ -578,10 +752,11 @@
       document.getElementById('m-brent').textContent = data.brief.brent;
       document.getElementById('m-brent-c').textContent = data.brief.brent_chg;
 
-      const jPairSelect = document.getElementById('j-pair');
-      const prevJPair = jPairSelect.value;
-      jPairSelect.innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
-      if (prevJPair) jPairSelect.value = prevJPair;
+      document.getElementById('j-pair').innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
+
+      if (!data.assets.some(a => a.symbol === selectedSymbol) && data.assets.length > 0) {
+        selectedSymbol = data.assets[0].symbol;
+      }
 
       renderJarvis();
       renderVision();
@@ -638,10 +813,14 @@
                 <div class="flex items-center gap-2">
                   <span class="font-mono font-extrabold text-white text-base">${a.symbol}</span>
                   <span class="text-xs font-mono text-slate-400">${a.price}</span>
+                  ${a.type === 'crypto' ? '<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">24/7</span>' : ''}
                 </div>
                 <div class="text-[11px] text-slate-400">${a.name}</div>
               </div>
-              <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-slate-300">Ver Gráfico →</button>
+              <div class="flex items-center gap-1.5">
+                <button onclick="speakAssetSetup('${a.symbol}')" title="Escuchar señal por voz" class="px-2 py-1 rounded bg-bg border border-border hover:border-purple-400 text-[11px] font-mono text-purple-300">🔊</button>
+                <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-slate-300">Ver Gráfico →</button>
+              </div>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-center bg-bg border border-border rounded-lg p-2.5">
@@ -722,6 +901,9 @@
       `).join('');
     }
 
+    // =========================================================
+    // ULTRÓN · SELECTOR + GRÁFICO CANVAS SMC CON ENTRADAS
+    // =========================================================
     function renderUltronSelector() {
       if (!data) return;
       document.getElementById('ultron-asset-selector').innerHTML = data.assets.map(a => `
@@ -795,7 +977,6 @@
       const canvas = document.getElementById('ultron-canvas');
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
-      if (rect.width === 0) return;
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
       const ctx = canvas.getContext('2d');
@@ -953,6 +1134,9 @@
     }
     window.addEventListener('resize', drawUltronChart);
 
+    // =========================================================
+    // F.R.I.D.A.Y. · TUTORA INTERACTIVA CON VOZ
+    // =========================================================
     function switchFridaySub(sub) {
       ['consulta', 'nucleo', 'leccion', 'curso', 'glosario'].forEach(s => {
         document.getElementById(`fsub-${s}`).classList.toggle('hidden', s !== sub);
@@ -980,7 +1164,7 @@
       const q = question.toUpperCase();
 
       if (data) {
-        const foundAsset = data.assets.find(a => q.includes(a.symbol));
+        const foundAsset = data.assets.find(a => q.includes(a.symbol) || (q.includes('BITCOIN') && a.symbol === 'BTCUSD') || (q.includes('EURO') && a.symbol === 'EURUSD'));
         if (foundAsset) {
           reply = `En <strong>${foundAsset.symbol}</strong> (${foundAsset.price}), <strong>VISIÓN</strong> marca <strong>${foundAsset.economy_bias}</strong> (${foundAsset.macro_reason}) y <strong>ULTRÓN</strong> marca <strong>${foundAsset.chart_bias}</strong>. Veredicto: <strong>${foundAsset.confluence.verdict_title}</strong>. Nivel de referencia: <strong>${foundAsset.setup.signal_tag} en ${foundAsset.setup.entry}</strong>, Stop en <strong>${foundAsset.setup.sl}</strong> y objetivos en <strong>${foundAsset.setup.tp1}</strong> (1:2) / <strong>${foundAsset.setup.tp2}</strong> (1:3).`;
         } else if (q.includes('MEJOR') || q.includes('ENTRADA')) {
@@ -990,14 +1174,21 @@
           const todayEv = data.calendar.filter(e => e.is_today);
           reply = todayEv.length > 0
             ? `Hoy tenemos eventos relevantes: ${todayEv.map(e => `<strong>${e.currency} - ${e.title}</strong> (${e.time})`).join('; ')}. Evite disparar entradas 15 minutos antes de la publicación.`
-            : `No hay noticias de alto impacto programadas para hoy en el calendario; puede operar la estructura técnica en Killzones de Londres y Nueva York.`;
+            : `No hay noticias de alto impacto programadas para hoy en el calendario; puede operar la estructura técnica en Killzones o Bitcoin 24/7.`;
         } else {
           reply = `${data.brief.headline}. Recomiendo revisar en la pestaña <strong>JARVIS</strong> los activos con etiqueta verde <em>«Van juntos»</em> antes de abrir posición.`;
         }
       }
 
-      log.innerHTML += `<div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed"><strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> ${reply}</div>`;
+      const safeSpeech = reply.replace(/"/g, '&quot;');
+      log.innerHTML += `
+        <div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed flex items-start justify-between gap-2">
+          <div><strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> ${reply}</div>
+          <button onclick="speakText('${safeSpeech}', true)" title="Repetir audio" class="shrink-0 px-2 py-0.5 rounded bg-bg border border-border text-purple-300 text-[11px]">🔊</button>
+        </div>
+      `;
       log.scrollTop = log.scrollHeight;
+      speakText(reply);
     }
 
     let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
@@ -1070,14 +1261,11 @@
       localStorage.setItem('oraculo_trades', JSON.stringify(trades));
       renderTrades();
     }
-
     renderTrades();
     loadData();
 
-    // Auto-recarga silenciosa de data.json cada 5 minutos (300,000 ms)
+    // Auto-recarga silenciosa de data.json cada 5 minutos
     setInterval(loadData, 300000);
-
-    // Refresca al instante cuando vuelves a enfocar la pestaña del navegador
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') loadData();
     });
