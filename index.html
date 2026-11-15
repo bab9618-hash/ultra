@@ -39,11 +39,6 @@
       50% { transform: scale(1.06); opacity: 0.4; }
     }
     .radar-ring { animation: pulseRing 2.6s infinite ease-in-out; }
-    @keyframes soundWave {
-      0%, 100% { height: 4px; }
-      50% { height: 14px; }
-    }
-    .eq-bar { animation: soundWave 0.6s infinite ease-in-out; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col pb-20 sm:pb-6 antialiased selection:bg-amber-500 selection:text-black">
@@ -63,7 +58,7 @@
       </div>
     </div>
     <h1 class="text-3xl font-extrabold tracking-[0.28em] text-white">ORÁCULO</h1>
-    <p class="text-xs font-mono tracking-[0.2em] text-amber-400 mt-2">TODOS LOS SISTEMAS · VOZ IA ACTIVA</p>
+    <p class="text-xs font-mono tracking-[0.2em] text-amber-400 mt-2">TODOS LOS SISTEMAS · VOCES IA CALIBRADAS</p>
     <button onclick="enterOraculo(true)" class="mt-7 px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-mono font-bold text-xs tracking-wider shadow-lg shadow-amber-500/20 transition">
       ENTRAR Y ACTIVAR VOZ →
     </button>
@@ -89,8 +84,8 @@
           <span id="voice-icon">🔊</span>
           <span id="voice-status-txt">VOZ IA: ON</span>
         </button>
-        <button onclick="speakBriefing()" title="Escuchar resumen del día" class="px-2 py-0.5 rounded bg-bg border border-border hover:border-amber-400 text-amber-400">
-          ▶ BRIEFING
+        <button onclick="speakBriefing()" title="Escuchar resumen de Jarvis" class="px-2 py-0.5 rounded bg-bg border border-border hover:border-amber-400 text-amber-400">
+          ▶ JARVIS
         </button>
         <button onclick="stopSpeaking()" id="stop-voice-btn" class="hidden px-2 py-0.5 rounded bg-red-500/20 border border-red-500 text-red-300">
           ■ CALLAR
@@ -182,7 +177,7 @@
             <p class="text-xs font-mono text-slate-300 mt-0.5">«VEO EL MUNDO ANTES QUE EL GRÁFICO.»</p>
           </div>
           <div class="flex gap-2">
-            <button onclick="speakBriefing()" class="px-3 py-1 rounded bg-sky-500/20 border border-sky-400 text-xs font-mono text-sky-300 hover:bg-sky-500/30">🔊 Escuchar Brief</button>
+            <button onclick="speakVisionBrief()" class="px-3 py-1 rounded bg-sky-500/20 border border-sky-400 text-xs font-mono text-sky-300 hover:bg-sky-500/30">🔊 Voz de Visión</button>
             <button onclick="loadData()" class="px-3 py-1 rounded bg-bg border border-border text-xs font-mono text-sky-400 hover:border-sky-400">↻ Actualizar</button>
           </div>
         </div>
@@ -253,7 +248,7 @@
             <p class="text-xs font-mono text-slate-300 mt-0.5">«SIN EMOCIONES. SOLO ESTRUCTURA.»</p>
           </div>
           <button onclick="speakCurrentUltron()" class="px-3 py-1.5 rounded bg-red-500/20 border border-red-400 text-xs font-mono font-bold text-red-300 hover:bg-red-500/30">
-            🔊 Dictar Entrada en Voz Alta
+            🔊 Voz de Ultrón · Dictar Entrada
           </button>
         </div>
 
@@ -269,7 +264,7 @@
       <div class="bg-panel border border-border rounded-xl p-5 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <div class="text-xs font-mono font-bold text-white"><span id="u-title-sym" class="text-red-400">USTEC</span> · LECTURA AUTOMÁTICA</div>
+            <div class="text-xs font-mono font-bold text-white"><span id="u-title-sym" class="text-red-400">BTCUSD</span> · LECTURA AUTOMÁTICA</div>
             <div class="text-[11px] text-slate-400">Estructura, Order Blocks, Liquidez (BSL/SSL) y Entrada Exacta</div>
           </div>
           <div class="flex gap-1.5 font-mono text-xs">
@@ -373,8 +368,8 @@
             <p class="text-xs font-mono text-slate-300 mt-0.5">«JARVIS OPERA, SEÑOR. YO ME ASEGURO DE QUE USTED ENTIENDA POR QUÉ.»</p>
           </div>
           <div class="flex items-center gap-2 text-xs font-mono">
-            <span class="text-slate-400">Voz:</span>
-            <select id="voice-select" onchange="savePreferredVoice()" class="bg-bg border border-border rounded px-2 py-1 text-purple-300 max-w-[180px]"></select>
+            <span class="text-slate-400">Perfil Vocal:</span>
+            <select id="voice-select" onchange="savePreferredVoice()" class="bg-bg border border-border rounded px-2 py-1 text-purple-300 max-w-[210px]"></select>
           </div>
         </div>
 
@@ -390,7 +385,7 @@
         <div id="fsub-consulta" class="bg-bg border border-border rounded-lg p-4 space-y-3">
           <div id="friday-chat-log" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1 text-xs">
             <div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed">
-              <strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> Buenas tardes, señor. Mi módulo de voz está listo. Pregúnteme por <strong>BTCUSD</strong>, <strong>EURUSD</strong>, <strong>US30</strong> o pida la mejor entrada del día y se lo explicaré en voz alta.
+              <strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> Buenas tardes, señor. Nuestras voces neuronales están calibradas. Pregúnteme por <strong>BTCUSD</strong>, <strong>EURUSD</strong>, <strong>US30</strong> o pida la mejor entrada del día y se lo explicaré en voz alta.
             </div>
           </div>
           <div class="flex flex-wrap gap-1.5">
@@ -407,13 +402,13 @@
 
         <!-- Sub 2: NÚCLEO -->
         <div id="fsub-nucleo" class="hidden bg-bg border border-purple-500/30 rounded-lg p-5 text-center space-y-3">
-          <div class="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400 text-xs font-mono text-purple-300">EN LÍNEA · SÍNTESIS DE VOZ ACTIVA</div>
+          <div class="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400 text-xs font-mono text-purple-300">EN LÍNEA · SÍNTESIS NEURONAL MULTI-PERSONAJE</div>
           <p class="text-xs text-slate-300 max-w-xl mx-auto">Experta en macroeconomía, política monetaria, liquidez institucional y estructura SMC. Cruza en vivo los datos de VISIÓN y ULTRÓN.</p>
           <div class="flex flex-wrap justify-center gap-2 text-[11px] font-mono">
             <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">8 BANCOS CENTRALES</span>
             <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">12 ACTIVOS + BITCOIN</span>
             <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">CALENDARIO SEMANAL</span>
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">SEÑALES SMC</span>
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">4 VOCES IA</span>
           </div>
         </div>
 
@@ -421,7 +416,7 @@
         <div id="fsub-leccion" class="hidden bg-bg border border-border rounded-lg p-5 space-y-3">
           <div class="flex items-center justify-between">
             <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold">LECCIÓN DE LA SEMANA</span>
-            <button onclick="speakText(document.getElementById('lesson-text').innerText)" class="px-2.5 py-1 rounded bg-purple-600/30 text-purple-200 text-[11px] font-mono">🔊 Escuchar lección</button>
+            <button onclick="speakText(document.getElementById('lesson-text').innerText, true, 'friday')" class="px-2.5 py-1 rounded bg-purple-600/30 text-purple-200 text-[11px] font-mono">🔊 Escuchar lección</button>
           </div>
           <h3 class="text-base font-bold text-white">¿Por qué los rendimientos del bono a 10 años (US10Y) mueven tanto al Dólar, Bitcoin y Nasdaq?</h3>
           <div id="lesson-text" class="bg-panel border border-purple-500/20 rounded p-3.5 text-xs text-slate-300 leading-relaxed space-y-2">
@@ -505,19 +500,57 @@
     let visibleCandles = 42;
 
     // =========================================================
-    // MOTOR DE VOZ IA (WEB SPEECH API NATIVA EN ESPAÑOL)
+    // MOTOR DE VOZ NEURONAL MULTI-PERSONAJE (VISION QUEST STYLE)
     // =========================================================
     let voiceEnabled = localStorage.getItem('oraculo_voice') !== 'off';
     let spanishVoices = [];
 
+    const PERSONA_PROFILES = {
+      jarvis: {
+        label: 'JARVIS',
+        preferred: ['Alvaro', 'Jorge', 'Pablo', 'Raul', 'Tomas', 'Google'],
+        pitch: 0.93,
+        rate: 0.98
+      },
+      vision: {
+        label: 'VISIÓN',
+        preferred: ['Tomas', 'Raul', 'Alvaro', 'Jorge', 'Diego'],
+        pitch: 0.84,
+        rate: 0.92
+      },
+      ultron: {
+        label: 'ULTRÓN',
+        preferred: ['Jorge', 'Alvaro', 'Pablo', 'Diego', 'Raul'],
+        pitch: 0.75,
+        rate: 0.95
+      },
+      friday: {
+        label: 'F.R.I.D.A.Y.',
+        preferred: ['Dalia', 'Elvira', 'Paloma', 'Sabina', 'Helena', 'Monica', 'Paulina', 'Google'],
+        pitch: 1.05,
+        rate: 1.03
+      }
+    };
+
+    function isNaturalVoice(v) {
+      const n = v.name.toLowerCase();
+      return n.includes('natural') || n.includes('online') || n.includes('google') || n.includes('neural');
+    }
+
     function loadVoices() {
       if (!('speechSynthesis' in window)) return;
       const all = window.speechSynthesis.getVoices();
-      spanishVoices = all.filter(v => v.lang.toLowerCase().startsWith('es'));
+      const esAll = all.filter(v => v.lang.toLowerCase().startsWith('es'));
+      spanishVoices = [
+        ...esAll.filter(isNaturalVoice),
+        ...esAll.filter(v => !isNaturalVoice(v))
+      ];
       const sel = document.getElementById('voice-select');
-      if (sel && spanishVoices.length > 0) {
-        const saved = localStorage.getItem('oraculo_voice_name');
-        sel.innerHTML = spanishVoices.map(v => `<option value="${v.name}" ${v.name === saved ? 'selected' : ''}>${v.name}</option>`).join('');
+      if (sel) {
+        const saved = localStorage.getItem('oraculo_voice_name') || 'AUTO_PERSONA';
+        sel.innerHTML =
+          `<option value="AUTO_PERSONA" ${saved === 'AUTO_PERSONA' ? 'selected' : ''}>🎭 Automático por Personaje (IA)</option>` +
+          spanishVoices.map(v => `<option value="${v.name}" ${v.name === saved ? 'selected' : ''}>${v.name}</option>`).join('');
       }
     }
     if ('speechSynthesis' in window) {
@@ -528,6 +561,26 @@
     function savePreferredVoice() {
       const sel = document.getElementById('voice-select');
       if (sel) localStorage.setItem('oraculo_voice_name', sel.value);
+    }
+
+    function pickVoiceForPersona(personaKey) {
+      if (spanishVoices.length === 0) return null;
+      const savedName = localStorage.getItem('oraculo_voice_name') || 'AUTO_PERSONA';
+      if (savedName !== 'AUTO_PERSONA') {
+        const manual = spanishVoices.find(v => v.name === savedName);
+        if (manual) return manual;
+      }
+
+      const profile = PERSONA_PROFILES[personaKey] || PERSONA_PROFILES.friday;
+      for (const kw of profile.preferred) {
+        const match = spanishVoices.find(v => isNaturalVoice(v) && v.name.toLowerCase().includes(kw.toLowerCase()));
+        if (match) return match;
+      }
+      for (const kw of profile.preferred) {
+        const match = spanishVoices.find(v => v.name.toLowerCase().includes(kw.toLowerCase()));
+        if (match) return match;
+      }
+      return spanishVoices[0];
     }
 
     function updateVoiceButtonUI() {
@@ -550,13 +603,11 @@
       localStorage.setItem('oraculo_voice', voiceEnabled ? 'on' : 'off');
       updateVoiceButtonUI();
       if (!voiceEnabled) stopSpeaking();
-      else speakText('Sistema de voz en línea, señor.');
+      else speakText('Todos los protocolos vocales están calibrados, señor.', true, 'jarvis');
     }
 
     function stopSpeaking() {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       document.getElementById('stop-voice-btn').classList.add('hidden');
     }
 
@@ -575,51 +626,70 @@
         .replace(/USTEC/g, 'Nasdaq')
         .replace(/US500/g, 'S P 500')
         .replace(/US30/g, 'Dow Jones')
-        .replace(/US10Y/g, 'bono a 10 años')
+        .replace(/US10Y/g, 'rendimiento del bono a 10 años')
         .replace(/DXY/g, 'índice del dólar')
         .replace(/CHoCH/g, 'cambio de carácter')
         .replace(/BOS/g, 'ruptura de estructura')
-        .replace(/TP1/g, 'Take Profit 1')
-        .replace(/TP2/g, 'Take Profit 2')
+        .replace(/TP1/g, 'primer objetivo')
+        .replace(/TP2/g, 'segundo objetivo')
         .replace(/SL/g, 'Stop Loss')
         .replace(/OB/g, 'bloque institucional')
+        .replace(/:/g, '. ')
+        .replace(/;/g, '. ')
         .replace(/\s+/g, ' ')
         .trim();
     }
 
-    function speakText(rawText, force = false) {
+    function speakText(rawText, force = false, personaKey = 'friday') {
       if ((!voiceEnabled && !force) || !('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
-      const text = cleanTextForSpeech(rawText);
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'es-ES';
-      utter.rate = 1.03;
-      utter.pitch = 1.02;
+      if (spanishVoices.length === 0) loadVoices();
 
-      const savedName = localStorage.getItem('oraculo_voice_name');
-      const chosen = spanishVoices.find(v => v.name === savedName)
-        || spanishVoices.find(v => v.name.includes('Google') || v.name.includes('Helena') || v.name.includes('Sabina') || v.name.includes('Monica'))
-        || spanishVoices[0];
-      if (chosen) utter.voice = chosen;
+      const profile = PERSONA_PROFILES[personaKey] || PERSONA_PROFILES.friday;
+      const chosenVoice = pickVoiceForPersona(personaKey);
+      const clean = cleanTextForSpeech(rawText);
 
+      const sentences = clean.match(/[^.!?]+[.!?]*/g) || [clean];
       const stopBtn = document.getElementById('stop-voice-btn');
-      utter.onstart = () => stopBtn.classList.remove('hidden');
-      utter.onend = () => stopBtn.classList.add('hidden');
-      utter.onerror = () => stopBtn.classList.add('hidden');
 
-      window.speechSynthesis.speak(utter);
+      sentences.forEach((sentence, idx) => {
+        const s = sentence.trim();
+        if (!s) return;
+        const utter = new SpeechSynthesisUtterance(s);
+        utter.lang = chosenVoice ? chosenVoice.lang : 'es-ES';
+        utter.pitch = profile.pitch;
+        utter.rate = profile.rate;
+        if (chosenVoice) utter.voice = chosenVoice;
+
+        if (idx === 0) {
+          utter.onstart = () => stopBtn.classList.remove('hidden');
+        }
+        if (idx === sentences.length - 1) {
+          utter.onend = () => stopBtn.classList.add('hidden');
+          utter.onerror = () => stopBtn.classList.add('hidden');
+        }
+        window.speechSynthesis.speak(utter);
+      });
     }
 
     function speakBriefing() {
       if (!data) {
-        speakText('Aún no se han cargado los datos del mercado, señor.', true);
+        speakText('Aún no se han cargado los datos del mercado, señor.', true, 'jarvis');
         return;
       }
       const aligned = data.assets.filter(a => a.confluence.alignment === 'ALIGNED');
       const alignedTxt = aligned.length > 0
         ? `Actualmente tenemos ${aligned.length} activos con alineación confirmada: ${aligned.map(a => `${a.symbol} para ${a.setup.direction === 'BUY' ? 'compras' : 'ventas'}`).join(', ')}.`
         : 'Por el momento ningún activo muestra alineación fuerte entre economía y gráfico; recomiendo esperar confirmación.';
-      speakText(`Reporte de Oráculo. ${data.brief.headline}. ${alignedTxt}`, true);
+      speakText(`Aquí Jarvis. ${data.brief.headline}. ${alignedTxt}`, true, 'jarvis');
+    }
+
+    function speakVisionBrief() {
+      if (!data) {
+        speakText('Visión sincronizando datos macroeconómicos.', true, 'vision');
+        return;
+      }
+      speakText(`Reporte de Visión. ${data.brief.headline}. ${data.brief.summary}`, true, 'vision');
     }
 
     function speakAssetSetup(symbol) {
@@ -628,11 +698,12 @@
       if (!a) return;
       const dirWord = a.setup.direction === 'BUY' ? 'compra' : 'venta';
       speakText(
-        `Lectura de ${a.symbol}. La economía marca ${a.economy_bias} y el gráfico marca ${a.chart_bias}. ` +
-        `Veredicto: ${a.confluence.verdict_title}. ` +
-        `Plan sugerido: ${dirWord} en ${a.setup.entry}, Stop Loss en ${a.setup.sl}, ` +
-        `primer objetivo en ${a.setup.tp1}, y segundo objetivo en ${a.setup.tp2}.`,
-        true
+        `Ultrón reportando sobre ${a.symbol}. Sin emociones, solo estructura. ` +
+        `La economía marca ${a.economy_bias} y el gráfico marca ${a.chart_bias}. ` +
+        `Plan de ejecución: ${dirWord} en ${a.setup.entry}. Stop Loss en ${a.setup.sl}. ` +
+        `Primer objetivo en ${a.setup.tp1}, y segundo objetivo en ${a.setup.tp2}.`,
+        true,
+        'ultron'
       );
     }
 
@@ -673,7 +744,7 @@
       setTimeout(() => el.classList.add('hidden'), 500);
       if (withGreeting) {
         if (data) speakBriefing();
-        else speakText('Todos los sistemas de Oráculo están en línea, señor.');
+        else speakText('Todos los sistemas de Oráculo están en línea, señor.', true, 'jarvis');
       }
     }
     function showBoot() {
@@ -818,7 +889,7 @@
                 <div class="text-[11px] text-slate-400">${a.name}</div>
               </div>
               <div class="flex items-center gap-1.5">
-                <button onclick="speakAssetSetup('${a.symbol}')" title="Escuchar señal por voz" class="px-2 py-1 rounded bg-bg border border-border hover:border-purple-400 text-[11px] font-mono text-purple-300">🔊</button>
+                <button onclick="speakAssetSetup('${a.symbol}')" title="Escuchar señal por voz de Ultrón" class="px-2 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-red-300">🔊</button>
                 <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-slate-300">Ver Gráfico →</button>
               </div>
             </div>
@@ -1184,11 +1255,11 @@
       log.innerHTML += `
         <div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed flex items-start justify-between gap-2">
           <div><strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> ${reply}</div>
-          <button onclick="speakText('${safeSpeech}', true)" title="Repetir audio" class="shrink-0 px-2 py-0.5 rounded bg-bg border border-border text-purple-300 text-[11px]">🔊</button>
+          <button onclick="speakText('${safeSpeech}', true, 'friday')" title="Repetir audio" class="shrink-0 px-2 py-0.5 rounded bg-bg border border-border text-purple-300 text-[11px]">🔊</button>
         </div>
       `;
       log.scrollTop = log.scrollHeight;
-      speakText(reply);
+      speakText(reply, false, 'friday');
     }
 
     let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
