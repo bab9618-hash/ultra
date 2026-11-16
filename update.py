@@ -44,35 +44,41 @@ def load_previous_assets():
         return {}
 
 def should_keep_locked_setup(prev_asset, new_dir, df_1h, current_price, now_dt):
+    """
+    Mantiene congelados Entry, SL, TP1 y TP2 mientras la operación está activa,
+    pero SE REINICIA AUTOMÁTICAMENTE en cuanto el precio toca TP1 o Stop Loss
+    (o tras 12 horas) para buscar nuevas re-entradas intradía.
+    """
     if not prev_asset or "setup" not in prev_asset:
         return False
     prev_setup = prev_asset["setup"]
     if prev_setup.get("direction") != new_dir:
         return False
 
-    # Verificar expiración máxima de 36 horas para evitar setups obsoletos
+    # Expiración intradía de 12 horas para renovar zonas de sesión
     locked_at_str = prev_setup.get("locked_at")
     if locked_at_str:
         try:
             locked_dt = datetime.datetime.fromisoformat(locked_at_str)
-            if (now_dt - locked_dt).total_seconds() > 36 * 3600:
+            if (now_dt - locked_dt).total_seconds() > 12 * 3600:
                 return False
         except Exception:
             pass
 
-    # Revisar si las últimas 6 horas tocaron TP2 o SL
-    recent_1h = df_1h.tail(6)
+    # Revisar las últimas 4 horas para detectar si tocó TP1 o SL
+    recent_1h = df_1h.tail(4)
     max_h = max(float(recent_1h["High"].max()), current_price)
     min_l = min(float(recent_1h["Low"].min()), current_price)
 
     sl = float(prev_setup["sl"])
-    tp2 = float(prev_setup["tp2"])
+    tp1 = float(prev_setup["tp1"])
 
     if new_dir == "BUY":
-        if min_l <= sl or max_h >= tp2:
+        # Si tocó Stop Loss o alcanzó TP1, liberar para buscar nueva re-entrada
+        if min_l <= sl or max_h >= tp1:
             return False
     else:
-        if max_h >= sl or min_l <= tp2:
+        if max_h >= sl or min_l <= tp1:
             return False
 
     return True
@@ -99,7 +105,7 @@ def serialize_candles(df, dec, limit=42):
     candles = []
     for idx, row in sub.iterrows():
         try:
-            label = idx.strftime("%d %b") if hasattr(idx, "strftime") else str(idx)[:10]
+            label = idx.strftime("%d %b %H:%M") if hasattr(idx, "strftime") else str(idx)[:16]
             candles.append({
                 "t": label,
                 "o": round(float(row["Open"]), dec),
@@ -144,7 +150,7 @@ def compute_macro_bias(cfg, dxy_bull, us10y_high):
 def analyze_asset(cfg, dxy_bull, us10y_high, prev_asset, now_dt):
     dec = cfg["decimals"]
     df_1d = yf.Ticker(cfg["ticker"]).history(period="4mo", interval="1d")
-    df_1h = yf.Ticker(cfg["ticker"]).history(period="20d", interval="1h")
+    df_1h = yf.Ticker(cfg["ticker"]).history(period="15d", interval="1h")
 
     if df_1d.empty or len(df_1d) < 25 or df_1h.empty or len(df_1h) < 30:
         return None
@@ -174,9 +180,10 @@ def analyze_asset(cfg, dxy_bull, us10y_high, prev_asset, now_dt):
     range_20_low = round(float(df_1d["Low"].tail(20).min()), dec)
     eq_50 = round((range_20_high + range_20_low) / 2, dec)
 
-    intraday_high = round(float(df_1h["High"].tail(48).max()), dec)
-    intraday_low = round(float(df_1h["Low"].tail(48).min()), dec)
-    intraday_rng = intraday_high - intraday_low
+    # Ventana Intradía fresca de 16 horas para re-entradas rápidas en sesión
+    intraday_high = round(float(df_1h["High"].tail(16).max()), dec)
+    intraday_low = round(float(df_1h["Low"].tail(16).min()), dec)
+    intraday_rng = max(intraday_high - intraday_low, cfg["pip"] * 15)
 
     weekly_bias = determine_tf_bias(df_1d.tail(35))
     daily_bias = determine_tf_bias(df_1d.tail(18))
@@ -220,30 +227,31 @@ def analyze_asset(cfg, dxy_bull, us10y_high, prev_asset, now_dt):
         verdict_sub = "Uno de los dos está neutral"
         trade_dir = "BUY" if (economy_bias == "SUBE" or chart_bias == "SUBE") else "SELL"
 
-    # SISTEMA DE BLOQUEO DE ENTRADAS (EVITA REPAINTING CADA 15 MIN)
+    # Mantiene la señal congelada hasta tocar TP1 o SL; al tocar TP1 se reinicia y busca re-entrada
     if should_keep_locked_setup(prev_asset, trade_dir, df_1h, price, now_dt):
         ob_low = prev_asset["ob_low"]
         ob_high = prev_asset["ob_high"]
         setup_obj = prev_asset["setup"]
     else:
+        is_reentry = bool(prev_asset and prev_asset.get("setup", {}).get("direction") == trade_dir)
         if trade_dir == "BUY":
-            ob_low = round(intraday_low + intraday_rng * 0.12, dec)
-            ob_high = round(intraday_low + intraday_rng * 0.32, dec)
+            ob_low = round(intraday_low + intraday_rng * 0.14, dec)
+            ob_high = round(intraday_low + intraday_rng * 0.34, dec)
             entry_price = round(ob_high, dec)
             sl_price = round(ob_low - max(intraday_rng * 0.14, cfg["pip"] * 8), dec)
             risk = max(entry_price - sl_price, cfg["pip"] * 5)
             tp1_price = round(entry_price + risk * 2.0, dec)
             tp2_price = round(entry_price + risk * 3.0, dec)
-            signal_tag = "SU COMPRA"
+            signal_tag = "RE-ENTRADA COMPRA" if is_reentry else "SU COMPRA"
         else:
-            ob_low = round(intraday_high - intraday_rng * 0.32, dec)
-            ob_high = round(intraday_high - intraday_rng * 0.12, dec)
+            ob_low = round(intraday_high - intraday_rng * 0.34, dec)
+            ob_high = round(intraday_high - intraday_rng * 0.14, dec)
             entry_price = round(ob_low, dec)
             sl_price = round(ob_high + max(intraday_rng * 0.14, cfg["pip"] * 8), dec)
             risk = max(sl_price - entry_price, cfg["pip"] * 5)
             tp1_price = round(entry_price - risk * 2.0, dec)
             tp2_price = round(entry_price - risk * 3.0, dec)
-            signal_tag = "SU VENTA"
+            signal_tag = "RE-ENTRADA VENTA" if is_reentry else "SU VENTA"
 
         setup_obj = {
             "direction": trade_dir,
