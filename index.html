@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Tactical HUD v4.0</title>
+  <title>ORÁCULO · Cybernetic HUD v5.0</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -16,10 +16,10 @@
             hud: ['Orbitron', 'sans-serif'],
           },
           colors: {
-            bg: '#04060a',
-            panel: '#0a0f18',
-            card: '#0e1522',
-            border: '#192538',
+            bg: '#030509',
+            panel: '#080d16',
+            card: '#0c1320',
+            border: '#18263d',
             gold: '#f59e0b',
             cyan: '#38bdf8',
             crimson: '#ef4444',
@@ -32,18 +32,20 @@
   </script>
   <style>
     body {
-      background-color: #04060a;
+      background-color: #030509;
       color: #e2e8f0;
-      background-image:
-        radial-gradient(circle at 18% 12%, rgba(56, 189, 248, 0.08), transparent 34%),
-        radial-gradient(circle at 82% 18%, rgba(245, 158, 11, 0.08), transparent 36%),
-        radial-gradient(circle at 50% 88%, rgba(168, 85, 247, 0.07), transparent 40%),
-        linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 100% 100%, 34px 34px, 34px 34px;
+      overflow-x: hidden;
     }
 
-    /* Efecto Scanlines sutil tipo visor HUD */
+    /* Fondo de red neuronal animada */
+    #neural-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Scanlines sutiles */
     body::before {
       content: "";
       position: fixed;
@@ -54,58 +56,110 @@
         to bottom,
         transparent 0px,
         transparent 3px,
-        rgba(0, 0, 0, 0.14) 4px
+        rgba(0, 0, 0, 0.16) 4px
       );
     }
 
     ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: #04060a; }
-    ::-webkit-scrollbar-thumb { background: #1e2e46; border-radius: 3px; }
+    ::-webkit-scrollbar-track { background: #030509; }
+    ::-webkit-scrollbar-thumb { background: #1e3252; border-radius: 3px; }
 
-    /* Paneles Glassmorphism + Brackets HUD */
+    /* Paneles Glassmorphism + Luz de Cursor + Brackets HUD */
     .hud-panel {
-      background: rgba(10, 15, 24, 0.78);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: linear-gradient(145deg, rgba(10, 16, 28, 0.84), rgba(6, 10, 18, 0.90));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       position: relative;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(56, 189, 248, 0.14), 0 12px 35px rgba(0, 0, 0, 0.55);
+      transition: transform 0.22s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .hud-interactive:hover {
+      transform: translateY(-2px);
+      box-shadow: inset 0 1px 0 rgba(56, 189, 248, 0.35), 0 14px 36px rgba(14, 165, 233, 0.14);
+    }
+
+    /* Rayo escáner horizontal continuo */
+    .scan-beam::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.85), transparent);
+      animation: beamSweep 4.5s infinite linear;
+      pointer-events: none;
+    }
+    @keyframes beamSweep {
+      0% { left: -60%; }
+      100% { left: 120%; }
     }
 
     .hud-corners::after {
       content: "";
       position: absolute;
-      inset: -1px;
+      inset: 0;
       pointer-events: none;
       border-radius: inherit;
       background:
-        linear-gradient(to right, currentColor 10px, transparent 10px) 0 0,
-        linear-gradient(to bottom, currentColor 10px, transparent 10px) 0 0,
-        linear-gradient(to left, currentColor 10px, transparent 10px) 100% 0,
-        linear-gradient(to bottom, currentColor 10px, transparent 10px) 100% 0,
-        linear-gradient(to right, currentColor 10px, transparent 10px) 0 100%,
-        linear-gradient(to top, currentColor 10px, transparent 10px) 0 100%,
-        linear-gradient(to left, currentColor 10px, transparent 10px) 100% 100%,
-        linear-gradient(to top, currentColor 10px, transparent 10px) 100% 100%;
+        linear-gradient(to right, currentColor 12px, transparent 12px) 0 0,
+        linear-gradient(to bottom, currentColor 12px, transparent 12px) 0 0,
+        linear-gradient(to left, currentColor 12px, transparent 12px) 100% 0,
+        linear-gradient(to bottom, currentColor 12px, transparent 12px) 100% 0,
+        linear-gradient(to right, currentColor 12px, transparent 12px) 0 100%,
+        linear-gradient(to top, currentColor 12px, transparent 12px) 0 100%,
+        linear-gradient(to left, currentColor 12px, transparent 12px) 100% 100%,
+        linear-gradient(to top, currentColor 12px, transparent 12px) 100% 100%;
       background-repeat: no-repeat;
-      background-size: 12px 2px, 2px 12px;
-      opacity: 0.55;
+      background-size: 14px 2px, 2px 14px;
+      opacity: 0.65;
+    }
+
+    /* Cinta Ticker continua */
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: tickerScroll 36s linear infinite;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Ecualizador de Voz IA */
+    .voice-wave span {
+      display: inline-block;
+      width: 2.5px;
+      height: 4px;
+      background: #c084fc;
+      border-radius: 2px;
+      transition: height 0.15s ease;
+    }
+    .voice-speaking .voice-wave span {
+      animation: eqPulse 0.55s infinite ease-in-out;
+    }
+    .voice-speaking .voice-wave span:nth-child(2) { animation-delay: 0.12s; }
+    .voice-speaking .voice-wave span:nth-child(3) { animation-delay: 0.24s; }
+    .voice-speaking .voice-wave span:nth-child(4) { animation-delay: 0.15s; }
+    @keyframes eqPulse {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; background: #38bdf8; }
     }
 
     @keyframes pulseRing {
       0%, 100% { transform: scale(1); opacity: 0.95; }
       50% { transform: scale(1.07); opacity: 0.35; }
     }
-    @keyframes spinSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes spinReverse {
-      from { transform: rotate(360deg); }
-      to { transform: rotate(0deg); }
-    }
+    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes spinReverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
     @keyframes radarBeacon {
       0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45); }
-      50% { box-shadow: 0 0 18px 2px rgba(16, 185, 129, 0.28); }
+      50% { box-shadow: 0 0 20px 3px rgba(16, 185, 129, 0.3); }
     }
     .radar-ring { animation: pulseRing 2.6s infinite ease-in-out; }
     .spin-slow { animation: spinSlow 18s linear infinite; }
@@ -113,52 +167,55 @@
     .entry-beacon { animation: radarBeacon 2s infinite ease-in-out; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-20 sm:pb-6 antialiased selection:bg-amber-500 selection:text-black">
+<body class="min-h-screen flex flex-col pb-20 sm:pb-6 antialiased selection:bg-cyan-400 selection:text-black">
+
+  <!-- RED NEURONAL INTERACTIVA DE FONDO -->
+  <canvas id="neural-bg"></canvas>
 
   <!-- PANTALLA DE ARRANQUE ORÁCULO HUD -->
-  <div id="boot-screen" class="fixed inset-0 z-50 bg-[#030508] flex flex-col items-center justify-center p-6 text-center transition-opacity duration-500">
+  <div id="boot-screen" class="fixed inset-0 z-50 bg-[#020408] flex flex-col items-center justify-center p-6 text-center transition-opacity duration-500">
     <div class="relative w-72 h-72 flex items-center justify-center mb-6">
       <div class="absolute inset-0 rounded-full border border-amber-500/35 radar-ring"></div>
       <div class="absolute inset-4 rounded-full border border-dashed border-cyan-400/50 spin-slow"></div>
       <div class="absolute inset-10 rounded-full border border-dotted border-purple-400/45 spin-rev"></div>
       <div class="absolute -top-3 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400 text-[10px] font-mono text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.3)]">JARVIS · MANDO</div>
-      <div class="absolute -left-6 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400 text-[10px] font-mono text-sky-300 shadow-[0_0_12px_rgba(56,189,248,0.3)]">VISIÓN · MACRO</div>
+      <div class="absolute -left-6 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400 text-[10px] font-mono text-sky-300 shadow-[0_0_12px_rgba(56,189,248,0.3)]">VISIÓN · ESCUDO</div>
       <div class="absolute -right-7 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-400 text-[10px] font-mono text-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.3)]">F.R.I.D.A.Y. · VOZ</div>
-      <div class="absolute -bottom-3 px-3 py-1 rounded-full bg-red-500/15 border border-red-400 text-[10px] font-mono text-red-300 shadow-[0_0_12px_rgba(239,68,68,0.3)]">ULTRÓN · RADAR</div>
-      <div class="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500/30 via-sky-500/20 to-purple-500/20 border-2 border-amber-400 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(245,158,11,0.35)]">
+      <div class="absolute -bottom-3 px-3 py-1 rounded-full bg-red-500/15 border border-red-400 text-[10px] font-mono text-red-300 shadow-[0_0_12px_rgba(239,68,68,0.3)]">ULTRÓN · PIPS & RADAR</div>
+      <div class="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500/30 via-sky-500/20 to-purple-500/20 border-2 border-cyan-400 flex flex-col items-center justify-center shadow-[0_0_28px_rgba(56,189,248,0.4)]">
         <span class="font-hud font-black text-2xl text-white">O</span>
-        <span class="text-[8px] font-mono text-amber-300 tracking-widest">HUD v4.0</span>
+        <span class="text-[8px] font-mono text-cyan-300 tracking-widest">HUD v5.0</span>
       </div>
     </div>
-    <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.32em] text-white drop-shadow-[0_0_12px_rgba(56,189,248,0.4)]">ORÁCULO</h1>
-    <p class="text-xs font-mono tracking-[0.22em] text-cyan-400 mt-2">INTERFAZ TÁCTICA · RADAR DE ENTRADAS ACTIVO</p>
-    <button onclick="enterOraculo(true)" class="mt-7 px-7 py-3 rounded-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-yellow-300 text-black font-hud font-bold text-xs tracking-widest shadow-[0_0_20px_rgba(245,158,11,0.4)] transition">
-      INICIALIZAR CABINA & VOZ →
+    <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.32em] text-white drop-shadow-[0_0_14px_rgba(56,189,248,0.45)]">ORÁCULO</h1>
+    <p class="text-xs font-mono tracking-[0.22em] text-cyan-400 mt-2">CABINA CIBERNÉTICA · ESCUDO NOTICIAS & RADAR PIPS</p>
+    <button onclick="enterOraculo(true)" class="mt-7 px-7 py-3 rounded-full bg-gradient-to-r from-cyan-400 to-amber-400 hover:brightness-110 text-black font-hud font-bold text-xs tracking-widest shadow-[0_0_24px_rgba(56,189,248,0.45)] transition">
+      ACTIVAR CABINA & VOZ IA →
     </button>
   </div>
 
   <!-- BARRA SUPERIOR TELEMETRÍA -->
-  <header class="border-b border-cyan-500/20 bg-[#070b12]/90 sticky top-0 z-30 backdrop-blur-md">
+  <header class="relative z-30 border-b border-cyan-500/25 bg-[#050912]/90 sticky top-0 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-3">
-        <button onclick="showBoot()" title="Reiniciar secuencia HUD" class="w-9 h-9 rounded-lg bg-amber-500/15 border border-amber-400/80 flex items-center justify-center text-amber-400 font-hud font-black text-sm shadow-[0_0_12px_rgba(245,158,11,0.25)]">O</button>
+        <button onclick="showBoot()" title="Secuencia de arranque" class="w-9 h-9 rounded-lg bg-cyan-500/15 border border-cyan-400/80 flex items-center justify-center text-cyan-300 font-hud font-black text-sm shadow-[0_0_14px_rgba(56,189,248,0.3)] hover:scale-105 transition">O</button>
         <div>
           <div class="flex items-center gap-2">
             <span class="font-hud font-extrabold tracking-[0.22em] text-white text-sm">ORÁCULO</span>
-            <span class="hidden sm:inline text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">SYS.ONLINE</span>
+            <span class="hidden sm:inline text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/15 border border-cyan-400/40 text-cyan-300">CORE v5</span>
             <span id="killzone-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">VERIFICANDO SESIÓN</span>
           </div>
           <div id="last-updated" class="text-[10px] font-mono text-slate-400">Sincronizando telemetría...</div>
         </div>
       </div>
 
-      <!-- Controles de Voz IA + Relojes mundiales -->
-      <div class="flex flex-wrap items-center gap-1.5 text-[11px] font-mono">
-        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-1 rounded bg-purple-600/25 border border-purple-400 text-purple-300 hover:bg-purple-600/40 font-bold flex items-center gap-1.5">
-          <span id="voice-icon">🔊</span>
+      <!-- Controles de Voz IA con Ecualizador Reactivo + Relojes -->
+      <div id="voice-hud-cluster" class="flex flex-wrap items-center gap-1.5 text-[11px] font-mono">
+        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-1 rounded bg-purple-600/25 border border-purple-400 text-purple-300 hover:bg-purple-600/40 font-bold flex items-center gap-2">
+          <span class="voice-wave flex items-end gap-0.5 h-3.5"><span></span><span></span><span></span><span></span></span>
           <span id="voice-status-txt">VOZ IA: ON</span>
         </button>
-        <button onclick="scanProximityAlerts(true)" title="Escanear pares cerca de entrada ahora" class="px-2.5 py-1 rounded bg-emerald-500/15 border border-emerald-400/60 hover:bg-emerald-500/25 text-emerald-300 font-bold">
+        <button onclick="scanProximityAlerts(true)" title="Escanear pares cerca de entrada" class="px-2.5 py-1 rounded bg-emerald-500/15 border border-emerald-400/60 hover:bg-emerald-500/25 text-emerald-300 font-bold">
           📡 ESCANEAR
         </button>
         <button onclick="speakBriefing()" title="Escuchar resumen de Jarvis" class="px-2 py-1 rounded bg-bg border border-border hover:border-amber-400 text-amber-400">
@@ -173,11 +230,18 @@
       </div>
     </div>
 
+    <!-- CINTA DE TELEMETRÍA EN VIVO (TICKER CONTINUO) -->
+    <div class="border-t border-cyan-500/15 bg-[#03060c]/90 overflow-hidden py-1">
+      <div id="live-ticker-track" class="ticker-track text-[10px] font-mono text-slate-300 gap-6 px-4">
+        <span>CARGANDO FLUJO DE MERCADO EN TIEMPO REAL...</span>
+      </div>
+    </div>
+
     <!-- Navegación Escritorio -->
     <nav class="hidden sm:flex max-w-7xl mx-auto px-4 border-t border-cyan-500/15 gap-1">
       <button onclick="switchModule('jarvis')" id="nav-jarvis" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-amber-400 text-amber-400">⚡ JARVIS · FUSIÓN</button>
-      <button onclick="switchModule('vision')" id="nav-vision" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-sky-400">🌐 VISIÓN · MACRO</button>
-      <button onclick="switchModule('ultron')" id="nav-ultron" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-red-400">🎯 ULTRÓN · RADAR & GRÁFICO</button>
+      <button onclick="switchModule('vision')" id="nav-vision" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-sky-400">🌐 VISIÓN · MACRO & ESCUDO</button>
+      <button onclick="switchModule('ultron')" id="nav-ultron" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-red-400">🎯 ULTRÓN · GRÁFICO & PIPS</button>
       <button onclick="switchModule('friday')" id="nav-friday" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-purple-400">🧠 F.R.I.D.A.Y. · TUTORA</button>
       <button onclick="switchModule('analisis')" id="nav-analisis" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-white">📐 ANÁLISIS</button>
       <button onclick="switchModule('diario')" id="nav-diario" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-white">📓 DIARIO <span id="journal-badge" class="ml-1 px-1.5 rounded bg-border text-slate-300">0</span></button>
@@ -185,22 +249,23 @@
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 space-y-5">
+  <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 py-5 space-y-5">
 
     <!-- ========================================================= -->
-    <!-- RADAR GLOBAL DE PROXIMIDAD DE ENTRADA (SIEMPRE VISIBLE)   -->
+    <!-- RADAR DE PROXIMIDAD + ESCUDO ANTI-NOTICIAS                -->
     <!-- ========================================================= -->
-    <section id="proximity-radar-bar" class="hud-panel hud-corners text-emerald-400 border border-emerald-500/35 rounded-xl p-4 space-y-3">
+    <section id="proximity-radar-bar" class="hud-panel hud-corners scan-beam text-emerald-400 border border-emerald-500/35 rounded-xl p-4 space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
-        <div class="flex items-center gap-2.5">
+        <div class="flex flex-wrap items-center gap-2.5">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-          <span class="font-hud text-xs sm:text-sm font-bold tracking-wider text-emerald-400">RADAR DE PROXIMIDAD · ZONAS DE ENTRADA</span>
+          <span class="font-hud text-xs sm:text-sm font-bold tracking-wider text-emerald-400">RADAR DE PROXIMIDAD · ZONAS DE DISPARO</span>
           <span id="radar-count-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-300">ESCANEANDO...</span>
+          <span id="news-shield-global" class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/15 border border-sky-500/40 text-sky-300">🛡️ ESCUDO NOTICIAS: DESPEJADO</span>
         </div>
         <div class="flex items-center gap-2 text-[11px] font-mono">
           <label class="flex items-center gap-1.5 cursor-pointer text-slate-300">
             <input id="auto-alert-toggle" type="checkbox" checked class="accent-emerald-400">
-            <span>Alerta automática al acercarse</span>
+            <span>Alerta vocal automática</span>
           </label>
         </div>
       </div>
@@ -211,14 +276,14 @@
     <!-- MÓDULO 1: JARVIS · FUSIÓN                                 -->
     <!-- ========================================================= -->
     <section id="mod-jarvis" class="space-y-5">
-      <div class="hud-panel hud-corners text-amber-400 border border-amber-500/35 rounded-xl p-5 space-y-3">
+      <div class="hud-panel hud-corners scan-beam text-amber-400 border border-amber-500/35 rounded-xl p-5 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
           <div>
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
               <h2 class="font-hud text-sm font-extrabold text-amber-400 tracking-wider">JARVIS · NÚCLEO DE FUSIÓN</h2>
             </div>
-            <p class="text-xs font-mono text-slate-300 mt-1">«VISIÓN VE EL MUNDO. ULTRÓN VE EL GRÁFICO. YO LOS UNO, SEÑOR.»</p>
+            <p class="text-xs font-mono text-slate-300 mt-1">«VISIÓN VE EL MUNDO. ULTRÓN MIDE LOS PIPS. YO PROTEJO SU EJECUCIÓN, SEÑOR.»</p>
           </div>
           <div class="flex flex-wrap gap-1.5 font-mono text-xs">
             <button onclick="filterJarvis('ALL')" class="j-filter px-3 py-1 rounded bg-amber-500 text-black font-bold" data-jf="ALL">TODOS (12)</button>
@@ -228,33 +293,14 @@
           </div>
         </div>
 
-        <div class="bg-[#060911]/90 border border-border rounded-lg p-4 space-y-3 text-slate-200">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-xs font-mono font-bold text-white">◆ PROTOCOLO DE DECISIÓN TÁCTICA</span>
-            <span class="text-[11px] font-mono text-cyan-400">TELEMETRÍA MACRO + ESTRUCTURA SMC</span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
-            <div class="bg-panel/90 border border-sky-500/25 rounded p-2.5 flex items-center gap-2.5">
-              <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 font-mono font-bold flex items-center justify-center text-[11px]">1</span>
-              <span><strong class="text-sky-400">VISIÓN</strong> detecta hacia dónde empuja la <strong>economía</strong></span>
-            </div>
-            <div class="bg-panel/90 border border-red-500/25 rounded p-2.5 flex items-center gap-2.5">
-              <span class="w-5 h-5 rounded-full bg-red-500/20 text-red-400 font-mono font-bold flex items-center justify-center text-[11px]">2</span>
-              <span><strong class="text-red-400">ULTRÓN</strong> calcula bloque institucional y <strong>punto exacto</strong></span>
-            </div>
-            <div class="bg-panel/90 border border-emerald-500/25 rounded p-2.5 flex items-center gap-2.5">
-              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center text-[11px]">3</span>
-              <span>Cuando el <strong>Radar</strong> marca zona activa, ejecute con disciplina</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+        <div class="bg-[#050811]/90 border border-border rounded-lg p-4 space-y-3 text-slate-200">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <div class="text-[10px] font-mono text-slate-400 uppercase mb-1.5">Mayor Confluencia</div>
               <div id="jarvis-top-confluence" class="flex flex-wrap gap-1.5"></div>
             </div>
             <div>
-              <div class="text-[10px] font-mono text-slate-400 uppercase mb-1.5">Mejores Hoy (Alineados)</div>
+              <div class="text-[10px] font-mono text-slate-400 uppercase mb-1.5">Mejores Hoy (Alineados y Libres de Noticia)</div>
               <div id="jarvis-best-today" class="flex flex-wrap gap-1.5"></div>
             </div>
           </div>
@@ -268,10 +314,10 @@
     <!-- MÓDULO 2: VISIÓN · INTELIGENCIA MACRO                     -->
     <!-- ========================================================= -->
     <section id="mod-vision" class="hidden space-y-5">
-      <div class="hud-panel hud-corners text-sky-400 border border-sky-500/35 rounded-xl p-5 space-y-4">
+      <div class="hud-panel hud-corners scan-beam text-sky-400 border border-sky-500/35 rounded-xl p-5 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
           <div>
-            <h2 class="font-hud text-sm font-extrabold text-sky-400 tracking-wider">🌐 VISIÓN · INTELIGENCIA MACRO</h2>
+            <h2 class="font-hud text-sm font-extrabold text-sky-400 tracking-wider">🌐 VISIÓN · INTELIGENCIA MACRO & ESCUDO</h2>
             <p class="text-xs font-mono text-slate-300 mt-0.5">«VEO EL MUNDO ANTES QUE EL GRÁFICO.»</p>
           </div>
           <div class="flex gap-2">
@@ -280,7 +326,7 @@
           </div>
         </div>
 
-        <div class="bg-[#060911]/90 border border-sky-500/25 rounded-lg p-4 space-y-2.5 text-slate-200">
+        <div class="bg-[#050811]/90 border border-sky-500/25 rounded-lg p-4 space-y-2.5 text-slate-200">
           <div class="flex items-center justify-between text-[11px] font-mono">
             <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">BRIEF DIARIO</span>
             <span id="brief-date" class="text-slate-400">--</span>
@@ -289,15 +335,15 @@
           <p id="brief-summary" class="text-xs sm:text-sm text-slate-300 leading-relaxed">--</p>
 
           <div class="grid grid-cols-3 gap-2.5 pt-2">
-            <div class="bg-panel border border-sky-500/20 rounded p-2.5">
+            <div class="bg-panel border border-sky-500/25 rounded p-2.5">
               <div class="text-[10px] font-mono text-slate-400">US 10Y YIELD</div>
               <div class="text-sm sm:text-base font-mono font-bold text-white mt-0.5"><span id="m-us10y">--</span> <span id="m-us10y-c" class="text-xs text-slate-400">--</span></div>
             </div>
-            <div class="bg-panel border border-sky-500/20 rounded p-2.5">
+            <div class="bg-panel border border-sky-500/25 rounded p-2.5">
               <div class="text-[10px] font-mono text-slate-400">DXY DÓLAR</div>
               <div class="text-sm sm:text-base font-mono font-bold text-emerald-400 mt-0.5"><span id="m-dxy">--</span> <span id="m-dxy-c" class="text-xs text-slate-400">--</span></div>
             </div>
-            <div class="bg-panel border border-sky-500/20 rounded p-2.5">
+            <div class="bg-panel border border-sky-500/25 rounded p-2.5">
               <div class="text-[10px] font-mono text-slate-400">BRENT CRUDE</div>
               <div class="text-sm sm:text-base font-mono font-bold text-white mt-0.5"><span id="m-brent">--</span> <span id="m-brent-c" class="text-xs text-slate-400">--</span></div>
             </div>
@@ -329,7 +375,7 @@
         </div>
 
         <div class="lg:col-span-6 hud-panel border border-border rounded-xl p-4 space-y-3">
-          <h3 class="text-xs font-mono font-bold text-sky-400 uppercase">Calendario Económico (Semana)</h3>
+          <h3 class="text-xs font-mono font-bold text-sky-400 uppercase">Calendario Económico (Escudo Activo)</h3>
           <div id="vision-calendar-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1"></div>
         </div>
       </div>
@@ -339,21 +385,21 @@
     <!-- MÓDULO 3: ULTRÓN · INTELIGENCIA TÉCNICA & GRÁFICO SMC     -->
     <!-- ========================================================= -->
     <section id="mod-ultron" class="hidden space-y-5">
-      <div class="hud-panel hud-corners text-red-400 border border-red-500/35 rounded-xl p-5 space-y-4">
+      <div class="hud-panel hud-corners scan-beam text-red-400 border border-red-500/35 rounded-xl p-5 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
           <div>
-            <h2 class="font-hud text-sm font-extrabold text-red-400 tracking-wider">🎯 ULTRÓN · INTELIGENCIA TÉCNICA</h2>
-            <p class="text-xs font-mono text-slate-300 mt-0.5">«SIN EMOCIONES. SOLO ESTRUCTURA.»</p>
+            <h2 class="font-hud text-sm font-extrabold text-red-400 tracking-wider">🎯 ULTRÓN · ESCÁNER ESTRUCTURAL & PIPS</h2>
+            <p class="text-xs font-mono text-slate-300 mt-0.5">«SIN EMOCIONES. SOLO ESTRUCTURA Y PRECISIÓN.»</p>
           </div>
           <button onclick="speakCurrentUltron()" class="px-3 py-1.5 rounded bg-red-500/20 border border-red-400 text-xs font-mono font-bold text-red-300 hover:bg-red-500/30">
-            🔊 Voz de Ultrón · Dictar Entrada
+            🔊 Voz de Ultrón · Dictar Plan & Pips
           </button>
         </div>
 
         <div class="space-y-2 text-slate-200">
           <div class="flex items-center justify-between text-xs font-mono">
             <span class="text-red-400 font-bold">01 · SELECCIÓN DE OBJETIVO</span>
-            <span class="text-slate-400 text-[11px]">Incluye indicador de distancia a entrada</span>
+            <span class="text-slate-400 text-[11px]">Estado en tiempo real y distancia al bloque</span>
           </div>
           <div id="ultron-asset-selector" class="grid grid-cols-3 sm:grid-cols-6 gap-2"></div>
         </div>
@@ -362,8 +408,12 @@
       <div class="hud-panel border border-border rounded-xl p-5 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <div class="text-xs font-mono font-bold text-white"><span id="u-title-sym" class="text-red-400">BTCUSD</span> · ESCÁNER ESTRUCTURAL</div>
-            <div id="u-proximity-status" class="text-[11px] font-mono text-emerald-400 mt-0.5">Calculando distancia al punto de entrada...</div>
+            <div class="flex flex-wrap items-center gap-2 text-xs font-mono font-bold text-white">
+              <span id="u-title-sym" class="text-red-400 text-sm">BTCUSD</span>
+              <span id="u-lifecycle-badge" class="px-2 py-0.5 rounded text-[10px] bg-sky-500/20 text-sky-300 border border-sky-400/40">ACTIVA</span>
+              <span id="u-news-badge" class="hidden px-2 py-0.5 rounded text-[10px] bg-red-500/25 text-red-300 border border-red-400 animate-pulse">⚠️ NOTICIA PRÓXIMA</span>
+            </div>
+            <div id="u-proximity-status" class="text-[11px] font-mono text-emerald-400 mt-1">Calculando telemetría...</div>
           </div>
           <div class="flex gap-1.5 font-mono text-xs">
             <button onclick="setUltronTF('1d')" class="utf-btn px-3 py-1 rounded bg-red-500 text-white font-bold" data-tf="1d">Diario</button>
@@ -372,7 +422,7 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono bg-[#060911] border border-border rounded-lg px-3 py-2">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono bg-[#050811] border border-border rounded-lg px-3 py-2">
           <div class="flex items-center gap-2">
             <button onclick="zoomChart(-6)" class="px-2.5 py-1 rounded bg-panel border border-border hover:border-red-400">- Alejar</button>
             <span id="u-candle-count" class="text-slate-400 text-[11px]">42 velas</span>
@@ -384,70 +434,88 @@
           </label>
         </div>
 
-        <div class="relative w-full bg-[#05070b] border border-red-500/25 rounded-lg overflow-hidden">
+        <div class="relative w-full bg-[#04060a] border border-red-500/25 rounded-lg overflow-hidden">
           <canvas id="ultron-canvas" class="w-full h-[380px] sm:h-[430px] block"></canvas>
         </div>
 
-        <div id="ultron-entry-box" class="bg-[#060911] border border-red-500/40 rounded-lg p-4 grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono text-xs">
+        <!-- CAJA DE EJECUCIÓN CON PIPS EXACTOS Y BOTÓN COPIAR -->
+        <div id="ultron-entry-box" class="bg-[#050811] border border-red-500/40 rounded-lg p-4 grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono text-xs">
           <div>
             <div class="text-[10px] text-slate-400">SEÑAL ULTRÓN</div>
             <div id="u-sig-dir" class="text-sm font-extrabold text-sky-400 mt-0.5">--</div>
+            <div id="u-sig-rr" class="text-[10px] text-slate-400 mt-0.5">Ratio 1:2 / 1:3</div>
           </div>
           <div>
             <div class="text-[10px] text-slate-400">PRECIO ENTRADA (OB)</div>
-            <div id="u-sig-entry" class="text-sm font-bold text-white mt-0.5">--</div>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span id="u-sig-entry" class="text-sm font-bold text-white">--</span>
+              <button onclick="copyLevel('u-sig-entry')" title="Copiar precio" class="text-[10px] px-1.5 py-0.5 rounded bg-panel border border-border hover:border-cyan-400 text-cyan-300">📋</button>
+            </div>
+            <div id="u-sig-dist" class="text-[10px] text-cyan-400 mt-0.5">--</div>
           </div>
           <div>
             <div class="text-[10px] text-red-400">STOP LOSS</div>
-            <div id="u-sig-sl" class="text-sm font-bold text-red-400 mt-0.5">--</div>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span id="u-sig-sl" class="text-sm font-bold text-red-400">--</span>
+              <button onclick="copyLevel('u-sig-sl')" title="Copiar SL" class="text-[10px] px-1.5 py-0.5 rounded bg-panel border border-border hover:border-red-400 text-red-300">📋</button>
+            </div>
+            <div id="u-sig-sl-pips" class="text-[10px] font-bold text-red-300 mt-0.5">-- pips</div>
           </div>
           <div>
             <div class="text-[10px] text-emerald-400">TP1 (1:2 · PARCIAL)</div>
-            <div id="u-sig-tp1" class="text-sm font-bold text-emerald-400 mt-0.5">--</div>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span id="u-sig-tp1" class="text-sm font-bold text-emerald-400">--</span>
+              <button onclick="copyLevel('u-sig-tp1')" title="Copiar TP1" class="text-[10px] px-1.5 py-0.5 rounded bg-panel border border-border hover:border-emerald-400 text-emerald-300">📋</button>
+            </div>
+            <div id="u-sig-tp1-pips" class="text-[10px] font-bold text-emerald-300 mt-0.5">+-- pips</div>
           </div>
           <div>
             <div class="text-[10px] text-emerald-400">TP2 (1:3 · LIQUIDEZ)</div>
-            <div id="u-sig-tp2" class="text-sm font-bold text-emerald-400 mt-0.5">--</div>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span id="u-sig-tp2" class="text-sm font-bold text-emerald-400">--</span>
+              <button onclick="copyLevel('u-sig-tp2')" title="Copiar TP2" class="text-[10px] px-1.5 py-0.5 rounded bg-panel border border-border hover:border-emerald-400 text-emerald-300">📋</button>
+            </div>
+            <div id="u-sig-tp2-pips" class="text-[10px] font-bold text-emerald-300 mt-0.5">+-- pips</div>
           </div>
         </div>
 
         <div class="grid grid-cols-3 gap-2.5 font-mono text-xs">
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">SEMANAL</div>
             <div id="u-tf-w" class="text-sm font-bold mt-1">--</div>
           </div>
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">DIARIO</div>
             <div id="u-tf-d" class="text-sm font-bold mt-1">--</div>
           </div>
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">4 HORAS</div>
             <div id="u-tf-4h" class="text-sm font-bold mt-1">--</div>
           </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 font-mono text-xs">
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">PRECIO ACTUAL</div>
             <div id="u-m-price" class="text-base font-bold text-white mt-0.5">--</div>
           </div>
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">ÚLTIMO TECHO (BSL)</div>
             <div id="u-m-high" class="text-base font-bold text-emerald-400 mt-0.5">--</div>
           </div>
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">ÚLTIMO PISO (SSL)</div>
             <div id="u-m-low" class="text-base font-bold text-red-400 mt-0.5">--</div>
           </div>
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">MOVIMIENTO DIARIO (ATR)</div>
             <div id="u-m-atr" class="text-base font-bold text-white mt-0.5">--</div>
           </div>
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">ESTA SEMANA</div>
             <div id="u-m-wk" class="text-base font-bold mt-0.5">--</div>
           </div>
-          <div class="bg-[#060911] border border-border rounded-lg p-3">
+          <div class="bg-[#050811] border border-border rounded-lg p-3">
             <div class="text-[10px] text-slate-400">RANGO 20 DÍAS</div>
             <div id="u-m-r20" class="text-xs font-bold text-slate-200 mt-1">--</div>
           </div>
@@ -459,7 +527,7 @@
     <!-- MÓDULO 4: F.R.I.D.A.Y. · TUTORA CON VOZ IA                -->
     <!-- ========================================================= -->
     <section id="mod-friday" class="hidden space-y-5">
-      <div class="hud-panel hud-corners text-purple-400 border border-purple-500/35 rounded-xl p-5 space-y-4">
+      <div class="hud-panel hud-corners scan-beam text-purple-400 border border-purple-500/35 rounded-xl p-5 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
           <div>
             <h2 class="font-hud text-sm font-extrabold text-purple-400 tracking-wider">🧠 F.R.I.D.A.Y. · TUTORA IA</h2>
@@ -479,15 +547,15 @@
           <button onclick="switchFridaySub('glosario')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="glosario">📖 GLOSARIO</button>
         </div>
 
-        <div id="fsub-consulta" class="bg-[#060911] border border-border rounded-lg p-4 space-y-3 text-slate-200">
+        <div id="fsub-consulta" class="bg-[#050811] border border-border rounded-lg p-4 space-y-3 text-slate-200">
           <div id="friday-chat-log" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1 text-xs">
             <div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed">
-              <strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> Buenas tardes, señor. El radar de proximidad y nuestras voces neuronales están activos. Pregúnteme qué pares están cerca de entrar o analice cualquier activo.
+              <strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> Buenas tardes, señor. El escudo de noticias, el detector de objetivos cumplidos y el radar de pips están en línea. Pregúnteme por cualquier par o consulte qué señales siguen activas.
             </div>
           </div>
           <div class="flex flex-wrap gap-1.5">
             <button onclick="askFriday('¿Qué pares están cerca de su entrada?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-emerald-500/40 text-emerald-300 hover:border-emerald-400">📡 Pares cerca de entrada</button>
-            <button onclick="askFriday('¿Cuál es la mejor entrada hoy?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">¿Mejor entrada hoy?</button>
+            <button onclick="askFriday('¿Hay noticias peligrosas ahora?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-red-500/40 text-red-300 hover:border-red-400">🛡️ Revisar Escudo Noticias</button>
             <button onclick="askFriday('Analiza BTCUSD')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-amber-300 hover:border-amber-400">Analiza BTCUSD</button>
             <button onclick="askFriday('Analiza EURUSD')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">Analiza EURUSD</button>
           </div>
@@ -497,18 +565,18 @@
           </form>
         </div>
 
-        <div id="fsub-nucleo" class="hidden bg-[#060911] border border-purple-500/30 rounded-lg p-5 text-center space-y-3 text-slate-200">
+        <div id="fsub-nucleo" class="hidden bg-[#050811] border border-purple-500/30 rounded-lg p-5 text-center space-y-3 text-slate-200">
           <div class="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400 text-xs font-mono text-purple-300">EN LÍNEA · SÍNTESIS NEURONAL MULTI-PERSONAJE</div>
           <p class="text-xs text-slate-300 max-w-xl mx-auto">Experta en macroeconomía, política monetaria, liquidez institucional y estructura SMC. Cruza en vivo los datos de VISIÓN y ULTRÓN.</p>
           <div class="flex flex-wrap justify-center gap-2 text-[11px] font-mono">
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">8 BANCOS CENTRALES</span>
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">12 ACTIVOS + BITCOIN</span>
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">RADAR DE PROXIMIDAD</span>
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">ESCUDO ANTI-NOTICIAS</span>
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">DETECTOR TP/SL</span>
+            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">CÁLCULO PIPS</span>
             <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">4 VOCES IA</span>
           </div>
         </div>
 
-        <div id="fsub-leccion" class="hidden bg-[#060911] border border-border rounded-lg p-5 space-y-3 text-slate-200">
+        <div id="fsub-leccion" class="hidden bg-[#050811] border border-border rounded-lg p-5 space-y-3 text-slate-200">
           <div class="flex items-center justify-between">
             <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold">LECCIÓN DE LA SEMANA</span>
             <button onclick="speakText(document.getElementById('lesson-text').innerText, true, 'friday')" class="px-2.5 py-1 rounded bg-purple-600/30 text-purple-200 text-[11px] font-mono">🔊 Escuchar lección</button>
@@ -519,12 +587,12 @@
           </div>
         </div>
 
-        <div id="fsub-curso" class="hidden bg-[#060911] border border-border rounded-lg p-4 space-y-2.5 text-slate-200">
+        <div id="fsub-curso" class="hidden bg-[#050811] border border-border rounded-lg p-4 space-y-2.5 text-slate-200">
           <div class="text-xs font-mono text-purple-300 mb-2">CURSO BASE · MARCA LAS LECCIONES QUE DOMINES:</div>
           <div id="friday-course-list" class="space-y-2"></div>
         </div>
 
-        <div id="fsub-glosario" class="hidden bg-[#060911] border border-border rounded-lg p-4 space-y-3 text-slate-200">
+        <div id="fsub-glosario" class="hidden bg-[#050811] border border-border rounded-lg p-4 space-y-3 text-slate-200">
           <input id="glossary-search" oninput="renderGlossary()" type="text" placeholder="Buscar término (ej. BOS, CHoCH, Order Block, Hawkish, Yield)..." class="w-full bg-panel border border-border rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400" />
           <div id="glossary-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
         </div>
@@ -542,15 +610,15 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <label class="text-xs font-mono text-amber-400 block mb-1">1. CONTEXTO HTF (SEMANAL / DIARIO / 4H)</label>
-          <textarea id="note-htf" rows="8" class="w-full bg-[#060911] border border-border rounded p-3 text-xs text-slate-200"></textarea>
+          <textarea id="note-htf" rows="8" class="w-full bg-[#050811] border border-border rounded p-3 text-xs text-slate-200"></textarea>
         </div>
         <div>
           <label class="text-xs font-mono text-amber-400 block mb-1">2. GATILLO INTRADAY (1H / 15m / 5m)</label>
-          <textarea id="note-ltf" rows="8" class="w-full bg-[#060911] border border-border rounded p-3 text-xs text-slate-200"></textarea>
+          <textarea id="note-ltf" rows="8" class="w-full bg-[#050811] border border-border rounded p-3 text-xs text-slate-200"></textarea>
         </div>
         <div>
           <label class="text-xs font-mono text-amber-400 block mb-1">3. GESTIÓN (PARCIALES 1:2 & BREAK EVEN)</label>
-          <textarea id="note-mgmt" rows="8" class="w-full bg-[#060911] border border-border rounded p-3 text-xs text-slate-200"></textarea>
+          <textarea id="note-mgmt" rows="8" class="w-full bg-[#050811] border border-border rounded p-3 text-xs text-slate-200"></textarea>
         </div>
       </div>
     </section>
@@ -561,13 +629,13 @@
     <section id="mod-diario" class="hidden hud-panel border border-border rounded-xl p-5 space-y-4">
       <h2 class="font-hud text-sm font-bold text-white uppercase">📓 Bitácora de Ejecución & Auditoría</h2>
       <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
-        <select id="j-pair" class="bg-[#060911] border border-border rounded px-3 py-2 text-xs font-mono text-white"></select>
-        <select id="j-dir" class="bg-[#060911] border border-border rounded px-3 py-2 text-xs font-mono text-white">
+        <select id="j-pair" class="bg-[#050811] border border-border rounded px-3 py-2 text-xs font-mono text-white"></select>
+        <select id="j-dir" class="bg-[#050811] border border-border rounded px-3 py-2 text-xs font-mono text-white">
           <option value="COMPRA">COMPRA (LONG)</option>
           <option value="VENTA">VENTA (SHORT)</option>
         </select>
-        <input id="j-rr" type="text" placeholder="Resultado (+2.5R / -1R)" required class="bg-[#060911] border border-border rounded px-3 py-2 text-xs font-mono text-white" />
-        <input id="j-note" type="text" placeholder="Confluencia (OB + CHoCH)" required class="bg-[#060911] border border-border rounded px-3 py-2 text-xs text-white" />
+        <input id="j-rr" type="text" placeholder="Resultado (+2.5R / -1R)" required class="bg-[#050811] border border-border rounded px-3 py-2 text-xs font-mono text-white" />
+        <input id="j-note" type="text" placeholder="Confluencia (OB + CHoCH)" required class="bg-[#050811] border border-border rounded px-3 py-2 text-xs text-white" />
         <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-black font-mono font-bold text-xs rounded px-4 py-2">REGISTRAR</button>
       </form>
       <div id="journal-list" class="space-y-2"></div>
@@ -576,7 +644,7 @@
   </main>
 
   <!-- BARRA INFERIOR MÓVIL -->
-  <nav class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-[#070b12]/95 border-t border-cyan-500/20 backdrop-blur grid grid-cols-6 text-[10px] font-mono">
+  <nav class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-[#050912]/95 border-t border-cyan-500/25 backdrop-blur grid grid-cols-6 text-[10px] font-mono">
     <button onclick="switchModule('jarvis')" class="m-nav py-2.5 flex flex-col items-center text-amber-400 font-bold" data-m="jarvis"><span>⚡</span><span>JARVIS</span></button>
     <button onclick="switchModule('vision')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="vision"><span>🌐</span><span>VISIÓN</span></button>
     <button onclick="switchModule('ultron')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="ultron"><span>🎯</span><span>ULTRÓN</span></button>
@@ -586,6 +654,73 @@
   </nav>
 
   <script>
+    // =========================================================
+    // RED NEURONAL INTERACTIVA DE FONDO (CANVAS PARTICLES)
+    // =========================================================
+    (function initNeuralCanvas() {
+      const c = document.getElementById('neural-bg');
+      const ctx = c.getContext('2d');
+      let w, h, nodes = [];
+      const mouse = { x: -999, y: -999 };
+
+      function resize() {
+        w = c.width = window.innerWidth;
+        h = c.height = window.innerHeight;
+        const count = Math.min(55, Math.floor((w * h) / 24000));
+        nodes = Array.from({ length: count }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          r: Math.random() * 1.6 + 0.8
+        }));
+      }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+      resize();
+
+      function loop() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          n.x += n.vx;
+          n.y += n.vy;
+          if (n.x < 0 || n.x > w) n.vx *= -1;
+          if (n.y < 0 || n.y > h) n.vy *= -1;
+
+          ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          for (let j = i + 1; j < nodes.length; j++) {
+            const m = nodes[j];
+            const dist = Math.hypot(n.x - m.x, n.y - m.y);
+            if (dist < 130) {
+              ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 130) * 0.14})`;
+              ctx.lineWidth = 0.7;
+              ctx.beginPath();
+              ctx.moveTo(n.x, n.y);
+              ctx.lineTo(m.x, m.y);
+              ctx.stroke();
+            }
+          }
+
+          const mDist = Math.hypot(n.x - mouse.x, n.y - mouse.y);
+          if (mDist < 160) {
+            ctx.strokeStyle = `rgba(245, 158, 11, ${(1 - mDist / 160) * 0.32})`;
+            ctx.lineWidth = 0.9;
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+          }
+        }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+
     let data = null;
     let jarvisFilter = 'ALL';
     let selectedSymbol = 'BTCUSD';
@@ -593,15 +728,97 @@
     let visibleCandles = 42;
     let alertedSignature = sessionStorage.getItem('oraculo_last_alert_sig') || '';
 
+    function copyLevel(elementId) {
+      const txt = document.getElementById(elementId)?.textContent?.trim();
+      if (!txt || txt === '--') return;
+      navigator.clipboard?.writeText(txt);
+      playRadarPing();
+    }
+
     // =========================================================
-    // CÁLCULO DE PROXIMIDAD DE ENTRADA (RADAR TÁCTICO)
+    // 1. CÁLCULO DE PIPS / PUNTOS EXACTOS DE LA SEÑAL
+    // =========================================================
+    function getSetupPips(a) {
+      const pip = a.pip || 0.0001;
+      const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
+      const toUnits = (val) => Math.round((Math.abs(val) / pip) * 10) / 10;
+
+      return {
+        unitLabel,
+        slPips: toUnits(a.setup.entry - a.setup.sl),
+        tp1Pips: toUnits(a.setup.tp1 - a.setup.entry),
+        tp2Pips: toUnits(a.setup.tp2 - a.setup.entry)
+      };
+    }
+
+    // =========================================================
+    // 2. ESCUDO ANTI-NOTICIAS DE ALTO IMPACTO
+    // =========================================================
+    function getAssetNewsShield(a) {
+      if (!data || !data.calendar) return null;
+      const now = new Date();
+      const todayIso = now.toISOString().slice(0, 10);
+      const currencies = new Set([a.base, a.quote]);
+      if (a.type === 'index' || a.type === 'crypto') currencies.add('USD');
+
+      for (const ev of data.calendar) {
+        if (ev.impact !== 'ALTO') continue;
+        if (!currencies.has(ev.currency)) continue;
+        if (ev.date !== todayIso || !ev.time || !ev.time.includes(':')) continue;
+
+        const [hh, mm] = ev.time.split(':').map(Number);
+        if (isNaN(hh) || isNaN(mm)) continue;
+        const evTime = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hh, mm, 0));
+        const diffMin = Math.round((evTime - now) / 60000);
+
+        // Bloquea desde 45 min antes hasta 15 min después de la noticia
+        if (diffMin >= -15 && diffMin <= 45) {
+          return {
+            blocked: true,
+            currency: ev.currency,
+            title: ev.title,
+            diffMin,
+            text: diffMin >= 0
+              ? `⚠️ NOTICIA ${ev.currency} EN ${diffMin} MIN · NO ENTRAR`
+              : `⚠️ NOTICIA ${ev.currency} HACE ${Math.abs(diffMin)} MIN · VOLATILIDAD`
+          };
+        }
+      }
+      return null;
+    }
+
+    // =========================================================
+    // 3. DETECTOR DE SEÑAL YA CUMPLIDA (TP1 / TP2 / STOP)
+    // =========================================================
+    function getSetupLifecycle(a) {
+      const recent = (a.candles && a.candles['1h']) ? a.candles['1h'].slice(-4) : [];
+      const isBuy = a.setup.direction === 'BUY';
+
+      if (recent.length > 0) {
+        const maxHigh = Math.max(...recent.map(c => c.h), a.price);
+        const minLow = Math.min(...recent.map(c => c.l), a.price);
+
+        if (isBuy) {
+          if (maxHigh >= a.setup.tp2) return { state: 'TP2_HIT', badge: '✅ TP2 ALCANZADO · ESPERAR NUEVO CORTE', cls: 'bg-emerald-500/20 border-emerald-400 text-emerald-300' };
+          if (maxHigh >= a.setup.tp1) return { state: 'TP1_HIT', badge: '✅ TP1 CUMPLIDO · NO RE-ENTRAR', cls: 'bg-emerald-500/15 border-emerald-500/50 text-emerald-300' };
+          if (minLow <= a.setup.sl) return { state: 'SL_HIT', badge: '🛑 STOP TOCADO · ESPERAR RE-ANÁLISIS', cls: 'bg-red-500/20 border-red-400 text-red-300' };
+        } else {
+          if (minLow <= a.setup.tp2) return { state: 'TP2_HIT', badge: '✅ TP2 ALCANZADO · ESPERAR NUEVO CORTE', cls: 'bg-emerald-500/20 border-emerald-400 text-emerald-300' };
+          if (minLow <= a.setup.tp1) return { state: 'TP1_HIT', badge: '✅ TP1 CUMPLIDO · NO RE-ENTRAR', cls: 'bg-emerald-500/15 border-emerald-500/50 text-emerald-300' };
+          if (maxHigh >= a.setup.sl) return { state: 'SL_HIT', badge: '🛑 STOP TOCADO · ESPERAR RE-ANÁLISIS', cls: 'bg-red-500/20 border-red-400 text-red-300' };
+        }
+      }
+      return { state: 'ACTIVE', badge: '⚡ SEÑAL VIGENTE', cls: 'bg-sky-500/15 border-sky-400/40 text-sky-300' };
+    }
+
+    // =========================================================
+    // 4. CÁLCULO DE PROXIMIDAD DE ENTRADA (RADAR TÁCTICO)
     // =========================================================
     function getAssetProximity(a) {
       const diff = Math.abs(a.price - a.setup.entry);
       const pct = (diff / a.price) * 100;
       const units = a.pip ? Math.round((diff / a.pip) * 10) / 10 : diff;
       const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
-      // Porcentaje de cercanía visual (100% = en precio exacto, 0% = a >= 0.8% de distancia)
       const closenessPct = Math.max(8, Math.min(100, Math.round((1 - pct / 0.8) * 100)));
 
       let status = 'FAR';
@@ -634,33 +851,67 @@
       } catch (e) {}
     }
 
+    function renderLiveTicker() {
+      if (!data) return;
+      const items = data.assets.map(a => {
+        const chgCls = a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400';
+        const arrow = a.chg_day >= 0 ? '▲' : '▼';
+        return `<span class="inline-flex items-center gap-1.5"><strong class="text-white">${a.symbol}</strong> <span class="text-cyan-300">${a.price}</span> <span class="${chgCls}">${arrow}${a.chg_day}%</span> <span class="text-slate-500">|</span></span>`;
+      }).join('');
+      // Duplicar para bucle infinito continuo
+      document.getElementById('live-ticker-track').innerHTML = items + items;
+    }
+
     function renderProximityRadar() {
       if (!data) return;
+      // Estado global del Escudo Anti-Noticias
+      const blockedAssets = data.assets.map(a => ({ a, shield: getAssetNewsShield(a) })).filter(x => x.shield);
+      const shieldEl = document.getElementById('news-shield-global');
+      if (blockedAssets.length > 0) {
+        shieldEl.textContent = `⚠️ ESCUDO ACTIVO: ${blockedAssets.length} PARES BLOQUEADOS POR NOTICIA`;
+        shieldEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/25 border border-red-400 text-red-200 font-bold animate-pulse';
+      } else {
+        shieldEl.textContent = '🛡️ ESCUDO NOTICIAS: DESPEJADO';
+        shieldEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/15 border border-sky-500/40 text-sky-300';
+      }
+
       const ranked = data.assets
-        .map(a => ({ asset: a, prox: getAssetProximity(a) }))
+        .map(a => ({
+          asset: a,
+          prox: getAssetProximity(a),
+          life: getSetupLifecycle(a),
+          shield: getAssetNewsShield(a),
+          pips: getSetupPips(a)
+        }))
         .sort((x, y) => x.prox.pct - y.prox.pct);
 
-      const hotOnes = ranked.filter(x => x.prox.status !== 'FAR');
+      const activeHot = ranked.filter(x => x.prox.status !== 'FAR' && x.life.state === 'ACTIVE');
       const badge = document.getElementById('radar-count-badge');
-      if (hotOnes.length > 0) {
-        badge.textContent = `${hotOnes.length} OBJETIVO${hotOnes.length > 1 ? 'S' : ''} EN RANGO`;
+      if (activeHot.length > 0) {
+        badge.textContent = `${activeHot.length} OBJETIVO${activeHot.length > 1 ? 'S' : ''} EN RANGO`;
         badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/25 border border-emerald-400 text-emerald-300 font-bold';
       } else {
         badge.textContent = 'VIGILANCIA ACTIVA (TOP 4 MÁS CERCANOS)';
         badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/35 text-cyan-300';
       }
 
-      const displayList = (hotOnes.length > 0 ? hotOnes : ranked).slice(0, 4);
-      document.getElementById('proximity-cards').innerHTML = displayList.map(({ asset: a, prox }) => {
-        const isIn = prox.status === 'IN_ZONE';
-        const isNear = prox.status === 'APPROACHING';
-        const borderCls = isIn
-          ? 'border-emerald-400 bg-emerald-500/10 entry-beacon'
-          : (isNear ? 'border-amber-400/70 bg-amber-500/10' : 'border-border bg-[#060911]/90');
-        const barColor = isIn ? 'bg-emerald-400' : (isNear ? 'bg-amber-400' : 'bg-cyan-400');
+      const displayList = (activeHot.length > 0 ? activeHot : ranked).slice(0, 4);
+      document.getElementById('proximity-cards').innerHTML = displayList.map(({ asset: a, prox, life, shield, pips }) => {
+        const isIn = prox.status === 'IN_ZONE' && life.state === 'ACTIVE' && !shield;
+        const isNear = prox.status === 'APPROACHING' && life.state === 'ACTIVE' && !shield;
+        const borderCls = shield
+          ? 'border-red-500 bg-red-500/10'
+          : (life.state !== 'ACTIVE'
+              ? 'border-slate-600 bg-slate-900/60 opacity-80'
+              : (isIn ? 'border-emerald-400 bg-emerald-500/10 entry-beacon' : (isNear ? 'border-amber-400/70 bg-amber-500/10' : 'border-border bg-[#050811]/90')));
+        const barColor = shield ? 'bg-red-500' : (isIn ? 'bg-emerald-400' : (isNear ? 'bg-amber-400' : 'bg-cyan-400'));
+
+        const statusLine = shield
+          ? shield.text
+          : (life.state !== 'ACTIVE' ? life.badge : `${prox.label} · TP1 +${pips.tp1Pips} ${pips.unitLabel}`);
 
         return `
-          <div onclick="openAssetInUltron('${a.symbol}')" class="cursor-pointer rounded-lg border ${borderCls} p-2.5 transition hover:scale-[1.01] space-y-1.5">
+          <div onclick="openAssetInUltron('${a.symbol}')" class="cursor-pointer rounded-lg border ${borderCls} p-2.5 transition hover:scale-[1.02] space-y-1.5">
             <div class="flex items-center justify-between font-mono text-xs">
               <span class="font-extrabold text-white">${a.symbol} <span class="text-[10px] ${a.setup.direction === 'BUY' ? 'text-emerald-400' : 'text-red-400'}">${a.setup.direction === 'BUY' ? '▲ COMPRA' : '▼ VENTA'}</span></span>
               <span class="text-[10px] font-bold ${isIn ? 'text-emerald-300' : (isNear ? 'text-amber-300' : 'text-slate-400')}">a ${prox.units} ${prox.unitLabel}</span>
@@ -672,8 +923,8 @@
             <div class="w-full h-1.5 bg-bg rounded-full overflow-hidden">
               <div class="h-full ${barColor} rounded-full transition-all" style="width: ${prox.closenessPct}%"></div>
             </div>
-            <div class="text-[9px] font-mono tracking-wider ${isIn ? 'text-emerald-300 font-bold' : (isNear ? 'text-amber-300' : 'text-slate-400')}">
-              ${prox.label}
+            <div class="text-[9px] font-mono tracking-wider truncate ${shield ? 'text-red-300 font-bold' : (isIn ? 'text-emerald-300 font-bold' : 'text-slate-300')}">
+              ${statusLine}
             </div>
           </div>
         `;
@@ -686,13 +937,13 @@
       if (!autoEnabled && !manualTrigger) return;
 
       const hot = data.assets
-        .map(a => ({ asset: a, prox: getAssetProximity(a) }))
-        .filter(x => x.prox.status === 'IN_ZONE' || x.prox.status === 'APPROACHING')
+        .map(a => ({ asset: a, prox: getAssetProximity(a), life: getSetupLifecycle(a), shield: getAssetNewsShield(a) }))
+        .filter(x => (x.prox.status === 'IN_ZONE' || x.prox.status === 'APPROACHING') && x.life.state === 'ACTIVE' && !x.shield)
         .sort((x, y) => x.prox.pct - y.prox.pct);
 
       if (hot.length === 0) {
         if (manualTrigger) {
-          speakText('Escaneo completo, señor. Ningún activo está en zona inmediata de entrada todavía.', true, 'jarvis');
+          speakText('Escaneo completo, señor. Ningún activo libre de noticias está en zona inmediata de entrada.', true, 'jarvis');
         }
         return;
       }
@@ -708,11 +959,11 @@
         return `${h.asset.symbol} a ${h.prox.units} ${h.prox.unitLabel} de su punto de ${dir} en ${h.asset.setup.entry}`;
       }).join('. ');
 
-      speakText(`Atención, señor. Alerta de proximidad en el radar. ${summary}.`, true, 'jarvis');
+      speakText(`Atención, señor. Objetivo detectado en el radar. ${summary}.`, true, 'jarvis');
     }
 
     // =========================================================
-    // MOTOR DE VOZ NEURONAL MULTI-PERSONAJE
+    // MOTOR DE VOZ NEURONAL MULTI-PERSONAJE CON ECUALIZADOR
     // =========================================================
     let voiceEnabled = localStorage.getItem('oraculo_voice') !== 'off';
     let spanishVoices = [];
@@ -771,18 +1022,27 @@
       return spanishVoices[0];
     }
 
+    function setSpeakingVisual(active) {
+      const cluster = document.getElementById('voice-hud-cluster');
+      const stopBtn = document.getElementById('stop-voice-btn');
+      if (active) {
+        cluster.classList.add('voice-speaking');
+        stopBtn.classList.remove('hidden');
+      } else {
+        cluster.classList.remove('voice-speaking');
+        stopBtn.classList.add('hidden');
+      }
+    }
+
     function updateVoiceButtonUI() {
       const btn = document.getElementById('voice-toggle-btn');
       const txt = document.getElementById('voice-status-txt');
-      const icon = document.getElementById('voice-icon');
       if (voiceEnabled) {
-        btn.className = 'px-2.5 py-1 rounded bg-purple-600/25 border border-purple-400 text-purple-300 hover:bg-purple-600/40 font-bold flex items-center gap-1.5';
+        btn.className = 'px-2.5 py-1 rounded bg-purple-600/25 border border-purple-400 text-purple-300 hover:bg-purple-600/40 font-bold flex items-center gap-2';
         txt.textContent = 'VOZ IA: ON';
-        icon.textContent = '🔊';
       } else {
-        btn.className = 'px-2.5 py-1 rounded bg-bg border border-border text-slate-400 font-bold flex items-center gap-1.5';
+        btn.className = 'px-2.5 py-1 rounded bg-bg border border-border text-slate-400 font-bold flex items-center gap-2';
         txt.textContent = 'VOZ IA: OFF';
-        icon.textContent = '🔇';
       }
     }
 
@@ -791,12 +1051,12 @@
       localStorage.setItem('oraculo_voice', voiceEnabled ? 'on' : 'off');
       updateVoiceButtonUI();
       if (!voiceEnabled) stopSpeaking();
-      else speakText('Protocolos vocales activados, señor.', true, 'jarvis');
+      else speakText('Protocolos vocales en línea, señor.', true, 'jarvis');
     }
 
     function stopSpeaking() {
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      document.getElementById('stop-voice-btn').classList.add('hidden');
+      setSpeakingVisual(false);
     }
 
     function cleanTextForSpeech(raw) {
@@ -836,9 +1096,7 @@
       const profile = PERSONA_PROFILES[personaKey] || PERSONA_PROFILES.friday;
       const chosenVoice = pickVoiceForPersona(personaKey);
       const clean = cleanTextForSpeech(rawText);
-
       const sentences = clean.match(/[^.!?]+[.!?]*/g) || [clean];
-      const stopBtn = document.getElementById('stop-voice-btn');
 
       sentences.forEach((sentence, idx) => {
         const s = sentence.trim();
@@ -849,10 +1107,10 @@
         utter.rate = profile.rate;
         if (chosenVoice) utter.voice = chosenVoice;
 
-        if (idx === 0) utter.onstart = () => stopBtn.classList.remove('hidden');
+        if (idx === 0) utter.onstart = () => setSpeakingVisual(true);
         if (idx === sentences.length - 1) {
-          utter.onend = () => stopBtn.classList.add('hidden');
-          utter.onerror = () => stopBtn.classList.add('hidden');
+          utter.onend = () => setSpeakingVisual(false);
+          utter.onerror = () => setSpeakingVisual(false);
         }
         window.speechSynthesis.speak(utter);
       });
@@ -863,10 +1121,10 @@
         speakText('Sincronizando telemetría del mercado, señor.', true, 'jarvis');
         return;
       }
-      const aligned = data.assets.filter(a => a.confluence.alignment === 'ALIGNED');
+      const aligned = data.assets.filter(a => a.confluence.alignment === 'ALIGNED' && getSetupLifecycle(a).state === 'ACTIVE');
       const alignedTxt = aligned.length > 0
-        ? `Tenemos ${aligned.length} activos con alineación confirmada: ${aligned.map(a => `${a.symbol} para ${a.setup.direction === 'BUY' ? 'compras' : 'ventas'}`).join(', ')}.`
-        : 'Ningún activo muestra alineación fuerte en este corte.';
+        ? `Tenemos ${aligned.length} activos con alineación vigente: ${aligned.map(a => `${a.symbol} para ${a.setup.direction === 'BUY' ? 'compras' : 'ventas'}`).join(', ')}.`
+        : 'Ningún activo muestra alineación vigente en este corte.';
       speakText(`Aquí Jarvis. ${data.brief.headline}. ${alignedTxt}`, true, 'jarvis');
     }
 
@@ -883,11 +1141,24 @@
       const a = data.assets.find(x => x.symbol === symbol);
       if (!a) return;
       const prox = getAssetProximity(a);
+      const pips = getSetupPips(a);
+      const shield = getAssetNewsShield(a);
+      const life = getSetupLifecycle(a);
+
+      if (shield) {
+        speakText(`Alerta de Ultrón sobre ${a.symbol}. Operación bloqueada por noticia de alto impacto de ${shield.currency}. No ejecutar.`, true, 'ultron');
+        return;
+      }
+      if (life.state !== 'ACTIVE') {
+        speakText(`Ultrón reportando sobre ${a.symbol}. Esta señal ya cumplió su recorrido anterior. Espere el próximo corte de actualización.`, true, 'ultron');
+        return;
+      }
+
       const dirWord = a.setup.direction === 'BUY' ? 'compra' : 'venta';
       speakText(
-        `Ultrón reportando sobre ${a.symbol}. Distancia al punto de entrada: ${prox.units} ${prox.unitLabel}. ` +
-        `Plan de ejecución: ${dirWord} en ${a.setup.entry}. Stop Loss en ${a.setup.sl}. ` +
-        `Primer objetivo en ${a.setup.tp1}, y segundo objetivo en ${a.setup.tp2}.`,
+        `Ultrón reportando sobre ${a.symbol}. Distancia a entrada: ${prox.units} ${prox.unitLabel}. ` +
+        `Plan de ${dirWord} en ${a.setup.entry}. Stop Loss en ${a.setup.sl}, riesgo de ${pips.slPips} ${pips.unitLabel}. ` +
+        `Primer objetivo en ${a.setup.tp1}, ganancia proyectada de ${pips.tp1Pips} ${pips.unitLabel}.`,
         true,
         'ultron'
       );
@@ -929,11 +1200,8 @@
       el.classList.add('opacity-0', 'pointer-events-none');
       setTimeout(() => el.classList.add('hidden'), 500);
       if (withGreeting) {
-        if (data) {
-          speakBriefing();
-        } else {
-          speakText('Cabina táctica de Oráculo inicializada, señor.', true, 'jarvis');
-        }
+        if (data) speakBriefing();
+        else speakText('Cabina cibernética de Oráculo inicializada, señor.', true, 'jarvis');
       }
     }
     function showBoot() {
@@ -1019,6 +1287,7 @@
         selectedSymbol = data.assets[0].symbol;
       }
 
+      renderLiveTicker();
       renderProximityRadar();
       renderJarvis();
       renderVision();
@@ -1052,28 +1321,31 @@
         </button>
       `).join('');
 
-      const aligned = sorted.filter(a => a.confluence.alignment === 'ALIGNED');
+      const aligned = sorted.filter(a => a.confluence.alignment === 'ALIGNED' && getSetupLifecycle(a).state === 'ACTIVE' && !getAssetNewsShield(a));
       document.getElementById('jarvis-best-today').innerHTML = aligned.length > 0
         ? aligned.map(a => `
             <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded ${a.setup.direction === 'BUY' ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300' : 'bg-red-500/15 border-red-500/40 text-red-300'} border text-xs font-mono font-bold">
               ${a.symbol} ${a.setup.direction === 'BUY' ? '▲ COMPRAS' : '▼ VENTAS'}
             </button>
           `).join('')
-        : '<span class="text-xs font-mono text-slate-400">Sin alineación fuerte en este corte; revisar niveles en Ultrón.</span>';
+        : '<span class="text-xs font-mono text-slate-400">Sin alineación nueva sin noticias en este corte.</span>';
 
       let list = sorted;
       if (jarvisFilter === 'NEAR') {
-        list = sorted.filter(a => getAssetProximity(a).status !== 'FAR');
+        list = sorted.filter(a => getAssetProximity(a).status !== 'FAR' && getSetupLifecycle(a).state === 'ACTIVE');
       } else if (jarvisFilter !== 'ALL') {
         list = sorted.filter(a => a.confluence.alignment === jarvisFilter);
       }
 
       document.getElementById('jarvis-cards-grid').innerHTML = list.map(a => {
         const prox = getAssetProximity(a);
+        const pips = getSetupPips(a);
+        const shield = getAssetNewsShield(a);
+        const life = getSetupLifecycle(a);
         const isAligned = a.confluence.alignment === 'ALIGNED';
         const isOpposed = a.confluence.alignment === 'OPPOSED';
         const ringColor = isAligned ? 'border-emerald-400 text-emerald-400' : (isOpposed ? 'border-amber-400 text-amber-400' : 'border-slate-500 text-slate-400');
-        const bannerBg = isAligned ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' : (isOpposed ? 'bg-red-500/10 border-red-500/40 text-red-300' : 'bg-[#060911] border-border text-slate-300');
+        const bannerBg = isAligned ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' : (isOpposed ? 'bg-red-500/10 border-red-500/40 text-red-300' : 'bg-[#050811] border-border text-slate-300');
 
         const proxBadge = prox.status === 'IN_ZONE'
           ? `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold">🔥 EN ZONA (${prox.units} ${prox.unitLabel})</span>`
@@ -1082,7 +1354,7 @@
               : `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-bg border border-border text-slate-400">Dist: ${prox.units} ${prox.unitLabel}</span>`);
 
         return `
-          <div class="hud-panel border ${prox.status === 'IN_ZONE' ? 'border-emerald-400 entry-beacon' : (isAligned ? 'border-emerald-500/40' : 'border-border')} rounded-xl p-4 space-y-3">
+          <div class="hud-panel hud-interactive border ${shield ? 'border-red-500' : (prox.status === 'IN_ZONE' && life.state === 'ACTIVE' ? 'border-emerald-400 entry-beacon' : (isAligned ? 'border-emerald-500/40' : 'border-border'))} rounded-xl p-4 space-y-3">
             <div class="flex items-center justify-between gap-2">
               <div>
                 <div class="flex flex-wrap items-center gap-2">
@@ -1090,15 +1362,18 @@
                   <span class="text-xs font-mono text-cyan-300">${a.price}</span>
                   ${proxBadge}
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5">${a.name}</div>
+                <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border ${life.cls}">${life.badge}</span>
+                  ${shield ? `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-red-500/25 border border-red-400 text-red-200 font-bold animate-pulse">${shield.text}</span>` : ''}
+                </div>
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="speakAssetSetup('${a.symbol}')" title="Escuchar señal por voz de Ultrón" class="px-2 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-red-300">🔊</button>
+                <button onclick="speakAssetSetup('${a.symbol}')" title="Escuchar señal y pips por voz" class="px-2 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-red-300">🔊</button>
                 <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-slate-300">Gráfico →</button>
               </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 text-center bg-[#060911] border border-border rounded-lg p-2.5">
+            <div class="grid grid-cols-2 gap-2 text-center bg-[#050811] border border-border rounded-lg p-2.5">
               <div>
                 <div class="text-[10px] font-mono text-slate-400 mb-1">ECONOMÍA</div>
                 ${biasPill(a.economy_bias)}
@@ -1120,22 +1395,27 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-4 gap-1.5 bg-[#060911] border border-border rounded-lg p-2 text-center font-mono text-[11px]">
+            <!-- PRECIOS + PIPS EXACTOS -->
+            <div class="grid grid-cols-4 gap-1.5 bg-[#050811] border border-border rounded-lg p-2 text-center font-mono text-[11px]">
               <div>
                 <div class="text-[9px] text-sky-400">${a.setup.signal_tag}</div>
                 <div class="font-bold text-white">${a.setup.entry}</div>
+                <div class="text-[9px] text-cyan-400">a ${prox.units} ${prox.unitLabel}</div>
               </div>
               <div>
                 <div class="text-[9px] text-red-400">STOP</div>
                 <div class="font-bold text-red-400">${a.setup.sl}</div>
+                <div class="text-[9px] text-red-300">-${pips.slPips} ${pips.unitLabel}</div>
               </div>
               <div>
                 <div class="text-[9px] text-emerald-400">TP1 (1:2)</div>
                 <div class="font-bold text-emerald-400">${a.setup.tp1}</div>
+                <div class="text-[9px] text-emerald-300">+${pips.tp1Pips} ${pips.unitLabel}</div>
               </div>
               <div>
                 <div class="text-[9px] text-emerald-400">TP2 (1:3)</div>
                 <div class="font-bold text-emerald-400">${a.setup.tp2}</div>
+                <div class="text-[9px] text-emerald-300">+${pips.tp2Pips} ${pips.unitLabel}</div>
               </div>
             </div>
           </div>
@@ -1146,7 +1426,7 @@
     function renderVision() {
       if (!data) return;
       document.getElementById('vision-assets-grid').innerHTML = data.assets.map(a => `
-        <div class="hud-panel border border-sky-500/20 rounded-lg p-3.5 space-y-2">
+        <div class="hud-panel hud-interactive border border-sky-500/20 rounded-lg p-3.5 space-y-2">
           <div class="flex items-center justify-between">
             <span class="font-mono font-bold text-white text-sm">${a.symbol} <span class="text-xs font-normal text-sky-300">${a.price}</span></span>
             ${biasPill(a.economy_bias)}
@@ -1165,7 +1445,7 @@
       `).join('');
 
       document.getElementById('vision-calendar-list').innerHTML = data.calendar.map(ev => `
-        <div class="bg-[#060911] border ${ev.is_today ? 'border-sky-500/50' : 'border-border'} rounded p-2.5 text-xs space-y-1">
+        <div class="bg-[#050811] border ${ev.is_today ? 'border-sky-500/50' : 'border-border'} rounded p-2.5 text-xs space-y-1">
           <div class="flex items-center justify-between font-mono text-[10px]">
             <span class="text-sky-400">${ev.date} · ${ev.time} · <strong>${ev.currency}</strong> ${ev.is_today ? '· HOY' : ''}</span>
             <span class="px-1.5 py-0.5 rounded ${ev.impact === 'ALTO' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'}">${ev.impact}</span>
@@ -1177,17 +1457,20 @@
     }
 
     // =========================================================
-    // ULTRÓN · SELECTOR + GRÁFICO CANVAS SMC CON ENTRADAS
+    // ULTRÓN · SELECTOR + GRÁFICO CANVAS SMC CON PIPS
     // =========================================================
     function renderUltronSelector() {
       if (!data) return;
       document.getElementById('ultron-asset-selector').innerHTML = data.assets.map(a => {
         const prox = getAssetProximity(a);
-        const dot = prox.status === 'IN_ZONE'
-          ? '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>'
-          : (prox.status === 'APPROACHING' ? '<span class="w-2 h-2 rounded-full bg-amber-400"></span>' : '');
+        const life = getSetupLifecycle(a);
+        const dot = life.state !== 'ACTIVE'
+          ? '<span class="text-[9px] text-emerald-400">✓</span>'
+          : (prox.status === 'IN_ZONE'
+              ? '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>'
+              : (prox.status === 'APPROACHING' ? '<span class="w-2 h-2 rounded-full bg-amber-400"></span>' : ''));
         return `
-          <button onclick="selectUltronAsset('${a.symbol}')" class="p-2 rounded-lg border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/15 border-red-500 text-white shadow-[0_0_12px_rgba(239,68,68,0.2)]' : 'bg-[#060911] border-border text-slate-300 hover:border-red-400/50'}">
+          <button onclick="selectUltronAsset('${a.symbol}')" class="p-2 rounded-lg border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/15 border-red-500 text-white shadow-[0_0_14px_rgba(239,68,68,0.25)]' : 'bg-[#050811] border-border text-slate-300 hover:border-red-400/50'}">
             <div class="flex items-center justify-between font-mono font-extrabold text-xs">
               <span>${a.symbol}</span>
               ${dot}
@@ -1233,13 +1516,37 @@
       selectedSymbol = a.symbol;
 
       const prox = getAssetProximity(a);
+      const pips = getSetupPips(a);
+      const life = getSetupLifecycle(a);
+      const shield = getAssetNewsShield(a);
+
       document.getElementById('u-title-sym').textContent = a.symbol;
+      const lifeEl = document.getElementById('u-lifecycle-badge');
+      lifeEl.textContent = life.badge;
+      lifeEl.className = `px-2 py-0.5 rounded text-[10px] border ${life.cls}`;
+
+      const newsEl = document.getElementById('u-news-badge');
+      if (shield) {
+        newsEl.textContent = shield.text;
+        newsEl.classList.remove('hidden');
+      } else {
+        newsEl.classList.add('hidden');
+      }
+
       document.getElementById('u-proximity-status').textContent = `${prox.label} · Distancia a entrada (${a.setup.entry}): ${prox.units} ${prox.unitLabel}`;
-      document.getElementById('u-sig-dir').textContent = `${a.setup.signal_tag} (${a.confluence.verdict_sub})`;
+      document.getElementById('u-sig-dir').textContent = `${a.setup.signal_tag}`;
+      document.getElementById('u-sig-rr').textContent = a.confluence.verdict_sub;
       document.getElementById('u-sig-entry').textContent = a.setup.entry;
+      document.getElementById('u-sig-dist').textContent = `A ${prox.units} ${prox.unitLabel} del precio`;
+
       document.getElementById('u-sig-sl').textContent = a.setup.sl;
+      document.getElementById('u-sig-sl-pips').textContent = `Riesgo: ${pips.slPips} ${pips.unitLabel}`;
+
       document.getElementById('u-sig-tp1').textContent = a.setup.tp1;
+      document.getElementById('u-sig-tp1-pips').textContent = `+${pips.tp1Pips} ${pips.unitLabel}`;
+
       document.getElementById('u-sig-tp2').textContent = a.setup.tp2;
+      document.getElementById('u-sig-tp2-pips').textContent = `+${pips.tp2Pips} ${pips.unitLabel}`;
 
       document.getElementById('u-tf-w').innerHTML = formatBiasText(a.tf_bias.weekly);
       document.getElementById('u-tf-d').innerHTML = formatBiasText(a.tf_bias.daily);
@@ -1274,7 +1581,7 @@
       const plotW = W - padLeft - padRight;
       const plotH = H - padTop - padBottom;
 
-      ctx.fillStyle = '#05070b';
+      ctx.fillStyle = '#04060a';
       ctx.fillRect(0, 0, W, H);
 
       const rawCandles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF] : [];
@@ -1282,6 +1589,7 @@
       if (candles.length === 0) return;
 
       const showLayers = document.getElementById('toggle-layers').checked;
+      const pips = getSetupPips(a);
 
       let highs = candles.map(c => c.h);
       let lows = candles.map(c => c.l);
@@ -1386,7 +1694,7 @@
           ctx.strokeStyle = bgColor;
           ctx.lineWidth = 1.3;
           ctx.beginPath();
-          ctx.moveTo(padLeft + plotW * 0.35, y);
+          ctx.moveTo(padLeft + plotW * 0.30, y);
           ctx.lineTo(W - padRight, y);
           ctx.stroke();
           ctx.setLineDash([]);
@@ -1397,16 +1705,17 @@
           ctx.font = 'bold 9px JetBrains Mono';
           ctx.fillText(priceVal.toFixed(a.decimals), W - padRight + 5, y + 3);
 
+          const tagW = Math.max(115, label.length * 6.2);
           ctx.fillStyle = bgColor;
-          ctx.fillRect(padLeft + plotW * 0.35, y - 14, 96, 13);
+          ctx.fillRect(padLeft + plotW * 0.30, y - 14, tagW, 13);
           ctx.fillStyle = '#ffffff';
-          ctx.fillText(label, padLeft + plotW * 0.35 + 4, y - 4);
+          ctx.fillText(label, padLeft + plotW * 0.30 + 4, y - 4);
         };
 
         drawTag(a.setup.entry, `${a.setup.signal_tag}`, '#0284c7');
-        drawTag(a.setup.sl, 'STOP LOSS', '#dc2626');
-        drawTag(a.setup.tp1, 'TP1 · 1:2', '#059669');
-        drawTag(a.setup.tp2, 'TP2 · 1:3', '#10b981');
+        drawTag(a.setup.sl, `STOP (-${pips.slPips} ${pips.unitLabel})`, '#dc2626');
+        drawTag(a.setup.tp1, `TP1 (+${pips.tp1Pips} ${pips.unitLabel})`, '#059669');
+        drawTag(a.setup.tp2, `TP2 (+${pips.tp2Pips} ${pips.unitLabel})`, '#10b981');
       }
 
       ctx.fillStyle = '#64748b';
@@ -1453,23 +1762,24 @@
         const foundAsset = data.assets.find(a => q.includes(a.symbol) || (q.includes('BITCOIN') && a.symbol === 'BTCUSD') || (q.includes('EURO') && a.symbol === 'EURUSD'));
         if (foundAsset) {
           const prox = getAssetProximity(foundAsset);
-          reply = `En <strong>${foundAsset.symbol}</strong> (${foundAsset.price}), está a <strong>${prox.units} ${prox.unitLabel}</strong> de su punto de entrada. <strong>VISIÓN</strong> marca <strong>${foundAsset.economy_bias}</strong> y <strong>ULTRÓN</strong> marca <strong>${foundAsset.chart_bias}</strong>. Plan: <strong>${foundAsset.setup.signal_tag} en ${foundAsset.setup.entry}</strong>, Stop en <strong>${foundAsset.setup.sl}</strong> y TP1 en <strong>${foundAsset.setup.tp1}</strong>.`;
+          const pips = getSetupPips(foundAsset);
+          const shield = getAssetNewsShield(foundAsset);
+          const life = getSetupLifecycle(foundAsset);
+          reply = `En <strong>${foundAsset.symbol}</strong> (${foundAsset.price}), está a <strong>${prox.units} ${prox.unitLabel}</strong> de su punto de entrada. Estado: <strong>${life.badge}</strong>. ${shield ? `<strong>${shield.text}.</strong> ` : ''}Plan: <strong>${foundAsset.setup.signal_tag} en ${foundAsset.setup.entry}</strong>, Stop de <strong>${pips.slPips} ${pips.unitLabel}</strong> (${foundAsset.setup.sl}) y TP1 de <strong>+${pips.tp1Pips} ${pips.unitLabel}</strong> (${foundAsset.setup.tp1}).`;
+        } else if (q.includes('NOTICIA') || q.includes('ESCUDO') || q.includes('PELIGRO')) {
+          const blocked = data.assets.map(a => ({ a, s: getAssetNewsShield(a) })).filter(x => x.s);
+          reply = blocked.length > 0
+            ? `El Escudo Anti-Noticias está bloqueando actualmente: ${blocked.map(x => `<strong>${x.a.symbol}</strong> (${x.s.text})`).join('; ')}.`
+            : `El Escudo Anti-Noticias está despejado en este momento; no hay publicaciones de alto impacto en los próximos 45 minutos.`;
         } else if (q.includes('CERCA') || q.includes('PROXIM') || q.includes('RADAR')) {
           const nearest = data.assets
-            .map(a => ({ asset: a, prox: getAssetProximity(a) }))
+            .map(a => ({ asset: a, prox: getAssetProximity(a), life: getSetupLifecycle(a) }))
+            .filter(x => x.life.state === 'ACTIVE')
             .sort((x, y) => x.prox.pct - y.prox.pct)
             .slice(0, 3);
-          reply = `Los activos más cercanos a su entrada en el radar son: ` + nearest.map(n => `<strong>${n.asset.symbol}</strong> a <strong>${n.prox.units} ${n.prox.unitLabel}</strong> de ${n.asset.setup.entry}`).join('; ') + `.`;
-        } else if (q.includes('MEJOR') || q.includes('ENTRADA')) {
-          const best = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score)[0];
-          reply = `La mayor confluencia actual está en <strong>${best.symbol}</strong> con puntaje <strong>${best.confluence.score} (${best.confluence.quality})</strong>: ${best.confluence.verdict_title}. Entrada proyectada en <strong>${best.setup.entry}</strong> con Stop en <strong>${best.setup.sl}</strong> y TP1 en <strong>${best.setup.tp1}</strong>.`;
-        } else if (q.includes('NOTICIA') || q.includes('CALENDARIO')) {
-          const todayEv = data.calendar.filter(e => e.is_today);
-          reply = todayEv.length > 0
-            ? `Hoy tenemos eventos relevantes: ${todayEv.map(e => `<strong>${e.currency} - ${e.title}</strong> (${e.time})`).join('; ')}.`
-            : `No hay noticias de alto impacto programadas para hoy; puede operar la estructura técnica en Killzones o Bitcoin 24/7.`;
+          reply = `Los activos vigentes más cercanos a su entrada en el radar son: ` + nearest.map(n => `<strong>${n.asset.symbol}</strong> a <strong>${n.prox.units} ${n.prox.unitLabel}</strong> de ${n.asset.setup.entry}`).join('; ') + `.`;
         } else {
-          reply = `${data.brief.headline}. Revise el Radar de Proximidad superior para ver qué pares están entrando en zona.`;
+          reply = `${data.brief.headline}. Revise el Radar de Proximidad superior para ver qué pares están entrando en zona y libres de noticias.`;
         }
       }
 
@@ -1527,7 +1837,7 @@
     function renderTrades() {
       document.getElementById('journal-badge').textContent = trades.length;
       document.getElementById('journal-list').innerHTML = trades.map((t, i) => `
-        <div class="bg-[#060911] border border-border rounded p-3 flex items-center justify-between text-xs">
+        <div class="bg-[#050811] border border-border rounded p-3 flex items-center justify-between text-xs">
           <div>
             <strong class="font-mono text-white">${t.pair} · ${t.dir} · <span class="text-amber-400">${t.rr}</span></strong>
             <div class="text-slate-400">${t.note} (${t.date})</div>
