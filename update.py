@@ -1,3 +1,4 @@
+import os
 import json
 import datetime
 import requests
@@ -31,6 +32,50 @@ CENTRAL_BANKS = [
 ]
 
 CURRENCY_SCORE = {cb["currency"]: cb["score"] for cb in CENTRAL_BANKS}
+
+def load_previous_assets():
+    if not os.path.exists("data.json"):
+        return {}
+    try:
+        with open("data.json", "r", encoding="utf-8") as f:
+            prev = json.load(f)
+        return {a["symbol"]: a for a in prev.get("assets", [])}
+    except Exception:
+        return {}
+
+def should_keep_locked_setup(prev_asset, new_dir, df_1h, current_price, now_dt):
+    if not prev_asset or "setup" not in prev_asset:
+        return False
+    prev_setup = prev_asset["setup"]
+    if prev_setup.get("direction") != new_dir:
+        return False
+
+    # Verificar expiración máxima de 36 horas para evitar setups obsoletos
+    locked_at_str = prev_setup.get("locked_at")
+    if locked_at_str:
+        try:
+            locked_dt = datetime.datetime.fromisoformat(locked_at_str)
+            if (now_dt - locked_dt).total_seconds() > 36 * 3600:
+                return False
+        except Exception:
+            pass
+
+    # Revisar si las últimas 6 horas tocaron TP2 o SL
+    recent_1h = df_1h.tail(6)
+    max_h = max(float(recent_1h["High"].max()), current_price)
+    min_l = min(float(recent_1h["Low"].min()), current_price)
+
+    sl = float(prev_setup["sl"])
+    tp2 = float(prev_setup["tp2"])
+
+    if new_dir == "BUY":
+        if min_l <= sl or max_h >= tp2:
+            return False
+    else:
+        if max_h >= sl or min_l <= tp2:
+            return False
+
+    return True
 
 def get_ticker_metrics(ticker_str, decimals=2):
     try:
@@ -96,7 +141,7 @@ def compute_macro_bias(cfg, dxy_bull, us10y_high):
             return "BAJA", f"Diferencial de tasas y flujo institucional favorecen ventas en {cfg['symbol']}."
         return "NEUTRAL", f"Fuerzas equilibradas entre {cfg['base']} y {cfg['quote']}; esperar catalizador."
 
-def analyze_asset(cfg, dxy_bull, us10y_high):
+def analyze_asset(cfg, dxy_bull, us10y_high, prev_asset, now_dt):
     dec = cfg["decimals"]
     df_1d = yf.Ticker(cfg["ticker"]).history(period="4mo", interval="1d")
     df_1h = yf.Ticker(cfg["ticker"]).history(period="20d", interval="1h")
@@ -104,7 +149,6 @@ def analyze_asset(cfg, dxy_bull, us10y_high):
     if df_1d.empty or len(df_1d) < 25 or df_1h.empty or len(df_1h) < 30:
         return None
 
-    # Resample 1H -> 4H
     df_4h = df_1h.resample("4h").agg({
         "Open": "first",
         "High": "max",
@@ -119,7 +163,6 @@ def analyze_asset(cfg, dxy_bull, us10y_high):
     week_open = float(df_1d["Close"].iloc[-6]) if len(df_1d) >= 6 else prev_day
     chg_week = round(((price - week_open) / week_open) * 100, 2)
 
-    # ATR 14 diario
     tr = pd.concat([
         df_1d["High"] - df_1d["Low"],
         (df_1d["High"] - df_1d["Close"].shift()).abs(),
@@ -127,7 +170,6 @@ def analyze_asset(cfg, dxy_bull, us10y_high):
     ], axis=1).max(axis=1)
     atr_14 = round(float(tr.tail(14).mean()), dec)
 
-    # Rangos institucionales (20 días y últimas 48h intradía)
     range_20_high = round(float(df_1d["High"].tail(20).max()), dec)
     range_20_low = round(float(df_1d["Low"].tail(20).min()), dec)
     eq_50 = round((range_20_high + range_20_low) / 2, dec)
@@ -141,7 +183,6 @@ def analyze_asset(cfg, dxy_bull, us10y_high):
     h4_bias = determine_tf_bias(df_4h.tail(25))
     h1_bias = determine_tf_bias(df_1h.tail(30))
 
-    # Sesgo técnico consolidado (Gráfico)
     bull_votes = [weekly_bias, daily_bias, h4_bias, h1_bias].count("SUBE")
     bear_votes = [weekly_bias, daily_bias, h4_bias, h1_bias].count("BAJA")
     if bull_votes >= 2 and bull_votes > bear_votes:
@@ -153,7 +194,6 @@ def analyze_asset(cfg, dxy_bull, us10y_high):
 
     economy_bias, macro_reason = compute_macro_bias(cfg, dxy_bull, us10y_high)
 
-    # Cálculo de confluencia y trade setup (Entrada, SL, TP1, TP2)
     trade_dir = "BUY" if (economy_bias == "SUBE" or chart_bias == "SUBE") else "SELL"
     if economy_bias == chart_bias and economy_bias != "NEUTRAL":
         alignment = "ALIGNED"
@@ -180,29 +220,44 @@ def analyze_asset(cfg, dxy_bull, us10y_high):
         verdict_sub = "Uno de los dos está neutral"
         trade_dir = "BUY" if (economy_bias == "SUBE" or chart_bias == "SUBE") else "SELL"
 
-    # Cálculo de niveles institucionales exactos (OB, Entrada, SL, TP1 1:2, TP2 1:3)
-    if trade_dir == "BUY":
-        ob_low = round(intraday_low + intraday_rng * 0.12, dec)
-        ob_high = round(intraday_low + intraday_rng * 0.32, dec)
-        entry_price = round(min(price, ob_high), dec) if price > ob_low else round(price, dec)
-        sl_price = round(min(ob_low, entry_price) - max(intraday_rng * 0.14, cfg["pip"] * 8), dec)
-        risk = max(entry_price - sl_price, cfg["pip"] * 5)
-        tp1_price = round(entry_price + risk * 2.0, dec)
-        tp2_price = round(entry_price + risk * 3.0, dec)
-        bsl = range_20_high
-        ssl = intraday_low
-        signal_tag = "SU COMPRA"
+    # SISTEMA DE BLOQUEO DE ENTRADAS (EVITA REPAINTING CADA 15 MIN)
+    if should_keep_locked_setup(prev_asset, trade_dir, df_1h, price, now_dt):
+        ob_low = prev_asset["ob_low"]
+        ob_high = prev_asset["ob_high"]
+        setup_obj = prev_asset["setup"]
     else:
-        ob_low = round(intraday_high - intraday_rng * 0.32, dec)
-        ob_high = round(intraday_high - intraday_rng * 0.12, dec)
-        entry_price = round(max(price, ob_low), dec) if price < ob_high else round(price, dec)
-        sl_price = round(max(ob_high, entry_price) + max(intraday_rng * 0.14, cfg["pip"] * 8), dec)
-        risk = max(sl_price - entry_price, cfg["pip"] * 5)
-        tp1_price = round(entry_price - risk * 2.0, dec)
-        tp2_price = round(entry_price - risk * 3.0, dec)
-        bsl = intraday_high
-        ssl = range_20_low
-        signal_tag = "SU VENTA"
+        if trade_dir == "BUY":
+            ob_low = round(intraday_low + intraday_rng * 0.12, dec)
+            ob_high = round(intraday_low + intraday_rng * 0.32, dec)
+            entry_price = round(ob_high, dec)
+            sl_price = round(ob_low - max(intraday_rng * 0.14, cfg["pip"] * 8), dec)
+            risk = max(entry_price - sl_price, cfg["pip"] * 5)
+            tp1_price = round(entry_price + risk * 2.0, dec)
+            tp2_price = round(entry_price + risk * 3.0, dec)
+            signal_tag = "SU COMPRA"
+        else:
+            ob_low = round(intraday_high - intraday_rng * 0.32, dec)
+            ob_high = round(intraday_high - intraday_rng * 0.12, dec)
+            entry_price = round(ob_low, dec)
+            sl_price = round(ob_high + max(intraday_rng * 0.14, cfg["pip"] * 8), dec)
+            risk = max(sl_price - entry_price, cfg["pip"] * 5)
+            tp1_price = round(entry_price - risk * 2.0, dec)
+            tp2_price = round(entry_price - risk * 3.0, dec)
+            signal_tag = "SU VENTA"
+
+        setup_obj = {
+            "direction": trade_dir,
+            "signal_tag": signal_tag,
+            "entry": entry_price,
+            "sl": sl_price,
+            "tp1": tp1_price,
+            "tp2": tp2_price,
+            "rr": "1:2 / 1:3",
+            "locked_at": now_dt.isoformat()
+        }
+
+    bsl = range_20_high if trade_dir == "BUY" else intraday_high
+    ssl = intraday_low if trade_dir == "BUY" else range_20_low
 
     return {
         "symbol": cfg["symbol"],
@@ -242,15 +297,7 @@ def analyze_asset(cfg, dxy_bull, us10y_high):
             "verdict_title": verdict_title,
             "verdict_sub": verdict_sub,
         },
-        "setup": {
-            "direction": trade_dir,
-            "signal_tag": signal_tag,
-            "entry": entry_price,
-            "sl": sl_price,
-            "tp1": tp1_price,
-            "tp2": tp2_price,
-            "rr": "1:2 / 1:3"
-        },
+        "setup": setup_obj,
         "candles": {
             "1d": serialize_candles(df_1d, dec, 42),
             "4h": serialize_candles(df_4h, dec, 42),
@@ -286,6 +333,9 @@ def fetch_calendar():
     return events[:16]
 
 def main():
+    now_dt = datetime.datetime.now(datetime.timezone.utc)
+    prev_assets = load_previous_assets()
+
     dxy = get_ticker_metrics("DX-Y.NYB", 2) or {"price": 103.20, "change_pct": 0.1, "ema20": 102.5}
     us10y = get_ticker_metrics("^TNX", 3) or {"price": 4.450, "change_pct": 0.2, "ema20": 4.35}
     brent = get_ticker_metrics("BZ=F", 2) or {"price": 76.50, "change_pct": -0.3, "ema20": 77.0}
@@ -314,11 +364,11 @@ def main():
 
     assets = []
     for cfg in ASSETS_CONFIG:
-        res = analyze_asset(cfg, dxy_bull, us10y_high)
+        res = analyze_asset(cfg, dxy_bull, us10y_high, prev_assets.get(cfg["symbol"]), now_dt)
         if res:
             assets.append(res)
 
-    now_utc = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    now_utc = now_dt.strftime("%Y-%m-%d %H:%M UTC")
 
     output = {
         "last_updated": now_utc,
