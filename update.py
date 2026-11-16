@@ -13,6 +13,10 @@ ASSETS_CONFIG = [
     {"symbol": "EURUSD", "name": "Euro Dólar", "ticker": "EURUSD=X", "base": "EUR", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
     {"symbol": "USDJPY", "name": "Dólar Yen", "ticker": "USDJPY=X", "base": "USD", "quote": "JPY", "decimals": 3, "pip": 0.01, "type": "forex"},
     {"symbol": "GBPUSD", "name": "Cable", "ticker": "GBPUSD=X", "base": "GBP", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
+    {"symbol": "GBPJPY", "name": "Libra Yen", "ticker": "GBPJPY=X", "base": "GBP", "quote": "JPY", "decimals": 3, "pip": 0.01, "type": "forex"},
+    {"symbol": "GBPAUD", "name": "Libra Aussie", "ticker": "GBPAUD=X", "base": "GBP", "quote": "AUD", "decimals": 5, "pip": 0.0001, "type": "forex"},
+    {"symbol": "GBPNZD", "name": "Libra Kiwi", "ticker": "GBPNZD=X", "base": "GBP", "quote": "NZD", "decimals": 5, "pip": 0.0001, "type": "forex"},
+    {"symbol": "GBPCAD", "name": "Libra Loonie", "ticker": "GBPCAD=X", "base": "GBP", "quote": "CAD", "decimals": 5, "pip": 0.0001, "type": "forex"},
     {"symbol": "AUDUSD", "name": "Aussie", "ticker": "AUDUSD=X", "base": "AUD", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
     {"symbol": "NZDUSD", "name": "Kiwi", "ticker": "NZDUSD=X", "base": "NZD", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
     {"symbol": "USDCAD", "name": "Loonie", "ticker": "USDCAD=X", "base": "USD", "quote": "CAD", "decimals": 5, "pip": 0.0001, "type": "forex"},
@@ -55,7 +59,6 @@ def should_keep_locked_setup(prev_asset, new_dir, df_1h, current_price, now_dt):
     if prev_setup.get("direction") != new_dir:
         return False
 
-    # Expiración intradía de 12 horas para renovar zonas de sesión
     locked_at_str = prev_setup.get("locked_at")
     if locked_at_str:
         try:
@@ -65,7 +68,6 @@ def should_keep_locked_setup(prev_asset, new_dir, df_1h, current_price, now_dt):
         except Exception:
             pass
 
-    # Revisar las últimas 4 horas para detectar si tocó TP1 o SL
     recent_1h = df_1h.tail(4)
     max_h = max(float(recent_1h["High"].max()), current_price)
     min_l = min(float(recent_1h["Low"].min()), current_price)
@@ -74,7 +76,6 @@ def should_keep_locked_setup(prev_asset, new_dir, df_1h, current_price, now_dt):
     tp1 = float(prev_setup["tp1"])
 
     if new_dir == "BUY":
-        # Si tocó Stop Loss o alcanzó TP1, liberar para buscar nueva re-entrada
         if min_l <= sl or max_h >= tp1:
             return False
     else:
@@ -180,7 +181,7 @@ def analyze_asset(cfg, dxy_bull, us10y_high, prev_asset, now_dt):
     range_20_low = round(float(df_1d["Low"].tail(20).min()), dec)
     eq_50 = round((range_20_high + range_20_low) / 2, dec)
 
-    # Ventana Intradía fresca de 16 horas para re-entradas rápidas en sesión
+    # Ventana Intradía fresca de 16 horas para cada activo de forma independiente
     intraday_high = round(float(df_1h["High"].tail(16).max()), dec)
     intraday_low = round(float(df_1h["Low"].tail(16).min()), dec)
     intraday_rng = max(intraday_high - intraday_low, cfg["pip"] * 15)
@@ -227,7 +228,6 @@ def analyze_asset(cfg, dxy_bull, us10y_high, prev_asset, now_dt):
         verdict_sub = "Uno de los dos está neutral"
         trade_dir = "BUY" if (economy_bias == "SUBE" or chart_bias == "SUBE") else "SELL"
 
-    # Mantiene la señal congelada hasta tocar TP1 o SL; al tocar TP1 se reinicia y busca re-entrada
     if should_keep_locked_setup(prev_asset, trade_dir, df_1h, price, now_dt):
         ob_low = prev_asset["ob_low"]
         ob_high = prev_asset["ob_high"]
@@ -355,13 +355,13 @@ def main():
         headline = f"Bono US10Y en {us10y['price']}% y DXY firme en {dxy['price']}: presión bajista sobre pares contra el USD"
         summary = (
             f"Los rendimientos del Tesoro a 10 años en {us10y['price']}% ({us10y['change_pct']:+}%) sostienen la demanda institucional por el dólar (DXY en {dxy['price']}). "
-            f"Mientras los bancos centrales de Europa y Oceanía mantienen sesgo acomodaticio, Jarvis prioriza ventas en pares mayores con confirmación estructural en Ultrón."
+            f"Mientras los bancos centrales de Europa y Oceanía mantienen sesgo acomodaticio, Jarvis prioriza ventas en pares mayores y cruces direccionales con confirmación en Ultrón."
         )
     elif not dxy_bull:
         headline = f"DXY retrocede a {dxy['price']} con US10Y en {us10y['price']}%: apetito por riesgo en índices, cripto y divisas mayores"
         summary = (
             f"La caída del índice del dólar por debajo de su media institucional ({dxy['ema20']}) libera liquidez hacia índices estadounidenses (USTEC, US500, US30), Bitcoin "
-            f"y favorece compras en EURUSD, GBPUSD y AUDUSD tras mitigación de bloques de demanda."
+            f"y favorece compras en EURUSD, GBPUSD, AUDUSD y cruces de libra tras mitigación de bloques de demanda."
         )
     else:
         headline = f"Divergencia de tasas activa: DXY en {dxy['price']} y bono US10Y en {us10y['price']}%"
