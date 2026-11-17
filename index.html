@@ -95,12 +95,11 @@
   <canvas id="neural-bg"></canvas>
 
   <!-- ========================================================= -->
-  <!-- PANTALLA DE ARRANQUE ORBITAL DE 7 AGENTES (DESBLOQUEABLE) -->
+  <!-- PANTALLA DE ARRANQUE ORBITAL DE 7 AGENTES                 -->
   <!-- ========================================================= -->
   <div id="boot-screen" onclick="enterOraculo(true)" ontouchstart="enterOraculo(true)" style="touch-action: manipulation;" class="fixed inset-0 z-50 bg-[#030407] flex flex-col items-center justify-between py-8 px-5 text-center cursor-pointer transition-opacity duration-300">
     <div class="text-[10px] font-mono tracking-[0.35em] text-slate-500">TELEMETRÍA NEURONAL EN LÍNEA</div>
 
-    <!-- CONSTELACIÓN ORBITAL 7 NODOS -->
     <div class="relative w-[310px] h-[310px] sm:w-[360px] sm:h-[360px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 360 360" class="w-full h-full overflow-visible">
         <defs>
@@ -195,7 +194,6 @@
       </svg>
     </div>
 
-    <!-- TÍTULO, TELEMETRÍA Y BOTÓN DE ENTRADA -->
     <div class="space-y-2.5 max-w-md w-full">
       <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-amber-400 drop-shadow-[0_0_18px_rgba(245,158,11,0.5)]">ORÁCULO</h1>
       <div class="text-[11px] font-mono tracking-[0.28em] text-slate-300">LO QUE USTED NO SABE</div>
@@ -247,7 +245,7 @@
 
       <div class="flex items-center gap-1.5 font-mono text-[11px]">
         <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400">
-          VOZ OFF
+          VOZ ON
         </button>
         <button onclick="toggleViewMode()" id="view-mode-btn" class="px-3 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold">
           VER PANEL ▸
@@ -262,21 +260,23 @@
   <main id="cockpit-view" class="relative z-10 flex-1 max-w-2xl w-full mx-auto px-4 py-4 flex flex-col justify-between gap-4">
 
     <div class="flex flex-col items-center justify-center pt-1">
-      <div id="agent-core-visual" class="w-[250px] h-[250px] sm:w-[290px] sm:h-[290px] flex items-center justify-center"></div>
+      <div id="agent-core-visual" class="w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] flex items-center justify-center"></div>
 
       <div class="text-center space-y-1 -mt-1">
         <div id="agent-hero-metric" class="font-hud text-xl sm:text-2xl font-extrabold tracking-wider text-white">0 ALERTAS</div>
         <div id="agent-hero-sub" class="text-[11px] font-mono tracking-[0.2em] text-slate-300 uppercase">SINCRONIZANDO</div>
         <div id="agent-role-label" class="text-[10px] font-mono tracking-[0.28em] text-slate-400 uppercase">JARVIS · ASISTENTE DE MANDO</div>
+        <div id="agent-voice-profile" class="text-[9px] font-mono text-slate-500">TIMBRE: MASCULINO CULTO · SERENO</div>
         <div id="agent-state-label" class="text-[11px] font-mono tracking-[0.38em] font-bold pt-1" style="color: var(--agent-color);">E N &nbsp; E S P E R A</div>
       </div>
     </div>
 
     <div class="space-y-3">
-      <div id="agent-dialogue-box" class="min-h-[78px] text-xs sm:text-sm font-mono text-slate-200 leading-relaxed px-1">
-        Buenas tardes, señor. Sincronizando telemetría del mercado.<span class="typing-cursor"></span>
+      <div id="agent-dialogue-box" class="min-h-[82px] text-xs sm:text-sm font-mono text-slate-200 leading-relaxed px-1">
+        A sus órdenes, señor. Sincronizando telemetría del mercado.<span class="typing-cursor"></span>
       </div>
 
+      <!-- Botones dinámicos según el agente (en F.R.I.D.A.Y. muestra controles de lección) -->
       <div id="quick-replies" class="flex flex-wrap gap-2">
         <button onclick="handleQuickReply('SI')" class="px-3.5 py-1.5 rounded border text-xs font-mono font-bold transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.03);">
           SÍ, DÉMELO
@@ -293,7 +293,7 @@
         <button type="button" onclick="startVoiceRecognition()" id="mic-btn" title="Hablar por micrófono" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">
           MIC
         </button>
-        <input id="cockpit-input" type="text" placeholder="Pregúntele algo..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
+        <input id="cockpit-input" type="text" placeholder="Pregúntele algo o pida una lección..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
         <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0 transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">
           ENVIAR
         </button>
@@ -302,13 +302,14 @@
   </main>
 
   <!-- ========================================================= -->
-  <!-- MODO 2: VISTA DE PANEL COMPLETO (16 PARES + GRÁFICO SMC)  -->
+  <!-- MODO 2: VISTA DE PANEL COMPLETO                           -->
   <!-- ========================================================= -->
   <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 py-4 space-y-5">
     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (16)</button>
         <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
+        <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 CURSO F.R.I.D.A.Y.</button>
         <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO & NOTICIAS</button>
         <button onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
       </div>
@@ -365,6 +366,15 @@
           <div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
       </div>
+    </section>
+
+    <!-- SUBPANEL ACADEMIA F.R.I.D.A.Y. -->
+    <section id="ptab-friday" class="hidden hud-panel rounded-xl p-4 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-hud text-sm font-bold text-purple-400">🟣 ACADEMIA INSTITUCIONAL F.R.I.D.A.Y. (10 MÓDULOS)</h3>
+        <span id="panel-course-pct" class="text-xs font-bold text-purple-300">0% COMPLETADO</span>
+      </div>
+      <div id="panel-lessons-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
 
     <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-4">
@@ -470,19 +480,158 @@
     let selectedTF = '1d';
     let typeTimer = null;
     let openWhyPanels = {};
-    let voiceEnabled = localStorage.getItem('oraculo_voice') === 'on';
+    let voiceEnabled = localStorage.getItem('oraculo_voice') !== 'off';
     let trades = JSON.parse(localStorage.getItem('oraculo_trades_v6') || '[]');
     let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
+    let activeLessonIndex = 0;
+
+    // =========================================================
+    // TEMARIO OFICIAL DE F.R.I.D.A.Y. (10 LECCIONES SMC + MACRO)
+    // =========================================================
+    const COURSE_LESSONS = [
+      {
+        id: 1,
+        title: "1. Estructura Institucional (BOS y CHoCH)",
+        body: "Lección uno: Estructura. Un BOS confirma que la tendencia continúa rompiendo un máximo o mínimo previo. Un CHoCH es el primer aviso de cambio de tendencia cuando el precio quiebra el último soporte u oferta que impulsó el movimiento.",
+        quiz: "Regla clave: Nunca opere en contra de un BOS confirmado en 4 horas."
+      },
+      {
+        id: 2,
+        title: "2. Liquidez Externa (BSL y SSL)",
+        body: "Lección dos: Liquidez. Las instituciones necesitan contrapartida. Por encima de los techos iguales hay liquidez compradora (BSL) y por debajo de los pisos iguales hay liquidez vendedora (SSL). El precio suele barrer esos stops antes de arrancar.",
+        quiz: "Regla clave: Si ve una mecha barriendo SSL y cerrando arriba, prepare compras."
+      },
+      {
+        id: 3,
+        title: "3. Equilibrio EQ 50% (Caro vs. Barato)",
+        body: "Lección tres: Equilibrium al 50 por ciento. La línea punteada EQ 50 divide el rango en dos: arriba es zona Premium (cara, solo para vender) y abajo es zona Discount (barata, solo para comprar).",
+        quiz: "Regla clave: Jamás compre por encima del EQ 50 por ciento; estaría comprando caro."
+      },
+      {
+        id: 4,
+        title: "4. Order Blocks Institucionales (OB)",
+        body: "Lección cuatro: Bloques de Órdenes. Son la última vela contraria antes de un impulso fuerte que rompe estructura. Allí quedaron órdenes pendientes de bancos que suelen mitigarse cuando el precio regresa.",
+        quiz: "Regla clave: Use la caja del Order Block como zona de espera, no entre sin rechazo."
+      },
+      {
+        id: 5,
+        title: "5. Confluencia Macro (DXY y US10Y)",
+        body: "Lección cinco: Visión Macro. Si el índice del dólar DXY y los bonos US10Y suben juntos, los pares contra el dólar como EURUSD o GBPUSD tienden a caer. Si ambos bajan, los activos de riesgo suben.",
+        quiz: "Regla clave: Cuando Visión y Ultrón coinciden, la probabilidad sube por encima del 70 por ciento."
+      },
+      {
+        id: 6,
+        title: "6. Killzones de Londres y Nueva York",
+        body: "Lección seis: Horarios Institucionales. El volumen real entra en la Killzone de Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). En Asia el volumen es bajo y abundan las trampas.",
+        quiz: "Regla clave: Si el indicador superior dice Fuera de Killzone, reduzca su exposición."
+      },
+      {
+        id: 7,
+        title: "7. Gestión de Riesgo 1:2 y 1:3 (TP1 y TP2)",
+        body: "Lección siete: Matemáticas del Trader. Todas las proyecciones de Oráculo buscan un mínimo de 1 a 2 en TP1 y 1 a 3 en TP2. Al tocar TP1 debe asegurar parciales y mover su Stop Loss a precio de entrada.",
+        quiz: "Regla clave: Con un ratio 1 a 2, acertando solo 4 de cada 10 operaciones usted ya es rentable."
+      },
+      {
+        id: 8,
+        title: "8. Re-entradas Intradía tras TP1",
+        body: "Lección ocho: Re-entradas. Cuando un par alcanza su TP1, el sistema libera el bloqueo y dibuja un nuevo Order Block a favor de la tendencia. Nunca persiga el precio; espere el retroceso a la nueva caja.",
+        quiz: "Regla clave: Opere las re-entradas con la mitad del lotaje inicial."
+      },
+      {
+        id: 9,
+        title: "9. Filtro de Tesis Rota y Gatillo 15m",
+        body: "Lección nueve: Protección de Capital. Si Jarvis marca Tesis Rota, significa que la macroeconomía y el gráfico se contradicen. Además, antes de entrar en un bloque, espere una vela de rechazo en 15 minutos.",
+        quiz: "Regla clave: Una operación evitada en Tesis Rota vale lo mismo que un Take Profit ganado."
+      },
+      {
+        id: 10,
+        title: "10. Auditoría Emocional con Karen y H.O.M.E.R.",
+        body: "Lección diez: Disciplina Profesional. Anotar cada ejecución en el diario de Karen elimina el trading por venganza tras un Stop Loss y permite que H.O.M.E.R. calcule su ventaja estadística real.",
+        quiz: "Regla clave: El éxito no está en adivinar cada vela, sino en repetir exactamente el mismo proceso."
+      }
+    ];
+
+    const CONCEPT_DICTIONARY = [
+      { keys: ['EQ', '50%', 'EQUILIBRIUM', 'CARO', 'BARATO', 'PREMIUM', 'DISCOUNT'], answer: "La línea EQ 50% marca exactamente la mitad del rango intradía. Arriba de ella es zona Premium (cara, ideal para ventas) y abajo es zona Discount (barata, ideal para compras)." },
+      { keys: ['CHOCH', 'CAMBIO DE TENDENCIA', 'GIRO'], answer: "CHoCH significa Cambio de Carácter. Ocurre cuando el precio rompe con cuerpo el último mínimo ascendente (en tendencia alcista) o el último máximo descendente (en tendencia bajista), avisando un posible giro." },
+      { keys: ['BOS', 'QUIEBRE'], answer: "BOS significa Break of Structure (Quiebre de Estructura). Confirma que la tendencia vigente tiene fuerza institucional al superar un máximo o mínimo anterior." },
+      { keys: ['TESIS ROTA', 'CONTRADICEN', 'OPPOSED'], answer: "Tesis Rota aparece cuando el análisis macroeconómico de Visión apunta hacia un lado y la estructura técnica de Ultrón apunta hacia el lado opuesto. Es una alerta para no operar ese par hasta que vuelvan a alinearse." },
+      { keys: ['KILLZONE', 'HORARIO', 'SESION'], answer: "Las Killzones son las ventanas de mayor liquidez bancaria: Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). Operar dentro de ellas evita los barridos falsos de la sesión asiática." },
+      { keys: ['REENTRADA', 'RE-ENTRADA', 'TP1'], answer: "Cuando un par toca TP1 o Stop Loss, el sistema libera la operación anterior y traza un nuevo Order Block más adelante para aprovechar la continuación del movimiento sin perseguir el precio." },
+      { keys: ['STOP', 'RIESGO', 'LOTAJE'], answer: "El Stop Loss en Oráculo se calcula dinámicamente según el rango intradía de 16 horas de cada activo. Nunca mueva el Stop hacia atrás ni arriesgue más del 1 al 2 por ciento de su cuenta por idea." }
+    ];
 
     const AGENTS = {
-      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', color: '#f59e0b', pitch: 0.94, rate: 0.98 },
-      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', color: '#38bdf8', pitch: 0.85, rate: 0.93 },
-      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', color: '#ef4444', pitch: 0.76, rate: 0.96 },
-      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', color: '#a855f7', pitch: 1.06, rate: 1.02 },
-      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', color: '#10b981', pitch: 1.02, rate: 1.00 },
-      karen:  { name: 'KAREN', sub: 'DIARIO', color: '#f43f5e', pitch: 1.04, rate: 1.01 },
-      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', color: '#84cc16', pitch: 0.90, rate: 0.97 }
+      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.96, rate: 0.98 },
+      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.80, rate: 0.90 },
+      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.68, rate: 1.02 },
+      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.08, rate: 1.03 },
+      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.00, rate: 1.05 },
+      karen:  { name: 'KAREN', sub: 'DIARIO', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.15, rate: 0.98 },
+      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 1, color: '#84cc16', pitch: 0.88, rate: 0.95 }
     };
+
+    let cachedEsVoices = [];
+    function loadSpanishVoices() {
+      if (!('speechSynthesis' in window)) return;
+      const all = window.speechSynthesis.getVoices();
+      const es = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('es'));
+      es.sort((a, b) => {
+        const score = v => {
+          const n = v.name.toLowerCase();
+          let s = 0;
+          if (n.includes('natural') || n.includes('neural')) s += 50;
+          if (n.includes('online') || n.includes('google')) s += 30;
+          if (n.includes('es-mx') || n.includes('es-us') || n.includes('es-419') || v.lang.toLowerCase().includes('mx')) s += 10;
+          return s;
+        };
+        return score(b) - score(a);
+      });
+      cachedEsVoices = es;
+    }
+    if ('speechSynthesis' in window) {
+      loadSpanishVoices();
+      window.speechSynthesis.onvoiceschanged = loadSpanishVoices;
+    }
+
+    function pickCharacterVoice(ag) {
+      if (!cachedEsVoices.length) loadSpanishVoices();
+      if (!cachedEsVoices.length) return null;
+      const maleHints = ['alvaro', 'jorge', 'pablo', 'diego', 'tomas', 'carlos', 'raul', 'alonso', 'male', 'hombre', 'es-es-x-eed', 'es-us-x-esd'];
+      const femaleHints = ['dalia', 'helena', 'elvira', 'paulina', 'monica', 'laura', 'sabina', 'paloma', 'ximena', 'camila', 'female', 'mujer', 'google español'];
+      const isMaleName = n => maleHints.some(h => n.toLowerCase().includes(h));
+      const isFemaleName = n => femaleHints.some(h => n.toLowerCase().includes(h));
+      let pool = ag.gender === 'M'
+        ? cachedEsVoices.filter(v => isMaleName(v.name))
+        : cachedEsVoices.filter(v => isFemaleName(v.name));
+      if (!pool.length) pool = cachedEsVoices;
+      return pool[ag.variant % pool.length];
+    }
+
+    function formatTextForSpeech(raw) {
+      return raw
+        .replace(/<[^>]*>/g, '')
+        .replace(/BTCUSD/g, 'Bitcoin')
+        .replace(/USTEC/g, 'Nasdaq cien')
+        .replace(/US500/g, 'S and P quinientos')
+        .replace(/US30/g, 'Dow Jones')
+        .replace(/EURUSD/g, 'Euro Dólar')
+        .replace(/USDJPY/g, 'Dólar Yen')
+        .replace(/GBPUSD/g, 'Libra Dólar')
+        .replace(/GBPJPY/g, 'Libra Yen')
+        .replace(/GBPAUD/g, 'Libra Australiano')
+        .replace(/GBPNZD/g, 'Libra Neozelandés')
+        .replace(/GBPCAD/g, 'Libra Canadiense')
+        .replace(/AUDUSD/g, 'Australiano Dólar')
+        .replace(/NZDUSD/g, 'Neozelandés Dólar')
+        .replace(/USDCAD/g, 'Dólar Canadiense')
+        .replace(/USDCHF/g, 'Dólar Franco')
+        .replace(/EURJPY/g, 'Euro Yen')
+        .replace(/BOS\/CHoCH/g, 'quiebre de estructura y cambio de carácter')
+        .replace(/TP1/g, 'Take Profit uno')
+        .replace(/TP2/g, 'Take Profit dos')
+        .replace(/\bSL\b/g, 'Stop Loss');
+    }
 
     function updateVoiceUI() {
       const btn = document.getElementById('voice-toggle-btn');
@@ -514,16 +663,19 @@
       if (!voiceEnabled || !('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
-      const clean = text.replace(/<[^>]*>/g, '').replace(/BTCUSD/g, 'Bitcoin').replace(/USDJPY/g, 'Dólar Yen').replace(/EURUSD/g, 'Euro Dólar').replace(/GBP/g, 'Libra ');
-      const u = new SpeechSynthesisUtterance(clean);
-      const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('es'));
-      if (voices.length > 0) u.voice = voices[0];
-      u.lang = 'es-ES';
-      u.pitch = ag.pitch;
-      u.rate = ag.rate;
-      u.onstart = () => setStateLabel('HABLANDO');
-      u.onend = () => setStateLabel('EN ESPERA');
-      window.speechSynthesis.speak(u);
+      const chosenVoice = pickCharacterVoice(ag);
+      const clean = formatTextForSpeech(text);
+      const chunks = clean.split(/(?<=[.!?])\s+/).filter(Boolean);
+      chunks.forEach((chunk, idx) => {
+        const u = new SpeechSynthesisUtterance(chunk);
+        if (chosenVoice) u.voice = chosenVoice;
+        u.lang = chosenVoice ? chosenVoice.lang : 'es-ES';
+        u.pitch = ag.pitch;
+        u.rate = ag.rate;
+        if (idx === 0) u.onstart = () => setStateLabel('HABLANDO');
+        if (idx === chunks.length - 1) u.onend = () => setStateLabel('EN ESPERA');
+        window.speechSynthesis.speak(u);
+      });
     }
 
     function startVoiceRecognition() {
@@ -544,43 +696,142 @@
       rec.start();
     }
 
+    // =========================================================
+    // FUNCIONES DE CURSO INTERACTIVO F.R.I.D.A.Y.
+    // =========================================================
+    function getNextPendingLessonIndex() {
+      const idx = COURSE_LESSONS.findIndex(l => !completedLessons.includes(l.id));
+      return idx === -1 ? 0 : idx;
+    }
+
+    function startFridayLesson(idx = activeLessonIndex) {
+      activeLessonIndex = (idx + COURSE_LESSONS.length) % COURSE_LESSONS.length;
+      const lesson = COURSE_LESSONS[activeLessonIndex];
+      const done = completedLessons.includes(lesson.id);
+      typeAgentDialogue(`${lesson.title}. ${lesson.body} ${lesson.quiz}`);
+      renderFridayButtons(lesson, done);
+    }
+
+    function completeCurrentLesson() {
+      const lesson = COURSE_LESSONS[activeLessonIndex];
+      if (!completedLessons.includes(lesson.id)) {
+        completedLessons.push(lesson.id);
+        localStorage.setItem('oraculo_course', JSON.stringify(completedLessons));
+      }
+      const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
+      document.getElementById('agent-hero-metric').textContent = `${pct}%`;
+      document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
+      renderPanelCourse();
+
+      if (completedLessons.length >= COURSE_LESSONS.length) {
+        typeAgentDialogue(`¡Felicidades, jefe! Ha completado el cien por ciento del entrenamiento institucional de Oráculo (10 de 10 lecciones aprobadas). Ya está listo para operar con disciplina de nivel bancario.`);
+        renderFridayButtons(lesson, true);
+      } else {
+        const nextIdx = getNextPendingLessonIndex();
+        typeAgentDialogue(`¡Excelente! Lección ${lesson.id} aprobada. Su progreso subió al ${pct} por ciento. ¿Pasamos a la siguiente lección?`);
+        activeLessonIndex = nextIdx;
+        renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
+      }
+    }
+
+    function renderFridayButtons(lesson, isDone, askNext = false) {
+      const qr = document.getElementById('quick-replies');
+      if (!qr) return;
+      if (askNext) {
+        qr.innerHTML = `
+          <button onclick="startFridayLesson(${activeLessonIndex})" class="px-3.5 py-1.5 rounded border border-purple-400 bg-purple-500/15 text-purple-300 text-xs font-mono font-bold">
+            ▸ INICIAR LECCIÓN ${lesson.id}
+          </button>
+          <button onclick="openCourseInPanel()" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 text-xs font-mono">
+            VER TEMARIO COMPLETO
+          </button>
+        `;
+        return;
+      }
+      qr.innerHTML = `
+        <button onclick="completeCurrentLesson()" class="px-3.5 py-1.5 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold">
+          ${isDone ? '✓ LECCIÓN APROBADA' : '✅ MARCAR COMO COMPLETADA'}
+        </button>
+        <button onclick="startFridayLesson(${activeLessonIndex + 1})" class="px-3.5 py-1.5 rounded border border-purple-400 text-purple-300 bg-[#090d16] text-xs font-mono font-bold">
+          SIGUIENTE LECCIÓN ▸
+        </button>
+        <button onclick="openCourseInPanel()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-400 text-xs font-mono">
+          TEMARIO (${completedLessons.length}/10)
+        </button>
+      `;
+    }
+
+    function renderDefaultQuickReplies() {
+      const qr = document.getElementById('quick-replies');
+      if (!qr) return;
+      qr.innerHTML = `
+        <button onclick="handleQuickReply('SI')" class="px-3.5 py-1.5 rounded border text-xs font-mono font-bold transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.03);">
+          SÍ, DÉMELO
+        </button>
+        <button onclick="handleQuickReply('NO')" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 hover:border-slate-500 text-xs font-mono">
+          NO, GRACIAS
+        </button>
+      `;
+    }
+
+    function openCourseInPanel() {
+      if (!isPanelMode) toggleViewMode();
+      switchPanelTab('friday');
+      renderPanelCourse();
+    }
+
+    function renderPanelCourse() {
+      const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
+      const badge = document.getElementById('panel-course-pct');
+      if (badge) badge.textContent = `${pct}% COMPLETADO (${completedLessons.length}/10)`;
+      const list = document.getElementById('panel-lessons-list');
+      if (!list) return;
+      list.innerHTML = COURSE_LESSONS.map((l, idx) => {
+        const done = completedLessons.includes(l.id);
+        return `
+          <div class="bg-[#050811] border ${done ? 'border-emerald-500/50' : 'border-slate-800'} rounded-lg p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <strong class="${done ? 'text-emerald-400' : 'text-purple-300'}">${l.title}</strong>
+              <span class="text-[10px] px-2 py-0.5 rounded ${done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'}">${done ? 'APROBADA' : 'PENDIENTE'}</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-relaxed">${l.body}</p>
+            <div class="flex gap-2 pt-1">
+              <button onclick="if(isPanelMode)toggleViewMode();selectAgent('friday',false);startFridayLesson(${idx});" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-purple-200 text-[10px] font-bold">
+                🎙️ ESCUCHAR CON F.R.I.D.A.Y.
+              </button>
+              ${!done ? `<button onclick="activeLessonIndex=${idx};completeCurrentLesson();" class="px-2.5 py-1 rounded bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-[10px] font-bold">✅ APROBAR</button>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================
+    // TELEMETRÍA Y NÚCLEOS SVG
+    // =========================================================
     function getBrokenTheses() {
       if (!data || !data.assets) return [];
       return data.assets.filter(a => a.confluence && a.confluence.alignment === 'OPPOSED');
     }
-
     function getAlignedAssets() {
       if (!data || !data.assets) return [];
       return data.assets.filter(a => a.confluence && a.confluence.alignment === 'ALIGNED');
     }
-
     function getNearestAsset() {
       if (!data || !data.assets || !data.assets.length) return null;
-      return [...data.assets].sort((a, b) => {
-        const da = Math.abs(a.price - a.setup.entry) / a.price;
-        const db = Math.abs(b.price - b.setup.entry) / b.price;
-        return da - db;
-      })[0];
+      return [...data.assets].sort((a, b) => (Math.abs(a.price - a.setup.entry) / a.price) - (Math.abs(b.price - b.setup.entry) / b.price))[0];
     }
-
     function getAssetUnitsDist(a) {
       const diff = Math.abs(a.price - a.setup.entry);
       const units = a.pip ? Math.round((diff / a.pip) * 10) / 10 : diff;
       return { diff, units, label: a.type === 'forex' ? 'pips' : 'pts' };
     }
-
     function getSetupPips(a) {
       const pip = a.pip || 0.0001;
       const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
       const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
-      return {
-        unitLabel,
-        sl: toU(a.setup.entry - a.setup.sl),
-        tp1: toU(a.setup.tp1 - a.setup.entry),
-        tp2: toU(a.setup.tp2 - a.setup.entry)
-      };
+      return { unitLabel, sl: toU(a.setup.entry - a.setup.sl), tp1: toU(a.setup.tp1 - a.setup.entry), tp2: toU(a.setup.tp2 - a.setup.entry) };
     }
-
     function getHomerMetrics() {
       if (!trades.length) return { winRate: 48, pnlR: '+0R', total: 0 };
       const wins = trades.filter(t => t.res === 'WIN').length;
@@ -597,49 +848,13 @@
           const active = i < 12;
           return `<rect x="138" y="16" width="4" height="${active ? 16 : 11}" rx="1" fill="${active ? '#f59e0b' : '#452c08'}" transform="rotate(${ang} 140 140)"/>`;
         }).join('');
-        return `
-          <svg viewBox="0 0 280 280" class="w-full h-full">
-            <g class="spin-slow" style="transform-origin:140px 140px">${bars}</g>
-            <circle cx="140" cy="140" r="92" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
-            <circle cx="140" cy="140" r="76" fill="none" stroke="#78350f" stroke-width="1" stroke-dasharray="4 4"/>
-            <polygon points="140,66 204,178 76,178" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2"/>
-            <circle cx="140" cy="140" r="36" fill="#07090f" stroke="#f59e0b" stroke-width="1.5"/>
-            <circle cx="140" cy="140" r="9" fill="#f59e0b" class="pulse-core"/>
-          </svg>`;
+        return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${bars}</g><circle cx="140" cy="140" r="92" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/><circle cx="140" cy="140" r="76" fill="none" stroke="#78350f" stroke-width="1" stroke-dasharray="4 4"/><polygon points="140,66 204,178 76,178" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2"/><circle cx="140" cy="140" r="36" fill="#07090f" stroke="#f59e0b" stroke-width="1.5"/><circle cx="140" cy="140" r="9" fill="#f59e0b" class="pulse-core"/></svg>`;
       }
       if (key === 'vision') {
-        return `
-          <svg viewBox="0 0 280 280" class="w-full h-full">
-            <circle cx="140" cy="140" r="110" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/>
-            <circle cx="140" cy="140" r="82" fill="none" stroke="#0284c7" stroke-width="1" opacity="0.6"/>
-            <circle cx="140" cy="140" r="52" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 4"/>
-            <line x1="25" y1="140" x2="255" y2="140" stroke="#0c4a6e" stroke-width="1"/>
-            <line x1="140" y1="25" x2="140" y2="255" stroke="#0c4a6e" stroke-width="1"/>
-            <g class="spin-med" style="transform-origin:140px 140px">
-              <line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/>
-              <path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/>
-            </g>
-            <g font-size="9" fill="#7dd3fc" font-weight="bold">
-              <circle cx="195" cy="92" r="3" fill="#38bdf8"/><text x="201" y="95">USD</text>
-              <circle cx="84" cy="108" r="3" fill="#38bdf8"/><text x="58" y="111">EUR</text>
-              <circle cx="198" cy="182" r="3" fill="#38bdf8"/><text x="204" y="185">GBP</text>
-              <circle cx="92" cy="188" r="3" fill="#38bdf8"/><text x="66" y="191">JPY</text>
-            </g>
-            <circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/>
-            <circle cx="140" cy="140" r="6" fill="#38bdf8"/>
-          </svg>`;
+        return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="110" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/><circle cx="140" cy="140" r="82" fill="none" stroke="#0284c7" stroke-width="1" opacity="0.6"/><circle cx="140" cy="140" r="52" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 4"/><line x1="25" y1="140" x2="255" y2="140" stroke="#0c4a6e" stroke-width="1"/><line x1="140" y1="25" x2="140" y2="255" stroke="#0c4a6e" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/><path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/></g><g font-size="9" fill="#7dd3fc" font-weight="bold"><circle cx="195" cy="92" r="3" fill="#38bdf8"/><text x="201" y="95">USD</text><circle cx="84" cy="108" r="3" fill="#38bdf8"/><text x="58" y="111">EUR</text><circle cx="198" cy="182" r="3" fill="#38bdf8"/><text x="204" y="185">GBP</text><circle cx="92" cy="188" r="3" fill="#38bdf8"/><text x="66" y="191">JPY</text></g><circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#38bdf8"/></svg>`;
       }
       if (key === 'ultron') {
-        return `
-          <svg viewBox="0 0 280 280" class="w-full h-full">
-            <circle cx="140" cy="140" r="108" fill="none" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="18 8"/>
-            <g class="spin-rev" style="transform-origin:140px 140px">
-              <polygon points="140,46 221,93 221,187 140,234 59,187 59,93" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="2"/>
-            </g>
-            <polygon points="140,74 197,107 197,173 140,206 83,173 83,107" fill="none" stroke="#f87171" stroke-width="1.2" stroke-dasharray="5 3"/>
-            <circle cx="140" cy="140" r="34" fill="#080507" stroke="#ef4444" stroke-width="2"/>
-            <circle cx="140" cy="140" r="10" fill="#ef4444" class="pulse-core"/>
-          </svg>`;
+        return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="108" fill="none" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="18 8"/><g class="spin-rev" style="transform-origin:140px 140px"><polygon points="140,46 221,93 221,187 140,234 59,187 59,93" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="2"/></g><polygon points="140,74 197,107 197,173 140,206 83,173 83,107" fill="none" stroke="#f87171" stroke-width="1.2" stroke-dasharray="5 3"/><circle cx="140" cy="140" r="34" fill="#080507" stroke="#ef4444" stroke-width="2"/><circle cx="140" cy="140" r="10" fill="#ef4444" class="pulse-core"/></svg>`;
       }
       if (key === 'friday') {
         const rings = Array.from({ length: 48 }, (_, i) => {
@@ -647,46 +862,17 @@
           const h = 8 + Math.sin(i * 0.7) * 6;
           return `<rect x="139" y="${22 - h/2}" width="2.5" height="${h}" fill="#a855f7" opacity="0.8" transform="rotate(${ang} 140 140)"/>`;
         }).join('');
-        return `
-          <svg viewBox="0 0 280 280" class="w-full h-full">
-            <g class="spin-slow" style="transform-origin:140px 140px">${rings}</g>
-            <circle cx="140" cy="140" r="84" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="10 6"/>
-            <circle cx="140" cy="140" r="58" fill="rgba(168,85,247,0.1)" stroke="#c084fc" stroke-width="1.5"/>
-            <circle cx="140" cy="140" r="30" fill="#07050d" stroke="#a855f7" stroke-width="2"/>
-            <circle cx="140" cy="140" r="8" fill="#e9d5ff" class="pulse-core"/>
-          </svg>`;
+        return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${rings}</g><circle cx="140" cy="140" r="84" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="10 6"/><circle cx="140" cy="140" r="58" fill="rgba(168,85,247,0.1)" stroke="#c084fc" stroke-width="1.5"/><circle cx="140" cy="140" r="30" fill="#07050d" stroke="#a855f7" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#e9d5ff" class="pulse-core"/></svg>`;
       }
       if (key === 'edith') {
-        return `
-          <svg viewBox="0 0 280 280" class="w-full h-full">
-            <circle cx="140" cy="140" r="106" fill="none" stroke="#065f46" stroke-width="2"/>
-            <circle cx="140" cy="140" r="94" fill="none" stroke="#10b981" stroke-width="6" stroke-dasharray="12 6" opacity="0.75"/>
-            <circle cx="140" cy="140" r="64" fill="none" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4 4"/>
-            <line x1="20" y1="140" x2="112" y2="140" stroke="#10b981" stroke-width="1.5"/>
-            <line x1="168" y1="140" x2="260" y2="140" stroke="#10b981" stroke-width="1.5"/>
-            <line x1="140" y1="20" x2="140" y2="112" stroke="#10b981" stroke-width="1.5"/>
-            <line x1="140" y1="168" x2="140" y2="260" stroke="#10b981" stroke-width="1.5"/>
-            <circle cx="140" cy="140" r="28" fill="#040a08" stroke="#10b981" stroke-width="1.5"/>
-            <circle cx="140" cy="140" r="6" fill="#10b981" class="pulse-core"/>
-          </svg>`;
+        return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="106" fill="none" stroke="#065f46" stroke-width="2"/><circle cx="140" cy="140" r="94" fill="none" stroke="#10b981" stroke-width="6" stroke-dasharray="12 6" opacity="0.75"/><circle cx="140" cy="140" r="64" fill="none" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4 4"/><line x1="20" y1="140" x2="112" y2="140" stroke="#10b981" stroke-width="1.5"/><line x1="168" y1="140" x2="260" y2="140" stroke="#10b981" stroke-width="1.5"/><line x1="140" y1="20" x2="140" y2="112" stroke="#10b981" stroke-width="1.5"/><line x1="140" y1="168" x2="140" y2="260" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="28" fill="#040a08" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#10b981" class="pulse-core"/></svg>`;
       }
       if (key === 'karen') {
         const spokes = Array.from({ length: 12 }, (_, i) => {
           const rad = (i * 30 * Math.PI) / 180;
           return `<line x1="140" y1="140" x2="${140 + Math.cos(rad)*106}" y2="${140 + Math.sin(rad)*106}" stroke="#881337" stroke-width="1"/>`;
         }).join('');
-        return `
-          <svg viewBox="0 0 280 280" class="w-full h-full">
-            ${spokes}
-            <circle cx="140" cy="140" r="104" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="14 6"/>
-            <circle cx="140" cy="140" r="76" fill="none" stroke="#fb7185" stroke-width="1"/>
-            <circle cx="140" cy="140" r="50" fill="none" stroke="#f43f5e" stroke-width="1"/>
-            <g class="spin-med" style="transform-origin:140px 140px">
-              <circle cx="195" cy="96" r="5" fill="#fda4af"/>
-            </g>
-            <circle cx="140" cy="140" r="28" fill="#0b0508" stroke="#f43f5e" stroke-width="1.8"/>
-            <circle cx="140" cy="140" r="7" fill="#f43f5e" class="pulse-core"/>
-          </svg>`;
+        return `<svg viewBox="0 0 280 280" class="w-full h-full">${spokes}<circle cx="140" cy="140" r="104" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="14 6"/><circle cx="140" cy="140" r="76" fill="none" stroke="#fb7185" stroke-width="1"/><circle cx="140" cy="140" r="50" fill="none" stroke="#f43f5e" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><circle cx="195" cy="96" r="5" fill="#fda4af"/></g><circle cx="140" cy="140" r="28" fill="#0b0508" stroke="#f43f5e" stroke-width="1.8"/><circle cx="140" cy="140" r="7" fill="#f43f5e" class="pulse-core"/></svg>`;
       }
       const eqBars = Array.from({ length: 40 }, (_, i) => {
         const ang = i * 9;
@@ -694,14 +880,7 @@
         const col = i % 4 === 0 ? '#ef4444' : '#84cc16';
         return `<rect x="138.5" y="${26 - h/2}" width="3" height="${h}" fill="${col}" transform="rotate(${ang} 140 140)"/>`;
       }).join('');
-      return `
-        <svg viewBox="0 0 280 280" class="w-full h-full">
-          <g class="spin-slow" style="transform-origin:140px 140px">${eqBars}</g>
-          <circle cx="140" cy="140" r="78" fill="none" stroke="#84cc16" stroke-width="1.5" stroke-dasharray="8 5"/>
-          <circle cx="140" cy="140" r="52" fill="rgba(132,204,22,0.08)" stroke="#a3e635" stroke-width="1.2"/>
-          <circle cx="140" cy="140" r="28" fill="#070a05" stroke="#84cc16" stroke-width="2"/>
-          <circle cx="140" cy="140" r="8" fill="#84cc16" class="pulse-core"/>
-        </svg>`;
+      return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${eqBars}</g><circle cx="140" cy="140" r="78" fill="none" stroke="#84cc16" stroke-width="1.5" stroke-dasharray="8 5"/><circle cx="140" cy="140" r="52" fill="rgba(132,204,22,0.08)" stroke="#a3e635" stroke-width="1.2"/><circle cx="140" cy="140" r="28" fill="#070a05" stroke="#84cc16" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#84cc16" class="pulse-core"/></svg>`;
     }
 
     function setStateLabel(txt) {
@@ -752,6 +931,7 @@
 
       document.getElementById('agent-core-visual').innerHTML = renderAgentCoreSVG(key);
       document.getElementById('agent-role-label').textContent = `${ag.name} · ${ag.sub}`;
+      document.getElementById('agent-voice-profile').textContent = ag.voiceDesc;
       updateAgentTelemetryAndGreeting(key);
     }
 
@@ -761,25 +941,33 @@
       const nearest = getNearestAsset();
       const homer = getHomerMetrics();
 
+      if (key === 'friday') {
+        const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
+        const nextIdx = getNextPendingLessonIndex();
+        activeLessonIndex = nextIdx;
+        document.getElementById('agent-hero-metric').textContent = `${pct}%`;
+        document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
+        renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
+        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}". También puede preguntarme por cualquier concepto como EQ 50% o CHoCH.`);
+        return;
+      }
+
+      renderDefaultQuickReplies();
+
       if (key === 'jarvis') {
         document.getElementById('agent-hero-metric').textContent = `${broken.length} ALERTAS`;
         document.getElementById('agent-hero-sub').textContent = `${aligned.length} IDEAS ABIERTAS`;
-        typeAgentDialogue(`Buenas tardes, señor. Detecto ${broken.length} alertas de tesis rota y ${aligned.length} ideas alineadas vigentes entre los 16 activos. ¿Quiere que le dé un resumen?`);
+        typeAgentDialogue(`A sus órdenes, señor. He auditado los dieciséis activos: tenemos ${broken.length} alertas de tesis rota y ${aligned.length} oportunidades alineadas. ¿Desea el reporte ejecutivo?`);
       } else if (key === 'vision') {
         const nextEv = (data && data.calendar && data.calendar[0]) ? `${data.calendar[0].title} (${data.calendar[0].currency})` : 'SIN NOTICIAS INMEDIATAS';
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = nextEv;
-        typeAgentDialogue(`Buenas tardes, señor. El dólar cotiza en ${data ? data.brief.dxy : '--'} y el bono a 10 años en ${data ? data.brief.us10y : '--'}. ¿Quiere que le dé un resumen macro?`);
+        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue el rendimiento. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, el equilibrio es delicado. ¿Analizamos el panorama macro?`);
       } else if (key === 'ultron') {
         const target = nearest || (data && data.assets[0]);
         document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
         document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · BOS/CHoCH` : 'ESTRUCTURA';
-        typeAgentDialogue(`Buenas tardes, señor. Sin emociones, solo estructura. Usted ponga las emociones, que yo pongo la estructura. ¿Quiere que le dé un diagnóstico técnico?`);
-      } else if (key === 'friday') {
-        const pct = Math.round((completedLessons.length / 10) * 100);
-        document.getElementById('agent-hero-metric').textContent = `${pct}%`;
-        document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE 10 LECCIONES`;
-        typeAgentDialogue(`Buenas tardes, señor. Prometo no tomarle examen sorpresa. Bueno, tal vez uno. ¿Quiere que le explique la idea principal de hoy?`);
+        typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez esperando ser barrida. Usted ponga la disciplina, yo pongo la estructura. ¿Quiere el diagnóstico técnico?`);
       } else if (key === 'edith') {
         if (nearest) {
           const d = getAssetUnitsDist(nearest);
@@ -789,21 +977,21 @@
           document.getElementById('agent-hero-metric').textContent = '--';
           document.getElementById('agent-hero-sub').textContent = 'CALCULANDO DISTANCIA';
         }
-        typeAgentDialogue(`Buenas tardes, señor. Calculé todo. Lo único impredecible sigue siendo usted. ¿Quiere que le dé los niveles exactos de entrada?`);
+        typeAgentDialogue(`Sistemas ópticos calibrados. He medido el riesgo, los bloques y cada pip de recorrido; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES AUDITADAS`;
-        typeAgentDialogue(`Buenas tardes, señor. Anotar duele menos que repetir errores, señor. ¿Quiere que le dé un resumen de su disciplina?`);
+        typeAgentDialogue(`Hola, me alegra verlo operando con calma. Recuerde que anotar cada entrada duele mucho menos que repetir un error por impulso. ¿Revisamos su bitácora de disciplina?`);
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Buenas tardes, señor. Revisé sus rachas. Hay de todo, como en botica. ¿Quiere que le dé un resumen estadístico?`);
+        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Revisé sus estadísticas y sus rachas recientes. ¿Quiere escuchar el veredicto matemático?`);
       }
     }
 
     function handleQuickReply(choice) {
       if (choice === 'NO') {
-        typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa vigilando los 16 pares.');
+        typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa vigilando los dieciséis pares.');
         return;
       }
       if (!data) {
@@ -823,15 +1011,12 @@
         const d = getAssetUnitsDist(n);
         const p = getSetupPips(n);
         typeAgentDialogue(`Objetivo prioritario: ${n.symbol}. Está a ${d.units} ${d.label} de su entrada en ${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
-      } else if (currentAgent === 'friday') {
-        const a = getAlignedAssets()[0] || data.assets[0];
-        typeAgentDialogue(`En ${a.symbol}, ${a.macro_reason} Técnicamente su gráfico está en ${a.chart_bias}. Recuerde entrar solo en Killzone y esperar confirmación de vela.`);
       } else if (currentAgent === 'edith') {
         const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
-        typeAgentDialogue(`Los 3 blancos más cercanos son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})`).join('; ') + `.`);
+        typeAgentDialogue(`Los tres blancos más cercanos son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})`).join('; ') + `.`);
       } else if (currentAgent === 'karen') {
         typeAgentDialogue(trades.length === 0
-          ? 'No tiene operaciones anotadas todavía, señor. Abra el panel para registrar su primera ejecución.'
+          ? 'No tiene operaciones anotadas todavía. Abra el panel para registrar su primera ejecución.'
           : `Tiene ${trades.length} operaciones registradas. Su última entrada fue en ${trades[0].pair} (${trades[0].dir}) con resultado ${trades[0].res}.`);
       } else if (currentAgent === 'homer') {
         const h = getHomerMetrics();
@@ -849,6 +1034,32 @@
 
     function processQuery(qRaw) {
       const q = qRaw.toUpperCase();
+
+      // 1. Comandos de lección / curso
+      if (q.includes('CURSO') || q.includes('CLASE') || q.includes('LECCION') || q.includes('LECCIÓN') || q.includes('EMPEZAR')) {
+        if (currentAgent !== 'friday') selectAgent('friday', false);
+        startFridayLesson(getNextPendingLessonIndex());
+        return;
+      }
+      if (q.includes('SIGUIENTE')) {
+        if (currentAgent !== 'friday') selectAgent('friday', false);
+        startFridayLesson(activeLessonIndex + 1);
+        return;
+      }
+      if (q.includes('APROBAR') || q.includes('COMPLETAR') || q.includes('LISTO')) {
+        if (currentAgent !== 'friday') selectAgent('friday', false);
+        completeCurrentLesson();
+        return;
+      }
+
+      // 2. Diccionario de conceptos institucionales
+      const concept = CONCEPT_DICTIONARY.find(c => c.keys.some(k => q.includes(k)));
+      if (concept) {
+        typeAgentDialogue(concept.answer);
+        return;
+      }
+
+      // 3. Consulta por activo específico
       if (!data) {
         typeAgentDialogue('Sincronizando datos del mercado, señor.');
         return;
@@ -866,6 +1077,13 @@
         typeAgentDialogue('Estado de la canasta GBP: ' + gbps.map(g => `${g.symbol} (${g.confluence.verdict_title}, a ${getAssetUnitsDist(g).units} pips)`).join('; ') + '.');
         return;
       }
+
+      // 4. Respuesta contextual si está en F.R.I.D.A.Y.
+      if (currentAgent === 'friday') {
+        startFridayLesson(activeLessonIndex);
+        return;
+      }
+
       handleQuickReply('SI');
     }
 
@@ -874,9 +1092,6 @@
       speakText(txt, currentAgent);
     }
 
-    // =========================================================
-    // DESBLOQUEO INMEDIATO DE PANTALLA DE ARRANQUE
-    // =========================================================
     function enterOraculo(withIntro = false) {
       const el = document.getElementById('boot-screen');
       if (!el || el.style.display === 'none') return;
@@ -906,8 +1121,9 @@
     }
 
     function switchPanelTab(tab) {
-      ['jarvis', 'ultron', 'vision', 'karen'].forEach(t => {
-        document.getElementById(`ptab-${t}`).classList.toggle('hidden', t !== tab);
+      ['jarvis', 'ultron', 'friday', 'vision', 'karen'].forEach(t => {
+        const el = document.getElementById(`ptab-${t}`);
+        if (el) el.classList.toggle('hidden', t !== tab);
       });
       document.querySelectorAll('.ptab').forEach(b => {
         b.className = b.dataset.pt === tab
@@ -915,6 +1131,7 @@
           : 'ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
       });
       if (tab === 'ultron') setTimeout(drawUltronChart, 60);
+      if (tab === 'friday') renderPanelCourse();
     }
 
     function setPanelFilter(f) {
@@ -988,6 +1205,7 @@
       if (!data) return;
       renderPanelJarvis();
       renderPanelUltron();
+      renderPanelCourse();
       document.getElementById('pv-headline').textContent = data.brief.headline;
       document.getElementById('pv-summary').textContent = data.brief.summary;
       document.getElementById('pv-calendar').innerHTML = data.calendar.map(ev => `
