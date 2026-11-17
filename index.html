@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cybernetic HUD v5.5</title>
+  <title>ORÁCULO · Cabina v6.0</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -14,27 +14,21 @@
             sans: ['Inter', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
             hud: ['Orbitron', 'sans-serif'],
-          },
-          colors: {
-            bg: '#030509',
-            panel: '#080d16',
-            card: '#0c1320',
-            border: '#18263d',
-            gold: '#f59e0b',
-            cyan: '#38bdf8',
-            crimson: '#ef4444',
-            violet: '#a855f7',
-            emerald: '#10b981'
           }
         }
       }
     }
   </script>
   <style>
+    :root {
+      --agent-color: #f59e0b;
+      --agent-glow: rgba(245, 158, 11, 0.35);
+    }
     body {
-      background-color: #030509;
+      background-color: #030407;
       color: #e2e8f0;
       overflow-x: hidden;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     #neural-bg {
@@ -54,1939 +48,925 @@
         to bottom,
         transparent 0px,
         transparent 3px,
-        rgba(0, 0, 0, 0.16) 4px
+        rgba(0, 0, 0, 0.18) 4px
       );
     }
 
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: #030509; }
-    ::-webkit-scrollbar-thumb { background: #1e3252; border-radius: 3px; }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #030407; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+
+    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes spinRev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+    @keyframes pulseCore { 0%, 100% { transform: scale(1); opacity: 0.92; } 50% { transform: scale(1.04); opacity: 0.55; } }
+    @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes blinkCursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes bannerFlash { 0% { opacity: 0; transform: scale(1.08); } 20% { opacity: 1; transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; } }
+
+    .spin-slow { animation: spinSlow 24s linear infinite; }
+    .spin-med { animation: spinSlow 14s linear infinite; }
+    .spin-rev { animation: spinRev 18s linear infinite; }
+    .pulse-core { animation: pulseCore 2.8s ease-in-out infinite; }
+    .ticker-track { display: flex; width: max-content; animation: tickerScroll 34s linear infinite; }
+    .typing-cursor { display: inline-block; width: 7px; height: 13px; background: var(--agent-color); margin-left: 3px; vertical-align: middle; animation: blinkCursor 0.8s infinite; }
+    .intro-anim { animation: bannerFlash 1.15s ease-in-out forwards; }
 
     .hud-panel {
-      background: linear-gradient(145deg, rgba(10, 16, 28, 0.86), rgba(6, 10, 18, 0.92));
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: linear-gradient(155deg, rgba(10, 14, 22, 0.9), rgba(5, 8, 13, 0.95));
+      backdrop-filter: blur(12px);
+      border: 1px solid #182234;
+    }
+
+    .hud-brackets {
       position: relative;
-      overflow: hidden;
-      box-shadow: inset 0 1px 0 rgba(56, 189, 248, 0.14), 0 12px 35px rgba(0, 0, 0, 0.55);
-      transition: transform 0.22s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
-
-    .hud-interactive:hover {
-      border-color: rgba(56, 189, 248, 0.45);
-      box-shadow: inset 0 1px 0 rgba(56, 189, 248, 0.35), 0 14px 36px rgba(14, 165, 233, 0.14);
-    }
-
-    .scan-beam::before {
+    .hud-brackets::before, .hud-brackets::after {
       content: "";
       position: absolute;
-      top: 0;
-      left: -100%;
-      width: 60%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.85), transparent);
-      animation: beamSweep 4.5s infinite linear;
+      width: 14px;
+      height: 14px;
+      border-color: var(--agent-color);
       pointer-events: none;
     }
-    @keyframes beamSweep {
-      0% { left: -60%; }
-      100% { left: 120%; }
-    }
-
-    .hud-corners::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      border-radius: inherit;
-      background:
-        linear-gradient(to right, currentColor 12px, transparent 12px) 0 0,
-        linear-gradient(to bottom, currentColor 12px, transparent 12px) 0 0,
-        linear-gradient(to left, currentColor 12px, transparent 12px) 100% 0,
-        linear-gradient(to bottom, currentColor 12px, transparent 12px) 100% 0,
-        linear-gradient(to right, currentColor 12px, transparent 12px) 0 100%,
-        linear-gradient(to top, currentColor 12px, transparent 12px) 0 100%,
-        linear-gradient(to left, currentColor 12px, transparent 12px) 100% 100%,
-        linear-gradient(to top, currentColor 12px, transparent 12px) 100% 100%;
-      background-repeat: no-repeat;
-      background-size: 14px 2px, 2px 14px;
-      opacity: 0.65;
-    }
-
-    @keyframes tickerScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .ticker-track {
-      display: flex;
-      width: max-content;
-      animation: tickerScroll 36s linear infinite;
-    }
-    .ticker-track:hover {
-      animation-play-state: paused;
-    }
-
-    .voice-wave span {
-      display: inline-block;
-      width: 2.5px;
-      height: 4px;
-      background: #c084fc;
-      border-radius: 2px;
-      transition: height 0.15s ease;
-    }
-    .voice-speaking .voice-wave span {
-      animation: eqPulse 0.55s infinite ease-in-out;
-    }
-    .voice-speaking .voice-wave span:nth-child(2) { animation-delay: 0.12s; }
-    .voice-speaking .voice-wave span:nth-child(3) { animation-delay: 0.24s; }
-    .voice-speaking .voice-wave span:nth-child(4) { animation-delay: 0.15s; }
-    @keyframes eqPulse {
-      0%, 100% { height: 4px; }
-      50% { height: 14px; background: #38bdf8; }
-    }
-
-    @keyframes pulseRing {
-      0%, 100% { transform: scale(1); opacity: 0.95; }
-      50% { transform: scale(1.07); opacity: 0.35; }
-    }
-    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    @keyframes spinReverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
-    @keyframes radarBeacon {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45); }
-      50% { box-shadow: 0 0 20px 3px rgba(16, 185, 129, 0.3); }
-    }
-    .radar-ring { animation: pulseRing 2.6s infinite ease-in-out; }
-    .spin-slow { animation: spinSlow 18s linear infinite; }
-    .spin-rev { animation: spinReverse 12s linear infinite; }
-    .entry-beacon { animation: radarBeacon 2s infinite ease-in-out; }
+    .hud-brackets::before { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
+    .hud-brackets::after { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-20 sm:pb-6 antialiased selection:bg-cyan-400 selection:text-black">
+<body class="min-h-screen flex flex-col pb-20 sm:pb-4 antialiased selection:bg-amber-400 selection:text-black">
 
   <canvas id="neural-bg"></canvas>
 
-  <!-- PANTALLA DE ARRANQUE ORÁCULO HUD -->
-  <div id="boot-screen" class="fixed inset-0 z-50 bg-[#020408] flex flex-col items-center justify-center p-6 text-center transition-opacity duration-500">
-    <div class="relative w-72 h-72 flex items-center justify-center mb-6">
-      <div class="absolute inset-0 rounded-full border border-amber-500/35 radar-ring"></div>
-      <div class="absolute inset-4 rounded-full border border-dashed border-cyan-400/50 spin-slow"></div>
-      <div class="absolute inset-10 rounded-full border border-dotted border-purple-400/45 spin-rev"></div>
-      <div class="absolute -top-3 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400 text-[10px] font-mono text-amber-300">JARVIS · FUSIÓN</div>
-      <div class="absolute -left-6 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400 text-[10px] font-mono text-sky-300">VISIÓN · ESCUDO</div>
-      <div class="absolute -right-7 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-400 text-[10px] font-mono text-purple-300">F.R.I.D.A.Y. · VOZ</div>
-      <div class="absolute -bottom-3 px-3 py-1 rounded-full bg-red-500/15 border border-red-400 text-[10px] font-mono text-red-300">ULTRÓN · RADAR</div>
-      <div class="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500/30 via-sky-500/20 to-purple-500/20 border-2 border-cyan-400 flex flex-col items-center justify-center shadow-[0_0_28px_rgba(56,189,248,0.4)]">
-        <span class="font-hud font-black text-2xl text-white">O</span>
-        <span class="text-[8px] font-mono text-cyan-300 tracking-widest">HUD v5.5</span>
+  <!-- ========================================================= -->
+  <!-- PANTALLA DE ARRANQUE ORBITAL DE 7 AGENTES                 -->
+  <!-- ========================================================= -->
+  <div id="boot-screen" onclick="enterOraculo(true)" class="fixed inset-0 z-50 bg-[#030407] flex flex-col items-center justify-between py-10 px-5 text-center cursor-pointer transition-opacity duration-500">
+    <div class="text-[10px] font-mono tracking-[0.35em] text-slate-500">TELEMETRÍA NEURONAL EN LÍNEA</div>
+
+    <!-- CONSTELACIÓN ORBITAL 7 NODOS -->
+    <div class="relative w-[330px] h-[330px] sm:w-[370px] sm:h-[370px] flex items-center justify-center my-auto">
+      <svg viewBox="0 0 360 360" class="w-full h-full overflow-visible">
+        <defs>
+          <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.35"/>
+            <stop offset="60%" stop-color="#38bdf8" stop-opacity="0.12"/>
+            <stop offset="100%" stop-color="#030407" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Órbitas -->
+        <circle cx="180" cy="180" r="134" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="3 4"/>
+        <circle cx="180" cy="180" r="95" fill="none" stroke="#334155" stroke-width="0.8" stroke-dasharray="1 5"/>
+        <circle cx="180" cy="180" r="64" fill="url(#coreGrad)"/>
+
+        <!-- Anillo segmentado central -->
+        <g class="spin-slow" style="transform-origin: 180px 180px;">
+          <circle cx="180" cy="180" r="54" fill="none" stroke="#f59e0b" stroke-width="4" stroke-dasharray="16 8 6 8 24 10" opacity="0.85"/>
+          <circle cx="180" cy="180" r="44" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="28 14" opacity="0.7"/>
+        </g>
+
+        <!-- Líneas radiales a los 7 nodos -->
+        <g stroke="#1e293b" stroke-width="1">
+          <line x1="180" y1="180" x2="180" y2="46"/>
+          <line x1="180" y1="180" x2="285" y2="96"/>
+          <line x1="180" y1="180" x2="310" y2="210"/>
+          <line x1="180" y1="180" x2="238" y2="300"/>
+          <line x1="180" y1="180" x2="122" y2="300"/>
+          <line x1="180" y1="180" x2="50" y2="210"/>
+          <line x1="180" y1="180" x2="75" y2="96"/>
+        </g>
+
+        <!-- Núcleo central -->
+        <circle cx="180" cy="180" r="26" fill="#060911" stroke="#f59e0b" stroke-width="1.5"/>
+        <line x1="158" y1="180" x2="202" y2="180" stroke="#38bdf8" stroke-width="1.5"/>
+        <circle cx="180" cy="180" r="6" fill="#f59e0b"/>
+
+        <!-- 1. JARVIS (Arriba - Ámbar) -->
+        <g transform="translate(180,46)">
+          <circle r="24" fill="#070a12" stroke="#f59e0b" stroke-width="1.5"/>
+          <circle r="19" fill="none" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4 3"/>
+          <polygon points="0,-9 8,6 -8,6" fill="none" stroke="#f59e0b" stroke-width="1.4"/>
+          <text y="36" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="bold" letter-spacing="2">JARVIS</text>
+          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">MANDO</text>
+        </g>
+
+        <!-- 2. E.D.I.T.H. (Arriba Der - Esmeralda) -->
+        <g transform="translate(285,96)">
+          <circle r="24" fill="#070a12" stroke="#10b981" stroke-width="1.5"/>
+          <circle r="14" fill="none" stroke="#10b981" stroke-width="1"/>
+          <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" stroke-width="1"/>
+          <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" stroke-width="1"/>
+          <text y="36" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold" letter-spacing="1.5">E.D.I.T.H.</text>
+          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">PLAN</text>
+        </g>
+
+        <!-- 3. F.R.I.D.A.Y. (Abajo Der - Violeta) -->
+        <g transform="translate(310,210)">
+          <circle r="24" fill="#070a12" stroke="#a855f7" stroke-width="1.5"/>
+          <circle r="15" fill="none" stroke="#a855f7" stroke-width="1.2" stroke-dasharray="6 3"/>
+          <circle r="5" fill="#a855f7"/>
+          <text y="36" text-anchor="middle" fill="#a855f7" font-size="9" font-weight="bold" letter-spacing="1.2">F.R.I.D.A.Y.</text>
+          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">MAESTRA</text>
+        </g>
+
+        <!-- 4. H.O.M.E.R. (Base Der - Lima) -->
+        <g transform="translate(238,300)">
+          <circle r="24" fill="#070a12" stroke="#84cc16" stroke-width="1.5"/>
+          <rect x="-9" y="2" width="4" height="8" fill="#84cc16"/>
+          <rect x="-2" y="-4" width="4" height="14" fill="#84cc16"/>
+          <rect x="5" y="-9" width="4" height="19" fill="#84cc16"/>
+          <text y="36" text-anchor="middle" fill="#84cc16" font-size="9" font-weight="bold" letter-spacing="1.2">H.O.M.E.R.</text>
+          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">ARCHIVO</text>
+        </g>
+
+        <!-- 5. ULTRÓN (Base Izq - Rojo) -->
+        <g transform="translate(122,300)">
+          <circle r="24" fill="#070a12" stroke="#ef4444" stroke-width="1.5"/>
+          <polygon points="0,-12 10,-6 10,6 0,12 -10,6 -10,-6" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+          <circle r="4" fill="#ef4444"/>
+          <text y="36" text-anchor="middle" fill="#ef4444" font-size="9" font-weight="bold" letter-spacing="1.8">ULTRÓN</text>
+          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">ESTRUCTURA</text>
+        </g>
+
+        <!-- 6. KAREN (Abajo Izq - Rosa) -->
+        <g transform="translate(50,210)">
+          <circle r="24" fill="#070a12" stroke="#f43f5e" stroke-width="1.5"/>
+          <polygon points="0,-13 11,-4 7,10 -7,10 -11,-4" fill="none" stroke="#f43f5e" stroke-width="1.2"/>
+          <circle r="4" fill="#f43f5e"/>
+          <text y="36" text-anchor="middle" fill="#f43f5e" font-size="9" font-weight="bold" letter-spacing="1.8">KAREN</text>
+          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">DIARIO</text>
+        </g>
+
+        <!-- 7. VISIÓN (Arriba Izq - Cian) -->
+        <g transform="translate(75,96)">
+          <circle r="24" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/>
+          <circle r="13" fill="none" stroke="#38bdf8" stroke-width="1"/>
+          <line x1="0" y1="0" x2="12" y2="-10" stroke="#38bdf8" stroke-width="1.5"/>
+          <circle r="3" fill="#38bdf8"/>
+          <text y="36" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold" letter-spacing="1.8">VISIÓN</text>
+          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">MACRO</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- TÍTULO Y TELEMETRÍA DE INICIO -->
+    <div class="space-y-3 max-w-md w-full">
+      <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-amber-400 drop-shadow-[0_0_18px_rgba(245,158,11,0.5)]">ORÁCULO</h1>
+      <div class="text-[11px] font-mono tracking-[0.28em] text-slate-300">LO QUE USTED NO SABE</div>
+      <div id="boot-alerts-ticker" class="text-[11px] font-mono text-red-400 font-bold tracking-wider min-h-[34px] flex flex-col justify-center">
+        SINCRONIZANDO 16 ACTIVOS Y ESCUDO MACRO...
+      </div>
+      <div id="boot-next-event" class="text-[10px] font-mono text-slate-400 tracking-wider">
+        PRÓXIMO: VERIFICANDO CALENDARIO...
+      </div>
+      <div class="pt-3 text-[10px] font-mono tracking-[0.25em] text-slate-500 animate-pulse">
+        TOQUE PARA ENTRAR A LA CABINA
       </div>
     </div>
-    <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.32em] text-white drop-shadow-[0_0_14px_rgba(56,189,248,0.45)]">ORÁCULO</h1>
-    <p class="text-xs font-mono tracking-[0.22em] text-cyan-400 mt-2">INTELIGENCIA EXPLICABLE · ESCUDO & RADAR PIPS</p>
-    <button onclick="enterOraculo(true)" class="mt-7 px-7 py-3 rounded-full bg-gradient-to-r from-cyan-400 to-amber-400 hover:brightness-110 text-black font-hud font-bold text-xs tracking-widest shadow-[0_0_24px_rgba(56,189,248,0.45)] transition">
-      ACTIVAR CABINA & VOZ IA →
-    </button>
   </div>
 
-  <!-- BARRA SUPERIOR TELEMETRÍA -->
-  <header class="relative z-30 border-b border-cyan-500/25 bg-[#050912]/90 sticky top-0 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
-      <div class="flex items-center gap-3">
-        <button onclick="showBoot()" title="Secuencia de arranque" class="w-9 h-9 rounded-lg bg-cyan-500/15 border border-cyan-400/80 flex items-center justify-center text-cyan-300 font-hud font-black text-sm shadow-[0_0_14px_rgba(56,189,248,0.3)] hover:scale-105 transition">O</button>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-hud font-extrabold tracking-[0.22em] text-white text-sm">ORÁCULO</span>
-            <span class="hidden sm:inline text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/15 border border-cyan-400/40 text-cyan-300">CORE v5.5</span>
-            <span id="killzone-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">VERIFICANDO SESIÓN</span>
+  <!-- ========================================================= -->
+  <!-- OVERLAY DE INTRODUCCIÓN AL CAMBIAR DE AGENTE              -->
+  <!-- ========================================================= -->
+  <div id="agent-intro-overlay" class="hidden fixed inset-0 z-40 bg-[#030407]/95 flex items-center justify-center pointer-events-none">
+    <div id="agent-intro-box" class="hud-brackets px-10 py-6 text-center space-y-2">
+      <div id="intro-title" class="font-hud text-3xl sm:text-4xl font-black tracking-[0.28em] text-white">JARVIS</div>
+      <div id="intro-sub" class="text-[11px] font-mono tracking-[0.32em] text-slate-300">ASISTENTE DE MANDO</div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- BARRA SUPERIOR DE TELEMETRÍA + CONTROLES                  -->
+  <!-- ========================================================= -->
+  <header class="relative z-30 border-b border-slate-800/80 bg-[#04060b]/95 sticky top-0 backdrop-blur-md">
+    <!-- Cinta de precios en vivo -->
+    <div class="overflow-hidden py-1.5 border-b border-slate-800/60 bg-[#020306]">
+      <div id="live-ticker-track" class="ticker-track text-[11px] font-mono text-slate-300 gap-6 px-4">
+        <span>CARGANDO FLUJO DE MERCADO...</span>
+      </div>
+    </div>
+
+    <!-- Controles principales -->
+    <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <button onclick="showBoot()" title="Pantalla Orbital" class="w-8 h-8 rounded border border-amber-500/50 bg-amber-500/10 flex items-center justify-center font-hud font-black text-amber-400 text-xs">O</button>
+        <div class="text-[10px] font-mono">
+          <div class="flex items-center gap-1.5">
+            <span class="font-hud font-bold text-white tracking-widest">ORÁCULO</span>
+            <span id="killzone-badge" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">UTC --:--</span>
           </div>
-          <div id="last-updated" class="text-[10px] font-mono text-slate-400">Sincronizando telemetría...</div>
+          <div id="last-updated" class="text-slate-500 text-[9px]">Sincronizando...</div>
         </div>
       </div>
 
-      <div id="voice-hud-cluster" class="flex flex-wrap items-center gap-1.5 text-[11px] font-mono">
-        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-1 rounded bg-purple-600/25 border border-purple-400 text-purple-300 hover:bg-purple-600/40 font-bold flex items-center gap-2">
-          <span class="voice-wave flex items-end gap-0.5 h-3.5"><span></span><span></span><span></span><span></span></span>
-          <span id="voice-status-txt">VOZ IA: ON</span>
+      <div class="flex items-center gap-1.5 font-mono text-[11px]">
+        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400">
+          VOZ OFF
         </button>
-        <button onclick="scanProximityAlerts(true)" title="Escanear pares cerca de entrada" class="px-2.5 py-1 rounded bg-emerald-500/15 border border-emerald-400/60 hover:bg-emerald-500/25 text-emerald-300 font-bold">
-          📡 ESCANEAR
+        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-3 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold">
+          VER PANEL ▸
         </button>
-        <button onclick="speakBriefing()" title="Escuchar resumen de Jarvis" class="px-2 py-1 rounded bg-bg border border-border hover:border-amber-400 text-amber-400">
-          ▶ JARVIS
-        </button>
-        <button onclick="stopSpeaking()" id="stop-voice-btn" class="hidden px-2 py-1 rounded bg-red-500/20 border border-red-500 text-red-300">
-          ■ CALLAR
-        </button>
-        <span id="clk-ldn" class="hidden lg:inline px-2 py-1 rounded bg-bg/80 border border-border text-slate-300">LDN --:--</span>
-        <span id="clk-nyc" class="hidden lg:inline px-2 py-1 rounded bg-bg/80 border border-border text-slate-300">NYC --:--</span>
-        <span id="clk-utc" class="px-2 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400">UTC --:--:--</span>
       </div>
     </div>
-
-    <!-- CINTA DE TELEMETRÍA EN VIVO -->
-    <div class="border-t border-cyan-500/15 bg-[#03060c]/90 overflow-hidden py-1">
-      <div id="live-ticker-track" class="ticker-track text-[10px] font-mono text-slate-300 gap-6 px-4">
-        <span>CARGANDO FLUJO DE MERCADO EN TIEMPO REAL...</span>
-      </div>
-    </div>
-
-    <!-- Navegación Escritorio -->
-    <nav class="hidden sm:flex max-w-7xl mx-auto px-4 border-t border-cyan-500/15 gap-1">
-      <button onclick="switchModule('jarvis')" id="nav-jarvis" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-amber-400 text-amber-400">⚡ JARVIS · FUSIÓN</button>
-      <button onclick="switchModule('vision')" id="nav-vision" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-sky-400">🌐 VISIÓN · MACRO & ESCUDO</button>
-      <button onclick="switchModule('ultron')" id="nav-ultron" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-red-400">🎯 ULTRÓN · GRÁFICO & PIPS</button>
-      <button onclick="switchModule('friday')" id="nav-friday" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-purple-400">🧠 F.R.I.D.A.Y. · TUTORA</button>
-      <button onclick="switchModule('analisis')" id="nav-analisis" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-white">📐 ANÁLISIS</button>
-      <button onclick="switchModule('diario')" id="nav-diario" class="nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-white">📓 DIARIO <span id="journal-badge" class="ml-1 px-1.5 rounded bg-border text-slate-300">0</span></button>
-    </nav>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 py-5 space-y-5">
+  <!-- ========================================================= -->
+  <!-- MODO 1: CABINA CONVERSACIONAL (IGUAL AL VIDEO)            -->
+  <!-- ========================================================= -->
+  <main id="cockpit-view" class="relative z-10 flex-1 max-w-2xl w-full mx-auto px-4 py-4 flex flex-col justify-between gap-4">
 
-    <!-- RADAR DE PROXIMIDAD + ESCUDO ANTI-NOTICIAS -->
-    <section id="proximity-radar-bar" class="hud-panel hud-corners scan-beam text-emerald-400 border border-emerald-500/35 rounded-xl p-4 space-y-3">
-      <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
-        <div class="flex flex-wrap items-center gap-2.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-          <span class="font-hud text-xs sm:text-sm font-bold tracking-wider text-emerald-400">RADAR DE PROXIMIDAD · ZONAS DE DISPARO</span>
-          <span id="radar-count-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-300">ESCANEANDO...</span>
-          <span id="news-shield-global" class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/15 border border-sky-500/40 text-sky-300">🛡️ ESCUDO NOTICIAS: DESPEJADO</span>
-        </div>
-        <div class="flex items-center gap-2 text-[11px] font-mono">
-          <label class="flex items-center gap-1.5 cursor-pointer text-slate-300">
-            <input id="auto-alert-toggle" type="checkbox" checked class="accent-emerald-400">
-            <span>Alerta vocal automática</span>
-          </label>
-        </div>
+    <!-- NÚCLEO VISUAL SVG DEL AGENTE ACTIVO -->
+    <div class="flex flex-col items-center justify-center pt-1">
+      <div id="agent-core-visual" class="w-[260px] h-[260px] sm:w-[290px] sm:h-[290px] flex items-center justify-center"></div>
+
+      <!-- MÉTRICA CENTRAL Y SUBTÍTULOS DEL AGENTE -->
+      <div class="text-center space-y-1 -mt-1">
+        <div id="agent-hero-metric" class="font-hud text-xl sm:text-2xl font-extrabold tracking-wider text-white">2 ALERTAS</div>
+        <div id="agent-hero-sub" class="text-[11px] font-mono tracking-[0.2em] text-slate-300 uppercase">3 IDEAS ABIERTAS</div>
+        <div id="agent-role-label" class="text-[10px] font-mono tracking-[0.28em] text-slate-400 uppercase">JARVIS · ASISTENTE DE MANDO</div>
+        <div id="agent-state-label" class="text-[11px] font-mono tracking-[0.38em] font-bold pt-1" style="color: var(--agent-color);">E N &nbsp; E S P E R A</div>
       </div>
-      <div id="proximity-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-slate-200"></div>
-    </section>
+    </div>
 
-    <!-- ========================================================= -->
-    <!-- MÓDULO 1: JARVIS · FUSIÓN + EXPLICACIÓN PASO A PASO       -->
-    <!-- ========================================================= -->
-    <section id="mod-jarvis" class="space-y-5">
-      <div class="hud-panel hud-corners scan-beam text-amber-400 border border-amber-500/35 rounded-xl p-5 space-y-3">
-        <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-              <h2 class="font-hud text-sm font-extrabold text-amber-400 tracking-wider">JARVIS · NÚCLEO DE FUSIÓN</h2>
-            </div>
-            <p class="text-xs font-mono text-slate-300 mt-1">«VISIÓN VE EL MUNDO. ULTRÓN MIDE LOS PIPS. YO EXPLICO CADA DECISIÓN, SEÑOR.»</p>
-          </div>
-          <div class="flex flex-wrap gap-1.5 font-mono text-xs">
-            <button onclick="filterJarvis('ALL')" class="j-filter px-3 py-1 rounded bg-amber-500 text-black font-bold" data-jf="ALL">TODOS (12)</button>
-            <button onclick="filterJarvis('ALIGNED')" class="j-filter px-3 py-1 rounded bg-bg/80 border border-border text-emerald-400" data-jf="ALIGNED">✔ VAN JUNTOS</button>
-            <button onclick="filterJarvis('NEAR')" class="j-filter px-3 py-1 rounded bg-bg/80 border border-emerald-500/40 text-emerald-300" data-jf="NEAR">🎯 CERCA DE ENTRADA</button>
-            <button onclick="filterJarvis('OPPOSED')" class="j-filter px-3 py-1 rounded bg-bg/80 border border-border text-red-400" data-jf="OPPOSED">✖ SE CONTRADICEN</button>
-          </div>
-        </div>
-
-        <div class="bg-[#050811]/90 border border-border rounded-lg p-4 space-y-3 text-slate-200">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <div class="text-[10px] font-mono text-slate-400 uppercase mb-1.5">Mayor Confluencia</div>
-              <div id="jarvis-top-confluence" class="flex flex-wrap gap-1.5"></div>
-            </div>
-            <div>
-              <div class="text-[10px] font-mono text-slate-400 uppercase mb-1.5">Mejores Hoy (Alineados y Libres de Noticia)</div>
-              <div id="jarvis-best-today" class="flex flex-wrap gap-1.5"></div>
-            </div>
-          </div>
-        </div>
+    <!-- DIÁLOGO CONVERSACIONAL + BOTONES RÁPIDOS + CHAT -->
+    <div class="space-y-3">
+      <div id="agent-dialogue-box" class="min-h-[78px] text-xs sm:text-sm font-mono text-slate-200 leading-relaxed px-1">
+        Buenas tardes, señor. Sincronizando telemetría del mercado.<span class="typing-cursor"></span>
       </div>
 
-      <div id="jarvis-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
-    </section>
-
-    <!-- ========================================================= -->
-    <!-- MÓDULO 2: VISIÓN · INTELIGENCIA MACRO                     -->
-    <!-- ========================================================= -->
-    <section id="mod-vision" class="hidden space-y-5">
-      <div class="hud-panel hud-corners scan-beam text-sky-400 border border-sky-500/35 rounded-xl p-5 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
-          <div>
-            <h2 class="font-hud text-sm font-extrabold text-sky-400 tracking-wider">🌐 VISIÓN · INTELIGENCIA MACRO & ESCUDO</h2>
-            <p class="text-xs font-mono text-slate-300 mt-0.5">«VEO EL MUNDO ANTES QUE EL GRÁFICO.»</p>
-          </div>
-          <div class="flex gap-2">
-            <button onclick="speakVisionBrief()" class="px-3 py-1 rounded bg-sky-500/20 border border-sky-400 text-xs font-mono text-sky-300 hover:bg-sky-500/30">🔊 Voz de Visión</button>
-            <button onclick="loadData()" class="px-3 py-1 rounded bg-bg border border-border text-xs font-mono text-sky-400 hover:border-sky-400">↻ Actualizar</button>
-          </div>
-        </div>
-
-        <div class="bg-[#050811]/90 border border-sky-500/25 rounded-lg p-4 space-y-2.5 text-slate-200">
-          <div class="flex items-center justify-between text-[11px] font-mono">
-            <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">BRIEF DIARIO</span>
-            <span id="brief-date" class="text-slate-400">--</span>
-          </div>
-          <h3 id="brief-headline" class="text-base sm:text-lg font-bold text-white leading-snug">Cargando reporte macroeconómico...</h3>
-          <p id="brief-summary" class="text-xs sm:text-sm text-slate-300 leading-relaxed">--</p>
-
-          <div class="grid grid-cols-3 gap-2.5 pt-2">
-            <div class="bg-panel border border-sky-500/25 rounded p-2.5">
-              <div class="text-[10px] font-mono text-slate-400">US 10Y YIELD</div>
-              <div class="text-sm sm:text-base font-mono font-bold text-white mt-0.5"><span id="m-us10y">--</span> <span id="m-us10y-c" class="text-xs text-slate-400">--</span></div>
-            </div>
-            <div class="bg-panel border border-sky-500/25 rounded p-2.5">
-              <div class="text-[10px] font-mono text-slate-400">DXY DÓLAR</div>
-              <div class="text-sm sm:text-base font-mono font-bold text-emerald-400 mt-0.5"><span id="m-dxy">--</span> <span id="m-dxy-c" class="text-xs text-slate-400">--</span></div>
-            </div>
-            <div class="bg-panel border border-sky-500/25 rounded p-2.5">
-              <div class="text-[10px] font-mono text-slate-400">BRENT CRUDE</div>
-              <div class="text-sm sm:text-base font-mono font-bold text-white mt-0.5"><span id="m-brent">--</span> <span id="m-brent-c" class="text-xs text-slate-400">--</span></div>
-            </div>
-          </div>
-        </div>
+      <!-- Botones rápidos Sí / No -->
+      <div id="quick-replies" class="flex flex-wrap gap-2">
+        <button onclick="handleQuickReply('SI')" class="px-3.5 py-1.5 rounded border text-xs font-mono font-bold transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.03);">
+          SÍ, DÉMELO
+        </button>
+        <button onclick="handleQuickReply('NO')" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 hover:border-slate-500 text-xs font-mono">
+          NO, GRACIAS
+        </button>
       </div>
 
-      <div class="space-y-2.5">
-        <h3 class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider">Cuadrante de Empuje Económico por Activo</h3>
-        <div id="vision-assets-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div class="lg:col-span-6 hud-panel border border-border rounded-xl p-4 space-y-3">
-          <h3 class="text-xs font-mono font-bold text-sky-400 uppercase">Bancos Centrales (Tasas & Postura)</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead>
-                <tr class="border-b border-border text-[10px] font-mono text-slate-400">
-                  <th class="py-2">BANCO</th>
-                  <th class="py-2">TASA</th>
-                  <th class="py-2">POSTURA</th>
-                  <th class="py-2">LECTURA</th>
-                </tr>
-              </thead>
-              <tbody id="vision-cb-table" class="divide-y divide-border/50"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="lg:col-span-6 hud-panel border border-border rounded-xl p-4 space-y-3">
-          <h3 class="text-xs font-mono font-bold text-sky-400 uppercase">Calendario Económico (Escudo Activo)</h3>
-          <div id="vision-calendar-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================= -->
-    <!-- MÓDULO 3: ULTRÓN · INTELIGENCIA TÉCNICA & GRÁFICO SMC     -->
-    <!-- ========================================================= -->
-    <section id="mod-ultron" class="hidden space-y-5">
-      <div class="hud-panel hud-corners scan-beam text-red-400 border border-red-500/35 rounded-xl p-5 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
-          <div>
-            <h2 class="font-hud text-sm font-extrabold text-red-400 tracking-wider">🎯 ULTRÓN · ESCÁNER ESTRUCTURAL & PIPS</h2>
-            <p class="text-xs font-mono text-slate-300 mt-0.5">«SIN EMOCIONES. SOLO ESTRUCTURA Y PRECISIÓN.»</p>
-          </div>
-          <button onclick="speakCurrentUltron()" class="px-3 py-1.5 rounded bg-red-500/20 border border-red-400 text-xs font-mono font-bold text-red-300 hover:bg-red-500/30">
-            🔊 Voz de Ultrón · Dictar Plan & Pips
-          </button>
-        </div>
-
-        <div class="space-y-2 text-slate-200">
-          <div class="flex items-center justify-between text-xs font-mono">
-            <span class="text-red-400 font-bold">01 · SELECCIÓN DE OBJETIVO</span>
-            <span class="text-slate-400 text-[11px]">Estado en tiempo real y distancia al bloque</span>
-          </div>
-          <div id="ultron-asset-selector" class="grid grid-cols-3 sm:grid-cols-6 gap-2"></div>
-        </div>
-      </div>
-
-      <div class="hud-panel border border-border rounded-xl p-5 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <div class="flex flex-wrap items-center gap-2 text-xs font-mono font-bold text-white">
-              <span id="u-title-sym" class="text-red-400 text-sm">BTCUSD</span>
-              <span id="u-lifecycle-badge" class="px-2 py-0.5 rounded text-[10px] bg-sky-500/20 text-sky-300 border border-sky-400/40">ACTIVA</span>
-              <span id="u-news-badge" class="hidden px-2 py-0.5 rounded text-[10px] bg-red-500/25 text-red-300 border border-red-400 animate-pulse">⚠️ NOTICIA PRÓXIMA</span>
-            </div>
-            <div id="u-proximity-status" class="text-[11px] font-mono text-emerald-400 mt-1">Calculando telemetría...</div>
-          </div>
-          <div class="flex gap-1.5 font-mono text-xs">
-            <button onclick="setUltronTF('1d')" class="utf-btn px-3 py-1 rounded bg-red-500 text-white font-bold" data-tf="1d">Diario</button>
-            <button onclick="setUltronTF('4h')" class="utf-btn px-3 py-1 rounded bg-bg border border-border text-slate-300" data-tf="4h">4 horas</button>
-            <button onclick="setUltronTF('1h')" class="utf-btn px-3 py-1 rounded bg-bg border border-border text-slate-300" data-tf="1h">1 hora</button>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono bg-[#050811] border border-border rounded-lg px-3 py-2">
-          <div class="flex items-center gap-2">
-            <button onclick="zoomChart(-6)" class="px-2.5 py-1 rounded bg-panel border border-border hover:border-red-400">- Alejar</button>
-            <span id="u-candle-count" class="text-slate-400 text-[11px]">42 velas</span>
-            <button onclick="zoomChart(6)" class="px-2.5 py-1 rounded bg-panel border border-border hover:border-red-400">+ Acercar</button>
-          </div>
-          <label class="flex items-center gap-2 cursor-pointer text-slate-300">
-            <input id="toggle-layers" type="checkbox" checked onchange="drawUltronChart()" class="accent-red-500">
-            <span>10 de 10 capas SMC activas</span>
-          </label>
-        </div>
-
-        <div class="relative w-full bg-[#04060a] border border-red-500/25 rounded-lg overflow-hidden">
-          <canvas id="ultron-canvas" class="w-full h-[380px] sm:h-[430px] block"></canvas>
-        </div>
-
-        <div id="ultron-entry-box" class="bg-[#050811] border border-red-500/40 rounded-lg p-4 grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono text-xs">
-          <div>
-            <div class="text-[10px] text-slate-400">SEÑAL ULTRÓN</div>
-            <div id="u-sig-dir" class="text-sm font-extrabold text-sky-400 mt-0.5">--</div>
-            <div id="u-sig-rr" class="text-[10px] text-slate-400 mt-0.5">Ratio 1:2 / 1:3</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-slate-400">PRECIO ENTRADA (OB)</div>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span id="u-sig-entry" class="text-sm font-bold text-white">--</span>
-              <button onclick="copyLevel('u-sig-entry')" title="Copiar precio" class="text-[10px] px-1.5 py-0.5 rounded bg-panel border border-border hover:border-cyan-400 text-cyan-300">📋</button>
-            </div>
-            <div id="u-sig-dist" class="text-[10px] text-cyan-400 mt-0.5">--</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-red-400">STOP LOSS</div>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span id="u-sig-sl" class="text-sm font-bold text-red-400">--</span>
-              <button onclick="copyLevel('u-sig-sl')" title="Copiar SL" class="text-[10px] px-1.5 py-0.5 rounded bg-panel border border-border hover:border-red-400 text-red-300">📋</button>
-            </div>
-            <div id="u-sig-sl-pips" class="text-[10px] font-bold text-red-300 mt-0.5">-- pips</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-emerald-400">TP1 (1:2 · PARCIAL)</div>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span id="u-sig-tp1" class="text-sm font-bold text-emerald-400">--</span>
-              <button onclick="copyLevel('u-sig-tp1')" title="Copiar TP1" class="text-[10px] px-1.5 py-0.5 rounded bg-panel border border-border hover:border-emerald-400 text-emerald-300">📋</button>
-            </div>
-            <div id="u-sig-tp1-pips" class="text-[10px] font-bold text-emerald-300 mt-0.5">+-- pips</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-emerald-400">TP2 (1:3 · LIQUIDEZ)</div>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span id="u-sig-tp2" class="text-sm font-bold text-emerald-400">--</span>
-              <button onclick="copyLevel('u-sig-tp2')" title="Copiar TP2" class="text-[10px] px-1.5 py-0.5 rounded bg-panel border border-border hover:border-emerald-400 text-emerald-300">📋</button>
-            </div>
-            <div id="u-sig-tp2-pips" class="text-[10px] font-bold text-emerald-300 mt-0.5">+-- pips</div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-2.5 font-mono text-xs">
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">SEMANAL</div>
-            <div id="u-tf-w" class="text-sm font-bold mt-1">--</div>
-          </div>
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">DIARIO</div>
-            <div id="u-tf-d" class="text-sm font-bold mt-1">--</div>
-          </div>
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">4 HORAS</div>
-            <div id="u-tf-4h" class="text-sm font-bold mt-1">--</div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 font-mono text-xs">
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">PRECIO ACTUAL</div>
-            <div id="u-m-price" class="text-base font-bold text-white mt-0.5">--</div>
-          </div>
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">ÚLTIMO TECHO (BSL)</div>
-            <div id="u-m-high" class="text-base font-bold text-emerald-400 mt-0.5">--</div>
-          </div>
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">ÚLTIMO PISO (SSL)</div>
-            <div id="u-m-low" class="text-base font-bold text-red-400 mt-0.5">--</div>
-          </div>
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">MOVIMIENTO DIARIO (ATR)</div>
-            <div id="u-m-atr" class="text-base font-bold text-white mt-0.5">--</div>
-          </div>
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">ESTA SEMANA</div>
-            <div id="u-m-wk" class="text-base font-bold mt-0.5">--</div>
-          </div>
-          <div class="bg-[#050811] border border-border rounded-lg p-3">
-            <div class="text-[10px] text-slate-400">RANGO 20 DÍAS</div>
-            <div id="u-m-r20" class="text-xs font-bold text-slate-200 mt-1">--</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================= -->
-    <!-- MÓDULO 4: F.R.I.D.A.Y. · TUTORA CON VOZ IA                -->
-    <!-- ========================================================= -->
-    <section id="mod-friday" class="hidden space-y-5">
-      <div class="hud-panel hud-corners scan-beam text-purple-400 border border-purple-500/35 rounded-xl p-5 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2 text-slate-200">
-          <div>
-            <h2 class="font-hud text-sm font-extrabold text-purple-400 tracking-wider">🧠 F.R.I.D.A.Y. · TUTORA IA</h2>
-            <p class="text-xs font-mono text-slate-300 mt-0.5">«JARVIS OPERA, SEÑOR. YO ME ASEGURO DE QUE USTED ENTIENDA POR QUÉ.»</p>
-          </div>
-          <div class="flex items-center gap-2 text-xs font-mono">
-            <span class="text-slate-400">Perfil Vocal:</span>
-            <select id="voice-select" onchange="savePreferredVoice()" class="bg-bg border border-border rounded px-2 py-1 text-purple-300 max-w-[210px]"></select>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap gap-1.5 font-mono text-xs text-slate-200">
-          <button onclick="switchFridaySub('consulta')" class="f-sub px-3 py-1.5 rounded bg-purple-600 text-white font-bold" data-fsub="consulta">💬 CONSULTA (VOZ)</button>
-          <button onclick="switchFridaySub('nucleo')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="nucleo">🟣 NÚCLEO</button>
-          <button onclick="switchFridaySub('leccion')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="leccion">📘 LECCIÓN</button>
-          <button onclick="switchFridaySub('curso')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="curso">🎓 CURSO (<span id="course-progress">0</span>/10)</button>
-          <button onclick="switchFridaySub('glosario')" class="f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300" data-fsub="glosario">📖 GLOSARIO</button>
-        </div>
-
-        <div id="fsub-consulta" class="bg-[#050811] border border-border rounded-lg p-4 space-y-3 text-slate-200">
-          <div id="friday-chat-log" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1 text-xs">
-            <div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed">
-              <strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> Buenas tardes, señor. Ahora cada tarjeta de Jarvis incluye el desplegable <strong>«¿Por qué?»</strong> con el análisis paso a paso. También puede consultarme aquí por voz.
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5">
-            <button onclick="askFriday('¿Qué pares están cerca de su entrada?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-emerald-500/40 text-emerald-300 hover:border-emerald-400">📡 Pares cerca de entrada</button>
-            <button onclick="askFriday('¿Hay noticias peligrosas ahora?')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-red-500/40 text-red-300 hover:border-red-400">🛡️ Revisar Escudo Noticias</button>
-            <button onclick="askFriday('Analiza BTCUSD')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-amber-300 hover:border-amber-400">Analiza BTCUSD</button>
-            <button onclick="askFriday('Analiza EURUSD')" class="text-[11px] font-mono px-2.5 py-1 rounded bg-panel border border-border text-purple-300 hover:border-purple-400">Analiza EURUSD</button>
-          </div>
-          <form onsubmit="handleFridaySubmit(event)" class="flex gap-2">
-            <input id="friday-input" type="text" placeholder="Escribe o pregunta a F.R.I.D.A.Y. (te responderá hablando)..." class="flex-1 bg-panel border border-border rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400" />
-            <button type="submit" class="px-4 py-2 rounded bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold text-xs">ENVIAR</button>
-          </form>
-        </div>
-
-        <div id="fsub-nucleo" class="hidden bg-[#050811] border border-purple-500/30 rounded-lg p-5 text-center space-y-3 text-slate-200">
-          <div class="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400 text-xs font-mono text-purple-300">EN LÍNEA · SÍNTESIS NEURONAL MULTI-PERSONAJE</div>
-          <p class="text-xs text-slate-300 max-w-xl mx-auto">Experta en macroeconomía, política monetaria, liquidez institucional y estructura SMC. Cruza en vivo los datos de VISIÓN y ULTRÓN.</p>
-          <div class="flex flex-wrap justify-center gap-2 text-[11px] font-mono">
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">EXPLICACIÓN PASO A PASO</span>
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">ESCUDO ANTI-NOTICIAS</span>
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">DETECTOR TP/SL</span>
-            <span class="px-3 py-1 rounded bg-panel border border-border text-purple-300">4 VOCES IA</span>
-          </div>
-        </div>
-
-        <div id="fsub-leccion" class="hidden bg-[#050811] border border-border rounded-lg p-5 space-y-3 text-slate-200">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold">LECCIÓN DE LA SEMANA</span>
-            <button onclick="speakText(document.getElementById('lesson-text').innerText, true, 'friday')" class="px-2.5 py-1 rounded bg-purple-600/30 text-purple-200 text-[11px] font-mono">🔊 Escuchar lección</button>
-          </div>
-          <h3 class="text-base font-bold text-white">¿Por qué los rendimientos del bono a 10 años (US10Y) mueven tanto al Dólar, Bitcoin y Nasdaq?</h3>
-          <div id="lesson-text" class="bg-panel border border-purple-500/20 rounded p-3.5 text-xs text-slate-300 leading-relaxed space-y-2">
-            <p>Si el banco te paga 5 caramelos seguros por guardar tu plata, ¿para qué vas a comprar un árbol que dará frutas recién dentro de 10 años? Las empresas tecnológicas y Bitcoin son activos de crecimiento futuro. Cuando el premio seguro sube, los inversores venden riesgo y compran dólares para cobrar ese interés seguro.</p>
-          </div>
-        </div>
-
-        <div id="fsub-curso" class="hidden bg-[#050811] border border-border rounded-lg p-4 space-y-2.5 text-slate-200">
-          <div class="text-xs font-mono text-purple-300 mb-2">CURSO BASE · MARCA LAS LECCIONES QUE DOMINES:</div>
-          <div id="friday-course-list" class="space-y-2"></div>
-        </div>
-
-        <div id="fsub-glosario" class="hidden bg-[#050811] border border-border rounded-lg p-4 space-y-3 text-slate-200">
-          <input id="glossary-search" oninput="renderGlossary()" type="text" placeholder="Buscar término (ej. BOS, CHoCH, Order Block, Hawkish, Yield)..." class="w-full bg-panel border border-border rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400" />
-          <div id="glossary-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================= -->
-    <!-- MÓDULO 5: ANÁLISIS                                        -->
-    <!-- ========================================================= -->
-    <section id="mod-analisis" class="hidden hud-panel border border-border rounded-xl p-5 space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="font-hud text-sm font-bold text-white uppercase">📐 Planificación Multi-Temporalidad (Guardado Local)</h2>
-        <span class="text-xs font-mono text-emerald-400">✓ Guardado automático</span>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label class="text-xs font-mono text-amber-400 block mb-1">1. CONTEXTO HTF (SEMANAL / DIARIO / 4H)</label>
-          <textarea id="note-htf" rows="8" class="w-full bg-[#050811] border border-border rounded p-3 text-xs text-slate-200"></textarea>
-        </div>
-        <div>
-          <label class="text-xs font-mono text-amber-400 block mb-1">2. GATILLO INTRADAY (1H / 15m / 5m)</label>
-          <textarea id="note-ltf" rows="8" class="w-full bg-[#050811] border border-border rounded p-3 text-xs text-slate-200"></textarea>
-        </div>
-        <div>
-          <label class="text-xs font-mono text-amber-400 block mb-1">3. GESTIÓN (PARCIALES 1:2 & BREAK EVEN)</label>
-          <textarea id="note-mgmt" rows="8" class="w-full bg-[#050811] border border-border rounded p-3 text-xs text-slate-200"></textarea>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================= -->
-    <!-- MÓDULO 6: DIARIO DE TRADING                               -->
-    <!-- ========================================================= -->
-    <section id="mod-diario" class="hidden hud-panel border border-border rounded-xl p-5 space-y-4">
-      <h2 class="font-hud text-sm font-bold text-white uppercase">📓 Bitácora de Ejecución & Auditoría</h2>
-      <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
-        <select id="j-pair" class="bg-[#050811] border border-border rounded px-3 py-2 text-xs font-mono text-white"></select>
-        <select id="j-dir" class="bg-[#050811] border border-border rounded px-3 py-2 text-xs font-mono text-white">
-          <option value="COMPRA">COMPRA (LONG)</option>
-          <option value="VENTA">VENTA (SHORT)</option>
-        </select>
-        <input id="j-rr" type="text" placeholder="Resultado (+2.5R / -1R)" required class="bg-[#050811] border border-border rounded px-3 py-2 text-xs font-mono text-white" />
-        <input id="j-note" type="text" placeholder="Confluencia (OB + CHoCH)" required class="bg-[#050811] border border-border rounded px-3 py-2 text-xs text-white" />
-        <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-black font-mono font-bold text-xs rounded px-4 py-2">REGISTRAR</button>
+      <!-- Barra inferior de control (Stop, Mic, Input, Enviar) -->
+      <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
+        <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">
+          ■
+        </button>
+        <button type="button" onclick="startVoiceRecognition()" id="mic-btn" title="Hablar por micrófono" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">
+          MIC
+        </button>
+        <input id="cockpit-input" type="text" placeholder="Pregúntele algo..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
+        <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0 transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">
+          ENVIAR
+        </button>
       </form>
-      <div id="journal-list" class="space-y-2"></div>
-    </section>
-
+    </div>
   </main>
 
-  <!-- BARRA INFERIOR MÓVIL -->
-  <nav class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-[#050912]/95 border-t border-cyan-500/25 backdrop-blur grid grid-cols-6 text-[10px] font-mono">
-    <button onclick="switchModule('jarvis')" class="m-nav py-2.5 flex flex-col items-center text-amber-400 font-bold" data-m="jarvis"><span>⚡</span><span>JARVIS</span></button>
-    <button onclick="switchModule('vision')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="vision"><span>🌐</span><span>VISIÓN</span></button>
-    <button onclick="switchModule('ultron')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="ultron"><span>🎯</span><span>ULTRÓN</span></button>
-    <button onclick="switchModule('friday')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="friday"><span>🧠</span><span>F.R.I.D.A.Y.</span></button>
-    <button onclick="switchModule('analisis')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="analisis"><span>📐</span><span>ANÁLISIS</span></button>
-    <button onclick="switchModule('diario')" class="m-nav py-2.5 flex flex-col items-center text-slate-400" data-m="diario"><span>📓</span><span>DIARIO</span></button>
+  <!-- ========================================================= -->
+  <!-- MODO 2: VISTA DE PANEL COMPLETO (16 PARES + GRÁFICO SMC)  -->
+  <!-- ========================================================= -->
+  <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 py-4 space-y-5">
+    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+      <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+        <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (16)</button>
+        <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
+        <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO & NOTICIAS</button>
+        <button onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
+      </div>
+      <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">
+        ◂ VOLVER A CABINA
+      </button>
+    </div>
+
+    <!-- SUBPANEL JARVIS: LOS 16 ACTIVOS CON DESPLEGABLE ¿POR QUÉ? -->
+    <section id="ptab-jarvis" class="space-y-4">
+      <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+        <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (16)</button>
+        <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
+        <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⚠️ TESIS ROTA</button>
+        <button onclick="setPanelFilter('GBP')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="GBP">💷 PARES GBP</button>
+      </div>
+      <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
+    </section>
+
+    <!-- SUBPANEL ULTRÓN: GRÁFICO SMC INTERACTIVO -->
+    <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
+      <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5" id="panel-ultron-selector"></div>
+      <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div>
+          <span id="pu-sym" class="font-hud font-bold text-red-400 text-base">BTCUSD</span>
+          <span id="pu-status" class="ml-2 text-emerald-400">--</span>
+        </div>
+        <div class="flex gap-1">
+          <button onclick="setChartTF('1d')" class="ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold" data-tf="1d">1D</button>
+          <button onclick="setChartTF('4h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="4h">4H</button>
+          <button onclick="setChartTF('1h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="1h">1H</button>
+        </div>
+      </div>
+      <div class="w-full bg-[#030509] border border-slate-800 rounded-lg overflow-hidden">
+        <canvas id="ultron-canvas" class="w-full h-[360px] block"></canvas>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+          <div class="text-[10px] text-sky-400">ENTRADA (OB)</div>
+          <div id="pu-entry" class="font-bold text-white text-sm">--</div>
+          <div id="pu-dist" class="text-[10px] text-slate-400">--</div>
+        </div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+          <div class="text-[10px] text-red-400">STOP LOSS</div>
+          <div id="pu-sl" class="font-bold text-red-400 text-sm">--</div>
+          <div id="pu-sl-pips" class="text-[10px] text-red-300">--</div>
+        </div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+          <div class="text-[10px] text-emerald-400">TP1 (1:2)</div>
+          <div id="pu-tp1" class="font-bold text-emerald-400 text-sm">--</div>
+          <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
+        </div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+          <div class="text-[10px] text-emerald-400">TP2 (1:3)</div>
+          <div id="pu-tp2" class="font-bold text-emerald-400 text-sm">--</div>
+          <div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUBPANEL VISIÓN: MACRO Y CALENDARIO -->
+    <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-4">
+      <div class="space-y-1">
+        <h3 id="pv-headline" class="font-bold text-sky-300 text-sm">--</h3>
+        <p id="pv-summary" class="text-xs text-slate-300 leading-relaxed">--</p>
+      </div>
+      <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
+    </section>
+
+    <!-- SUBPANEL KAREN & HOMER: DIARIO Y RENDIMIENTO -->
+    <section id="ptab-karen" class="hidden hud-panel rounded-xl p-4 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <h3 class="font-hud text-sm font-bold text-rose-400">🕸️ AUDITORÍA DE KAREN & ESTADÍSTICA H.O.M.E.R.</h3>
+        <div id="homer-stats-badge" class="text-xs text-lime-400 font-bold">ACIERTO: --%</div>
+      </div>
+      <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
+        <select id="j-pair" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"></select>
+        <select id="j-dir" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white">
+          <option value="COMPRA">COMPRA</option>
+          <option value="VENTA">VENTA</option>
+        </select>
+        <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white">
+          <option value="WIN">GANADA (+2R / +3R)</option>
+          <option value="LOSS">PERDIDA (-1R)</option>
+          <option value="BE">BREAK EVEN (0R)</option>
+        </select>
+        <input id="j-note" type="text" placeholder="Nota o emoción..." required class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white" />
+        <button type="submit" class="bg-rose-500 hover:bg-rose-400 text-black font-bold rounded px-3 py-2">ANOTAR</button>
+      </form>
+      <div id="journal-list" class="space-y-2 text-xs"></div>
+    </section>
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- BARRA DE NAVEGACIÓN INFERIOR DESLIZABLE (7 AGENTES)       -->
+  <!-- ========================================================= -->
+  <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#04060b]/95 border-t border-slate-800 backdrop-blur overflow-x-auto">
+    <div class="flex min-w-max sm:justify-center mx-auto">
+      <button onclick="selectAgent('jarvis')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-amber-400 text-amber-400" data-ag="jarvis">
+        <span class="text-sm">⚡</span><span class="text-[10px] font-bold tracking-wider">JARVIS</span>
+      </button>
+      <button onclick="selectAgent('vision')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="vision">
+        <span class="text-sm">🌐</span><span class="text-[10px] font-bold tracking-wider">VISIÓN</span>
+      </button>
+      <button onclick="selectAgent('ultron')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="ultron">
+        <span class="text-sm">🎯</span><span class="text-[10px] font-bold tracking-wider">ULTRÓN</span>
+      </button>
+      <button onclick="selectAgent('friday')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="friday">
+        <span class="text-sm">🟣</span><span class="text-[10px] font-bold tracking-wider">F.R.I.D.A.Y.</span>
+      </button>
+      <button onclick="selectAgent('edith')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="edith">
+        <span class="text-sm">⌖</span><span class="text-[10px] font-bold tracking-wider">E.D.I.T.H.</span>
+      </button>
+      <button onclick="selectAgent('karen')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="karen">
+        <span class="text-sm">🕸️</span><span class="text-[10px] font-bold tracking-wider">KAREN</span>
+      </button>
+      <button onclick="selectAgent('homer')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="homer">
+        <span class="text-sm">📊</span><span class="text-[10px] font-bold tracking-wider">H.O.M.E.R.</span>
+      </button>
+    </div>
   </nav>
 
   <script>
     // =========================================================
-    // RED NEURONAL INTERACTIVA DE FONDO
+    // PARTÍCULAS DE FONDO ESTILO TELEMETRÍA
     // =========================================================
-    (function initNeuralCanvas() {
+    (function initBg() {
       const c = document.getElementById('neural-bg');
       const ctx = c.getContext('2d');
-      let w, h, nodes = [];
-      const mouse = { x: -999, y: -999 };
-
+      let w, h, dots = [];
       function resize() {
         w = c.width = window.innerWidth;
         h = c.height = window.innerHeight;
-        const count = Math.min(55, Math.floor((w * h) / 24000));
-        nodes = Array.from({ length: count }, () => ({
+        dots = Array.from({ length: 48 }, () => ({
           x: Math.random() * w,
           y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: (Math.random() - 0.5) * 0.35,
-          r: Math.random() * 1.6 + 0.8
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          r: Math.random() * 1.4 + 0.5
         }));
       }
       window.addEventListener('resize', resize);
-      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
       resize();
-
       function loop() {
         ctx.clearRect(0, 0, w, h);
-        for (let i = 0; i < nodes.length; i++) {
-          const n = nodes[i];
-          n.x += n.vx;
-          n.y += n.vy;
-          if (n.x < 0 || n.x > w) n.vx *= -1;
-          if (n.y < 0 || n.y > h) n.vy *= -1;
-
-          ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
+        dots.forEach(d => {
+          d.x += d.vx; d.y += d.vy;
+          if (d.x < 0 || d.x > w) d.vx *= -1;
+          if (d.y < 0 || d.y > h) d.vy *= -1;
+          ctx.fillStyle = 'rgba(148, 163, 184, 0.25)';
           ctx.beginPath();
-          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
           ctx.fill();
-
-          for (let j = i + 1; j < nodes.length; j++) {
-            const m = nodes[j];
-            const dist = Math.hypot(n.x - m.x, n.y - m.y);
-            if (dist < 130) {
-              ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 130) * 0.14})`;
-              ctx.lineWidth = 0.7;
-              ctx.beginPath();
-              ctx.moveTo(n.x, n.y);
-              ctx.lineTo(m.x, m.y);
-              ctx.stroke();
-            }
-          }
-
-          const mDist = Math.hypot(n.x - mouse.x, n.y - mouse.y);
-          if (mDist < 160) {
-            ctx.strokeStyle = `rgba(245, 158, 11, ${(1 - mDist / 160) * 0.32})`;
-            ctx.lineWidth = 0.9;
-            ctx.beginPath();
-            ctx.moveTo(n.x, n.y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.stroke();
-          }
-        }
+        });
         requestAnimationFrame(loop);
       }
       loop();
     })();
 
+    // =========================================================
+    // ESTADO GLOBAL Y CONFIGURACIÓN DE LOS 7 AGENTES
+    // =========================================================
     let data = null;
-    let jarvisFilter = 'ALL';
+    let currentAgent = 'jarvis';
+    let isPanelMode = false;
+    let panelFilter = 'ALL';
     let selectedSymbol = 'BTCUSD';
     let selectedTF = '1d';
-    let visibleCandles = 42;
-    let alertedSignature = sessionStorage.getItem('oraculo_last_alert_sig') || '';
+    let typeTimer = null;
     let openWhyPanels = {};
+    let voiceEnabled = localStorage.getItem('oraculo_voice') === 'on';
+    let trades = JSON.parse(localStorage.getItem('oraculo_trades_v6') || '[]');
+    let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
 
-    function toggleWhyPanel(symbol) {
-      openWhyPanels[symbol] = !openWhyPanels[symbol];
-      const box = document.getElementById(`why-panel-${symbol}`);
-      const btn = document.getElementById(`why-btn-${symbol}`);
-      if (box && btn) {
-        const isOpen = !!openWhyPanels[symbol];
-        box.classList.toggle('hidden', !isOpen);
-        btn.innerHTML = isOpen ? 'Cerrar explicación ▴' : '¿Por qué? ▾';
+    const AGENTS = {
+      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', color: '#f59e0b', pitch: 0.94, rate: 0.98 },
+      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', color: '#38bdf8', pitch: 0.85, rate: 0.93 },
+      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', color: '#ef4444', pitch: 0.76, rate: 0.96 },
+      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', color: '#a855f7', pitch: 1.06, rate: 1.02 },
+      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', color: '#10b981', pitch: 1.02, rate: 1.00 },
+      karen:  { name: 'KAREN', sub: 'DIARIO', color: '#f43f5e', pitch: 1.04, rate: 1.01 },
+      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', color: '#84cc16', pitch: 0.90, rate: 0.97 }
+    };
+
+    // =========================================================
+    // MOTOR DE VOZ (TTS + RECONOCIMIENTO MIC)
+    // =========================================================
+    function updateVoiceUI() {
+      const btn = document.getElementById('voice-toggle-btn');
+      if (voiceEnabled) {
+        btn.textContent = 'VOZ ON';
+        btn.className = 'px-2.5 py-1 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 font-bold';
+      } else {
+        btn.textContent = 'VOZ OFF';
+        btn.className = 'px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-400';
       }
     }
+    updateVoiceUI();
 
-    function copyLevel(elementId) {
-      const txt = document.getElementById(elementId)?.textContent?.trim();
-      if (!txt || txt === '--') return;
-      navigator.clipboard?.writeText(txt);
-      playRadarPing();
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      localStorage.setItem('oraculo_voice', voiceEnabled ? 'on' : 'off');
+      updateVoiceUI();
+      if (!voiceEnabled) stopSpeaking();
+      else speakCurrentAgent();
+    }
+
+    function stopSpeaking() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      setStateLabel('EN ESPERA');
+    }
+
+    function speakText(text, agentKey = currentAgent) {
+      if (!voiceEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const ag = AGENTS[agentKey] || AGENTS.jarvis;
+      const clean = text.replace(/<[^>]*>/g, '').replace(/BTCUSD/g, 'Bitcoin').replace(/USDJPY/g, 'Dólar Yen').replace(/EURUSD/g, 'Euro Dólar').replace(/GBP/g, 'Libra ');
+      const u = new SpeechSynthesisUtterance(clean);
+      const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('es'));
+      if (voices.length > 0) u.voice = voices[0];
+      u.lang = 'es-ES';
+      u.pitch = ag.pitch;
+      u.rate = ag.rate;
+      u.onstart = () => setStateLabel('HABLANDO');
+      u.onend = () => setStateLabel('EN ESPERA');
+      window.speechSynthesis.speak(u);
+    }
+
+    function startVoiceRecognition() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        typeAgentDialogue('El reconocimiento de micrófono no está disponible en este navegador, señor. Escriba su consulta abajo.');
+        return;
+      }
+      const rec = new SR();
+      rec.lang = 'es-ES';
+      setStateLabel('ESCUCHANDO');
+      rec.onresult = (e) => {
+        const transcript = e.results[0][0].transcript;
+        document.getElementById('cockpit-input').value = transcript;
+        processQuery(transcript);
+      };
+      rec.onerror = () => setStateLabel('EN ESPERA');
+      rec.start();
+    }
+
+    // =========================================================
+    // LÓGICA DE ANÁLISIS: TESIS ROTA, PROXIMIDAD Y ESTADÍSTICAS
+    // =========================================================
+    function getBrokenTheses() {
+      if (!data) return [];
+      return data.assets.filter(a => a.confluence.alignment === 'OPPOSED');
+    }
+
+    function getAlignedAssets() {
+      if (!data) return [];
+      return data.assets.filter(a => a.confluence.alignment === 'ALIGNED');
+    }
+
+    function getNearestAsset() {
+      if (!data || !data.assets.length) return null;
+      return [...data.assets].sort((a, b) => {
+        const da = Math.abs(a.price - a.setup.entry) / a.price;
+        const db = Math.abs(b.price - b.setup.entry) / b.price;
+        return da - db;
+      })[0];
+    }
+
+    function getAssetUnitsDist(a) {
+      const diff = Math.abs(a.price - a.setup.entry);
+      const units = a.pip ? Math.round((diff / a.pip) * 10) / 10 : diff;
+      return { diff, units, label: a.type === 'forex' ? 'pips' : 'pts' };
     }
 
     function getSetupPips(a) {
       const pip = a.pip || 0.0001;
       const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
-      const toUnits = (val) => Math.round((Math.abs(val) / pip) * 10) / 10;
-
+      const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
       return {
         unitLabel,
-        slPips: toUnits(a.setup.entry - a.setup.sl),
-        tp1Pips: toUnits(a.setup.tp1 - a.setup.entry),
-        tp2Pips: toUnits(a.setup.tp2 - a.setup.entry)
+        sl: toU(a.setup.entry - a.setup.sl),
+        tp1: toU(a.setup.tp1 - a.setup.entry),
+        tp2: toU(a.setup.tp2 - a.setup.entry)
       };
     }
 
-    function getAssetNewsShield(a) {
-      if (!data || !data.calendar) return null;
-      const now = new Date();
-      const todayIso = now.toISOString().slice(0, 10);
-      const currencies = new Set([a.base, a.quote]);
-      if (a.type === 'index' || a.type === 'crypto') currencies.add('USD');
-
-      for (const ev of data.calendar) {
-        if (ev.impact !== 'ALTO') continue;
-        if (!currencies.has(ev.currency)) continue;
-        if (ev.date !== todayIso || !ev.time || !ev.time.includes(':')) continue;
-
-        const [hh, mm] = ev.time.split(':').map(Number);
-        if (isNaN(hh) || isNaN(mm)) continue;
-        const evTime = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hh, mm, 0));
-        const diffMin = Math.round((evTime - now) / 60000);
-
-        if (diffMin >= -15 && diffMin <= 45) {
-          return {
-            blocked: true,
-            currency: ev.currency,
-            title: ev.title,
-            diffMin,
-            text: diffMin >= 0
-              ? `⚠️ NOTICIA ${ev.currency} EN ${diffMin} MIN · NO ENTRAR`
-              : `⚠️ NOTICIA ${ev.currency} HACE ${Math.abs(diffMin)} MIN · VOLATILIDAD`
-          };
-        }
-      }
-      return null;
+    function getHomerMetrics() {
+      if (!trades.length) return { winRate: 48, pnlR: '+0R', total: 0 };
+      const wins = trades.filter(t => t.res === 'WIN').length;
+      const losses = trades.filter(t => t.res === 'LOSS').length;
+      const winRate = Math.round((wins / trades.length) * 100);
+      const netR = wins * 2 - losses;
+      return { winRate, pnlR: `${netR >= 0 ? '+' : ''}${netR}R`, total: trades.length };
     }
 
-    function getRelevantNewsForAsset(a) {
-      if (!data || !data.calendar) return [];
-      const currencies = new Set([a.base, a.quote]);
-      if (a.type === 'index' || a.type === 'crypto') currencies.add('USD');
-      return data.calendar.filter(ev => currencies.has(ev.currency) && ev.impact === 'ALTO').slice(0, 3);
-    }
-
-    function getSetupLifecycle(a) {
-      const recent = (a.candles && a.candles['1h']) ? a.candles['1h'].slice(-4) : [];
-      const isBuy = a.setup.direction === 'BUY';
-
-      if (recent.length > 0) {
-        const maxHigh = Math.max(...recent.map(c => c.h), a.price);
-        const minLow = Math.min(...recent.map(c => c.l), a.price);
-
-        if (isBuy) {
-          if (maxHigh >= a.setup.tp2) return { state: 'TP2_HIT', badge: '✅ TP2 ALCANZADO · ESPERAR NUEVO CORTE', cls: 'bg-emerald-500/20 border-emerald-400 text-emerald-300' };
-          if (maxHigh >= a.setup.tp1) return { state: 'TP1_HIT', badge: '✅ TP1 CUMPLIDO · BUSCANDO RE-ENTRADA', cls: 'bg-emerald-500/15 border-emerald-500/50 text-emerald-300' };
-          if (minLow <= a.setup.sl) return { state: 'SL_HIT', badge: '🛑 STOP TOCADO · ESPERAR RE-ANÁLISIS', cls: 'bg-red-500/20 border-red-400 text-red-300' };
-        } else {
-          if (minLow <= a.setup.tp2) return { state: 'TP2_HIT', badge: '✅ TP2 ALCANZADO · ESPERAR NUEVO CORTE', cls: 'bg-emerald-500/20 border-emerald-400 text-emerald-300' };
-          if (minLow <= a.setup.tp1) return { state: 'TP1_HIT', badge: '✅ TP1 CUMPLIDO · BUSCANDO RE-ENTRADA', cls: 'bg-emerald-500/15 border-emerald-500/50 text-emerald-300' };
-          if (maxHigh >= a.setup.sl) return { state: 'SL_HIT', badge: '🛑 STOP TOCADO · ESPERAR RE-ANÁLISIS', cls: 'bg-red-500/20 border-red-400 text-red-300' };
-        }
-      }
-      return { state: 'ACTIVE', badge: '⚡ SEÑAL VIGENTE', cls: 'bg-sky-500/15 border-sky-400/40 text-sky-300' };
-    }
-
-    function getAssetProximity(a) {
-      const diff = Math.abs(a.price - a.setup.entry);
-      const pct = (diff / a.price) * 100;
-      const units = a.pip ? Math.round((diff / a.pip) * 10) / 10 : diff;
-      const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
-      const closenessPct = Math.max(8, Math.min(100, Math.round((1 - pct / 0.8) * 100)));
-
-      let status = 'FAR';
-      let label = 'EN ESPERA';
-      if (pct <= 0.16) {
-        status = 'IN_ZONE';
-        label = '🔥 EN ZONA DE ENTRADA';
-      } else if (pct <= 0.45) {
-        status = 'APPROACHING';
-        label = '⚡ APROXIMÁNDOSE';
-      }
-      return { diff, pct, units, unitLabel, closenessPct, status, label };
-    }
-
-    function playRadarPing() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.14);
-        gain.gain.setValueAtTime(0.08, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.36);
-      } catch (e) {}
-    }
-
-    function renderLiveTicker() {
-      if (!data) return;
-      const items = data.assets.map(a => {
-        const chgCls = a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400';
-        const arrow = a.chg_day >= 0 ? '▲' : '▼';
-        return `<span class="inline-flex items-center gap-1.5"><strong class="text-white">${a.symbol}</strong> <span class="text-cyan-300">${a.price}</span> <span class="${chgCls}">${arrow}${a.chg_day}%</span> <span class="text-slate-500">|</span></span>`;
-      }).join('');
-      document.getElementById('live-ticker-track').innerHTML = items + items;
-    }
-
-    function renderProximityRadar() {
-      if (!data) return;
-      const blockedAssets = data.assets.map(a => ({ a, shield: getAssetNewsShield(a) })).filter(x => x.shield);
-      const shieldEl = document.getElementById('news-shield-global');
-      if (blockedAssets.length > 0) {
-        shieldEl.textContent = `⚠️ ESCUDO ACTIVO: ${blockedAssets.length} PARES BLOQUEADOS POR NOTICIA`;
-        shieldEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/25 border border-red-400 text-red-200 font-bold animate-pulse';
-      } else {
-        shieldEl.textContent = '🛡️ ESCUDO NOTICIAS: DESPEJADO';
-        shieldEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/15 border border-sky-500/40 text-sky-300';
-      }
-
-      const ranked = data.assets
-        .map(a => ({
-          asset: a,
-          prox: getAssetProximity(a),
-          life: getSetupLifecycle(a),
-          shield: getAssetNewsShield(a),
-          pips: getSetupPips(a)
-        }))
-        .sort((x, y) => x.prox.pct - y.prox.pct);
-
-      const activeHot = ranked.filter(x => x.prox.status !== 'FAR' && x.life.state === 'ACTIVE');
-      const badge = document.getElementById('radar-count-badge');
-      if (activeHot.length > 0) {
-        badge.textContent = `${activeHot.length} OBJETIVO${activeHot.length > 1 ? 'S' : ''} EN RANGO`;
-        badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/25 border border-emerald-400 text-emerald-300 font-bold';
-      } else {
-        badge.textContent = 'VIGILANCIA ACTIVA (TOP 4 MÁS CERCANOS)';
-        badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/35 text-cyan-300';
-      }
-
-      const displayList = (activeHot.length > 0 ? activeHot : ranked).slice(0, 4);
-      document.getElementById('proximity-cards').innerHTML = displayList.map(({ asset: a, prox, life, shield, pips }) => {
-        const isIn = prox.status === 'IN_ZONE' && life.state === 'ACTIVE' && !shield;
-        const isNear = prox.status === 'APPROACHING' && life.state === 'ACTIVE' && !shield;
-        const borderCls = shield
-          ? 'border-red-500 bg-red-500/10'
-          : (life.state !== 'ACTIVE'
-              ? 'border-slate-600 bg-slate-900/60 opacity-80'
-              : (isIn ? 'border-emerald-400 bg-emerald-500/10 entry-beacon' : (isNear ? 'border-amber-400/70 bg-amber-500/10' : 'border-border bg-[#050811]/90')));
-        const barColor = shield ? 'bg-red-500' : (isIn ? 'bg-emerald-400' : (isNear ? 'bg-amber-400' : 'bg-cyan-400'));
-
-        const statusLine = shield
-          ? shield.text
-          : (life.state !== 'ACTIVE' ? life.badge : `${prox.label} · TP1 +${pips.tp1Pips} ${pips.unitLabel}`);
-
+    // =========================================================
+    // NÚCLEOS SVG ANIMADOS DE LOS 7 AGENTES (ESTILO VIDEO)
+    // =========================================================
+    function renderAgentCoreSVG(key) {
+      if (key === 'jarvis') {
+        const bars = Array.from({ length: 36 }, (_, i) => {
+          const ang = i * 10;
+          const active = i < 12;
+          return `<rect x="138" y="16" width="4" height="${active ? 16 : 11}" rx="1" fill="${active ? '#f59e0b' : '#452c08'}" transform="rotate(${ang} 140 140)"/>`;
+        }).join('');
         return `
-          <div onclick="openAssetInUltron('${a.symbol}')" class="cursor-pointer rounded-lg border ${borderCls} p-2.5 transition hover:scale-[1.02] space-y-1.5">
-            <div class="flex items-center justify-between font-mono text-xs">
-              <span class="font-extrabold text-white">${a.symbol} <span class="text-[10px] ${a.setup.direction === 'BUY' ? 'text-emerald-400' : 'text-red-400'}">${a.setup.direction === 'BUY' ? '▲ COMPRA' : '▼ VENTA'}</span></span>
-              <span class="text-[10px] font-bold ${isIn ? 'text-emerald-300' : (isNear ? 'text-amber-300' : 'text-slate-400')}">a ${prox.units} ${prox.unitLabel}</span>
-            </div>
-            <div class="flex items-center justify-between text-[10px] font-mono text-slate-300">
-              <span>Actual: <strong>${a.price}</strong></span>
-              <span>Entrada: <strong class="text-sky-300">${a.setup.entry}</strong></span>
-            </div>
-            <div class="w-full h-1.5 bg-bg rounded-full overflow-hidden">
-              <div class="h-full ${barColor} rounded-full transition-all" style="width: ${prox.closenessPct}%"></div>
-            </div>
-            <div class="text-[9px] font-mono tracking-wider truncate ${shield ? 'text-red-300 font-bold' : (isIn ? 'text-emerald-300 font-bold' : 'text-slate-300')}">
-              ${statusLine}
-            </div>
-          </div>
-        `;
+          <svg viewBox="0 0 280 280" class="w-full h-full">
+            <g class="spin-slow" style="transform-origin:140px 140px">${bars}</g>
+            <circle cx="140" cy="140" r="92" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
+            <circle cx="140" cy="140" r="76" fill="none" stroke="#78350f" stroke-width="1" stroke-dasharray="4 4"/>
+            <polygon points="140,66 204,178 76,178" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2"/>
+            <circle cx="140" cy="140" r="36" fill="#07090f" stroke="#f59e0b" stroke-width="1.5"/>
+            <circle cx="140" cy="140" r="9" fill="#f59e0b" class="pulse-core"/>
+          </svg>`;
+      }
+      if (key === 'vision') {
+        return `
+          <svg viewBox="0 0 280 280" class="w-full h-full">
+            <circle cx="140" cy="140" r="110" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <circle cx="140" cy="140" r="82" fill="none" stroke="#0284c7" stroke-width="1" opacity="0.6"/>
+            <circle cx="140" cy="140" r="52" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 4"/>
+            <line x1="25" y1="140" x2="255" y2="140" stroke="#0c4a6e" stroke-width="1"/>
+            <line x1="140" y1="25" x2="140" y2="255" stroke="#0c4a6e" stroke-width="1"/>
+            <g class="spin-med" style="transform-origin:140px 140px">
+              <line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/>
+              <path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/>
+            </g>
+            <g font-size="9" fill="#7dd3fc" font-weight="bold">
+              <circle cx="195" cy="92" r="3" fill="#38bdf8"/><text x="201" y="95">USD</text>
+              <circle cx="84" cy="108" r="3" fill="#38bdf8"/><text x="58" y="111">EUR</text>
+              <circle cx="198" cy="182" r="3" fill="#38bdf8"/><text x="204" y="185">GBP</text>
+              <circle cx="92" cy="188" r="3" fill="#38bdf8"/><text x="66" y="191">JPY</text>
+            </g>
+            <circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/>
+            <circle cx="140" cy="140" r="6" fill="#38bdf8"/>
+          </svg>`;
+      }
+      if (key === 'ultron') {
+        return `
+          <svg viewBox="0 0 280 280" class="w-full h-full">
+            <circle cx="140" cy="140" r="108" fill="none" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="18 8"/>
+            <g class="spin-rev" style="transform-origin:140px 140px">
+              <polygon points="140,46 221,93 221,187 140,234 59,187 59,93" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="2"/>
+            </g>
+            <polygon points="140,74 197,107 197,173 140,206 83,173 83,107" fill="none" stroke="#f87171" stroke-width="1.2" stroke-dasharray="5 3"/>
+            <circle cx="140" cy="140" r="34" fill="#080507" stroke="#ef4444" stroke-width="2"/>
+            <circle cx="140" cy="140" r="10" fill="#ef4444" class="pulse-core"/>
+          </svg>`;
+      }
+      if (key === 'friday') {
+        const rings = Array.from({ length: 48 }, (_, i) => {
+          const ang = i * 7.5;
+          const h = 8 + Math.sin(i * 0.7) * 6;
+          return `<rect x="139" y="${22 - h/2}" width="2.5" height="${h}" fill="#a855f7" opacity="0.8" transform="rotate(${ang} 140 140)"/>`;
+        }).join('');
+        return `
+          <svg viewBox="0 0 280 280" class="w-full h-full">
+            <g class="spin-slow" style="transform-origin:140px 140px">${rings}</g>
+            <circle cx="140" cy="140" r="84" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="10 6"/>
+            <circle cx="140" cy="140" r="58" fill="rgba(168,85,247,0.1)" stroke="#c084fc" stroke-width="1.5"/>
+            <circle cx="140" cy="140" r="30" fill="#07050d" stroke="#a855f7" stroke-width="2"/>
+            <circle cx="140" cy="140" r="8" fill="#e9d5ff" class="pulse-core"/>
+          </svg>`;
+      }
+      if (key === 'edith') {
+        return `
+          <svg viewBox="0 0 280 280" class="w-full h-full">
+            <circle cx="140" cy="140" r="106" fill="none" stroke="#065f46" stroke-width="2"/>
+            <circle cx="140" cy="140" r="94" fill="none" stroke="#10b981" stroke-width="6" stroke-dasharray="12 6" opacity="0.75"/>
+            <circle cx="140" cy="140" r="64" fill="none" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4 4"/>
+            <line x1="20" y1="140" x2="112" y2="140" stroke="#10b981" stroke-width="1.5"/>
+            <line x1="168" y1="140" x2="260" y2="140" stroke="#10b981" stroke-width="1.5"/>
+            <line x1="140" y1="20" x2="140" y2="112" stroke="#10b981" stroke-width="1.5"/>
+            <line x1="140" y1="168" x2="140" y2="260" stroke="#10b981" stroke-width="1.5"/>
+            <circle cx="140" cy="140" r="28" fill="#040a08" stroke="#10b981" stroke-width="1.5"/>
+            <circle cx="140" cy="140" r="6" fill="#10b981" class="pulse-core"/>
+          </svg>`;
+      }
+      if (key === 'karen') {
+        const spokes = Array.from({ length: 12 }, (_, i) => {
+          const rad = (i * 30 * Math.PI) / 180;
+          return `<line x1="140" y1="140" x2="${140 + Math.cos(rad)*106}" y2="${140 + Math.sin(rad)*106}" stroke="#881337" stroke-width="1"/>`;
+        }).join('');
+        return `
+          <svg viewBox="0 0 280 280" class="w-full h-full">
+            ${spokes}
+            <circle cx="140" cy="140" r="104" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="14 6"/>
+            <circle cx="140" cy="140" r="76" fill="none" stroke="#fb7185" stroke-width="1"/>
+            <circle cx="140" cy="140" r="50" fill="none" stroke="#f43f5e" stroke-width="1"/>
+            <g class="spin-med" style="transform-origin:140px 140px">
+              <circle cx="195" cy="96" r="5" fill="#fda4af"/>
+            </g>
+            <circle cx="140" cy="140" r="28" fill="#0b0508" stroke="#f43f5e" stroke-width="1.8"/>
+            <circle cx="140" cy="140" r="7" fill="#f43f5e" class="pulse-core"/>
+          </svg>`;
+      }
+      // HOMER
+      const eqBars = Array.from({ length: 40 }, (_, i) => {
+        const ang = i * 9;
+        const h = (i % 5 === 0) ? 20 : ((i % 2 === 0) ? 14 : 9);
+        const col = i % 4 === 0 ? '#ef4444' : '#84cc16';
+        return `<rect x="138.5" y="${26 - h/2}" width="3" height="${h}" fill="${col}" transform="rotate(${ang} 140 140)"/>`;
       }).join('');
-    }
-
-    function scanProximityAlerts(manualTrigger = false) {
-      if (!data) return;
-      const autoEnabled = document.getElementById('auto-alert-toggle').checked;
-      if (!autoEnabled && !manualTrigger) return;
-
-      const hot = data.assets
-        .map(a => ({ asset: a, prox: getAssetProximity(a), life: getSetupLifecycle(a), shield: getAssetNewsShield(a) }))
-        .filter(x => (x.prox.status === 'IN_ZONE' || x.prox.status === 'APPROACHING') && x.life.state === 'ACTIVE' && !x.shield)
-        .sort((x, y) => x.prox.pct - y.prox.pct);
-
-      if (hot.length === 0) {
-        if (manualTrigger) {
-          speakText('Escaneo completo, señor. Ningún activo libre de noticias está en zona inmediata de entrada.', true, 'jarvis');
-        }
-        return;
-      }
-
-      const sig = `${data.last_updated}_${hot.map(h => h.asset.symbol).join('-')}`;
-      if (!manualTrigger && sig === alertedSignature) return;
-      alertedSignature = sig;
-      sessionStorage.setItem('oraculo_last_alert_sig', sig);
-
-      playRadarPing();
-      const summary = hot.slice(0, 3).map(h => {
-        const dir = h.asset.setup.direction === 'BUY' ? 'compra' : 'venta';
-        return `${h.asset.symbol} a ${h.prox.units} ${h.prox.unitLabel} de su punto de ${dir} en ${h.asset.setup.entry}`;
-      }).join('. ');
-
-      speakText(`Atención, señor. Objetivo detectado en el radar. ${summary}.`, true, 'jarvis');
+      return `
+        <svg viewBox="0 0 280 280" class="w-full h-full">
+          <g class="spin-slow" style="transform-origin:140px 140px">${eqBars}</g>
+          <circle cx="140" cy="140" r="78" fill="none" stroke="#84cc16" stroke-width="1.5" stroke-dasharray="8 5"/>
+          <circle cx="140" cy="140" r="52" fill="rgba(132,204,22,0.08)" stroke="#a3e635" stroke-width="1.2"/>
+          <circle cx="140" cy="140" r="28" fill="#070a05" stroke="#84cc16" stroke-width="2"/>
+          <circle cx="140" cy="140" r="8" fill="#84cc16" class="pulse-core"/>
+        </svg>`;
     }
 
     // =========================================================
-    // MOTOR DE VOZ NEURONAL MULTI-PERSONAJE
+    // CONTROL DE ESTADO, INTRO Y DIÁLOGO MÁQUINA DE ESCRIBIR
     // =========================================================
-    let voiceEnabled = localStorage.getItem('oraculo_voice') !== 'off';
-    let spanishVoices = [];
-
-    const PERSONA_PROFILES = {
-      jarvis: { preferred: ['Alvaro', 'Jorge', 'Pablo', 'Raul', 'Tomas', 'Google'], pitch: 0.93, rate: 0.98 },
-      vision: { preferred: ['Tomas', 'Raul', 'Alvaro', 'Jorge', 'Diego'], pitch: 0.84, rate: 0.92 },
-      ultron: { preferred: ['Jorge', 'Alvaro', 'Pablo', 'Diego', 'Raul'], pitch: 0.75, rate: 0.95 },
-      friday: { preferred: ['Dalia', 'Elvira', 'Paloma', 'Sabina', 'Helena', 'Monica', 'Paulina', 'Google'], pitch: 1.05, rate: 1.03 }
-    };
-
-    function isNaturalVoice(v) {
-      const n = v.name.toLowerCase();
-      return n.includes('natural') || n.includes('online') || n.includes('google') || n.includes('neural');
+    function setStateLabel(txt) {
+      const el = document.getElementById('agent-state-label');
+      if (el) el.textContent = txt.split('').join(' ');
     }
 
-    function loadVoices() {
-      if (!('speechSynthesis' in window)) return;
-      const all = window.speechSynthesis.getVoices();
-      const esAll = all.filter(v => v.lang.toLowerCase().startsWith('es'));
-      spanishVoices = [...esAll.filter(isNaturalVoice), ...esAll.filter(v => !isNaturalVoice(v))];
-      const sel = document.getElementById('voice-select');
-      if (sel) {
-        const saved = localStorage.getItem('oraculo_voice_name') || 'AUTO_PERSONA';
-        sel.innerHTML =
-          `<option value="AUTO_PERSONA" ${saved === 'AUTO_PERSONA' ? 'selected' : ''}>🎭 Automático por Personaje (IA)</option>` +
-          spanishVoices.map(v => `<option value="${v.name}" ${v.name === saved ? 'selected' : ''}>${v.name}</option>`).join('');
-      }
-    }
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-      loadVoices();
-    }
-
-    function savePreferredVoice() {
-      const sel = document.getElementById('voice-select');
-      if (sel) localStorage.setItem('oraculo_voice_name', sel.value);
-    }
-
-    function pickVoiceForPersona(personaKey) {
-      if (spanishVoices.length === 0) return null;
-      const savedName = localStorage.getItem('oraculo_voice_name') || 'AUTO_PERSONA';
-      if (savedName !== 'AUTO_PERSONA') {
-        const manual = spanishVoices.find(v => v.name === savedName);
-        if (manual) return manual;
-      }
-      const profile = PERSONA_PROFILES[personaKey] || PERSONA_PROFILES.friday;
-      for (const kw of profile.preferred) {
-        const match = spanishVoices.find(v => isNaturalVoice(v) && v.name.toLowerCase().includes(kw.toLowerCase()));
-        if (match) return match;
-      }
-      for (const kw of profile.preferred) {
-        const match = spanishVoices.find(v => v.name.toLowerCase().includes(kw.toLowerCase()));
-        if (match) return match;
-      }
-      return spanishVoices[0];
-    }
-
-    function setSpeakingVisual(active) {
-      const cluster = document.getElementById('voice-hud-cluster');
-      const stopBtn = document.getElementById('stop-voice-btn');
-      if (active) {
-        cluster.classList.add('voice-speaking');
-        stopBtn.classList.remove('hidden');
-      } else {
-        cluster.classList.remove('voice-speaking');
-        stopBtn.classList.add('hidden');
-      }
-    }
-
-    function updateVoiceButtonUI() {
-      const btn = document.getElementById('voice-toggle-btn');
-      const txt = document.getElementById('voice-status-txt');
-      if (voiceEnabled) {
-        btn.className = 'px-2.5 py-1 rounded bg-purple-600/25 border border-purple-400 text-purple-300 hover:bg-purple-600/40 font-bold flex items-center gap-2';
-        txt.textContent = 'VOZ IA: ON';
-      } else {
-        btn.className = 'px-2.5 py-1 rounded bg-bg border border-border text-slate-400 font-bold flex items-center gap-2';
-        txt.textContent = 'VOZ IA: OFF';
-      }
-    }
-
-    function toggleVoice() {
-      voiceEnabled = !voiceEnabled;
-      localStorage.setItem('oraculo_voice', voiceEnabled ? 'on' : 'off');
-      updateVoiceButtonUI();
-      if (!voiceEnabled) stopSpeaking();
-      else speakText('Protocolos vocales en línea, señor.', true, 'jarvis');
-    }
-
-    function stopSpeaking() {
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      setSpeakingVisual(false);
-    }
-
-    function cleanTextForSpeech(raw) {
-      return raw
-        .replace(/<[^>]*>/g, ' ')
-        .replace(/BTCUSD/g, 'Bitcoin')
-        .replace(/EURUSD/g, 'Euro Dólar')
-        .replace(/USDJPY/g, 'Dólar Yen')
-        .replace(/GBPUSD/g, 'Libra Dólar')
-        .replace(/AUDUSD/g, 'Dólar Australiano')
-        .replace(/NZDUSD/g, 'Dólar Neozelandés')
-        .replace(/USDCAD/g, 'Dólar Canadiense')
-        .replace(/USDCHF/g, 'Dólar Franco')
-        .replace(/EURJPY/g, 'Euro Yen')
-        .replace(/USTEC/g, 'Nasdaq')
-        .replace(/US500/g, 'S P 500')
-        .replace(/US30/g, 'Dow Jones')
-        .replace(/US10Y/g, 'rendimiento del bono a 10 años')
-        .replace(/DXY/g, 'índice del dólar')
-        .replace(/CHoCH/g, 'cambio de carácter')
-        .replace(/BOS/g, 'ruptura de estructura')
-        .replace(/TP1/g, 'primer objetivo')
-        .replace(/TP2/g, 'segundo objetivo')
-        .replace(/SL/g, 'Stop Loss')
-        .replace(/OB/g, 'bloque institucional')
-        .replace(/:/g, '. ')
-        .replace(/;/g, '. ')
-        .replace(/\s+/g, ' ')
-        .trim();
-    }
-
-    function speakText(rawText, force = false, personaKey = 'friday') {
-      if ((!voiceEnabled && !force) || !('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      if (spanishVoices.length === 0) loadVoices();
-
-      const profile = PERSONA_PROFILES[personaKey] || PERSONA_PROFILES.friday;
-      const chosenVoice = pickVoiceForPersona(personaKey);
-      const clean = cleanTextForSpeech(rawText);
-      const sentences = clean.match(/[^.!?]+[.!?]*/g) || [clean];
-
-      sentences.forEach((sentence, idx) => {
-        const s = sentence.trim();
-        if (!s) return;
-        const utter = new SpeechSynthesisUtterance(s);
-        utter.lang = chosenVoice ? chosenVoice.lang : 'es-ES';
-        utter.pitch = profile.pitch;
-        utter.rate = profile.rate;
-        if (chosenVoice) utter.voice = chosenVoice;
-
-        if (idx === 0) utter.onstart = () => setSpeakingVisual(true);
-        if (idx === sentences.length - 1) {
-          utter.onend = () => setSpeakingVisual(false);
-          utter.onerror = () => setSpeakingVisual(false);
+    function typeAgentDialogue(fullText, speak = true) {
+      clearInterval(typeTimer);
+      const box = document.getElementById('agent-dialogue-box');
+      let i = 0;
+      setStateLabel('HABLANDO');
+      if (speak) speakText(fullText, currentAgent);
+      typeTimer = setInterval(() => {
+        i += 2;
+        box.innerHTML = `${fullText.slice(0, i)}<span class="typing-cursor"></span>`;
+        if (i >= fullText.length) {
+          clearInterval(typeTimer);
+          box.innerHTML = `${fullText}<span class="typing-cursor"></span>`;
+          if (!voiceEnabled) setStateLabel('EN ESPERA');
         }
-        window.speechSynthesis.speak(utter);
+      }, 22);
+    }
+
+    function selectAgent(key, withIntro = true) {
+      currentAgent = key;
+      const ag = AGENTS[key];
+      document.documentElement.style.setProperty('--agent-color', ag.color);
+
+      // Actualizar tabs inferiores
+      document.querySelectorAll('.ag-tab').forEach(btn => {
+        const active = btn.dataset.ag === key;
+        btn.style.borderColor = active ? ag.color : 'transparent';
+        btn.style.color = active ? ag.color : '#94a3b8';
       });
+
+      // Intro cinematográfica rápida como en el video
+      if (withIntro) {
+        const ov = document.getElementById('agent-intro-overlay');
+        const title = document.getElementById('intro-title');
+        const sub = document.getElementById('intro-sub');
+        title.textContent = ag.name;
+        title.style.color = '#ffffff';
+        title.style.textShadow = `0 0 22px ${ag.color}`;
+        sub.textContent = ag.sub;
+        ov.classList.remove('hidden');
+        setTimeout(() => ov.classList.add('hidden'), 950);
+      }
+
+      document.getElementById('agent-core-visual').innerHTML = renderAgentCoreSVG(key);
+      document.getElementById('agent-role-label').textContent = `${ag.name} · ${ag.sub}`;
+      updateAgentTelemetryAndGreeting(key);
     }
 
-    function speakBriefing() {
+    function updateAgentTelemetryAndGreeting(key) {
+      const broken = getBrokenTheses();
+      const aligned = getAlignedAssets();
+      const nearest = getNearestAsset();
+      const homer = getHomerMetrics();
+
+      if (key === 'jarvis') {
+        document.getElementById('agent-hero-metric').textContent = `${broken.length} ALERTAS`;
+        document.getElementById('agent-hero-sub').textContent = `${aligned.length} IDEAS ABIERTAS`;
+        typeAgentDialogue(`Buenas tardes, señor. Detecto ${broken.length} alertas de tesis rota y ${aligned.length} ideas alineadas vigentes entre los 16 activos. ¿Quiere que le dé un resumen?`);
+      } else if (key === 'vision') {
+        const nextEv = (data && data.calendar && data.calendar[0]) ? `${data.calendar[0].title} (${data.calendar[0].currency})` : 'SIN NOTICIAS INMEDIATAS';
+        document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
+        document.getElementById('agent-hero-sub').textContent = nextEv;
+        typeAgentDialogue(`Buenas tardes, señor. El dólar cotiza en ${data ? data.brief.dxy : '--'} y el bono a 10 años en ${data ? data.brief.us10y : '--'}. ¿Quiere que le dé un resumen macro?`);
+      } else if (key === 'ultron') {
+        const target = nearest || (data && data.assets[0]);
+        document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
+        document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · BOS/CHoCH` : 'ESTRUCTURA';
+        typeAgentDialogue(`Buenas tardes, señor. Sin emociones, solo estructura. Usted ponga las emociones, que yo pongo la estructura. ¿Quiere que le dé un diagnóstico técnico?`);
+      } else if (key === 'friday') {
+        const pct = Math.round((completedLessons.length / 10) * 100);
+        document.getElementById('agent-hero-metric').textContent = `${pct}%`;
+        document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE 10 LECCIONES`;
+        typeAgentDialogue(`Buenas tardes, señor. Prometo no tomarle examen sorpresa. Bueno, tal vez uno. ¿Quiere que le explique la idea principal de hoy?`);
+      } else if (key === 'edith') {
+        if (nearest) {
+          const d = getAssetUnitsDist(nearest);
+          document.getElementById('agent-hero-metric').textContent = `${d.units} ${d.label}`;
+          document.getElementById('agent-hero-sub').textContent = `${nearest.symbol} · FALTA PARA LA ENTRADA`;
+        } else {
+          document.getElementById('agent-hero-metric').textContent = '--';
+          document.getElementById('agent-hero-sub').textContent = 'CALCULANDO DISTANCIA';
+        }
+        typeAgentDialogue(`Buenas tardes, señor. Calculé todo. Lo único impredecible sigue siendo usted. ¿Quiere que le dé los niveles exactos de entrada?`);
+      } else if (key === 'karen') {
+        document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
+        document.getElementById('agent-hero-sub').textContent = `OPERACIONES AUDITADAS`;
+        typeAgentDialogue(`Buenas tardes, señor. Anotar duele menos que repetir errores, señor. ¿Quiere que le dé un resumen de su disciplina?`);
+      } else if (key === 'homer') {
+        document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
+        document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
+        typeAgentDialogue(`Buenas tardes, señor. Revisé sus rachas. Hay de todo, como en botica. ¿Quiere que le dé un resumen estadístico?`);
+      }
+    }
+
+    function handleQuickReply(choice) {
+      if (choice === 'NO') {
+        typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa vigilando los 16 pares.');
+        return;
+      }
       if (!data) {
-        speakText('Sincronizando telemetría del mercado, señor.', true, 'jarvis');
+        typeAgentDialogue('Aún estoy descargando los últimos datos de GitHub Actions, señor. Intente en unos segundos.');
         return;
       }
-      const aligned = data.assets.filter(a => a.confluence.alignment === 'ALIGNED' && getSetupLifecycle(a).state === 'ACTIVE');
-      const alignedTxt = aligned.length > 0
-        ? `Tenemos ${aligned.length} activos con alineación vigente: ${aligned.map(a => `${a.symbol} para ${a.setup.direction === 'BUY' ? 'compras' : 'ventas'}`).join(', ')}.`
-        : 'Ningún activo muestra alineación vigente en este corte.';
-      speakText(`Aquí Jarvis. ${data.brief.headline}. ${alignedTxt}`, true, 'jarvis');
+      if (currentAgent === 'jarvis') {
+        const broken = getBrokenTheses();
+        const aligned = getAlignedAssets();
+        const bTxt = broken.length ? `Alertas de tesis rota en ${broken.map(x => x.symbol).join(', ')}. ` : 'Sin tesis rotas ahora. ';
+        const aTxt = aligned.length ? `Las ideas alineadas vigentes son ${aligned.map(x => `${x.symbol} (${x.setup.signal_tag})`).join(', ')}.` : 'Ningún par tiene alineación fuerte en este momento.';
+        typeAgentDialogue(bTxt + aTxt);
+      } else if (currentAgent === 'vision') {
+        typeAgentDialogue(`${data.brief.headline}. ${data.brief.summary}`);
+      } else if (currentAgent === 'ultron') {
+        const n = getNearestAsset();
+        const d = getAssetUnitsDist(n);
+        const p = getSetupPips(n);
+        typeAgentDialogue(`Objetivo prioritario: ${n.symbol}. Está a ${d.units} ${d.label} de su entrada en ${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
+      } else if (currentAgent === 'friday') {
+        const a = getAlignedAssets()[0] || data.assets[0];
+        typeAgentDialogue(`En ${a.symbol}, ${a.macro_reason} Técnicamente su gráfico está en ${a.chart_bias}. Recuerde entrar solo en Killzone y esperar confirmación de vela.`);
+      } else if (currentAgent === 'edith') {
+        const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
+        typeAgentDialogue(`Los 3 blancos más cercanos son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})`).join('; ') + `.`);
+      } else if (currentAgent === 'karen') {
+        typeAgentDialogue(trades.length === 0
+          ? 'No tiene operaciones anotadas todavía, señor. Abra el panel para registrar su primera ejecución.'
+          : `Tiene ${trades.length} operaciones registradas. Su última entrada fue en ${trades[0].pair} (${trades[0].dir}) con resultado ${trades[0].res}.`);
+      } else if (currentAgent === 'homer') {
+        const h = getHomerMetrics();
+        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre ${h.total} operaciones auditadas.`);
+      }
     }
 
-    function speakVisionBrief() {
+    function handleCockpitChat(e) {
+      e.preventDefault();
+      const inp = document.getElementById('cockpit-input');
+      if (!inp.value.trim()) return;
+      processQuery(inp.value.trim());
+      inp.value = '';
+    }
+
+    function processQuery(qRaw) {
+      const q = qRaw.toUpperCase();
       if (!data) {
-        speakText('Visión analizando flujos macroeconómicos.', true, 'vision');
+        typeAgentDialogue('Sincronizando datos del mercado, señor.');
         return;
       }
-      speakText(`Reporte de Visión. ${data.brief.headline}. ${data.brief.summary}`, true, 'vision');
-    }
-
-    function speakAssetSetup(symbol) {
-      if (!data) return;
-      const a = data.assets.find(x => x.symbol === symbol);
-      if (!a) return;
-      const prox = getAssetProximity(a);
-      const pips = getSetupPips(a);
-      const shield = getAssetNewsShield(a);
-      const life = getSetupLifecycle(a);
-
-      if (shield) {
-        speakText(`Alerta de Ultrón sobre ${a.symbol}. Operación bloqueada por noticia de alto impacto de ${shield.currency}. No ejecutar.`, true, 'ultron');
+      const asset = data.assets.find(a => q.includes(a.symbol));
+      if (asset) {
+        const d = getAssetUnitsDist(asset);
+        const p = getSetupPips(asset);
+        const status = asset.confluence.alignment === 'OPPOSED' ? 'ALERTA DE TESIS ROTA (se contradicen)' : (asset.confluence.alignment === 'ALIGNED' ? 'ALINEACIÓN FUERTE' : 'NEUTRAL');
+        typeAgentDialogue(`${asset.symbol} cotiza en ${asset.price}. Estado: ${status}. Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss de ${p.sl} ${p.unitLabel} (${asset.setup.sl}) y TP1 de +${p.tp1} ${p.unitLabel} (${asset.setup.tp1}).`);
         return;
       }
-      if (life.state !== 'ACTIVE') {
-        speakText(`Ultrón reportando sobre ${a.symbol}. Esta señal ya cumplió su recorrido anterior. Espere el próximo corte de actualización.`, true, 'ultron');
+      if (q.includes('GBP') || q.includes('LIBRA')) {
+        const gbps = data.assets.filter(a => a.symbol.includes('GBP'));
+        typeAgentDialogue('Estado de la canasta GBP: ' + gbps.map(g => `${g.symbol} (${g.confluence.verdict_title}, a ${getAssetUnitsDist(g).units} pips)`).join('; ') + '.');
         return;
       }
-
-      const dirWord = a.setup.direction === 'BUY' ? 'compra' : 'venta';
-      speakText(
-        `Ultrón reportando sobre ${a.symbol}. Distancia a entrada: ${prox.units} ${prox.unitLabel}. ` +
-        `Plan de ${dirWord} en ${a.setup.entry}. Stop Loss en ${a.setup.sl}, riesgo de ${pips.slPips} ${pips.unitLabel}. ` +
-        `Primer objetivo en ${a.setup.tp1}, ganancia proyectada de ${pips.tp1Pips} ${pips.unitLabel}.`,
-        true,
-        'ultron'
-      );
+      handleQuickReply('SI');
     }
 
-    function speakCurrentUltron() {
-      speakAssetSetup(selectedSymbol);
+    function speakCurrentAgent() {
+      const txt = document.getElementById('agent-dialogue-box').innerText;
+      speakText(txt, currentAgent);
     }
 
-    updateVoiceButtonUI();
-
-    const COURSE_LESSONS = [
-      "1. Qué mueve el precio de una moneda (diferenciales de tasas)",
-      "2. Bancos centrales: Hawkish vs. Dovish",
-      "3. Inflación: CPI, PCE y su impacto en el USD",
-      "4. Empleo: NFP y tasa de desempleo",
-      "5. Bonos del Tesoro (US10Y) y apetito por riesgo",
-      "6. Estructura de mercado: HH, HL, LH, LL",
-      "7. Quiebres institucionales: BOS vs. CHoCH",
-      "8. Zonas Premium (Caro) vs. Discount (Barato) y EQ 50%",
-      "9. Order Blocks (OB) y Vacíos de Liquidez (FVG)",
-      "10. Liquidez externa: BSL, SSL y Killzones de Londres/NY"
-    ];
-
-    const GLOSSARY_ITEMS = [
-      { term: "BOS (Break of Structure)", def: "Ruptura de estructura a favor de la tendencia dominante que confirma continuación institucional." },
-      { term: "CHoCH (Change of Character)", def: "Primer quiebre estructural en contra de la tendencia previa; señala posible cambio de dirección." },
-      { term: "Order Block (OB)", def: "Última vela contraria antes de un movimiento impulsivo con desequilibrio donde instituciones dejaron órdenes." },
-      { term: "BSL / SSL", def: "Buy-Side Liquidity (liquidez sobre máximos) y Sell-Side Liquidity (liquidez bajo mínimos)." },
-      { term: "Premium / Discount", def: "Mitad superior (cara, para buscar ventas) e inferior (barata, para buscar compras) de un rango." },
-      { term: "Hawkish / Dovish", def: "Hawkish: postura restrictiva / tasas altas. Dovish: postura flexible / recortes de tasas." },
-      { term: "Yield (US10Y)", def: "Rendimiento del bono del Tesoro a 10 años; referencia clave para fortaleza del USD." },
-      { term: "ATR (Average True Range)", def: "Rango promedio de movimiento diario de un activo; útil para dimensionar Stop Loss." }
-    ];
-
-    function enterOraculo(withGreeting = false) {
+    // =========================================================
+    // PANTALLA DE ARRANQUE Y ALTERNAR CABINA / PANEL
+    // =========================================================
+    function enterOraculo(withIntro = false) {
       const el = document.getElementById('boot-screen');
       if (el.classList.contains('hidden')) return;
       el.classList.add('opacity-0', 'pointer-events-none');
-      setTimeout(() => el.classList.add('hidden'), 500);
-      if (withGreeting) {
-        if (data) speakBriefing();
-        else speakText('Cabina cibernética de Oráculo inicializada, señor.', true, 'jarvis');
-      }
+      setTimeout(() => {
+        el.classList.add('hidden');
+        selectAgent('jarvis', withIntro);
+      }, 450);
     }
     function showBoot() {
       const el = document.getElementById('boot-screen');
       el.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
     }
-    setTimeout(() => enterOraculo(false), 3200);
+    setTimeout(() => enterOraculo(false), 3800);
 
-    function updateClocks() {
+    function toggleViewMode() {
+      isPanelMode = !isPanelMode;
+      document.getElementById('cockpit-view').classList.toggle('hidden', isPanelMode);
+      document.getElementById('panel-view').classList.toggle('hidden', !isPanelMode);
+      document.getElementById('view-mode-btn').textContent = isPanelMode ? '◂ CABINA' : 'VER PANEL ▸';
+      if (isPanelMode) renderPanelAll();
+    }
+
+    function switchPanelTab(tab) {
+      ['jarvis', 'ultron', 'vision', 'karen'].forEach(t => {
+        document.getElementById(`ptab-${t}`).classList.toggle('hidden', t !== tab);
+      });
+      document.querySelectorAll('.ptab').forEach(b => {
+        b.className = b.dataset.pt === tab
+          ? 'ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold'
+          : 'ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+      });
+      if (tab === 'ultron') setTimeout(drawUltronChart, 60);
+    }
+
+    function setPanelFilter(f) {
+      panelFilter = f;
+      document.querySelectorAll('.pf-btn').forEach(b => {
+        b.className = b.dataset.pf === f
+          ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold'
+          : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+      });
+      renderPanelJarvis();
+    }
+
+    // =========================================================
+    // RELOJES UTC Y KILLZONES
+    // =========================================================
+    function updateClock() {
       const now = new Date();
-      const fmt = (tz) => now.toLocaleTimeString('es-ES', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
-      document.getElementById('clk-ldn').textContent = `LDN ${fmt('Europe/London')}`;
-      document.getElementById('clk-nyc').textContent = `NYC ${fmt('America/New_York')}`;
-      document.getElementById('clk-utc').textContent = `UTC ${now.toISOString().substring(11, 19)}`;
-
       const h = now.getUTCHours();
       const kz = document.getElementById('killzone-badge');
-      if ((h >= 7 && h <= 10) || (h >= 12 && h <= 16)) {
-        kz.textContent = 'EN KILLZONE · ALTA LIQUIDEZ';
-        kz.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
-      } else {
-        kz.textContent = 'FUERA DE KILLZONE';
-        kz.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-bg text-slate-400 border border-border';
-      }
-    }
-    setInterval(updateClocks, 1000);
-    updateClocks();
-
-    function switchModule(mod) {
-      ['jarvis', 'vision', 'ultron', 'friday', 'analisis', 'diario'].forEach(m => {
-        document.getElementById(`mod-${m}`).classList.toggle('hidden', m !== mod);
-        const btn = document.getElementById(`nav-${m}`);
-        if (btn) {
-          const colors = { jarvis: 'border-amber-400 text-amber-400', vision: 'border-sky-400 text-sky-400', ultron: 'border-red-400 text-red-400', friday: 'border-purple-400 text-purple-400', analisis: 'border-white text-white', diario: 'border-white text-white' };
-          btn.className = m === mod
-            ? `nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 ${colors[m]}`
-            : 'nav-tab px-4 py-2.5 text-xs font-mono font-bold border-b-2 border-transparent text-slate-400 hover:text-white';
-        }
-      });
-      document.querySelectorAll('.m-nav').forEach(b => {
-        b.className = b.dataset.m === mod
-          ? 'm-nav py-2.5 flex flex-col items-center text-amber-400 font-bold'
-          : 'm-nav py-2.5 flex flex-col items-center text-slate-400';
-      });
-      if (mod === 'ultron') setTimeout(drawUltronChart, 60);
-    }
-
-    function openAssetInUltron(symbol) {
-      selectedSymbol = symbol;
-      renderUltronSelector();
-      updateUltronDetails();
-      switchModule('ultron');
-    }
-
-    async function loadData() {
-      try {
-        const res = await fetch(`./data.json?t=${Date.now()}`);
-        if (!res.ok) throw new Error('Pendiente data.json');
-        data = await res.json();
-        renderAll();
-        scanProximityAlerts(false);
-      } catch (e) {
-        document.getElementById('last-updated').textContent = 'Ejecuta Actions en GitHub para cargar telemetría';
-      }
-    }
-
-    function renderAll() {
-      if (!data) return;
-      document.getElementById('last-updated').textContent = `TELEMETRÍA: ${data.last_updated}`;
-      document.getElementById('brief-date').textContent = data.last_updated;
-      document.getElementById('brief-headline').textContent = data.brief.headline;
-      document.getElementById('brief-summary').textContent = data.brief.summary;
-      document.getElementById('m-us10y').textContent = data.brief.us10y;
-      document.getElementById('m-us10y-c').textContent = data.brief.us10y_chg;
-      document.getElementById('m-dxy').textContent = data.brief.dxy;
-      document.getElementById('m-dxy-c').textContent = data.brief.dxy_chg;
-      document.getElementById('m-brent').textContent = data.brief.brent;
-      document.getElementById('m-brent-c').textContent = data.brief.brent_chg;
-
-      document.getElementById('j-pair').innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
-
-      if (!data.assets.some(a => a.symbol === selectedSymbol) && data.assets.length > 0) {
-        selectedSymbol = data.assets[0].symbol;
-      }
-
-      renderLiveTicker();
-      renderProximityRadar();
-      renderJarvis();
-      renderVision();
-      renderUltronSelector();
-      updateUltronDetails();
-    }
-
-    function biasPill(bias) {
-      if (bias === 'SUBE') return '<span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[11px] font-bold">▲ SUBE</span>';
-      if (bias === 'BAJA') return '<span class="px-2 py-0.5 rounded bg-red-500/15 text-red-400 border border-red-500/30 font-mono text-[11px] font-bold">▼ BAJA</span>';
-      return '<span class="px-2 py-0.5 rounded bg-slate-500/15 text-slate-300 border border-slate-500/30 font-mono text-[11px] font-bold">● NEUTRAL</span>';
-    }
-
-    function filterJarvis(f) {
-      jarvisFilter = f;
-      document.querySelectorAll('.j-filter').forEach(b => {
-        b.className = b.dataset.jf === f
-          ? 'j-filter px-3 py-1 rounded bg-amber-500 text-black font-bold'
-          : 'j-filter px-3 py-1 rounded bg-bg/80 border border-border text-slate-300';
-      });
-      renderJarvis();
-    }
-
-    function buildWhyExplanationHTML(a, prox, pips, life, shield) {
-      const dirVerb = a.setup.direction === 'BUY' ? 'comprar' : 'vender';
-      const oppVerb = a.setup.direction === 'BUY' ? 'bajar' : 'subir';
-      const votes = [a.tf_bias.weekly, a.tf_bias.daily, a.tf_bias.h4];
-      const bullCount = votes.filter(v => v === 'SUBE').length;
-      const bearCount = votes.filter(v => v === 'BAJA').length;
-      const winVotes = a.setup.direction === 'BUY' ? bullCount : bearCount;
-
-      const relNews = getRelevantNewsForAsset(a);
-      const strongNewsCount = relNews.length;
-      const sizeAdvice = strongNewsCount >= 3
-        ? `${strongNewsCount} noticias fuertes esta semana: tamaño moderado`
-        : (strongNewsCount > 0 ? `${strongNewsCount} noticia(s) fuerte(s) esta semana: gestión estándar` : 'Semana despejada de alto impacto');
-
-      const simpleSummary = a.confluence.alignment === 'ALIGNED'
-        ? `Se busca <strong>${dirVerb} ${a.symbol}</strong> porque <strong>VISIÓN</strong> y <strong>ULTRÓN</strong> empujan en la misma dirección hacia el objetivo de <strong>${a.setup.tp1} (+${pips.tp1Pips} ${pips.unitLabel})</strong>.`
-        : (a.confluence.alignment === 'OPPOSED'
-            ? `Precaución en <strong>${a.symbol}</strong>: la economía (${a.economy_bias}) y el gráfico (${a.chart_bias}) se contradicen. Espere confirmación estructural en el bloque <strong>${a.setup.entry}</strong> antes de entrar.`
-            : `Se proyecta <strong>${dirVerb} ${a.symbol}</strong> en el bloque <strong>${a.setup.entry}</strong>, aunque uno de los motores está neutral. Confirme ruptura en temporalidad menor antes de ejecutar.`);
-
-      const newsBlockHTML = relNews.length > 0
-        ? relNews.map(ev => `
-            <div class="bg-[#04070e] border border-border rounded p-2 space-y-1 text-[11px]">
-              <div class="flex items-center justify-between font-mono">
-                <span class="text-amber-300 font-bold">${ev.title}</span>
-                <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300">${ev.currency} · ${ev.time}</span>
-              </div>
-              <div class="font-mono text-[10px] text-slate-400">Previa: <span class="text-slate-200">${ev.forecast}</span> | Antes: <span class="text-slate-200">${ev.previous}</span></div>
-              <div class="text-[10px]"><span class="text-emerald-400 font-bold">FUERTE:</span> Apoya el escenario USD | <span class="text-red-400 font-bold">DÉBIL:</span> Lo afloja</div>
-            </div>
-          `).join('')
-        : `<div class="text-[11px] text-slate-400 font-mono">No hay noticias rojas programadas para ${a.base}/${a.quote} en lo que resta de la semana.</div>`;
-
-      const rawSpeech = `Explicación de ${a.symbol}. En simple: ${simpleSummary.replace(/<[^>]*>/g, '')} Riesgo de ${pips.slPips} ${pips.unitLabel} para buscar ${pips.tp1Pips} ${pips.unitLabel}.`;
-
-      return `
-        <div id="why-panel-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04070e] border border-cyan-500/30 rounded-lg p-3.5 space-y-3 text-xs text-slate-200">
-          <!-- EN SIMPLE -->
-          <div class="bg-panel border-l-2 border-amber-400 rounded-r p-2.5 space-y-1">
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] font-mono font-bold text-amber-400 uppercase">EN SIMPLE</span>
-              <button onclick="speakText('${rawSpeech.replace(/'/g, '')}', true, 'friday')" class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 hover:bg-purple-500/30">🔊 Escuchar explicación</button>
-            </div>
-            <p class="text-xs text-slate-200 leading-relaxed">${simpleSummary}</p>
-          </div>
-
-          <!-- MARCO · LO QUE DICE LA ECONOMÍA (VISIÓN) -->
-          <div class="space-y-1.5">
-            <div class="text-[10px] font-mono font-bold text-sky-400 uppercase">MARCO · LO QUE DICE LA ECONOMÍA (VISIÓN)</div>
-            <div class="flex flex-wrap gap-1.5 text-[10px] font-mono">
-              <span class="px-2 py-0.5 rounded bg-panel border border-border">Semanal: <strong class="${a.tf_bias.weekly === 'SUBE' ? 'text-emerald-400' : (a.tf_bias.weekly === 'BAJA' ? 'text-red-400' : 'text-slate-300')}">${a.tf_bias.weekly}</strong></span>
-              <span class="px-2 py-0.5 rounded bg-panel border border-border">Diario: <strong class="${a.tf_bias.daily === 'SUBE' ? 'text-emerald-400' : (a.tf_bias.daily === 'BAJA' ? 'text-red-400' : 'text-slate-300')}">${a.tf_bias.daily}</strong></span>
-              <span class="px-2 py-0.5 rounded bg-panel border border-border">4H: <strong class="${a.tf_bias.h4 === 'SUBE' ? 'text-emerald-400' : (a.tf_bias.h4 === 'BAJA' ? 'text-red-400' : 'text-slate-300')}">${a.tf_bias.h4}</strong></span>
-            </div>
-            <p class="text-[11px] text-slate-300 leading-relaxed">${a.macro_reason}</p>
-          </div>
-
-          <!-- POR QUÉ VISIÓN DICE ESTO · PASO A PASO -->
-          <div class="space-y-2 border-t border-border/70 pt-2.5">
-            <div class="text-[10px] font-mono font-bold text-purple-300 uppercase">POR QUÉ VISIÓN DICE ESTO · PASO A PASO</div>
-
-            <div class="space-y-1">
-              <div class="font-mono font-bold text-[11px] text-white"><span class="text-sky-400">1</span> La idea</div>
-              <p class="text-[11px] text-slate-300 pl-3.5">VISIÓN ve que <strong>${a.symbol}</strong> tiende a <strong>${a.economy_bias === 'SUBE' ? 'subir' : (a.economy_bias === 'BAJA' ? 'bajar' : 'lateralizar')}</strong> con convicción <strong>${winVotes} de 3</strong> en temporalidades mayores.</p>
-            </div>
-
-            <div class="space-y-1">
-              <div class="font-mono font-bold text-[11px] text-white"><span class="text-sky-400">2</span> Los números</div>
-              <ul class="text-[11px] text-slate-300 pl-5 list-disc space-y-0.5 font-mono">
-                <li>${a.symbol} cotiza en <strong>${a.price}</strong> (${a.chg_day >= 0 ? '+' : ''}${a.chg_day}% hoy / ${a.chg_week >= 0 ? '+' : ''}${a.chg_week}% semana)</li>
-                <li>Bono US10Y: <strong>${data.brief.us10y}</strong> · Índice Dólar DXY: <strong>${data.brief.dxy}</strong></li>
-                <li>Rango 20 días: <strong>${a.range_20_low}</strong> – <strong>${a.range_20_high}</strong> (EQ 50%: ${a.eq_50})</li>
-              </ul>
-            </div>
-
-            <div class="space-y-1">
-              <div class="font-mono font-bold text-[11px] text-white"><span class="text-sky-400">3</span> Qué la respalda</div>
-              <ul class="text-[11px] text-slate-300 pl-5 list-disc space-y-0.5">
-                <li>Bloque institucional (OB) trazado entre <strong>${a.ob_low}</strong> y <strong>${a.ob_high}</strong></li>
-                <li>Distancia actual al punto de entrada: <strong>${prox.units} ${prox.unitLabel}</strong></li>
-                <li>Relación Riesgo/Beneficio: <strong>${pips.slPips} ${pips.unitLabel}</strong> de Stop vs <strong>+${pips.tp1Pips} / +${pips.tp2Pips} ${pips.unitLabel}</strong></li>
-              </ul>
-            </div>
-
-            <div class="space-y-1.5">
-              <div class="font-mono font-bold text-[11px] text-white"><span class="text-sky-400">4</span> Noticias de esta semana que la ponen a prueba</div>
-              <div class="pl-3.5 space-y-1.5">
-                ${newsBlockHTML}
-                <p class="text-[10px] text-amber-300/90 italic">Si el dato sale del lado que «la afloja», no pelee contra el mercado: achique o salga.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- ULTRÓN & LO QUE PODRÍA SALIR MAL -->
-          <div class="border-t border-border/70 pt-2.5 space-y-2">
-            <div>
-              <div class="text-[10px] font-mono font-bold text-red-400 uppercase">ULTRÓN · LO QUE DICE EL GRÁFICO</div>
-              <p class="text-[11px] text-slate-300 mt-0.5">Tendencia técnica en <strong>${a.chart_bias}</strong>. Estado actual: <strong>${life.badge}</strong>.</p>
-            </div>
-            <div>
-              <div class="text-[10px] font-mono font-bold text-amber-400 uppercase">LO QUE PODRÍA SALIR MAL</div>
-              <ul class="text-[11px] text-slate-300 pl-4 list-disc mt-0.5 space-y-0.5">
-                <li>${sizeAdvice}</li>
-                <li>Invalidación técnica si el precio rompe el Stop Loss en <strong>${a.setup.sl}</strong> (-${pips.slPips} ${pips.unitLabel}) y empieza a ${oppVerb} con fuerza.</li>
-              </ul>
-            </div>
-            <div class="pt-1 flex justify-end">
-              <button onclick="openAssetInUltron('${a.symbol}')" class="px-3 py-1 rounded bg-red-500/20 border border-red-400/60 hover:bg-red-500/30 text-[11px] font-mono font-bold text-red-300">
-                Abrir ficha completa en Ultrón →
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderJarvis() {
-      if (!data) return;
-      const sorted = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score);
-      document.getElementById('jarvis-top-confluence').innerHTML = sorted.slice(0, 4).map(a => `
-        <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-panel border border-border hover:border-amber-400 text-xs font-mono flex items-center gap-1.5">
-          <span class="text-white font-bold">${a.symbol}</span>
-          <span class="${a.chart_bias === 'SUBE' ? 'text-emerald-400' : 'text-red-400'}">${a.chart_bias === 'SUBE' ? '▲' : '▼'} ${a.confluence.score}</span>
-        </button>
-      `).join('');
-
-      const aligned = sorted.filter(a => a.confluence.alignment === 'ALIGNED' && getSetupLifecycle(a).state === 'ACTIVE' && !getAssetNewsShield(a));
-      document.getElementById('jarvis-best-today').innerHTML = aligned.length > 0
-        ? aligned.map(a => `
-            <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded ${a.setup.direction === 'BUY' ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300' : 'bg-red-500/15 border-red-500/40 text-red-300'} border text-xs font-mono font-bold">
-              ${a.symbol} ${a.setup.direction === 'BUY' ? '▲ COMPRAS' : '▼ VENTAS'}
-            </button>
-          `).join('')
-        : '<span class="text-xs font-mono text-slate-400">Sin alineación nueva sin noticias en este corte.</span>';
-
-      let list = sorted;
-      if (jarvisFilter === 'NEAR') {
-        list = sorted.filter(a => getAssetProximity(a).status !== 'FAR' && getSetupLifecycle(a).state === 'ACTIVE');
-      } else if (jarvisFilter !== 'ALL') {
-        list = sorted.filter(a => a.confluence.alignment === jarvisFilter);
-      }
-
-      document.getElementById('jarvis-cards-grid').innerHTML = list.map(a => {
-        const prox = getAssetProximity(a);
-        const pips = getSetupPips(a);
-        const shield = getAssetNewsShield(a);
-        const life = getSetupLifecycle(a);
-        const isAligned = a.confluence.alignment === 'ALIGNED';
-        const isOpposed = a.confluence.alignment === 'OPPOSED';
-        const ringColor = isAligned ? 'border-emerald-400 text-emerald-400' : (isOpposed ? 'border-amber-400 text-amber-400' : 'border-slate-500 text-slate-400');
-        const bannerBg = isAligned ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' : (isOpposed ? 'bg-red-500/10 border-red-500/40 text-red-300' : 'bg-[#050811] border-border text-slate-300');
-
-        const proxBadge = prox.status === 'IN_ZONE'
-          ? `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold">🔥 EN ZONA (${prox.units} ${prox.unitLabel})</span>`
-          : (prox.status === 'APPROACHING'
-              ? `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/50 text-amber-300">⚡ A ${prox.units} ${prox.unitLabel}</span>`
-              : `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-bg border border-border text-slate-400">Dist: ${prox.units} ${prox.unitLabel}</span>`);
-
-        const whyHTML = buildWhyExplanationHTML(a, prox, pips, life, shield);
-
-        return `
-          <div class="hud-panel hud-interactive border ${shield ? 'border-red-500' : (prox.status === 'IN_ZONE' && life.state === 'ACTIVE' ? 'border-emerald-400 entry-beacon' : (isAligned ? 'border-emerald-500/40' : 'border-border'))} rounded-xl p-4 space-y-3">
-            <div class="flex items-center justify-between gap-2">
-              <div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <span class="font-hud font-extrabold text-white text-sm">${a.symbol}</span>
-                  <span class="text-xs font-mono text-cyan-300">${a.price}</span>
-                  ${proxBadge}
-                </div>
-                <div class="flex flex-wrap items-center gap-1.5 mt-1">
-                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border ${life.cls}">${life.badge}</span>
-                  ${shield ? `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-red-500/25 border border-red-400 text-red-200 font-bold animate-pulse">${shield.text}</span>` : ''}
-                </div>
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="speakAssetSetup('${a.symbol}')" title="Escuchar señal y pips por voz" class="px-2 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-red-300">🔊</button>
-                <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-bg border border-border hover:border-red-400 text-[11px] font-mono text-slate-300">Gráfico →</button>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 text-center bg-[#050811] border border-border rounded-lg p-2.5">
-              <div>
-                <div class="text-[10px] font-mono text-slate-400 mb-1">ECONOMÍA</div>
-                ${biasPill(a.economy_bias)}
-              </div>
-              <div class="border-l border-border">
-                <div class="text-[10px] font-mono text-slate-400 mb-1">SU GRÁFICO</div>
-                ${biasPill(a.chart_bias)}
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between gap-2 rounded-lg border p-2.5 ${bannerBg}">
-              <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-full border-2 ${ringColor} flex flex-col items-center justify-center shrink-0 font-mono">
-                  <span class="text-xs font-extrabold leading-none">${a.confluence.score}</span>
-                  <span class="text-[8px] mt-0.5">${a.confluence.quality}</span>
-                </div>
-                <div class="text-xs">
-                  <div class="font-bold">${isAligned ? '✔' : (isOpposed ? '✖' : '●')} ${a.confluence.verdict_title}</div>
-                  <div class="text-[11px] opacity-80">${a.confluence.verdict_sub}</div>
-                </div>
-              </div>
-              <button id="why-btn-${a.symbol}" onclick="toggleWhyPanel('${a.symbol}')" class="shrink-0 px-2.5 py-1 rounded bg-bg/90 border border-cyan-500/40 hover:border-cyan-400 text-[11px] font-mono font-bold text-cyan-300">
-                ${openWhyPanels[a.symbol] ? 'Cerrar explicación ▴' : '¿Por qué? ▾'}
-              </button>
-            </div>
-
-            <!-- DESPLEGABLE EXPLICATIVO PASO A PASO -->
-            ${whyHTML}
-
-            <!-- PRECIOS + PIPS EXACTOS -->
-            <div class="grid grid-cols-4 gap-1.5 bg-[#050811] border border-border rounded-lg p-2 text-center font-mono text-[11px]">
-              <div>
-                <div class="text-[9px] text-sky-400">${a.setup.signal_tag}</div>
-                <div class="font-bold text-white">${a.setup.entry}</div>
-                <div class="text-[9px] text-cyan-400">a ${prox.units} ${prox.unitLabel}</div>
-              </div>
-              <div>
-                <div class="text-[9px] text-red-400">STOP</div>
-                <div class="font-bold text-red-400">${a.setup.sl}</div>
-                <div class="text-[9px] text-red-300">-${pips.slPips} ${pips.unitLabel}</div>
-              </div>
-              <div>
-                <div class="text-[9px] text-emerald-400">TP1 (1:2)</div>
-                <div class="font-bold text-emerald-400">${a.setup.tp1}</div>
-                <div class="text-[9px] text-emerald-300">+${pips.tp1Pips} ${pips.unitLabel}</div>
-              </div>
-              <div>
-                <div class="text-[9px] text-emerald-400">TP2 (1:3)</div>
-                <div class="font-bold text-emerald-400">${a.setup.tp2}</div>
-                <div class="text-[9px] text-emerald-300">+${pips.tp2Pips} ${pips.unitLabel}</div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function renderVision() {
-      if (!data) return;
-      document.getElementById('vision-assets-grid').innerHTML = data.assets.map(a => `
-        <div class="hud-panel hud-interactive border border-sky-500/20 rounded-lg p-3.5 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="font-mono font-bold text-white text-sm">${a.symbol} <span class="text-xs font-normal text-sky-300">${a.price}</span></span>
-            ${biasPill(a.economy_bias)}
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">${a.macro_reason}</p>
-        </div>
-      `).join('');
-
-      document.getElementById('vision-cb-table').innerHTML = data.central_banks.map(cb => `
-        <tr>
-          <td class="py-2 font-mono font-bold text-white">${cb.bank} <span class="text-slate-400 font-normal">(${cb.currency})</span></td>
-          <td class="py-2 font-mono text-slate-200">${cb.rate}</td>
-          <td class="py-2"><span class="px-1.5 py-0.5 rounded text-[10px] font-mono ${cb.stance === 'HAWKISH' ? 'bg-emerald-500/20 text-emerald-400' : (cb.stance === 'DOVISH' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400')}">${cb.stance}</span></td>
-          <td class="py-2 text-slate-300">${cb.note}</td>
-        </tr>
-      `).join('');
-
-      document.getElementById('vision-calendar-list').innerHTML = data.calendar.map(ev => `
-        <div class="bg-[#050811] border ${ev.is_today ? 'border-sky-500/50' : 'border-border'} rounded p-2.5 text-xs space-y-1">
-          <div class="flex items-center justify-between font-mono text-[10px]">
-            <span class="text-sky-400">${ev.date} · ${ev.time} · <strong>${ev.currency}</strong> ${ev.is_today ? '· HOY' : ''}</span>
-            <span class="px-1.5 py-0.5 rounded ${ev.impact === 'ALTO' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'}">${ev.impact}</span>
-          </div>
-          <div class="font-semibold text-white">${ev.title}</div>
-          <div class="text-[11px] text-slate-400 font-mono">Pronóstico: ${ev.forecast} | Anterior: ${ev.previous}</div>
-        </div>
-      `).join('');
-    }
-
-    function renderUltronSelector() {
-      if (!data) return;
-      document.getElementById('ultron-asset-selector').innerHTML = data.assets.map(a => {
-        const prox = getAssetProximity(a);
-        const life = getSetupLifecycle(a);
-        const dot = life.state !== 'ACTIVE'
-          ? '<span class="text-[9px] text-emerald-400">✓</span>'
-          : (prox.status === 'IN_ZONE'
-              ? '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>'
-              : (prox.status === 'APPROACHING' ? '<span class="w-2 h-2 rounded-full bg-amber-400"></span>' : ''));
-        return `
-          <button onclick="selectUltronAsset('${a.symbol}')" class="p-2 rounded-lg border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/15 border-red-500 text-white shadow-[0_0_14px_rgba(239,68,68,0.25)]' : 'bg-[#050811] border-border text-slate-300 hover:border-red-400/50'}">
-            <div class="flex items-center justify-between font-mono font-extrabold text-xs">
-              <span>${a.symbol}</span>
-              ${dot}
-            </div>
-            <div class="text-[10px] text-slate-400 truncate">a ${prox.units} ${prox.unitLabel}</div>
-          </button>
-        `;
-      }).join('');
-    }
-
-    function selectUltronAsset(sym) {
-      selectedSymbol = sym;
-      renderUltronSelector();
-      updateUltronDetails();
-    }
-
-    function setUltronTF(tf) {
-      selectedTF = tf;
-      document.querySelectorAll('.utf-btn').forEach(b => {
-        b.className = b.dataset.tf === tf
-          ? 'utf-btn px-3 py-1 rounded bg-red-500 text-white font-bold'
-          : 'utf-btn px-3 py-1 rounded bg-bg border border-border text-slate-300';
-      });
-      drawUltronChart();
-    }
-
-    function zoomChart(delta) {
-      visibleCandles = Math.max(18, Math.min(42, visibleCandles - delta));
-      document.getElementById('u-candle-count').textContent = `${visibleCandles} velas`;
-      drawUltronChart();
-    }
-
-    function formatBiasText(b) {
-      if (b === 'SUBE') return '<span class="text-emerald-400">▲ Alza</span>';
-      if (b === 'BAJA') return '<span class="text-red-400">▼ Baja</span>';
-      return '<span class="text-slate-300">● De lado</span>';
-    }
-
-    function updateUltronDetails() {
-      if (!data) return;
-      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
-      if (!a) return;
-      selectedSymbol = a.symbol;
-
-      const prox = getAssetProximity(a);
-      const pips = getSetupPips(a);
-      const life = getSetupLifecycle(a);
-      const shield = getAssetNewsShield(a);
-
-      document.getElementById('u-title-sym').textContent = a.symbol;
-      const lifeEl = document.getElementById('u-lifecycle-badge');
-      lifeEl.textContent = life.badge;
-      lifeEl.className = `px-2 py-0.5 rounded text-[10px] border ${life.cls}`;
-
-      const newsEl = document.getElementById('u-news-badge');
-      if (shield) {
-        newsEl.textContent = shield.text;
-        newsEl.classList.remove('hidden');
-      } else {
-        newsEl.classList.add('hidden');
-      }
-
-      document.getElementById('u-proximity-status').textContent = `${prox.label} · Distancia a entrada (${a.setup.entry}): ${prox.units} ${prox.unitLabel}`;
-      document.getElementById('u-sig-dir').textContent = `${a.setup.signal_tag}`;
-      document.getElementById('u-sig-rr').textContent = a.confluence.verdict_sub;
-      document.getElementById('u-sig-entry').textContent = a.setup.entry;
-      document.getElementById('u-sig-dist').textContent = `A ${prox.units} ${prox.unitLabel} del precio`;
-
-      document.getElementById('u-sig-sl').textContent = a.setup.sl;
-      document.getElementById('u-sig-sl-pips').textContent = `Riesgo: ${pips.slPips} ${pips.unitLabel}`;
-
-      document.getElementById('u-sig-tp1').textContent = a.setup.tp1;
-      document.getElementById('u-sig-tp1-pips').textContent = `+${pips.tp1Pips} ${pips.unitLabel}`;
-
-      document.getElementById('u-sig-tp2').textContent = a.setup.tp2;
-      document.getElementById('u-sig-tp2-pips').textContent = `+${pips.tp2Pips} ${pips.unitLabel}`;
-
-      document.getElementById('u-tf-w').innerHTML = formatBiasText(a.tf_bias.weekly);
-      document.getElementById('u-tf-d').innerHTML = formatBiasText(a.tf_bias.daily);
-      document.getElementById('u-tf-4h').innerHTML = formatBiasText(a.tf_bias.h4);
-
-      document.getElementById('u-m-price').textContent = a.price;
-      document.getElementById('u-m-high').textContent = a.range_20_high;
-      document.getElementById('u-m-low').textContent = a.range_20_low;
-      document.getElementById('u-m-atr').textContent = a.atr;
-      document.getElementById('u-m-wk').innerHTML = `<span class="${a.chg_week >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_week >= 0 ? '+' : ''}${a.chg_week}%</span>`;
-      document.getElementById('u-m-r20').textContent = `${a.range_20_low} – ${a.range_20_high}`;
-
-      drawUltronChart();
-    }
-
-    function drawUltronChart() {
-      if (!data) return;
-      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
-      if (!a) return;
-
-      const canvas = document.getElementById('ultron-canvas');
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      const ctx = canvas.getContext('2d');
-      ctx.scale(dpr, dpr);
-
-      const W = rect.width;
-      const H = rect.height;
-      const padLeft = 14, padRight = 84, padTop = 24, padBottom = 26;
-      const plotW = W - padLeft - padRight;
-      const plotH = H - padTop - padBottom;
-
-      ctx.fillStyle = '#04060a';
-      ctx.fillRect(0, 0, W, H);
-
-      const rawCandles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF] : [];
-      const candles = rawCandles.slice(-visibleCandles);
-      if (candles.length === 0) return;
-
-      const showLayers = document.getElementById('toggle-layers').checked;
-      const pips = getSetupPips(a);
-
-      let highs = candles.map(c => c.h);
-      let lows = candles.map(c => c.l);
-      if (showLayers) {
-        highs.push(a.setup.sl, a.setup.tp2, a.intraday_high);
-        lows.push(a.setup.sl, a.setup.tp2, a.intraday_low);
-      }
-      const maxP = Math.max(...highs);
-      const minP = Math.min(...lows);
-      const span = (maxP - minP) || 1;
-      const yOf = (p) => padTop + ((maxP - p) / span) * plotH;
-
-      ctx.strokeStyle = '#111927';
-      ctx.lineWidth = 1;
-      for (let i = 0; i <= 5; i++) {
-        const y = padTop + (plotH / 5) * i;
-        ctx.beginPath();
-        ctx.moveTo(padLeft, y);
-        ctx.lineTo(W - padRight, y);
-        ctx.stroke();
-        const priceVal = maxP - (span / 5) * i;
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px JetBrains Mono';
-        ctx.fillText(priceVal.toFixed(a.decimals), W - padRight + 6, y + 3);
-      }
-
-      if (showLayers) {
-        const yHigh = yOf(a.intraday_high);
-        const yLow = yOf(a.intraday_low);
-        const yEq = yOf((a.intraday_high + a.intraday_low) / 2);
-
-        ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
-        ctx.fillRect(padLeft, yHigh, plotW, Math.max(4, yEq - yHigh));
-        ctx.fillStyle = '#f87171';
-        ctx.font = 'bold 9px JetBrains Mono';
-        ctx.fillText('CARO · PREMIUM', padLeft + 6, yHigh + 11);
-
-        ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
-        ctx.fillRect(padLeft, yEq, plotW, Math.max(4, yLow - yEq));
-        ctx.fillStyle = '#34d399';
-        ctx.fillText('BARATO · DISCOUNT', padLeft + 6, yLow - 5);
-
-        ctx.setLineDash([4, 4]);
-        ctx.strokeStyle = '#64748b';
-        ctx.beginPath();
-        ctx.moveTo(padLeft, yEq);
-        ctx.lineTo(W - padRight, yEq);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = '#94a3b8';
-        ctx.fillText('EQ 50%', W - padRight - 42, yEq - 4);
-
-        const yObTop = yOf(a.ob_high);
-        const yObBot = yOf(a.ob_low);
-        ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16, 185, 129, 0.22)' : 'rgba(239, 68, 68, 0.22)';
-        ctx.fillRect(padLeft + plotW * 0.45, yObTop, plotW * 0.55, Math.max(6, yObBot - yObTop));
-        ctx.fillStyle = '#e2e8f0';
-        ctx.fillText('OB INSTITUCIONAL', padLeft + plotW * 0.47, yObTop + 10);
-      }
-
-      const step = plotW / candles.length;
-      const cw = Math.max(3, step * 0.62);
-      let maxIdx = 0, minIdx = 0;
-
-      candles.forEach((c, i) => {
-        if (c.h > candles[maxIdx].h) maxIdx = i;
-        if (c.l < candles[minIdx].l) minIdx = i;
-
-        const x = padLeft + i * step + step / 2;
-        const bull = c.c >= c.o;
-        ctx.strokeStyle = bull ? '#10b981' : '#ef4444';
-        ctx.fillStyle = bull ? '#10b981' : '#ef4444';
-
-        ctx.beginPath();
-        ctx.moveTo(x, yOf(c.h));
-        ctx.lineTo(x, yOf(c.l));
-        ctx.stroke();
-
-        const top = yOf(Math.max(c.o, c.c));
-        const hBody = Math.max(2, Math.abs(yOf(c.o) - yOf(c.c)));
-        ctx.fillRect(x - cw / 2, top, cw, hBody);
-      });
-
-      if (showLayers) {
-        ctx.font = 'bold 10px JetBrains Mono';
-        const xMax = padLeft + maxIdx * step + step / 2;
-        ctx.fillStyle = '#34d399';
-        ctx.fillText('HH · BSL', xMax - 18, Math.max(14, yOf(candles[maxIdx].h) - 5));
-
-        const xMin = padLeft + minIdx * step + step / 2;
-        ctx.fillStyle = '#f87171';
-        ctx.fillText('LL · SSL', xMin - 18, Math.min(H - 28, yOf(candles[minIdx].l) + 12));
-
-        const midIdx = Math.floor(candles.length * 0.65);
-        const xMid = padLeft + midIdx * step;
-        ctx.fillStyle = '#fbbf24';
-        ctx.fillText(a.chart_bias === 'SUBE' ? 'BOS ▲' : 'CHoCH ▼', xMid, yOf(candles[midIdx].h) - 6);
-
-        const drawTag = (priceVal, label, bgColor) => {
-          const y = yOf(priceVal);
-          ctx.setLineDash([3, 3]);
-          ctx.strokeStyle = bgColor;
-          ctx.lineWidth = 1.3;
-          ctx.beginPath();
-          ctx.moveTo(padLeft + plotW * 0.30, y);
-          ctx.lineTo(W - padRight, y);
-          ctx.stroke();
-          ctx.setLineDash([]);
-
-          ctx.fillStyle = bgColor;
-          ctx.fillRect(W - padRight + 2, y - 9, padRight - 4, 18);
-          ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 9px JetBrains Mono';
-          ctx.fillText(priceVal.toFixed(a.decimals), W - padRight + 5, y + 3);
-
-          const tagW = Math.max(115, label.length * 6.2);
-          ctx.fillStyle = bgColor;
-          ctx.fillRect(padLeft + plotW * 0.30, y - 14, tagW, 13);
-          ctx.fillStyle = '#ffffff';
-          ctx.fillText(label, padLeft + plotW * 0.30 + 4, y - 4);
-        };
-
-        drawTag(a.setup.entry, `${a.setup.signal_tag}`, '#0284c7');
-        drawTag(a.setup.sl, `STOP (-${pips.slPips} ${pips.unitLabel})`, '#dc2626');
-        drawTag(a.setup.tp1, `TP1 (+${pips.tp1Pips} ${pips.unitLabel})`, '#059669');
-        drawTag(a.setup.tp2, `TP2 (+${pips.tp2Pips} ${pips.unitLabel})`, '#10b981');
-      }
-
-      ctx.fillStyle = '#64748b';
-      ctx.font = '9px JetBrains Mono';
-      [0, Math.floor(candles.length / 2), candles.length - 1].forEach(idx => {
-        if (candles[idx]) {
-          const x = padLeft + idx * step;
-          ctx.fillText(candles[idx].t, x, H - 8);
-        }
-      });
-    }
-    window.addEventListener('resize', drawUltronChart);
-
-    // =========================================================
-    // F.R.I.D.A.Y. · TUTORA INTERACTIVA CON VOZ
-    // =========================================================
-    function switchFridaySub(sub) {
-      ['consulta', 'nucleo', 'leccion', 'curso', 'glosario'].forEach(s => {
-        document.getElementById(`fsub-${s}`).classList.toggle('hidden', s !== sub);
-      });
-      document.querySelectorAll('.f-sub').forEach(b => {
-        b.className = b.dataset.fsub === sub
-          ? 'f-sub px-3 py-1.5 rounded bg-purple-600 text-white font-bold'
-          : 'f-sub px-3 py-1.5 rounded bg-bg border border-border text-slate-300';
-      });
-    }
-
-    function handleFridaySubmit(e) {
-      e.preventDefault();
-      const inp = document.getElementById('friday-input');
-      if (!inp.value.trim()) return;
-      askFriday(inp.value.trim());
-      inp.value = '';
-    }
-
-    function askFriday(question) {
-      const log = document.getElementById('friday-chat-log');
-      log.innerHTML += `<div class="bg-panel border border-border rounded-lg p-2.5 text-right text-slate-200"><strong class="text-amber-400 font-mono">TÚ:</strong> ${question}</div>`;
-
-      let reply = 'Estoy analizando el contexto macro y técnico.';
-      const q = question.toUpperCase();
-
-      if (data) {
-        const foundAsset = data.assets.find(a => q.includes(a.symbol) || (q.includes('BITCOIN') && a.symbol === 'BTCUSD') || (q.includes('EURO') && a.symbol === 'EURUSD'));
-        if (foundAsset) {
-          const prox = getAssetProximity(foundAsset);
-          const pips = getSetupPips(foundAsset);
-          const shield = getAssetNewsShield(foundAsset);
-          const life = getSetupLifecycle(foundAsset);
-          reply = `En <strong>${foundAsset.symbol}</strong> (${foundAsset.price}), está a <strong>${prox.units} ${prox.unitLabel}</strong> de su punto de entrada. Estado: <strong>${life.badge}</strong>. ${shield ? `<strong>${shield.text}.</strong> ` : ''}Plan: <strong>${foundAsset.setup.signal_tag} en ${foundAsset.setup.entry}</strong>, Stop de <strong>${pips.slPips} ${pips.unitLabel}</strong> (${foundAsset.setup.sl}) y TP1 de <strong>+${pips.tp1Pips} ${pips.unitLabel}</strong> (${foundAsset.setup.tp1}).`;
-        } else if (q.includes('NOTICIA') || q.includes('ESCUDO') || q.includes('PELIGRO')) {
-          const blocked = data.assets.map(a => ({ a, s: getAssetNewsShield(a) })).filter(x => x.s);
-          reply = blocked.length > 0
-            ? `El Escudo Anti-Noticias está bloqueando actualmente: ${blocked.map(x => `<strong>${x.a.symbol}</strong> (${x.s.text})`).join('; ')}.`
-            : `El Escudo Anti-Noticias está despejado en este momento; no hay publicaciones de alto impacto en los próximos 45 minutos.`;
-        } else if (q.includes('CERCA') || q.includes('PROXIM') || q.includes('RADAR')) {
-          const nearest = data.assets
-            .map(a => ({ asset: a, prox: getAssetProximity(a), life: getSetupLifecycle(a) }))
-            .filter(x => x.life.state === 'ACTIVE')
-            .sort((x, y) => x.prox.pct - y.prox.pct)
-            .slice(0, 3);
-          reply = `Los activos vigentes más cercanos a su entrada en el radar son: ` + nearest.map(n => `<strong>${n.asset.symbol}</strong> a <strong>${n.prox.units} ${n.prox.unitLabel}</strong> de ${n.asset.setup.entry}`).join('; ') + `.`;
-        } else {
-          reply = `${data.brief.headline}. Pulse <strong>«¿Por qué? ▾»</strong> en cualquier tarjeta de Jarvis para ver el desglose macro, técnico y de noticias paso a paso.`;
-        }
-      }
-
-      const safeSpeech = reply.replace(/"/g, '&quot;');
-      log.innerHTML += `
-        <div class="bg-panel border border-purple-500/30 rounded-lg p-3 text-slate-200 leading-relaxed flex items-start justify-between gap-2">
-          <div><strong class="text-purple-400 font-mono">F.R.I.D.A.Y.:</strong> ${reply}</div>
-          <button onclick="speakText('${safeSpeech}', true, 'friday')" title="Repetir audio" class="shrink-0 px-2 py-0.5 rounded bg-bg border border-border text-purple-300 text-[11px]">🔊</button>
-        </div>
-      `;
-      log.scrollTop = log.scrollHeight;
-      speakText(reply, false, 'friday');
-    }
-
-    let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
-    function renderCourse() {
-      document.getElementById('course-progress').textContent = completedLessons.length;
-      document.getElementById('friday-course-list').innerHTML = COURSE_LESSONS.map((title, i) => {
-        const done = completedLessons.includes(i);
-        return `
-          <label class="flex items-center gap-2.5 p-2.5 rounded bg-panel border ${done ? 'border-purple-500/50 text-purple-200' : 'border-border text-slate-300'} cursor-pointer text-xs">
-            <input type="checkbox" ${done ? 'checked' : ''} onchange="toggleLesson(${i})" class="accent-purple-500 w-4 h-4">
-            <span>${title}</span>
-          </label>
-        `;
-      }).join('');
-    }
-    function toggleLesson(idx) {
-      if (completedLessons.includes(idx)) completedLessons = completedLessons.filter(x => x !== idx);
-      else completedLessons.push(idx);
-      localStorage.setItem('oraculo_course', JSON.stringify(completedLessons));
-      renderCourse();
-    }
-    renderCourse();
-
-    function renderGlossary() {
-      const q = (document.getElementById('glossary-search').value || '').toLowerCase();
-      const filtered = GLOSSARY_ITEMS.filter(g => g.term.toLowerCase().includes(q) || g.def.toLowerCase().includes(q));
-      document.getElementById('glossary-list').innerHTML = filtered.map(g => `
-        <div class="bg-panel border border-border rounded p-3">
-          <div class="font-mono font-bold text-purple-300">${g.term}</div>
-          <p class="text-slate-400 mt-1">${g.def}</p>
-        </div>
-      `).join('');
-    }
-    renderGlossary();
-
-    ['htf', 'ltf', 'mgmt'].forEach(k => {
-      const el = document.getElementById(`note-${k}`);
-      el.value = localStorage.getItem(`oraculo_note_${k}`) || '';
-      el.addEventListener('input', () => localStorage.setItem(`oraculo_note_${k}`, el.value));
-    });
-
-    let trades = JSON.parse(localStorage.getItem('oraculo_trades') || '[]');
-    function renderTrades() {
-      document.getElementById('journal-badge').textContent = trades.length;
-      document.getElementById('journal-list').innerHTML = trades.map((t, i) => `
-        <div class="bg-[#050811] border border-border rounded p-3 flex items-center justify-between text-xs">
-          <div>
-            <strong class="font-mono text-white">${t.pair} · ${t.dir} · <span class="text-amber-400">${t.rr}</span></strong>
-            <div class="text-slate-400">${t.note} (${t.date})</div>
-          </div>
-          <button onclick="deleteTrade(${i})" class="text-red-400 font-mono text-xs">Eliminar</button>
-        </div>
-      `).join('');
-    }
-    document.getElementById('journal-form').addEventListener('submit', e => {
-      e.preventDefault();
-      trades.unshift({
-        pair: document.getElementById('j-pair').value,
-        dir: document.getElementById('j-dir').value,
-        rr: document.getElementById('j-rr').value,
-        note: document.getElementById('j-note').value,
-        date: new Date().toLocaleDateString('es-ES')
-      });
-      localStorage.setItem('oraculo_trades', JSON.stringify(trades));
-      e.target.reset();
-      renderTrades();
-    });
-    function deleteTrade(i) {
-      trades.splice(i, 1);
-      localStorage.setItem('oraculo_trades', JSON.stringify(trades));
-      renderTrades();
-    }
-    renderTrades();
-    loadData();
-
-    setInterval(loadData, 60000);
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') loadData();
-    });
-  </script>
-</body>
-</html>
+      const inKz = (h >= 7 && h <= 10
