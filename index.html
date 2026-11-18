@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.4</title>
+  <title>ORÁCULO · Cabina v6.5 LIVE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -147,7 +147,10 @@
             <span class="font-hud font-bold text-white tracking-widest">ORÁCULO</span>
             <span id="killzone-badge" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">UTC --:--</span>
           </div>
-          <div id="last-updated" class="text-slate-500 text-[9px]">Sincronizando...</div>
+          <div class="flex items-center gap-2 text-[9px]">
+            <span id="last-updated" class="text-slate-500">Sincronizando...</span>
+            <span id="live-feed-badge" class="text-emerald-400 font-bold">● LIVE</span>
+          </div>
         </div>
       </div>
       <div class="flex items-center gap-1.5 font-mono text-[11px]">
@@ -214,7 +217,7 @@
     <!-- SUBPANEL ULTRÓN -->
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-b border-slate-800 pb-2">
-        <span class="font-bold text-slate-200">LEYENDA DE ESTADOS:</span>
+        <span class="font-bold text-slate-200">LEYENDA DE ESTADOS (ACTUALIZACIÓN EN VIVO):</span>
         <div class="flex flex-wrap gap-3">
           <span>🟢 TP1 Alcanzado</span>
           <span>🔵 Re-entrada Activa</span>
@@ -225,6 +228,7 @@
       <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
         <div>
           <span id="pu-sym" class="font-hud font-bold text-red-400 text-base">XAUUSD</span>
+          <span id="pu-price" class="ml-2 font-bold text-amber-300">--</span>
           <span id="pu-status" class="ml-2 text-emerald-400">--</span>
         </div>
         <div class="flex gap-1">
@@ -286,7 +290,6 @@
         </div>
       </div>
 
-      <!-- Barra de vinculación nube GitHub -->
       <div class="bg-[#050811] border border-slate-800 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px]">
         <div class="text-slate-300">
           <strong class="text-rose-300">☁️ Nube PC ↔ Celular:</strong>
@@ -369,6 +372,98 @@
     let activeLessonIndex = 0;
 
     // =========================================================
+    // MOTOR DE PRECIOS EN TIEMPO REAL (CADA 10 SEGUNDOS)
+    // =========================================================
+    async function refreshLivePrices() {
+      if (!data || !data.assets || !data.assets.length) return;
+      let updatedAny = false;
+
+      // 1. BTCUSD en tiempo real desde Binance
+      try {
+        const bRes = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+        if (bRes.ok) {
+          const bJson = await bRes.json();
+          const btcPrice = parseFloat(bJson.price);
+          const btcAsset = data.assets.find(a => a.symbol === 'BTCUSD');
+          if (btcAsset && btcPrice > 0) {
+            btcAsset.price = Number(btcPrice.toFixed(btcAsset.decimals));
+            updatedAny = true;
+          }
+        }
+      } catch (e) {}
+
+      // 2. Forex y Oro (XAU) en tiempo real desde tasas spot USD
+      try {
+        const fxRes = await fetch('https://open.er-api.com/v6/latest/USD');
+        if (fxRes.ok) {
+          const fxJson = await fxRes.json();
+          const r = fxJson.rates || {};
+          const mapLive = {
+            'EURUSD': r.EUR ? 1 / r.EUR : null,
+            'GBPUSD': r.GBP ? 1 / r.GBP : null,
+            'AUDUSD': r.AUD ? 1 / r.AUD : null,
+            'NZDUSD': r.NZD ? 1 / r.NZD : null,
+            'USDJPY': r.JPY || null,
+            'USDCAD': r.CAD || null,
+            'USDCHF': r.CHF || null,
+            'GBPJPY': (r.GBP && r.JPY) ? r.JPY / r.GBP : null,
+            'GBPAUD': (r.GBP && r.AUD) ? r.AUD / r.GBP : null,
+            'GBPNZD': (r.GBP && r.NZD) ? r.NZD / r.GBP : null,
+            'GBPCAD': (r.GBP && r.CAD) ? r.CAD / r.GBP : null,
+            'EURJPY': (r.EUR && r.JPY) ? r.JPY / r.EUR : null,
+            'XAUUSD': r.XAU ? 1 / r.XAU : null
+          };
+          data.assets.forEach(a => {
+            const p = mapLive[a.symbol];
+            if (p && p > 0) {
+              // Evitar saltos absurdos si XAU spot difería mucho de futuros
+              if (a.symbol === 'XAUUSD' && Math.abs(p - a.price) / a.price > 0.08) return;
+              a.price = Number(p.toFixed(a.decimals));
+              // Actualizar cierre de la última vela para que el gráfico refleje el precio vivo
+              if (a.candles && a.candles['1h'] && a.candles['1h'].length) {
+                const lastC = a.candles['1h'][a.candles['1h'].length - 1];
+                lastC.c = a.price;
+                if (a.price > lastC.h) lastC.h = a.price;
+                if (a.price < lastC.l) lastC.l = a.price;
+              }
+              updatedAny = true;
+            }
+          });
+        }
+      } catch (e) {}
+
+      if (updatedAny) {
+        const badge = document.getElementById('live-feed-badge');
+        if (badge) badge.textContent = `● LIVE ${new Date().toISOString().substring(11, 19)} UTC`;
+        updateTickerBar();
+        if (isPanelMode) {
+          renderPanelJarvis();
+          renderPanelUltron();
+        } else {
+          // Actualizar métrica en vivo de EDITH o JARVIS sin interrumpir la voz
+          if (currentAgent === 'edith') {
+            const n = getNearestAsset();
+            if (n) {
+              const d = getAssetUnitsDist(n);
+              document.getElementById('agent-hero-metric').textContent = `${d.units} ${d.label}`;
+              document.getElementById('agent-hero-sub').textContent = `${n.symbol} · EN VIVO (${n.price})`;
+            }
+          }
+        }
+      }
+    }
+
+    function updateTickerBar() {
+      if (!data || !data.assets) return;
+      const items = data.assets.map(a => {
+        const st = getAssetBadgeState(a);
+        return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong> <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`;
+      }).join('<span class="text-slate-600">|</span>');
+      const track = document.getElementById('live-ticker-track');
+      if (track) track.innerHTML = items + items;
+    }
+
+    // =========================================================
     // SINCRONIZACIÓN EN LA NUBE PC <-> CELULAR (journal.json)
     // =========================================================
     function updateCloudBadge(statusText, isCloud = false) {
@@ -403,7 +498,6 @@
     async function loadCloudJournal(notify = false) {
       updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LECTURA NUBE', !!ghToken);
       try {
-        // Primero intentar vía API si hay token (sin caché), si no vía GitHub Pages público
         let remoteTrades = null;
         if (ghToken) {
           const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_JOURNAL_PATH}?ref=${GH_BRANCH}&t=${Date.now()}`, {
@@ -426,9 +520,7 @@
           if (currentAgent === 'karen' || currentAgent === 'homer') updateAgentTelemetryAndGreeting(currentAgent);
           if (notify) updateCloudBadge('SINCRONIZADO ✓', true);
         }
-      } catch (e) {
-        console.log('Sin journal.json remoto aún');
-      }
+      } catch (e) {}
     }
 
     async function saveCloudJournal() {
@@ -810,7 +902,7 @@
         const reCount = data ? data.assets.filter(a => getAssetBadgeState(a).code === 'REENTRY').length : 0;
         document.getElementById('agent-hero-metric').textContent = `${broken.length} ALERTAS`;
         document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${tp1Count} TP1 · ${reCount} RE-ENTRADAS`;
-        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos incluyendo XAUUSD: tenemos ${tp1Count} en TP1, ${reCount} en re-entrada y ${broken.length} alertas de tesis rota. ¿Desea el reporte?`);
+        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos en tiempo real incluyendo XAUUSD: tenemos ${tp1Count} en TP1, ${reCount} en re-entrada y ${broken.length} alertas de tesis rota. ¿Desea el reporte?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO';
@@ -824,12 +916,12 @@
         if (nearest) {
           const d = getAssetUnitsDist(nearest);
           document.getElementById('agent-hero-metric').textContent = `${d.units} ${d.label}`;
-          document.getElementById('agent-hero-sub').textContent = `${nearest.symbol} · FALTA PARA LA ENTRADA`;
+          document.getElementById('agent-hero-sub').textContent = `${nearest.symbol} · EN VIVO (${nearest.price})`;
         } else {
           document.getElementById('agent-hero-metric').textContent = '--';
           document.getElementById('agent-hero-sub').textContent = 'CALCULANDO DISTANCIA';
         }
-        typeAgentDialogue(`Sistemas ópticos calibrados. He medido el riesgo, los bloques y cada punto de recorrido; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
+        typeAgentDialogue(`Sistemas ópticos calibrados en tiempo real. He medido el riesgo, los bloques y cada punto de recorrido; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES SINCRONIZADAS`;
@@ -855,10 +947,10 @@
         const n = getNearestAsset();
         const d = getAssetUnitsDist(n);
         const p = getSetupPips(n);
-        typeAgentDialogue(`Objetivo prioritario: ${n.symbol}. Está a ${d.units} ${d.label} de su entrada en ${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
+        typeAgentDialogue(`Objetivo prioritario en vivo: ${n.symbol} (${n.price}). Está a ${d.units} ${d.label} de su entrada en ${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
       } else if (currentAgent === 'edith') {
         const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
-        typeAgentDialogue(`Los tres blancos más cercanos son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})`).join('; ') + `.`);
+        typeAgentDialogue(`Los tres blancos más cercanos en vivo son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})`).join('; ') + `.`);
       } else if (currentAgent === 'karen') {
         typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía. Abra el panel y pulse Vincular Nube para sincronizar PC y celular.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
       } else if (currentAgent === 'homer') {
@@ -892,7 +984,7 @@
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
         const st = getAssetBadgeState(asset);
-        typeAgentDialogue(`${asset.symbol} cotiza en ${asset.price} ${st.text ? `(${st.text})` : ''}. Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
+        typeAgentDialogue(`${asset.symbol} cotiza en vivo en ${asset.price} ${st.text ? `(${st.text})` : ''}. Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
         return;
       }
       handleQuickReply('SI');
@@ -949,16 +1041,16 @@
         const res = await fetch(`./data.json?t=${Date.now()}`);
         if (!res.ok) throw new Error('Sin data.json');
         data = await res.json();
-        document.getElementById('last-updated').textContent = `TELEMETRÍA: ${data.last_updated}`;
-        const items = data.assets.map(a => {
-          const st = getAssetBadgeState(a);
-          return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong> <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`;
-        }).join('<span class="text-slate-600">|</span>');
-        document.getElementById('live-ticker-track').innerHTML = items + items;
+        document.getElementById('last-updated').textContent = `ESTRUCTURA: ${data.last_updated}`;
+        updateTickerBar();
 
         if (!data.assets.some(a => a.symbol === selectedSymbol)) selectedSymbol = data.assets[0].symbol;
-        document.getElementById('j-pair').innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
+        const jPair = document.getElementById('j-pair');
+        if (jPair && !jPair.options.length) {
+          jPair.innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
+        }
 
+        await refreshLivePrices();
         if (!isPanelMode) updateAgentTelemetryAndGreeting(currentAgent);
         else renderPanelAll();
       } catch (e) {
@@ -1009,7 +1101,7 @@
             <div class="flex items-center justify-between gap-2">
               <div class="flex flex-wrap items-center gap-1.5">
                 <span class="font-hud font-bold text-white text-sm">${st.dot} ${a.symbol}</span>
-                <span class="text-xs text-cyan-300">${a.price}</span>
+                <span class="text-xs text-cyan-300 font-bold">${a.price}</span>
                 ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
                 ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">TESIS ROTA</span>' : ''}
               </div>
@@ -1056,6 +1148,7 @@
       const p = getSetupPips(a);
       const st = getAssetBadgeState(a);
       document.getElementById('pu-sym').textContent = `${st.dot} ${a.symbol}`;
+      document.getElementById('pu-price').textContent = `${a.price}`;
       document.getElementById('pu-status').textContent = `${st.text || a.setup.signal_tag} · a ${d.units} ${d.label}`;
       document.getElementById('pu-entry').textContent = a.setup.entry;
       document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
@@ -1092,8 +1185,8 @@
       ctx.fillStyle = '#030509'; ctx.fillRect(0, 0, W, H);
       const candles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF].slice(-40) : [];
       if (!candles.length) return;
-      const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp2];
-      const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp2];
+      const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp2, a.price];
+      const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp2, a.price];
       const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
       const yOf = p => padT + ((maxP - p) / span) * plotH;
 
@@ -1128,6 +1221,14 @@
       drawLvl(a.setup.sl, 'STOP', '#dc2626');
       drawLvl(a.setup.tp1, 'TP1', '#059669');
       drawLvl(a.setup.tp2, 'TP2', '#10b981');
+
+      // Línea amarilla del precio EN VIVO
+      const yLive = yOf(a.price);
+      ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padL, yLive); ctx.lineTo(W - padR, yLive); ctx.stroke();
+      ctx.fillStyle = '#f59e0b'; ctx.fillRect(W - padR + 2, yLive - 8, padR - 4, 16);
+      ctx.fillStyle = '#000'; ctx.font = 'bold 9px JetBrains Mono';
+      ctx.fillText(a.price.toFixed(a.decimals), W - padR + 5, yLive + 3);
     }
 
     function renderTrades() {
@@ -1168,7 +1269,8 @@
     updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
     loadCloudJournal(false);
     loadData();
-    setInterval(loadData, 60000);
+    setInterval(refreshLivePrices, 10000);
+    setInterval(loadData, 120000);
   </script>
 </body>
 </html>
