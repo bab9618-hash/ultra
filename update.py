@@ -3,7 +3,6 @@ import os
 from datetime import datetime, timezone
 import yfinance as yf
 import pandas as pd
-import numpy as np
 
 # =========================================================
 # CONFIGURACIÓN DE 17 ACTIVOS (INCLUYE XAUUSD Y CRUCES GBP)
@@ -28,10 +27,20 @@ ASSETS = [
     {"symbol": "EURJPY", "ticker": "EURJPY=X", "type": "forex",     "pip": 0.01,   "decimals": 3, "base": "EUR", "quote": "JPY"}
 ]
 
+def fetch_hist(ticker_sym, period, interval):
+    try:
+        t = yf.Ticker(ticker_sym)
+        df = t.history(period=period, interval=interval)
+        if df is not None and not df.empty:
+            return df[["Open", "High", "Low", "Close"]].dropna()
+    except Exception as e:
+        print(f"Error descargando {ticker_sym} ({interval}): {e}")
+    return pd.DataFrame()
+
 def get_trend(df):
-    if df is None or len(df) < 22:
+    if df is None or len(df) < 15:
         return "NEUTRAL"
-    close = df["Close"].squeeze()
+    close = df["Close"]
     ema9 = close.ewm(span=9, adjust=False).mean().iloc[-1]
     ema21 = close.ewm(span=21, adjust=False).mean().iloc[-1]
     if ema9 > ema21 * 1.0002:
@@ -40,47 +49,33 @@ def get_trend(df):
         return "BAJA"
     return "NEUTRAL"
 
-def format_candles(df, decimals, limit=45):
+def format_candles(df, decimals, limit=42):
     if df is None or df.empty:
         return []
     sub = df.tail(limit)
     out = []
     for idx, row in sub.iterrows():
-        o = float(row["Open"].iloc[0] if isinstance(row["Open"], pd.Series) else row["Open"])
-        h = float(row["High"].iloc[0] if isinstance(row["High"], pd.Series) else row["High"])
-        l = float(row["Low"].iloc[0] if isinstance(row["Low"], pd.Series) else row["Low"])
-        c = float(row["Close"].iloc[0] if isinstance(row["Close"], pd.Series) else row["Close"])
-        if pd.isna(o) or pd.isna(c):
-            continue
         out.append({
             "t": idx.strftime("%d %b %H:%M"),
-            "o": round(o, decimals),
-            "h": round(h, decimals),
-            "l": round(l, decimals),
-            "c": round(c, decimals)
+            "o": round(float(row["Open"]), decimals),
+            "h": round(float(row["High"]), decimals),
+            "l": round(float(row["Low"]), decimals),
+            "c": round(float(row["Close"]), decimals)
         })
     return out
 
 def get_macro_context():
     dxy_val, dxy_trend = 104.20, "NEUTRAL"
     us10y_val, us10y_trend = 4.25, "NEUTRAL"
-    try:
-        dxy_df = yf.download("DX-Y.NYB", period="15d", interval="1h", progress=False)
-        if not dxy_df.empty:
-            c = dxy_df["Close"].squeeze()
-            dxy_val = round(float(c.iloc[-1]), 2)
-            dxy_trend = get_trend(dxy_df)
-    except Exception:
-        pass
+    dxy_df = fetch_hist("DX-Y.NYB", "15d", "1h")
+    if not dxy_df.empty:
+        dxy_val = round(float(dxy_df["Close"].iloc[-1]), 2)
+        dxy_trend = get_trend(dxy_df)
 
-    try:
-        tnx_df = yf.download("^TNX", period="15d", interval="1h", progress=False)
-        if not tnx_df.empty:
-            c = tnx_df["Close"].squeeze()
-            us10y_val = round(float(c.iloc[-1]), 2)
-            us10y_trend = get_trend(tnx_df)
-    except Exception:
-        pass
+    tnx_df = fetch_hist("^TNX", "15d", "1h")
+    if not tnx_df.empty:
+        us10y_val = round(float(tnx_df["Close"].iloc[-1]), 2)
+        us10y_trend = get_trend(tnx_df)
 
     return dxy_val, dxy_trend, us10y_val, us10y_trend
 
@@ -88,7 +83,7 @@ def evaluate_macro_for_asset(asset, dxy_trend, us10y_trend):
     base, quote = asset["base"], asset["quote"]
 
     if base == "XAU":
-        if dxy_trend == "UP" or (dxy_trend == "SUBE" and us10y_trend == "SUBE"):
+        if dxy_trend == "SUBE" and us10y_trend == "SUBE":
             return "BAJA", "El fortalecimiento del dólar (DXY) y los rendimientos US10Y presionan al oro a la baja."
         elif dxy_trend == "BAJA" and us10y_trend == "BAJA":
             return "SUBE", "La debilidad del dólar y caída en rendimientos impulsan demanda institucional en XAU/USD."
@@ -144,20 +139,20 @@ def main():
         dec = asset["decimals"]
         pip = asset["pip"]
         try:
-            df_1h = yf.download(asset["ticker"], period="10d", interval="1h", progress=False)
-            df_1d = yf.download(asset["ticker"], period="60d", interval="1d", progress=False)
+            df_1h = fetch_hist(asset["ticker"], "10d", "1h")
+            df_1d = fetch_hist(asset["ticker"], "60d", "1d")
             if df_1h.empty:
+                print(f"Sin velas 1H para {sym}")
                 continue
 
-            close_1h = df_1h["Close"].squeeze()
-            high_1h = df_1h["High"].squeeze()
-            low_1h = df_1h["Low"].squeeze()
+            close_1h = df_1h["Close"]
+            high_1h = df_1h["High"]
+            low_1h = df_1h["Low"]
 
             price = round(float(close_1h.iloc[-1]), dec)
             prev_close = float(close_1h.iloc[-24]) if len(close_1h) >= 24 else float(close_1h.iloc[0])
             chg_day = round(((price - prev_close) / prev_close) * 100, 2)
 
-            # Resample 4H
             df_4h = df_1h.resample("4h").agg({"Open": "first", "High": "max", "Low": "min", "Close": "last"}).dropna()
 
             b_1d = get_trend(df_1d)
@@ -174,13 +169,11 @@ def main():
 
             macro_bias, macro_reason = evaluate_macro_for_asset(asset, dxy_trend, us10y_trend)
 
-            # Rango intradía de 16 horas para EQ 50% y Order Block dinámico
             recent_high = float(high_1h.tail(16).max())
             recent_low = float(low_1h.tail(16).min())
             rng = max(recent_high - recent_low, pip * 15)
             eq_50 = (recent_high + recent_low) / 2.0
 
-            # Verificar si existe una señal previa vigente que aún no ha tocado TP1 ni SL
             reuse_setup = False
             old_a = prev_map.get(sym)
             if old_a and "setup" in old_a:
@@ -193,8 +186,8 @@ def main():
 
             if reuse_setup:
                 setup = old_a["setup"]
-                ob_high = old_a.get("ob_high", setup["entry"] + rng * 0.08)
-                ob_low = old_a.get("ob_low", setup["entry"] - rng * 0.08)
+                ob_high = old_a.get("ob_high", round(setup["entry"] + rng * 0.08, dec))
+                ob_low = old_a.get("ob_low", round(setup["entry"] - rng * 0.08, dec))
             else:
                 direction = "BUY" if chart_bias == "SUBE" else "SELL"
                 risk_dist = max(rng * 0.28, pip * 12)
@@ -228,7 +221,6 @@ def main():
                     "tp2": tp2
                 }
 
-            # Confluencia Visión + Ultrón
             if macro_bias == chart_bias and macro_bias != "NEUTRAL":
                 alignment = "ALIGNED"
                 score = 84
@@ -273,8 +265,9 @@ def main():
                     "1h": format_candles(df_1h, dec, 42)
                 }
             })
+            print(f"OK {sym}: {price}")
         except Exception as e:
-            print(f"Error en {sym}: {e}")
+            print(f"Error procesando {sym}: {e}")
 
     payload = {
         "last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -293,7 +286,7 @@ def main():
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
-    print(f"data.json actualizado correctamente con {len(assets_output)} activos.")
+    print(f"data.json guardado con {len(assets_output)} activos.")
 
 if __name__ == "__main__":
     main()
