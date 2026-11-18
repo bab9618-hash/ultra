@@ -65,7 +65,6 @@
     @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     @keyframes blinkCursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
-    /* Seguro automático CSS: oculta la pantalla de inicio tras 2.6s incluso si falla el JS */
     @keyframes bootAutoFade {
       0%, 82% { opacity: 1; visibility: visible; pointer-events: auto; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
@@ -78,7 +77,7 @@
     .spin-med { animation: spinSlow 14s linear infinite; }
     .spin-rev { animation: spinRev 18s linear infinite; }
     .pulse-core { animation: pulseCore 2.8s ease-in-out infinite; }
-    .ticker-track { display: flex; width: max-content; animation: tickerScroll 34s linear infinite; }
+    .ticker-track { display: flex; width: max-content; animation: tickerScroll 36s linear infinite; }
     .typing-cursor { display: inline-block; width: 7px; height: 13px; background: var(--agent-color); margin-left: 3px; vertical-align: middle; animation: blinkCursor 0.8s infinite; }
 
     .hud-panel {
@@ -104,7 +103,7 @@
 
   <canvas id="neural-bg"></canvas>
 
-  <!-- PANTALLA DE ARRANQUE ORBITAL DE 7 AGENTES CON CIERRE GARANTIZADO -->
+  <!-- PANTALLA DE ARRANQUE ORBITAL DE 7 AGENTES -->
   <div id="boot-screen" onclick="this.style.display='none'; if(window.enterOraculo) enterOraculo(true);" ontouchstart="this.style.display='none'; if(window.enterOraculo) enterOraculo(true);" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2rem 1.25rem;text-align:center;cursor:pointer;touch-action:manipulation;">
     <div class="text-[10px] font-mono tracking-[0.35em] text-slate-500">TELEMETRÍA NEURONAL EN LÍNEA</div>
 
@@ -206,7 +205,7 @@
       <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-amber-400">ORÁCULO</h1>
       <div class="text-[11px] font-mono tracking-[0.28em] text-slate-300">LO QUE USTED NO SABE</div>
       <div id="boot-alerts-ticker" class="text-[11px] font-mono text-red-400 font-bold tracking-wider min-h-[24px] flex flex-col justify-center">
-        SINCRONIZANDO 16 ACTIVOS...
+        SINCRONIZANDO 17 ACTIVOS (INCLUYE XAU/USD)...
       </div>
       <div class="pt-2">
         <button type="button" onclick="document.getElementById('boot-screen').style.display='none'; if(window.enterOraculo) enterOraculo(true);" style="padding:10px 24px;border-radius:8px;border:1px solid #fbbf24;background:rgba(245,158,11,0.2);color:#fcd34d;font-weight:bold;font-size:12px;letter-spacing:0.2em;">
@@ -294,7 +293,7 @@
         <button type="button" onclick="startVoiceRecognition()" id="mic-btn" title="Hablar por micrófono" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">
           MIC
         </button>
-        <input id="cockpit-input" type="text" placeholder="Pregúntele algo o pida una lección..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
+        <input id="cockpit-input" type="text" placeholder="Pregúntele por XAUUSD, pares o lección..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
         <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0 transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">
           ENVIAR
         </button>
@@ -306,7 +305,7 @@
   <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 py-4 space-y-5">
     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
-        <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (16)</button>
+        <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (17)</button>
         <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
         <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 CURSO F.R.I.D.A.Y.</button>
         <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO & NOTICIAS</button>
@@ -319,19 +318,20 @@
 
     <section id="ptab-jarvis" class="space-y-4">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
-        <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (16)</button>
+        <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (17)</button>
         <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
         <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⚠️ TESIS ROTA</button>
+        <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
         <button onclick="setPanelFilter('GBP')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="GBP">💷 PARES GBP</button>
       </div>
       <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
     </section>
 
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
-      <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5" id="panel-ultron-selector"></div>
+      <div class="grid grid-cols-4 sm:grid-cols-9 gap-1.5" id="panel-ultron-selector"></div>
       <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
         <div>
-          <span id="pu-sym" class="font-hud font-bold text-red-400 text-base">BTCUSD</span>
+          <span id="pu-sym" class="font-hud font-bold text-red-400 text-base">XAUUSD</span>
           <span id="pu-status" class="ml-2 text-emerald-400">--</span>
         </div>
         <div class="flex gap-1">
@@ -472,7 +472,7 @@
     let currentAgent = 'jarvis';
     let isPanelMode = false;
     let panelFilter = 'ALL';
-    let selectedSymbol = 'BTCUSD';
+    let selectedSymbol = 'XAUUSD';
     let selectedTF = '1d';
     let typeTimer = null;
     let openWhyPanels = {};
@@ -487,7 +487,7 @@
       { id: 2, title: "2. Liquidez Externa (BSL y SSL)", body: "Lección dos: Liquidez. Las instituciones necesitan contrapartida. Por encima de los techos iguales hay liquidez compradora (BSL) y por debajo de los pisos iguales hay liquidez vendedora (SSL). El precio suele barrer esos stops antes de arrancar.", quiz: "Regla clave: Si ve una mecha barriendo SSL y cerrando arriba, prepare compras." },
       { id: 3, title: "3. Equilibrio EQ 50% (Caro vs. Barato)", body: "Lección tres: Equilibrium al 50 por ciento. La línea punteada EQ 50 divide el rango en dos: arriba es zona Premium (cara, solo para vender) y abajo es zona Discount (barata, solo para comprar).", quiz: "Regla clave: Jamás compre por encima del EQ 50 por ciento; estaría comprando caro." },
       { id: 4, title: "4. Order Blocks Institucionales (OB)", body: "Lección cuatro: Bloques de Órdenes. Son la última vela contraria antes de un impulso fuerte que rompe estructura. Allí quedaron órdenes pendientes de bancos que suelen mitigarse cuando el precio regresa.", quiz: "Regla clave: Use la caja del Order Block como zona de espera, no entre sin rechazo." },
-      { id: 5, title: "5. Confluencia Macro (DXY y US10Y)", body: "Lección cinco: Visión Macro. Si el índice del dólar DXY y los bonos US10Y suben juntos, los pares contra el dólar como EURUSD o GBPUSD tienden a caer. Si ambos bajan, los activos de riesgo suben.", quiz: "Regla clave: Cuando Visión y Ultrón coinciden, la probabilidad sube por encima del 70 por ciento." },
+      { id: 5, title: "5. Confluencia Macro (DXY, US10Y y Oro)", body: "Lección cinco: Visión Macro. Si el índice del dólar DXY y los bonos US10Y suben juntos, pares como EURUSD y el oro XAUUSD tienden a caer. Si ambos bajan, los activos de riesgo y el oro suben.", quiz: "Regla clave: Cuando Visión y Ultrón coinciden, la probabilidad sube por encima del 70 por ciento." },
       { id: 6, title: "6. Killzones de Londres y Nueva York", body: "Lección seis: Horarios Institucionales. El volumen real entra en la Killzone de Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). En Asia el volumen es bajo y abundan las trampas.", quiz: "Regla clave: Si el indicador superior dice Fuera de Killzone, reduzca su exposición." },
       { id: 7, title: "7. Gestión de Riesgo 1:2 y 1:3 (TP1 y TP2)", body: "Lección siete: Matemáticas del Trader. Todas las proyecciones de Oráculo buscan un mínimo de 1 a 2 en TP1 y 1 a 3 en TP2. Al tocar TP1 debe asegurar parciales y mover su Stop Loss a precio de entrada.", quiz: "Regla clave: Con un ratio 1 a 2, acertando solo 4 de cada 10 operaciones usted ya es rentable." },
       { id: 8, title: "8. Re-entradas Intradía tras TP1", body: "Lección ocho: Re-entradas. Cuando un par alcanza su TP1, el sistema libera el bloqueo y dibuja un nuevo Order Block a favor de la tendencia. Nunca persiga el precio; espere el retroceso a la nueva caja.", quiz: "Regla clave: Opere las re-entradas con la mitad del lotaje inicial." },
@@ -591,6 +591,7 @@
     function formatTextForSpeech(raw) {
       return raw
         .replace(/<[^>]*>/g, '')
+        .replace(/XAUUSD/g, 'Oro Dólar')
         .replace(/BTCUSD/g, 'Bitcoin')
         .replace(/USTEC/g, 'Nasdaq cien')
         .replace(/US500/g, 'S and P quinientos')
@@ -825,7 +826,7 @@
         return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${bars}</g><circle cx="140" cy="140" r="92" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/><circle cx="140" cy="140" r="76" fill="none" stroke="#78350f" stroke-width="1" stroke-dasharray="4 4"/><polygon points="140,66 204,178 76,178" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2"/><circle cx="140" cy="140" r="36" fill="#07090f" stroke="#f59e0b" stroke-width="1.5"/><circle cx="140" cy="140" r="9" fill="#f59e0b" class="pulse-core"/></svg>`;
       }
       if (key === 'vision') {
-        return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="110" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/><circle cx="140" cy="140" r="82" fill="none" stroke="#0284c7" stroke-width="1" opacity="0.6"/><circle cx="140" cy="140" r="52" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 4"/><line x1="25" y1="140" x2="255" y2="140" stroke="#0c4a6e" stroke-width="1"/><line x1="140" y1="25" x2="140" y2="255" stroke="#0c4a6e" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/><path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/></g><g font-size="9" fill="#7dd3fc" font-weight="bold"><circle cx="195" cy="92" r="3" fill="#38bdf8"/><text x="201" y="95">USD</text><circle cx="84" cy="108" r="3" fill="#38bdf8"/><text x="58" y="111">EUR</text><circle cx="198" cy="182" r="3" fill="#38bdf8"/><text x="204" y="185">GBP</text><circle cx="92" cy="188" r="3" fill="#38bdf8"/><text x="66" y="191">JPY</text></g><circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#38bdf8"/></svg>`;
+        return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="110" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/><circle cx="140" cy="140" r="82" fill="none" stroke="#0284c7" stroke-width="1" opacity="0.6"/><circle cx="140" cy="140" r="52" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 4"/><line x1="25" y1="140" x2="255" y2="140" stroke="#0c4a6e" stroke-width="1"/><line x1="140" y1="25" x2="140" y2="255" stroke="#0c4a6e" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/><path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/></g><g font-size="9" fill="#7dd3fc" font-weight="bold"><circle cx="195" cy="92" r="3" fill="#38bdf8"/><text x="201" y="95">USD</text><circle cx="84" cy="108" r="3" fill="#38bdf8"/><text x="58" y="111">EUR</text><circle cx="198" cy="182" r="3" fill="#38bdf8"/><text x="204" y="185">XAU</text><circle cx="92" cy="188" r="3" fill="#38bdf8"/><text x="66" y="191">JPY</text></g><circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#38bdf8"/></svg>`;
       }
       if (key === 'ultron') {
         return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="108" fill="none" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="18 8"/><g class="spin-rev" style="transform-origin:140px 140px"><polygon points="140,46 221,93 221,187 140,234 59,187 59,93" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="2"/></g><polygon points="140,74 197,107 197,173 140,206 83,173 83,107" fill="none" stroke="#f87171" stroke-width="1.2" stroke-dasharray="5 3"/><circle cx="140" cy="140" r="34" fill="#080507" stroke="#ef4444" stroke-width="2"/><circle cx="140" cy="140" r="10" fill="#ef4444" class="pulse-core"/></svg>`;
@@ -914,6 +915,7 @@
       const aligned = getAlignedAssets();
       const nearest = getNearestAsset();
       const homer = getHomerMetrics();
+      const totalCount = data ? data.assets.length : 17;
 
       if (key === 'friday') {
         const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
@@ -931,7 +933,7 @@
       if (key === 'jarvis') {
         document.getElementById('agent-hero-metric').textContent = `${broken.length} ALERTAS`;
         document.getElementById('agent-hero-sub').textContent = `${aligned.length} IDEAS ABIERTAS`;
-        typeAgentDialogue(`A sus órdenes, señor. He auditado los dieciséis activos: tenemos ${broken.length} alertas de tesis rota y ${aligned.length} oportunidades alineadas. ¿Desea el reporte ejecutivo?`);
+        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos incluyendo XAUUSD: tenemos ${broken.length} alertas de tesis rota y ${aligned.length} oportunidades alineadas. ¿Desea el reporte ejecutivo?`);
       } else if (key === 'vision') {
         const nextEv = (data && data.calendar && data.calendar[0]) ? `${data.calendar[0].title} (${data.calendar[0].currency})` : 'SIN NOTICIAS INMEDIATAS';
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
@@ -951,7 +953,7 @@
           document.getElementById('agent-hero-metric').textContent = '--';
           document.getElementById('agent-hero-sub').textContent = 'CALCULANDO DISTANCIA';
         }
-        typeAgentDialogue(`Sistemas ópticos calibrados. He medido el riesgo, los bloques y cada pip de recorrido; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
+        typeAgentDialogue(`Sistemas ópticos calibrados. He medido el riesgo, los bloques y cada punto de recorrido; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES AUDITADAS`;
@@ -965,7 +967,7 @@
 
     function handleQuickReply(choice) {
       if (choice === 'NO') {
-        typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa vigilando los dieciséis pares.');
+        typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa vigilando los diecisiete activos.');
         return;
       }
       if (!data) {
@@ -976,7 +978,7 @@
         const broken = getBrokenTheses();
         const aligned = getAlignedAssets();
         const bTxt = broken.length ? `Alertas de tesis rota en ${broken.map(x => x.symbol).join(', ')}. ` : 'Sin tesis rotas ahora. ';
-        const aTxt = aligned.length ? `Las ideas alineadas vigentes son ${aligned.map(x => `${x.symbol} (${x.setup.signal_tag})`).join(', ')}.` : 'Ningún par tiene alineación fuerte en este momento.';
+        const aTxt = aligned.length ? `Las ideas alineadas vigentes son ${aligned.map(x => `${x.symbol} (${x.setup.signal_tag})`).join(', ')}.` : 'Ningún activo tiene alineación fuerte en este momento.';
         typeAgentDialogue(bTxt + aTxt);
       } else if (currentAgent === 'vision') {
         typeAgentDialogue(`${data.brief.headline}. ${data.brief.summary}`);
@@ -1032,7 +1034,10 @@
         typeAgentDialogue('Sincronizando datos del mercado, señor.');
         return;
       }
-      const asset = data.assets.find(a => q.includes(a.symbol));
+      let asset = data.assets.find(a => q.includes(a.symbol));
+      if (!asset && (q.includes('ORO') || q.includes('GOLD') || q.includes('XAU'))) {
+        asset = data.assets.find(a => a.symbol === 'XAUUSD');
+      }
       if (asset) {
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
@@ -1179,6 +1184,7 @@
       let list = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score);
       if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
       if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence.alignment === 'OPPOSED');
+      if (panelFilter === 'XAU') list = list.filter(a => a.symbol === 'XAUUSD');
       if (panelFilter === 'GBP') list = list.filter(a => a.symbol.includes('GBP'));
 
       document.getElementById('panel-jarvis-grid').innerHTML = list.map(a => {
