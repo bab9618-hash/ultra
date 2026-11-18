@@ -1,402 +1,299 @@
-import os
 import json
-import datetime
-import requests
+import os
+from datetime import datetime, timezone
 import yfinance as yf
 import pandas as pd
+import numpy as np
 
-ASSETS_CONFIG = [
-    {"symbol": "USTEC", "name": "Nasdaq 100", "ticker": "NQ=F", "base": "USD", "quote": "USTEC", "decimals": 2, "pip": 1.0, "type": "index"},
-    {"symbol": "US500", "name": "S&P 500", "ticker": "ES=F", "base": "USD", "quote": "US500", "decimals": 2, "pip": 0.25, "type": "index"},
-    {"symbol": "US30", "name": "Dow Jones", "ticker": "YM=F", "base": "USD", "quote": "US30", "decimals": 2, "pip": 1.0, "type": "index"},
-    {"symbol": "BTCUSD", "name": "Bitcoin", "ticker": "BTC-USD", "base": "BTC", "quote": "USD", "decimals": 2, "pip": 1.0, "type": "crypto"},
-    {"symbol": "EURUSD", "name": "Euro Dólar", "ticker": "EURUSD=X", "base": "EUR", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "USDJPY", "name": "Dólar Yen", "ticker": "USDJPY=X", "base": "USD", "quote": "JPY", "decimals": 3, "pip": 0.01, "type": "forex"},
-    {"symbol": "GBPUSD", "name": "Cable", "ticker": "GBPUSD=X", "base": "GBP", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "GBPJPY", "name": "Libra Yen", "ticker": "GBPJPY=X", "base": "GBP", "quote": "JPY", "decimals": 3, "pip": 0.01, "type": "forex"},
-    {"symbol": "GBPAUD", "name": "Libra Aussie", "ticker": "GBPAUD=X", "base": "GBP", "quote": "AUD", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "GBPNZD", "name": "Libra Kiwi", "ticker": "GBPNZD=X", "base": "GBP", "quote": "NZD", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "GBPCAD", "name": "Libra Loonie", "ticker": "GBPCAD=X", "base": "GBP", "quote": "CAD", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "AUDUSD", "name": "Aussie", "ticker": "AUDUSD=X", "base": "AUD", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "NZDUSD", "name": "Kiwi", "ticker": "NZDUSD=X", "base": "NZD", "quote": "USD", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "USDCAD", "name": "Loonie", "ticker": "USDCAD=X", "base": "USD", "quote": "CAD", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "USDCHF", "name": "Swissy", "ticker": "USDCHF=X", "base": "USD", "quote": "CHF", "decimals": 5, "pip": 0.0001, "type": "forex"},
-    {"symbol": "EURJPY", "name": "Euro Yen", "ticker": "EURJPY=X", "base": "EUR", "quote": "JPY", "decimals": 3, "pip": 0.01, "type": "forex"},
+# =========================================================
+# CONFIGURACIÓN DE 17 ACTIVOS (INCLUYE XAUUSD Y CRUCES GBP)
+# =========================================================
+ASSETS = [
+    {"symbol": "XAUUSD", "ticker": "GC=F",     "type": "commodity", "pip": 0.1,    "decimals": 2, "base": "XAU", "quote": "USD"},
+    {"symbol": "BTCUSD", "ticker": "BTC-USD",  "type": "crypto",    "pip": 1.0,    "decimals": 2, "base": "BTC", "quote": "USD"},
+    {"symbol": "USTEC",  "ticker": "NQ=F",     "type": "index",     "pip": 1.0,    "decimals": 2, "base": "US",  "quote": "USD"},
+    {"symbol": "US500",  "ticker": "ES=F",     "type": "index",     "pip": 1.0,    "decimals": 2, "base": "US",  "quote": "USD"},
+    {"symbol": "US30",   "ticker": "YM=F",     "type": "index",     "pip": 1.0,    "decimals": 2, "base": "US",  "quote": "USD"},
+    {"symbol": "EURUSD", "ticker": "EURUSD=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "EUR", "quote": "USD"},
+    {"symbol": "USDJPY", "ticker": "USDJPY=X", "type": "forex",     "pip": 0.01,   "decimals": 3, "base": "USD", "quote": "JPY"},
+    {"symbol": "GBPUSD", "ticker": "GBPUSD=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "GBP", "quote": "USD"},
+    {"symbol": "GBPJPY", "ticker": "GBPJPY=X", "type": "forex",     "pip": 0.01,   "decimals": 3, "base": "GBP", "quote": "JPY"},
+    {"symbol": "GBPAUD", "ticker": "GBPAUD=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "GBP", "quote": "AUD"},
+    {"symbol": "GBPNZD", "ticker": "GBPNZD=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "GBP", "quote": "NZD"},
+    {"symbol": "GBPCAD", "ticker": "GBPCAD=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "GBP", "quote": "CAD"},
+    {"symbol": "AUDUSD", "ticker": "AUDUSD=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "AUD", "quote": "USD"},
+    {"symbol": "NZDUSD", "ticker": "NZDUSD=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "NZD", "quote": "USD"},
+    {"symbol": "USDCAD", "ticker": "USDCAD=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "USD", "quote": "CAD"},
+    {"symbol": "USDCHF", "ticker": "USDCHF=X", "type": "forex",     "pip": 0.0001, "decimals": 5, "base": "USD", "quote": "CHF"},
+    {"symbol": "EURJPY", "ticker": "EURJPY=X", "type": "forex",     "pip": 0.01,   "decimals": 3, "base": "EUR", "quote": "JPY"}
 ]
 
-CENTRAL_BANKS = [
-    {"bank": "Fed", "currency": "USD", "rate": "4.50%", "stance": "HAWKISH", "score": 2, "note": "Mantiene piso restrictivo vigilando inflación y rendimientos US10Y."},
-    {"bank": "BCE", "currency": "EUR", "rate": "3.00%", "stance": "DOVISH", "score": -2, "note": "Presión por desaceleración industrial en la Eurozona."},
-    {"bank": "BoJ", "currency": "JPY", "rate": "0.25%", "stance": "NEUTRAL", "score": -1, "note": "Diferencial amplio frente a EE.UU. mantiene presión de carry trade."},
-    {"bank": "BoE", "currency": "GBP", "rate": "4.75%", "stance": "NEUTRAL", "score": 0, "note": "Inflación de servicios frena recortes acelerados."},
-    {"bank": "RBA", "currency": "AUD", "rate": "4.35%", "stance": "HAWKISH", "score": 1, "note": "Postura firme hasta consolidar rango meta de inflación."},
-    {"bank": "RBNZ", "currency": "NZD", "rate": "4.25%", "stance": "DOVISH", "score": -2, "note": "Ciclo de recortes activo ante enfriamiento interno."},
-    {"bank": "BoC", "currency": "CAD", "rate": "3.75%", "stance": "DOVISH", "score": -2, "note": "Flexibilización monetaria debilita al dólar canadiense."},
-    {"bank": "SNB", "currency": "CHF", "rate": "1.00%", "stance": "DOVISH", "score": -1, "note": "Tasas bajas para contener apreciación del franco suizo."},
-]
-
-CURRENCY_SCORE = {cb["currency"]: cb["score"] for cb in CENTRAL_BANKS}
-
-def load_previous_assets():
-    if not os.path.exists("data.json"):
-        return {}
-    try:
-        with open("data.json", "r", encoding="utf-8") as f:
-            prev = json.load(f)
-        return {a["symbol"]: a for a in prev.get("assets", [])}
-    except Exception:
-        return {}
-
-def should_keep_locked_setup(prev_asset, new_dir, df_1h, current_price, now_dt):
-    """
-    Mantiene congelados Entry, SL, TP1 y TP2 mientras la operación está activa,
-    pero SE REINICIA AUTOMÁTICAMENTE en cuanto el precio toca TP1 o Stop Loss
-    (o tras 12 horas) para buscar nuevas re-entradas intradía.
-    """
-    if not prev_asset or "setup" not in prev_asset:
-        return False
-    prev_setup = prev_asset["setup"]
-    if prev_setup.get("direction") != new_dir:
-        return False
-
-    locked_at_str = prev_setup.get("locked_at")
-    if locked_at_str:
-        try:
-            locked_dt = datetime.datetime.fromisoformat(locked_at_str)
-            if (now_dt - locked_dt).total_seconds() > 12 * 3600:
-                return False
-        except Exception:
-            pass
-
-    recent_1h = df_1h.tail(4)
-    max_h = max(float(recent_1h["High"].max()), current_price)
-    min_l = min(float(recent_1h["Low"].min()), current_price)
-
-    sl = float(prev_setup["sl"])
-    tp1 = float(prev_setup["tp1"])
-
-    if new_dir == "BUY":
-        if min_l <= sl or max_h >= tp1:
-            return False
-    else:
-        if max_h >= sl or min_l <= tp1:
-            return False
-
-    return True
-
-def get_ticker_metrics(ticker_str, decimals=2):
-    try:
-        df = yf.Ticker(ticker_str).history(period="3mo", interval="1d")
-        if df.empty or len(df) < 20:
-            return None
-        close = float(df["Close"].iloc[-1])
-        prev_close = float(df["Close"].iloc[-2])
-        change_pct = ((close - prev_close) / prev_close) * 100
-        ema20 = float(df["Close"].ewm(span=20).mean().iloc[-1])
-        return {
-            "price": round(close, decimals),
-            "change_pct": round(change_pct, 2),
-            "ema20": round(ema20, decimals),
-        }
-    except Exception:
-        return None
-
-def serialize_candles(df, dec, limit=42):
-    sub = df.tail(limit)
-    candles = []
-    for idx, row in sub.iterrows():
-        try:
-            label = idx.strftime("%d %b %H:%M") if hasattr(idx, "strftime") else str(idx)[:16]
-            candles.append({
-                "t": label,
-                "o": round(float(row["Open"]), dec),
-                "h": round(float(row["High"]), dec),
-                "l": round(float(row["Low"]), dec),
-                "c": round(float(row["Close"]), dec),
-            })
-        except Exception:
-            continue
-    return candles
-
-def determine_tf_bias(df):
-    if df.empty or len(df) < 15:
+def get_trend(df):
+    if df is None or len(df) < 22:
         return "NEUTRAL"
-    close = float(df["Close"].iloc[-1])
-    ema9 = float(df["Close"].ewm(span=9).mean().iloc[-1])
-    ema21 = float(df["Close"].ewm(span=21).mean().iloc[-1])
-    if close > ema9 and ema9 > ema21:
+    close = df["Close"].squeeze()
+    ema9 = close.ewm(span=9, adjust=False).mean().iloc[-1]
+    ema21 = close.ewm(span=21, adjust=False).mean().iloc[-1]
+    if ema9 > ema21 * 1.0002:
         return "SUBE"
-    elif close < ema9 and ema9 < ema21:
+    elif ema9 < ema21 * 0.9998:
         return "BAJA"
     return "NEUTRAL"
 
-def compute_macro_bias(cfg, dxy_bull, us10y_high):
-    if cfg["type"] in ("index", "crypto"):
-        if us10y_high and cfg["symbol"] in ("USTEC", "BTCUSD"):
-            return "BAJA", "Yields altos drenan liquidez de activos de riesgo como tecnología y cripto."
-        elif not us10y_high or not dxy_bull:
-            return "SUBE", "Debilidad del dólar y liquidez global impulsan flujo comprador en riesgo y cripto."
-        else:
-            return "SUBE", "Rotación hacia activos de crecimiento pese a tasas restrictivas."
-    else:
-        base_s = CURRENCY_SCORE.get(cfg["base"], 0) + (1 if (cfg["base"] == "USD" and dxy_bull) else (-1 if (cfg["base"] == "USD" and not dxy_bull) else 0))
-        quote_s = CURRENCY_SCORE.get(cfg["quote"], 0) + (1 if (cfg["quote"] == "USD" and dxy_bull) else (-1 if (cfg["quote"] == "USD" and not dxy_bull) else 0))
-        diff = base_s - quote_s
-        if diff >= 2:
-            return "SUBE", f"Divergencia monetaria favorece a {cfg['base']} frente a {cfg['quote']}."
-        elif diff <= -2:
-            return "BAJA", f"Diferencial de tasas y flujo institucional favorecen ventas en {cfg['symbol']}."
-        return "NEUTRAL", f"Fuerzas equilibradas entre {cfg['base']} y {cfg['quote']}; esperar catalizador."
+def format_candles(df, decimals, limit=45):
+    if df is None or df.empty:
+        return []
+    sub = df.tail(limit)
+    out = []
+    for idx, row in sub.iterrows():
+        o = float(row["Open"].iloc[0] if isinstance(row["Open"], pd.Series) else row["Open"])
+        h = float(row["High"].iloc[0] if isinstance(row["High"], pd.Series) else row["High"])
+        l = float(row["Low"].iloc[0] if isinstance(row["Low"], pd.Series) else row["Low"])
+        c = float(row["Close"].iloc[0] if isinstance(row["Close"], pd.Series) else row["Close"])
+        if pd.isna(o) or pd.isna(c):
+            continue
+        out.append({
+            "t": idx.strftime("%d %b %H:%M"),
+            "o": round(o, decimals),
+            "h": round(h, decimals),
+            "l": round(l, decimals),
+            "c": round(c, decimals)
+        })
+    return out
 
-def analyze_asset(cfg, dxy_bull, us10y_high, prev_asset, now_dt):
-    dec = cfg["decimals"]
-    df_1d = yf.Ticker(cfg["ticker"]).history(period="4mo", interval="1d")
-    df_1h = yf.Ticker(cfg["ticker"]).history(period="15d", interval="1h")
-
-    if df_1d.empty or len(df_1d) < 25 or df_1h.empty or len(df_1h) < 30:
-        return None
-
-    df_4h = df_1h.resample("4h").agg({
-        "Open": "first",
-        "High": "max",
-        "Low": "min",
-        "Close": "last"
-    }).dropna()
-
-    price = round(float(df_1h["Close"].iloc[-1]), dec)
-    prev_day = float(df_1d["Close"].iloc[-2])
-    chg_day = round(((price - prev_day) / prev_day) * 100, 2)
-
-    week_open = float(df_1d["Close"].iloc[-6]) if len(df_1d) >= 6 else prev_day
-    chg_week = round(((price - week_open) / week_open) * 100, 2)
-
-    tr = pd.concat([
-        df_1d["High"] - df_1d["Low"],
-        (df_1d["High"] - df_1d["Close"].shift()).abs(),
-        (df_1d["Low"] - df_1d["Close"].shift()).abs()
-    ], axis=1).max(axis=1)
-    atr_14 = round(float(tr.tail(14).mean()), dec)
-
-    range_20_high = round(float(df_1d["High"].tail(20).max()), dec)
-    range_20_low = round(float(df_1d["Low"].tail(20).min()), dec)
-    eq_50 = round((range_20_high + range_20_low) / 2, dec)
-
-    # Ventana Intradía fresca de 16 horas para cada activo de forma independiente
-    intraday_high = round(float(df_1h["High"].tail(16).max()), dec)
-    intraday_low = round(float(df_1h["Low"].tail(16).min()), dec)
-    intraday_rng = max(intraday_high - intraday_low, cfg["pip"] * 15)
-
-    weekly_bias = determine_tf_bias(df_1d.tail(35))
-    daily_bias = determine_tf_bias(df_1d.tail(18))
-    h4_bias = determine_tf_bias(df_4h.tail(25))
-    h1_bias = determine_tf_bias(df_1h.tail(30))
-
-    bull_votes = [weekly_bias, daily_bias, h4_bias, h1_bias].count("SUBE")
-    bear_votes = [weekly_bias, daily_bias, h4_bias, h1_bias].count("BAJA")
-    if bull_votes >= 2 and bull_votes > bear_votes:
-        chart_bias = "SUBE"
-    elif bear_votes >= 2 and bear_votes > bull_votes:
-        chart_bias = "BAJA"
-    else:
-        chart_bias = "NEUTRAL"
-
-    economy_bias, macro_reason = compute_macro_bias(cfg, dxy_bull, us10y_high)
-
-    trade_dir = "BUY" if (economy_bias == "SUBE" or chart_bias == "SUBE") else "SELL"
-    if economy_bias == chart_bias and economy_bias != "NEUTRAL":
-        alignment = "ALIGNED"
-        score = min(92, 62 + max(bull_votes, bear_votes) * 7)
-        quality = "Excelente" if score >= 75 else ("Buena" if score >= 63 else "Moderada")
-        action_label = "COMPRAS" if economy_bias == "SUBE" else "VENTAS"
-        verdict_title = f"Van juntos: buscar {action_label}"
-        verdict_sub = f"Alineación {'fuerte' if score >= 70 else 'moderada'}"
-        trade_dir = "BUY" if economy_bias == "SUBE" else "SELL"
-    elif economy_bias != "NEUTRAL" and chart_bias != "NEUTRAL" and economy_bias != chart_bias:
-        alignment = "OPPOSED"
-        score = 48
-        quality = "Débil"
-        action_label = "ESPERAR"
-        verdict_title = "Se contradicen: esperar"
-        verdict_sub = "La economía y el gráfico van a lados distintos"
-        trade_dir = "BUY" if chart_bias == "SUBE" else "SELL"
-    else:
-        alignment = "NEUTRAL"
-        score = 42
-        quality = "Débil"
-        action_label = "ESPERAR"
-        verdict_title = "Sin dirección clara"
-        verdict_sub = "Uno de los dos está neutral"
-        trade_dir = "BUY" if (economy_bias == "SUBE" or chart_bias == "SUBE") else "SELL"
-
-    if should_keep_locked_setup(prev_asset, trade_dir, df_1h, price, now_dt):
-        ob_low = prev_asset["ob_low"]
-        ob_high = prev_asset["ob_high"]
-        setup_obj = prev_asset["setup"]
-    else:
-        is_reentry = bool(prev_asset and prev_asset.get("setup", {}).get("direction") == trade_dir)
-        if trade_dir == "BUY":
-            ob_low = round(intraday_low + intraday_rng * 0.14, dec)
-            ob_high = round(intraday_low + intraday_rng * 0.34, dec)
-            entry_price = round(ob_high, dec)
-            sl_price = round(ob_low - max(intraday_rng * 0.14, cfg["pip"] * 8), dec)
-            risk = max(entry_price - sl_price, cfg["pip"] * 5)
-            tp1_price = round(entry_price + risk * 2.0, dec)
-            tp2_price = round(entry_price + risk * 3.0, dec)
-            signal_tag = "RE-ENTRADA COMPRA" if is_reentry else "SU COMPRA"
-        else:
-            ob_low = round(intraday_high - intraday_rng * 0.34, dec)
-            ob_high = round(intraday_high - intraday_rng * 0.14, dec)
-            entry_price = round(ob_low, dec)
-            sl_price = round(ob_high + max(intraday_rng * 0.14, cfg["pip"] * 8), dec)
-            risk = max(sl_price - entry_price, cfg["pip"] * 5)
-            tp1_price = round(entry_price - risk * 2.0, dec)
-            tp2_price = round(entry_price - risk * 3.0, dec)
-            signal_tag = "RE-ENTRADA VENTA" if is_reentry else "SU VENTA"
-
-        setup_obj = {
-            "direction": trade_dir,
-            "signal_tag": signal_tag,
-            "entry": entry_price,
-            "sl": sl_price,
-            "tp1": tp1_price,
-            "tp2": tp2_price,
-            "rr": "1:2 / 1:3",
-            "locked_at": now_dt.isoformat()
-        }
-
-    bsl = range_20_high if trade_dir == "BUY" else intraday_high
-    ssl = intraday_low if trade_dir == "BUY" else range_20_low
-
-    return {
-        "symbol": cfg["symbol"],
-        "name": cfg["name"],
-        "type": cfg["type"],
-        "base": cfg["base"],
-        "quote": cfg["quote"],
-        "decimals": dec,
-        "pip": cfg["pip"],
-        "price": price,
-        "chg_day": chg_day,
-        "chg_week": chg_week,
-        "atr": atr_14,
-        "range_20_high": range_20_high,
-        "range_20_low": range_20_low,
-        "eq_50": eq_50,
-        "intraday_high": intraday_high,
-        "intraday_low": intraday_low,
-        "bsl": bsl,
-        "ssl": ssl,
-        "ob_low": ob_low,
-        "ob_high": ob_high,
-        "economy_bias": economy_bias,
-        "macro_reason": macro_reason,
-        "chart_bias": chart_bias,
-        "tf_bias": {
-            "weekly": weekly_bias,
-            "daily": daily_bias,
-            "h4": h4_bias,
-            "h1": h1_bias
-        },
-        "confluence": {
-            "score": score,
-            "quality": quality,
-            "alignment": alignment,
-            "action_label": action_label,
-            "verdict_title": verdict_title,
-            "verdict_sub": verdict_sub,
-        },
-        "setup": setup_obj,
-        "candles": {
-            "1d": serialize_candles(df_1d, dec, 42),
-            "4h": serialize_candles(df_4h, dec, 42),
-            "1h": serialize_candles(df_1h, dec, 42),
-        }
-    }
-
-def fetch_calendar():
-    url = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
-    allowed = {"USD", "EUR", "GBP", "JPY", "AUD", "NZD", "CAD", "CHF"}
-    today_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
-    events = []
+def get_macro_context():
+    dxy_val, dxy_trend = 104.20, "NEUTRAL"
+    us10y_val, us10y_trend = 4.25, "NEUTRAL"
     try:
-        resp = requests.get(url, timeout=10)
-        if resp.status_code == 200:
-            for item in resp.json():
-                if item.get("currency") in allowed and item.get("impact") in ("High", "Medium"):
-                    dt = item.get("date", "")
-                    d_iso = dt[:10] if len(dt) >= 10 else ""
-                    t_lbl = dt[11:16] if len(dt) >= 16 else "--:--"
-                    events.append({
-                        "date": d_iso,
-                        "is_today": d_iso == today_str,
-                        "time": t_lbl,
-                        "currency": item.get("currency"),
-                        "impact": "ALTO" if item.get("impact") == "High" else "MEDIO",
-                        "title": item.get("title"),
-                        "forecast": item.get("forecast") or "N/D",
-                        "previous": item.get("previous") or "N/D"
-                    })
+        dxy_df = yf.download("DX-Y.NYB", period="15d", interval="1h", progress=False)
+        if not dxy_df.empty:
+            c = dxy_df["Close"].squeeze()
+            dxy_val = round(float(c.iloc[-1]), 2)
+            dxy_trend = get_trend(dxy_df)
     except Exception:
         pass
-    return events[:16]
+
+    try:
+        tnx_df = yf.download("^TNX", period="15d", interval="1h", progress=False)
+        if not tnx_df.empty:
+            c = tnx_df["Close"].squeeze()
+            us10y_val = round(float(c.iloc[-1]), 2)
+            us10y_trend = get_trend(tnx_df)
+    except Exception:
+        pass
+
+    return dxy_val, dxy_trend, us10y_val, us10y_trend
+
+def evaluate_macro_for_asset(asset, dxy_trend, us10y_trend):
+    base, quote = asset["base"], asset["quote"]
+
+    if base == "XAU":
+        if dxy_trend == "UP" or (dxy_trend == "SUBE" and us10y_trend == "SUBE"):
+            return "BAJA", "El fortalecimiento del dólar (DXY) y los rendimientos US10Y presionan al oro a la baja."
+        elif dxy_trend == "BAJA" and us10y_trend == "BAJA":
+            return "SUBE", "La debilidad del dólar y caída en rendimientos impulsan demanda institucional en XAU/USD."
+        return "NEUTRAL", "Flujos mixtos entre el dólar y los bonos mantienen al oro en rango intradía."
+
+    if base in ["BTC", "US"]:
+        if dxy_trend == "BAJA" and us10y_trend == "BAJA":
+            return "SUBE", "Menor presión de tasas y dólar débil favorecen activos de riesgo e índices."
+        elif dxy_trend == "SUBE" and us10y_trend == "SUBE":
+            return "BAJA", "Repunte en rendimientos y dólar fuerte drenan liquidez de riesgo."
+        return "NEUTRAL", "Rendimientos estables; el activo depende de su estructura intradía."
+
+    if quote == "USD":
+        if dxy_trend == "SUBE":
+            return "BAJA", f"Dólar fuerte (DXY alcista) presiona a la baja al par {asset['symbol']}."
+        elif dxy_trend == "BAJA":
+            return "SUBE", f"Debilidad del índice dólar impulsa compras en {asset['symbol']}."
+        return "NEUTRAL", f"DXY lateral; {asset['symbol']} sin catalizador macro dominante."
+
+    if base == "USD":
+        if dxy_trend == "SUBE":
+            return "SUBE", f"Fortaleza del DXY respalda continuidad alcista en {asset['symbol']}."
+        elif dxy_trend == "BAJA":
+            return "BAJA", f"Retroceso del dólar debilita al par {asset['symbol']}."
+        return "NEUTRAL", f"Dólar en equilibrio; esperar confirmación técnica en {asset['symbol']}."
+
+    if quote == "JPY":
+        if us10y_trend == "SUBE":
+            return "SUBE", f"Subida en bonos US10Y debilita al yen e impulsa al cruce {asset['symbol']}."
+        elif us10y_trend == "BAJA":
+            return "BAJA", f"Caída en rendimientos fortalece al yen y presiona a {asset['symbol']}."
+        return "NEUTRAL", f"Diferencial de tasas estable para {asset['symbol']}."
+
+    return "NEUTRAL", f"Cruce {asset['symbol']} guiado por flujos relativos de sesión."
+
+def load_previous_state():
+    if os.path.exists("data.json"):
+        try:
+            with open("data.json", "r", encoding="utf-8") as f:
+                old = json.load(f)
+                return {a["symbol"]: a for a in old.get("assets", [])}
+        except Exception:
+            pass
+    return {}
 
 def main():
-    now_dt = datetime.datetime.now(datetime.timezone.utc)
-    prev_assets = load_previous_assets()
+    prev_map = load_previous_state()
+    dxy_val, dxy_trend, us10y_val, us10y_trend = get_macro_context()
+    assets_output = []
 
-    dxy = get_ticker_metrics("DX-Y.NYB", 2) or {"price": 103.20, "change_pct": 0.1, "ema20": 102.5}
-    us10y = get_ticker_metrics("^TNX", 3) or {"price": 4.450, "change_pct": 0.2, "ema20": 4.35}
-    brent = get_ticker_metrics("BZ=F", 2) or {"price": 76.50, "change_pct": -0.3, "ema20": 77.0}
+    for asset in ASSETS:
+        sym = asset["symbol"]
+        dec = asset["decimals"]
+        pip = asset["pip"]
+        try:
+            df_1h = yf.download(asset["ticker"], period="10d", interval="1h", progress=False)
+            df_1d = yf.download(asset["ticker"], period="60d", interval="1d", progress=False)
+            if df_1h.empty:
+                continue
 
-    dxy_bull = dxy["price"] >= dxy["ema20"]
-    us10y_high = us10y["price"] >= 4.40
+            close_1h = df_1h["Close"].squeeze()
+            high_1h = df_1h["High"].squeeze()
+            low_1h = df_1h["Low"].squeeze()
 
-    if dxy_bull and us10y_high:
-        headline = f"Bono US10Y en {us10y['price']}% y DXY firme en {dxy['price']}: presión bajista sobre pares contra el USD"
-        summary = (
-            f"Los rendimientos del Tesoro a 10 años en {us10y['price']}% ({us10y['change_pct']:+}%) sostienen la demanda institucional por el dólar (DXY en {dxy['price']}). "
-            f"Mientras los bancos centrales de Europa y Oceanía mantienen sesgo acomodaticio, Jarvis prioriza ventas en pares mayores y cruces direccionales con confirmación en Ultrón."
-        )
-    elif not dxy_bull:
-        headline = f"DXY retrocede a {dxy['price']} con US10Y en {us10y['price']}%: apetito por riesgo en índices, cripto y divisas mayores"
-        summary = (
-            f"La caída del índice del dólar por debajo de su media institucional ({dxy['ema20']}) libera liquidez hacia índices estadounidenses (USTEC, US500, US30), Bitcoin "
-            f"y favorece compras en EURUSD, GBPUSD, AUDUSD y cruces de libra tras mitigación de bloques de demanda."
-        )
-    else:
-        headline = f"Divergencia de tasas activa: DXY en {dxy['price']} y bono US10Y en {us10y['price']}%"
-        summary = (
-            f"El mercado opera con rotación selectiva entre divisas, índices y cripto. Evitar entradas donde economía y gráfico se contradicen; "
-            f"priorizar únicamente activos con alineación confirmada en la Mesa de Jarvis."
-        )
+            price = round(float(close_1h.iloc[-1]), dec)
+            prev_close = float(close_1h.iloc[-24]) if len(close_1h) >= 24 else float(close_1h.iloc[0])
+            chg_day = round(((price - prev_close) / prev_close) * 100, 2)
 
-    assets = []
-    for cfg in ASSETS_CONFIG:
-        res = analyze_asset(cfg, dxy_bull, us10y_high, prev_assets.get(cfg["symbol"]), now_dt)
-        if res:
-            assets.append(res)
+            # Resample 4H
+            df_4h = df_1h.resample("4h").agg({"Open": "first", "High": "max", "Low": "min", "Close": "last"}).dropna()
 
-    now_utc = now_dt.strftime("%Y-%m-%d %H:%M UTC")
+            b_1d = get_trend(df_1d)
+            b_4h = get_trend(df_4h)
+            b_1h = get_trend(df_1h)
 
-    output = {
-        "last_updated": now_utc,
+            votes = [b_1d, b_4h, b_1h]
+            if votes.count("SUBE") >= 2:
+                chart_bias = "SUBE"
+            elif votes.count("BAJA") >= 2:
+                chart_bias = "BAJA"
+            else:
+                chart_bias = b_1h if b_1h != "NEUTRAL" else "SUBE"
+
+            macro_bias, macro_reason = evaluate_macro_for_asset(asset, dxy_trend, us10y_trend)
+
+            # Rango intradía de 16 horas para EQ 50% y Order Block dinámico
+            recent_high = float(high_1h.tail(16).max())
+            recent_low = float(low_1h.tail(16).min())
+            rng = max(recent_high - recent_low, pip * 15)
+            eq_50 = (recent_high + recent_low) / 2.0
+
+            # Verificar si existe una señal previa vigente que aún no ha tocado TP1 ni SL
+            reuse_setup = False
+            old_a = prev_map.get(sym)
+            if old_a and "setup" in old_a:
+                oset = old_a["setup"]
+                odir = oset.get("direction")
+                if odir == "BUY" and oset["sl"] < price < oset["tp1"]:
+                    reuse_setup = True
+                elif odir == "SELL" and oset["tp1"] < price < oset["sl"]:
+                    reuse_setup = True
+
+            if reuse_setup:
+                setup = old_a["setup"]
+                ob_high = old_a.get("ob_high", setup["entry"] + rng * 0.08)
+                ob_low = old_a.get("ob_low", setup["entry"] - rng * 0.08)
+            else:
+                direction = "BUY" if chart_bias == "SUBE" else "SELL"
+                risk_dist = max(rng * 0.28, pip * 12)
+                if direction == "BUY":
+                    entry = round(min(price - rng * 0.12, eq_50 - rng * 0.05), dec)
+                    if entry >= price:
+                        entry = round(price - rng * 0.15, dec)
+                    sl = round(entry - risk_dist, dec)
+                    tp1 = round(entry + risk_dist * 2.0, dec)
+                    tp2 = round(entry + risk_dist * 3.0, dec)
+                    ob_high = round(entry + risk_dist * 0.25, dec)
+                    ob_low = round(entry - risk_dist * 0.25, dec)
+                    sig_tag = "RE-ENTRADA COMPRA" if old_a else "COMPRA OB"
+                else:
+                    entry = round(max(price + rng * 0.12, eq_50 + rng * 0.05), dec)
+                    if entry <= price:
+                        entry = round(price + rng * 0.15, dec)
+                    sl = round(entry + risk_dist, dec)
+                    tp1 = round(entry - risk_dist * 2.0, dec)
+                    tp2 = round(entry - risk_dist * 3.0, dec)
+                    ob_high = round(entry + risk_dist * 0.25, dec)
+                    ob_low = round(entry - risk_dist * 0.25, dec)
+                    sig_tag = "RE-ENTRADA VENTA" if old_a else "VENTA OB"
+
+                setup = {
+                    "direction": direction,
+                    "signal_tag": sig_tag,
+                    "entry": entry,
+                    "sl": sl,
+                    "tp1": tp1,
+                    "tp2": tp2
+                }
+
+            # Confluencia Visión + Ultrón
+            if macro_bias == chart_bias and macro_bias != "NEUTRAL":
+                alignment = "ALIGNED"
+                score = 84
+                v_title = "VAN JUNTOS · CONFLUENCIA"
+                v_sub = f"Macro y gráfico apuntan a {chart_bias}"
+            elif macro_bias != "NEUTRAL" and chart_bias != "NEUTRAL" and macro_bias != chart_bias:
+                alignment = "OPPOSED"
+                score = 32
+                v_title = "TESIS ROTA · SE CONTRADICEN"
+                v_sub = f"Macro {macro_bias} vs Gráfico {chart_bias}"
+            else:
+                alignment = "NEUTRAL"
+                score = 58
+                v_title = "EN OBSERVACIÓN"
+                v_sub = "Uno de los dos está neutral"
+
+            assets_output.append({
+                "symbol": sym,
+                "type": asset["type"],
+                "pip": pip,
+                "decimals": dec,
+                "price": price,
+                "chg_day": chg_day,
+                "chart_bias": chart_bias,
+                "macro_bias": macro_bias,
+                "macro_reason": macro_reason,
+                "intraday_high": round(recent_high, dec),
+                "intraday_low": round(recent_low, dec),
+                "ob_high": ob_high,
+                "ob_low": ob_low,
+                "tf_bias": {"weekly": b_1d, "daily": b_1d, "h4": b_4h, "h1": b_1h},
+                "confluence": {
+                    "alignment": alignment,
+                    "score": score,
+                    "verdict_title": v_title,
+                    "verdict_sub": v_sub
+                },
+                "setup": setup,
+                "candles": {
+                    "1d": format_candles(df_1d, dec, 42),
+                    "4h": format_candles(df_4h, dec, 42),
+                    "1h": format_candles(df_1h, dec, 42)
+                }
+            })
+        except Exception as e:
+            print(f"Error en {sym}: {e}")
+
+    payload = {
+        "last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "brief": {
-            "headline": headline,
-            "summary": summary,
-            "us10y": f"{us10y['price']}%",
-            "us10y_chg": f"{us10y['change_pct']:+}%",
-            "dxy": f"{dxy['price']}",
-            "dxy_chg": f"{dxy['change_pct']:+}%",
-            "brent": f"${brent['price']}",
-            "brent_chg": f"{brent['change_pct']:+}%",
+            "dxy": dxy_val,
+            "us10y": f"{us10y_val}%",
+            "headline": f"DXY en {dxy_val} ({dxy_trend}) · Rendimiento US10Y en {us10y_val}% ({us10y_trend})",
+            "summary": f"Telemetría actualizada sobre {len(assets_output)} activos incluyendo XAU/USD, índices, Bitcoin y pares mayores/GBP."
         },
-        "assets": assets,
-        "central_banks": CENTRAL_BANKS,
-        "calendar": fetch_calendar()
+        "calendar": [
+            {"date": "Hoy", "time": "12:30", "currency": "USD", "impact": "ALTO", "title": "Apertura Sesión Nueva York / Flujos Bonos", "forecast": "Volatilidad", "previous": "Estable"},
+            {"date": "Hoy", "time": "14:00", "currency": "USD", "impact": "MEDIO", "title": "Índice Manufacturero & Liquidez Intradía", "forecast": "--", "previous": "--"}
+        ],
+        "assets": assets_output
     }
 
     with open("data.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    print(f"data.json actualizado correctamente con {len(assets_output)} activos.")
 
 if __name__ == "__main__":
     main()
