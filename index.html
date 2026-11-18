@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.5 LIVE</title>
+  <title>ORÁCULO · Cabina v6.6 LIVE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -147,7 +147,7 @@
             <span class="font-hud font-bold text-white tracking-widest">ORÁCULO</span>
             <span id="killzone-badge" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">UTC --:--</span>
           </div>
-          <div class="flex items-center gap-2 text-[9px]">
+          <div class="flex flex-wrap items-center gap-2 text-[9px]">
             <span id="last-updated" class="text-slate-500">Sincronizando...</span>
             <span id="live-feed-badge" class="text-emerald-400 font-bold">● LIVE</span>
           </div>
@@ -280,7 +280,7 @@
       <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
     </section>
 
-    <!-- SUBPANEL DIARIO KAREN CON SINCRONIZACIÓN EN LA NUBE PC <-> CELULAR -->
+    <!-- SUBPANEL DIARIO KAREN CON SINCRONIZACIÓN AUTOMÁTICA PC <-> CELULAR -->
     <section id="ptab-karen" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <h3 class="font-hud text-sm font-bold text-rose-400">🕸️ AUDITORÍA DE KAREN & ESTADÍSTICA H.O.M.E.R.</h3>
@@ -290,19 +290,28 @@
         </div>
       </div>
 
-      <div class="bg-[#050811] border border-slate-800 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+      <div class="bg-[#050811] border border-slate-800 rounded-lg p-3 flex flex-wrap items-center justify-between gap-2 text-[11px]">
         <div class="text-slate-300">
-          <strong class="text-rose-300">☁️ Nube PC ↔ Celular:</strong>
-          <span id="cloud-token-info">Sin vincular (solo local)</span>
+          <strong class="text-rose-300">☁️ Nube PC ↔ Celular (Auto 15s):</strong>
+          <span id="cloud-token-info">Pulsa VINCULAR NUBE para sincronizar</span>
         </div>
-        <div class="flex gap-1.5">
-          <button type="button" onclick="configureCloudToken()" class="px-2.5 py-1 rounded bg-rose-500/20 border border-rose-400/60 text-rose-200 font-bold">🔑 VINCULAR NUBE</button>
-          <button type="button" onclick="loadCloudJournal(true)" class="px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-200">↻ SINCRONIZAR</button>
+        <div class="flex gap-2">
+          <button type="button" onclick="configureCloudToken()" class="px-3 py-1.5 rounded bg-rose-500/20 border border-rose-400/60 text-rose-200 font-bold">🔑 VINCULAR NUBE</button>
+          <button type="button" onclick="loadCloudJournal(true)" class="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-bold">↻ SINCRONIZAR</button>
         </div>
       </div>
 
       <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
-        <select id="j-pair" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"></select>
+        <select id="j-pair" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white">
+          <option value="XAUUSD">XAUUSD</option>
+          <option value="EURUSD">EURUSD</option>
+          <option value="GBPUSD">GBPUSD</option>
+          <option value="USDJPY">USDJPY</option>
+          <option value="GBPJPY">GBPJPY</option>
+          <option value="BTCUSD">BTCUSD</option>
+          <option value="US30">US30</option>
+          <option value="USTEC">USTEC</option>
+        </select>
         <select id="j-dir" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="COMPRA">COMPRA</option><option value="VENTA">VENTA</option></select>
         <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="WIN">GANADA (+2R / +3R)</option><option value="LOSS">PERDIDA (-1R)</option><option value="BE">BREAK EVEN (0R)</option></select>
         <input id="j-note" type="text" placeholder="Nota o emoción..." required class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white" />
@@ -378,7 +387,6 @@
       if (!data || !data.assets || !data.assets.length) return;
       let updatedAny = false;
 
-      // 1. BTCUSD en tiempo real desde Binance
       try {
         const bRes = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
         if (bRes.ok) {
@@ -392,7 +400,6 @@
         }
       } catch (e) {}
 
-      // 2. Forex y Oro (XAU) en tiempo real desde tasas spot USD
       try {
         const fxRes = await fetch('https://open.er-api.com/v6/latest/USD');
         if (fxRes.ok) {
@@ -416,10 +423,8 @@
           data.assets.forEach(a => {
             const p = mapLive[a.symbol];
             if (p && p > 0) {
-              // Evitar saltos absurdos si XAU spot difería mucho de futuros
               if (a.symbol === 'XAUUSD' && Math.abs(p - a.price) / a.price > 0.08) return;
               a.price = Number(p.toFixed(a.decimals));
-              // Actualizar cierre de la última vela para que el gráfico refleje el precio vivo
               if (a.candles && a.candles['1h'] && a.candles['1h'].length) {
                 const lastC = a.candles['1h'][a.candles['1h'].length - 1];
                 lastC.c = a.price;
@@ -439,15 +444,12 @@
         if (isPanelMode) {
           renderPanelJarvis();
           renderPanelUltron();
-        } else {
-          // Actualizar métrica en vivo de EDITH o JARVIS sin interrumpir la voz
-          if (currentAgent === 'edith') {
-            const n = getNearestAsset();
-            if (n) {
-              const d = getAssetUnitsDist(n);
-              document.getElementById('agent-hero-metric').textContent = `${d.units} ${d.label}`;
-              document.getElementById('agent-hero-sub').textContent = `${n.symbol} · EN VIVO (${n.price})`;
-            }
+        } else if (currentAgent === 'edith') {
+          const n = getNearestAsset();
+          if (n) {
+            const d = getAssetUnitsDist(n);
+            document.getElementById('agent-hero-metric').textContent = `${d.units} ${d.label}`;
+            document.getElementById('agent-hero-sub').textContent = `${n.symbol} · EN VIVO (${n.price})`;
           }
         }
       }
@@ -464,7 +466,7 @@
     }
 
     // =========================================================
-    // SINCRONIZACIÓN EN LA NUBE PC <-> CELULAR (journal.json)
+    // SINCRONIZACIÓN AUTOMÁTICA PC <-> CELULAR (journal.json)
     // =========================================================
     function updateCloudBadge(statusText, isCloud = false) {
       const badge = document.getElementById('sync-status-badge');
@@ -473,17 +475,17 @@
         badge.textContent = statusText;
         badge.className = isCloud
           ? 'text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
-          : 'text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300';
+          : 'text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold';
       }
       if (info) {
         info.textContent = ghToken
-          ? 'Conectado a GitHub (sincronizado entre PC y celular)'
-          : 'Pulsa VINCULAR NUBE para sincronizar entre PC y celular';
+          ? 'Conectado a GitHub (auto-sync cada 15s activo)'
+          : 'Pulsa VINCULAR NUBE y pega tu token de GitHub';
       }
     }
 
     function configureCloudToken() {
-      const t = prompt('Pega tu Token de GitHub (ghp_...) para sincronizar tu Diario entre PC y celular:', ghToken);
+      const t = prompt('Pega tu Token de GitHub (ghp_...) para sincronizar PC y celular:', ghToken);
       if (t !== null) {
         ghToken = t.trim();
         localStorage.setItem('oraculo_gh_token', ghToken);
@@ -496,17 +498,24 @@
     }
 
     async function loadCloudJournal(notify = false) {
-      updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LECTURA NUBE', !!ghToken);
+      if (notify) updateCloudBadge('SINCRONIZANDO...', true);
       try {
         let remoteTrades = null;
         if (ghToken) {
           const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_JOURNAL_PATH}?ref=${GH_BRANCH}&t=${Date.now()}`, {
             headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
           });
+          if (r.status === 401 || r.status === 403) {
+            updateCloudBadge('TOKEN INVÁLIDO / REVOCADO', false);
+            return;
+          }
           if (r.ok) {
             const j = await r.json();
             const decoded = decodeURIComponent(escape(atob(j.content.replace(/\n/g, ''))));
             remoteTrades = JSON.parse(decoded);
+          } else if (r.status === 404 && notify) {
+            updateCloudBadge('NUBE LISTA (SIN NOTAS AÚN)', true);
+            return;
           }
         } else {
           const r = await fetch(`./${GH_JOURNAL_PATH}?t=${Date.now()}`);
@@ -514,20 +523,27 @@
         }
 
         if (Array.isArray(remoteTrades)) {
+          const changed = JSON.stringify(remoteTrades) !== JSON.stringify(trades);
           trades = remoteTrades;
           localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
           renderTrades();
-          if (currentAgent === 'karen' || currentAgent === 'homer') updateAgentTelemetryAndGreeting(currentAgent);
-          if (notify) updateCloudBadge('SINCRONIZADO ✓', true);
+          if (changed && (currentAgent === 'karen' || currentAgent === 'homer')) {
+            updateAgentTelemetryAndGreeting(currentAgent);
+          }
+          if (notify || ghToken) updateCloudBadge('NUBE SINCRONIZADA ✓', true);
+        } else if (notify && !ghToken) {
+          updateCloudBadge('FALTA VINCULAR TOKEN', false);
         }
-      } catch (e) {}
+      } catch (e) {
+        if (notify) updateCloudBadge('ERROR DE RED', false);
+      }
     }
 
     async function saveCloudJournal() {
       localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
       renderTrades();
       if (!ghToken) {
-        updateCloudBadge('GUARDADO LOCAL (FALTA VINCULAR)', false);
+        updateCloudBadge('SOLO LOCAL (PULSA VINCULAR NUBE)', false);
         return;
       }
       updateCloudBadge('GUARDANDO EN NUBE...', true);
@@ -537,6 +553,10 @@
         const getRes = await fetch(`${apiUrl}?ref=${GH_BRANCH}&t=${Date.now()}`, {
           headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
         });
+        if (getRes.status === 401 || getRes.status === 403) {
+          updateCloudBadge('TOKEN REVOCADO · GENERA UNO NUEVO', false);
+          return;
+        }
         if (getRes.ok) {
           const existing = await getRes.json();
           sha = existing.sha;
@@ -1013,7 +1033,11 @@
       });
       if (tab === 'ultron') setTimeout(drawUltronChart, 60);
       if (tab === 'friday') renderPanelCourse();
-      if (tab === 'karen') { updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken); loadCloudJournal(false); }
+      if (tab === 'karen') {
+        renderTrades();
+        updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
+        loadCloudJournal(false);
+      }
     }
 
     function setPanelFilter(f) {
@@ -1046,7 +1070,7 @@
 
         if (!data.assets.some(a => a.symbol === selectedSymbol)) selectedSymbol = data.assets[0].symbol;
         const jPair = document.getElementById('j-pair');
-        if (jPair && !jPair.options.length) {
+        if (jPair) {
           jPair.innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
         }
 
@@ -1072,6 +1096,7 @@
     }
 
     function renderPanelAll() {
+      renderTrades();
       if (!data) return;
       renderPanelJarvis();
       renderPanelUltron();
@@ -1079,10 +1104,10 @@
       document.getElementById('pv-headline').textContent = data.brief.headline;
       document.getElementById('pv-summary').textContent = data.brief.summary;
       document.getElementById('pv-calendar').innerHTML = data.calendar.map(ev => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="flex justify-between text-[10px] text-sky-400"><span>${ev.date} ${ev.time} · ${ev.currency}</span><span>${ev.impact}</span></div><div class="font-bold text-white mt-0.5">${ev.title}</div></div>`).join('');
-      renderTrades();
     }
 
     function renderPanelJarvis() {
+      if (!data) return;
       let list = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score);
       if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
       if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence.alignment === 'OPPOSED');
@@ -1130,6 +1155,7 @@
     }
 
     function renderPanelUltron() {
+      if (!data) return;
       document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => {
         const st = getAssetBadgeState(a);
         const d = getAssetUnitsDist(a);
@@ -1222,7 +1248,6 @@
       drawLvl(a.setup.tp1, 'TP1', '#059669');
       drawLvl(a.setup.tp2, 'TP2', '#10b981');
 
-      // Línea amarilla del precio EN VIVO
       const yLive = yOf(a.price);
       ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(padL, yLive); ctx.lineTo(W - padR, yLive); ctx.stroke();
@@ -1233,15 +1258,22 @@
 
     function renderTrades() {
       const h = getHomerMetrics();
-      document.getElementById('homer-stats-badge').textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
-      document.getElementById('journal-list').innerHTML = trades.map((t, i) => `
+      const badge = document.getElementById('homer-stats-badge');
+      const list = document.getElementById('journal-list');
+      if (badge) badge.textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
+      if (!list) return;
+      if (!trades.length) {
+        list.innerHTML = `<div class="text-slate-500 text-center py-3">Sin operaciones registradas aún.</div>`;
+        return;
+      }
+      list.innerHTML = trades.map((t, i) => `
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between gap-2">
           <div>
             <strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')}">${t.res}</span></strong>
             <span class="text-slate-400"> - ${t.note}</span>
             ${t.date ? `<span class="text-[10px] text-slate-500 ml-1">(${t.date})</span>` : ''}
           </div>
-          <button onclick="deleteTrade(${i})" class="text-red-400 px-1.5">✕</button>
+          <button onclick="deleteTrade(${i})" class="text-red-400 px-2 py-1 font-bold">✕</button>
         </div>
       `).join('');
     }
@@ -1266,10 +1298,12 @@
     });
 
     selectAgent('jarvis', false);
+    renderTrades();
     updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
     loadCloudJournal(false);
     loadData();
     setInterval(refreshLivePrices, 10000);
+    setInterval(() => loadCloudJournal(false), 15000);
     setInterval(loadData, 120000);
   </script>
 </body>
