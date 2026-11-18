@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.1</title>
+  <title>ORÁCULO · Cabina v6.3</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -22,10 +22,7 @@
     }
   </script>
   <style>
-    :root {
-      --agent-color: #f59e0b;
-      --agent-glow: rgba(245, 158, 11, 0.35);
-    }
+    :root { --agent-color: #f59e0b; }
     body {
       background-color: #030407;
       color: #e2e8f0;
@@ -33,28 +30,15 @@
       font-family: 'JetBrains Mono', monospace;
       margin: 0;
     }
-
-    #neural-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
+    #neural-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 60;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0px,
-        transparent 3px,
-        rgba(0, 0, 0, 0.18) 4px
-      );
+      background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.18) 4px);
     }
-
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: #030407; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
@@ -64,50 +48,38 @@
     @keyframes pulseCore { 0%, 100% { transform: scale(1); opacity: 0.92; } 50% { transform: scale(1.04); opacity: 0.55; } }
     @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     @keyframes blinkCursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-
     @keyframes bootAutoFade {
       0%, 82% { opacity: 1; visibility: visible; pointer-events: auto; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
     }
-    #boot-screen {
-      animation: bootAutoFade 2.8s ease-out forwards;
-    }
-
+    #boot-screen { animation: bootAutoFade 2.6s ease-out forwards; }
     .spin-slow { animation: spinSlow 24s linear infinite; }
     .spin-med { animation: spinSlow 14s linear infinite; }
     .spin-rev { animation: spinRev 18s linear infinite; }
     .pulse-core { animation: pulseCore 2.8s ease-in-out infinite; }
     .ticker-track { display: flex; width: max-content; animation: tickerScroll 36s linear infinite; }
     .typing-cursor { display: inline-block; width: 7px; height: 13px; background: var(--agent-color); margin-left: 3px; vertical-align: middle; animation: blinkCursor 0.8s infinite; }
-
     .hud-panel {
-      background: linear-gradient(155deg, rgba(10, 14, 22, 0.9), rgba(5, 8, 13, 0.95));
+      background: linear-gradient(155deg, rgba(10, 14, 22, 0.92), rgba(5, 8, 13, 0.96));
       backdrop-filter: blur(12px);
       border: 1px solid #182234;
     }
-
     .hud-brackets { position: relative; }
     .hud-brackets::before, .hud-brackets::after {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-color: var(--agent-color);
-      pointer-events: none;
+      content: ""; position: absolute; width: 14px; height: 14px; border-color: var(--agent-color); pointer-events: none;
     }
     .hud-brackets::before { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
     .hud-brackets::after { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-20 sm:pb-4 antialiased selection:bg-amber-400 selection:text-black">
+<body class="min-h-screen flex flex-col pb-32 antialiased selection:bg-amber-400 selection:text-black">
 
   <canvas id="neural-bg"></canvas>
 
   <!-- PANTALLA DE ARRANQUE ORBITAL DE 7 AGENTES -->
   <div id="boot-screen" onclick="this.style.display='none'; if(window.enterOraculo) enterOraculo(true);" ontouchstart="this.style.display='none'; if(window.enterOraculo) enterOraculo(true);" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2rem 1.25rem;text-align:center;cursor:pointer;touch-action:manipulation;">
     <div class="text-[10px] font-mono tracking-[0.35em] text-slate-500">TELEMETRÍA NEURONAL EN LÍNEA</div>
-
-    <div class="relative w-[300px] h-[300px] sm:w-[350px] sm:h-[350px] flex items-center justify-center my-auto pointer-events-none">
+    <div class="relative w-[290px] h-[290px] sm:w-[340px] sm:h-[340px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 360 360" class="w-full h-full overflow-visible">
         <defs>
           <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
@@ -116,97 +88,34 @@
             <stop offset="100%" stop-color="#030407" stop-opacity="0"/>
           </radialGradient>
         </defs>
-
         <circle cx="180" cy="180" r="134" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="3 4"/>
         <circle cx="180" cy="180" r="95" fill="none" stroke="#334155" stroke-width="0.8" stroke-dasharray="1 5"/>
         <circle cx="180" cy="180" r="64" fill="url(#coreGrad)"/>
-
         <g class="spin-slow" style="transform-origin: 180px 180px;">
           <circle cx="180" cy="180" r="54" fill="none" stroke="#f59e0b" stroke-width="4" stroke-dasharray="16 8 6 8 24 10" opacity="0.85"/>
           <circle cx="180" cy="180" r="44" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="28 14" opacity="0.7"/>
         </g>
-
         <g stroke="#1e293b" stroke-width="1">
-          <line x1="180" y1="180" x2="180" y2="46"/>
-          <line x1="180" y1="180" x2="285" y2="96"/>
-          <line x1="180" y1="180" x2="310" y2="210"/>
-          <line x1="180" y1="180" x2="238" y2="300"/>
-          <line x1="180" y1="180" x2="122" y2="300"/>
-          <line x1="180" y1="180" x2="50" y2="210"/>
+          <line x1="180" y1="180" x2="180" y2="46"/><line x1="180" y1="180" x2="285" y2="96"/>
+          <line x1="180" y1="180" x2="310" y2="210"/><line x1="180" y1="180" x2="238" y2="300"/>
+          <line x1="180" y1="180" x2="122" y2="300"/><line x1="180" y1="180" x2="50" y2="210"/>
           <line x1="180" y1="180" x2="75" y2="96"/>
         </g>
-
         <circle cx="180" cy="180" r="26" fill="#060911" stroke="#f59e0b" stroke-width="1.5"/>
         <line x1="158" y1="180" x2="202" y2="180" stroke="#38bdf8" stroke-width="1.5"/>
         <circle cx="180" cy="180" r="6" fill="#f59e0b"/>
-
-        <g transform="translate(180,46)">
-          <circle r="24" fill="#070a12" stroke="#f59e0b" stroke-width="1.5"/>
-          <circle r="19" fill="none" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4 3"/>
-          <polygon points="0,-9 8,6 -8,6" fill="none" stroke="#f59e0b" stroke-width="1.4"/>
-          <text y="36" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="bold" letter-spacing="2">JARVIS</text>
-          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">MANDO</text>
-        </g>
-
-        <g transform="translate(285,96)">
-          <circle r="24" fill="#070a12" stroke="#10b981" stroke-width="1.5"/>
-          <circle r="14" fill="none" stroke="#10b981" stroke-width="1"/>
-          <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" stroke-width="1"/>
-          <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" stroke-width="1"/>
-          <text y="36" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold" letter-spacing="1.5">E.D.I.T.H.</text>
-          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">PLAN</text>
-        </g>
-
-        <g transform="translate(310,210)">
-          <circle r="24" fill="#070a12" stroke="#a855f7" stroke-width="1.5"/>
-          <circle r="15" fill="none" stroke="#a855f7" stroke-width="1.2" stroke-dasharray="6 3"/>
-          <circle r="5" fill="#a855f7"/>
-          <text y="36" text-anchor="middle" fill="#a855f7" font-size="9" font-weight="bold" letter-spacing="1.2">F.R.I.D.A.Y.</text>
-          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">MAESTRA</text>
-        </g>
-
-        <g transform="translate(238,300)">
-          <circle r="24" fill="#070a12" stroke="#84cc16" stroke-width="1.5"/>
-          <rect x="-9" y="2" width="4" height="8" fill="#84cc16"/>
-          <rect x="-2" y="-4" width="4" height="14" fill="#84cc16"/>
-          <rect x="5" y="-9" width="4" height="19" fill="#84cc16"/>
-          <text y="36" text-anchor="middle" fill="#84cc16" font-size="9" font-weight="bold" letter-spacing="1.2">H.O.M.E.R.</text>
-          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">ARCHIVO</text>
-        </g>
-
-        <g transform="translate(122,300)">
-          <circle r="24" fill="#070a12" stroke="#ef4444" stroke-width="1.5"/>
-          <polygon points="0,-12 10,-6 10,6 0,12 -10,6 -10,-6" fill="none" stroke="#ef4444" stroke-width="1.4"/>
-          <circle r="4" fill="#ef4444"/>
-          <text y="36" text-anchor="middle" fill="#ef4444" font-size="9" font-weight="bold" letter-spacing="1.8">ULTRÓN</text>
-          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">ESTRUCTURA</text>
-        </g>
-
-        <g transform="translate(50,210)">
-          <circle r="24" fill="#070a12" stroke="#f43f5e" stroke-width="1.5"/>
-          <polygon points="0,-13 11,-4 7,10 -7,10 -11,-4" fill="none" stroke="#f43f5e" stroke-width="1.2"/>
-          <circle r="4" fill="#f43f5e"/>
-          <text y="36" text-anchor="middle" fill="#f43f5e" font-size="9" font-weight="bold" letter-spacing="1.8">KAREN</text>
-          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">DIARIO</text>
-        </g>
-
-        <g transform="translate(75,96)">
-          <circle r="24" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/>
-          <circle r="13" fill="none" stroke="#38bdf8" stroke-width="1"/>
-          <line x1="0" y1="0" x2="12" y2="-10" stroke="#38bdf8" stroke-width="1.5"/>
-          <circle r="3" fill="#38bdf8"/>
-          <text y="36" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold" letter-spacing="1.8">VISIÓN</text>
-          <text y="45" text-anchor="middle" fill="#94a3b8" font-size="6.5" letter-spacing="1.5">MACRO</text>
-        </g>
+        <g transform="translate(180,46)"><circle r="24" fill="#070a12" stroke="#f59e0b" stroke-width="1.5"/><polygon points="0,-9 8,6 -8,6" fill="none" stroke="#f59e0b" stroke-width="1.4"/><text y="36" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="bold">JARVIS</text></g>
+        <g transform="translate(285,96)"><circle r="24" fill="#070a12" stroke="#10b981" stroke-width="1.5"/><circle r="14" fill="none" stroke="#10b981" stroke-width="1"/><text y="36" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold">E.D.I.T.H.</text></g>
+        <g transform="translate(310,210)"><circle r="24" fill="#070a12" stroke="#a855f7" stroke-width="1.5"/><circle r="5" fill="#a855f7"/><text y="36" text-anchor="middle" fill="#a855f7" font-size="9" font-weight="bold">F.R.I.D.A.Y.</text></g>
+        <g transform="translate(238,300)"><circle r="24" fill="#070a12" stroke="#84cc16" stroke-width="1.5"/><rect x="-2" y="-4" width="4" height="14" fill="#84cc16"/><text y="36" text-anchor="middle" fill="#84cc16" font-size="9" font-weight="bold">H.O.M.E.R.</text></g>
+        <g transform="translate(122,300)"><circle r="24" fill="#070a12" stroke="#ef4444" stroke-width="1.5"/><circle r="4" fill="#ef4444"/><text y="36" text-anchor="middle" fill="#ef4444" font-size="9" font-weight="bold">ULTRÓN</text></g>
+        <g transform="translate(50,210)"><circle r="24" fill="#070a12" stroke="#f43f5e" stroke-width="1.5"/><circle r="4" fill="#f43f5e"/><text y="36" text-anchor="middle" fill="#f43f5e" font-size="9" font-weight="bold">KAREN</text></g>
+        <g transform="translate(75,96)"><circle r="24" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/><circle r="3" fill="#38bdf8"/><text y="36" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold">VISIÓN</text></g>
       </svg>
     </div>
-
-    <div class="space-y-2.5 max-w-md w-full">
+    <div class="space-y-2 max-w-md w-full">
       <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-amber-400">ORÁCULO</h1>
       <div class="text-[11px] font-mono tracking-[0.28em] text-slate-300">LO QUE USTED NO SABE</div>
-      <div id="boot-alerts-ticker" class="text-[11px] font-mono text-red-400 font-bold tracking-wider min-h-[24px] flex flex-col justify-center">
-        SINCRONIZANDO 17 ACTIVOS (INCLUYE XAU/USD)...
-      </div>
       <div class="pt-2">
         <button type="button" onclick="document.getElementById('boot-screen').style.display='none'; if(window.enterOraculo) enterOraculo(true);" style="padding:10px 24px;border-radius:8px;border:1px solid #fbbf24;background:rgba(245,158,11,0.2);color:#fcd34d;font-weight:bold;font-size:12px;letter-spacing:0.2em;">
           ENTRAR A LA CABINA ▸
@@ -223,14 +132,13 @@
     </div>
   </div>
 
-  <!-- BARRA SUPERIOR DE TELEMETRÍA + CONTROLES -->
+  <!-- BARRA SUPERIOR DE TELEMETRÍA -->
   <header class="relative z-30 border-b border-slate-800/80 bg-[#04060b]/95 sticky top-0 backdrop-blur-md">
     <div class="overflow-hidden py-1.5 border-b border-slate-800/60 bg-[#020306]">
       <div id="live-ticker-track" class="ticker-track text-[11px] font-mono text-slate-300 gap-6 px-4">
         <span>CARGANDO FLUJO DE MERCADO...</span>
       </div>
     </div>
-
     <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <button onclick="showBoot()" title="Pantalla Orbital" class="w-8 h-8 rounded border border-amber-500/50 bg-amber-500/10 flex items-center justify-center font-hud font-black text-amber-400 text-xs">O</button>
@@ -242,67 +150,43 @@
           <div id="last-updated" class="text-slate-500 text-[9px]">Sincronizando...</div>
         </div>
       </div>
-
       <div class="flex items-center gap-1.5 font-mono text-[11px]">
-        <button onclick="cycleAgentVoice()" title="Cambiar timbre vocal del agente" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-cyan-300 hover:border-cyan-400 text-[10px]">
-          🎙️ TIMBRE
-        </button>
-        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400">
-          VOZ ON
-        </button>
-        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-3 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold">
-          VER PANEL ▸
-        </button>
+        <button onclick="cycleAgentVoice()" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-cyan-300 hover:border-cyan-400 text-[10px]">🎙️ TIMBRE</button>
+        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400">VOZ ON</button>
+        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-3 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold">VER PANEL ▸</button>
       </div>
     </div>
   </header>
 
-  <!-- MODO 1: CABINA CONVERSACIONAL -->
-  <main id="cockpit-view" class="relative z-10 flex-1 max-w-2xl w-full mx-auto px-4 py-4 flex flex-col justify-between gap-4">
-
-    <div class="flex flex-col items-center justify-center pt-1">
-      <div id="agent-core-visual" class="w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] flex items-center justify-center"></div>
-
+  <!-- MODO 1: CABINA CONVERSACIONAL (CON ESPACIO INFERIOR GARANTIZADO) -->
+  <main id="cockpit-view" class="relative z-10 flex-1 max-w-2xl w-full mx-auto px-4 pt-3 pb-28 flex flex-col justify-between gap-3">
+    <div class="flex flex-col items-center justify-center">
+      <div id="agent-core-visual" class="w-[210px] h-[210px] sm:w-[240px] sm:h-[240px] flex items-center justify-center"></div>
       <div class="text-center space-y-1 -mt-1">
         <div id="agent-hero-metric" class="font-hud text-xl sm:text-2xl font-extrabold tracking-wider text-white">0 ALERTAS</div>
         <div id="agent-hero-sub" class="text-[11px] font-mono tracking-[0.2em] text-slate-300 uppercase">SINCRONIZANDO</div>
         <div id="agent-role-label" class="text-[10px] font-mono tracking-[0.28em] text-slate-400 uppercase">JARVIS · ASISTENTE DE MANDO</div>
         <div id="agent-voice-profile" class="text-[9px] font-mono text-slate-500">TIMBRE: MASCULINO CULTO · SERENO</div>
-        <div id="agent-state-label" class="text-[11px] font-mono tracking-[0.38em] font-bold pt-1" style="color: var(--agent-color);">E N &nbsp; E S P E R A</div>
+        <div id="agent-state-label" class="text-[11px] font-mono tracking-[0.38em] font-bold pt-0.5" style="color: var(--agent-color);">E N &nbsp; E S P E R A</div>
       </div>
     </div>
 
-    <div class="space-y-3">
-      <div id="agent-dialogue-box" class="min-h-[82px] text-xs sm:text-sm font-mono text-slate-200 leading-relaxed px-1">
+    <div class="space-y-2.5 bg-[#04060c]/85 p-3 rounded-xl border border-slate-800/80">
+      <div id="agent-dialogue-box" class="min-h-[68px] text-xs sm:text-sm font-mono text-slate-200 leading-relaxed">
         A sus órdenes, señor. Sincronizando telemetría del mercado.<span class="typing-cursor"></span>
       </div>
-
-      <div id="quick-replies" class="flex flex-wrap gap-2">
-        <button onclick="handleQuickReply('SI')" class="px-3.5 py-1.5 rounded border text-xs font-mono font-bold transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.03);">
-          SÍ, DÉMELO
-        </button>
-        <button onclick="handleQuickReply('NO')" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 hover:border-slate-500 text-xs font-mono">
-          NO, GRACIAS
-        </button>
-      </div>
-
+      <div id="quick-replies" class="flex flex-wrap gap-2"></div>
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
-        <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">
-          ■
-        </button>
-        <button type="button" onclick="startVoiceRecognition()" id="mic-btn" title="Hablar por micrófono" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">
-          MIC
-        </button>
+        <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
+        <button type="button" onclick="startVoiceRecognition()" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
         <input id="cockpit-input" type="text" placeholder="Pregúntele por XAUUSD, pares o lección..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
-        <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0 transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">
-          ENVIAR
-        </button>
+        <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ENVIAR</button>
       </form>
     </div>
   </main>
 
   <!-- MODO 2: VISTA DE PANEL COMPLETO -->
-  <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 py-4 space-y-5">
+  <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 pt-4 pb-28 space-y-5">
     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (17)</button>
@@ -311,24 +195,33 @@
         <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO & NOTICIAS</button>
         <button onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
       </div>
-      <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">
-        ◂ VOLVER A CABINA
-      </button>
+      <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
     </div>
 
+    <!-- SUBPANEL JARVIS CON FILTRO DE TP1 Y RE-ENTRADAS -->
     <section id="ptab-jarvis" class="space-y-4">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (17)</button>
         <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
+        <button onclick="setPanelFilter('TP1')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-green-300" data-pf="TP1">🟢 EN TP1</button>
+        <button onclick="setPanelFilter('REENTRY')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pf="REENTRY">🔵 RE-ENTRADA</button>
         <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⚠️ TESIS ROTA</button>
         <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
-        <button onclick="setPanelFilter('GBP')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="GBP">💷 PARES GBP</button>
       </div>
       <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
     </section>
 
+    <!-- SUBPANEL ULTRÓN CON PUNTOS VERDES (TP1), AZULES (RE-ENTRADA) Y AMARILLOS (CERCA) -->
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
-      <div class="grid grid-cols-4 sm:grid-cols-9 gap-1.5" id="panel-ultron-selector"></div>
+      <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-b border-slate-800 pb-2">
+        <span class="font-bold text-slate-200">LEYENDA DE ESTADOS:</span>
+        <div class="flex flex-wrap gap-3">
+          <span>🟢 TP1 Alcanzado</span>
+          <span>🔵 Re-entrada Activa</span>
+          <span>🟡 Cerca del Bloque</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5" id="panel-ultron-selector"></div>
       <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
         <div>
           <span id="pu-sym" class="font-hud font-bold text-red-400 text-base">XAUUSD</span>
@@ -390,15 +283,8 @@
       </div>
       <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
         <select id="j-pair" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"></select>
-        <select id="j-dir" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white">
-          <option value="COMPRA">COMPRA</option>
-          <option value="VENTA">VENTA</option>
-        </select>
-        <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white">
-          <option value="WIN">GANADA (+2R / +3R)</option>
-          <option value="LOSS">PERDIDA (-1R)</option>
-          <option value="BE">BREAK EVEN (0R)</option>
-        </select>
+        <select id="j-dir" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="COMPRA">COMPRA</option><option value="VENTA">VENTA</option></select>
+        <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="WIN">GANADA (+2R / +3R)</option><option value="LOSS">PERDIDA (-1R)</option><option value="BE">BREAK EVEN (0R)</option></select>
         <input id="j-note" type="text" placeholder="Nota o emoción..." required class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white" />
         <button type="submit" class="bg-rose-500 hover:bg-rose-400 text-black font-bold rounded px-3 py-2">ANOTAR</button>
       </form>
@@ -406,30 +292,16 @@
     </section>
   </main>
 
-  <!-- BARRA DE NAVEGACIÓN INFERIOR DESLIZABLE (7 AGENTES) -->
+  <!-- BARRA DE NAVEGACIÓN INFERIOR (7 AGENTES) -->
   <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#04060b]/95 border-t border-slate-800 backdrop-blur overflow-x-auto">
     <div class="flex min-w-max sm:justify-center mx-auto">
-      <button onclick="selectAgent('jarvis')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-amber-400 text-amber-400" data-ag="jarvis">
-        <span class="text-sm">⚡</span><span class="text-[10px] font-bold tracking-wider">JARVIS</span>
-      </button>
-      <button onclick="selectAgent('vision')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="vision">
-        <span class="text-sm">🌐</span><span class="text-[10px] font-bold tracking-wider">VISIÓN</span>
-      </button>
-      <button onclick="selectAgent('ultron')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="ultron">
-        <span class="text-sm">🎯</span><span class="text-[10px] font-bold tracking-wider">ULTRÓN</span>
-      </button>
-      <button onclick="selectAgent('friday')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="friday">
-        <span class="text-sm">🟣</span><span class="text-[10px] font-bold tracking-wider">F.R.I.D.A.Y.</span>
-      </button>
-      <button onclick="selectAgent('edith')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="edith">
-        <span class="text-sm">⌖</span><span class="text-[10px] font-bold tracking-wider">E.D.I.T.H.</span>
-      </button>
-      <button onclick="selectAgent('karen')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="karen">
-        <span class="text-sm">🕸️</span><span class="text-[10px] font-bold tracking-wider">KAREN</span>
-      </button>
-      <button onclick="selectAgent('homer')" class="ag-tab w-24 py-2.5 flex flex-col items-center gap-1 border-t-2 border-transparent text-slate-400" data-ag="homer">
-        <span class="text-sm">📊</span><span class="text-[10px] font-bold tracking-wider">H.O.M.E.R.</span>
-      </button>
+      <button onclick="selectAgent('jarvis')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-amber-400 text-amber-400" data-ag="jarvis"><span class="text-sm">⚡</span><span class="text-[10px] font-bold">JARVIS</span></button>
+      <button onclick="selectAgent('vision')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="vision"><span class="text-sm">🌐</span><span class="text-[10px] font-bold">VISIÓN</span></button>
+      <button onclick="selectAgent('ultron')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="ultron"><span class="text-sm">🎯</span><span class="text-[10px] font-bold">ULTRÓN</span></button>
+      <button onclick="selectAgent('friday')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="friday"><span class="text-sm">🟣</span><span class="text-[10px] font-bold">F.R.I.D.A.Y.</span></button>
+      <button onclick="selectAgent('edith')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="edith"><span class="text-sm">⌖</span><span class="text-[10px] font-bold">E.D.I.T.H.</span></button>
+      <button onclick="selectAgent('karen')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="karen"><span class="text-sm">🕸️</span><span class="text-[10px] font-bold">KAREN</span></button>
+      <button onclick="selectAgent('homer')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="homer"><span class="text-sm">📊</span><span class="text-[10px] font-bold">H.O.M.E.R.</span></button>
     </div>
   </nav>
 
@@ -440,15 +312,8 @@
       const ctx = c.getContext('2d');
       let w, h, dots = [];
       function resize() {
-        w = c.width = window.innerWidth;
-        h = c.height = window.innerHeight;
-        dots = Array.from({ length: 42 }, () => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.25,
-          vy: (Math.random() - 0.5) * 0.25,
-          r: Math.random() * 1.4 + 0.5
-        }));
+        w = c.width = window.innerWidth; h = c.height = window.innerHeight;
+        dots = Array.from({ length: 40 }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25, r: Math.random() * 1.4 + 0.5 }));
       }
       window.addEventListener('resize', resize);
       resize();
@@ -459,9 +324,7 @@
           if (d.x < 0 || d.x > w) d.vx *= -1;
           if (d.y < 0 || d.y > h) d.vy *= -1;
           ctx.fillStyle = 'rgba(148, 163, 184, 0.25)';
-          ctx.beginPath();
-          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
         });
         requestAnimationFrame(loop);
       }
@@ -482,6 +345,24 @@
     let customVoiceMap = JSON.parse(localStorage.getItem('oraculo_voice_map') || '{}');
     let activeLessonIndex = 0;
 
+    // =========================================================
+    // CLASIFICADOR VISUAL DE ESTADOS (VERDE TP1 / AZUL RE-ENTRADA / AMARILLO CERCA)
+    // =========================================================
+    function getAssetBadgeState(a) {
+      const isBuy = a.setup.direction === 'BUY';
+      const hitTP1 = isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1);
+      const isReentry = (a.setup.signal_tag || '').toUpperCase().includes('RE-ENTRADA');
+      const pctDist = Math.abs(a.price - a.setup.entry) / a.price;
+      // Solo marca amarillo si está cerca del bloque desde el lado correcto (antes de pasar TP1)
+      const rightSide = isBuy ? (a.price >= a.setup.sl && a.price < a.setup.tp1) : (a.price <= a.setup.sl && a.price > a.setup.tp1);
+      const nearBlock = rightSide && pctDist <= 0.004;
+
+      if (hitTP1) return { code: 'TP1', dot: '🟢', text: 'TP1 ALCANZADO', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400' };
+      if (isReentry) return { code: 'REENTRY', dot: '🔵', text: 'RE-ENTRADA', badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-400' };
+      if (nearBlock) return { code: 'NEAR', dot: '🟡', text: 'CERCA OB', badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-400' };
+      return { code: 'WAIT', dot: '', text: '', badgeClass: '' };
+    }
+
     const COURSE_LESSONS = [
       { id: 1, title: "1. Estructura Institucional (BOS y CHoCH)", body: "Lección uno: Estructura. Un BOS confirma que la tendencia continúa rompiendo un máximo o mínimo previo. Un CHoCH es el primer aviso de cambio de tendencia cuando el precio quiebra el último soporte u oferta que impulsó el movimiento.", quiz: "Regla clave: Nunca opere en contra de un BOS confirmado en 4 horas." },
       { id: 2, title: "2. Liquidez Externa (BSL y SSL)", body: "Lección dos: Liquidez. Las instituciones necesitan contrapartida. Por encima de los techos iguales hay liquidez compradora (BSL) y por debajo de los pisos iguales hay liquidez vendedora (SSL). El precio suele barrer esos stops antes de arrancar.", quiz: "Regla clave: Si ve una mecha barriendo SSL y cerrando arriba, prepare compras." },
@@ -501,8 +382,7 @@
       { keys: ['BOS', 'QUIEBRE'], answer: "BOS significa Break of Structure (Quiebre de Estructura). Confirma que la tendencia vigente tiene fuerza institucional al superar un máximo o mínimo anterior." },
       { keys: ['TESIS ROTA', 'CONTRADICEN', 'OPPOSED'], answer: "Tesis Rota aparece cuando el análisis macroeconómico de Visión apunta hacia un lado y la estructura técnica de Ultrón apunta hacia el lado opuesto. Es una alerta para no operar ese par hasta que vuelvan a alinearse." },
       { keys: ['KILLZONE', 'HORARIO', 'SESION'], answer: "Las Killzones son las ventanas de mayor liquidez bancaria: Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). Operar dentro de ellas evita los barridos falsos de la sesión asiática." },
-      { keys: ['REENTRADA', 'RE-ENTRADA', 'TP1'], answer: "Cuando un par toca TP1 o Stop Loss, el sistema libera la operación anterior y traza un nuevo Order Block más adelante para aprovechar la continuación del movimiento sin perseguir el precio." },
-      { keys: ['STOP', 'RIESGO', 'LOTAJE'], answer: "El Stop Loss en Oráculo se calcula dinámicamente según el rango intradía de 16 horas de cada activo. Nunca mueva el Stop hacia atrás ni arriesgue más del 1 al 2 por ciento de su cuenta por idea." }
+      { keys: ['REENTRADA', 'RE-ENTRADA', 'TP1'], answer: "Los pares marcados con punto verde (🟢) ya alcanzaron su TP1, y los marcados con punto azul (🔵) tienen activa una Re-entrada institucional esperando retroceso al nuevo bloque." }
     ];
 
     const AGENTS = {
@@ -531,37 +411,20 @@
       setTimeout(loadSpanishVoices, 1000);
     }
 
-    const MALE_CODES = [
-      'es-us-x-esd', 'es-us-x-esf', 'es-es-x-eed', 'es-es-x-eef',
-      'es-419-x-esd', 'es-ar-x-ard', 'es-mx-x-mxd',
-      'alvaro', 'jorge', 'pablo', 'diego', 'tomas', 'carlos', 'raul', 'alonso', 'male', 'hombre'
-    ];
-    const FEMALE_CODES = [
-      'es-us-x-sfb', 'es-es-x-eec', 'es-es-x-eea', 'es-mx-x-mxf',
-      'dalia', 'helena', 'elvira', 'paulina', 'monica', 'laura', 'sabina', 'female', 'mujer'
-    ];
+    const MALE_CODES = ['es-us-x-esd', 'es-us-x-esf', 'es-es-x-eed', 'es-es-x-eef', 'alvaro', 'jorge', 'pablo', 'diego', 'tomas', 'carlos', 'raul', 'alonso', 'male', 'hombre'];
+    const FEMALE_CODES = ['es-us-x-sfb', 'es-es-x-eec', 'es-es-x-eea', 'dalia', 'helena', 'elvira', 'paulina', 'monica', 'laura', 'sabina', 'female', 'mujer'];
 
     function pickCharacterVoice(agentKey) {
       if (!cachedEsVoices.length) loadSpanishVoices();
       if (!cachedEsVoices.length) return null;
-
-      if (typeof customVoiceMap[agentKey] === 'number' && cachedEsVoices[customVoiceMap[agentKey]]) {
-        return cachedEsVoices[customVoiceMap[agentKey]];
-      }
-
+      if (typeof customVoiceMap[agentKey] === 'number' && cachedEsVoices[customVoiceMap[agentKey]]) return cachedEsVoices[customVoiceMap[agentKey]];
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
       const idOf = v => `${v.name} ${v.voiceURI}`.toLowerCase();
-
       const males = cachedEsVoices.filter(v => MALE_CODES.some(c => idOf(v).includes(c)));
       const females = cachedEsVoices.filter(v => FEMALE_CODES.some(c => idOf(v).includes(c)));
-
       if (ag.gender === 'M') {
         if (males.length > 0) return males[ag.variant % males.length];
-        if (cachedEsVoices.length > 1) {
-          const nonFem = cachedEsVoices.filter(v => !FEMALE_CODES.some(c => idOf(v).includes(c)));
-          if (nonFem.length > 0) return nonFem[ag.variant % nonFem.length];
-          return cachedEsVoices[1 + (ag.variant % (cachedEsVoices.length - 1))];
-        }
+        if (cachedEsVoices.length > 1) return cachedEsVoices[1 + (ag.variant % (cachedEsVoices.length - 1))];
       } else {
         if (females.length > 0) return females[ag.variant % females.length];
       }
@@ -589,41 +452,16 @@
     }
 
     function formatTextForSpeech(raw) {
-      return raw
-        .replace(/<[^>]*>/g, '')
-        .replace(/XAUUSD/g, 'Oro Dólar')
-        .replace(/BTCUSD/g, 'Bitcoin')
-        .replace(/USTEC/g, 'Nasdaq cien')
-        .replace(/US500/g, 'S and P quinientos')
-        .replace(/US30/g, 'Dow Jones')
-        .replace(/EURUSD/g, 'Euro Dólar')
-        .replace(/USDJPY/g, 'Dólar Yen')
-        .replace(/GBPUSD/g, 'Libra Dólar')
-        .replace(/GBPJPY/g, 'Libra Yen')
-        .replace(/GBPAUD/g, 'Libra Australiano')
-        .replace(/GBPNZD/g, 'Libra Neozelandés')
-        .replace(/GBPCAD/g, 'Libra Canadiense')
-        .replace(/AUDUSD/g, 'Australiano Dólar')
-        .replace(/NZDUSD/g, 'Neozelandés Dólar')
-        .replace(/USDCAD/g, 'Dólar Canadiense')
-        .replace(/USDCHF/g, 'Dólar Franco')
-        .replace(/EURJPY/g, 'Euro Yen')
-        .replace(/BOS\/CHoCH/g, 'quiebre de estructura y cambio de carácter')
-        .replace(/TP1/g, 'Take Profit uno')
-        .replace(/TP2/g, 'Take Profit dos')
-        .replace(/\bSL\b/g, 'Stop Loss');
+      return raw.replace(/<[^>]*>/g, '').replace(/XAUUSD/g, 'Oro Dólar').replace(/BTCUSD/g, 'Bitcoin').replace(/USTEC/g, 'Nasdaq cien').replace(/US500/g, 'S and P quinientos').replace(/US30/g, 'Dow Jones').replace(/EURUSD/g, 'Euro Dólar').replace(/USDJPY/g, 'Dólar Yen').replace(/GBPUSD/g, 'Libra Dólar').replace(/GBPJPY/g, 'Libra Yen').replace(/GBPAUD/g, 'Libra Australiano').replace(/GBPNZD/g, 'Libra Neozelandés').replace(/GBPCAD/g, 'Libra Canadiense').replace(/AUDUSD/g, 'Australiano Dólar').replace(/NZDUSD/g, 'Neozelandés Dólar').replace(/USDCAD/g, 'Dólar Canadiense').replace(/USDCHF/g, 'Dólar Franco').replace(/EURJPY/g, 'Euro Yen').replace(/TP1/g, 'Take Profit uno').replace(/TP2/g, 'Take Profit dos').replace(/\bSL\b/g, 'Stop Loss');
     }
 
     function updateVoiceUI() {
       const btn = document.getElementById('voice-toggle-btn');
       if (!btn) return;
-      if (voiceEnabled) {
-        btn.textContent = 'VOZ ON';
-        btn.className = 'px-2.5 py-1 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 font-bold';
-      } else {
-        btn.textContent = 'VOZ OFF';
-        btn.className = 'px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-400';
-      }
+      btn.textContent = voiceEnabled ? 'VOZ ON' : 'VOZ OFF';
+      btn.className = voiceEnabled
+        ? 'px-2.5 py-1 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 font-bold'
+        : 'px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-400';
     }
     updateVoiceUI();
 
@@ -645,14 +483,12 @@
       window.speechSynthesis.cancel();
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
       const chosenVoice = pickCharacterVoice(agentKey);
-      const clean = formatTextForSpeech(text);
-      const chunks = clean.split(/(?<=[.!?])\s+/).filter(Boolean);
+      const chunks = formatTextForSpeech(text).split(/(?<=[.!?])\s+/).filter(Boolean);
       chunks.forEach((chunk, idx) => {
         const u = new SpeechSynthesisUtterance(chunk);
         if (chosenVoice) u.voice = chosenVoice;
         u.lang = chosenVoice ? chosenVoice.lang : 'es-ES';
-        u.pitch = ag.pitch;
-        u.rate = ag.rate;
+        u.pitch = ag.pitch; u.rate = ag.rate;
         if (idx === 0) u.onstart = () => setStateLabel('HABLANDO');
         if (idx === chunks.length - 1) u.onend = () => setStateLabel('EN ESPERA');
         window.speechSynthesis.speak(u);
@@ -661,17 +497,14 @@
 
     function startVoiceRecognition() {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SR) {
-        typeAgentDialogue('El reconocimiento de micrófono no está disponible en este navegador, señor. Escriba su consulta abajo.');
-        return;
-      }
+      if (!SR) { typeAgentDialogue('Micrófono no disponible aquí, señor. Escriba su consulta abajo.'); return; }
       const rec = new SR();
       rec.lang = 'es-ES';
       setStateLabel('ESCUCHANDO');
       rec.onresult = (e) => {
-        const transcript = e.results[0][0].transcript;
-        document.getElementById('cockpit-input').value = transcript;
-        processQuery(transcript);
+        const t = e.results[0][0].transcript;
+        document.getElementById('cockpit-input').value = t;
+        processQuery(t);
       };
       rec.onerror = () => setStateLabel('EN ESPERA');
       rec.start();
@@ -700,13 +533,12 @@
       document.getElementById('agent-hero-metric').textContent = `${pct}%`;
       document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
       renderPanelCourse();
-
       if (completedLessons.length >= COURSE_LESSONS.length) {
-        typeAgentDialogue(`¡Felicidades, jefe! Ha completado el cien por ciento del entrenamiento institucional de Oráculo (10 de 10 lecciones aprobadas). Ya está listo para operar con disciplina de nivel bancario.`);
+        typeAgentDialogue(`¡Felicidades, jefe! Ha completado el cien por ciento del entrenamiento institucional de Oráculo.`);
         renderFridayButtons(lesson, true);
       } else {
         const nextIdx = getNextPendingLessonIndex();
-        typeAgentDialogue(`¡Excelente! Lección ${lesson.id} aprobada. Su progreso subió al ${pct} por ciento. ¿Pasamos a la siguiente lección?`);
+        typeAgentDialogue(`¡Excelente! Lección ${lesson.id} aprobada. Progreso al ${pct} por ciento. ¿Pasamos a la siguiente?`);
         activeLessonIndex = nextIdx;
         renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
       }
@@ -716,40 +548,16 @@
       const qr = document.getElementById('quick-replies');
       if (!qr) return;
       if (askNext) {
-        qr.innerHTML = `
-          <button onclick="startFridayLesson(${activeLessonIndex})" class="px-3.5 py-1.5 rounded border border-purple-400 bg-purple-500/15 text-purple-300 text-xs font-mono font-bold">
-            ▸ INICIAR LECCIÓN ${lesson.id}
-          </button>
-          <button onclick="openCourseInPanel()" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 text-xs font-mono">
-            VER TEMARIO COMPLETO
-          </button>
-        `;
+        qr.innerHTML = `<button onclick="startFridayLesson(${activeLessonIndex})" class="px-3.5 py-1.5 rounded border border-purple-400 bg-purple-500/15 text-purple-300 text-xs font-mono font-bold">▸ INICIAR LECCIÓN ${lesson.id}</button><button onclick="openCourseInPanel()" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 text-xs font-mono">VER TEMARIO</button>`;
         return;
       }
-      qr.innerHTML = `
-        <button onclick="completeCurrentLesson()" class="px-3.5 py-1.5 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold">
-          ${isDone ? '✓ LECCIÓN APROBADA' : '✅ MARCAR COMO COMPLETADA'}
-        </button>
-        <button onclick="startFridayLesson(${activeLessonIndex + 1})" class="px-3.5 py-1.5 rounded border border-purple-400 text-purple-300 bg-[#090d16] text-xs font-mono font-bold">
-          SIGUIENTE LECCIÓN ▸
-        </button>
-        <button onclick="openCourseInPanel()" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-400 text-xs font-mono">
-          TEMARIO (${completedLessons.length}/10)
-        </button>
-      `;
+      qr.innerHTML = `<button onclick="completeCurrentLesson()" class="px-3.5 py-1.5 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold">${isDone ? '✓ APROBADA' : '✅ MARCAR COMPLETADA'}</button><button onclick="startFridayLesson(${activeLessonIndex + 1})" class="px-3.5 py-1.5 rounded border border-purple-400 text-purple-300 bg-[#090d16] text-xs font-mono font-bold">SIGUIENTE ▸</button>`;
     }
 
     function renderDefaultQuickReplies() {
       const qr = document.getElementById('quick-replies');
       if (!qr) return;
-      qr.innerHTML = `
-        <button onclick="handleQuickReply('SI')" class="px-3.5 py-1.5 rounded border text-xs font-mono font-bold transition" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.03);">
-          SÍ, DÉMELO
-        </button>
-        <button onclick="handleQuickReply('NO')" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 hover:border-slate-500 text-xs font-mono">
-          NO, GRACIAS
-        </button>
-      `;
+      qr.innerHTML = `<button onclick="handleQuickReply('SI')" class="px-3.5 py-1.5 rounded border text-xs font-mono font-bold" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.03);">SÍ, DÉMELO</button><button onclick="handleQuickReply('NO')" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 text-xs font-mono">NO, GRACIAS</button>`;
     }
 
     function openCourseInPanel() {
@@ -766,32 +574,12 @@
       if (!list) return;
       list.innerHTML = COURSE_LESSONS.map((l, idx) => {
         const done = completedLessons.includes(l.id);
-        return `
-          <div class="bg-[#050811] border ${done ? 'border-emerald-500/50' : 'border-slate-800'} rounded-lg p-3 space-y-2">
-            <div class="flex items-center justify-between">
-              <strong class="${done ? 'text-emerald-400' : 'text-purple-300'}">${l.title}</strong>
-              <span class="text-[10px] px-2 py-0.5 rounded ${done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'}">${done ? 'APROBADA' : 'PENDIENTE'}</span>
-            </div>
-            <p class="text-[11px] text-slate-300 leading-relaxed">${l.body}</p>
-            <div class="flex gap-2 pt-1">
-              <button onclick="if(isPanelMode)toggleViewMode();selectAgent('friday',false);startFridayLesson(${idx});" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-purple-200 text-[10px] font-bold">
-                🎙️ ESCUCHAR CON F.R.I.D.A.Y.
-              </button>
-              ${!done ? `<button onclick="activeLessonIndex=${idx};completeCurrentLesson();" class="px-2.5 py-1 rounded bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-[10px] font-bold">✅ APROBAR</button>` : ''}
-            </div>
-          </div>
-        `;
+        return `<div class="bg-[#050811] border ${done ? 'border-emerald-500/50' : 'border-slate-800'} rounded-lg p-3 space-y-2"><div class="flex items-center justify-between"><strong class="${done ? 'text-emerald-400' : 'text-purple-300'}">${l.title}</strong><span class="text-[10px] px-2 py-0.5 rounded ${done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'}">${done ? 'APROBADA' : 'PENDIENTE'}</span></div><p class="text-[11px] text-slate-300">${l.body}</p><div class="flex gap-2"><button onclick="if(isPanelMode)toggleViewMode();selectAgent('friday',false);startFridayLesson(${idx});" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-purple-200 text-[10px] font-bold">🎙️ ESCUCHAR</button>${!done ? `<button onclick="activeLessonIndex=${idx};completeCurrentLesson();" class="px-2.5 py-1 rounded bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-[10px] font-bold">✅ APROBAR</button>` : ''}</div></div>`;
       }).join('');
     }
 
-    function getBrokenTheses() {
-      if (!data || !data.assets) return [];
-      return data.assets.filter(a => a.confluence && a.confluence.alignment === 'OPPOSED');
-    }
-    function getAlignedAssets() {
-      if (!data || !data.assets) return [];
-      return data.assets.filter(a => a.confluence && a.confluence.alignment === 'ALIGNED');
-    }
+    function getBrokenTheses() { return (data && data.assets) ? data.assets.filter(a => a.confluence && a.confluence.alignment === 'OPPOSED') : []; }
+    function getAlignedAssets() { return (data && data.assets) ? data.assets.filter(a => a.confluence && a.confluence.alignment === 'ALIGNED') : []; }
     function getNearestAsset() {
       if (!data || !data.assets || !data.assets.length) return null;
       return [...data.assets].sort((a, b) => (Math.abs(a.price - a.setup.entry) / a.price) - (Math.abs(b.price - b.setup.entry) / b.price))[0];
@@ -811,51 +599,20 @@
       if (!trades.length) return { winRate: 48, pnlR: '+0R', total: 0 };
       const wins = trades.filter(t => t.res === 'WIN').length;
       const losses = trades.filter(t => t.res === 'LOSS').length;
-      const winRate = Math.round((wins / trades.length) * 100);
-      const netR = wins * 2 - losses;
-      return { winRate, pnlR: `${netR >= 0 ? '+' : ''}${netR}R`, total: trades.length };
+      return { winRate: Math.round((wins / trades.length) * 100), pnlR: `${(wins * 2 - losses) >= 0 ? '+' : ''}${wins * 2 - losses}R`, total: trades.length };
     }
 
     function renderAgentCoreSVG(key) {
       if (key === 'jarvis') {
-        const bars = Array.from({ length: 36 }, (_, i) => {
-          const ang = i * 10;
-          const active = i < 12;
-          return `<rect x="138" y="16" width="4" height="${active ? 16 : 11}" rx="1" fill="${active ? '#f59e0b' : '#452c08'}" transform="rotate(${ang} 140 140)"/>`;
-        }).join('');
-        return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${bars}</g><circle cx="140" cy="140" r="92" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/><circle cx="140" cy="140" r="76" fill="none" stroke="#78350f" stroke-width="1" stroke-dasharray="4 4"/><polygon points="140,66 204,178 76,178" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2"/><circle cx="140" cy="140" r="36" fill="#07090f" stroke="#f59e0b" stroke-width="1.5"/><circle cx="140" cy="140" r="9" fill="#f59e0b" class="pulse-core"/></svg>`;
+        const bars = Array.from({ length: 36 }, (_, i) => `<rect x="138" y="16" width="4" height="${i < 12 ? 16 : 11}" rx="1" fill="${i < 12 ? '#f59e0b' : '#452c08'}" transform="rotate(${i * 10} 140 140)"/>`).join('');
+        return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${bars}</g><circle cx="140" cy="140" r="92" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/><polygon points="140,66 204,178 76,178" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2"/><circle cx="140" cy="140" r="36" fill="#07090f" stroke="#f59e0b" stroke-width="1.5"/><circle cx="140" cy="140" r="9" fill="#f59e0b" class="pulse-core"/></svg>`;
       }
-      if (key === 'vision') {
-        return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="110" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/><circle cx="140" cy="140" r="82" fill="none" stroke="#0284c7" stroke-width="1" opacity="0.6"/><circle cx="140" cy="140" r="52" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 4"/><line x1="25" y1="140" x2="255" y2="140" stroke="#0c4a6e" stroke-width="1"/><line x1="140" y1="25" x2="140" y2="255" stroke="#0c4a6e" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/><path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/></g><g font-size="9" fill="#7dd3fc" font-weight="bold"><circle cx="195" cy="92" r="3" fill="#38bdf8"/><text x="201" y="95">USD</text><circle cx="84" cy="108" r="3" fill="#38bdf8"/><text x="58" y="111">EUR</text><circle cx="198" cy="182" r="3" fill="#38bdf8"/><text x="204" y="185">XAU</text><circle cx="92" cy="188" r="3" fill="#38bdf8"/><text x="66" y="191">JPY</text></g><circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#38bdf8"/></svg>`;
-      }
-      if (key === 'ultron') {
-        return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="108" fill="none" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="18 8"/><g class="spin-rev" style="transform-origin:140px 140px"><polygon points="140,46 221,93 221,187 140,234 59,187 59,93" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="2"/></g><polygon points="140,74 197,107 197,173 140,206 83,173 83,107" fill="none" stroke="#f87171" stroke-width="1.2" stroke-dasharray="5 3"/><circle cx="140" cy="140" r="34" fill="#080507" stroke="#ef4444" stroke-width="2"/><circle cx="140" cy="140" r="10" fill="#ef4444" class="pulse-core"/></svg>`;
-      }
-      if (key === 'friday') {
-        const rings = Array.from({ length: 48 }, (_, i) => {
-          const ang = i * 7.5;
-          const h = 8 + Math.sin(i * 0.7) * 6;
-          return `<rect x="139" y="${22 - h/2}" width="2.5" height="${h}" fill="#a855f7" opacity="0.8" transform="rotate(${ang} 140 140)"/>`;
-        }).join('');
-        return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${rings}</g><circle cx="140" cy="140" r="84" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="10 6"/><circle cx="140" cy="140" r="58" fill="rgba(168,85,247,0.1)" stroke="#c084fc" stroke-width="1.5"/><circle cx="140" cy="140" r="30" fill="#07050d" stroke="#a855f7" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#e9d5ff" class="pulse-core"/></svg>`;
-      }
-      if (key === 'edith') {
-        return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="106" fill="none" stroke="#065f46" stroke-width="2"/><circle cx="140" cy="140" r="94" fill="none" stroke="#10b981" stroke-width="6" stroke-dasharray="12 6" opacity="0.75"/><circle cx="140" cy="140" r="64" fill="none" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4 4"/><line x1="20" y1="140" x2="112" y2="140" stroke="#10b981" stroke-width="1.5"/><line x1="168" y1="140" x2="260" y2="140" stroke="#10b981" stroke-width="1.5"/><line x1="140" y1="20" x2="140" y2="112" stroke="#10b981" stroke-width="1.5"/><line x1="140" y1="168" x2="140" y2="260" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="28" fill="#040a08" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#10b981" class="pulse-core"/></svg>`;
-      }
-      if (key === 'karen') {
-        const spokes = Array.from({ length: 12 }, (_, i) => {
-          const rad = (i * 30 * Math.PI) / 180;
-          return `<line x1="140" y1="140" x2="${140 + Math.cos(rad)*106}" y2="${140 + Math.sin(rad)*106}" stroke="#881337" stroke-width="1"/>`;
-        }).join('');
-        return `<svg viewBox="0 0 280 280" class="w-full h-full">${spokes}<circle cx="140" cy="140" r="104" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="14 6"/><circle cx="140" cy="140" r="76" fill="none" stroke="#fb7185" stroke-width="1"/><circle cx="140" cy="140" r="50" fill="none" stroke="#f43f5e" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><circle cx="195" cy="96" r="5" fill="#fda4af"/></g><circle cx="140" cy="140" r="28" fill="#0b0508" stroke="#f43f5e" stroke-width="1.8"/><circle cx="140" cy="140" r="7" fill="#f43f5e" class="pulse-core"/></svg>`;
-      }
-      const eqBars = Array.from({ length: 40 }, (_, i) => {
-        const ang = i * 9;
-        const h = (i % 5 === 0) ? 20 : ((i % 2 === 0) ? 14 : 9);
-        const col = i % 4 === 0 ? '#ef4444' : '#84cc16';
-        return `<rect x="138.5" y="${26 - h/2}" width="3" height="${h}" fill="${col}" transform="rotate(${ang} 140 140)"/>`;
-      }).join('');
-      return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${eqBars}</g><circle cx="140" cy="140" r="78" fill="none" stroke="#84cc16" stroke-width="1.5" stroke-dasharray="8 5"/><circle cx="140" cy="140" r="52" fill="rgba(132,204,22,0.08)" stroke="#a3e635" stroke-width="1.2"/><circle cx="140" cy="140" r="28" fill="#070a05" stroke="#84cc16" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#84cc16" class="pulse-core"/></svg>`;
+      if (key === 'vision') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="108" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/><circle cx="140" cy="140" r="76" fill="none" stroke="#0284c7" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/><path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/></g><circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#38bdf8"/></svg>`;
+      if (key === 'ultron') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="106" fill="none" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="18 8"/><g class="spin-rev" style="transform-origin:140px 140px"><polygon points="140,46 221,93 221,187 140,234 59,187 59,93" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="2"/></g><circle cx="140" cy="140" r="34" fill="#080507" stroke="#ef4444" stroke-width="2"/><circle cx="140" cy="140" r="10" fill="#ef4444" class="pulse-core"/></svg>`;
+      if (key === 'friday') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="96" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="10 6"/><circle cx="140" cy="140" r="62" fill="rgba(168,85,247,0.1)" stroke="#c084fc" stroke-width="1.5"/><circle cx="140" cy="140" r="30" fill="#07050d" stroke="#a855f7" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#e9d5ff" class="pulse-core"/></svg>`;
+      if (key === 'edith') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="102" fill="none" stroke="#10b981" stroke-width="4" stroke-dasharray="12 6" opacity="0.75"/><line x1="25" y1="140" x2="255" y2="140" stroke="#10b981" stroke-width="1.5"/><line x1="140" y1="25" x2="140" y2="255" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="28" fill="#040a08" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#10b981" class="pulse-core"/></svg>`;
+      if (key === 'karen') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="100" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="14 6"/><circle cx="140" cy="140" r="64" fill="none" stroke="#fb7185" stroke-width="1"/><circle cx="140" cy="140" r="28" fill="#0b0508" stroke="#f43f5e" stroke-width="1.8"/><circle cx="140" cy="140" r="7" fill="#f43f5e" class="pulse-core"/></svg>`;
+      return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="86" fill="none" stroke="#84cc16" stroke-width="1.5" stroke-dasharray="8 5"/><circle cx="140" cy="140" r="52" fill="rgba(132,204,22,0.08)" stroke="#a3e635" stroke-width="1.2"/><circle cx="140" cy="140" r="28" fill="#070a05" stroke="#84cc16" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#84cc16" class="pulse-core"/></svg>`;
     }
 
     function setStateLabel(txt) {
@@ -885,25 +642,18 @@
       currentAgent = key;
       const ag = AGENTS[key];
       document.documentElement.style.setProperty('--agent-color', ag.color);
-
       document.querySelectorAll('.ag-tab').forEach(btn => {
         const active = btn.dataset.ag === key;
         btn.style.borderColor = active ? ag.color : 'transparent';
         btn.style.color = active ? ag.color : '#94a3b8';
       });
-
       if (withIntro) {
         const ov = document.getElementById('agent-intro-overlay');
-        const title = document.getElementById('intro-title');
-        const sub = document.getElementById('intro-sub');
-        title.textContent = ag.name;
-        title.style.color = '#ffffff';
-        title.style.textShadow = `0 0 22px ${ag.color}`;
-        sub.textContent = ag.sub;
+        document.getElementById('intro-title').textContent = ag.name;
+        document.getElementById('intro-sub').textContent = ag.sub;
         ov.classList.remove('hidden');
-        setTimeout(() => ov.classList.add('hidden'), 850);
+        setTimeout(() => ov.classList.add('hidden'), 800);
       }
-
       document.getElementById('agent-core-visual').innerHTML = renderAgentCoreSVG(key);
       document.getElementById('agent-role-label').textContent = `${ag.name} · ${ag.sub}`;
       updateVoiceProfileLabel();
@@ -924,20 +674,20 @@
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
         document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
         renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
-        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}". También puede preguntarme por cualquier concepto como EQ 50% o CHoCH.`);
+        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}".`);
         return;
       }
-
       renderDefaultQuickReplies();
 
       if (key === 'jarvis') {
+        const tp1Count = data ? data.assets.filter(a => getAssetBadgeState(a).code === 'TP1').length : 0;
+        const reCount = data ? data.assets.filter(a => getAssetBadgeState(a).code === 'REENTRY').length : 0;
         document.getElementById('agent-hero-metric').textContent = `${broken.length} ALERTAS`;
-        document.getElementById('agent-hero-sub').textContent = `${aligned.length} IDEAS ABIERTAS`;
-        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos incluyendo XAUUSD: tenemos ${broken.length} alertas de tesis rota y ${aligned.length} oportunidades alineadas. ¿Desea el reporte ejecutivo?`);
+        document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${tp1Count} TP1 · ${reCount} RE-ENTRADAS`;
+        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos incluyendo XAUUSD: tenemos ${tp1Count} en TP1, ${reCount} en re-entrada y ${broken.length} alertas de tesis rota. ¿Desea el reporte?`);
       } else if (key === 'vision') {
-        const nextEv = (data && data.calendar && data.calendar[0]) ? `${data.calendar[0].title} (${data.calendar[0].currency})` : 'SIN NOTICIAS INMEDIATAS';
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
-        document.getElementById('agent-hero-sub').textContent = nextEv;
+        document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO';
         typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue el rendimiento. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, el equilibrio es delicado. ¿Analizamos el panorama macro?`);
       } else if (key === 'ultron') {
         const target = nearest || (data && data.assets[0]);
@@ -957,29 +707,22 @@
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES AUDITADAS`;
-        typeAgentDialogue(`Hola, me alegra verlo operando con calma. Recuerde que anotar cada entrada duele mucho menos que repetir un error por impulso. ¿Revisamos su bitácora de disciplina?`);
+        typeAgentDialogue(`Hola, me alegra verlo operando con calma. Recuerde que anotar cada entrada duele mucho menos que repetir un error por impulso. ¿Revisamos su bitácora?`);
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Revisé sus estadísticas y sus rachas recientes. ¿Quiere escuchar el veredicto matemático?`);
+        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Revisé sus estadísticas y rachas recientes. ¿Quiere escuchar el veredicto?`);
       }
     }
 
     function handleQuickReply(choice) {
-      if (choice === 'NO') {
-        typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa vigilando los diecisiete activos.');
-        return;
-      }
-      if (!data) {
-        typeAgentDialogue('Aún estoy descargando los últimos datos de GitHub Actions, señor. Intente en unos segundos.');
-        return;
-      }
+      if (choice === 'NO') { typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa.'); return; }
+      if (!data) { typeAgentDialogue('Ejecute el flujo en GitHub Actions para generar data.json con los 17 activos.'); return; }
       if (currentAgent === 'jarvis') {
-        const broken = getBrokenTheses();
-        const aligned = getAlignedAssets();
-        const bTxt = broken.length ? `Alertas de tesis rota en ${broken.map(x => x.symbol).join(', ')}. ` : 'Sin tesis rotas ahora. ';
-        const aTxt = aligned.length ? `Las ideas alineadas vigentes son ${aligned.map(x => `${x.symbol} (${x.setup.signal_tag})`).join(', ')}.` : 'Ningún activo tiene alineación fuerte en este momento.';
-        typeAgentDialogue(bTxt + aTxt);
+        const tp1s = data.assets.filter(a => getAssetBadgeState(a).code === 'TP1').map(x => x.symbol);
+        const res = data.assets.filter(a => getAssetBadgeState(a).code === 'REENTRY').map(x => x.symbol);
+        const aligned = getAlignedAssets().map(x => x.symbol);
+        typeAgentDialogue(`En TP1 (verde): ${tp1s.length ? tp1s.join(', ') : 'ninguno'}. En Re-entrada (azul): ${res.length ? res.join(', ') : 'ninguno'}. Confluencia fuerte: ${aligned.length ? aligned.join(', ') : 'ninguno'}.`);
       } else if (currentAgent === 'vision') {
         typeAgentDialogue(`${data.brief.headline}. ${data.brief.summary}`);
       } else if (currentAgent === 'ultron') {
@@ -991,12 +734,10 @@
         const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
         typeAgentDialogue(`Los tres blancos más cercanos son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})`).join('; ') + `.`);
       } else if (currentAgent === 'karen') {
-        typeAgentDialogue(trades.length === 0
-          ? 'No tiene operaciones anotadas todavía. Abra el panel para registrar su primera ejecución.'
-          : `Tiene ${trades.length} operaciones registradas. Su última entrada fue en ${trades[0].pair} (${trades[0].dir}) con resultado ${trades[0].res}.`);
+        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
       } else if (currentAgent === 'homer') {
         const h = getHomerMetrics();
-        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre ${h.total} operaciones auditadas.`);
+        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR}.`);
       }
     }
 
@@ -1012,69 +753,29 @@
       const q = qRaw.toUpperCase();
       if (q.includes('CURSO') || q.includes('CLASE') || q.includes('LECCION') || q.includes('LECCIÓN') || q.includes('EMPEZAR')) {
         if (currentAgent !== 'friday') selectAgent('friday', false);
-        startFridayLesson(getNextPendingLessonIndex());
-        return;
+        startFridayLesson(getNextPendingLessonIndex()); return;
       }
-      if (q.includes('SIGUIENTE')) {
-        if (currentAgent !== 'friday') selectAgent('friday', false);
-        startFridayLesson(activeLessonIndex + 1);
-        return;
-      }
-      if (q.includes('APROBAR') || q.includes('COMPLETAR') || q.includes('LISTO')) {
-        if (currentAgent !== 'friday') selectAgent('friday', false);
-        completeCurrentLesson();
-        return;
-      }
+      if (q.includes('SIGUIENTE')) { if (currentAgent !== 'friday') selectAgent('friday', false); startFridayLesson(activeLessonIndex + 1); return; }
+      if (q.includes('APROBAR') || q.includes('COMPLETAR')) { if (currentAgent !== 'friday') selectAgent('friday', false); completeCurrentLesson(); return; }
       const concept = CONCEPT_DICTIONARY.find(c => c.keys.some(k => q.includes(k)));
-      if (concept) {
-        typeAgentDialogue(concept.answer);
-        return;
-      }
-      if (!data) {
-        typeAgentDialogue('Sincronizando datos del mercado, señor.');
-        return;
-      }
+      if (concept) { typeAgentDialogue(concept.answer); return; }
+      if (!data) { typeAgentDialogue('Aún no se ha cargado data.json. Ejecute el workflow en GitHub Actions.'); return; }
       let asset = data.assets.find(a => q.includes(a.symbol));
-      if (!asset && (q.includes('ORO') || q.includes('GOLD') || q.includes('XAU'))) {
-        asset = data.assets.find(a => a.symbol === 'XAUUSD');
-      }
+      if (!asset && (q.includes('ORO') || q.includes('GOLD') || q.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
       if (asset) {
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
-        const status = asset.confluence.alignment === 'OPPOSED' ? 'ALERTA DE TESIS ROTA (se contradicen)' : (asset.confluence.alignment === 'ALIGNED' ? 'ALINEACIÓN FUERTE' : 'NEUTRAL');
-        typeAgentDialogue(`${asset.symbol} cotiza en ${asset.price}. Estado: ${status}. Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss de ${p.sl} ${p.unitLabel} (${asset.setup.sl}) y TP1 de +${p.tp1} ${p.unitLabel} (${asset.setup.tp1}).`);
-        return;
-      }
-      if (q.includes('GBP') || q.includes('LIBRA')) {
-        const gbps = data.assets.filter(a => a.symbol.includes('GBP'));
-        typeAgentDialogue('Estado de la canasta GBP: ' + gbps.map(g => `${g.symbol} (${g.confluence.verdict_title}, a ${getAssetUnitsDist(g).units} pips)`).join('; ') + '.');
-        return;
-      }
-      if (currentAgent === 'friday') {
-        startFridayLesson(activeLessonIndex);
+        const st = getAssetBadgeState(asset);
+        typeAgentDialogue(`${asset.symbol} cotiza en ${asset.price} ${st.text ? `(${st.text})` : ''}. Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
         return;
       }
       handleQuickReply('SI');
     }
 
-    function speakCurrentAgent() {
-      const txt = document.getElementById('agent-dialogue-box').innerText;
-      speakText(txt, currentAgent);
-    }
-
-    function enterOraculo(withIntro = false) {
-      const el = document.getElementById('boot-screen');
-      if (el) {
-        el.style.display = 'none';
-        el.remove();
-      }
-      selectAgent('jarvis', withIntro);
-    }
+    function speakCurrentAgent() { speakText(document.getElementById('agent-dialogue-box').innerText, currentAgent); }
+    function enterOraculo(withIntro = false) { const el = document.getElementById('boot-screen'); if (el) el.remove(); selectAgent('jarvis', withIntro); }
     window.enterOraculo = enterOraculo;
-
-    function showBoot() {
-      location.reload();
-    }
+    function showBoot() { location.reload(); }
 
     function toggleViewMode() {
       isPanelMode = !isPanelMode;
@@ -1090,9 +791,7 @@
         if (el) el.classList.toggle('hidden', t !== tab);
       });
       document.querySelectorAll('.ptab').forEach(b => {
-        b.className = b.dataset.pt === tab
-          ? 'ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold'
-          : 'ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+        b.className = b.dataset.pt === tab ? 'ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold' : 'ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
       });
       if (tab === 'ultron') setTimeout(drawUltronChart, 60);
       if (tab === 'friday') renderPanelCourse();
@@ -1101,9 +800,7 @@
     function setPanelFilter(f) {
       panelFilter = f;
       document.querySelectorAll('.pf-btn').forEach(b => {
-        b.className = b.dataset.pf === f
-          ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold'
-          : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+        b.className = b.dataset.pf === f ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold' : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
       });
       renderPanelJarvis();
     }
@@ -1115,9 +812,7 @@
       if (!kz) return;
       const inKz = (h >= 7 && h <= 10) || (h >= 12 && h <= 16);
       kz.textContent = `${inKz ? 'KILLZONE ACTIVA' : 'FUERA KILLZONE'} · ${now.toISOString().substring(11, 19)} UTC`;
-      kz.className = inKz
-        ? 'px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px]'
-        : 'px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[9px]';
+      kz.className = inKz ? 'px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px]' : 'px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[9px]';
     }
     setInterval(updateClock, 1000);
     updateClock();
@@ -1127,18 +822,12 @@
         const res = await fetch(`./data.json?t=${Date.now()}`);
         if (!res.ok) throw new Error('Sin data.json');
         data = await res.json();
-
         document.getElementById('last-updated').textContent = `TELEMETRÍA: ${data.last_updated}`;
-        const items = data.assets.map(a => `<span><strong class="text-white">${a.symbol}</strong> <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`).join('<span class="text-slate-600">|</span>');
+        const items = data.assets.map(a => {
+          const st = getAssetBadgeState(a);
+          return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong> <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`;
+        }).join('<span class="text-slate-600">|</span>');
         document.getElementById('live-ticker-track').innerHTML = items + items;
-
-        const broken = getBrokenTheses();
-        const bootAlerts = document.getElementById('boot-alerts-ticker');
-        if (bootAlerts) {
-          bootAlerts.innerHTML = broken.length > 0
-            ? broken.slice(0, 2).map(b => `<div>ALERTA · TESIS ROTA · ${b.symbol}</div>`).join('')
-            : `<div class="text-emerald-400">SISTEMA ESTABLE · ${getAlignedAssets().length} IDEAS ALINEADAS VIGENTES</div>`;
-        }
 
         if (!data.assets.some(a => a.symbol === selectedSymbol)) selectedSymbol = data.assets[0].symbol;
         document.getElementById('j-pair').innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
@@ -1170,13 +859,7 @@
       renderPanelCourse();
       document.getElementById('pv-headline').textContent = data.brief.headline;
       document.getElementById('pv-summary').textContent = data.brief.summary;
-      document.getElementById('pv-calendar').innerHTML = data.calendar.map(ev => `
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="flex justify-between text-[10px] text-sky-400"><span>${ev.date} ${ev.time} · ${ev.currency}</span><span>${ev.impact}</span></div>
-          <div class="font-bold text-white mt-0.5">${ev.title}</div>
-          <div class="text-[10px] text-slate-400">Prev: ${ev.forecast} | Ant: ${ev.previous}</div>
-        </div>
-      `).join('');
+      document.getElementById('pv-calendar').innerHTML = data.calendar.map(ev => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="flex justify-between text-[10px] text-sky-400"><span>${ev.date} ${ev.time} · ${ev.currency}</span><span>${ev.impact}</span></div><div class="font-bold text-white mt-0.5">${ev.title}</div></div>`).join('');
       renderTrades();
     }
 
@@ -1184,65 +867,69 @@
       let list = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score);
       if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
       if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence.alignment === 'OPPOSED');
+      if (panelFilter === 'TP1') list = list.filter(a => getAssetBadgeState(a).code === 'TP1');
+      if (panelFilter === 'REENTRY') list = list.filter(a => getAssetBadgeState(a).code === 'REENTRY');
       if (panelFilter === 'XAU') list = list.filter(a => a.symbol === 'XAUUSD');
-      if (panelFilter === 'GBP') list = list.filter(a => a.symbol.includes('GBP'));
 
       document.getElementById('panel-jarvis-grid').innerHTML = list.map(a => {
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
+        const st = getAssetBadgeState(a);
         const isBroken = a.confluence.alignment === 'OPPOSED';
         const isAligned = a.confluence.alignment === 'ALIGNED';
         return `
-          <div class="hud-panel rounded-xl p-4 space-y-3 border ${isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/50' : 'border-slate-800')}">
-            <div class="flex items-center justify-between">
-              <div>
-                <span class="font-hud font-bold text-white text-sm">${a.symbol}</span>
-                <span class="text-xs text-cyan-300 ml-1.5">${a.price}</span>
-                ${isBroken ? '<span class="ml-2 text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">TESIS ROTA</span>' : ''}
+          <div class="hud-panel rounded-xl p-4 space-y-3 border ${st.code === 'TP1' ? 'border-emerald-400' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800'))}">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="font-hud font-bold text-white text-sm">${st.dot} ${a.symbol}</span>
+                <span class="text-xs text-cyan-300">${a.price}</span>
+                ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
+                ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">TESIS ROTA</span>' : ''}
               </div>
-              <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400">Gráfico →</button>
+              <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400 shrink-0">Gráfico →</button>
             </div>
-
             <div class="flex items-center justify-between bg-[#050811] border border-slate-800 rounded-lg p-2.5">
               <div class="flex items-center gap-2.5">
                 <div class="w-10 h-10 rounded-full border-2 ${isAligned ? 'border-emerald-400 text-emerald-400' : (isBroken ? 'border-red-400 text-red-400' : 'border-slate-500 text-slate-400')} flex items-center justify-center font-bold text-xs">${a.confluence.score}</div>
-                <div class="text-xs">
-                  <div class="font-bold text-white">${a.confluence.verdict_title}</div>
-                  <div class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</div>
-                </div>
+                <div class="text-xs"><div class="font-bold text-white">${a.confluence.verdict_title}</div><div class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</div></div>
               </div>
               <button onclick="toggleWhy('${a.symbol}')" class="px-2 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">¿Por qué? ▾</button>
             </div>
-
             <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
               <div><strong class="text-sky-400">VISIÓN (Macro):</strong> ${a.macro_reason}</div>
-              <div><strong class="text-red-400">ULTRÓN (Técnico):</strong> Tendencia ${a.chart_bias} (W:${a.tf_bias.weekly} / D:${a.tf_bias.daily} / 4H:${a.tf_bias.h4}).</div>
+              <div><strong class="text-red-400">ULTRÓN (Técnico):</strong> Tendencia ${a.chart_bias} (D:${a.tf_bias.daily} / 4H:${a.tf_bias.h4} / 1H:${a.tf_bias.h1}).</div>
               <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> Entrada en ${a.setup.entry} (a ${d.units} ${d.label}), SL ${p.sl} ${p.unitLabel}, TP1 +${p.tp1} ${p.unitLabel}.</div>
             </div>
-
             <div class="grid grid-cols-4 gap-1.5 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[11px]">
               <div><div class="text-[9px] text-sky-400">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[9px] text-slate-400">a ${d.units} ${d.label}</div></div>
               <div><div class="text-[9px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[9px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
               <div><div class="text-[9px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[9px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
               <div><div class="text-[9px] text-emerald-400">TP2</div><div class="font-bold text-emerald-400">${a.setup.tp2}</div><div class="text-[9px] text-emerald-300">+${p.tp2} ${p.unitLabel}</div></div>
             </div>
-          </div>
-        `;
+          </div>`;
       }).join('');
     }
 
     function renderPanelUltron() {
-      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => `
-        <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-1.5 rounded border text-[11px] font-bold ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : 'bg-[#050811] border-slate-800 text-slate-400'}">
-          ${a.symbol}
-        </button>
-      `).join('');
+      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => {
+        const st = getAssetBadgeState(a);
+        const d = getAssetUnitsDist(a);
+        return `
+          <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : 'bg-[#050811] border-slate-800 text-slate-300'}">
+            <div class="flex items-center justify-between text-[11px] font-bold">
+              <span>${a.symbol}</span>
+              <span>${st.dot}</span>
+            </div>
+            <div class="text-[9px] text-slate-400 mt-0.5">${st.text || `a ${d.units} ${d.label}`}</div>
+          </button>`;
+      }).join('');
 
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
       const d = getAssetUnitsDist(a);
       const p = getSetupPips(a);
-      document.getElementById('pu-sym').textContent = a.symbol;
-      document.getElementById('pu-status').textContent = `${a.setup.signal_tag} · a ${d.units} ${d.label}`;
+      const st = getAssetBadgeState(a);
+      document.getElementById('pu-sym').textContent = `${st.dot} ${a.symbol}`;
+      document.getElementById('pu-status').textContent = `${st.text || a.setup.signal_tag} · a ${d.units} ${d.label}`;
       document.getElementById('pu-entry').textContent = a.setup.entry;
       document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
       document.getElementById('pu-sl').textContent = a.setup.sl;
@@ -1257,9 +944,7 @@
     function setChartTF(tf) {
       selectedTF = tf;
       document.querySelectorAll('.ctf').forEach(b => {
-        b.className = b.dataset.tf === tf
-          ? 'ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold'
-          : 'ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300';
+        b.className = b.dataset.tf === tf ? 'ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold' : 'ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300';
       });
       drawUltronChart();
     }
@@ -1272,45 +957,33 @@
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
       if (!rect.width) return;
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
       const ctx = canvas.getContext('2d');
       ctx.scale(dpr, dpr);
-
-      const W = rect.width, H = rect.height;
-      const padL = 10, padR = 76, padT = 20, padB = 22;
+      const W = rect.width, H = rect.height, padL = 10, padR = 76, padT = 20, padB = 22;
       const plotW = W - padL - padR, plotH = H - padT - padB;
-      ctx.fillStyle = '#030509';
-      ctx.fillRect(0, 0, W, H);
-
+      ctx.fillStyle = '#030509'; ctx.fillRect(0, 0, W, H);
       const candles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF].slice(-40) : [];
       if (!candles.length) return;
-
       const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp2];
       const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp2];
-      const maxP = Math.max(...highs), minP = Math.min(...lows);
-      const span = (maxP - minP) || 1;
+      const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
       const yOf = p => padT + ((maxP - p) / span) * plotH;
 
       const yEq = yOf((a.intraday_high + a.intraday_low) / 2);
-      ctx.setLineDash([4, 4]);
-      ctx.strokeStyle = '#475569';
+      ctx.setLineDash([4, 4]); ctx.strokeStyle = '#475569';
       ctx.beginPath(); ctx.moveTo(padL, yEq); ctx.lineTo(W - padR, yEq); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono';
+      ctx.setLineDash([]); ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono';
       ctx.fillText('EQ 50%', W - padR - 42, yEq - 4);
 
       const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
       ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
       ctx.fillRect(padL + plotW * 0.4, yObT, plotW * 0.6, Math.max(5, yObB - yObT));
 
-      const step = plotW / candles.length;
-      const cw = Math.max(3, step * 0.6);
+      const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
       candles.forEach((c, i) => {
-        const x = padL + i * step + step / 2;
-        const bull = c.c >= c.o;
-        ctx.strokeStyle = bull ? '#10b981' : '#ef4444';
-        ctx.fillStyle = bull ? '#10b981' : '#ef4444';
+        const x = padL + i * step + step / 2, bull = c.c >= c.o;
+        ctx.strokeStyle = bull ? '#10b981' : '#ef4444'; ctx.fillStyle = bull ? '#10b981' : '#ef4444';
         ctx.beginPath(); ctx.moveTo(x, yOf(c.h)); ctx.lineTo(x, yOf(c.l)); ctx.stroke();
         ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
       });
@@ -1319,8 +992,7 @@
         const y = yOf(val);
         ctx.strokeStyle = col; ctx.setLineDash([3, 3]);
         ctx.beginPath(); ctx.moveTo(padL + plotW * 0.35, y); ctx.lineTo(W - padR, y); ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
+        ctx.setLineDash([]); ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
         ctx.fillStyle = '#fff'; ctx.font = 'bold 9px JetBrains Mono';
         ctx.fillText(val.toFixed(a.decimals), W - padR + 5, y + 3);
         ctx.fillText(lbl, padL + plotW * 0.36, y - 4);
@@ -1334,25 +1006,14 @@
     function renderTrades() {
       const h = getHomerMetrics();
       document.getElementById('homer-stats-badge').textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
-      document.getElementById('journal-list').innerHTML = trades.map((t, i) => `
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between">
-          <div><strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')}">${t.res}</span></strong> <span class="text-slate-400">- ${t.note}</span></div>
-          <button onclick="trades.splice(${i},1);localStorage.setItem('oraculo_trades_v6',JSON.stringify(trades));renderTrades();" class="text-red-400">✕</button>
-        </div>
-      `).join('');
+      document.getElementById('journal-list').innerHTML = trades.map((t, i) => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between"><div><strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')}">${t.res}</span></strong> <span class="text-slate-400">- ${t.note}</span></div><button onclick="trades.splice(${i},1);localStorage.setItem('oraculo_trades_v6',JSON.stringify(trades));renderTrades();" class="text-red-400">✕</button></div>`).join('');
     }
 
     document.getElementById('journal-form').addEventListener('submit', e => {
       e.preventDefault();
-      trades.unshift({
-        pair: document.getElementById('j-pair').value,
-        dir: document.getElementById('j-dir').value,
-        res: document.getElementById('j-res').value,
-        note: document.getElementById('j-note').value
-      });
+      trades.unshift({ pair: document.getElementById('j-pair').value, dir: document.getElementById('j-dir').value, res: document.getElementById('j-res').value, note: document.getElementById('j-note').value });
       localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
-      e.target.reset();
-      renderTrades();
+      e.target.reset(); renderTrades();
     });
 
     selectAgent('jarvis', false);
