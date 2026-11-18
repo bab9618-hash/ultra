@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.3</title>
+  <title>ORÁCULO · Cabina v6.4</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -52,7 +52,7 @@
       0%, 82% { opacity: 1; visibility: visible; pointer-events: auto; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
     }
-    #boot-screen { animation: bootAutoFade 2.6s ease-out forwards; }
+    #boot-screen { animation: bootAutoFade 2.5s ease-out forwards; }
     .spin-slow { animation: spinSlow 24s linear infinite; }
     .spin-med { animation: spinSlow 14s linear infinite; }
     .spin-rev { animation: spinRev 18s linear infinite; }
@@ -158,7 +158,7 @@
     </div>
   </header>
 
-  <!-- MODO 1: CABINA CONVERSACIONAL (CON ESPACIO INFERIOR GARANTIZADO) -->
+  <!-- MODO 1: CABINA CONVERSACIONAL -->
   <main id="cockpit-view" class="relative z-10 flex-1 max-w-2xl w-full mx-auto px-4 pt-3 pb-28 flex flex-col justify-between gap-3">
     <div class="flex flex-col items-center justify-center">
       <div id="agent-core-visual" class="w-[210px] h-[210px] sm:w-[240px] sm:h-[240px] flex items-center justify-center"></div>
@@ -198,7 +198,7 @@
       <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
     </div>
 
-    <!-- SUBPANEL JARVIS CON FILTRO DE TP1 Y RE-ENTRADAS -->
+    <!-- SUBPANEL JARVIS -->
     <section id="ptab-jarvis" class="space-y-4">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (17)</button>
@@ -211,7 +211,7 @@
       <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
     </section>
 
-    <!-- SUBPANEL ULTRÓN CON PUNTOS VERDES (TP1), AZULES (RE-ENTRADA) Y AMARILLOS (CERCA) -->
+    <!-- SUBPANEL ULTRÓN -->
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-b border-slate-800 pb-2">
         <span class="font-bold text-slate-200">LEYENDA DE ESTADOS:</span>
@@ -276,17 +276,34 @@
       <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
     </section>
 
+    <!-- SUBPANEL DIARIO KAREN CON SINCRONIZACIÓN EN LA NUBE PC <-> CELULAR -->
     <section id="ptab-karen" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <h3 class="font-hud text-sm font-bold text-rose-400">🕸️ AUDITORÍA DE KAREN & ESTADÍSTICA H.O.M.E.R.</h3>
-        <div id="homer-stats-badge" class="text-xs text-lime-400 font-bold">ACIERTO: --%</div>
+        <div class="flex items-center gap-2">
+          <span id="sync-status-badge" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">LOCAL</span>
+          <div id="homer-stats-badge" class="text-xs text-lime-400 font-bold">ACIERTO: 0% (+0R)</div>
+        </div>
       </div>
+
+      <!-- Barra de vinculación nube GitHub -->
+      <div class="bg-[#050811] border border-slate-800 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+        <div class="text-slate-300">
+          <strong class="text-rose-300">☁️ Nube PC ↔ Celular:</strong>
+          <span id="cloud-token-info">Sin vincular (solo local)</span>
+        </div>
+        <div class="flex gap-1.5">
+          <button type="button" onclick="configureCloudToken()" class="px-2.5 py-1 rounded bg-rose-500/20 border border-rose-400/60 text-rose-200 font-bold">🔑 VINCULAR NUBE</button>
+          <button type="button" onclick="loadCloudJournal(true)" class="px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-200">↻ SINCRONIZAR</button>
+        </div>
+      </div>
+
       <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
         <select id="j-pair" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"></select>
         <select id="j-dir" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="COMPRA">COMPRA</option><option value="VENTA">VENTA</option></select>
         <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="WIN">GANADA (+2R / +3R)</option><option value="LOSS">PERDIDA (-1R)</option><option value="BE">BREAK EVEN (0R)</option></select>
         <input id="j-note" type="text" placeholder="Nota o emoción..." required class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white" />
-        <button type="submit" class="bg-rose-500 hover:bg-rose-400 text-black font-bold rounded px-3 py-2">ANOTAR</button>
+        <button type="submit" id="j-submit-btn" class="bg-rose-500 hover:bg-rose-400 text-black font-bold rounded px-3 py-2">ANOTAR</button>
       </form>
       <div id="journal-list" class="space-y-2 text-xs"></div>
     </section>
@@ -331,6 +348,11 @@
       loop();
     })();
 
+    const GH_OWNER = 'bab9618-hash';
+    const GH_REPO = 'ultra';
+    const GH_BRANCH = 'principal';
+    const GH_JOURNAL_PATH = 'journal.json';
+
     let data = null;
     let currentAgent = 'jarvis';
     let isPanelMode = false;
@@ -343,17 +365,121 @@
     let trades = JSON.parse(localStorage.getItem('oraculo_trades_v6') || '[]');
     let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
     let customVoiceMap = JSON.parse(localStorage.getItem('oraculo_voice_map') || '{}');
+    let ghToken = localStorage.getItem('oraculo_gh_token') || '';
     let activeLessonIndex = 0;
 
     // =========================================================
-    // CLASIFICADOR VISUAL DE ESTADOS (VERDE TP1 / AZUL RE-ENTRADA / AMARILLO CERCA)
+    // SINCRONIZACIÓN EN LA NUBE PC <-> CELULAR (journal.json)
     // =========================================================
+    function updateCloudBadge(statusText, isCloud = false) {
+      const badge = document.getElementById('sync-status-badge');
+      const info = document.getElementById('cloud-token-info');
+      if (badge) {
+        badge.textContent = statusText;
+        badge.className = isCloud
+          ? 'text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+          : 'text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300';
+      }
+      if (info) {
+        info.textContent = ghToken
+          ? 'Conectado a GitHub (sincronizado entre PC y celular)'
+          : 'Pulsa VINCULAR NUBE para sincronizar entre PC y celular';
+      }
+    }
+
+    function configureCloudToken() {
+      const t = prompt('Pega tu Token de GitHub (ghp_...) para sincronizar tu Diario entre PC y celular:', ghToken);
+      if (t !== null) {
+        ghToken = t.trim();
+        localStorage.setItem('oraculo_gh_token', ghToken);
+        updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
+        if (ghToken) {
+          if (trades.length > 0) saveCloudJournal();
+          else loadCloudJournal(true);
+        }
+      }
+    }
+
+    async function loadCloudJournal(notify = false) {
+      updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LECTURA NUBE', !!ghToken);
+      try {
+        // Primero intentar vía API si hay token (sin caché), si no vía GitHub Pages público
+        let remoteTrades = null;
+        if (ghToken) {
+          const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_JOURNAL_PATH}?ref=${GH_BRANCH}&t=${Date.now()}`, {
+            headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
+          });
+          if (r.ok) {
+            const j = await r.json();
+            const decoded = decodeURIComponent(escape(atob(j.content.replace(/\n/g, ''))));
+            remoteTrades = JSON.parse(decoded);
+          }
+        } else {
+          const r = await fetch(`./${GH_JOURNAL_PATH}?t=${Date.now()}`);
+          if (r.ok) remoteTrades = await r.json();
+        }
+
+        if (Array.isArray(remoteTrades)) {
+          trades = remoteTrades;
+          localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
+          renderTrades();
+          if (currentAgent === 'karen' || currentAgent === 'homer') updateAgentTelemetryAndGreeting(currentAgent);
+          if (notify) updateCloudBadge('SINCRONIZADO ✓', true);
+        }
+      } catch (e) {
+        console.log('Sin journal.json remoto aún');
+      }
+    }
+
+    async function saveCloudJournal() {
+      localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
+      renderTrades();
+      if (!ghToken) {
+        updateCloudBadge('GUARDADO LOCAL (FALTA VINCULAR)', false);
+        return;
+      }
+      updateCloudBadge('GUARDANDO EN NUBE...', true);
+      try {
+        const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_JOURNAL_PATH}`;
+        let sha = null;
+        const getRes = await fetch(`${apiUrl}?ref=${GH_BRANCH}&t=${Date.now()}`, {
+          headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (getRes.ok) {
+          const existing = await getRes.json();
+          sha = existing.sha;
+        }
+
+        const jsonStr = JSON.stringify(trades, null, 2);
+        const contentB64 = btoa(unescape(encodeURIComponent(jsonStr)));
+        const body = {
+          message: 'Actualizar diario de operaciones Karen',
+          content: contentB64,
+          branch: GH_BRANCH
+        };
+        if (sha) body.sha = sha;
+
+        const putRes = await fetch(apiUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${ghToken}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        if (putRes.ok) updateCloudBadge('NUBE SINCRONIZADA ✓', true);
+        else updateCloudBadge('ERROR TOKEN GITHUB', false);
+      } catch (e) {
+        updateCloudBadge('ERROR RED', false);
+      }
+    }
+
     function getAssetBadgeState(a) {
       const isBuy = a.setup.direction === 'BUY';
       const hitTP1 = isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1);
       const isReentry = (a.setup.signal_tag || '').toUpperCase().includes('RE-ENTRADA');
       const pctDist = Math.abs(a.price - a.setup.entry) / a.price;
-      // Solo marca amarillo si está cerca del bloque desde el lado correcto (antes de pasar TP1)
       const rightSide = isBuy ? (a.price >= a.setup.sl && a.price < a.setup.tp1) : (a.price <= a.setup.sl && a.price > a.setup.tp1);
       const nearBlock = rightSide && pctDist <= 0.004;
 
@@ -596,7 +722,7 @@
       return { unitLabel, sl: toU(a.setup.entry - a.setup.sl), tp1: toU(a.setup.tp1 - a.setup.entry), tp2: toU(a.setup.tp2 - a.setup.entry) };
     }
     function getHomerMetrics() {
-      if (!trades.length) return { winRate: 48, pnlR: '+0R', total: 0 };
+      if (!trades.length) return { winRate: 0, pnlR: '+0R', total: 0 };
       const wins = trades.filter(t => t.res === 'WIN').length;
       const losses = trades.filter(t => t.res === 'LOSS').length;
       return { winRate: Math.round((wins / trades.length) * 100), pnlR: `${(wins * 2 - losses) >= 0 ? '+' : ''}${wins * 2 - losses}R`, total: trades.length };
@@ -706,18 +832,18 @@
         typeAgentDialogue(`Sistemas ópticos calibrados. He medido el riesgo, los bloques y cada punto de recorrido; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
-        document.getElementById('agent-hero-sub').textContent = `OPERACIONES AUDITADAS`;
-        typeAgentDialogue(`Hola, me alegra verlo operando con calma. Recuerde que anotar cada entrada duele mucho menos que repetir un error por impulso. ¿Revisamos su bitácora?`);
+        document.getElementById('agent-hero-sub').textContent = `OPERACIONES SINCRONIZADAS`;
+        typeAgentDialogue(`Hola, me alegra verlo operando con calma. Tiene ${trades.length} operaciones sincronizadas en su bitácora entre computadora y celular. ¿Revisamos sus registros?`);
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Revisé sus estadísticas y rachas recientes. ¿Quiere escuchar el veredicto?`);
+        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Sobre ${homer.total} operaciones anotadas tiene ${homer.winRate}% de acierto y ${homer.pnlR}. ¿Quiere escuchar el veredicto?`);
       }
     }
 
     function handleQuickReply(choice) {
       if (choice === 'NO') { typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa.'); return; }
-      if (!data) { typeAgentDialogue('Ejecute el flujo en GitHub Actions para generar data.json con los 17 activos.'); return; }
+      if (!data) { typeAgentDialogue('Sincronizando datos del mercado, señor.'); return; }
       if (currentAgent === 'jarvis') {
         const tp1s = data.assets.filter(a => getAssetBadgeState(a).code === 'TP1').map(x => x.symbol);
         const res = data.assets.filter(a => getAssetBadgeState(a).code === 'REENTRY').map(x => x.symbol);
@@ -734,10 +860,10 @@
         const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
         typeAgentDialogue(`Los tres blancos más cercanos son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})`).join('; ') + `.`);
       } else if (currentAgent === 'karen') {
-        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
+        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía. Abra el panel y pulse Vincular Nube para sincronizar PC y celular.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
       } else if (currentAgent === 'homer') {
         const h = getHomerMetrics();
-        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR}.`);
+        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre ${h.total} operaciones.`);
       }
     }
 
@@ -759,7 +885,7 @@
       if (q.includes('APROBAR') || q.includes('COMPLETAR')) { if (currentAgent !== 'friday') selectAgent('friday', false); completeCurrentLesson(); return; }
       const concept = CONCEPT_DICTIONARY.find(c => c.keys.some(k => q.includes(k)));
       if (concept) { typeAgentDialogue(concept.answer); return; }
-      if (!data) { typeAgentDialogue('Aún no se ha cargado data.json. Ejecute el workflow en GitHub Actions.'); return; }
+      if (!data) { typeAgentDialogue('Sincronizando datos del mercado.'); return; }
       let asset = data.assets.find(a => q.includes(a.symbol));
       if (!asset && (q.includes('ORO') || q.includes('GOLD') || q.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
       if (asset) {
@@ -795,6 +921,7 @@
       });
       if (tab === 'ultron') setTimeout(drawUltronChart, 60);
       if (tab === 'friday') renderPanelCourse();
+      if (tab === 'karen') { updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken); loadCloudJournal(false); }
     }
 
     function setPanelFilter(f) {
@@ -835,7 +962,7 @@
         if (!isPanelMode) updateAgentTelemetryAndGreeting(currentAgent);
         else renderPanelAll();
       } catch (e) {
-        document.getElementById('last-updated').textContent = 'Ejecuta GitHub Actions para cargar data.json';
+        document.getElementById('last-updated').textContent = 'Sincronizando data.json...';
       }
     }
 
@@ -1006,17 +1133,40 @@
     function renderTrades() {
       const h = getHomerMetrics();
       document.getElementById('homer-stats-badge').textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
-      document.getElementById('journal-list').innerHTML = trades.map((t, i) => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between"><div><strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')}">${t.res}</span></strong> <span class="text-slate-400">- ${t.note}</span></div><button onclick="trades.splice(${i},1);localStorage.setItem('oraculo_trades_v6',JSON.stringify(trades));renderTrades();" class="text-red-400">✕</button></div>`).join('');
+      document.getElementById('journal-list').innerHTML = trades.map((t, i) => `
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between gap-2">
+          <div>
+            <strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')}">${t.res}</span></strong>
+            <span class="text-slate-400"> - ${t.note}</span>
+            ${t.date ? `<span class="text-[10px] text-slate-500 ml-1">(${t.date})</span>` : ''}
+          </div>
+          <button onclick="deleteTrade(${i})" class="text-red-400 px-1.5">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function deleteTrade(idx) {
+      trades.splice(idx, 1);
+      saveCloudJournal();
     }
 
     document.getElementById('journal-form').addEventListener('submit', e => {
       e.preventDefault();
-      trades.unshift({ pair: document.getElementById('j-pair').value, dir: document.getElementById('j-dir').value, res: document.getElementById('j-res').value, note: document.getElementById('j-note').value });
-      localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
-      e.target.reset(); renderTrades();
+      const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+      trades.unshift({
+        pair: document.getElementById('j-pair').value,
+        dir: document.getElementById('j-dir').value,
+        res: document.getElementById('j-res').value,
+        note: document.getElementById('j-note').value,
+        date: nowStr
+      });
+      e.target.reset();
+      saveCloudJournal();
     });
 
     selectAgent('jarvis', false);
+    updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
+    loadCloudJournal(false);
     loadData();
     setInterval(loadData, 60000);
   </script>
