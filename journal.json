@@ -1,0 +1,16 @@
+[
+  {
+    "pair": "EURUSD",
+    "dir": "VENTA",
+    "res": "WIN",
+    "note": "Buena",
+    "date": "2026-11-18 20:50 UTC"
+  },
+  {
+    "pair": "GBPNZD",
+    "dir": "VENTA",
+    "res": "LOSS",
+    "note": "Mala",
+    "date": "2026-11-18 20:41 UTC"
+  }
+]
