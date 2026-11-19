@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-11-19 08:57 UTC",
+  "last_updated": "2026-11-19 09:55 UTC",
   "brief": {
-    "dxy": 103.76,
+    "dxy": 103.7,
     "us10y": "5.07%",
-    "headline": "DXY en 103.76 (SUBE) · Rendimiento US10Y en 5.07% (BAJA)",
+    "headline": "DXY en 103.7 (NEUTRAL) · Rendimiento US10Y en 5.07% (BAJA)",
     "summary": "Telemetría actualizada sobre 17 activos incluyendo XAU/USD, índices, Bitcoin y pares mayores/GBP."
   },
   "calendar": [
@@ -32,8 +32,8 @@
       "type": "commodity",
       "pip": 0.1,
       "decimals": 2,
-      "price": 3732.9,
-      "chg_day": -1.04,
+      "price": 3732.5,
+      "chg_day": -1.29,
       "chart_bias": "BAJA",
       "macro_bias": "NEUTRAL",
       "macro_reason": "Flujos mixtos entre el dólar y los bonos mantienen al oro en rango intradía.",
@@ -355,17 +355,10 @@
             "o": 3855.2,
             "h": 3759.5,
             "l": 3694.5,
-            "c": 3732.9
+            "c": 3732.5
           }
         ],
         "4h": [
-          {
-            "t": "10 Nov 08:00",
-            "o": 4087.0,
-            "h": 4090.5,
-            "l": 4020.8,
-            "c": 4030.2
-          },
           {
             "t": "10 Nov 12:00",
             "o": 4029.8,
@@ -651,17 +644,17 @@
             "o": 3725.5,
             "h": 3745.6,
             "l": 3722.6,
-            "c": 3732.9
+            "c": 3737.5
+          },
+          {
+            "t": "19 Nov 04:00",
+            "o": 3737.5,
+            "h": 3742.4,
+            "l": 3727.1,
+            "c": 3732.5
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 08:00",
-            "o": 3863.8,
-            "h": 3867.0,
-            "l": 3839.2,
-            "c": 3853.6
-          },
           {
             "t": "17 Nov 09:00",
             "o": 3853.4,
@@ -947,7 +940,14 @@
             "o": 3737.7,
             "h": 3743.8,
             "l": 3731.1,
-            "c": 3732.9
+            "c": 3737.5
+          },
+          {
+            "t": "19 Nov 04:00",
+            "o": 3737.5,
+            "h": 3742.4,
+            "l": 3727.1,
+            "c": 3732.5
           }
         ]
       }
@@ -957,12 +957,12 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 63701.18,
-      "chg_day": -1.32,
+      "price": 63818.79,
+      "chg_day": -0.74,
       "chart_bias": "BAJA",
       "macro_bias": "NEUTRAL",
       "macro_reason": "Rendimientos estables; el activo depende de su estructura intradía.",
-      "intraday_high": 63804.24,
+      "intraday_high": 63864.1,
       "intraday_low": 62012.27,
       "ob_high": 63875.14,
       "ob_low": 63501.42,
@@ -970,7 +970,7 @@
         "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "confluence": {
         "alignment": "NEUTRAL",
@@ -1278,9 +1278,9 @@
           {
             "t": "19 Nov 00:00",
             "o": 62987.29,
-            "h": 63727.08,
+            "h": 63819.62,
             "l": 62382.48,
-            "c": 63701.18
+            "c": 63818.79
           }
         ],
         "4h": [
@@ -1574,19 +1574,12 @@
           {
             "t": "19 Nov 08:00",
             "o": 63654.32,
-            "h": 63776.31,
+            "h": 63864.1,
             "l": 63494.39,
-            "c": 63701.18
+            "c": 63818.79
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 64949.1,
-            "h": 65100.24,
-            "l": 63278.41,
-            "c": 64050.29
-          },
           {
             "t": "17 Nov 16:00",
             "o": 64000.05,
@@ -1872,7 +1865,14 @@
             "o": 63654.32,
             "h": 63776.31,
             "l": 63494.39,
-            "c": 63701.18
+            "c": 63664.2
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 63671.69,
+            "h": 63864.1,
+            "l": 63613.78,
+            "c": 63818.79
           }
         ]
       }
@@ -1882,15 +1882,15 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 27681.5,
-      "chg_day": 1.27,
+      "price": 27700.25,
+      "chg_day": 1.06,
       "chart_bias": "BAJA",
       "macro_bias": "NEUTRAL",
       "macro_reason": "Rendimientos estables; el activo depende de su estructura intradía.",
       "intraday_high": 27742.0,
-      "intraday_low": 26921.75,
-      "ob_high": 27556.03,
-      "ob_low": 27462.61,
+      "intraday_low": 27034.75,
+      "ob_high": 27834.63,
+      "ob_low": 27735.61,
       "tf_bias": {
         "weekly": "BAJA",
         "daily": "BAJA",
@@ -1906,10 +1906,10 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "RE-ENTRADA VENTA",
-        "entry": 27509.32,
-        "sl": 27696.15,
-        "tp1": 27135.66,
-        "tp2": 26948.83
+        "entry": 27785.12,
+        "sl": 27983.15,
+        "tp1": 27389.06,
+        "tp2": 27191.03
       },
       "candles": {
         "1d": [
@@ -2205,17 +2205,10 @@
             "o": 27382.0,
             "h": 27742.0,
             "l": 27169.0,
-            "c": 27682.0
+            "c": 27700.25
           }
         ],
         "4h": [
-          {
-            "t": "10 Nov 08:00",
-            "o": 27921.0,
-            "h": 28090.0,
-            "l": 27590.0,
-            "c": 27633.0
-          },
           {
             "t": "10 Nov 12:00",
             "o": 27631.25,
@@ -2501,17 +2494,17 @@
             "o": 27477.25,
             "h": 27742.0,
             "l": 27442.0,
-            "c": 27681.5
+            "c": 27710.0
+          },
+          {
+            "t": "19 Nov 04:00",
+            "o": 27708.5,
+            "h": 27721.5,
+            "l": 27627.5,
+            "c": 27700.25
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 08:00",
-            "o": 27396.5,
-            "h": 27432.25,
-            "l": 27319.0,
-            "c": 27398.5
-          },
           {
             "t": "17 Nov 09:00",
             "o": 27398.75,
@@ -2797,7 +2790,14 @@
             "o": 27698.25,
             "h": 27737.75,
             "l": 27652.0,
-            "c": 27681.5
+            "c": 27710.0
+          },
+          {
+            "t": "19 Nov 04:00",
+            "o": 27708.5,
+            "h": 27721.5,
+            "l": 27627.5,
+            "c": 27700.25
           }
         ]
       }
@@ -2807,13 +2807,13 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 7417.0,
-      "chg_day": 0.26,
+      "price": 7418.5,
+      "chg_day": 0.13,
       "chart_bias": "BAJA",
       "macro_bias": "NEUTRAL",
       "macro_reason": "Rendimientos estables; el activo depende de su estructura intradía.",
       "intraday_high": 7425.75,
-      "intraday_low": 7305.25,
+      "intraday_low": 7328.5,
       "ob_high": 7419.58,
       "ob_low": 7405.34,
       "tf_bias": {
@@ -3130,17 +3130,10 @@
             "o": 7340.5,
             "h": 7425.75,
             "l": 7338.25,
-            "c": 7417.25
+            "c": 7418.5
           }
         ],
         "4h": [
-          {
-            "t": "10 Nov 08:00",
-            "o": 7580.0,
-            "h": 7596.75,
-            "l": 7503.0,
-            "c": 7506.25
-          },
           {
             "t": "10 Nov 12:00",
             "o": 7505.75,
@@ -3426,17 +3419,17 @@
             "o": 7388.25,
             "h": 7425.75,
             "l": 7382.25,
-            "c": 7417.0
+            "c": 7422.75
+          },
+          {
+            "t": "19 Nov 04:00",
+            "o": 7422.0,
+            "h": 7425.5,
+            "l": 7405.5,
+            "c": 7418.5
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 08:00",
-            "o": 7438.5,
-            "h": 7442.0,
-            "l": 7421.25,
-            "c": 7433.0
-          },
           {
             "t": "17 Nov 09:00",
             "o": 7432.75,
@@ -3722,7 +3715,14 @@
             "o": 7423.0,
             "h": 7425.75,
             "l": 7412.25,
-            "c": 7417.0
+            "c": 7422.75
+          },
+          {
+            "t": "19 Nov 04:00",
+            "o": 7422.0,
+            "h": 7425.5,
+            "l": 7405.5,
+            "c": 7418.5
           }
         ]
       }
@@ -3732,13 +3732,13 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 50595.0,
-      "chg_day": -0.66,
+      "price": 50568.0,
+      "chg_day": -0.81,
       "chart_bias": "BAJA",
       "macro_bias": "NEUTRAL",
       "macro_reason": "Rendimientos estables; el activo depende de su estructura intradía.",
       "intraday_high": 50651.0,
-      "intraday_low": 50096.0,
+      "intraday_low": 50190.0,
       "ob_high": 50678.7,
       "ob_low": 50561.8,
       "tf_bias": {
@@ -4055,17 +4055,10 @@
             "o": 50258.0,
             "h": 50651.0,
             "l": 50258.0,
-            "c": 50595.0
+            "c": 50568.0
           }
         ],
         "4h": [
-          {
-            "t": "10 Nov 08:00",
-            "o": 52706.0,
-            "h": 52760.0,
-            "l": 52056.0,
-            "c": 52109.0
-          },
           {
             "t": "10 Nov 12:00",
             "o": 52105.0,
@@ -4351,17 +4344,17 @@
             "o": 50459.0,
             "h": 50651.0,
             "l": 50444.0,
-            "c": 50595.0
+            "c": 50620.0
+          },
+          {
+            "t": "19 Nov 04:00",
+            "o": 50619.0,
+            "h": 50639.0,
+            "l": 50497.0,
+            "c": 50568.0
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 08:00",
-            "o": 51364.0,
-            "h": 51389.0,
-            "l": 51203.0,
-            "c": 51271.0
-          },
           {
             "t": "17 Nov 09:00",
             "o": 51270.0,
@@ -4647,7 +4640,14 @@
             "o": 50623.0,
             "h": 50651.0,
             "l": 50555.0,
-            "c": 50595.0
+            "c": 50620.0
+          },
+          {
+            "t": "19 Nov 04:00",
+            "o": 50619.0,
+            "h": 50639.0,
+            "l": 50497.0,
+            "c": 50568.0
           }
         ]
       }
@@ -4657,34 +4657,34 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.09902,
-      "chg_day": 0.1,
+      "price": 1.09975,
+      "chg_day": 0.21,
       "chart_bias": "BAJA",
-      "macro_bias": "BAJA",
-      "macro_reason": "Dólar fuerte (DXY alcista) presiona a la baja al par EURUSD.",
-      "intraday_high": 1.09902,
+      "macro_bias": "NEUTRAL",
+      "macro_reason": "DXY lateral; EURUSD sin catalizador macro dominante.",
+      "intraday_high": 1.10035,
       "intraday_low": 1.09589,
-      "ob_high": 1.09836,
-      "ob_low": 1.09776,
+      "ob_high": 1.1006,
+      "ob_low": 1.09998,
       "tf_bias": {
         "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 84,
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "alignment": "NEUTRAL",
+        "score": 58,
+        "verdict_title": "EN OBSERVACIÓN",
+        "verdict_sub": "Uno de los dos está neutral"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 1.09806,
-        "sl": 1.09926,
-        "tp1": 1.09566,
-        "tp2": 1.09446
+        "signal_tag": "RE-ENTRADA VENTA",
+        "entry": 1.10029,
+        "sl": 1.10154,
+        "tp1": 1.09779,
+        "tp2": 1.09654
       },
       "candles": {
         "1d": [
@@ -4978,9 +4978,9 @@
           {
             "t": "19 Nov 00:00",
             "o": 1.09782,
-            "h": 1.09902,
+            "h": 1.10035,
             "l": 1.09589,
-            "c": 1.09902
+            "c": 1.09975
           }
         ],
         "4h": [
@@ -5274,19 +5274,12 @@
           {
             "t": "19 Nov 08:00",
             "o": 1.0983,
-            "h": 1.09902,
+            "h": 1.10035,
             "l": 1.0983,
-            "c": 1.09902
+            "c": 1.09975
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 1.09938,
-            "h": 1.10132,
-            "l": 1.09938,
-            "c": 1.10072
-          },
           {
             "t": "17 Nov 16:00",
             "o": 1.10072,
@@ -5570,9 +5563,16 @@
           {
             "t": "19 Nov 08:00",
             "o": 1.0983,
-            "h": 1.09902,
+            "h": 1.09914,
             "l": 1.0983,
-            "c": 1.09902
+            "c": 1.09914
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 1.09926,
+            "h": 1.10035,
+            "l": 1.09926,
+            "c": 1.09975
           }
         ]
       }
@@ -5582,15 +5582,15 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 159.745,
-      "chg_day": 0.31,
+      "price": 159.875,
+      "chg_day": 0.34,
       "chart_bias": "SUBE",
-      "macro_bias": "SUBE",
-      "macro_reason": "Fortaleza del DXY respalda continuidad alcista en USDJPY.",
-      "intraday_high": 159.8,
-      "intraday_low": 159.233,
-      "ob_high": 159.477,
-      "ob_low": 159.397,
+      "macro_bias": "NEUTRAL",
+      "macro_reason": "Dólar en equilibrio; esperar confirmación técnica en USDJPY.",
+      "intraday_high": 159.886,
+      "intraday_low": 159.234,
+      "ob_high": 159.573,
+      "ob_low": 159.481,
       "tf_bias": {
         "weekly": "SUBE",
         "daily": "SUBE",
@@ -5598,18 +5598,18 @@
         "h1": "SUBE"
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 84,
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a SUBE"
+        "alignment": "NEUTRAL",
+        "score": 58,
+        "verdict_title": "EN OBSERVACIÓN",
+        "verdict_sub": "Uno de los dos está neutral"
       },
       "setup": {
         "direction": "BUY",
         "signal_tag": "RE-ENTRADA COMPRA",
-        "entry": 159.437,
-        "sl": 159.279,
-        "tp1": 159.753,
-        "tp2": 159.912
+        "entry": 159.527,
+        "sl": 159.344,
+        "tp1": 159.892,
+        "tp2": 160.075
       },
       "candles": {
         "1d": [
@@ -5903,9 +5903,9 @@
           {
             "t": "19 Nov 00:00",
             "o": 159.297,
-            "h": 159.8,
+            "h": 159.886,
             "l": 159.265,
-            "c": 159.745
+            "c": 159.875
           }
         ],
         "4h": [
@@ -6199,19 +6199,12 @@
           {
             "t": "19 Nov 08:00",
             "o": 159.699,
-            "h": 159.8,
+            "h": 159.886,
             "l": 159.69,
-            "c": 159.745
+            "c": 159.875
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 159.401,
-            "h": 159.437,
-            "l": 159.118,
-            "c": 159.266
-          },
           {
             "t": "17 Nov 16:00",
             "o": 159.26,
@@ -6497,7 +6490,14 @@
             "o": 159.699,
             "h": 159.8,
             "l": 159.69,
-            "c": 159.745
+            "c": 159.75
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 159.752,
+            "h": 159.886,
+            "l": 159.739,
+            "c": 159.875
           }
         ]
       }
@@ -6507,12 +6507,12 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.31562,
-      "chg_day": -0.12,
+      "price": 1.31473,
+      "chg_day": -0.2,
       "chart_bias": "BAJA",
-      "macro_bias": "BAJA",
-      "macro_reason": "Dólar fuerte (DXY alcista) presiona a la baja al par GBPUSD.",
-      "intraday_high": 1.31586,
+      "macro_bias": "NEUTRAL",
+      "macro_reason": "DXY lateral; GBPUSD sin catalizador macro dominante.",
+      "intraday_high": 1.31608,
       "intraday_low": 1.31215,
       "ob_high": 1.3153,
       "ob_low": 1.31458,
@@ -6523,10 +6523,10 @@
         "h1": "BAJA"
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 84,
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "alignment": "NEUTRAL",
+        "score": 58,
+        "verdict_title": "EN OBSERVACIÓN",
+        "verdict_sub": "Uno de los dos está neutral"
       },
       "setup": {
         "direction": "SELL",
@@ -6828,9 +6828,9 @@
           {
             "t": "19 Nov 00:00",
             "o": 1.3153,
-            "h": 1.31581,
+            "h": 1.31608,
             "l": 1.31215,
-            "c": 1.31562
+            "c": 1.31473
           }
         ],
         "4h": [
@@ -7124,19 +7124,12 @@
           {
             "t": "19 Nov 08:00",
             "o": 1.31527,
-            "h": 1.31562,
-            "l": 1.31499,
-            "c": 1.31562
+            "h": 1.31608,
+            "l": 1.31453,
+            "c": 1.31473
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 1.31924,
-            "h": 1.32085,
-            "l": 1.31905,
-            "c": 1.32052
-          },
           {
             "t": "17 Nov 16:00",
             "o": 1.3206,
@@ -7420,9 +7413,16 @@
           {
             "t": "19 Nov 08:00",
             "o": 1.31527,
-            "h": 1.31562,
+            "h": 1.31563,
             "l": 1.31499,
-            "c": 1.31562
+            "c": 1.31553
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 1.31553,
+            "h": 1.31608,
+            "l": 1.31453,
+            "c": 1.31473
           }
         ]
       }
@@ -7432,12 +7432,12 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 210.157,
-      "chg_day": 0.2,
+      "price": 210.176,
+      "chg_day": 0.13,
       "chart_bias": "SUBE",
       "macro_bias": "BAJA",
       "macro_reason": "Caída en rendimientos fortalece al yen y presiona a GBPJPY.",
-      "intraday_high": 210.216,
+      "intraday_high": 210.337,
       "intraday_low": 209.212,
       "ob_high": 210.202,
       "ob_low": 209.99,
@@ -7753,9 +7753,9 @@
           {
             "t": "19 Nov 00:00",
             "o": 209.49,
-            "h": 210.216,
+            "h": 210.337,
             "l": 209.226,
-            "c": 210.157
+            "c": 210.176
           }
         ],
         "4h": [
@@ -8049,19 +8049,12 @@
           {
             "t": "19 Nov 08:00",
             "o": 210.09,
-            "h": 210.216,
+            "h": 210.337,
             "l": 210.011,
-            "c": 210.157
+            "c": 210.176
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 210.291,
-            "h": 210.422,
-            "l": 210.123,
-            "c": 210.294
-          },
           {
             "t": "17 Nov 16:00",
             "o": 210.294,
@@ -8347,7 +8340,14 @@
             "o": 210.09,
             "h": 210.216,
             "l": 210.011,
-            "c": 210.157
+            "c": 210.153
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 210.155,
+            "h": 210.337,
+            "l": 210.075,
+            "c": 210.176
           }
         ]
       }
@@ -8357,8 +8357,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.96211,
-      "chg_day": 0.26,
+      "price": 1.96025,
+      "chg_day": 0.18,
       "chart_bias": "SUBE",
       "macro_bias": "NEUTRAL",
       "macro_reason": "Cruce GBPAUD guiado por flujos relativos de sesión.",
@@ -8680,7 +8680,7 @@
             "o": 1.95876,
             "h": 1.97096,
             "l": 1.95497,
-            "c": 1.96212
+            "c": 1.96025
           }
         ],
         "4h": [
@@ -8975,18 +8975,11 @@
             "t": "19 Nov 08:00",
             "o": 1.96163,
             "h": 1.96389,
-            "l": 1.96143,
-            "c": 1.96211
+            "l": 1.95931,
+            "c": 1.96025
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 1.95696,
-            "h": 1.96155,
-            "l": 1.95689,
-            "c": 1.96022
-          },
           {
             "t": "17 Nov 16:00",
             "o": 1.96032,
@@ -9272,7 +9265,14 @@
             "o": 1.96163,
             "h": 1.96389,
             "l": 1.96143,
-            "c": 1.96211
+            "c": 1.9619
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 1.96201,
+            "h": 1.96204,
+            "l": 1.95931,
+            "c": 1.96025
           }
         ]
       }
@@ -9282,15 +9282,15 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 2.38366,
-      "chg_day": -0.56,
+      "price": 2.37919,
+      "chg_day": -0.7,
       "chart_bias": "BAJA",
       "macro_bias": "NEUTRAL",
       "macro_reason": "Cruce GBPNZD guiado por flujos relativos de sesión.",
       "intraday_high": 2.39617,
-      "intraday_low": 2.38208,
-      "ob_high": 2.39082,
-      "ob_low": 2.38884,
+      "intraday_low": 2.3773,
+      "ob_high": 2.389,
+      "ob_low": 2.38636,
       "tf_bias": {
         "weekly": "SUBE",
         "daily": "SUBE",
@@ -9306,10 +9306,10 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "RE-ENTRADA VENTA",
-        "entry": 2.38983,
-        "sl": 2.39378,
-        "tp1": 2.38194,
-        "tp2": 2.37799
+        "entry": 2.38768,
+        "sl": 2.39296,
+        "tp1": 2.37711,
+        "tp2": 2.37183
       },
       "candles": {
         "1d": [
@@ -9604,8 +9604,8 @@
             "t": "19 Nov 00:00",
             "o": 2.39328,
             "h": 2.39617,
-            "l": 2.38208,
-            "c": 2.38366
+            "l": 2.3773,
+            "c": 2.379
           }
         ],
         "4h": [
@@ -9900,18 +9900,11 @@
             "t": "19 Nov 08:00",
             "o": 2.38933,
             "h": 2.39019,
-            "l": 2.38208,
-            "c": 2.38366
+            "l": 2.3773,
+            "c": 2.37919
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 2.39993,
-            "h": 2.40155,
-            "l": 2.39769,
-            "c": 2.40068
-          },
           {
             "t": "17 Nov 16:00",
             "o": 2.40058,
@@ -10196,8 +10189,15 @@
             "t": "19 Nov 08:00",
             "o": 2.38933,
             "h": 2.39019,
-            "l": 2.38208,
-            "c": 2.38366
+            "l": 2.38116,
+            "c": 2.38383
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 2.38382,
+            "h": 2.38452,
+            "l": 2.3773,
+            "c": 2.37919
           }
         ]
       }
@@ -10207,15 +10207,15 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.88323,
-      "chg_day": -0.12,
+      "price": 1.88082,
+      "chg_day": -0.21,
       "chart_bias": "BAJA",
       "macro_bias": "NEUTRAL",
       "macro_reason": "Cruce GBPCAD guiado por flujos relativos de sesión.",
-      "intraday_high": 1.88554,
-      "intraday_low": 1.88185,
-      "ob_high": 1.88737,
-      "ob_low": 1.88629,
+      "intraday_high": 1.88518,
+      "intraday_low": 1.88082,
+      "ob_high": 1.88353,
+      "ob_low": 1.88291,
       "tf_bias": {
         "weekly": "SUBE",
         "daily": "SUBE",
@@ -10230,11 +10230,11 @@
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 1.88683,
-        "sl": 1.889,
-        "tp1": 1.88248,
-        "tp2": 1.88031
+        "signal_tag": "RE-ENTRADA VENTA",
+        "entry": 1.88322,
+        "sl": 1.88444,
+        "tp1": 1.88078,
+        "tp2": 1.87956
       },
       "candles": {
         "1d": [
@@ -10529,8 +10529,8 @@
             "t": "19 Nov 00:00",
             "o": 1.88314,
             "h": 1.88516,
-            "l": 1.88255,
-            "c": 1.88323
+            "l": 1.88082,
+            "c": 1.88082
           }
         ],
         "4h": [
@@ -10825,18 +10825,11 @@
             "t": "19 Nov 08:00",
             "o": 1.88442,
             "h": 1.88454,
-            "l": 1.88273,
-            "c": 1.88323
+            "l": 1.88082,
+            "c": 1.88082
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 1.8858,
-            "h": 1.88776,
-            "l": 1.88529,
-            "c": 1.88639
-          },
           {
             "t": "17 Nov 16:00",
             "o": 1.88639,
@@ -11122,7 +11115,14 @@
             "o": 1.88442,
             "h": 1.88454,
             "l": 1.88273,
-            "c": 1.88323
+            "c": 1.88315
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 1.88307,
+            "h": 1.8836,
+            "l": 1.88082,
+            "c": 1.88082
           }
         ]
       }
@@ -11132,11 +11132,11 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.67069,
-      "chg_day": -0.38,
+      "price": 0.67083,
+      "chg_day": -0.39,
       "chart_bias": "BAJA",
-      "macro_bias": "BAJA",
-      "macro_reason": "Dólar fuerte (DXY alcista) presiona a la baja al par AUDUSD.",
+      "macro_bias": "NEUTRAL",
+      "macro_reason": "DXY lateral; AUDUSD sin catalizador macro dominante.",
       "intraday_high": 0.67245,
       "intraday_low": 0.66653,
       "ob_high": 0.67116,
@@ -11148,10 +11148,10 @@
         "h1": "BAJA"
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 84,
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "alignment": "NEUTRAL",
+        "score": 58,
+        "verdict_title": "EN OBSERVACIÓN",
+        "verdict_sub": "Uno de los dos está neutral"
       },
       "setup": {
         "direction": "SELL",
@@ -11455,7 +11455,7 @@
             "o": 0.67146,
             "h": 0.67222,
             "l": 0.66653,
-            "c": 0.67069
+            "c": 0.67083
           }
         ],
         "4h": [
@@ -11749,19 +11749,12 @@
           {
             "t": "19 Nov 08:00",
             "o": 0.67047,
-            "h": 0.67069,
+            "h": 0.67146,
             "l": 0.67006,
-            "c": 0.67069
+            "c": 0.67083
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 0.67422,
-            "h": 0.67431,
-            "l": 0.67358,
-            "c": 0.67381
-          },
           {
             "t": "17 Nov 16:00",
             "o": 0.67404,
@@ -12045,9 +12038,16 @@
           {
             "t": "19 Nov 08:00",
             "o": 0.67047,
-            "h": 0.67069,
+            "h": 0.67078,
             "l": 0.67006,
             "c": 0.67069
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 0.67083,
+            "h": 0.67146,
+            "l": 0.67069,
+            "c": 0.67083
           }
         ]
       }
@@ -12057,12 +12057,12 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.55197,
-      "chg_day": 0.44,
+      "price": 0.55267,
+      "chg_day": 0.49,
       "chart_bias": "BAJA",
-      "macro_bias": "BAJA",
-      "macro_reason": "Dólar fuerte (DXY alcista) presiona a la baja al par NZDUSD.",
-      "intraday_high": 0.55197,
+      "macro_bias": "NEUTRAL",
+      "macro_reason": "DXY lateral; NZDUSD sin catalizador macro dominante.",
+      "intraday_high": 0.55285,
       "intraday_low": 0.54855,
       "ob_high": 0.55268,
       "ob_low": 0.55208,
@@ -12073,10 +12073,10 @@
         "h1": "SUBE"
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 84,
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "alignment": "NEUTRAL",
+        "score": 58,
+        "verdict_title": "EN OBSERVACIÓN",
+        "verdict_sub": "Uno de los dos está neutral"
       },
       "setup": {
         "direction": "SELL",
@@ -12378,9 +12378,9 @@
           {
             "t": "19 Nov 00:00",
             "o": 0.54909,
-            "h": 0.55197,
+            "h": 0.55285,
             "l": 0.54855,
-            "c": 0.55197
+            "c": 0.55267
           }
         ],
         "4h": [
@@ -12674,19 +12674,12 @@
           {
             "t": "19 Nov 08:00",
             "o": 0.55051,
-            "h": 0.55197,
+            "h": 0.55285,
             "l": 0.55045,
-            "c": 0.55197
+            "c": 0.55267
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 0.54975,
-            "h": 0.55039,
-            "l": 0.5496,
-            "c": 0.55018
-          },
           {
             "t": "17 Nov 16:00",
             "o": 0.55018,
@@ -12970,9 +12963,16 @@
           {
             "t": "19 Nov 08:00",
             "o": 0.55051,
-            "h": 0.55197,
+            "h": 0.55206,
             "l": 0.55045,
-            "c": 0.55197
+            "c": 0.55194
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 0.55206,
+            "h": 0.55285,
+            "l": 0.552,
+            "c": 0.55267
           }
         ]
       }
@@ -12982,26 +12982,26 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.43168,
-      "chg_day": 0.01,
+      "price": 1.43097,
+      "chg_day": 0.02,
       "chart_bias": "SUBE",
-      "macro_bias": "SUBE",
-      "macro_reason": "Fortaleza del DXY respalda continuidad alcista en USDCAD.",
+      "macro_bias": "NEUTRAL",
+      "macro_reason": "Dólar en equilibrio; esperar confirmación técnica en USDCAD.",
       "intraday_high": 1.43573,
-      "intraday_low": 1.4313,
+      "intraday_low": 1.4305,
       "ob_high": 1.43279,
       "ob_low": 1.43193,
       "tf_bias": {
         "weekly": "SUBE",
         "daily": "SUBE",
         "h4": "SUBE",
-        "h1": "SUBE"
+        "h1": "NEUTRAL"
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 84,
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a SUBE"
+        "alignment": "NEUTRAL",
+        "score": 58,
+        "verdict_title": "EN OBSERVACIÓN",
+        "verdict_sub": "Uno de los dos está neutral"
       },
       "setup": {
         "direction": "BUY",
@@ -13304,8 +13304,8 @@
             "t": "19 Nov 00:00",
             "o": 1.4319,
             "h": 1.43573,
-            "l": 1.4313,
-            "c": 1.43168
+            "l": 1.4305,
+            "c": 1.43097
           }
         ],
         "4h": [
@@ -13600,18 +13600,11 @@
             "t": "19 Nov 08:00",
             "o": 1.43263,
             "h": 1.43296,
-            "l": 1.4313,
-            "c": 1.43168
+            "l": 1.4305,
+            "c": 1.43097
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 1.42954,
-            "h": 1.43071,
-            "l": 1.428,
-            "c": 1.42875
-          },
           {
             "t": "17 Nov 16:00",
             "o": 1.42876,
@@ -13896,8 +13889,15 @@
             "t": "19 Nov 08:00",
             "o": 1.43263,
             "h": 1.43296,
-            "l": 1.4313,
-            "c": 1.43168
+            "l": 1.4312,
+            "c": 1.4314
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 1.43167,
+            "h": 1.43175,
+            "l": 1.4305,
+            "c": 1.43097
           }
         ]
       }
@@ -13907,11 +13907,11 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.84244,
-      "chg_day": 0.1,
+      "price": 0.84259,
+      "chg_day": 0.08,
       "chart_bias": "SUBE",
-      "macro_bias": "SUBE",
-      "macro_reason": "Fortaleza del DXY respalda continuidad alcista en USDCHF.",
+      "macro_bias": "NEUTRAL",
+      "macro_reason": "Dólar en equilibrio; esperar confirmación técnica en USDCHF.",
       "intraday_high": 0.8443,
       "intraday_low": 0.84137,
       "ob_high": 0.84296,
@@ -13923,10 +13923,10 @@
         "h1": "SUBE"
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 84,
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a SUBE"
+        "alignment": "NEUTRAL",
+        "score": 58,
+        "verdict_title": "EN OBSERVACIÓN",
+        "verdict_sub": "Uno de los dos está neutral"
       },
       "setup": {
         "direction": "BUY",
@@ -14229,8 +14229,8 @@
             "t": "19 Nov 00:00",
             "o": 0.84286,
             "h": 0.8443,
-            "l": 0.84194,
-            "c": 0.84247
+            "l": 0.84185,
+            "c": 0.84264
           }
         ],
         "4h": [
@@ -14525,18 +14525,11 @@
             "t": "19 Nov 08:00",
             "o": 0.8431,
             "h": 0.84328,
-            "l": 0.84238,
-            "c": 0.84244
+            "l": 0.84185,
+            "c": 0.84259
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 0.84109,
-            "h": 0.84135,
-            "l": 0.83799,
-            "c": 0.83896
-          },
           {
             "t": "17 Nov 16:00",
             "o": 0.83897,
@@ -14822,7 +14815,14 @@
             "o": 0.8431,
             "h": 0.84328,
             "l": 0.84238,
-            "c": 0.84244
+            "c": 0.84255
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 0.84255,
+            "h": 0.84265,
+            "l": 0.84185,
+            "c": 0.84259
           }
         ]
       }
@@ -14832,15 +14832,15 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 175.534,
-      "chg_day": 0.44,
+      "price": 175.779,
+      "chg_day": 0.55,
       "chart_bias": "BAJA",
       "macro_bias": "BAJA",
       "macro_reason": "Caída en rendimientos fortalece al yen y presiona a EURJPY.",
-      "intraday_high": 175.587,
-      "intraday_low": 174.65,
-      "ob_high": 175.577,
-      "ob_low": 175.443,
+      "intraday_high": 175.819,
+      "intraday_low": 174.665,
+      "ob_high": 175.998,
+      "ob_low": 175.836,
       "tf_bias": {
         "weekly": "BAJA",
         "daily": "BAJA",
@@ -14856,10 +14856,10 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "RE-ENTRADA VENTA",
-        "entry": 175.51,
-        "sl": 175.776,
-        "tp1": 174.977,
-        "tp2": 174.711
+        "entry": 175.917,
+        "sl": 176.24,
+        "tp1": 175.271,
+        "tp2": 174.948
       },
       "candles": {
         "1d": [
@@ -15153,9 +15153,9 @@
           {
             "t": "19 Nov 00:00",
             "o": 174.824,
-            "h": 175.587,
+            "h": 175.819,
             "l": 174.713,
-            "c": 175.534
+            "c": 175.776
           }
         ],
         "4h": [
@@ -15449,19 +15449,12 @@
           {
             "t": "19 Nov 08:00",
             "o": 175.393,
-            "h": 175.587,
+            "h": 175.819,
             "l": 175.365,
-            "c": 175.534
+            "c": 175.779
           }
         ],
         "1h": [
-          {
-            "t": "17 Nov 15:00",
-            "o": 175.189,
-            "h": 175.335,
-            "l": 175.148,
-            "c": 175.242
-          },
           {
             "t": "17 Nov 16:00",
             "o": 175.245,
@@ -15747,7 +15740,14 @@
             "o": 175.393,
             "h": 175.587,
             "l": 175.365,
-            "c": 175.534
+            "c": 175.545
+          },
+          {
+            "t": "19 Nov 09:00",
+            "o": 175.54,
+            "h": 175.819,
+            "l": 175.53,
+            "c": 175.779
           }
         ]
       }
