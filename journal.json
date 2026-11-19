@@ -1,5 +1,12 @@
 [
   {
+    "pair": "GBPAUD",
+    "dir": "COMPRA",
+    "res": "WIN",
+    "note": "Buena",
+    "date": "2026-11-19 01:15 UTC"
+  },
+  {
     "pair": "EURUSD",
     "dir": "VENTA",
     "res": "WIN",
