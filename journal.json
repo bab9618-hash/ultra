@@ -1,5 +1,12 @@
 [
   {
+    "pair": "AUDUSD",
+    "dir": "COMPRA",
+    "res": "WIN",
+    "note": "Buena",
+    "date": "2026-11-19 01:14 UTC"
+  },
+  {
     "pair": "EURUSD",
     "dir": "VENTA",
     "res": "WIN",
