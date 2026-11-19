@@ -1,5 +1,12 @@
 [
   {
+    "pair": "USDCAD",
+    "dir": "COMPRA",
+    "res": "WIN",
+    "note": "Buena",
+    "date": "2026-11-19 03:16 UTC"
+  },
+  {
     "pair": "GBPAUD",
     "dir": "COMPRA",
     "res": "WIN",
