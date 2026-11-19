@@ -1,46 +1,46 @@
 {
-  "last_updated": "2026-11-19 16:07 UTC",
+  "last_updated": "2026-11-19 16:09 UTC",
   "brief": {
-    "dxy": 103.79,
+    "dxy": 103.82,
     "us10y": 5.06,
-    "headline": "DXY en 103.79 (SUBE) · Rendimiento Bonos US10Y en 5.06%",
-    "summary": "Telemetría macro actualizada sobre 22 activos (incluyendo pares AUD y GBP). El índice del dólar presenta sesgo SUBE."
+    "headline": "USD DÉBIL (DXY 103.82 · US10Y 5.06%) | GBP NEUTRAL | AUD DÉBIL",
+    "summary": "Matriz multidivisa 4H activa sobre 22 activos: USD (DÉBIL), GBP (NEUTRAL), AUD (DÉBIL), EUR (FUERTE), JPY (NEUTRAL) y riesgo US500 (-1.67%)."
   },
   "banks": [
     {
       "bank": "FED (EE.UU.)",
       "currency": "USD",
-      "stance": "RESTRICTIVA (HAWKISH)",
-      "bias": "BULLISH",
-      "detail": "DXY en 103.79 y bonos US10Y en 5.06%. Prioridad en control de inflación y datos de empleo."
-    },
-    {
-      "bank": "BCE (Eurozona)",
-      "currency": "EUR",
-      "stance": "FLEXIBILIZACIÓN GRADUAL",
+      "stance": "USD DÉBIL · HAWKISH",
       "bias": "BEARISH",
-      "detail": "Enfoque dependiente de datos ante desaceleración industrial europea; presión bajista frente a un USD firme."
+      "detail": "Medido con DXY (103.82) + Bonos US10Y (5.06%) en 4H."
     },
     {
       "bank": "BoE (Reino Unido)",
       "currency": "GBP",
-      "stance": "CAUTELA EN RECORTES",
+      "stance": "GBP NEUTRAL · CESTA 4H",
       "bias": "NEUTRAL",
-      "detail": "Inflación persistente en servicios mantiene diferencial atractivo para la libra en cruces de rendimiento."
-    },
-    {
-      "bank": "BoJ (Japón)",
-      "currency": "JPY",
-      "stance": "NORMALIZACIÓN LENTA",
-      "bias": "BEARISH",
-      "detail": "Diferencial de tasas frente a EE.UU. y Europa sigue condicionando movimientos bruscos en USDJPY, GBPJPY y AUDJPY."
+      "detail": "Medido por cesta ponderada GBPUSD + GBPJPY + GBPAUD en 4H y diferencial de tasas BoE."
     },
     {
       "bank": "RBA (Australia)",
       "currency": "AUD",
-      "stance": "VIGILANCIA DE INFLACIÓN",
+      "stance": "AUD DÉBIL · RIESGO & CESTA",
+      "bias": "BEARISH",
+      "detail": "Medido por cesta AUDUSD + AUDJPY + AUDNZD en 4H cruzado con apetito al riesgo (US500)."
+    },
+    {
+      "bank": "BCE (Eurozona)",
+      "currency": "EUR",
+      "stance": "EUR FUERTE · CESTA 4H",
+      "bias": "BULLISH",
+      "detail": "Medido por cesta EURUSD + EURJPY + EURAUD en 4H frente a política del BCE."
+    },
+    {
+      "bank": "BoJ (Japón)",
+      "currency": "JPY",
+      "stance": "JPY NEUTRAL · CESTA YEN",
       "bias": "NEUTRAL",
-      "detail": "Sensible a materias primas, crecimiento asiático y diferencial de rendimiento frente al dólar estadounidense y el yen."
+      "detail": "Medido por flujo inverso en cruces JPY (USDJPY, GBPJPY, EURJPY, AUDJPY) en 4H."
     }
   ],
   "news": [
@@ -129,8 +129,8 @@
       "type": "metal",
       "pip": 0.1,
       "decimals": 2,
-      "price": 3677.1,
-      "chg_day": -1.73,
+      "price": 3674.8,
+      "chg_day": -1.79,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -138,23 +138,23 @@
         "h1": "BAJA"
       },
       "intraday_high": 3772.8,
-      "intraday_low": 3676.5,
-      "ob_high": 3745.6,
-      "ob_low": 3744.4,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "intraday_low": 3672.6,
+      "ob_high": 3722.6,
+      "ob_low": 3711.7,
+      "macro_reason": "XAU (FUERTE) vs USD (DÉBIL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 84,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "score": 32,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere SUBE, gráfico BAJA"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 3745.0,
-        "sl": 3766.19,
-        "tp1": 3702.62,
-        "tp2": 3681.43
+        "signal_tag": "CHoCH BAJISTA · OB",
+        "entry": 3717.15,
+        "sl": 3723.0,
+        "tp1": 3705.45,
+        "tp2": 3699.6
       },
       "candles": {
         "1d": [
@@ -470,8 +470,8 @@
             "t": 1795064400,
             "o": 3730.3,
             "h": 3759.5,
-            "l": 3676.5,
-            "c": 3677.1
+            "l": 3672.6,
+            "c": 3674.8
           }
         ],
         "4h": [
@@ -787,8 +787,8 @@
             "t": 1795089600,
             "o": 3720.0,
             "h": 3728.9,
-            "l": 3676.5,
-            "c": 3677.1
+            "l": 3672.6,
+            "c": 3674.8
           }
         ],
         "1h": [
@@ -1104,8 +1104,8 @@
             "t": 1795100400,
             "o": 3709.6,
             "h": 3714.9,
-            "l": 3676.5,
-            "c": 3677.1
+            "l": 3672.6,
+            "c": 3674.8
           }
         ]
       }
@@ -1115,8 +1115,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.0983,
-      "chg_day": -0.09,
+      "price": 1.09842,
+      "chg_day": -0.08,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -1125,22 +1125,22 @@
       },
       "intraday_high": 1.10132,
       "intraday_low": 1.09589,
-      "ob_high": 1.10132,
-      "ob_low": 1.10012,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 1.10023,
+      "ob_low": 1.09938,
+      "macro_reason": "EUR (FUERTE) vs USD (DÉBIL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:NEUTRAL, 1H:BAJA).",
       "confluence": {
-        "score": 84,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "score": 40,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere SUBE, gráfico BAJA"
       },
       "setup": {
         "direction": "SELL",
         "signal_tag": "VENTA OB",
-        "entry": 1.10072,
-        "sl": 1.10192,
-        "tp1": 1.09832,
-        "tp2": 1.09712
+        "entry": 1.0998,
+        "sl": 1.101,
+        "tp1": 1.0974,
+        "tp2": 1.0962
       },
       "candles": {
         "1d": [
@@ -1457,7 +1457,7 @@
             "o": 1.09782,
             "h": 1.10132,
             "l": 1.09589,
-            "c": 1.0983
+            "c": 1.09842
           }
         ],
         "4h": [
@@ -1774,7 +1774,7 @@
             "o": 1.09999,
             "h": 1.10084,
             "l": 1.09782,
-            "c": 1.0983
+            "c": 1.09842
           }
         ],
         "1h": [
@@ -2091,7 +2091,7 @@
             "o": 1.09842,
             "h": 1.09854,
             "l": 1.0983,
-            "c": 1.0983
+            "c": 1.09842
           }
         ]
       }
@@ -2101,8 +2101,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 159.802,
-      "chg_day": 0.19,
+      "price": 159.778,
+      "chg_day": 0.17,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "NEUTRAL",
@@ -2111,22 +2111,22 @@
       },
       "intraday_high": 159.97,
       "intraday_low": 159.233,
-      "ob_high": 159.59,
-      "ob_low": 159.47,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 159.946,
+      "ob_low": 159.647,
+      "macro_reason": "USD (DÉBIL) vs JPY (NEUTRAL) en cesta 4H. Jerarquía técnica (1D:NEUTRAL, 4H:SUBE, 1H:BAJA).",
       "confluence": {
-        "score": 84,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a SUBE"
+        "score": 44,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere BAJA, gráfico SUBE"
       },
       "setup": {
         "direction": "BUY",
-        "signal_tag": "COMPRA OB",
-        "entry": 159.53,
-        "sl": 159.368,
-        "tp1": 159.854,
-        "tp2": 160.016
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 159.796,
+        "sl": 159.607,
+        "tp1": 160.174,
+        "tp2": 160.363
       },
       "candles": {
         "1d": [
@@ -2443,7 +2443,7 @@
             "o": 159.297,
             "h": 159.97,
             "l": 159.265,
-            "c": 159.803
+            "c": 159.782
           }
         ],
         "4h": [
@@ -2760,7 +2760,7 @@
             "o": 159.922,
             "h": 159.97,
             "l": 159.647,
-            "c": 159.803
+            "c": 159.778
           }
         ],
         "1h": [
@@ -3077,7 +3077,7 @@
             "o": 159.813,
             "h": 159.82,
             "l": 159.761,
-            "c": 159.802
+            "c": 159.778
           }
         ]
       }
@@ -3087,8 +3087,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.31187,
-      "chg_day": -0.65,
+      "price": 1.31201,
+      "chg_day": -0.64,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -3097,22 +3097,22 @@
       },
       "intraday_high": 1.31728,
       "intraday_low": 1.31091,
-      "ob_high": 1.31728,
-      "ob_low": 1.31608,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 1.31614,
+      "ob_low": 1.31513,
+      "macro_reason": "GBP (NEUTRAL) vs USD (DÉBIL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 84,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "score": 32,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere SUBE, gráfico BAJA"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 1.31668,
-        "sl": 1.31808,
-        "tp1": 1.31388,
-        "tp2": 1.31248
+        "signal_tag": "CHoCH BAJISTA · OB",
+        "entry": 1.31563,
+        "sl": 1.31703,
+        "tp1": 1.31283,
+        "tp2": 1.31143
       },
       "candles": {
         "1d": [
@@ -3429,7 +3429,7 @@
             "o": 1.3153,
             "h": 1.31728,
             "l": 1.31091,
-            "c": 1.31187
+            "c": 1.31201
           }
         ],
         "4h": [
@@ -3746,7 +3746,7 @@
             "o": 1.31589,
             "h": 1.31638,
             "l": 1.31091,
-            "c": 1.31187
+            "c": 1.31201
           }
         ],
         "1h": [
@@ -4063,7 +4063,7 @@
             "o": 1.3118,
             "h": 1.31201,
             "l": 1.31163,
-            "c": 1.31187
+            "c": 1.31201
           }
         ]
       }
@@ -4073,32 +4073,32 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 209.632,
-      "chg_day": -0.47,
+      "price": 209.616,
+      "chg_day": -0.48,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
-        "h4": "SUBE",
+        "h4": "NEUTRAL",
         "h1": "BAJA"
       },
       "intraday_high": 210.653,
       "intraday_low": 209.212,
-      "ob_high": 210.653,
-      "ob_low": 210.533,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 210.472,
+      "ob_low": 210.327,
+      "macro_reason": "GBP (NEUTRAL) vs JPY (NEUTRAL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:NEUTRAL, 1H:BAJA).",
       "confluence": {
-        "score": 72,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "score": 40,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere SUBE, gráfico BAJA"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 210.593,
-        "sl": 210.91,
-        "tp1": 209.959,
-        "tp2": 209.642
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 210.399,
+        "sl": 210.512,
+        "tp1": 210.173,
+        "tp2": 210.06
       },
       "candles": {
         "1d": [
@@ -4415,7 +4415,7 @@
             "o": 209.49,
             "h": 210.653,
             "l": 209.226,
-            "c": 209.632
+            "c": 209.616
           }
         ],
         "4h": [
@@ -4732,7 +4732,7 @@
             "o": 210.437,
             "h": 210.497,
             "l": 209.391,
-            "c": 209.632
+            "c": 209.616
           }
         ],
         "1h": [
@@ -5049,7 +5049,7 @@
             "o": 209.655,
             "h": 209.659,
             "l": 209.547,
-            "c": 209.632
+            "c": 209.616
           }
         ]
       }
@@ -5059,8 +5059,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.96438,
-      "chg_day": 0.27,
+      "price": 1.96396,
+      "chg_day": 0.25,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "SUBE",
@@ -5069,22 +5069,22 @@
       },
       "intraday_high": 1.97096,
       "intraday_low": 1.9549,
-      "ob_high": 1.95835,
-      "ob_low": 1.95715,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 1.96153,
+      "ob_low": 1.95908,
+      "macro_reason": "GBP (NEUTRAL) vs AUD (DÉBIL) en cesta 4H. Jerarquía técnica (1D:SUBE, 4H:SUBE, 1H:SUBE).",
       "confluence": {
-        "score": 72,
+        "score": 90,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a SUBE"
+        "verdict_sub": "Cesta macro (SUBE) y estructura mayor (SUBE) alineadas"
       },
       "setup": {
         "direction": "BUY",
         "signal_tag": "COMPRA OB",
-        "entry": 1.95775,
-        "sl": 1.95422,
-        "tp1": 1.96481,
-        "tp2": 1.96834
+        "entry": 1.9603,
+        "sl": 1.95868,
+        "tp1": 1.96354,
+        "tp2": 1.96516
       },
       "candles": {
         "1d": [
@@ -5401,7 +5401,7 @@
             "o": 1.95876,
             "h": 1.97096,
             "l": 1.95497,
-            "c": 1.96438
+            "c": 1.96396
           }
         ],
         "4h": [
@@ -5718,7 +5718,7 @@
             "o": 1.96038,
             "h": 1.9659,
             "l": 1.95715,
-            "c": 1.96438
+            "c": 1.96396
           }
         ],
         "1h": [
@@ -6033,9 +6033,9 @@
           {
             "t": 1795104000,
             "o": 1.96394,
-            "h": 1.96444,
+            "h": 1.9648,
             "l": 1.96328,
-            "c": 1.96438
+            "c": 1.96396
           }
         ]
       }
@@ -6045,8 +6045,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 2.38304,
-      "chg_day": -0.77,
+      "price": 2.38257,
+      "chg_day": -0.79,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -6055,22 +6055,22 @@
       },
       "intraday_high": 2.39617,
       "intraday_low": 2.3773,
-      "ob_high": 2.39086,
-      "ob_low": 2.38966,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 2.3826,
+      "ob_low": 2.37886,
+      "macro_reason": "GBP (NEUTRAL) vs NZD (FUERTE) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:SUBE).",
       "confluence": {
-        "score": 72,
+        "score": 83,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 2.39026,
-        "sl": 2.39441,
-        "tp1": 2.38196,
-        "tp2": 2.37781
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 2.38073,
+        "sl": 2.383,
+        "tp1": 2.37619,
+        "tp2": 2.37392
       },
       "candles": {
         "1d": [
@@ -6387,7 +6387,7 @@
             "o": 2.39328,
             "h": 2.39617,
             "l": 2.3773,
-            "c": 2.38304
+            "c": 2.38257
           }
         ],
         "4h": [
@@ -6704,7 +6704,7 @@
             "o": 2.38039,
             "h": 2.38424,
             "l": 2.37746,
-            "c": 2.38304
+            "c": 2.38257
           }
         ],
         "1h": [
@@ -7019,9 +7019,9 @@
           {
             "t": 1795104000,
             "o": 2.38214,
-            "h": 2.38312,
+            "h": 2.38329,
             "l": 2.38124,
-            "c": 2.38304
+            "c": 2.38257
           }
         ]
       }
@@ -7031,8 +7031,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.87718,
-      "chg_day": -0.57,
+      "price": 1.87654,
+      "chg_day": -0.61,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -7040,23 +7040,23 @@
         "h1": "BAJA"
       },
       "intraday_high": 1.88554,
-      "intraday_low": 1.87656,
-      "ob_high": 1.88484,
-      "ob_low": 1.88364,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "intraday_low": 1.87654,
+      "ob_high": 1.88364,
+      "ob_low": 1.88057,
+      "macro_reason": "GBP (NEUTRAL) vs CAD (FUERTE) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 72,
+        "score": 86,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 1.88424,
-        "sl": 1.88622,
-        "tp1": 1.88028,
-        "tp2": 1.8783
+        "signal_tag": "CHoCH BAJISTA · OB",
+        "entry": 1.88211,
+        "sl": 1.88404,
+        "tp1": 1.87825,
+        "tp2": 1.87632
       },
       "candles": {
         "1d": [
@@ -7372,8 +7372,8 @@
             "t": 1795046400,
             "o": 1.88314,
             "h": 1.88516,
-            "l": 1.87656,
-            "c": 1.87718
+            "l": 1.87654,
+            "c": 1.87654
           }
         ],
         "4h": [
@@ -7689,8 +7689,8 @@
             "t": 1795093200,
             "o": 1.88092,
             "h": 1.88125,
-            "l": 1.87656,
-            "c": 1.87718
+            "l": 1.87654,
+            "c": 1.87654
           }
         ],
         "1h": [
@@ -8006,8 +8006,8 @@
             "t": 1795104000,
             "o": 1.87747,
             "h": 1.87751,
-            "l": 1.87694,
-            "c": 1.87718
+            "l": 1.87654,
+            "c": 1.87654
           }
         ]
       }
@@ -8017,8 +8017,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.668,
-      "chg_day": -0.89,
+      "price": 0.66814,
+      "chg_day": -0.87,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -8027,22 +8027,22 @@
       },
       "intraday_high": 0.67245,
       "intraday_low": 0.66653,
-      "ob_high": 0.67209,
-      "ob_low": 0.67089,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 0.6715,
+      "ob_low": 0.6707,
+      "macro_reason": "AUD (DÉBIL) vs USD (DÉBIL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 84,
+        "score": 86,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 0.67149,
-        "sl": 0.67279,
-        "tp1": 0.66889,
-        "tp2": 0.66759
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 0.6711,
+        "sl": 0.6724,
+        "tp1": 0.6685,
+        "tp2": 0.6672
       },
       "candles": {
         "1d": [
@@ -8359,7 +8359,7 @@
             "o": 0.67146,
             "h": 0.67222,
             "l": 0.66653,
-            "c": 0.668
+            "c": 0.66814
           }
         ],
         "4h": [
@@ -8676,7 +8676,7 @@
             "o": 0.6715,
             "h": 0.67209,
             "l": 0.66774,
-            "c": 0.668
+            "c": 0.66814
           }
         ],
         "1h": [
@@ -8992,8 +8992,8 @@
             "t": 1795104000,
             "o": 0.668,
             "h": 0.66836,
-            "l": 0.668,
-            "c": 0.668
+            "l": 0.66796,
+            "c": 0.66814
           }
         ]
       }
@@ -9003,8 +9003,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 106.709,
-      "chg_day": -0.73,
+      "price": 106.726,
+      "chg_day": -0.72,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -9013,22 +9013,22 @@
       },
       "intraday_high": 107.434,
       "intraday_low": 106.215,
-      "ob_high": 107.434,
-      "ob_low": 107.314,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 107.363,
+      "ob_low": 107.238,
+      "macro_reason": "AUD (DÉBIL) vs JPY (NEUTRAL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 72,
+        "score": 90,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
         "signal_tag": "VENTA OB",
-        "entry": 107.374,
-        "sl": 107.642,
-        "tp1": 106.838,
-        "tp2": 106.57
+        "entry": 107.3,
+        "sl": 107.403,
+        "tp1": 107.094,
+        "tp2": 106.991
       },
       "candles": {
         "1d": [
@@ -9345,7 +9345,7 @@
             "o": 106.924,
             "h": 107.434,
             "l": 106.215,
-            "c": 106.709
+            "c": 106.726
           }
         ],
         "4h": [
@@ -9662,7 +9662,7 @@
             "o": 107.332,
             "h": 107.434,
             "l": 106.533,
-            "c": 106.709
+            "c": 106.726
           }
         ],
         "1h": [
@@ -9979,7 +9979,7 @@
             "o": 106.748,
             "h": 106.768,
             "l": 106.675,
-            "c": 106.709
+            "c": 106.726
           }
         ]
       }
@@ -9989,8 +9989,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.95557,
-      "chg_day": -0.84,
+      "price": 0.95542,
+      "chg_day": -0.86,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -9999,22 +9999,22 @@
       },
       "intraday_high": 0.96337,
       "intraday_low": 0.95484,
-      "ob_high": 0.96073,
-      "ob_low": 0.95953,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 0.96038,
+      "ob_low": 0.95844,
+      "macro_reason": "AUD (DÉBIL) vs CAD (FUERTE) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 72,
+        "score": 86,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 0.96013,
-        "sl": 0.96201,
-        "tp1": 0.95637,
-        "tp2": 0.95449
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 0.95941,
+        "sl": 0.96078,
+        "tp1": 0.95667,
+        "tp2": 0.9553
       },
       "candles": {
         "1d": [
@@ -10330,8 +10330,8 @@
             "t": 1795046400,
             "o": 0.96096,
             "h": 0.96311,
-            "l": 0.95484,
-            "c": 0.95551
+            "l": 0.95457,
+            "c": 0.95542
           }
         ],
         "4h": [
@@ -10648,7 +10648,7 @@
             "o": 0.95937,
             "h": 0.96002,
             "l": 0.95484,
-            "c": 0.95551
+            "c": 0.95542
           }
         ],
         "1h": [
@@ -10965,7 +10965,7 @@
             "o": 0.95591,
             "h": 0.95612,
             "l": 0.95484,
-            "c": 0.95557
+            "c": 0.95542
           }
         ]
       }
@@ -10975,7 +10975,7 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.21309,
+      "price": 1.21311,
       "chg_day": -1.04,
       "chart_bias": "BAJA",
       "tf_bias": {
@@ -10985,22 +10985,22 @@
       },
       "intraday_high": 1.22391,
       "intraday_low": 1.21238,
-      "ob_high": 1.2186,
-      "ob_low": 1.2174,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 1.21552,
+      "ob_low": 1.21374,
+      "macro_reason": "AUD (DÉBIL) vs NZD (FUERTE) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:NEUTRAL).",
       "confluence": {
-        "score": 72,
+        "score": 83,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 1.218,
-        "sl": 1.22054,
-        "tp1": 1.21292,
-        "tp2": 1.21038
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 1.21463,
+        "sl": 1.21592,
+        "tp1": 1.21205,
+        "tp2": 1.21076
       },
       "candles": {
         "1d": [
@@ -11317,7 +11317,7 @@
             "o": 1.22214,
             "h": 1.22391,
             "l": 1.21238,
-            "c": 1.21309
+            "c": 1.21311
           }
         ],
         "4h": [
@@ -11634,7 +11634,7 @@
             "o": 1.21414,
             "h": 1.21563,
             "l": 1.21238,
-            "c": 1.21309
+            "c": 1.21311
           }
         ],
         "1h": [
@@ -11951,7 +11951,7 @@
             "o": 1.21296,
             "h": 1.21322,
             "l": 1.21238,
-            "c": 1.21309
+            "c": 1.21311
           }
         ]
       }
@@ -11961,8 +11961,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.64413,
-      "chg_day": 0.81,
+      "price": 1.64411,
+      "chg_day": 0.8,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "SUBE",
@@ -11971,22 +11971,22 @@
       },
       "intraday_high": 1.64618,
       "intraday_low": 1.63154,
-      "ob_high": 1.63746,
-      "ob_low": 1.63626,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 1.64027,
+      "ob_low": 1.63761,
+      "macro_reason": "EUR (FUERTE) vs AUD (DÉBIL) en cesta 4H. Jerarquía técnica (1D:SUBE, 4H:SUBE, 1H:SUBE).",
       "confluence": {
-        "score": 72,
+        "score": 86,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a SUBE"
+        "verdict_sub": "Cesta macro (SUBE) y estructura mayor (SUBE) alineadas"
       },
       "setup": {
         "direction": "BUY",
-        "signal_tag": "COMPRA OB",
-        "entry": 1.63686,
-        "sl": 1.63364,
-        "tp1": 1.6433,
-        "tp2": 1.64652
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 1.63894,
+        "sl": 1.63721,
+        "tp1": 1.6424,
+        "tp2": 1.64413
       },
       "candles": {
         "1d": [
@@ -12303,7 +12303,7 @@
             "o": 1.63453,
             "h": 1.64618,
             "l": 1.63159,
-            "c": 1.64422
+            "c": 1.64411
           }
         ],
         "4h": [
@@ -12620,7 +12620,7 @@
             "o": 1.63843,
             "h": 1.64618,
             "l": 1.63691,
-            "c": 1.64422
+            "c": 1.64411
           }
         ],
         "1h": [
@@ -12935,9 +12935,9 @@
           {
             "t": 1795104000,
             "o": 1.64413,
-            "h": 1.64432,
+            "h": 1.64448,
             "l": 1.64325,
-            "c": 1.64413
+            "c": 1.64411
           }
         ]
       }
@@ -12947,8 +12947,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.56288,
-      "chg_day": -0.72,
+      "price": 0.5628,
+      "chg_day": -0.74,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -12958,21 +12958,21 @@
       "intraday_high": 0.567,
       "intraday_low": 0.56131,
       "ob_high": 0.56586,
-      "ob_low": 0.56466,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_low": 0.5641,
+      "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 72,
+        "score": 86,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 0.56526,
-        "sl": 0.56651,
-        "tp1": 0.56276,
-        "tp2": 0.56151
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 0.56498,
+        "sl": 0.56626,
+        "tp1": 0.56242,
+        "tp2": 0.56114
       },
       "candles": {
         "1d": [
@@ -13289,7 +13289,7 @@
             "o": 0.5651,
             "h": 0.567,
             "l": 0.56131,
-            "c": 0.56288
+            "c": 0.5628
           }
         ],
         "4h": [
@@ -13606,7 +13606,7 @@
             "o": 0.56532,
             "h": 0.56586,
             "l": 0.56197,
-            "c": 0.56288
+            "c": 0.5628
           }
         ],
         "1h": [
@@ -13923,7 +13923,7 @@
             "o": 0.56307,
             "h": 0.56324,
             "l": 0.56232,
-            "c": 0.56288
+            "c": 0.5628
           }
         ]
       }
@@ -13933,8 +13933,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.55066,
-      "chg_day": 0.15,
+      "price": 0.55072,
+      "chg_day": 0.17,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -13943,22 +13943,22 @@
       },
       "intraday_high": 0.55343,
       "intraday_low": 0.54855,
-      "ob_high": 0.55343,
-      "ob_low": 0.55223,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 0.55313,
+      "ob_low": 0.55233,
+      "macro_reason": "NZD (FUERTE) vs USD (DÉBIL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:SUBE, 1H:BAJA).",
       "confluence": {
-        "score": 84,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "score": 40,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere SUBE, gráfico BAJA"
       },
       "setup": {
         "direction": "SELL",
         "signal_tag": "VENTA OB",
-        "entry": 0.55283,
-        "sl": 0.55403,
-        "tp1": 0.55043,
-        "tp2": 0.54923
+        "entry": 0.55273,
+        "sl": 0.55393,
+        "tp1": 0.55033,
+        "tp2": 0.54913
       },
       "candles": {
         "1d": [
@@ -14275,7 +14275,7 @@
             "o": 0.54909,
             "h": 0.55343,
             "l": 0.54855,
-            "c": 0.55066
+            "c": 0.55072
           }
         ],
         "4h": [
@@ -14592,7 +14592,7 @@
             "o": 0.55297,
             "h": 0.55313,
             "l": 0.55024,
-            "c": 0.55066
+            "c": 0.55072
           }
         ],
         "1h": [
@@ -14908,8 +14908,8 @@
             "t": 1795104000,
             "o": 0.55075,
             "h": 0.55099,
-            "l": 0.55066,
-            "c": 0.55066
+            "l": 0.55063,
+            "c": 0.55072
           }
         ]
       }
@@ -14919,8 +14919,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.43112,
-      "chg_day": 0.08,
+      "price": 1.4306,
+      "chg_day": 0.05,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "SUBE",
@@ -14929,22 +14929,22 @@
       },
       "intraday_high": 1.43573,
       "intraday_low": 1.4283,
-      "ob_high": 1.4295,
-      "ob_low": 1.4283,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 1.43108,
+      "ob_low": 1.4292,
+      "macro_reason": "USD (DÉBIL) vs CAD (FUERTE) en cesta 4H. Jerarquía técnica (1D:SUBE, 4H:BAJA, 1H:NEUTRAL).",
       "confluence": {
-        "score": 84,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a SUBE"
+        "score": 42,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere BAJA, gráfico SUBE"
       },
       "setup": {
         "direction": "BUY",
         "signal_tag": "COMPRA OB",
-        "entry": 1.4289,
-        "sl": 1.42727,
-        "tp1": 1.43216,
-        "tp2": 1.43379
+        "entry": 1.43014,
+        "sl": 1.4288,
+        "tp1": 1.43282,
+        "tp2": 1.43416
       },
       "candles": {
         "1d": [
@@ -15261,7 +15261,7 @@
             "o": 1.4319,
             "h": 1.43573,
             "l": 1.4283,
-            "c": 1.43111
+            "c": 1.4306
           }
         ],
         "4h": [
@@ -15578,7 +15578,7 @@
             "o": 1.4296,
             "h": 1.43236,
             "l": 1.4283,
-            "c": 1.43112
+            "c": 1.4306
           }
         ],
         "1h": [
@@ -15895,7 +15895,7 @@
             "o": 1.4313,
             "h": 1.43146,
             "l": 1.4305,
-            "c": 1.43112
+            "c": 1.4306
           }
         ]
       }
@@ -15905,8 +15905,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.84297,
-      "chg_day": 0.2,
+      "price": 0.84265,
+      "chg_day": 0.16,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "SUBE",
@@ -15915,22 +15915,22 @@
       },
       "intraday_high": 0.8443,
       "intraday_low": 0.84137,
-      "ob_high": 0.84288,
-      "ob_low": 0.84168,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 0.84412,
+      "ob_low": 0.84261,
+      "macro_reason": "USD (DÉBIL) vs CHF (FUERTE) en cesta 4H. Jerarquía técnica (1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL).",
       "confluence": {
-        "score": 84,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a SUBE"
+        "score": 42,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere BAJA, gráfico SUBE"
       },
       "setup": {
         "direction": "BUY",
         "signal_tag": "COMPRA OB",
-        "entry": 0.84228,
-        "sl": 0.84108,
-        "tp1": 0.84468,
-        "tp2": 0.84588
+        "entry": 0.84336,
+        "sl": 0.84221,
+        "tp1": 0.84566,
+        "tp2": 0.84681
       },
       "candles": {
         "1d": [
@@ -16247,7 +16247,7 @@
             "o": 0.84286,
             "h": 0.8443,
             "l": 0.84168,
-            "c": 0.84297
+            "c": 0.84265
           }
         ],
         "4h": [
@@ -16564,7 +16564,7 @@
             "o": 0.84232,
             "h": 0.84412,
             "l": 0.84176,
-            "c": 0.84297
+            "c": 0.84265
           }
         ],
         "1h": [
@@ -16880,8 +16880,8 @@
             "t": 1795104000,
             "o": 0.84298,
             "h": 0.84318,
-            "l": 0.8427,
-            "c": 0.84297
+            "l": 0.84265,
+            "c": 0.84265
           }
         ]
       }
@@ -16891,8 +16891,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 175.459,
-      "chg_day": 0.07,
+      "price": 175.476,
+      "chg_day": 0.08,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -16901,22 +16901,22 @@
       },
       "intraday_high": 176.072,
       "intraday_low": 174.65,
-      "ob_high": 176.072,
-      "ob_low": 175.952,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 175.881,
+      "ob_low": 175.695,
+      "macro_reason": "EUR (FUERTE) vs JPY (NEUTRAL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:SUBE, 1H:BAJA).",
       "confluence": {
-        "score": 72,
-        "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "score": 40,
+        "alignment": "OPPOSED",
+        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
+        "verdict_sub": "Flujo macro sugiere SUBE, gráfico BAJA"
       },
       "setup": {
         "direction": "SELL",
         "signal_tag": "VENTA OB",
-        "entry": 176.012,
-        "sl": 176.325,
-        "tp1": 175.386,
-        "tp2": 175.073
+        "entry": 175.788,
+        "sl": 175.921,
+        "tp1": 175.522,
+        "tp2": 175.389
       },
       "candles": {
         "1d": [
@@ -17233,7 +17233,7 @@
             "o": 174.824,
             "h": 176.072,
             "l": 174.713,
-            "c": 175.459
+            "c": 175.476
           }
         ],
         "4h": [
@@ -17550,7 +17550,7 @@
             "o": 175.881,
             "h": 175.972,
             "l": 175.35,
-            "c": 175.459
+            "c": 175.476
           }
         ],
         "1h": [
@@ -17867,7 +17867,7 @@
             "o": 175.521,
             "h": 175.522,
             "l": 175.417,
-            "c": 175.459
+            "c": 175.476
           }
         ]
       }
@@ -17877,8 +17877,8 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 62965.64,
-      "chg_day": -0.03,
+      "price": 63013.45,
+      "chg_day": 0.04,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -17888,21 +17888,21 @@
       "intraday_high": 64011.58,
       "intraday_low": 62004.0,
       "ob_high": 64011.58,
-      "ob_low": 63999.58,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_low": 63609.36,
+      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta 4H. Jerarquía técnica (1D:BAJA, 4H:SUBE, 1H:BAJA).",
       "confluence": {
         "score": 84,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
         "signal_tag": "VENTA OB",
-        "entry": 64005.58,
-        "sl": 64447.25,
-        "tp1": 63122.24,
-        "tp2": 62680.57
+        "entry": 63810.47,
+        "sl": 64015.58,
+        "tp1": 63400.25,
+        "tp2": 63195.14
       },
       "candles": {
         "1d": [
@@ -18219,7 +18219,7 @@
             "o": 62987.29,
             "h": 63985.29,
             "l": 62382.48,
-            "c": 62965.64
+            "c": 63013.45
           }
         ],
         "4h": [
@@ -18536,7 +18536,7 @@
             "o": 63809.94,
             "h": 64011.58,
             "l": 62706.83,
-            "c": 62965.64
+            "c": 63013.45
           }
         ],
         "1h": [
@@ -18852,8 +18852,8 @@
             "t": 1795104000,
             "o": 63036.03,
             "h": 63081.03,
-            "l": 62944.51,
-            "c": 62965.64
+            "l": 62915.75,
+            "c": 63013.45
           }
         ]
       }
@@ -18863,8 +18863,8 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 49700.38,
-      "chg_day": -0.99,
+      "price": 49665.4,
+      "chg_day": -1.06,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -18873,22 +18873,22 @@
       },
       "intraday_high": 52358.73,
       "intraday_low": 49648.34,
-      "ob_high": 50973.52,
-      "ob_low": 50961.52,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 50255.45,
+      "ob_low": 50150.03,
+      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 84,
+        "score": 92,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 50967.52,
-        "sl": 51563.81,
-        "tp1": 49774.94,
-        "tp2": 49178.65
+        "signal_tag": "CHoCH BAJISTA · OB",
+        "entry": 50202.74,
+        "sl": 50259.45,
+        "tp1": 50089.32,
+        "tp2": 50032.61
       },
       "candles": {
         "1d": [
@@ -19205,7 +19205,7 @@
             "o": 50432.32,
             "h": 50454.81,
             "l": 49648.34,
-            "c": 49707.1
+            "c": 49665.4
           }
         ],
         "4h": [
@@ -19494,7 +19494,7 @@
             "o": 50432.32,
             "h": 50454.81,
             "l": 49648.34,
-            "c": 49707.1
+            "c": 49665.4
           }
         ],
         "1h": [
@@ -19811,7 +19811,7 @@
             "o": 49892.48,
             "h": 49899.85,
             "l": 49648.34,
-            "c": 49700.38
+            "c": 49665.4
           }
         ]
       }
@@ -19821,8 +19821,8 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 24511.58,
-      "chg_day": 0.33,
+      "price": 24468.38,
+      "chg_day": 0.16,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -19831,22 +19831,22 @@
       },
       "intraday_high": 25193.78,
       "intraday_low": 23992.76,
-      "ob_high": 24936.06,
-      "ob_low": 24924.06,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 24477.38,
+      "ob_low": 24469.38,
+      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:SUBE).",
       "confluence": {
-        "score": 84,
+        "score": 89,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 24930.06,
-        "sl": 25194.28,
-        "tp1": 24401.62,
-        "tp2": 24137.4
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 24473.38,
+        "sl": 24737.6,
+        "tp1": 23944.94,
+        "tp2": 23680.72
       },
       "candles": {
         "1d": [
@@ -20163,7 +20163,7 @@
             "o": 24809.05,
             "h": 24939.62,
             "l": 24337.56,
-            "c": 24511.58
+            "c": 24468.38
           }
         ],
         "4h": [
@@ -20452,7 +20452,7 @@
             "o": 24801.17,
             "h": 24936.06,
             "l": 24337.84,
-            "c": 24511.58
+            "c": 24468.38
           }
         ],
         "1h": [
@@ -20769,7 +20769,7 @@
             "o": 24549.47,
             "h": 24549.54,
             "l": 24337.84,
-            "c": 24511.58
+            "c": 24468.38
           }
         ]
       }
@@ -20779,8 +20779,8 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 7307.13,
-      "chg_day": -0.23,
+      "price": 7297.68,
+      "chg_day": -0.35,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -20789,22 +20789,22 @@
       },
       "intraday_high": 7568.33,
       "intraday_low": 7274.42,
-      "ob_high": 7415.64,
-      "ob_low": 7403.64,
-      "macro_reason": "DXY con sesgo SUBE. Flujo institucional respalda la dirección técnica.",
+      "ob_high": 7334.09,
+      "ob_low": 7313.49,
+      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía técnica (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "confluence": {
-        "score": 84,
+        "score": 86,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Macro y gráfico apuntan a BAJA"
+        "verdict_sub": "Cesta macro (BAJA) y estructura mayor (BAJA) alineadas"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 7409.64,
-        "sl": 7474.3,
-        "tp1": 7280.32,
-        "tp2": 7215.66
+        "signal_tag": "RE-ENTRADA OB",
+        "entry": 7323.79,
+        "sl": 7338.09,
+        "tp1": 7295.19,
+        "tp2": 7280.89
       },
       "candles": {
         "1d": [
@@ -21121,7 +21121,7 @@
             "o": 7389.26,
             "h": 7415.64,
             "l": 7274.42,
-            "c": 7307.13
+            "c": 7296.32
           }
         ],
         "4h": [
@@ -21410,7 +21410,7 @@
             "o": 7389.26,
             "h": 7415.64,
             "l": 7274.42,
-            "c": 7307.13
+            "c": 7297.68
           }
         ],
         "1h": [
@@ -21727,7 +21727,7 @@
             "o": 7324.56,
             "h": 7324.58,
             "l": 7274.42,
-            "c": 7307.13
+            "c": 7297.68
           }
         ]
       }
