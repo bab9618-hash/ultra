@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.6 LIVE</title>
+  <title>ORÁCULO · Cabina v6.7 LIVE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -201,8 +201,8 @@
       <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
     </div>
 
-    <!-- SUBPANEL JARVIS -->
-    <section id="ptab-jarvis" class="space-y-4">
+    <!-- SUBPANEL JARVIS CON LUPA BUSCADORA -->
+    <section id="ptab-jarvis" class="space-y-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (17)</button>
         <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
@@ -211,6 +211,14 @@
         <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⚠️ TESIS ROTA</button>
         <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
       </div>
+
+      <!-- LUPA BUSCADORA DE PARES -->
+      <div class="relative flex items-center">
+        <span class="absolute left-3 text-amber-400 text-sm pointer-events-none">🔍</span>
+        <input id="pair-search-input" type="text" oninput="setPairSearch(this.value)" placeholder="Buscar par o activo (ej: XAU, EURUSD, GBP, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500" />
+        <button id="pair-search-clear" type="button" onclick="clearPairSearch()" class="hidden absolute right-2.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-xs font-bold">✕</button>
+      </div>
+
       <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
     </section>
 
@@ -369,6 +377,7 @@
     let currentAgent = 'jarvis';
     let isPanelMode = false;
     let panelFilter = 'ALL';
+    let pairSearchTerm = '';
     let selectedSymbol = 'XAUUSD';
     let selectedTF = '1d';
     let typeTimer = null;
@@ -379,6 +388,19 @@
     let customVoiceMap = JSON.parse(localStorage.getItem('oraculo_voice_map') || '{}');
     let ghToken = localStorage.getItem('oraculo_gh_token') || '';
     let activeLessonIndex = 0;
+
+    function setPairSearch(val) {
+      pairSearchTerm = (val || '').trim().toUpperCase();
+      const clr = document.getElementById('pair-search-clear');
+      if (clr) clr.classList.toggle('hidden', !pairSearchTerm);
+      renderPanelJarvis();
+    }
+
+    function clearPairSearch() {
+      const inp = document.getElementById('pair-search-input');
+      if (inp) inp.value = '';
+      setPairSearch('');
+    }
 
     // =========================================================
     // MOTOR DE PRECIOS EN TIEMPO REAL (CADA 10 SEGUNDOS)
@@ -1115,7 +1137,22 @@
       if (panelFilter === 'REENTRY') list = list.filter(a => getAssetBadgeState(a).code === 'REENTRY');
       if (panelFilter === 'XAU') list = list.filter(a => a.symbol === 'XAUUSD');
 
-      document.getElementById('panel-jarvis-grid').innerHTML = list.map(a => {
+      if (pairSearchTerm) {
+        list = list.filter(a => {
+          const symMatch = a.symbol.includes(pairSearchTerm);
+          const goldAlias = (pairSearchTerm === 'ORO' || pairSearchTerm === 'GOLD') && a.symbol === 'XAUUSD';
+          const btcAlias = pairSearchTerm === 'BITCOIN' && a.symbol === 'BTCUSD';
+          return symMatch || goldAlias || btcAlias;
+        });
+      }
+
+      const grid = document.getElementById('panel-jarvis-grid');
+      if (!list.length) {
+        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No se encontraron pares para "<strong class="text-amber-400">${pairSearchTerm}</strong>".</div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(a => {
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
         const st = getAssetBadgeState(a);
