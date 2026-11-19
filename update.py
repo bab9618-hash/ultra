@@ -58,6 +58,132 @@ def get_candles(ticker_str, period, interval, decimals, limit=45):
         print(f"Aviso {ticker_str} ({interval}): {e}")
         return []
 
+def group_4h(c_1h_long):
+    if not c_1h_long:
+        return []
+    grouped = []
+    for i in range(0, len(c_1h_long), 4):
+        chunk = c_1h_long[i:i+4]
+        grouped.append({
+            "t": chunk[0]["t"],
+            "o": chunk[0]["o"],
+            "h": max(x["h"] for x in chunk),
+            "l": min(x["l"] for x in chunk),
+            "c": chunk[-1]["c"],
+        })
+    return grouped[-45:]
+
+def calc_bias(candles, lookback=6, threshold=0.0006):
+    if not candles or len(candles) < lookback:
+        return "NEUTRAL"
+    first = candles[-lookback]["c"]
+    last = candles[-1]["c"]
+    if last > first * (1.0 + threshold):
+        return "SUBE"
+    if last < first * (1.0 - threshold):
+        return "BAJA"
+    return "NEUTRAL"
+
+def pct_change_4h(candles, lookback=6):
+    if not candles or len(candles) < lookback:
+        return 0.0
+    first = candles[-lookback]["c"]
+    last = candles[-1]["c"]
+    return ((last - first) / first) * 100.0 if first else 0.0
+
+def detect_structure_shift(c_1h):
+    if len(c_1h) < 16:
+        return {"choch": "NONE", "sweep": "NONE"}
+    window = c_1h[-18:-2]
+    last_two = c_1h[-2:]
+    curr_close = last_two[-1]["c"]
+    swing_high = max(x["h"] for x in window)
+    swing_low = min(x["l"] for x in window)
+
+    choch = "NONE"
+    if curr_close > swing_high:
+        choch = "BULLISH_CHOCH"
+    elif curr_close < swing_low:
+        choch = "BEARISH_CHOCH"
+
+    sweep = "NONE"
+    for c in last_two:
+        if c["l"] <= swing_low and c["c"] > swing_low:
+            sweep = "SSL_SWEEP_BUY"
+        elif c["h"] >= swing_high and c["c"] < swing_high:
+            sweep = "BSL_SWEEP_SELL"
+
+    return {"choch": choch, "sweep": sweep}
+
+def compute_currency_strength_matrix(c4_map, dxy_4h, us10y_4h, spx_4h):
+    """
+    Mide la fuerza macroeconómica real en 4H de cada divisa:
+    - USD: DXY (4H) + Rendimiento Bonos US10Y (4H)
+    - GBP: Cesta GBPUSD + GBPJPY + inverso EURGBP (4H)
+    - AUD: Cesta AUDUSD + AUDJPY + AUDNZD + Apetito al Riesgo US500 (4H)
+    - EUR / JPY / CAD / NZD / CHF: Cestas cruzadas en 4H
+    """
+    dxy_chg = pct_change_4h(dxy_4h, 6)
+    us10y_chg = pct_change_4h(us10y_4h, 6)
+    spx_chg = pct_change_4h(spx_4h, 6)
+
+    usd_score = (dxy_chg * 1.4) + (us10y_chg * 0.35)
+
+    gbpusd_chg = pct_change_4h(c4_map.get("GBPUSD"), 6)
+    gbpjpy_chg = pct_change_4h(c4_map.get("GBPJPY"), 6)
+    gbpaud_chg = pct_change_4h(c4_map.get("GBPAUD"), 6)
+    gbp_score = (gbpusd_chg + gbpjpy_chg + gbpaud_chg) / 3.0
+
+    audusd_chg = pct_change_4h(c4_map.get("AUDUSD"), 6)
+    audjpy_chg = pct_change_4h(c4_map.get("AUDJPY"), 6)
+    audnzd_chg = pct_change_4h(c4_map.get("AUDNZD"), 6)
+    aud_score = ((audusd_chg + audjpy_chg + audnzd_chg) / 3.0) + (spx_chg * 0.25)
+
+    eurusd_chg = pct_change_4h(c4_map.get("EURUSD"), 6)
+    eurjpy_chg = pct_change_4h(c4_map.get("EURJPY"), 6)
+    euraud_chg = pct_change_4h(c4_map.get("EURAUD"), 6)
+    eur_score = (eurusd_chg + eurjpy_chg + euraud_chg) / 3.0
+
+    usdjpy_chg = pct_change_4h(c4_map.get("USDJPY"), 6)
+    jpy_score = -((usdjpy_chg + gbpjpy_chg + eurjpy_chg + audjpy_chg) / 4.0)
+
+    nzdusd_chg = pct_change_4h(c4_map.get("NZDUSD"), 6)
+    nzd_score = (nzdusd_chg - audnzd_chg) / 2.0
+
+    usdcad_chg = pct_change_4h(c4_map.get("USDCAD"), 6)
+    audcad_chg = pct_change_4h(c4_map.get("AUDCAD"), 6)
+    cad_score = (-usdcad_chg - audcad_chg) / 2.0
+
+    usdchf_chg = pct_change_4h(c4_map.get("USDCHF"), 6)
+    audchf_chg = pct_change_4h(c4_map.get("AUDCHF"), 6)
+    chf_score = (-usdchf_chg - audchf_chg) / 2.0
+
+    xau_score = -usd_score * 0.9
+
+    raw = {
+        "USD": usd_score,
+        "GBP": gbp_score,
+        "AUD": aud_score,
+        "EUR": eur_score,
+        "JPY": jpy_score,
+        "NZD": nzd_score,
+        "CAD": cad_score,
+        "CHF": chf_score,
+        "XAU": xau_score,
+        "BTC": spx_chg * 0.8 - usd_score * 0.5,
+    }
+
+    labels = {}
+    for k, val in raw.items():
+        if val > 0.12:
+            labels[k] = "FUERTE"
+        elif val < -0.12:
+            labels[k] = "DÉBIL"
+        else:
+            labels[k] = "NEUTRAL"
+
+    return raw, labels, round(spx_chg, 2)
+
 def fetch_live_news():
     feeds = [
         ("Yahoo Finance", "https://finance.yahoo.com/news/rssindex"),
@@ -93,102 +219,99 @@ def fetch_live_news():
     if not news_items:
         news_items = [
             {"source": "Radar Institucional", "title": "Flujos de liquidez concentrados en apertura de Londres y Nueva York; atención a rendimientos del Tesoro a 10 años.", "link": "#", "time": "En línea"},
-            {"source": "Mesa Divisas", "title": "Inversores evalúan diferenciales de tasas entre la Reserva Federal, el Banco Central Europeo y el Banco de Japón.", "link": "#", "time": "En línea"}
+            {"source": "Mesa Divisas", "title": "Inversores evalúan diferenciales de tasas entre Fed, BCE, BoE, BoJ y RBA.", "link": "#", "time": "En línea"}
         ]
     return news_items[:8]
 
-def get_central_banks(dxy_val, us10y_val):
-    usd_hawk = dxy_val >= 103.5 or us10y_val >= 4.1
+def get_central_banks(dxy_val, us10y_val, ccy_labels):
     return [
         {
             "bank": "FED (EE.UU.)",
             "currency": "USD",
-            "stance": "RESTRICTIVA (HAWKISH)" if usd_hawk else "NEUTRAL / CAUTA",
-            "bias": "BULLISH" if usd_hawk else "NEUTRAL",
-            "detail": f"DXY en {dxy_val} y bonos US10Y en {us10y_val}%. Prioridad en control de inflación y datos de empleo."
-        },
-        {
-            "bank": "BCE (Eurozona)",
-            "currency": "EUR",
-            "stance": "FLEXIBILIZACIÓN GRADUAL",
-            "bias": "BEARISH",
-            "detail": "Enfoque dependiente de datos ante desaceleración industrial europea; presión bajista frente a un USD firme."
+            "stance": f"USD {ccy_labels.get('USD', 'NEUTRAL')} · HAWKISH",
+            "bias": "BULLISH" if ccy_labels.get("USD") == "FUERTE" else ("BEARISH" if ccy_labels.get("USD") == "DÉBIL" else "NEUTRAL"),
+            "detail": f"Medido con DXY ({dxy_val}) + Bonos US10Y ({us10y_val}%) en 4H."
         },
         {
             "bank": "BoE (Reino Unido)",
             "currency": "GBP",
-            "stance": "CAUTELA EN RECORTES",
-            "bias": "NEUTRAL",
-            "detail": "Inflación persistente en servicios mantiene diferencial atractivo para la libra en cruces de rendimiento."
-        },
-        {
-            "bank": "BoJ (Japón)",
-            "currency": "JPY",
-            "stance": "NORMALIZACIÓN LENTA",
-            "bias": "BEARISH",
-            "detail": "Diferencial de tasas frente a EE.UU. y Europa sigue condicionando movimientos bruscos en USDJPY, GBPJPY y AUDJPY."
+            "stance": f"GBP {ccy_labels.get('GBP', 'NEUTRAL')} · CESTA 4H",
+            "bias": "BULLISH" if ccy_labels.get("GBP") == "FUERTE" else ("BEARISH" if ccy_labels.get("GBP") == "DÉBIL" else "NEUTRAL"),
+            "detail": "Medido por cesta ponderada GBPUSD + GBPJPY + GBPAUD en 4H y diferencial de tasas BoE."
         },
         {
             "bank": "RBA (Australia)",
             "currency": "AUD",
-            "stance": "VIGILANCIA DE INFLACIÓN",
-            "bias": "NEUTRAL",
-            "detail": "Sensible a materias primas, crecimiento asiático y diferencial de rendimiento frente al dólar estadounidense y el yen."
+            "stance": f"AUD {ccy_labels.get('AUD', 'NEUTRAL')} · RIESGO & CESTA",
+            "bias": "BULLISH" if ccy_labels.get("AUD") == "FUERTE" else ("BEARISH" if ccy_labels.get("AUD") == "DÉBIL" else "NEUTRAL"),
+            "detail": "Medido por cesta AUDUSD + AUDJPY + AUDNZD en 4H cruzado con apetito al riesgo (US500)."
+        },
+        {
+            "bank": "BCE (Eurozona)",
+            "currency": "EUR",
+            "stance": f"EUR {ccy_labels.get('EUR', 'NEUTRAL')} · CESTA 4H",
+            "bias": "BULLISH" if ccy_labels.get("EUR") == "FUERTE" else ("BEARISH" if ccy_labels.get("EUR") == "DÉBIL" else "NEUTRAL"),
+            "detail": "Medido por cesta EURUSD + EURJPY + EURAUD en 4H frente a política del BCE."
+        },
+        {
+            "bank": "BoJ (Japón)",
+            "currency": "JPY",
+            "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')} · CESTA YEN",
+            "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DÉBIL" else "NEUTRAL"),
+            "detail": "Medido por flujo inverso en cruces JPY (USDJPY, GBPJPY, EURJPY, AUDJPY) en 4H."
         }
     ]
 
-def calc_bias(candles):
-    if len(candles) < 6:
-        return "NEUTRAL"
-    first = candles[-6]["c"]
-    last = candles[-1]["c"]
-    if last > first * 1.0005:
-        return "SUBE"
-    if last < first * 0.9995:
-        return "BAJA"
-    return "NEUTRAL"
-
-def build_asset(cfg, usd_bias):
+def build_asset(cfg, candles_bundle, raw_strength, ccy_labels):
     try:
         sym = cfg["symbol"]
         dec = cfg["decimals"]
         pip = cfg["pip"]
 
-        c_1d = get_candles(cfg["yf"], "3mo", "1d", dec, 45)
-        c_4h_raw = get_candles(cfg["yf"], "1mo", "1h", dec, 180)
-        c_4h = []
-        if c_4h_raw:
-            for i in range(0, len(c_4h_raw), 4):
-                chunk = c_4h_raw[i:i+4]
-                c_4h.append({
-                    "t": chunk[0]["t"],
-                    "o": chunk[0]["o"],
-                    "h": max(x["h"] for x in chunk),
-                    "l": min(x["l"] for x in chunk),
-                    "c": chunk[-1]["c"],
-                })
-            c_4h = c_4h[-45:]
-        c_1h = get_candles(cfg["yf"], "10d", "1h", dec, 45)
+        c_1d = candles_bundle.get("1d", [])
+        c_4h = candles_bundle.get("4h", [])
+        c_1h = candles_bundle.get("1h", [])
 
         if not c_1h and c_1d:
             c_1h = c_1d[-30:]
         if not c_4h and c_1d:
             c_4h = c_1d[-30:]
         if not c_1h:
-            print(f"Omitido {sym}: sin velas disponibles.")
             return None
 
         price = c_1h[-1]["c"]
         prev_close = c_1d[-2]["c"] if len(c_1d) >= 2 else c_1h[0]["o"]
         chg_day = round(((price - prev_close) / prev_close) * 100, 2) if prev_close else 0.0
 
-        b_d = calc_bias(c_1d)
-        b_4h = calc_bias(c_4h)
-        b_1h = calc_bias(c_1h)
+        # 1. PONDERACIÓN ESTRUCTURAL POR JERARQUÍA DE TEMPORALIDADES (1D=3, 4H=2, 1H=1)
+        b_d = calc_bias(c_1d, 6, 0.0010)
+        b_4h = calc_bias(c_4h, 6, 0.0008)
+        b_1h = calc_bias(c_1h, 6, 0.0006)
 
-        score_up = (1 if b_d == "SUBE" else 0) + (1 if b_4h == "SUBE" else 0) + (1 if b_1h == "SUBE" else 0)
-        score_dn = (1 if b_d == "BAJA" else 0) + (1 if b_4h == "BAJA" else 0) + (1 if b_1h == "BAJA" else 0)
-        chart_bias = "SUBE" if score_up >= score_dn else "BAJA"
+        w_up = (3 if b_d == "SUBE" else 0) + (2 if b_4h == "SUBE" else 0) + (1 if b_1h == "SUBE" else 0)
+        w_dn = (3 if b_d == "BAJA" else 0) + (2 if b_4h == "BAJA" else 0) + (1 if b_1h == "BAJA" else 0)
+
+        shift = detect_structure_shift(c_1h)
+        if shift["choch"] == "BULLISH_CHOCH" or shift["sweep"] == "SSL_SWEEP_BUY":
+            w_up += 2
+        elif shift["choch"] == "BEARISH_CHOCH" or shift["sweep"] == "BSL_SWEEP_SELL":
+            w_dn += 2
+
+        chart_bias = "SUBE" if w_up >= w_dn else "BAJA"
+
+        # 2. CONFLUENCIA MACROECONÓMICA MULTIDIVISA (BASE VS QUOTE EN 4H)
+        base_ccy = cfg["base"]
+        quote_ccy = cfg["quote"]
+        if cfg["type"] == "index":
+            macro_diff = raw_strength.get("BTC", 0.0)
+            macro_dir = "SUBE" if macro_diff > 0.10 else ("BAJA" if macro_diff < -0.10 else "NEUTRAL")
+            macro_detail = f"Apetito al riesgo US500 y rendimiento USD ({ccy_labels.get('USD', 'NEUTRAL')})."
+        else:
+            b_str = raw_strength.get(base_ccy, 0.0)
+            q_str = raw_strength.get(quote_ccy, 0.0)
+            macro_diff = b_str - q_str
+            macro_dir = "SUBE" if macro_diff > 0.12 else ("BAJA" if macro_diff < -0.12 else "NEUTRAL")
+            macro_detail = f"{base_ccy} ({ccy_labels.get(base_ccy, 'NEUTRAL')}) vs {quote_ccy} ({ccy_labels.get(quote_ccy, 'NEUTRAL')}) en cesta 4H."
 
         recent = c_1h[-24:]
         intraday_high = max(x["h"] for x in recent)
@@ -197,54 +320,72 @@ def build_asset(cfg, usd_bias):
 
         if chart_bias == "SUBE":
             direction = "BUY"
-            ob_low = round(min(x["l"] for x in recent[-12:]), dec)
-            ob_high = round(ob_low + (12 * pip), dec)
+            bear_candles = [x for x in c_1h[-10:-1] if x["c"] < x["o"]]
+            if bear_candles:
+                ob_c = bear_candles[-1]
+                ob_low = round(ob_c["l"], dec)
+                ob_high = round(max(ob_c["h"], ob_low + 8 * pip), dec)
+            else:
+                ob_low = round(min(x["l"] for x in recent[-10:]), dec)
+                ob_high = round(ob_low + (12 * pip), dec)
             entry = round((ob_low + ob_high) / 2.0, dec)
-            if price < entry:
-                entry = round(price - (6 * pip), dec)
-                ob_low = round(entry - (5 * pip), dec)
-                ob_high = round(entry + (5 * pip), dec)
+            if price <= ob_low:
+                entry = round(price - (5 * pip), dec)
+                ob_low = round(entry - (4 * pip), dec)
+                ob_high = round(entry + (4 * pip), dec)
             risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
-            sl = round(entry - risk, dec)
-            tp1 = round(entry + (risk * 2.0), dec)
-            tp2 = round(entry + (risk * 3.0), dec)
-            signal_tag = "COMPRA OB" if price > eq_50 * 0.998 else "RE-ENTRADA OB"
+            sl = round(ob_low - (4 * pip), dec)
+            if (entry - sl) < 10 * pip:
+                sl = round(entry - risk, dec)
+            actual_risk = abs(entry - sl)
+            tp1 = round(entry + (actual_risk * 2.0), dec)
+            tp2 = round(entry + (actual_risk * 3.0), dec)
+            in_good_zone = price <= eq_50 * 1.001
+            signal_tag = "CHoCH ALCISTA · OB" if shift["choch"] == "BULLISH_CHOCH" else ("COMPRA OB" if in_good_zone else "RE-ENTRADA OB")
         else:
             direction = "SELL"
-            ob_high = round(max(x["h"] for x in recent[-12:]), dec)
-            ob_low = round(ob_high - (12 * pip), dec)
+            bull_candles = [x for x in c_1h[-10:-1] if x["c"] > x["o"]]
+            if bull_candles:
+                ob_c = bull_candles[-1]
+                ob_high = round(ob_c["h"], dec)
+                ob_low = round(min(ob_c["l"], ob_high - 8 * pip), dec)
+            else:
+                ob_high = round(max(x["h"] for x in recent[-10:]), dec)
+                ob_low = round(ob_high - (12 * pip), dec)
             entry = round((ob_low + ob_high) / 2.0, dec)
-            if price > entry:
-                entry = round(price + (6 * pip), dec)
-                ob_high = round(entry + (5 * pip), dec)
-                ob_low = round(entry - (5 * pip), dec)
+            if price >= ob_high:
+                entry = round(price + (5 * pip), dec)
+                ob_high = round(entry + (4 * pip), dec)
+                ob_low = round(entry - (4 * pip), dec)
             risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
-            sl = round(entry + risk, dec)
-            tp1 = round(entry - (risk * 2.0), dec)
-            tp2 = round(entry - (risk * 3.0), dec)
-            signal_tag = "VENTA OB" if price < eq_50 * 1.002 else "RE-ENTRADA OB"
+            sl = round(ob_high + (4 * pip), dec)
+            if (sl - entry) < 10 * pip:
+                sl = round(entry + risk, dec)
+            actual_risk = abs(sl - entry)
+            tp1 = round(entry - (actual_risk * 2.0), dec)
+            tp2 = round(entry - (actual_risk * 3.0), dec)
+            in_good_zone = price >= eq_50 * 0.999
+            signal_tag = "CHoCH BAJISTA · OB" if shift["choch"] == "BEARISH_CHOCH" else ("VENTA OB" if in_good_zone else "RE-ENTRADA OB")
 
-        macro_dir = "NEUTRAL"
-        if cfg["quote"] == "USD":
-            macro_dir = "BAJA" if usd_bias == "SUBE" else ("SUBE" if usd_bias == "BAJA" else "NEUTRAL")
-        elif cfg["base"] == "USD":
-            macro_dir = usd_bias
-
-        if macro_dir == "NEUTRAL" or macro_dir == chart_bias:
+        # 3. PUNTAJE DINÁMICO REAL (EVITA SALTOS ARTIFICIALES DE 72 A 84)
+        dominant_w = max(w_up, w_dn)
+        if macro_dir == chart_bias:
             alignment = "ALIGNED"
-            conf_score = 84 if macro_dir == chart_bias else 72
+            conf_score = min(94, 68 + (dominant_w * 3) + (4 if in_good_zone else 0))
             verdict_title = "VAN JUNTOS · CONFLUENCIA"
-            verdict_sub = f"Macro y gráfico apuntan a {chart_bias}"
+            verdict_sub = f"Cesta macro ({macro_dir}) y estructura mayor ({chart_bias}) alineadas"
+        elif macro_dir == "NEUTRAL":
+            alignment = "ALIGNED"
+            conf_score = min(79, 56 + (dominant_w * 3) + (3 if in_good_zone else 0))
+            verdict_title = "ESTRUCTURA MANDA · MACRO PLANA"
+            verdict_sub = f"Jerarquía 1D/4H apunta a {chart_bias} · Macro en rango"
         else:
             alignment = "OPPOSED"
-            conf_score = 38
+            conf_score = max(32, 48 - (dominant_w * 2))
             verdict_title = "CONTRADICCIÓN · TESIS ROTA"
-            verdict_sub = f"Macro sugiere {macro_dir}, gráfico {chart_bias}"
+            verdict_sub = f"Flujo macro sugiere {macro_dir}, gráfico {chart_bias}"
 
-        macro_reason = (
-            f"DXY con sesgo {usd_bias}. "
-            + ("Flujo institucional respalda la dirección técnica." if alignment == "ALIGNED" else "Divergencia entre rendimiento del dólar y estructura intradía.")
-        )
+        macro_reason = f"{macro_detail} Jerarquía técnica (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h})."
 
         return {
             "symbol": sym,
@@ -286,20 +427,40 @@ def build_asset(cfg, usd_bias):
 
 def main():
     now_utc = datetime.now(timezone.utc)
-    dxy_candles = get_candles("DX-Y.NYB", "10d", "1h", 2, 24)
-    us10y_candles = get_candles("^TNX", "10d", "1h", 2, 24)
 
-    dxy_val = dxy_candles[-1]["c"] if dxy_candles else 104.20
-    us10y_val = us10y_candles[-1]["c"] if us10y_candles else 4.25
-    usd_bias = calc_bias(dxy_candles) if dxy_candles else "NEUTRAL"
+    # Descargar DXY y US10Y en 4H para fuerza real del USD
+    dxy_1h_long = get_candles("DX-Y.NYB", "1mo", "1h", 2, 180)
+    us10y_1h_long = get_candles("^TNX", "1mo", "1h", 2, 180)
+    dxy_4h = group_4h(dxy_1h_long)
+    us10y_4h = group_4h(us10y_1h_long)
+
+    dxy_val = dxy_4h[-1]["c"] if dxy_4h else 104.20
+    us10y_val = us10y_4h[-1]["c"] if us10y_4h else 4.25
+
+    # Precargar velas de todos los activos para construir las cestas AUD, GBP, EUR y JPY
+    bundles = {}
+    c4_map = {}
+    for cfg in ASSETS_CONFIG:
+        sym = cfg["symbol"]
+        dec = cfg["decimals"]
+        c_1d = get_candles(cfg["yf"], "3mo", "1d", dec, 45)
+        c_1h_long = get_candles(cfg["yf"], "1mo", "1h", dec, 180)
+        c_4h = group_4h(c_1h_long)
+        c_1h = c_1h_long[-45:] if c_1h_long else []
+        bundles[sym] = {"1d": c_1d, "4h": c_4h, "1h": c_1h}
+        c4_map[sym] = c_4h
+
+    raw_strength, ccy_labels, spx_chg = compute_currency_strength_matrix(
+        c4_map, dxy_4h, us10y_4h, c4_map.get("US500", [])
+    )
 
     assets = []
     for cfg in ASSETS_CONFIG:
-        item = build_asset(cfg, usd_bias)
+        item = build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels)
         if item:
             assets.append(item)
 
-    banks = get_central_banks(dxy_val, us10y_val)
+    banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
     news = fetch_live_news()
 
     payload = {
@@ -307,8 +468,8 @@ def main():
         "brief": {
             "dxy": dxy_val,
             "us10y": us10y_val,
-            "headline": f"DXY en {dxy_val} ({usd_bias}) · Rendimiento Bonos US10Y en {us10y_val}%",
-            "summary": f"Telemetría macro actualizada sobre {len(assets)} activos (incluyendo pares AUD y GBP). El índice del dólar presenta sesgo {usd_bias}."
+            "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}",
+            "summary": f"Matriz multidivisa 4H activa sobre {len(assets)} activos: USD ({ccy_labels.get('USD')}), GBP ({ccy_labels.get('GBP')}), AUD ({ccy_labels.get('AUD')}), EUR ({ccy_labels.get('EUR')}), JPY ({ccy_labels.get('JPY')}) y riesgo US500 ({spx_chg:+.2f}%)."
         },
         "banks": banks,
         "news": news,
@@ -324,7 +485,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos, {len(banks)} bancos y {len(news)} noticias guardados en data.json.")
+    print(f"OK: {len(assets)} activos con matriz multidivisa (USD/GBP/AUD/EUR/JPY) guardados en data.json.")
 
 if __name__ == "__main__":
     main()
