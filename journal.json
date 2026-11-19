@@ -1,5 +1,12 @@
 [
   {
+    "pair": "EURUSD",
+    "dir": "VENTA",
+    "res": "LOSS",
+    "note": "Mala",
+    "date": "2026-11-19 12:16 UTC"
+  },
+  {
     "pair": "NZDUSD",
     "dir": "VENTA",
     "res": "LOSS",
