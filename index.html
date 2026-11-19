@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.7 LIVE</title>
+  <title>ORÁCULO · Cabina v6.8 LIVE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -195,7 +195,7 @@
         <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (17)</button>
         <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
         <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 CURSO F.R.I.D.A.Y.</button>
-        <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO & NOTICIAS</button>
+        <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO, BANCOS & NOTICIAS</button>
         <button onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
       </div>
       <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
@@ -225,7 +225,7 @@
     <!-- SUBPANEL ULTRÓN -->
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-b border-slate-800 pb-2">
-        <span class="font-bold text-slate-200">LEYENDA DE ESTADOS (ACTUALIZACIÓN EN VIVO):</span>
+        <span class="font-bold text-slate-200">LEYENDA DE ESTADOS (ACTUALIZACIÓN INTRADÍA EN VIVO):</span>
         <div class="flex flex-wrap gap-3">
           <span>🟢 TP1 Alcanzado</span>
           <span>🔵 Re-entrada Activa</span>
@@ -280,12 +280,27 @@
       <div id="panel-lessons-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
 
-    <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-4">
-      <div class="space-y-1">
+    <!-- SUBPANEL VISIÓN: MACRO, RADAR DE BANCOS CENTRALES, CALENDARIO Y NOTICIAS -->
+    <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-5">
+      <div class="space-y-1 border-b border-slate-800 pb-3">
         <h3 id="pv-headline" class="font-bold text-sky-300 text-sm">--</h3>
         <p id="pv-summary" class="text-xs text-slate-300 leading-relaxed">--</p>
       </div>
-      <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
+
+      <div class="space-y-2">
+        <h4 class="font-hud text-xs font-bold text-amber-400 tracking-wider">🏦 RADAR DE BANCOS CENTRALES & POLÍTICA MONETARIA</h4>
+        <div id="pv-banks" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="font-hud text-xs font-bold text-cyan-400 tracking-wider">📅 CALENDARIO DE SESIONES E IMPACTO</h4>
+        <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="font-hud text-xs font-bold text-emerald-400 tracking-wider">📰 TITULARES DE MERCADO EN VIVO</h4>
+        <div id="pv-news" class="space-y-2 text-xs"></div>
+      </div>
     </section>
 
     <!-- SUBPANEL DIARIO KAREN CON SINCRONIZACIÓN AUTOMÁTICA PC <-> CELULAR -->
@@ -403,61 +418,58 @@
     }
 
     // =========================================================
-    // MOTOR DE PRECIOS EN TIEMPO REAL (CADA 10 SEGUNDOS)
+    // MOTOR DE PRECIOS EN TIEMPO REAL (FEED INTRADÍA REAL)
     // =========================================================
+    const YF_MAP = {
+      'XAUUSD': 'GC=F', 'EURUSD': 'EURUSD=X', 'USDJPY': 'JPY=X',
+      'GBPUSD': 'GBPUSD=X', 'GBPJPY': 'GBPJPY=X', 'GBPAUD': 'GBPAUD=X',
+      'GBPNZD': 'GBPNZD=X', 'GBPCAD': 'GBPCAD=X', 'AUDUSD': 'AUDUSD=X',
+      'NZDUSD': 'NZDUSD=X', 'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X',
+      'EURJPY': 'EURJPY=X', 'US30': '^DJI', 'USTEC': '^IXIC', 'US500': '^GSPC'
+    };
+
+    async function fetchLiveSymbol(sym) {
+      if (sym === 'BTCUSD') {
+        const r = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+        if (r.ok) { const j = await r.json(); return parseFloat(j.price); }
+        return null;
+      }
+      const yf = YF_MAP[sym];
+      if (!yf) return null;
+      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yf)}?interval=1m&range=1d`;
+      const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`);
+      if (!r.ok) return null;
+      const j = await r.json();
+      const meta = j?.chart?.result?.[0]?.meta;
+      return meta?.regularMarketPrice || null;
+    }
+
     async function refreshLivePrices() {
       if (!data || !data.assets || !data.assets.length) return;
       let updatedAny = false;
 
-      try {
-        const bRes = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
-        if (bRes.ok) {
-          const bJson = await bRes.json();
-          const btcPrice = parseFloat(bJson.price);
-          const btcAsset = data.assets.find(a => a.symbol === 'BTCUSD');
-          if (btcAsset && btcPrice > 0) {
-            btcAsset.price = Number(btcPrice.toFixed(btcAsset.decimals));
-            updatedAny = true;
-          }
-        }
-      } catch (e) {}
+      const priority = [selectedSymbol, 'EURUSD', 'XAUUSD', 'BTCUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'US30', 'USTEC'];
+      const uniqueSyms = [...new Set([...priority, ...data.assets.map(a => a.symbol)])];
 
-      try {
-        const fxRes = await fetch('https://open.er-api.com/v6/latest/USD');
-        if (fxRes.ok) {
-          const fxJson = await fxRes.json();
-          const r = fxJson.rates || {};
-          const mapLive = {
-            'EURUSD': r.EUR ? 1 / r.EUR : null,
-            'GBPUSD': r.GBP ? 1 / r.GBP : null,
-            'AUDUSD': r.AUD ? 1 / r.AUD : null,
-            'NZDUSD': r.NZD ? 1 / r.NZD : null,
-            'USDJPY': r.JPY || null,
-            'USDCAD': r.CAD || null,
-            'USDCHF': r.CHF || null,
-            'GBPJPY': (r.GBP && r.JPY) ? r.JPY / r.GBP : null,
-            'GBPAUD': (r.GBP && r.AUD) ? r.AUD / r.GBP : null,
-            'GBPNZD': (r.GBP && r.NZD) ? r.NZD / r.GBP : null,
-            'GBPCAD': (r.GBP && r.CAD) ? r.CAD / r.GBP : null,
-            'EURJPY': (r.EUR && r.JPY) ? r.JPY / r.EUR : null,
-            'XAUUSD': r.XAU ? 1 / r.XAU : null
-          };
-          data.assets.forEach(a => {
-            const p = mapLive[a.symbol];
-            if (p && p > 0) {
-              if (a.symbol === 'XAUUSD' && Math.abs(p - a.price) / a.price > 0.08) return;
-              a.price = Number(p.toFixed(a.decimals));
-              if (a.candles && a.candles['1h'] && a.candles['1h'].length) {
-                const lastC = a.candles['1h'][a.candles['1h'].length - 1];
+      await Promise.all(uniqueSyms.map(async (sym) => {
+        const a = data.assets.find(x => x.symbol === sym);
+        if (!a) return;
+        try {
+          const liveP = await fetchLiveSymbol(sym);
+          if (liveP && liveP > 0) {
+            a.price = Number(liveP.toFixed(a.decimals));
+            ['1h', '4h', '1d'].forEach(tf => {
+              if (a.candles && a.candles[tf] && a.candles[tf].length) {
+                const lastC = a.candles[tf][a.candles[tf].length - 1];
                 lastC.c = a.price;
                 if (a.price > lastC.h) lastC.h = a.price;
                 if (a.price < lastC.l) lastC.l = a.price;
               }
-              updatedAny = true;
-            }
-          });
-        }
-      } catch (e) {}
+            });
+            updatedAny = true;
+          }
+        } catch (e) {}
+      }));
 
       if (updatedAny) {
         const badge = document.getElementById('live-feed-badge');
@@ -947,8 +959,8 @@
         typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos en tiempo real incluyendo XAUUSD: tenemos ${tp1Count} en TP1, ${reCount} en re-entrada y ${broken.length} alertas de tesis rota. ¿Desea el reporte?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
-        document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO';
-        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue el rendimiento. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, el equilibrio es delicado. ¿Analizamos el panorama macro?`);
+        document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & BANCOS';
+        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue la tasa real. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he actualizado el radar de bancos centrales y titulares. ¿Analizamos el panorama macro?`);
       } else if (key === 'ultron') {
         const target = nearest || (data && data.assets[0]);
         document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
@@ -984,7 +996,8 @@
         const aligned = getAlignedAssets().map(x => x.symbol);
         typeAgentDialogue(`En TP1 (verde): ${tp1s.length ? tp1s.join(', ') : 'ninguno'}. En Re-entrada (azul): ${res.length ? res.join(', ') : 'ninguno'}. Confluencia fuerte: ${aligned.length ? aligned.join(', ') : 'ninguno'}.`);
       } else if (currentAgent === 'vision') {
-        typeAgentDialogue(`${data.brief.headline}. ${data.brief.summary}`);
+        const topNews = (data.news && data.news.length) ? ` Titular destacado: ${data.news[0].title}.` : '';
+        typeAgentDialogue(`${data.brief.headline}. ${data.brief.summary}${topNews}`);
       } else if (currentAgent === 'ultron') {
         const n = getNearestAsset();
         const d = getAssetUnitsDist(n);
@@ -1123,9 +1136,43 @@
       renderPanelJarvis();
       renderPanelUltron();
       renderPanelCourse();
+
       document.getElementById('pv-headline').textContent = data.brief.headline;
       document.getElementById('pv-summary').textContent = data.brief.summary;
-      document.getElementById('pv-calendar').innerHTML = data.calendar.map(ev => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="flex justify-between text-[10px] text-sky-400"><span>${ev.date} ${ev.time} · ${ev.currency}</span><span>${ev.impact}</span></div><div class="font-bold text-white mt-0.5">${ev.title}</div></div>`).join('');
+
+      const banksList = data.banks || [
+        { bank: "FED (EE.UU.)", currency: "USD", stance: "RESTRICTIVA (HAWKISH)", bias: "BULLISH", detail: `DXY en ${data.brief.dxy} · Bonos US10Y en ${data.brief.us10y}%.` },
+        { bank: "BCE (Eurozona)", currency: "EUR", stance: "FLEXIBILIZACIÓN GRADUAL", bias: "BEARISH", detail: "Presión bajista en EUR frente a diferenciales de rendimiento." }
+      ];
+      document.getElementById('pv-banks').innerHTML = banksList.map(b => `
+        <div class="bg-[#050811] border border-slate-800 rounded-lg p-3 space-y-1">
+          <div class="flex items-center justify-between">
+            <strong class="text-white">${b.bank}</strong>
+            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${b.bias === 'BULLISH' ? 'bg-emerald-500/20 text-emerald-300' : (b.bias === 'BEARISH' ? 'bg-red-500/20 text-red-300' : 'bg-slate-800 text-slate-300')}">${b.stance}</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">${b.detail}</p>
+        </div>
+      `).join('');
+
+      document.getElementById('pv-calendar').innerHTML = (data.calendar || []).map(ev => `
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+          <div class="flex justify-between text-[10px] text-sky-400"><span>${ev.date} ${ev.time} · ${ev.currency}</span><span>${ev.impact}</span></div>
+          <div class="font-bold text-white mt-0.5">${ev.title}</div>
+        </div>
+      `).join('');
+
+      const newsList = data.news || [
+        { source: "Radar Institucional", title: "Sin titulares RSS recientes; ejecute el flujo de GitHub Actions para refrescar noticias.", link: "#", time: "En espera" }
+      ];
+      document.getElementById('pv-news').innerHTML = newsList.map(n => `
+        <a href="${n.link}" target="_blank" rel="noopener noreferrer" class="block bg-[#050811] hover:border-sky-500/50 border border-slate-800 rounded-lg p-3 transition">
+          <div class="flex justify-between text-[10px] text-emerald-400 mb-1">
+            <span>${n.source}</span>
+            <span class="text-slate-500">${n.time}</span>
+          </div>
+          <div class="font-bold text-slate-200">${n.title}</div>
+        </a>
+      `).join('');
     }
 
     function renderPanelJarvis() {
