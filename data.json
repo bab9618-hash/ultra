@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-11-20 13:11 UTC",
+  "last_updated": "2026-11-20 13:27 UTC",
   "brief": {
-    "dxy": 103.7,
+    "dxy": 103.64,
     "us10y": 5.05,
-    "headline": "USD DÉBIL (DXY 103.7 · US10Y 5.05%) | GBP DÉBIL | AUD DÉBIL",
+    "headline": "USD DÉBIL (DXY 103.64 · US10Y 5.05%) | GBP DÉBIL | AUD DÉBIL",
     "summary": "Matriz híbrida 4H/1D (60%/40%), alerta preventiva de agotamiento, re-entrada opcional y giros con respaldo macro sobre 22 activos."
   },
   "banks": [
@@ -12,7 +12,7 @@
       "currency": "USD",
       "stance": "USD DÉBIL",
       "bias": "BEARISH",
-      "detail": "DXY (103.7) + Bonos US10Y (5.05%) en cesta híbrida 4H/1D."
+      "detail": "DXY (103.64) + Bonos US10Y (5.05%) en cesta híbrida 4H/1D."
     },
     {
       "bank": "BoE (Reino Unido)",
@@ -129,8 +129,8 @@
       "type": "metal",
       "pip": 0.1,
       "decimals": 2,
-      "price": 3577.5,
-      "chg_day": -2.93,
+      "price": 3571.2,
+      "chg_day": -3.1,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -143,6 +143,7 @@
       "ob_low": 3595.5,
       "macro_reason": "XAU (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -472,7 +473,7 @@
             "o": 3633.8,
             "h": 3638.1,
             "l": 3515.0,
-            "c": 3578.5
+            "c": 3571.2
           }
         ],
         "4h": [
@@ -789,7 +790,7 @@
             "o": 3568.9,
             "h": 3596.7,
             "l": 3566.7,
-            "c": 3577.5
+            "c": 3571.2
           }
         ],
         "1h": [
@@ -1104,9 +1105,9 @@
           {
             "t": 1795179600,
             "o": 3574.5,
-            "h": 3580.8,
-            "l": 3572.7,
-            "c": 3577.5
+            "h": 3582.4,
+            "l": 3568.5,
+            "c": 3571.2
           }
         ]
       }
@@ -1116,8 +1117,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.09963,
-      "chg_day": 0.22,
+      "price": 1.10023,
+      "chg_day": 0.28,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "BAJA",
@@ -1130,6 +1131,7 @@
       "ob_low": 1.09613,
       "macro_reason": "EUR (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:SUBE, 1H:SUBE). Giro detectado (BULLISH_CHOCH) con respaldo macro.",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
@@ -1141,8 +1143,8 @@
         "signal_tag": "RE-ENTRADA OB (OPCIONAL)",
         "entry": 1.09653,
         "sl": 1.09533,
-        "tp1": 1.09893,
-        "tp2": 1.10013
+        "tp1": 1.10143,
+        "tp2": 1.10263
       },
       "candles": {
         "1d": [
@@ -1457,9 +1459,9 @@
           {
             "t": 1795132800,
             "o": 1.09709,
-            "h": 1.09963,
+            "h": 1.10023,
             "l": 1.09613,
-            "c": 1.09963
+            "c": 1.10023
           }
         ],
         "4h": [
@@ -1774,9 +1776,9 @@
           {
             "t": 1795168800,
             "o": 1.09757,
-            "h": 1.09963,
+            "h": 1.10023,
             "l": 1.09613,
-            "c": 1.09963
+            "c": 1.10023
           }
         ],
         "1h": [
@@ -2091,9 +2093,9 @@
           {
             "t": 1795179600,
             "o": 1.09866,
-            "h": 1.09963,
+            "h": 1.10023,
             "l": 1.09866,
-            "c": 1.09963
+            "c": 1.10023
           }
         ]
       }
@@ -2103,8 +2105,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 158.63,
-      "chg_day": -0.47,
+      "price": 158.589,
+      "chg_day": -0.5,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -2112,11 +2114,12 @@
         "h1": "BAJA"
       },
       "intraday_high": 159.946,
-      "intraday_low": 158.612,
+      "intraday_low": 158.575,
       "ob_high": 159.359,
       "ob_low": 159.239,
       "macro_reason": "USD (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -2127,9 +2130,9 @@
         "direction": "SELL",
         "signal_tag": "CHoCH BAJISTA · OB",
         "entry": 159.299,
-        "sl": 159.592,
-        "tp1": 158.713,
-        "tp2": 158.42
+        "sl": 159.601,
+        "tp1": 158.695,
+        "tp2": 158.393
       },
       "candles": {
         "1d": [
@@ -2445,8 +2448,8 @@
             "t": 1795132800,
             "o": 159.622,
             "h": 159.841,
-            "l": 158.612,
-            "c": 158.63
+            "l": 158.575,
+            "c": 158.589
           }
         ],
         "4h": [
@@ -2762,8 +2765,8 @@
             "t": 1795168800,
             "o": 158.713,
             "h": 158.983,
-            "l": 158.612,
-            "c": 158.63
+            "l": 158.575,
+            "c": 158.589
           }
         ],
         "1h": [
@@ -3079,8 +3082,8 @@
             "t": 1795179600,
             "o": 158.75,
             "h": 158.756,
-            "l": 158.612,
-            "c": 158.63
+            "l": 158.575,
+            "c": 158.589
           }
         ]
       }
@@ -3090,8 +3093,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.3128,
-      "chg_day": -0.14,
+      "price": 1.31268,
+      "chg_day": -0.15,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "BAJA",
@@ -3104,6 +3107,7 @@
       "ob_low": 1.30808,
       "macro_reason": "GBP (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:SUBE, 1H:SUBE). Giro detectado (BULLISH_CHOCH) con respaldo macro.",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
@@ -3433,7 +3437,7 @@
             "o": 1.30938,
             "h": 1.3128,
             "l": 1.30808,
-            "c": 1.3128
+            "c": 1.31268
           }
         ],
         "4h": [
@@ -3750,7 +3754,7 @@
             "o": 1.31032,
             "h": 1.3128,
             "l": 1.3095,
-            "c": 1.3128
+            "c": 1.31268
           }
         ],
         "1h": [
@@ -4067,7 +4071,7 @@
             "o": 1.31148,
             "h": 1.3128,
             "l": 1.31148,
-            "c": 1.3128
+            "c": 1.31268
           }
         ]
       }
@@ -4077,22 +4081,23 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 208.252,
-      "chg_day": -0.61,
+      "price": 208.152,
+      "chg_day": -0.66,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
         "h4": "BAJA",
-        "h1": "NEUTRAL"
+        "h1": "BAJA"
       },
       "intraday_high": 210.497,
       "intraday_low": 207.922,
       "ob_high": 208.91,
       "ob_low": 208.79,
-      "macro_reason": "GBP (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:NEUTRAL).",
+      "macro_reason": "GBP (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
-        "score": 83,
+        "score": 86,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
         "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
@@ -4420,7 +4425,7 @@
             "o": 208.936,
             "h": 209.192,
             "l": 207.922,
-            "c": 208.252
+            "c": 208.152
           }
         ],
         "4h": [
@@ -4737,7 +4742,7 @@
             "o": 207.943,
             "h": 208.376,
             "l": 207.922,
-            "c": 208.252
+            "c": 208.152
           }
         ],
         "1h": [
@@ -5053,8 +5058,8 @@
             "t": 1795179600,
             "o": 208.153,
             "h": 208.315,
-            "l": 208.134,
-            "c": 208.252
+            "l": 208.117,
+            "c": 208.152
           }
         ]
       }
@@ -5064,8 +5069,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.96934,
-      "chg_day": 0.57,
+      "price": 1.96903,
+      "chg_day": 0.55,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "SUBE",
@@ -5078,6 +5083,7 @@
       "ob_low": 1.96199,
       "macro_reason": "GBP (DÉBIL) vs AUD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:SUBE, 1H:SUBE).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -5407,7 +5413,7 @@
             "o": 1.9653,
             "h": 1.97051,
             "l": 1.96199,
-            "c": 1.96934
+            "c": 1.96903
           }
         ],
         "4h": [
@@ -5722,9 +5728,9 @@
           {
             "t": 1795168800,
             "o": 1.96832,
-            "h": 1.96945,
+            "h": 1.96965,
             "l": 1.96529,
-            "c": 1.96934
+            "c": 1.96903
           }
         ],
         "1h": [
@@ -6039,9 +6045,9 @@
           {
             "t": 1795179600,
             "o": 1.96691,
-            "h": 1.96945,
+            "h": 1.96965,
             "l": 1.96686,
-            "c": 1.96934
+            "c": 1.96903
           }
         ]
       }
@@ -6051,22 +6057,23 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 2.38462,
-      "chg_day": -0.45,
+      "price": 2.38407,
+      "chg_day": -0.47,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "NEUTRAL",
-        "h4": "SUBE",
+        "h4": "NEUTRAL",
         "h1": "SUBE"
       },
       "intraday_high": 2.3899,
       "intraday_low": 2.37886,
       "ob_high": 2.38047,
       "ob_low": 2.37927,
-      "macro_reason": "GBP (DÉBIL) vs NZD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:NEUTRAL, 4H:SUBE, 1H:SUBE).",
+      "macro_reason": "GBP (DÉBIL) vs NZD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
-        "score": 40,
+        "score": 44,
         "alignment": "OPPOSED",
         "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
         "verdict_sub": "Macro en BAJA rechaza movimiento SUBE"
@@ -6394,7 +6401,7 @@
             "o": 2.38711,
             "h": 2.3899,
             "l": 2.37927,
-            "c": 2.38462
+            "c": 2.38407
           }
         ],
         "4h": [
@@ -6711,7 +6718,7 @@
             "o": 2.38205,
             "h": 2.38678,
             "l": 2.38021,
-            "c": 2.38462
+            "c": 2.38407
           }
         ],
         "1h": [
@@ -7027,8 +7034,8 @@
             "t": 1795179600,
             "o": 2.38351,
             "h": 2.38498,
-            "l": 2.38306,
-            "c": 2.38462
+            "l": 2.38209,
+            "c": 2.38407
           }
         ]
       }
@@ -7038,8 +7045,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.87792,
-      "chg_day": -0.3,
+      "price": 1.87724,
+      "chg_day": -0.34,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -7052,6 +7059,7 @@
       "ob_low": 1.87795,
       "macro_reason": "GBP (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 77,
         "alignment": "ALIGNED",
@@ -7381,7 +7389,7 @@
             "o": 1.87637,
             "h": 1.87915,
             "l": 1.87421,
-            "c": 1.87796
+            "c": 1.87724
           }
         ],
         "4h": [
@@ -7696,9 +7704,9 @@
           {
             "t": 1795168800,
             "o": 1.8763,
-            "h": 1.87807,
+            "h": 1.87808,
             "l": 1.87421,
-            "c": 1.87792
+            "c": 1.87724
           }
         ],
         "1h": [
@@ -8013,9 +8021,9 @@
           {
             "t": 1795179600,
             "o": 1.87567,
-            "h": 1.87807,
+            "h": 1.87808,
             "l": 1.87556,
-            "c": 1.87792
+            "c": 1.87724
           }
         ]
       }
@@ -8025,7 +8033,7 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.6668,
+      "price": 0.66676,
       "chg_day": -0.67,
       "chart_bias": "BAJA",
       "tf_bias": {
@@ -8039,6 +8047,7 @@
       "ob_low": 0.6672,
       "macro_reason": "AUD (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 77,
         "alignment": "ALIGNED",
@@ -8368,7 +8377,7 @@
             "o": 0.666,
             "h": 0.6684,
             "l": 0.66489,
-            "c": 0.6668
+            "c": 0.66676
           }
         ],
         "4h": [
@@ -8685,7 +8694,7 @@
             "o": 0.66613,
             "h": 0.66707,
             "l": 0.66582,
-            "c": 0.6668
+            "c": 0.66676
           }
         ],
         "1h": [
@@ -9001,8 +9010,8 @@
             "t": 1795179600,
             "o": 0.66689,
             "h": 0.66707,
-            "l": 0.6668,
-            "c": 0.6668
+            "l": 0.66671,
+            "c": 0.66676
           }
         ]
       }
@@ -9012,8 +9021,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 105.736,
-      "chg_day": -1.16,
+      "price": 105.708,
+      "chg_day": -1.19,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -9026,6 +9035,7 @@
       "ob_low": 106.272,
       "macro_reason": "AUD (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -9355,7 +9365,7 @@
             "o": 106.261,
             "h": 106.429,
             "l": 105.631,
-            "c": 105.736
+            "c": 105.708
           }
         ],
         "4h": [
@@ -9672,7 +9682,7 @@
             "o": 105.637,
             "h": 105.971,
             "l": 105.631,
-            "c": 105.736
+            "c": 105.708
           }
         ],
         "1h": [
@@ -9988,8 +9998,8 @@
             "t": 1795179600,
             "o": 105.81,
             "h": 105.845,
-            "l": 105.722,
-            "c": 105.736
+            "l": 105.662,
+            "c": 105.708
           }
         ]
       }
@@ -9999,8 +10009,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.95349,
-      "chg_day": -0.81,
+      "price": 0.95336,
+      "chg_day": -0.83,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -10013,6 +10023,7 @@
       "ob_low": 0.95559,
       "macro_reason": "AUD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -10342,7 +10353,7 @@
             "o": 0.95429,
             "h": 0.95679,
             "l": 0.95204,
-            "c": 0.95349
+            "c": 0.95336
           }
         ],
         "4h": [
@@ -10659,7 +10670,7 @@
             "o": 0.95322,
             "h": 0.95491,
             "l": 0.95227,
-            "c": 0.95349
+            "c": 0.95336
           }
         ],
         "1h": [
@@ -10975,8 +10986,8 @@
             "t": 1795179600,
             "o": 0.95349,
             "h": 0.95384,
-            "l": 0.95257,
-            "c": 0.95349
+            "l": 0.9524,
+            "c": 0.95336
           }
         ]
       }
@@ -10986,7 +10997,7 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.21071,
+      "price": 1.21068,
       "chg_day": -1.01,
       "chart_bias": "BAJA",
       "tf_bias": {
@@ -11000,6 +11011,7 @@
       "ob_low": 1.21247,
       "macro_reason": "AUD (DÉBIL) vs NZD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -11329,7 +11341,7 @@
             "o": 1.21448,
             "h": 1.21463,
             "l": 1.2098,
-            "c": 1.21071
+            "c": 1.21068
           }
         ],
         "4h": [
@@ -11646,7 +11658,7 @@
             "o": 1.21015,
             "h": 1.21288,
             "l": 1.2098,
-            "c": 1.21071
+            "c": 1.21068
           }
         ],
         "1h": [
@@ -11962,8 +11974,8 @@
             "t": 1795179600,
             "o": 1.21166,
             "h": 1.21167,
-            "l": 1.21059,
-            "c": 1.21071
+            "l": 1.21034,
+            "c": 1.21068
           }
         ]
       }
@@ -11973,8 +11985,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.64938,
-      "chg_day": 0.92,
+      "price": 1.64992,
+      "chg_day": 0.95,
       "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "SUBE",
@@ -11987,6 +11999,7 @@
       "ob_low": 1.64369,
       "macro_reason": "EUR (NEUTRAL) vs AUD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:SUBE, 1H:SUBE).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -12316,7 +12329,7 @@
             "o": 1.6469,
             "h": 1.65085,
             "l": 1.64369,
-            "c": 1.64938
+            "c": 1.64992
           }
         ],
         "4h": [
@@ -12631,9 +12644,9 @@
           {
             "t": 1795168800,
             "o": 1.64824,
-            "h": 1.64939,
+            "h": 1.65047,
             "l": 1.64446,
-            "c": 1.64938
+            "c": 1.64992
           }
         ],
         "1h": [
@@ -12948,9 +12961,9 @@
           {
             "t": 1795179600,
             "o": 1.64754,
-            "h": 1.64939,
+            "h": 1.65047,
             "l": 1.64729,
-            "c": 1.64938
+            "c": 1.64992
           }
         ]
       }
@@ -12960,8 +12973,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.55909,
-      "chg_day": -1.25,
+      "price": 0.55849,
+      "chg_day": -1.35,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -12969,24 +12982,25 @@
         "h1": "BAJA"
       },
       "intraday_high": 0.56586,
-      "intraday_low": 0.55853,
+      "intraday_low": 0.55781,
       "ob_high": 0.56284,
       "ob_low": 0.56164,
-      "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
+      "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro.",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
-        "score": 86,
+        "score": 90,
         "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
+        "verdict_title": "GIRO CONFIRMADO · MACRO + TÉCNICO",
         "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB",
+        "signal_tag": "TP1 CUMPLIDO · SIN RE-ENTRADA",
         "entry": 0.56224,
-        "sl": 0.56385,
-        "tp1": 0.55902,
-        "tp2": 0.55741
+        "sl": 0.56401,
+        "tp1": 0.5587,
+        "tp2": 0.55693
       },
       "candles": {
         "1d": [
@@ -13302,8 +13316,8 @@
             "t": 1795132800,
             "o": 0.56135,
             "h": 0.56284,
-            "l": 0.55853,
-            "c": 0.55909
+            "l": 0.55767,
+            "c": 0.55849
           }
         ],
         "4h": [
@@ -13619,8 +13633,8 @@
             "t": 1795168800,
             "o": 0.55984,
             "h": 0.5615,
-            "l": 0.55853,
-            "c": 0.55909
+            "l": 0.55781,
+            "c": 0.55849
           }
         ],
         "1h": [
@@ -13936,8 +13950,8 @@
             "t": 1795179600,
             "o": 0.56003,
             "h": 0.56015,
-            "l": 0.55853,
-            "c": 0.55909
+            "l": 0.55781,
+            "c": 0.55849
           }
         ]
       }
@@ -13947,33 +13961,34 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.55054,
-      "chg_day": 0.31,
-      "chart_bias": "BAJA",
+      "price": 0.55066,
+      "chg_day": 0.33,
+      "chart_bias": "SUBE",
       "tf_bias": {
         "daily": "BAJA",
-        "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h4": "SUBE",
+        "h1": "SUBE"
       },
       "intraday_high": 0.55288,
       "intraday_low": 0.54777,
-      "ob_high": 0.5513,
-      "ob_low": 0.5501,
-      "macro_reason": "NZD (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
+      "ob_high": 0.5493,
+      "ob_low": 0.5481,
+      "macro_reason": "NZD (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:SUBE, 1H:SUBE).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
-        "score": 40,
-        "alignment": "OPPOSED",
-        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
-        "verdict_sub": "Macro en SUBE rechaza movimiento BAJA"
+        "score": 77,
+        "alignment": "ALIGNED",
+        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
+        "verdict_sub": "Flujo macro (SUBE) respalda estructura (SUBE)"
       },
       "setup": {
-        "direction": "SELL",
-        "signal_tag": "VENTA OB",
-        "entry": 0.5507,
-        "sl": 0.5519,
-        "tp1": 0.5483,
-        "tp2": 0.5471
+        "direction": "BUY",
+        "signal_tag": "COMPRA OB",
+        "entry": 0.5487,
+        "sl": 0.5475,
+        "tp1": 0.5511,
+        "tp2": 0.5523
       },
       "candles": {
         "1d": [
@@ -14290,7 +14305,7 @@
             "o": 0.54834,
             "h": 0.5513,
             "l": 0.54777,
-            "c": 0.55054
+            "c": 0.55066
           }
         ],
         "4h": [
@@ -14605,9 +14620,9 @@
           {
             "t": 1795168800,
             "o": 0.5503,
-            "h": 0.5506,
+            "h": 0.55066,
             "l": 0.549,
-            "c": 0.55054
+            "c": 0.55066
           }
         ],
         "1h": [
@@ -14922,9 +14937,9 @@
           {
             "t": 1795179600,
             "o": 0.55042,
-            "h": 0.5506,
+            "h": 0.55066,
             "l": 0.55042,
-            "c": 0.55054
+            "c": 0.55066
           }
         ]
       }
@@ -14934,8 +14949,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.43056,
-      "chg_day": -0.18,
+      "price": 1.43035,
+      "chg_day": -0.19,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "SUBE",
@@ -14948,6 +14963,7 @@
       "ob_low": 1.43327,
       "macro_reason": "USD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro.",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
@@ -15276,8 +15292,8 @@
             "t": 1795132800,
             "o": 1.43368,
             "h": 1.43466,
-            "l": 1.4299,
-            "c": 1.43056
+            "l": 1.4296,
+            "c": 1.43035
           }
         ],
         "4h": [
@@ -15593,8 +15609,8 @@
             "t": 1795168800,
             "o": 1.43215,
             "h": 1.4332,
-            "l": 1.4299,
-            "c": 1.43056
+            "l": 1.4296,
+            "c": 1.43035
           }
         ],
         "1h": [
@@ -15910,8 +15926,8 @@
             "t": 1795179600,
             "o": 1.4304,
             "h": 1.43086,
-            "l": 1.4299,
-            "c": 1.43056
+            "l": 1.4296,
+            "c": 1.43035
           }
         ]
       }
@@ -15921,8 +15937,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.83882,
-      "chg_day": -0.55,
+      "price": 0.83788,
+      "chg_day": -0.66,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "SUBE",
@@ -15930,11 +15946,12 @@
         "h1": "BAJA"
       },
       "intraday_high": 0.8444,
-      "intraday_low": 0.83882,
+      "intraday_low": 0.83754,
       "ob_high": 0.84231,
       "ob_low": 0.84113,
       "macro_reason": "USD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro.",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
@@ -15945,9 +15962,9 @@
         "direction": "SELL",
         "signal_tag": "RE-ENTRADA OB (OPCIONAL)",
         "entry": 0.84172,
-        "sl": 0.84295,
-        "tp1": 0.83926,
-        "tp2": 0.83803
+        "sl": 0.84323,
+        "tp1": 0.83668,
+        "tp2": 0.83517
       },
       "candles": {
         "1d": [
@@ -16263,8 +16280,8 @@
             "t": 1795132800,
             "o": 0.84343,
             "h": 0.84434,
-            "l": 0.83875,
-            "c": 0.83882
+            "l": 0.83754,
+            "c": 0.83788
           }
         ],
         "4h": [
@@ -16580,8 +16597,8 @@
             "t": 1795168800,
             "o": 0.84113,
             "h": 0.84246,
-            "l": 0.83882,
-            "c": 0.83882
+            "l": 0.83754,
+            "c": 0.83788
           }
         ],
         "1h": [
@@ -16897,8 +16914,8 @@
             "t": 1795179600,
             "o": 0.84022,
             "h": 0.84032,
-            "l": 0.83882,
-            "c": 0.83882
+            "l": 0.83754,
+            "c": 0.83788
           }
         ]
       }
@@ -16908,8 +16925,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 174.409,
-      "chg_day": -0.26,
+      "price": 174.426,
+      "chg_day": -0.25,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -16922,6 +16939,7 @@
       "ob_low": 174.83,
       "macro_reason": "EUR (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:NEUTRAL).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 83,
         "alignment": "ALIGNED",
@@ -17251,7 +17269,7 @@
             "o": 175.096,
             "h": 175.344,
             "l": 174.0,
-            "c": 174.417
+            "c": 174.426
           }
         ],
         "4h": [
@@ -17566,9 +17584,9 @@
           {
             "t": 1795168800,
             "o": 174.131,
-            "h": 174.431,
+            "h": 174.495,
             "l": 174.0,
-            "c": 174.409
+            "c": 174.426
           }
         ],
         "1h": [
@@ -17883,9 +17901,9 @@
           {
             "t": 1795179600,
             "o": 174.353,
-            "h": 174.431,
+            "h": 174.495,
             "l": 174.323,
-            "c": 174.409
+            "c": 174.426
           }
         ]
       }
@@ -17895,8 +17913,8 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 61591.41,
-      "chg_day": -0.5,
+      "price": 61409.52,
+      "chg_day": -0.8,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -17909,6 +17927,7 @@
       "ob_low": 62310.56,
       "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -18238,7 +18257,7 @@
             "o": 61904.76,
             "h": 62437.7,
             "l": 61326.04,
-            "c": 61591.41
+            "c": 61409.52
           }
         ],
         "4h": [
@@ -18555,7 +18574,7 @@
             "o": 61579.2,
             "h": 62273.59,
             "l": 61179.66,
-            "c": 61591.41
+            "c": 61409.52
           }
         ],
         "1h": [
@@ -18870,9 +18889,9 @@
           {
             "t": 1795179600,
             "o": 61489.62,
-            "h": 61602.66,
-            "l": 61464.7,
-            "c": 61591.41
+            "h": 61614.06,
+            "l": 61355.6,
+            "c": 61409.52
           }
         ]
       }
@@ -18896,6 +18915,7 @@
       "ob_low": 50450.4,
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -19855,6 +19875,7 @@
       "ob_low": 24924.06,
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro.",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 90,
         "alignment": "ALIGNED",
@@ -20814,6 +20835,7 @@
       "ob_low": 7403.64,
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro.",
       "news_warning": null,
+      "created_at": 1795181276,
       "confluence": {
         "score": 90,
         "alignment": "ALIGNED",
