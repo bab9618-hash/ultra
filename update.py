@@ -378,7 +378,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         # 4. DETECTOR TEMPRANO DE AGOTAMIENTO ANTES DEL GIRO
         exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
 
-        # 5. BLOQUES CLÁSICOS + RE-ENTRADA OPCIONAL EN RETROCESO (CON TP SIEMPRE POR DELANTE)
+        # 5. BLOQUES CLÁSICOS + RE-ENTRADA OPCIONAL EN RETROCESO
         if chart_bias == "SUBE":
             direction = "BUY"
             ob_low = round(min(x["l"] for x in recent[-12:]), dec)
@@ -501,7 +501,26 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             verdict_title = "CONTRADICCIÓN · TESIS ROTA"
             verdict_sub = f"Macro en {macro_dir} rechaza movimiento {chart_bias}"
 
-        # 7. DETECCIÓN DE NOTICIA DE ALTO IMPACTO HOY PARA ESTE PAR
+        # 7. DETECTOR INSTITUCIONAL DE POTENCIAL SWING (MULTI-DÍA)
+        # Requiere: 1D y 4H alineados en la misma dirección + respaldo macro + sin agotamiento
+        is_swing_potential = (
+            not exhaustion["active"]
+            and b_d == chart_bias
+            and b_4h == chart_bias
+            and macro_dir == chart_bias
+            and conf_score >= 80
+        )
+        swing_tp = round(entry + (risk * 4.2), dec) if direction == "BUY" else round(entry - (risk * 4.2), dec)
+        swing_info = None
+        if is_swing_potential:
+            swing_info = {
+                "active": True,
+                "label": "🌊 POTENCIAL SWING",
+                "target": swing_tp,
+                "plan": f"1D + 4H + Macro alineados. Cobrar parciales en TP1 ({tp1}), proteger en BE y dejar correr remanente hacia objetivo semanal ({swing_tp})."
+            }
+
+        # 8. DETECCIÓN DE NOTICIA DE ALTO IMPACTO HOY PARA ESTE PAR
         ccys_to_check = {"USD"} if cfg["type"] in ("index", "crypto") else ({base_ccy, quote_ccy} - {"XAU"})
         if base_ccy == "XAU":
             ccys_to_check.add("USD")
@@ -522,8 +541,9 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "events": pair_news_titles[:3]
             }
 
+        swing_note = f" 🌊 Potencial Swing activo hacia {swing_tp}." if is_swing_potential else ""
         extra_note = f" {exhaustion['reason']}" if exhaustion["active"] else (f" Giro detectado ({rev['sweep'] if rev['sweep'] != 'NONE' else rev['choch']}) con respaldo macro." if macro_backed_reversal else "")
-        macro_reason = f"{macro_detail} Jerarquía (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{extra_note}"
+        macro_reason = f"{macro_detail} Jerarquía (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{extra_note}{swing_note}"
 
         return {
             "symbol": sym,
@@ -540,6 +560,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             "ob_low": ob_low,
             "macro_reason": macro_reason,
             "news_warning": news_warning,
+            "swing_potential": swing_info,
             "created_at": now_ts,
             "confluence": {
                 "score": conf_score,
@@ -608,7 +629,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"Matriz híbrida 4H/1D (60%/40%), alerta preventiva de agotamiento, re-entrada opcional y giros con respaldo macro sobre {len(assets)} activos."
+            "summary": f"Matriz híbrida 4H/1D (60%/40%), detector Potencial Swing, alerta temprana de agotamiento y giros con respaldo macro sobre {len(assets)} activos."
         },
         "banks": banks,
         "news": news,
@@ -619,7 +640,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados con sello de tiempo created_at.")
+    print(f"OK: {len(assets)} activos actualizados con detector Potencial Swing.")
 
 if __name__ == "__main__":
     main()
