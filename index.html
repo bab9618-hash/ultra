@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.9 LIVE (22)</title>
+  <title>ORÁCULO · Cabina v7.0 IA LIVE (22)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -154,9 +154,10 @@
         </div>
       </div>
       <div class="flex items-center gap-1.5 font-mono text-[11px]">
+        <button onclick="configureGeminiApiKey()" id="ai-brain-btn" title="Conectar Cerebro IA Real (Gemini API)" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 hover:border-purple-400 text-[10px] font-bold">🧠 IA</button>
         <button onclick="cycleAgentVoice()" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-cyan-300 hover:border-cyan-400 text-[10px]">🎙️ TIMBRE</button>
-        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400">VOZ ON</button>
-        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-3 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold">VER PANEL ▸</button>
+        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400 text-[10px]">VOZ ON</button>
+        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-2.5 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold text-[10px]">PANEL ▸</button>
       </div>
     </div>
   </header>
@@ -164,7 +165,7 @@
   <!-- MODO 1: CABINA CONVERSACIONAL -->
   <main id="cockpit-view" class="relative z-10 flex-1 max-w-2xl w-full mx-auto px-4 pt-3 pb-28 flex flex-col justify-between gap-3">
     <div class="flex flex-col items-center justify-center">
-      <div id="agent-core-visual" class="w-[210px] h-[210px] sm:w-[240px] sm:h-[240px] flex items-center justify-center"></div>
+      <div id="agent-core-visual" class="w-[195px] h-[195px] sm:w-[225px] sm:h-[225px] flex items-center justify-center"></div>
       <div class="text-center space-y-1 -mt-1">
         <div id="agent-hero-metric" class="font-hud text-xl sm:text-2xl font-extrabold tracking-wider text-white">0 ALERTAS</div>
         <div id="agent-hero-sub" class="text-[11px] font-mono tracking-[0.2em] text-slate-300 uppercase">SINCRONIZANDO</div>
@@ -175,14 +176,14 @@
     </div>
 
     <div class="space-y-2.5 bg-[#04060c]/85 p-3 rounded-xl border border-slate-800/80">
-      <div id="agent-dialogue-box" class="min-h-[68px] text-xs sm:text-sm font-mono text-slate-200 leading-relaxed">
+      <div id="agent-dialogue-box" class="min-h-[82px] max-h-[210px] overflow-y-auto pr-1 text-xs sm:text-sm font-mono text-slate-200 leading-relaxed whitespace-pre-line">
         A sus órdenes, señor. Sincronizando telemetría del mercado.<span class="typing-cursor"></span>
       </div>
       <div id="quick-replies" class="flex flex-wrap gap-2"></div>
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
         <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
         <button type="button" onclick="startVoiceRecognition()" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
-        <input id="cockpit-input" type="text" placeholder="Pregúntele por XAUUSD, AUDJPY, noticias o lección..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
+        <input id="cockpit-input" type="text" placeholder="Pregunte cualquier duda sobre pares, lotaje, giros o macro..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
         <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ENVIAR</button>
       </form>
     </div>
@@ -201,7 +202,7 @@
       <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
     </div>
 
-    <!-- SUBPANEL JARVIS CON LUPA BUSCADORA Y FILTRO DE NOTICIAS FUERTES -->
+    <!-- SUBPANEL JARVIS -->
     <section id="ptab-jarvis" class="space-y-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
@@ -214,7 +215,6 @@
         <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
       </div>
 
-      <!-- LUPA BUSCADORA DE PARES -->
       <div class="relative flex items-center">
         <span class="absolute left-3 text-amber-400 text-sm pointer-events-none">🔍</span>
         <input id="pair-search-input" type="text" oninput="setPairSearch(this.value)" placeholder="Buscar par o activo (ej: AUD, XAU, EURUSD, GBP, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500" />
@@ -286,7 +286,7 @@
       <div id="panel-lessons-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
 
-    <!-- SUBPANEL VISIÓN: MACRO, RADAR DE BANCOS CENTRALES, CALENDARIO Y NOTICIAS -->
+    <!-- SUBPANEL VISIÓN -->
     <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-5">
       <div class="space-y-1 border-b border-slate-800 pb-3">
         <h3 id="pv-headline" class="font-bold text-sky-300 text-sm">--</h3>
@@ -309,7 +309,7 @@
       </div>
     </section>
 
-    <!-- SUBPANEL DIARIO KAREN CON SINCRONIZACIÓN AUTOMÁTICA PC <-> CELULAR -->
+    <!-- SUBPANEL DIARIO KAREN -->
     <section id="ptab-karen" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <h3 class="font-hud text-sm font-bold text-rose-400">🕸️ AUDITORÍA DE KAREN & ESTADÍSTICA H.O.M.E.R.</h3>
@@ -412,7 +412,34 @@
     let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
     let customVoiceMap = JSON.parse(localStorage.getItem('oraculo_voice_map') || '{}');
     let ghToken = localStorage.getItem('oraculo_gh_token') || '';
+    let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
+    let chatHistory = [];
     let activeLessonIndex = 0;
+
+    function updateAiBrainButton() {
+      const btn = document.getElementById('ai-brain-btn');
+      if (!btn) return;
+      if (geminiApiKey) {
+        btn.textContent = '🧠 IA ON';
+        btn.className = 'px-2 py-1 rounded border border-emerald-400 bg-emerald-500/20 text-emerald-300 font-bold text-[10px]';
+      } else {
+        btn.textContent = '🧠 IA';
+        btn.className = 'px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 hover:border-purple-400 text-[10px] font-bold';
+      }
+    }
+    updateAiBrainButton();
+
+    function configureGeminiApiKey() {
+      const k = prompt('Pega tu clave gratuita de Google AI Studio (AIzaSy...) para activar el cerebro IA completo de Jarvis y los 7 agentes (déjalo vacío para usar el motor local):', geminiApiKey);
+      if (k !== null) {
+        geminiApiKey = k.trim();
+        localStorage.setItem('oraculo_gemini_key', geminiApiKey);
+        updateAiBrainButton();
+        typeAgentDialogue(geminiApiKey
+          ? 'Cerebro neuronal Gemini conectado, señor. Ahora puede preguntarme cualquier duda técnica, macroeconómica, de gestión de riesgo o sobre cualquiera de los veintidós activos.'
+          : 'Clave eliminada. Operando con el motor analítico local de respaldo, señor.');
+      }
+    }
 
     function setPairSearch(val) {
       pairSearchTerm = (val || '').trim().toUpperCase();
@@ -671,13 +698,13 @@
     ];
 
     const AGENTS = {
-      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
-      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
-      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
-      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
-      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
-      karen:  { name: 'KAREN', sub: 'DIARIO', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
-      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
+      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, el asistente de mando táctico de Oráculo. Hablas con elegancia británica en español ("señor"), máxima precisión institucional, claridad y calma.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
+      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, el analista macroeconómico de Oráculo. Hablas con serenidad filosófica y profundidad sobre bancos centrales, DXY, bonos US10Y y flujos de divisas.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
+      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, el lector implacable de estructura técnica de Oráculo. Eres directo, frío, analítico y enfocado en liquidez, Order Blocks, CHoCH y trampas institucionales.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
+      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., la instructora ágil e ingeniosa de Oráculo. Llamas "jefe" al usuario y explicas conceptos institucionales con ejemplos claros y prácticos.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
+      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., la planificadora táctica de ejecución y riesgo de Oráculo. Calculas distancias en pips, lotajes para cuenta fondeada de $1,000 USD (riesgo 0.5% a 1%) y ratios 1:2 / 1:3 con exactitud.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
+      karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, la psicóloga de trading y auditora emocional de Oráculo. Cuidas la disciplina del usuario, evitas el FOMO y analizas su bitácora con empatía firme.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
+      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', personaPrompt: 'Eres H.O.M.E.R., el estadístico veterano y algo irónico de Oráculo. Evalúas probabilidades, esperanza matemática y rendimiento en R.', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
     };
 
     let cachedEsVoices = [];
@@ -739,7 +766,7 @@
     function formatTextForSpeech(raw) {
       return raw
         .replace(/<[^>]*>/g, '')
-        .replace(/⚠️/g, '')
+        .replace(/[*#`⚠️]/g, '')
         .replace(/XAUUSD/g, 'Oro Dólar')
         .replace(/BTCUSD/g, 'Bitcoin')
         .replace(/USTEC/g, 'Nasdaq cien')
@@ -772,8 +799,8 @@
       if (!btn) return;
       btn.textContent = voiceEnabled ? 'VOZ ON' : 'VOZ OFF';
       btn.className = voiceEnabled
-        ? 'px-2.5 py-1 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 font-bold'
-        : 'px-2.5 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-400';
+        ? 'px-2 py-1 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 font-bold text-[10px]'
+        : 'px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-400 text-[10px]';
     }
     updateVoiceUI();
 
@@ -914,6 +941,59 @@
       return { winRate: Math.round((wins / trades.length) * 100), pnlR: `${(wins * 2 - losses) >= 0 ? '+' : ''}${wins * 2 - losses}R`, total: trades.length };
     }
 
+    function buildLiveContextSnapshot() {
+      if (!data || !data.assets) return 'Sin datos de mercado cargados aún.';
+      const header = `Fecha estructura: ${data.last_updated}. Macro: ${data.brief.headline}. ${data.brief.summary}`;
+      const assetsText = data.assets.map(a => {
+        const d = getAssetUnitsDist(a);
+        const p = getSetupPips(a);
+        const nw = (a.news_warning && a.news_warning.active) ? ` [ALERTA NOTICIA HOY: ${a.news_warning.events.join(', ')}]` : '';
+        return `- ${a.symbol}: Precio=${a.price}, Sesgo=${a.chart_bias} (1D:${a.tf_bias.daily}, 4H:${a.tf_bias.h4}, 1H:${a.tf_bias.h1}), Señal=${a.setup.signal_tag}, Entrada=${a.setup.entry} (a ${d.units} ${d.label}), SL=${a.setup.sl} (${p.sl} ${p.unitLabel}), TP1=${a.setup.tp1} (+${p.tp1} ${p.unitLabel}), TP2=${a.setup.tp2}, Confluencia=${a.confluence.score}/100 (${a.confluence.verdict_title}). Razón: ${a.macro_reason}${nw}`;
+      }).join('\n');
+      const journalText = trades.length
+        ? `Bitácora reciente del usuario (${trades.length} operaciones): ` + trades.slice(0, 5).map(t => `${t.pair} ${t.dir} ${t.res} (${t.note})`).join('; ')
+        : 'Bitácora vacía.';
+      return `${header}\n\nACTIVOS EN VIVO:\n${assetsText}\n\n${journalText}`;
+    }
+
+    async function askGeminiBrain(userQuestion, agentKey) {
+      const ag = AGENTS[agentKey] || AGENTS.jarvis;
+      const sysPrompt = `${ag.personaPrompt}
+Eres parte del sistema de trading institucional ORÁCULO (operado por Brian Aguilera en cuenta intradía de $1,000 USD con enfoque en Order Blocks, CHoCH, liquidez y matriz macro híbrida 4H/1D).
+Responde en español de forma clara, completa, directa y sin rodeos (entre 3 y 7 oraciones bien estructuradas, o lista breve si piden varios pares).
+Usa SIEMPRE los datos reales en vivo proporcionados abajo; nunca inventes precios ni niveles que no estén en el contexto. Si el usuario pregunta por lotaje, calcula el riesgo sugerido (0.5% = $5 o 1% = $10 sobre $1,000) según los pips de SL del activo.
+
+CONTEXTO EN VIVO DEL MERCADO:
+${buildLiveContextSnapshot()}`;
+
+      const contents = [
+        ...chatHistory.slice(-4),
+        { role: 'user', parts: [{ text: `${sysPrompt}\n\nPREGUNTA DEL USUARIO: ${userQuestion}` }] }
+      ];
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents,
+          generationConfig: { temperature: 0.45, maxOutputTokens: 550 }
+        })
+      });
+
+      if (!res.ok) {
+        const errTxt = await res.text();
+        throw new Error(`HTTP ${res.status}: ${errTxt}`);
+      }
+      const json = await res.json();
+      const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!reply) throw new Error('Respuesta vacía de Gemini');
+
+      chatHistory.push({ role: 'user', parts: [{ text: userQuestion }] });
+      chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+      return reply.replace(/\*\*/g, '').trim();
+    }
+
     function renderAgentCoreSVG(key) {
       if (key === 'jarvis') {
         const bars = Array.from({ length: 36 }, (_, i) => `<rect x="138" y="16" width="4" height="${i < 12 ? 16 : 11}" rx="1" fill="${i < 12 ? '#f59e0b' : '#452c08'}" transform="rotate(${i * 10} 140 140)"/>`).join('');
@@ -940,14 +1020,16 @@
       setStateLabel('HABLANDO');
       if (speak) speakText(fullText, currentAgent);
       typeTimer = setInterval(() => {
-        i += 2;
+        i += 3;
         box.innerHTML = `${fullText.slice(0, i)}<span class="typing-cursor"></span>`;
+        box.scrollTop = box.scrollHeight;
         if (i >= fullText.length) {
           clearInterval(typeTimer);
           box.innerHTML = `${fullText}<span class="typing-cursor"></span>`;
+          box.scrollTop = box.scrollHeight;
           if (!voiceEnabled) setStateLabel('EN ESPERA');
         }
-      }, 22);
+      }, 18);
     }
 
     function selectAgent(key, withIntro = true) {
@@ -986,7 +1068,7 @@
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
         document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
         renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
-        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}".`);
+        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}", o puede preguntarme cualquier duda técnica.`);
         return;
       }
       renderDefaultQuickReplies();
@@ -996,16 +1078,16 @@
         const revCount = data ? data.assets.filter(a => (a.setup.signal_tag || '').includes('GIRO MACRO')).length : 0;
         document.getElementById('agent-hero-metric').textContent = `${broken.length} ALERTAS`;
         document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${revCount} GIROS MACRO · ${newsPairsCount} NOTICIAS`;
-        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos: tenemos ${revCount} giros respaldados por macro, ${newsPairsCount} pares con noticia fuerte hoy que requieren precaución y ${broken.length} tesis rotas. ¿Desea el reporte?`);
+        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos con la matriz híbrida 4H/1D: tenemos ${revCount} giros respaldados por macro, ${newsPairsCount} pares con noticia fuerte hoy y ${broken.length} tesis rotas. ¿Desea el reporte o tiene alguna consulta específica?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & BANCOS';
-        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue la tasa real. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he actualizado el calendario de noticias fuertes y bancos centrales. ¿Analizamos el panorama macro?`);
+        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue la tasa real. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he actualizado el calendario de noticias fuertes y bancos centrales. ¿Qué desea analizar?`);
       } else if (key === 'ultron') {
         const target = nearest || (data && data.assets[0]);
         document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
         document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · GIROS Y OB` : 'ESTRUCTURA';
-        typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez esperando ser barrida. Usted ponga la disciplina, yo pongo la estructura. ¿Quiere el diagnóstico técnico?`);
+        typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez esperando ser barrida. Usted ponga la disciplina, yo pongo la estructura. ¿Qué gráfico auditamos?`);
       } else if (key === 'edith') {
         if (nearest) {
           const d = getAssetUnitsDist(nearest);
@@ -1032,9 +1114,10 @@
       if (!data) { typeAgentDialogue('Sincronizando datos del mercado, señor.'); return; }
       if (currentAgent === 'jarvis') {
         const revs = data.assets.filter(a => (a.setup.signal_tag || '').includes('GIRO MACRO')).map(x => x.symbol);
+        const exhaust = data.assets.filter(a => (a.setup.signal_tag || '').includes('RIESGO GIRO')).map(x => x.symbol);
         const newsP = data.assets.filter(a => a.news_warning && a.news_warning.active).map(x => x.symbol);
         const aligned = getAlignedAssets().map(x => x.symbol);
-        typeAgentDialogue(`Giros con respaldo macro: ${revs.length ? revs.join(', ') : 'ninguno'}. Pares con noticia fuerte hoy (operar con cuidado): ${newsP.length ? newsP.join(', ') : 'ninguno'}. Confluencia fuerte: ${aligned.slice(0, 6).join(', ')}.`);
+        typeAgentDialogue(`Reporte completo, señor: Giros confirmados con respaldo macro: ${revs.length ? revs.join(', ') : 'ninguno'}. Alertas tempranas de agotamiento para proteger posiciones: ${exhaust.length ? exhaust.join(', ') : 'ninguna'}. Pares con noticia fuerte hoy: ${newsP.length ? newsP.join(', ') : 'ninguno'}. Activos con mayor confluencia alineada: ${aligned.slice(0, 6).join(', ')}.`);
       } else if (currentAgent === 'vision') {
         const topNews = (data.news && data.news.length) ? ` Titular destacado: ${data.news[0].title}.` : '';
         typeAgentDialogue(`${data.brief.headline}. ${data.brief.summary}${topNews}`);
@@ -1063,8 +1146,25 @@
       inp.value = '';
     }
 
-    function processQuery(qRaw) {
+    async function processQuery(qRaw) {
       const q = qRaw.toUpperCase();
+
+      // Si hay clave de Gemini API configurada, usar razonamiento completo en vivo
+      if (geminiApiKey) {
+        clearInterval(typeTimer);
+        const box = document.getElementById('agent-dialogue-box');
+        if (box) box.innerHTML = `<span class="text-slate-400">Analizando telemetría en vivo...</span><span class="typing-cursor"></span>`;
+        setStateLabel('PROCESANDO');
+        try {
+          const aiResponse = await askGeminiBrain(qRaw, currentAgent);
+          typeAgentDialogue(aiResponse);
+          return;
+        } catch (err) {
+          console.warn('Fallo temporal Gemini API, usando motor local:', err);
+        }
+      }
+
+      // Motor analítico local de respaldo
       if (q.includes('CURSO') || q.includes('CLASE') || q.includes('LECCION') || q.includes('LECCIÓN') || q.includes('EMPEZAR')) {
         if (currentAgent !== 'friday') selectAgent('friday', false);
         startFridayLesson(getNextPendingLessonIndex()); return;
@@ -1080,7 +1180,7 @@
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
         const nw = (asset.news_warning && asset.news_warning.active) ? ` Precaución: hoy tiene noticia fuerte en ${asset.news_warning.currencies}: ${asset.news_warning.events[0]}.` : '';
-        typeAgentDialogue(`${asset.symbol} cotiza en vivo en ${asset.price} (${asset.setup.signal_tag}). Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}).${nw}`);
+        typeAgentDialogue(`${asset.symbol} cotiza en vivo en ${asset.price} (${asset.setup.signal_tag}). Confluencia en ${asset.confluence.score}/100 (${asset.confluence.verdict_title}). Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}). Diagnóstico: ${asset.macro_reason}${nw}`);
         return;
       }
       handleQuickReply('SI');
@@ -1095,7 +1195,7 @@
       isPanelMode = !isPanelMode;
       document.getElementById('cockpit-view').classList.toggle('hidden', isPanelMode);
       document.getElementById('panel-view').classList.toggle('hidden', !isPanelMode);
-      document.getElementById('view-mode-btn').textContent = isPanelMode ? '◂ CABINA' : 'VER PANEL ▸';
+      document.getElementById('view-mode-btn').textContent = isPanelMode ? '◂ CABINA' : 'PANEL ▸';
       if (isPanelMode) renderPanelAll();
     }
 
