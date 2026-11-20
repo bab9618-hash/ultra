@@ -86,11 +86,6 @@ def pct_change_lookback(candles, lookback=6):
     return ((last - first) / first) * 100.0 if first else 0.0
 
 def detect_reversal_and_structure(c_1h):
-    """
-    Detecta giros de cambio de tendencia reales:
-    1. Barrido de liquidez (Sweep SSL / BSL) en extremos con mecha de rechazo.
-    2. Cambio de Carácter (CHoCH) rompiendo el último swing estructural.
-    """
     if len(c_1h) < 18:
         return {"choch": "NONE", "sweep": "NONE", "reversal_dir": "NONE"}
 
@@ -125,11 +120,6 @@ def detect_reversal_and_structure(c_1h):
     return {"choch": choch, "sweep": sweep, "reversal_dir": reversal_dir}
 
 def detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low):
-    """
-    Alerta temprana ANTES del giro completo:
-    Detecta cuando el precio llega a un extremo del rango con 3 velas perdiendo
-    cuerpo/momentum y mechas de rechazo, mientras la macro híbrida ya gira en contra.
-    """
     if len(c_1h) < 12:
         return {"active": False, "reason": ""}
 
@@ -225,10 +215,6 @@ def fetch_high_impact_calendar(now_utc):
     return events_today[:10], high_impact_by_ccy
 
 def compute_currency_strength_matrix(c4_map, c1d_map, dxy_4h, dxy_1d, us10y_4h, us10y_1d, spx_4h, spx_1d):
-    """
-    Mide la fuerza macroeconómica combinando flujo intradía (60% en 4H)
-    y estructura institucional de fondo (40% en 1D).
-    """
     def blend_chg(c4, c1d):
         return (pct_change_lookback(c4, 6) * 0.60) + (pct_change_lookback(c1d, 5) * 0.40)
 
@@ -332,7 +318,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         prev_close = c_1d[-2]["c"] if len(c_1d) >= 2 else c_1h[0]["o"]
         chg_day = round(((price - prev_close) / prev_close) * 100, 2) if prev_close else 0.0
 
-        # 1. JERARQUÍA TÉCNICA CLÁSICA (1D=3, 4H=2, 1H=1)
         b_d = calc_bias(c_1d, 6, 0.0010)
         b_4h = calc_bias(c_4h, 6, 0.0008)
         b_1h = calc_bias(c_1h, 6, 0.0006)
@@ -340,7 +325,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         w_up = (3 if b_d == "SUBE" else 0) + (2 if b_4h == "SUBE" else 0) + (1 if b_1h == "SUBE" else 0)
         w_dn = (3 if b_d == "BAJA" else 0) + (2 if b_4h == "BAJA" else 0) + (1 if b_1h == "BAJA" else 0)
 
-        # 2. FUERZA MACRO HÍBRIDA (60% 4H + 40% 1D)
         base_ccy = cfg["base"]
         quote_ccy = cfg["quote"]
         if cfg["type"] == "index":
@@ -354,7 +338,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             macro_dir = "SUBE" if macro_diff > 0.14 else ("BAJA" if macro_diff < -0.14 else "NEUTRAL")
             macro_detail = f"{base_ccy} ({ccy_labels.get(base_ccy, 'NEUTRAL')}) vs {quote_ccy} ({ccy_labels.get(quote_ccy, 'NEUTRAL')}) en cesta híbrida 4H/1D."
 
-        # 3. GIROS DE CAMBIO DE TENDENCIA CON RESPALDO MACRO
         rev = detect_reversal_and_structure(c_1h)
         macro_backed_reversal = (rev["reversal_dir"] != "NONE" and rev["reversal_dir"] == macro_dir)
 
@@ -375,10 +358,8 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         intraday_high = max(x["h"] for x in recent)
         intraday_low = min(x["l"] for x in recent)
 
-        # 4. DETECTOR TEMPRANO DE AGOTAMIENTO ANTES DEL GIRO
         exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
 
-        # 5. BLOQUES CLÁSICOS + RE-ENTRADA OPCIONAL EN RETROCESO
         if chart_bias == "SUBE":
             direction = "BUY"
             ob_low = round(min(x["l"] for x in recent[-12:]), dec)
@@ -392,6 +373,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             sl = round(entry - risk, dec)
             tp1 = round(entry + (risk * 2.0), dec)
             tp2 = round(entry + (risk * 3.0), dec)
+            be_trigger = round(entry + risk, dec)
 
             touched_orig = any(x["l"] <= ob_high for x in c_1h[-6:])
             hit_tp1_real = touched_orig and price >= tp1
@@ -409,6 +391,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                         entry = round((ob_low + ob_high) / 2.0, dec)
                         sl = round(min(ob_low - (6 * pip), entry - risk), dec)
                         actual_r = abs(entry - sl)
+                        be_trigger = round(entry + actual_r, dec)
                         tp1 = round(max(entry + (actual_r * 2.0), price + (12 * pip)), dec)
                         tp2 = round(max(entry + (actual_r * 3.0), tp1 + actual_r), dec)
                         is_reentry_active = True
@@ -417,7 +400,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             if exhaustion["active"]:
                 signal_tag = "⚠️ RIESGO GIRO · PROTEGER"
             elif is_reentry_active:
-                signal_tag = "RE-ENTRADA OB (OPCIONAL)"
+                signal_tag = "RE-ENTRADA OB (PIRÁMIDE)"
             elif hit_tp1_real:
                 signal_tag = "TP1 CUMPLIDO · SIN RE-ENTRADA"
             elif macro_backed_reversal and rev["sweep"] == "SSL_SWEEP_BUY":
@@ -441,6 +424,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             sl = round(entry + risk, dec)
             tp1 = round(entry - (risk * 2.0), dec)
             tp2 = round(entry - (risk * 3.0), dec)
+            be_trigger = round(entry - risk, dec)
 
             touched_orig = any(x["h"] >= ob_low for x in c_1h[-6:])
             hit_tp1_real = touched_orig and price <= tp1
@@ -458,6 +442,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                         entry = round((ob_low + ob_high) / 2.0, dec)
                         sl = round(max(ob_high + (6 * pip), entry + risk), dec)
                         actual_r = abs(sl - entry)
+                        be_trigger = round(entry - actual_r, dec)
                         tp1 = round(min(entry - (actual_r * 2.0), price - (12 * pip)), dec)
                         tp2 = round(min(entry - (actual_r * 3.0), tp1 - actual_r), dec)
                         is_reentry_active = True
@@ -466,7 +451,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             if exhaustion["active"]:
                 signal_tag = "⚠️ RIESGO GIRO · PROTEGER"
             elif is_reentry_active:
-                signal_tag = "RE-ENTRADA OB (OPCIONAL)"
+                signal_tag = "RE-ENTRADA OB (PIRÁMIDE)"
             elif hit_tp1_real:
                 signal_tag = "TP1 CUMPLIDO · SIN RE-ENTRADA"
             elif macro_backed_reversal and rev["sweep"] == "BSL_SWEEP_SELL":
@@ -478,7 +463,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             else:
                 signal_tag = "VENTA OB"
 
-        # 6. CONFLUENCIA MACRO + TÉCNICA
         dominant_w = max(w_up, w_dn)
         if exhaustion["active"]:
             alignment = "OPPOSED" if macro_dir != chart_bias else "ALIGNED"
@@ -501,8 +485,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             verdict_title = "CONTRADICCIÓN · TESIS ROTA"
             verdict_sub = f"Macro en {macro_dir} rechaza movimiento {chart_bias}"
 
-        # 7. DETECTOR INSTITUCIONAL DE POTENCIAL SWING (MULTI-DÍA)
-        # Requiere: 1D y 4H alineados en la misma dirección + respaldo macro + sin agotamiento
+        # PROTOCOLO INSTITUCIONAL DE PIRAMIDACIÓN SWING + PARCIALES (SIN LOTAJE)
         is_swing_potential = (
             not exhaustion["active"]
             and b_d == chart_bias
@@ -515,12 +498,16 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         if is_swing_potential:
             swing_info = {
                 "active": True,
-                "label": "🌊 POTENCIAL SWING",
+                "label": "🌊 POTENCIAL SWING · PROTOCOLO PIRÁMIDE",
                 "target": swing_tp,
-                "plan": f"1D + 4H + Macro alineados. Cobrar parciales en TP1 ({tp1}), proteger en BE y dejar correr remanente hacia objetivo semanal ({swing_tp})."
+                "be_trigger": be_trigger,
+                "plan": (
+                    f"1) Divide la entrada base en {entry} (SL {sl}). "
+                    f"2) Al tocar {be_trigger} (+1R) o TP1 ({tp1}), cobra parciales y sube el SL a {entry} (Break Even). "
+                    f"3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP {swing_tp}."
+                )
             }
 
-        # 8. DETECCIÓN DE NOTICIA DE ALTO IMPACTO HOY PARA ESTE PAR
         ccys_to_check = {"USD"} if cfg["type"] in ("index", "crypto") else ({base_ccy, quote_ccy} - {"XAU"})
         if base_ccy == "XAU":
             ccys_to_check.add("USD")
@@ -541,12 +528,14 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "events": pair_news_titles[:3]
             }
 
-        swing_note = f" 🌊 Potencial Swing activo hacia {swing_tp}." if is_swing_potential else ""
+        swing_note = f" 🌊 Potencial Swing activo (BE en {be_trigger}, Swing TP {swing_tp})." if is_swing_potential else ""
         extra_note = f" {exhaustion['reason']}" if exhaustion["active"] else (f" Giro detectado ({rev['sweep'] if rev['sweep'] != 'NONE' else rev['choch']}) con respaldo macro." if macro_backed_reversal else "")
         macro_reason = f"{macro_detail} Jerarquía (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{extra_note}{swing_note}"
 
         return {
             "symbol": sym,
+            "base": base_ccy,
+            "quote": quote_ccy,
             "type": cfg["type"],
             "pip": pip,
             "decimals": dec,
@@ -572,6 +561,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "direction": direction,
                 "signal_tag": signal_tag,
                 "entry": entry,
+                "be_trigger": be_trigger,
                 "sl": sl,
                 "tp1": tp1,
                 "tp2": tp2,
@@ -585,6 +575,35 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
     except Exception as e:
         print(f"Error procesando {cfg.get('symbol')}: {e}")
         return None
+
+def build_correlated_baskets(assets, ccy_labels):
+    """
+    Agrupa los pares correlacionados que apuntan en bloque a favor de las divisas
+    con fuerza/debilidad confirmada (ej. USD FUERTE -> vender AUDUSD/EURUSD y comprar USDCAD/USDJPY).
+    """
+    baskets = []
+    for ccy in ["USD", "GBP", "AUD", "EUR", "JPY", "CAD", "NZD", "CHF"]:
+        st = ccy_labels.get(ccy, "NEUTRAL")
+        if st == "NEUTRAL":
+            continue
+        matched_pairs = []
+        for a in assets:
+            if a["confluence"]["alignment"] != "ALIGNED":
+                continue
+            d = a["setup"]["direction"]
+            if st == "FUERTE":
+                if (a["base"] == ccy and d == "BUY") or (a["quote"] == ccy and d == "SELL"):
+                    matched_pairs.append(f"{a['symbol']} ({'COMPRA' if d == 'BUY' else 'VENTA'})")
+            elif st == "DÉBIL":
+                if (a["base"] == ccy and d == "SELL") or (a["quote"] == ccy and d == "BUY"):
+                    matched_pairs.append(f"{a['symbol']} ({'COMPRA' if d == 'BUY' else 'VENTA'})")
+        if len(matched_pairs) >= 2:
+            baskets.append({
+                "currency": ccy,
+                "status": st,
+                "pairs": matched_pairs[:5]
+            })
+    return baskets
 
 def main():
     now_utc = datetime.now(timezone.utc)
@@ -618,6 +637,7 @@ def main():
     )
     assets = [item for cfg in ASSETS_CONFIG if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels, high_impact_by_ccy, now_ts))]
     banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
+    baskets = build_correlated_baskets(assets, ccy_labels)
     news = fetch_live_news()
 
     alert_ccys = sorted(high_impact_by_ccy.keys())
@@ -629,8 +649,9 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"Matriz híbrida 4H/1D (60%/40%), detector Potencial Swing, alerta temprana de agotamiento y giros con respaldo macro sobre {len(assets)} activos."
+            "summary": f"Matriz híbrida 4H/1D, cestas correlacionadas, protocolo Pirámide Swing + parciales y giros con respaldo macro sobre {len(assets)} activos."
         },
+        "correlated_baskets": baskets,
         "banks": banks,
         "news": news,
         "calendar": calendar_events,
@@ -640,7 +661,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados con detector Potencial Swing.")
+    print(f"OK: {len(assets)} activos actualizados con protocolo Pirámide Swing y cestas correlacionadas.")
 
 if __name__ == "__main__":
     main()
