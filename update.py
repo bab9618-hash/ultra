@@ -124,11 +124,51 @@ def detect_reversal_and_structure(c_1h):
 
     return {"choch": choch, "sweep": sweep, "reversal_dir": reversal_dir}
 
+def detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low):
+    """
+    Alerta temprana ANTES del giro completo:
+    Detecta cuando el precio llega a un extremo del rango con 3 velas perdiendo
+    cuerpo/momentum y mechas de rechazo, mientras la macro 4H ya gira en contra.
+    """
+    if len(c_1h) < 12:
+        return {"active": False, "reason": ""}
+
+    span = max(1e-9, intraday_high - intraday_low)
+    price = c_1h[-1]["c"]
+    pos_ratio = (price - intraday_low) / span  # 1.0 = techo del rango, 0.0 = piso del rango
+
+    prev_candles = c_1h[-10:-3]
+    last_three = c_1h[-3:]
+    avg_prev_body = sum(abs(x["c"] - x["o"]) for x in prev_candles) / max(1, len(prev_candles))
+    avg_last_body = sum(abs(x["c"] - x["o"]) for x in last_three) / 3.0
+
+    # Compresión de cuerpo: las últimas 3 velas perdieron al menos 35% de fuerza frente al impulso previo
+    losing_momentum = avg_prev_body > 0 and (avg_last_body <= avg_prev_body * 0.65)
+    macro_turning = (macro_dir != "NEUTRAL" and macro_dir != chart_bias)
+
+    if chart_bias == "SUBE" and pos_ratio >= 0.80:
+        upper_wicks = sum(x["h"] - max(x["o"], x["c"]) for x in last_three)
+        bodies_sum = max(1e-9, sum(abs(x["c"] - x["o"]) for x in last_three))
+        wick_rejection = upper_wicks >= bodies_sum * 0.85
+        if losing_momentum and (macro_turning or wick_rejection):
+            return {
+                "active": True,
+                "reason": "Agotamiento alcista en techo de rango (3 velas perdiendo cuerpo + rechazo/macro en contra). Proteger compras."
+            }
+
+    if chart_bias == "BAJA" and pos_ratio <= 0.20:
+        lower_wicks = sum(min(x["o"], x["c"]) - x["l"] for x in last_three)
+        bodies_sum = max(1e-9, sum(abs(x["c"] - x["o"]) for x in last_three))
+        wick_rejection = lower_wicks >= bodies_sum * 0.85
+        if losing_momentum and (macro_turning or wick_rejection):
+            return {
+                "active": True,
+                "reason": "Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas."
+            }
+
+    return {"active": False, "reason": ""}
+
 def fetch_high_impact_calendar(now_utc):
-    """
-    Descarga el calendario económico real de la semana (ForexFactory) y filtra
-    las noticias de ALTO IMPACTO (High) del día de hoy por divisa.
-    """
     today_ff = now_utc.strftime("%m-%d-%Y")
     today_iso = now_utc.strftime("%Y-%m-%d")
     events_today = []
@@ -176,7 +216,6 @@ def fetch_high_impact_calendar(now_utc):
     except Exception as e:
         print(f"Aviso calendario económico: {e}")
 
-    # Respaldo de calendario si el feed externo no responde
     if not events_today:
         events_today = [
             {"date": today_iso, "time": "07:00 UTC", "currency": "EUR/GBP", "impact": "ALTO", "title": "Apertura Killzone Londres · Barrido de Liquidez Asiática"},
@@ -314,12 +353,15 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 w_dn += 2
             chart_bias = "SUBE" if w_up >= w_dn else "BAJA"
 
-        # 4. BLOQUES CLÁSICOS ORIGINALES (SIN ORDER BLOCKS FRESCOS ARTIFICIALES)
         recent = c_1h[-24:]
         intraday_high = max(x["h"] for x in recent)
         intraday_low = min(x["l"] for x in recent)
         eq_50 = (intraday_high + intraday_low) / 2.0
 
+        # 4. DETECTOR TEMPRANO DE AGOTAMIENTO ANTES DEL GIRO (PARA PROTEGER OPERACIONES ABIERTAS)
+        exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
+
+        # 5. BLOQUES CLÁSICOS ORIGINALES
         if chart_bias == "SUBE":
             direction = "BUY"
             ob_low = round(min(x["l"] for x in recent[-12:]), dec)
@@ -334,7 +376,9 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             tp1 = round(entry + (risk * 2.0), dec)
             tp2 = round(entry + (risk * 3.0), dec)
 
-            if macro_backed_reversal and rev["sweep"] == "SSL_SWEEP_BUY":
+            if exhaustion["active"]:
+                signal_tag = "⚠️ RIESGO GIRO · PROTEGER"
+            elif macro_backed_reversal and rev["sweep"] == "SSL_SWEEP_BUY":
                 signal_tag = "GIRO MACRO · BARRIDO SSL"
             elif macro_backed_reversal and rev["choch"] == "BULLISH_CHOCH":
                 signal_tag = "GIRO MACRO · CHoCH ALCISTA"
@@ -356,7 +400,9 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             tp1 = round(entry - (risk * 2.0), dec)
             tp2 = round(entry - (risk * 3.0), dec)
 
-            if macro_backed_reversal and rev["sweep"] == "BSL_SWEEP_SELL":
+            if exhaustion["active"]:
+                signal_tag = "⚠️ RIESGO GIRO · PROTEGER"
+            elif macro_backed_reversal and rev["sweep"] == "BSL_SWEEP_SELL":
                 signal_tag = "GIRO MACRO · BARRIDO BSL"
             elif macro_backed_reversal and rev["choch"] == "BEARISH_CHOCH":
                 signal_tag = "GIRO MACRO · CHoCH BAJISTA"
@@ -365,9 +411,14 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             else:
                 signal_tag = "VENTA OB" if price < eq_50 * 1.002 else "RE-ENTRADA OB"
 
-        # 5. CONFLUENCIA MACRO + TÉCNICA
+        # 6. CONFLUENCIA MACRO + TÉCNICA
         dominant_w = max(w_up, w_dn)
-        if macro_dir == chart_bias:
+        if exhaustion["active"]:
+            alignment = "OPPOSED" if macro_dir != chart_bias else "ALIGNED"
+            conf_score = 44 if macro_dir != chart_bias else 58
+            verdict_title = "⚠️ AGOTAMIENTO · RIESGO DE GIRO"
+            verdict_sub = "Momentum en extremo se frena · Asegurar parciales / BE"
+        elif macro_dir == chart_bias:
             alignment = "ALIGNED"
             conf_score = min(94, 68 + (dominant_w * 3) + (4 if macro_backed_reversal else 0))
             verdict_title = "GIRO CONFIRMADO · MACRO + TÉCNICO" if macro_backed_reversal else "VAN JUNTOS · CONFLUENCIA"
@@ -383,7 +434,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             verdict_title = "CONTRADICCIÓN · TESIS ROTA"
             verdict_sub = f"Macro en {macro_dir} rechaza movimiento {chart_bias}"
 
-        # 6. DETECCIÓN DE NOTICIA DE ALTO IMPACTO HOY PARA ESTE PAR
+        # 7. DETECCIÓN DE NOTICIA DE ALTO IMPACTO HOY PARA ESTE PAR
         ccys_to_check = {"USD"} if cfg["type"] in ("index", "crypto") else ({base_ccy, quote_ccy} - {"XAU"})
         if base_ccy == "XAU":
             ccys_to_check.add("USD")
@@ -395,9 +446,8 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 affected_ccys.append(c)
                 pair_news_titles.extend(high_impact_by_ccy[c])
 
-        has_high_news = len(pair_news_titles) > 0
         news_warning = None
-        if has_high_news:
+        if pair_news_titles:
             news_warning = {
                 "active": True,
                 "currencies": "/".join(affected_ccys),
@@ -405,8 +455,8 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "events": pair_news_titles[:3]
             }
 
-        rev_note = f" Giro detectado ({rev['sweep'] if rev['sweep'] != 'NONE' else rev['choch']}) con respaldo macro." if macro_backed_reversal else ""
-        macro_reason = f"{macro_detail} Jerarquía (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{rev_note}"
+        extra_note = f" {exhaustion['reason']}" if exhaustion["active"] else (f" Giro detectado ({rev['sweep'] if rev['sweep'] != 'NONE' else rev['choch']}) con respaldo macro." if macro_backed_reversal else "")
+        macro_reason = f"{macro_detail} Jerarquía (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{extra_note}"
 
         return {
             "symbol": sym,
@@ -482,7 +532,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"Matriz multidivisa 4H y giros con respaldo macro sobre {len(assets)} activos (bloques clásicos sin pullbacks artificiales)."
+            "summary": f"Matriz multidivisa 4H, alerta preventiva de agotamiento y giros con respaldo macro sobre {len(assets)} activos."
         },
         "banks": banks,
         "news": news,
@@ -493,7 +543,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos guardados. Divisas con noticia fuerte hoy: {alert_ccys}")
+    print(f"OK: {len(assets)} activos actualizados con alerta preventiva de agotamiento.")
 
 if __name__ == "__main__":
     main()
