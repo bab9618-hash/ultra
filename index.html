@@ -1017,7 +1017,7 @@
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Sobre ${homer.total} operaciones anotadas tiene ${homer.winRate}% de acierto y${homer.pnlR}. ¿Quiere escuchar el veredicto?`);
+        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Sobre ${homer.total} operaciones anotadas tiene ${homer.winRate}% de acierto y ${homer.pnlR}. ¿Quiere escuchar el veredicto?`);
       }
     }
 
@@ -1037,15 +1037,15 @@
         const d = getAssetUnitsDist(n);
         const p = getSetupPips(n);
         const nw = (n.news_warning && n.news_warning.active) ? ` Atención: tiene noticia fuerte hoy (${n.news_warning.events[0]}).` : '';
-        typeAgentDialogue(`Objetivo prioritario en vivo: ${n.symbol} (${n.price}). Está a ${d.units} ${d.label} de su entrada en${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl}${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).${nw}`);
+        typeAgentDialogue(`Objetivo prioritario en vivo: ${n.symbol} (${n.price}). Está a ${d.units} ${d.label} de su entrada en ${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).${nw}`);
       } else if (currentAgent === 'edith') {
         const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
-        typeAgentDialogue(`Los tres blancos más cercanos en vivo son: ` + top3.map(x => `${x.symbol} a${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})${(x.news_warning && x.news_warning.active) ? ' [con noticia fuerte]' : ''}`).join('; ') + `.`);
+        typeAgentDialogue(`Los tres blancos más cercanos en vivo son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})${(x.news_warning && x.news_warning.active) ? ' [con noticia fuerte]' : ''}`).join('; ') + `.`);
       } else if (currentAgent === 'karen') {
-        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía. Abra el panel y pulse Vincular Nube para sincronizar PC y celular.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) -${trades[0].res}.`);
+        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía. Abra el panel y pulse Vincular Nube para sincronizar PC y celular.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
       } else if (currentAgent === 'homer') {
         const h = getHomerMetrics();
-        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre${h.total} operaciones.`);
+        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre ${h.total} operaciones.`);
       }
     }
 
@@ -1073,8 +1073,8 @@
       if (asset) {
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
-        const nw = (asset.news_warning && asset.news_warning.active) ? ` Precaución: hoy tiene noticia fuerte en ${asset.news_warning.currencies}:${asset.news_warning.events[0]}.` : '';
-        typeAgentDialogue(`${asset.symbol} cotiza en vivo en${asset.price} (${asset.setup.signal_tag}). Está a ${d.units} ${d.label} de su entrada en${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en${asset.setup.tp1} (+${p.tp1}${p.unitLabel}).${nw}`);
+        const nw = (asset.news_warning && asset.news_warning.active) ? ` Precaución: hoy tiene noticia fuerte en ${asset.news_warning.currencies}: ${asset.news_warning.events[0]}.` : '';
+        typeAgentDialogue(`${asset.symbol} cotiza en vivo en ${asset.price} (${asset.setup.signal_tag}). Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}).${nw}`);
         return;
       }
       handleQuickReply('SI');
@@ -1190,7 +1190,7 @@
 
       document.getElementById('pv-calendar').innerHTML = (data.calendar || []).map(ev => `
         <div class="bg-[#050811] border ${ev.impact === 'ALTO' ? 'border-orange-500/50' : 'border-slate-800'} rounded p-2.5">
-          <div class="flex justify-between text-[10px] ${ev.impact === 'ALTO' ? 'text-orange-300 font-bold' : 'text-sky-400'}"><span>${ev.date}${ev.time} · ${ev.currency}</span><span>${ev.impact === 'ALTO' ? '⚠️ ALTO IMPACTO' : ev.impact}</span></div>
+          <div class="flex justify-between text-[10px] ${ev.impact === 'ALTO' ? 'text-orange-300 font-bold' : 'text-sky-400'}"><span>${ev.date} ${ev.time} · ${ev.currency}</span><span>${ev.impact === 'ALTO' ? '⚠️ ALTO IMPACTO' : ev.impact}</span></div>
           <div class="font-bold text-white mt-0.5">${ev.title}</div>
         </div>
       `).join('');
@@ -1247,12 +1247,205 @@
           <div class="hud-panel rounded-xl p-4 space-y-3 border ${hasNews ? 'border-orange-400/70' : (st.code === 'TP1' ? 'border-emerald-400' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800')))}">
             <div class="flex items-center justify-between gap-2">
               <div class="flex flex-wrap items-center gap-1.5">
-                <span class="font-hud font-bold text-white text-sm">${st.dot}${a.symbol}</span>
-                <span class="text-xs text-cyan-300 font-bold">${a.price}</span>${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
+                <span class="font-hud font-bold text-white text-sm">${st.dot} ${a.symbol}</span>
+                <span class="text-xs text-cyan-300 font-bold">${a.price}</span>
+                ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
                 ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA ${a.news_warning.currencies}</span>` : ''}
                 ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">TESIS ROTA</span>' : ''}
               </div>
               <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400 shrink-0">Gráfico →</button>
             </div>
 
-            ${
+            ${hasNews ? `
+              <div class="bg-orange-500/15 border border-orange-400/50 rounded-lg px-2.5 py-1.5 text-[10px] text-orange-200">
+                <strong>${a.news_warning.label}:</strong> ${a.news_warning.events.join(' · ')}
+              </div>
+            ` : ''}
+
+            <div class="flex items-center justify-between bg-[#050811] border border-slate-800 rounded-lg p-2.5">
+              <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-full border-2 ${isAligned ? 'border-emerald-400 text-emerald-400' : (isBroken ? 'border-red-400 text-red-400' : 'border-slate-500 text-slate-400')} flex items-center justify-center font-bold text-xs">${a.confluence.score}</div>
+                <div class="text-xs"><div class="font-bold text-white">${a.confluence.verdict_title}</div><div class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</div></div>
+              </div>
+              <button onclick="toggleWhy('${a.symbol}')" class="px-2 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">¿Por qué? ▾</button>
+            </div>
+            <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
+              <div><strong class="text-sky-400">VISIÓN (Macro):</strong> ${a.macro_reason}</div>
+              <div><strong class="text-red-400">ULTRÓN (Técnico):</strong> Tendencia ${a.chart_bias} (D:${a.tf_bias.daily} / 4H:${a.tf_bias.h4} / 1H:${a.tf_bias.h1}).</div>
+              <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> Entrada en ${a.setup.entry} (a ${d.units} ${d.label}), SL ${p.sl} ${p.unitLabel}, TP1 +${p.tp1} ${p.unitLabel}.</div>
+            </div>
+            <div class="grid grid-cols-4 gap-1.5 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[11px]">
+              <div><div class="text-[9px] text-sky-400">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[9px] text-slate-400">a ${d.units} ${d.label}</div></div>
+              <div><div class="text-[9px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[9px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
+              <div><div class="text-[9px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[9px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
+              <div><div class="text-[9px] text-emerald-400">TP2</div><div class="font-bold text-emerald-400">${a.setup.tp2}</div><div class="text-[9px] text-emerald-300">+${p.tp2} ${p.unitLabel}</div></div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderPanelUltron() {
+      if (!data) return;
+      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => {
+        const st = getAssetBadgeState(a);
+        const d = getAssetUnitsDist(a);
+        const hasNews = a.news_warning && a.news_warning.active;
+        return `
+          <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : (hasNews ? 'bg-[#050811] border-orange-500/50 text-slate-200' : 'bg-[#050811] border-slate-800 text-slate-300')}">
+            <div class="flex items-center justify-between text-[11px] font-bold">
+              <span>${a.symbol}</span>
+              <span>${hasNews ? '⚠️' : st.dot}</span>
+            </div>
+            <div class="text-[9px] text-slate-400 mt-0.5">${st.text || `a ${d.units} ${d.label}`}</div>
+          </button>`;
+      }).join('');
+
+      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      const d = getAssetUnitsDist(a);
+      const p = getSetupPips(a);
+      const st = getAssetBadgeState(a);
+      const newsBanner = document.getElementById('pu-news-banner');
+      if (newsBanner) {
+        if (a.news_warning && a.news_warning.active) {
+          newsBanner.classList.remove('hidden');
+          newsBanner.innerHTML = `<strong>${a.news_warning.label}:</strong> ${a.news_warning.events.join(' · ')}`;
+        } else {
+          newsBanner.classList.add('hidden');
+        }
+      }
+
+      document.getElementById('pu-sym').textContent = `${st.dot} ${a.symbol}`;
+      document.getElementById('pu-price').textContent = `${a.price}`;
+      document.getElementById('pu-status').textContent = `${st.text || a.setup.signal_tag} · a ${d.units} ${d.label}`;
+      document.getElementById('pu-entry').textContent = a.setup.entry;
+      document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
+      document.getElementById('pu-sl').textContent = a.setup.sl;
+      document.getElementById('pu-sl-pips').textContent = `-${p.sl} ${p.unitLabel}`;
+      document.getElementById('pu-tp1').textContent = a.setup.tp1;
+      document.getElementById('pu-tp1-pips').textContent = `+${p.tp1} ${p.unitLabel}`;
+      document.getElementById('pu-tp2').textContent = a.setup.tp2;
+      document.getElementById('pu-tp2-pips').textContent = `+${p.tp2} ${p.unitLabel}`;
+      drawUltronChart();
+    }
+
+    function setChartTF(tf) {
+      selectedTF = tf;
+      document.querySelectorAll('.ctf').forEach(b => {
+        b.className = b.dataset.tf === tf ? 'ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold' : 'ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300';
+      });
+      drawUltronChart();
+    }
+
+    function drawUltronChart() {
+      if (!data) return;
+      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      const canvas = document.getElementById('ultron-canvas');
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width) return;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const W = rect.width, H = rect.height, padL = 10, padR = 76, padT = 20, padB = 22;
+      const plotW = W - padL - padR, plotH = H - padT - padB;
+      ctx.fillStyle = '#030509'; ctx.fillRect(0, 0, W, H);
+      const candles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF].slice(-40) : [];
+      if (!candles.length) return;
+      const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp2, a.price];
+      const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp2, a.price];
+      const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
+      const yOf = p => padT + ((maxP - p) / span) * plotH;
+
+      const yEq = yOf((a.intraday_high + a.intraday_low) / 2);
+      ctx.setLineDash([4, 4]); ctx.strokeStyle = '#475569';
+      ctx.beginPath(); ctx.moveTo(padL, yEq); ctx.lineTo(W - padR, yEq); ctx.stroke();
+      ctx.setLineDash([]); ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono';
+      ctx.fillText('EQ 50%', W - padR - 42, yEq - 4);
+
+      const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
+      ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
+      ctx.fillRect(padL + plotW * 0.4, yObT, plotW * 0.6, Math.max(5, yObB - yObT));
+
+      const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
+      candles.forEach((c, i) => {
+        const x = padL + i * step + step / 2, bull = c.c >= c.o;
+        ctx.strokeStyle = bull ? '#10b981' : '#ef4444'; ctx.fillStyle = bull ? '#10b981' : '#ef4444';
+        ctx.beginPath(); ctx.moveTo(x, yOf(c.h)); ctx.lineTo(x, yOf(c.l)); ctx.stroke();
+        ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
+      });
+
+      const drawLvl = (val, lbl, col) => {
+        const y = yOf(val);
+        ctx.strokeStyle = col; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(padL + plotW * 0.35, y); ctx.lineTo(W - padR, y); ctx.stroke();
+        ctx.setLineDash([]); ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
+        ctx.fillStyle = '#fff'; ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(val.toFixed(a.decimals), W - padR + 5, y + 3);
+        ctx.fillText(lbl, padL + plotW * 0.36, y - 4);
+      };
+      drawLvl(a.setup.entry, a.setup.signal_tag, '#0284c7');
+      drawLvl(a.setup.sl, 'STOP', '#dc2626');
+      drawLvl(a.setup.tp1, 'TP1', '#059669');
+      drawLvl(a.setup.tp2, 'TP2', '#10b981');
+
+      const yLive = yOf(a.price);
+      ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padL, yLive); ctx.lineTo(W - padR, yLive); ctx.stroke();
+      ctx.fillStyle = '#f59e0b'; ctx.fillRect(W - padR + 2, yLive - 8, padR - 4, 16);
+      ctx.fillStyle = '#000'; ctx.font = 'bold 9px JetBrains Mono';
+      ctx.fillText(a.price.toFixed(a.decimals), W - padR + 5, yLive + 3);
+    }
+
+    function renderTrades() {
+      const h = getHomerMetrics();
+      const badge = document.getElementById('homer-stats-badge');
+      const list = document.getElementById('journal-list');
+      if (badge) badge.textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
+      if (!list) return;
+      if (!trades.length) {
+        list.innerHTML = `<div class="text-slate-500 text-center py-3">Sin operaciones registradas aún.</div>`;
+        return;
+      }
+      list.innerHTML = trades.map((t, i) => `
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between gap-2">
+          <div>
+            <strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')}">${t.res}</span></strong>
+            <span class="text-slate-400"> - ${t.note}</span>
+            ${t.date ? `<span class="text-[10px] text-slate-500 ml-1">(${t.date})</span>` : ''}
+          </div>
+          <button onclick="deleteTrade(${i})" class="text-red-400 px-2 py-1 font-bold">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function deleteTrade(idx) {
+      trades.splice(idx, 1);
+      saveCloudJournal();
+    }
+
+    document.getElementById('journal-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+      trades.unshift({
+        pair: document.getElementById('j-pair').value,
+        dir: document.getElementById('j-dir').value,
+        res: document.getElementById('j-res').value,
+        note: document.getElementById('j-note').value,
+        date: nowStr
+      });
+      e.target.reset();
+      saveCloudJournal();
+    });
+
+    selectAgent('jarvis', false);
+    renderTrades();
+    updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
+    loadCloudJournal(false);
+    loadData();
+    setInterval(refreshLivePrices, 10000);
+    setInterval(() => loadCloudJournal(false), 15000);
+    setInterval(loadData, 120000);
+  </script>
+</body>
+</html>
