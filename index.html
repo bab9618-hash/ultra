@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v7.3 SWING + IA LIVE (22)</title>
+  <title>ORÁCULO · Cabina v7.4 SWING + IA LIVE (22)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -978,36 +978,57 @@ ${buildLiveContextSnapshot()}`;
         { role: 'user', parts: [{ text: `${sysPrompt}\n\nPREGUNTA DEL USUARIO: ${userQuestion}` }] }
       ];
 
-      const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-1.5-flash'];
+      // 1. Obtener dinámicamente los modelos activos habilitados en la clave API
+      let activeModels = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
+      try {
+        const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(geminiApiKey)}`);
+        if (listRes.ok) {
+          const listJson = await listRes.json();
+          const valid = (listJson.models || [])
+            .filter(m => (m.supportedGenerationMethods || []).includes('generateContent') && m.name.includes('gemini'))
+            .map(m => m.name.replace('models/', ''));
+          if (valid.length) {
+            const preferred = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-2.5-pro'];
+            const ordered = preferred.filter(p => valid.includes(p));
+            const rest = valid.filter(v => !ordered.includes(v));
+            activeModels = [...ordered, ...rest].slice(0, 5);
+          }
+        }
+      } catch (e) {}
+
       let lastError = 'Sin respuesta';
 
-      for (const modelName of models) {
-        try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(geminiApiKey)}`;
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents,
-              generationConfig: { temperature: 0.45, maxOutputTokens: 600 }
-            })
-          });
+      // 2. Intentar con cada modelo activo y reintentar tras pausa breve si hay pico de tráfico
+      for (let round = 0; round < 2; round++) {
+        for (const modelName of activeModels) {
+          try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(geminiApiKey)}`;
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents,
+                generationConfig: { temperature: 0.45, maxOutputTokens: 600 }
+              })
+            });
 
-          if (!res.ok) {
-            const errJson = await res.json().catch(() => ({}));
-            lastError = errJson?.error?.message || `HTTP ${res.status}`;
-            continue;
+            if (!res.ok) {
+              const errJson = await res.json().catch(() => ({}));
+              lastError = errJson?.error?.message || `HTTP ${res.status}`;
+              continue;
+            }
+            const json = await res.json();
+            const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (reply) {
+              chatHistory.push({ role: 'user', parts: [{ text: userQuestion }] });
+              chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+              return reply.replace(/\*\*/g, '').trim();
+            }
+          } catch (e) {
+            lastError = e.message;
           }
-          const json = await res.json();
-          const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (reply) {
-            chatHistory.push({ role: 'user', parts: [{ text: userQuestion }] });
-            chatHistory.push({ role: 'model', parts: [{ text: reply }] });
-            return reply.replace(/\*\*/g, '').trim();
-          }
-        } catch (e) {
-          lastError = e.message;
         }
+        await new Promise(r => setTimeout(r, 1500));
       }
       throw new Error(lastError);
     }
