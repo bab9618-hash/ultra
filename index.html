@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.8 LIVE (22)</title>
+  <title>ORÁCULO · Cabina v6.9 LIVE (22)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -236,7 +236,6 @@
         </div>
       </div>
 
-      <!-- BANNER DE ALERTA DE NOTICIA FUERTE EN ULTRÓN -->
       <div id="pu-news-banner" class="hidden bg-orange-500/15 border border-orange-400/60 rounded-lg p-2.5 text-xs text-orange-200"></div>
 
       <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5" id="panel-ultron-selector"></div>
@@ -631,13 +630,20 @@
 
     function getAssetBadgeState(a) {
       const isBuy = a.setup.direction === 'BUY';
-      const hitTP1 = isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1);
+      const createdTs = a.created_at || 0;
+      const futureCandles = (a.candles && a.candles['1h'])
+        ? a.candles['1h'].filter(c => c.t >= createdTs)
+        : [];
+      const touchedEntry = futureCandles.some(c => isBuy ? (c.l <= a.setup.entry) : (c.h >= a.setup.entry));
+      const hitTP1 = touchedEntry && (isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1));
+      const missedMove = !touchedEntry && (isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1));
       const isReentry = (a.setup.signal_tag || '').toUpperCase().includes('RE-ENTRADA');
       const pctDist = Math.abs(a.price - a.setup.entry) / a.price;
       const rightSide = isBuy ? (a.price >= a.setup.sl && a.price < a.setup.tp1) : (a.price <= a.setup.sl && a.price > a.setup.tp1);
       const nearBlock = rightSide && pctDist <= 0.004;
 
       if (hitTP1) return { code: 'TP1', dot: '🟢', text: 'TP1 ALCANZADO', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400' };
+      if (missedMove) return { code: 'MISSED', dot: '⚪', text: 'SIN ACTIVAR', badgeClass: 'bg-slate-700/40 text-slate-300 border-slate-500' };
       if (isReentry) return { code: 'REENTRY', dot: '🔵', text: 'RE-ENTRADA', badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-400' };
       if (nearBlock) return { code: 'NEAR', dot: '🟡', text: 'CERCA OB', badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-400' };
       return { code: 'WAIT', dot: '', text: '', badgeClass: '' };
@@ -650,8 +656,8 @@
       { id: 4, title: "4. Order Blocks Institucionales (OB)", body: "Lección cuatro: Bloques de Órdenes. Son la última vela contraria antes de un impulso fuerte que rompe estructura. Allí quedaron órdenes pendientes de bancos que suelen mitigarse cuando el precio regresa.", quiz: "Regla clave: Use la caja del Order Block como zona de espera, no entre sin rechazo." },
       { id: 5, title: "5. Confluencia Macro (DXY, US10Y y Oro)", body: "Lección cinco: Visión Macro. Si el índice del dólar DXY y los bonos US10Y suben juntos, pares como EURUSD y el oro XAUUSD tienden a caer. Si ambos bajan, los activos de riesgo y el oro suben.", quiz: "Regla clave: Cuando Visión y Ultrón coinciden, la probabilidad sube por encima del 70 por ciento." },
       { id: 6, title: "6. Killzones de Londres y Nueva York", body: "Lección seis: Horarios Institucionales. El volumen real entra en la Killzone de Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). En Asia el volumen es bajo y abundan las trampas.", quiz: "Regla clave: Si el indicador superior dice Fuera de Killzone, reduzca su exposición." },
-      { id: 7, title: "7. Gestión de Riesgo 1:2 y 1:3 (TP1 y TP2)", body: "Lección siete: Matemáticas del Trader. Todas las projeciones de Oráculo buscan un mínimo de 1 a 2 en TP1 y 1 a 3 en TP2. Al tocar TP1 debe asegurar parciales y mover su Stop Loss a precio de entrada.", quiz: "Regla clave: Con un ratio 1 a 2, acertando solo 4 de cada 10 operaciones usted ya es rentable." },
-      { id: 8, title: "8. Re-entradas Intradía tras TP1", body: "Lección ocho: Re-entradas. Cuando un par alcanza su TP1, el sistema libera el bloqueo y dibuja un nuevo Order Block a favor de la tendencia. Nunca persiga el precio; espere el retroceso a la nueva caja.", quiz: "Regla clave: Opere las re-entradas con la mitad del lotaje inicial." },
+      { id: 7, title: "7. Gestión de Riesgo 1:2 y 1:3 (TP1 y TP2)", body: "Lección siete: Matemáticas del Trader. Todas las proyecciones de Oráculo buscan un mínimo de 1 a 2 en TP1 y 1 a 3 en TP2. Al tocar TP1 debe asegurar parciales y mover su Stop Loss a precio de entrada.", quiz: "Regla clave: Con un ratio 1 a 2, acertando solo 4 de cada 10 operaciones usted ya es rentable." },
+      { id: 8, title: "8. Re-entradas Intradía tras TP1", body: "Lección ocho: Re-entradas. Cuando un par alcanza su TP1 tras activar la entrada, el sistema busca opcionalmente un Order Block claro en el impulso para esperar retroceso. Nunca persiga el precio.", quiz: "Regla clave: Opere las re-entradas con la mitad del lotaje inicial." },
       { id: 9, title: "9. Filtro de Tesis Rota y Noticias Fuertes", body: "Lección nueve: Protección de Capital. Si Jarvis marca Tesis Rota o el par tiene alerta de noticia fuerte de alto impacto hoy, reduzca el riesgo o espere a que pase el latigazo de la noticia.", quiz: "Regla clave: Una operación evitada en noticia de alto impacto protege su cuenta fondeada." },
       { id: 10, title: "10. Auditoría Emocional con Karen y H.O.M.E.R.", body: "Lección diez: Disciplina Profesional. Anotar cada ejecución en el diario de Karen elimina el trading por venganza tras un Stop Loss y permite que H.O.M.E.R. calcule su ventaja estadística real.", quiz: "Regla clave: El éxito no está en adivinar cada vela, sino en repetir exactamente el mismo proceso." }
     ];
