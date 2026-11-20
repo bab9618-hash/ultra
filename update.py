@@ -374,12 +374,11 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         recent = c_1h[-24:]
         intraday_high = max(x["h"] for x in recent)
         intraday_low = min(x["l"] for x in recent)
-        eq_50 = (intraday_high + intraday_low) / 2.0
 
         # 4. DETECTOR TEMPRANO DE AGOTAMIENTO ANTES DEL GIRO
         exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
 
-        # 5. BLOQUES CLÁSICOS ORIGINALES
+        # 5. BLOQUES CLÁSICOS ORIGINALES + RE-ENTRADA OPCIONAL SOLO SI HAY ZONA INSTITUCIONAL CLARA
         if chart_bias == "SUBE":
             direction = "BUY"
             ob_low = round(min(x["l"] for x in recent[-12:]), dec)
@@ -394,8 +393,34 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             tp1 = round(entry + (risk * 2.0), dec)
             tp2 = round(entry + (risk * 3.0), dec)
 
+            touched_orig = any(x["l"] <= ob_high for x in c_1h[-6:])
+            hit_tp1_real = touched_orig and price >= tp1
+            is_reentry_active = False
+
+            if hit_tp1_real:
+                # Re-entrada OPCIONAL: solo si hubo vela bajista seguida de desplazamiento fuerte (>= 1.3x)
+                for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
+                    c_ob = c_1h[idx]
+                    c_imp = c_1h[idx + 1]
+                    body_ob = max(pip, abs(c_ob["c"] - c_ob["o"]))
+                    body_imp = abs(c_imp["c"] - c_imp["o"])
+                    if c_ob["c"] < c_ob["o"] and c_imp["c"] > c_ob["h"] and body_imp >= body_ob * 1.3:
+                        ob_low = round(c_ob["l"], dec)
+                        ob_high = round(max(c_ob["h"], ob_low + 8 * pip), dec)
+                        entry = round((ob_low + ob_high) / 2.0, dec)
+                        sl = round(min(ob_low - (6 * pip), entry - risk), dec)
+                        actual_r = abs(entry - sl)
+                        tp1 = round(entry + (actual_r * 2.0), dec)
+                        tp2 = round(entry + (actual_r * 3.0), dec)
+                        is_reentry_active = True
+                        break
+
             if exhaustion["active"]:
                 signal_tag = "⚠️ RIESGO GIRO · PROTEGER"
+            elif is_reentry_active:
+                signal_tag = "RE-ENTRADA OB (OPCIONAL)"
+            elif hit_tp1_real:
+                signal_tag = "TP1 CUMPLIDO · SIN RE-ENTRADA"
             elif macro_backed_reversal and rev["sweep"] == "SSL_SWEEP_BUY":
                 signal_tag = "GIRO MACRO · BARRIDO SSL"
             elif macro_backed_reversal and rev["choch"] == "BULLISH_CHOCH":
@@ -403,7 +428,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             elif rev["choch"] == "BULLISH_CHOCH":
                 signal_tag = "CHoCH ALCISTA · OB"
             else:
-                signal_tag = "COMPRA OB" if price > eq_50 * 0.998 else "RE-ENTRADA OB"
+                signal_tag = "COMPRA OB"
         else:
             direction = "SELL"
             ob_high = round(max(x["h"] for x in recent[-12:]), dec)
@@ -418,8 +443,34 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             tp1 = round(entry - (risk * 2.0), dec)
             tp2 = round(entry - (risk * 3.0), dec)
 
+            touched_orig = any(x["h"] >= ob_low for x in c_1h[-6:])
+            hit_tp1_real = touched_orig and price <= tp1
+            is_reentry_active = False
+
+            if hit_tp1_real:
+                # Re-entrada OPCIONAL: solo si hubo vela alcista seguida de caída fuerte (>= 1.3x)
+                for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
+                    c_ob = c_1h[idx]
+                    c_imp = c_1h[idx + 1]
+                    body_ob = max(pip, abs(c_ob["c"] - c_ob["o"]))
+                    body_imp = abs(c_imp["c"] - c_imp["o"])
+                    if c_ob["c"] > c_ob["o"] and c_imp["c"] < c_ob["l"] and body_imp >= body_ob * 1.3:
+                        ob_high = round(c_ob["h"], dec)
+                        ob_low = round(min(c_ob["l"], ob_high - 8 * pip), dec)
+                        entry = round((ob_low + ob_high) / 2.0, dec)
+                        sl = round(max(ob_high + (6 * pip), entry + risk), dec)
+                        actual_r = abs(sl - entry)
+                        tp1 = round(entry - (actual_r * 2.0), dec)
+                        tp2 = round(entry - (actual_r * 3.0), dec)
+                        is_reentry_active = True
+                        break
+
             if exhaustion["active"]:
                 signal_tag = "⚠️ RIESGO GIRO · PROTEGER"
+            elif is_reentry_active:
+                signal_tag = "RE-ENTRADA OB (OPCIONAL)"
+            elif hit_tp1_real:
+                signal_tag = "TP1 CUMPLIDO · SIN RE-ENTRADA"
             elif macro_backed_reversal and rev["sweep"] == "BSL_SWEEP_SELL":
                 signal_tag = "GIRO MACRO · BARRIDO BSL"
             elif macro_backed_reversal and rev["choch"] == "BEARISH_CHOCH":
@@ -427,7 +478,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             elif rev["choch"] == "BEARISH_CHOCH":
                 signal_tag = "CHoCH BAJISTA · OB"
             else:
-                signal_tag = "VENTA OB" if price < eq_50 * 1.002 else "RE-ENTRADA OB"
+                signal_tag = "VENTA OB"
 
         # 6. CONFLUENCIA MACRO + TÉCNICA
         dominant_w = max(w_up, w_dn)
@@ -557,7 +608,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"Matriz híbrida 4H/1D (60%/40%), alerta preventiva de agotamiento y giros con respaldo macro sobre {len(assets)} activos."
+            "summary": f"Matriz híbrida 4H/1D (60%/40%), alerta preventiva de agotamiento, re-entrada opcional y giros con respaldo macro sobre {len(assets)} activos."
         },
         "banks": banks,
         "news": news,
@@ -568,7 +619,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados con cesta híbrida 4H/1D y alerta preventiva.")
+    print(f"OK: {len(assets)} activos actualizados con cesta híbrida 4H/1D y re-entrada opcional.")
 
 if __name__ == "__main__":
     main()
