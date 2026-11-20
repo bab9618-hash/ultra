@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v6.8 LIVE</title>
+  <title>ORÁCULO · Cabina v6.8 LIVE (22)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -57,7 +57,7 @@
     .spin-med { animation: spinSlow 14s linear infinite; }
     .spin-rev { animation: spinRev 18s linear infinite; }
     .pulse-core { animation: pulseCore 2.8s ease-in-out infinite; }
-    .ticker-track { display: flex; width: max-content; animation: tickerScroll 36s linear infinite; }
+    .ticker-track { display: flex; width: max-content; animation: tickerScroll 42s linear infinite; }
     .typing-cursor { display: inline-block; width: 7px; height: 13px; background: var(--agent-color); margin-left: 3px; vertical-align: middle; animation: blinkCursor 0.8s infinite; }
     .hud-panel {
       background: linear-gradient(155deg, rgba(10, 14, 22, 0.92), rgba(5, 8, 13, 0.96));
@@ -182,7 +182,7 @@
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
         <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
         <button type="button" onclick="startVoiceRecognition()" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
-        <input id="cockpit-input" type="text" placeholder="Pregúntele por XAUUSD, pares o lección..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
+        <input id="cockpit-input" type="text" placeholder="Pregúntele por XAUUSD, AUDJPY, noticias o lección..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
         <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ENVIAR</button>
       </form>
     </div>
@@ -192,7 +192,7 @@
   <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 pt-4 pb-28 space-y-5">
     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
-        <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (17)</button>
+        <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (22)</button>
         <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
         <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 CURSO F.R.I.D.A.Y.</button>
         <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO, BANCOS & NOTICIAS</button>
@@ -201,21 +201,23 @@
       <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
     </div>
 
-    <!-- SUBPANEL JARVIS CON LUPA BUSCADORA -->
+    <!-- SUBPANEL JARVIS CON LUPA BUSCADORA Y FILTRO DE NOTICIAS FUERTES -->
     <section id="ptab-jarvis" class="space-y-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
-        <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (17)</button>
+        <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
         <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
+        <button onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300" data-pf="NEWS">⚠️ CON NOTICIA HOY</button>
         <button onclick="setPanelFilter('TP1')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-green-300" data-pf="TP1">🟢 EN TP1</button>
         <button onclick="setPanelFilter('REENTRY')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pf="REENTRY">🔵 RE-ENTRADA</button>
-        <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⚠️ TESIS ROTA</button>
+        <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ TESIS ROTA</button>
+        <button onclick="setPanelFilter('AUD')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="AUD">🇦🇺 PARES AUD</button>
         <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
       </div>
 
       <!-- LUPA BUSCADORA DE PARES -->
       <div class="relative flex items-center">
         <span class="absolute left-3 text-amber-400 text-sm pointer-events-none">🔍</span>
-        <input id="pair-search-input" type="text" oninput="setPairSearch(this.value)" placeholder="Buscar par o activo (ej: XAU, EURUSD, GBP, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500" />
+        <input id="pair-search-input" type="text" oninput="setPairSearch(this.value)" placeholder="Buscar par o activo (ej: AUD, XAU, EURUSD, GBP, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500" />
         <button id="pair-search-clear" type="button" onclick="clearPairSearch()" class="hidden absolute right-2.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-xs font-bold">✕</button>
       </div>
 
@@ -230,8 +232,13 @@
           <span>🟢 TP1 Alcanzado</span>
           <span>🔵 Re-entrada Activa</span>
           <span>🟡 Cerca del Bloque</span>
+          <span class="text-orange-300">⚠️ Noticia Fuerte Hoy</span>
         </div>
       </div>
+
+      <!-- BANNER DE ALERTA DE NOTICIA FUERTE EN ULTRÓN -->
+      <div id="pu-news-banner" class="hidden bg-orange-500/15 border border-orange-400/60 rounded-lg p-2.5 text-xs text-orange-200"></div>
+
       <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5" id="panel-ultron-selector"></div>
       <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
         <div>
@@ -293,7 +300,7 @@
       </div>
 
       <div class="space-y-2">
-        <h4 class="font-hud text-xs font-bold text-cyan-400 tracking-wider">📅 CALENDARIO DE SESIONES E IMPACTO</h4>
+        <h4 class="font-hud text-xs font-bold text-cyan-400 tracking-wider">📅 CALENDARIO ECONÓMICO DE HOY (ALERTAS DE ALTO IMPACTO)</h4>
         <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
       </div>
 
@@ -331,9 +338,13 @@
           <option value="GBPUSD">GBPUSD</option>
           <option value="USDJPY">USDJPY</option>
           <option value="GBPJPY">GBPJPY</option>
+          <option value="AUDUSD">AUDUSD</option>
+          <option value="AUDJPY">AUDJPY</option>
+          <option value="AUDCAD">AUDCAD</option>
+          <option value="AUDNZD">AUDNZD</option>
+          <option value="EURAUD">EURAUD</option>
+          <option value="AUDCHF">AUDCHF</option>
           <option value="BTCUSD">BTCUSD</option>
-          <option value="US30">US30</option>
-          <option value="USTEC">USTEC</option>
         </select>
         <select id="j-dir" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="COMPRA">COMPRA</option><option value="VENTA">VENTA</option></select>
         <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="WIN">GANADA (+2R / +3R)</option><option value="LOSS">PERDIDA (-1R)</option><option value="BE">BREAK EVEN (0R)</option></select>
@@ -417,15 +428,14 @@
       setPairSearch('');
     }
 
-    // =========================================================
-    // MOTOR DE PRECIOS EN TIEMPO REAL (FEED INTRADÍA REAL)
-    // =========================================================
     const YF_MAP = {
       'XAUUSD': 'GC=F', 'EURUSD': 'EURUSD=X', 'USDJPY': 'JPY=X',
       'GBPUSD': 'GBPUSD=X', 'GBPJPY': 'GBPJPY=X', 'GBPAUD': 'GBPAUD=X',
       'GBPNZD': 'GBPNZD=X', 'GBPCAD': 'GBPCAD=X', 'AUDUSD': 'AUDUSD=X',
-      'NZDUSD': 'NZDUSD=X', 'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X',
-      'EURJPY': 'EURJPY=X', 'US30': '^DJI', 'USTEC': '^IXIC', 'US500': '^GSPC'
+      'AUDJPY': 'AUDJPY=X', 'AUDCAD': 'AUDCAD=X', 'AUDNZD': 'AUDNZD=X',
+      'EURAUD': 'EURAUD=X', 'AUDCHF': 'AUDCHF=X', 'NZDUSD': 'NZDUSD=X',
+      'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X', 'EURJPY': 'EURJPY=X',
+      'US30': '^DJI', 'USTEC': '^IXIC', 'US500': '^GSPC'
     };
 
     async function fetchLiveSymbol(sym) {
@@ -448,7 +458,7 @@
       if (!data || !data.assets || !data.assets.length) return;
       let updatedAny = false;
 
-      const priority = [selectedSymbol, 'EURUSD', 'XAUUSD', 'BTCUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'US30', 'USTEC'];
+      const priority = [selectedSymbol, 'EURUSD', 'XAUUSD', 'BTCUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 'AUDJPY', 'GBPJPY'];
       const uniqueSyms = [...new Set([...priority, ...data.assets.map(a => a.symbol)])];
 
       await Promise.all(uniqueSyms.map(async (sym) => {
@@ -493,15 +503,13 @@
       if (!data || !data.assets) return;
       const items = data.assets.map(a => {
         const st = getAssetBadgeState(a);
-        return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong> <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`;
+        const newsTag = (a.news_warning && a.news_warning.active) ? ' <span class="text-orange-400 font-bold">⚠️NOTICIA</span>' : '';
+        return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong>${newsTag} <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`;
       }).join('<span class="text-slate-600">|</span>');
       const track = document.getElementById('live-ticker-track');
       if (track) track.innerHTML = items + items;
     }
 
-    // =========================================================
-    // SINCRONIZACIÓN AUTOMÁTICA PC <-> CELULAR (journal.json)
-    // =========================================================
     function updateCloudBadge(statusText, isCloud = false) {
       const badge = document.getElementById('sync-status-badge');
       const info = document.getElementById('cloud-token-info');
@@ -642,19 +650,18 @@
       { id: 4, title: "4. Order Blocks Institucionales (OB)", body: "Lección cuatro: Bloques de Órdenes. Son la última vela contraria antes de un impulso fuerte que rompe estructura. Allí quedaron órdenes pendientes de bancos que suelen mitigarse cuando el precio regresa.", quiz: "Regla clave: Use la caja del Order Block como zona de espera, no entre sin rechazo." },
       { id: 5, title: "5. Confluencia Macro (DXY, US10Y y Oro)", body: "Lección cinco: Visión Macro. Si el índice del dólar DXY y los bonos US10Y suben juntos, pares como EURUSD y el oro XAUUSD tienden a caer. Si ambos bajan, los activos de riesgo y el oro suben.", quiz: "Regla clave: Cuando Visión y Ultrón coinciden, la probabilidad sube por encima del 70 por ciento." },
       { id: 6, title: "6. Killzones de Londres y Nueva York", body: "Lección seis: Horarios Institucionales. El volumen real entra en la Killzone de Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). En Asia el volumen es bajo y abundan las trampas.", quiz: "Regla clave: Si el indicador superior dice Fuera de Killzone, reduzca su exposición." },
-      { id: 7, title: "7. Gestión de Riesgo 1:2 y 1:3 (TP1 y TP2)", body: "Lección siete: Matemáticas del Trader. Todas las proyecciones de Oráculo buscan un mínimo de 1 a 2 en TP1 y 1 a 3 en TP2. Al tocar TP1 debe asegurar parciales y mover su Stop Loss a precio de entrada.", quiz: "Regla clave: Con un ratio 1 a 2, acertando solo 4 de cada 10 operaciones usted ya es rentable." },
+      { id: 7, title: "7. Gestión de Riesgo 1:2 y 1:3 (TP1 y TP2)", body: "Lección siete: Matemáticas del Trader. Todas las projeciones de Oráculo buscan un mínimo de 1 a 2 en TP1 y 1 a 3 en TP2. Al tocar TP1 debe asegurar parciales y mover su Stop Loss a precio de entrada.", quiz: "Regla clave: Con un ratio 1 a 2, acertando solo 4 de cada 10 operaciones usted ya es rentable." },
       { id: 8, title: "8. Re-entradas Intradía tras TP1", body: "Lección ocho: Re-entradas. Cuando un par alcanza su TP1, el sistema libera el bloqueo y dibuja un nuevo Order Block a favor de la tendencia. Nunca persiga el precio; espere el retroceso a la nueva caja.", quiz: "Regla clave: Opere las re-entradas con la mitad del lotaje inicial." },
-      { id: 9, title: "9. Filtro de Tesis Rota y Gatillo 15m", body: "Lección nueve: Protección de Capital. Si Jarvis marca Tesis Rota, significa que la macroeconomía y el gráfico se contradicen. Además, antes de entrar en un bloque, espere una vela de rechazo en 15 minutos.", quiz: "Regla clave: Una operación evitada en Tesis Rota vale lo mismo que un Take Profit ganado." },
+      { id: 9, title: "9. Filtro de Tesis Rota y Noticias Fuertes", body: "Lección nueve: Protección de Capital. Si Jarvis marca Tesis Rota o el par tiene alerta de noticia fuerte de alto impacto hoy, reduzca el riesgo o espere a que pase el latigazo de la noticia.", quiz: "Regla clave: Una operación evitada en noticia de alto impacto protege su cuenta fondeada." },
       { id: 10, title: "10. Auditoría Emocional con Karen y H.O.M.E.R.", body: "Lección diez: Disciplina Profesional. Anotar cada ejecución en el diario de Karen elimina el trading por venganza tras un Stop Loss y permite que H.O.M.E.R. calcule su ventaja estadística real.", quiz: "Regla clave: El éxito no está en adivinar cada vela, sino en repetir exactamente el mismo proceso." }
     ];
 
     const CONCEPT_DICTIONARY = [
       { keys: ['EQ', '50%', 'EQUILIBRIUM', 'CARO', 'BARATO', 'PREMIUM', 'DISCOUNT'], answer: "La línea EQ 50% marca exactamente la mitad del rango intradía. Arriba de ella es zona Premium (cara, ideal para ventas) y abajo es zona Discount (barata, ideal para compras)." },
-      { keys: ['CHOCH', 'CAMBIO DE TENDENCIA', 'GIRO'], answer: "CHoCH significa Cambio de Carácter. Ocurre cuando el precio rompe con cuerpo el último mínimo ascendente (en tendencia alcista) o el último máximo descendente (en tendencia bajista), avisando un posible giro." },
+      { keys: ['CHOCH', 'CAMBIO DE TENDENCIA', 'GIRO'], answer: "CHoCH significa Cambio de Carácter. Ocurre cuando el precio rompe con cuerpo el último mínimo ascendente o máximo descendente, o barre liquidez con mecha de rechazo respaldado por el flujo macro." },
       { keys: ['BOS', 'QUIEBRE'], answer: "BOS significa Break of Structure (Quiebre de Estructura). Confirma que la tendencia vigente tiene fuerza institucional al superar un máximo o mínimo anterior." },
       { keys: ['TESIS ROTA', 'CONTRADICEN', 'OPPOSED'], answer: "Tesis Rota aparece cuando el análisis macroeconómico de Visión apunta hacia un lado y la estructura técnica de Ultrón apunta hacia el lado opuesto. Es una alerta para no operar ese par hasta que vuelvan a alinearse." },
-      { keys: ['KILLZONE', 'HORARIO', 'SESION'], answer: "Las Killzones son las ventanas de mayor liquidez bancaria: Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). Operar dentro de ellas evita los barridos falsos de la sesión asiática." },
-      { keys: ['REENTRADA', 'RE-ENTRADA', 'TP1'], answer: "Los pares marcados con punto verde (🟢) ya alcanzaron su TP1, y los marcados con punto azul (🔵) tienen activa una Re-entrada institucional esperando retroceso al nuevo bloque." }
+      { keys: ['NOTICIA', 'NOTICIAS', 'IMPACTO', 'CARPETA'], answer: "Cuando un par muestra la etiqueta naranja de Noticia Fuerte Hoy, significa que alguna de sus dos divisas tiene hoy un dato macroeconómico de alto impacto (como tasas, inflación o empleo) y debe operarse con máxima cautela." }
     ];
 
     const AGENTS = {
@@ -724,7 +731,34 @@
     }
 
     function formatTextForSpeech(raw) {
-      return raw.replace(/<[^>]*>/g, '').replace(/XAUUSD/g, 'Oro Dólar').replace(/BTCUSD/g, 'Bitcoin').replace(/USTEC/g, 'Nasdaq cien').replace(/US500/g, 'S and P quinientos').replace(/US30/g, 'Dow Jones').replace(/EURUSD/g, 'Euro Dólar').replace(/USDJPY/g, 'Dólar Yen').replace(/GBPUSD/g, 'Libra Dólar').replace(/GBPJPY/g, 'Libra Yen').replace(/GBPAUD/g, 'Libra Australiano').replace(/GBPNZD/g, 'Libra Neozelandés').replace(/GBPCAD/g, 'Libra Canadiense').replace(/AUDUSD/g, 'Australiano Dólar').replace(/NZDUSD/g, 'Neozelandés Dólar').replace(/USDCAD/g, 'Dólar Canadiense').replace(/USDCHF/g, 'Dólar Franco').replace(/EURJPY/g, 'Euro Yen').replace(/TP1/g, 'Take Profit uno').replace(/TP2/g, 'Take Profit dos').replace(/\bSL\b/g, 'Stop Loss');
+      return raw
+        .replace(/<[^>]*>/g, '')
+        .replace(/⚠️/g, '')
+        .replace(/XAUUSD/g, 'Oro Dólar')
+        .replace(/BTCUSD/g, 'Bitcoin')
+        .replace(/USTEC/g, 'Nasdaq cien')
+        .replace(/US500/g, 'S and P quinientos')
+        .replace(/US30/g, 'Dow Jones')
+        .replace(/EURUSD/g, 'Euro Dólar')
+        .replace(/USDJPY/g, 'Dólar Yen')
+        .replace(/GBPUSD/g, 'Libra Dólar')
+        .replace(/GBPJPY/g, 'Libra Yen')
+        .replace(/GBPAUD/g, 'Libra Australiano')
+        .replace(/GBPNZD/g, 'Libra Neozelandés')
+        .replace(/GBPCAD/g, 'Libra Canadiense')
+        .replace(/AUDUSD/g, 'Australiano Dólar')
+        .replace(/AUDJPY/g, 'Australiano Yen')
+        .replace(/AUDCAD/g, 'Australiano Canadiense')
+        .replace(/AUDNZD/g, 'Australiano Neozelandés')
+        .replace(/EURAUD/g, 'Euro Australiano')
+        .replace(/AUDCHF/g, 'Australiano Franco')
+        .replace(/NZDUSD/g, 'Neozelandés Dólar')
+        .replace(/USDCAD/g, 'Dólar Canadiense')
+        .replace(/USDCHF/g, 'Dólar Franco')
+        .replace(/EURJPY/g, 'Euro Yen')
+        .replace(/TP1/g, 'Take Profit uno')
+        .replace(/TP2/g, 'Take Profit dos')
+        .replace(/\bSL\b/g, 'Stop Loss');
     }
 
     function updateVoiceUI() {
@@ -937,7 +971,7 @@
       const aligned = getAlignedAssets();
       const nearest = getNearestAsset();
       const homer = getHomerMetrics();
-      const totalCount = data ? data.assets.length : 17;
+      const totalCount = data ? data.assets.length : 22;
 
       if (key === 'friday') {
         const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
@@ -952,19 +986,19 @@
       renderDefaultQuickReplies();
 
       if (key === 'jarvis') {
-        const tp1Count = data ? data.assets.filter(a => getAssetBadgeState(a).code === 'TP1').length : 0;
-        const reCount = data ? data.assets.filter(a => getAssetBadgeState(a).code === 'REENTRY').length : 0;
+        const newsPairsCount = data ? data.assets.filter(a => a.news_warning && a.news_warning.active).length : 0;
+        const revCount = data ? data.assets.filter(a => (a.setup.signal_tag || '').includes('GIRO MACRO')).length : 0;
         document.getElementById('agent-hero-metric').textContent = `${broken.length} ALERTAS`;
-        document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${tp1Count} TP1 · ${reCount} RE-ENTRADAS`;
-        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos en tiempo real incluyendo XAUUSD: tenemos ${tp1Count} en TP1, ${reCount} en re-entrada y ${broken.length} alertas de tesis rota. ¿Desea el reporte?`);
+        document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${revCount} GIROS MACRO · ${newsPairsCount} NOTICIAS`;
+        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos: tenemos ${revCount} giros respaldados por macro, ${newsPairsCount} pares con noticia fuerte hoy que requieren precaución y ${broken.length} tesis rotas. ¿Desea el reporte?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & BANCOS';
-        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue la tasa real. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he actualizado el radar de bancos centrales y titulares. ¿Analizamos el panorama macro?`);
+        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue la tasa real. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he actualizado el calendario de noticias fuertes y bancos centrales. ¿Analizamos el panorama macro?`);
       } else if (key === 'ultron') {
         const target = nearest || (data && data.assets[0]);
         document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
-        document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · BOS/CHoCH` : 'ESTRUCTURA';
+        document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · GIROS Y OB` : 'ESTRUCTURA';
         typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez esperando ser barrida. Usted ponga la disciplina, yo pongo la estructura. ¿Quiere el diagnóstico técnico?`);
       } else if (key === 'edith') {
         if (nearest) {
@@ -975,7 +1009,7 @@
           document.getElementById('agent-hero-metric').textContent = '--';
           document.getElementById('agent-hero-sub').textContent = 'CALCULANDO DISTANCIA';
         }
-        typeAgentDialogue(`Sistemas ópticos calibrados en tiempo real. He medido el riesgo, los bloques y cada punto de recorrido; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
+        typeAgentDialogue(`Sistemas ópticos calibrados en tiempo real. He medido el riesgo, los bloques y las noticias de alto impacto del día; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES SINCRONIZADAS`;
@@ -983,7 +1017,7 @@
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Sobre ${homer.total} operaciones anotadas tiene ${homer.winRate}% de acierto y ${homer.pnlR}. ¿Quiere escuchar el veredicto?`);
+        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Sobre ${homer.total} operaciones anotadas tiene ${homer.winRate}% de acierto y${homer.pnlR}. ¿Quiere escuchar el veredicto?`);
       }
     }
 
@@ -991,10 +1025,10 @@
       if (choice === 'NO') { typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa.'); return; }
       if (!data) { typeAgentDialogue('Sincronizando datos del mercado, señor.'); return; }
       if (currentAgent === 'jarvis') {
-        const tp1s = data.assets.filter(a => getAssetBadgeState(a).code === 'TP1').map(x => x.symbol);
-        const res = data.assets.filter(a => getAssetBadgeState(a).code === 'REENTRY').map(x => x.symbol);
+        const revs = data.assets.filter(a => (a.setup.signal_tag || '').includes('GIRO MACRO')).map(x => x.symbol);
+        const newsP = data.assets.filter(a => a.news_warning && a.news_warning.active).map(x => x.symbol);
         const aligned = getAlignedAssets().map(x => x.symbol);
-        typeAgentDialogue(`En TP1 (verde): ${tp1s.length ? tp1s.join(', ') : 'ninguno'}. En Re-entrada (azul): ${res.length ? res.join(', ') : 'ninguno'}. Confluencia fuerte: ${aligned.length ? aligned.join(', ') : 'ninguno'}.`);
+        typeAgentDialogue(`Giros con respaldo macro: ${revs.length ? revs.join(', ') : 'ninguno'}. Pares con noticia fuerte hoy (operar con cuidado): ${newsP.length ? newsP.join(', ') : 'ninguno'}. Confluencia fuerte: ${aligned.slice(0, 6).join(', ')}.`);
       } else if (currentAgent === 'vision') {
         const topNews = (data.news && data.news.length) ? ` Titular destacado: ${data.news[0].title}.` : '';
         typeAgentDialogue(`${data.brief.headline}. ${data.brief.summary}${topNews}`);
@@ -1002,15 +1036,16 @@
         const n = getNearestAsset();
         const d = getAssetUnitsDist(n);
         const p = getSetupPips(n);
-        typeAgentDialogue(`Objetivo prioritario en vivo: ${n.symbol} (${n.price}). Está a ${d.units} ${d.label} de su entrada en ${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
+        const nw = (n.news_warning && n.news_warning.active) ? ` Atención: tiene noticia fuerte hoy (${n.news_warning.events[0]}).` : '';
+        typeAgentDialogue(`Objetivo prioritario en vivo: ${n.symbol} (${n.price}). Está a ${d.units} ${d.label} de su entrada en${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl}${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).${nw}`);
       } else if (currentAgent === 'edith') {
         const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
-        typeAgentDialogue(`Los tres blancos más cercanos en vivo son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})`).join('; ') + `.`);
+        typeAgentDialogue(`Los tres blancos más cercanos en vivo son: ` + top3.map(x => `${x.symbol} a${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})${(x.news_warning && x.news_warning.active) ? ' [con noticia fuerte]' : ''}`).join('; ') + `.`);
       } else if (currentAgent === 'karen') {
-        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía. Abra el panel y pulse Vincular Nube para sincronizar PC y celular.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
+        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía. Abra el panel y pulse Vincular Nube para sincronizar PC y celular.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) -${trades[0].res}.`);
       } else if (currentAgent === 'homer') {
         const h = getHomerMetrics();
-        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre ${h.total} operaciones.`);
+        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre${h.total} operaciones.`);
       }
     }
 
@@ -1038,8 +1073,8 @@
       if (asset) {
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
-        const st = getAssetBadgeState(asset);
-        typeAgentDialogue(`${asset.symbol} cotiza en vivo en ${asset.price} ${st.text ? `(${st.text})` : ''}. Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}).`);
+        const nw = (asset.news_warning && asset.news_warning.active) ? ` Precaución: hoy tiene noticia fuerte en ${asset.news_warning.currencies}:${asset.news_warning.events[0]}.` : '';
+        typeAgentDialogue(`${asset.symbol} cotiza en vivo en${asset.price} (${asset.setup.signal_tag}). Está a ${d.units} ${d.label} de su entrada en${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en${asset.setup.tp1} (+${p.tp1}${p.unitLabel}).${nw}`);
         return;
       }
       handleQuickReply('SI');
@@ -1141,8 +1176,7 @@
       document.getElementById('pv-summary').textContent = data.brief.summary;
 
       const banksList = data.banks || [
-        { bank: "FED (EE.UU.)", currency: "USD", stance: "RESTRICTIVA (HAWKISH)", bias: "BULLISH", detail: `DXY en ${data.brief.dxy} · Bonos US10Y en ${data.brief.us10y}%.` },
-        { bank: "BCE (Eurozona)", currency: "EUR", stance: "FLEXIBILIZACIÓN GRADUAL", bias: "BEARISH", detail: "Presión bajista en EUR frente a diferenciales de rendimiento." }
+        { bank: "FED (EE.UU.)", currency: "USD", stance: "RESTRICTIVA (HAWKISH)", bias: "BULLISH", detail: `DXY en ${data.brief.dxy} · Bonos US10Y en ${data.brief.us10y}%.` }
       ];
       document.getElementById('pv-banks').innerHTML = banksList.map(b => `
         <div class="bg-[#050811] border border-slate-800 rounded-lg p-3 space-y-1">
@@ -1155,8 +1189,8 @@
       `).join('');
 
       document.getElementById('pv-calendar').innerHTML = (data.calendar || []).map(ev => `
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="flex justify-between text-[10px] text-sky-400"><span>${ev.date} ${ev.time} · ${ev.currency}</span><span>${ev.impact}</span></div>
+        <div class="bg-[#050811] border ${ev.impact === 'ALTO' ? 'border-orange-500/50' : 'border-slate-800'} rounded p-2.5">
+          <div class="flex justify-between text-[10px] ${ev.impact === 'ALTO' ? 'text-orange-300 font-bold' : 'text-sky-400'}"><span>${ev.date}${ev.time} · ${ev.currency}</span><span>${ev.impact === 'ALTO' ? '⚠️ ALTO IMPACTO' : ev.impact}</span></div>
           <div class="font-bold text-white mt-0.5">${ev.title}</div>
         </div>
       `).join('');
@@ -1179,9 +1213,11 @@
       if (!data) return;
       let list = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score);
       if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
+      if (panelFilter === 'NEWS') list = list.filter(a => a.news_warning && a.news_warning.active);
       if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence.alignment === 'OPPOSED');
       if (panelFilter === 'TP1') list = list.filter(a => getAssetBadgeState(a).code === 'TP1');
       if (panelFilter === 'REENTRY') list = list.filter(a => getAssetBadgeState(a).code === 'REENTRY');
+      if (panelFilter === 'AUD') list = list.filter(a => a.symbol.includes('AUD'));
       if (panelFilter === 'XAU') list = list.filter(a => a.symbol === 'XAUUSD');
 
       if (pairSearchTerm) {
@@ -1195,7 +1231,7 @@
 
       const grid = document.getElementById('panel-jarvis-grid');
       if (!list.length) {
-        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No se encontraron pares para "<strong class="text-amber-400">${pairSearchTerm}</strong>".</div>`;
+        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No se encontraron pares para este filtro.</div>`;
         return;
       }
 
@@ -1205,190 +1241,18 @@
         const st = getAssetBadgeState(a);
         const isBroken = a.confluence.alignment === 'OPPOSED';
         const isAligned = a.confluence.alignment === 'ALIGNED';
+        const hasNews = a.news_warning && a.news_warning.active;
+
         return `
-          <div class="hud-panel rounded-xl p-4 space-y-3 border ${st.code === 'TP1' ? 'border-emerald-400' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800'))}">
+          <div class="hud-panel rounded-xl p-4 space-y-3 border ${hasNews ? 'border-orange-400/70' : (st.code === 'TP1' ? 'border-emerald-400' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800')))}">
             <div class="flex items-center justify-between gap-2">
               <div class="flex flex-wrap items-center gap-1.5">
-                <span class="font-hud font-bold text-white text-sm">${st.dot} ${a.symbol}</span>
-                <span class="text-xs text-cyan-300 font-bold">${a.price}</span>
-                ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
+                <span class="font-hud font-bold text-white text-sm">${st.dot}${a.symbol}</span>
+                <span class="text-xs text-cyan-300 font-bold">${a.price}</span>${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
+                ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA ${a.news_warning.currencies}</span>` : ''}
                 ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">TESIS ROTA</span>' : ''}
               </div>
               <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400 shrink-0">Gráfico →</button>
             </div>
-            <div class="flex items-center justify-between bg-[#050811] border border-slate-800 rounded-lg p-2.5">
-              <div class="flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-full border-2 ${isAligned ? 'border-emerald-400 text-emerald-400' : (isBroken ? 'border-red-400 text-red-400' : 'border-slate-500 text-slate-400')} flex items-center justify-center font-bold text-xs">${a.confluence.score}</div>
-                <div class="text-xs"><div class="font-bold text-white">${a.confluence.verdict_title}</div><div class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</div></div>
-              </div>
-              <button onclick="toggleWhy('${a.symbol}')" class="px-2 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">¿Por qué? ▾</button>
-            </div>
-            <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
-              <div><strong class="text-sky-400">VISIÓN (Macro):</strong> ${a.macro_reason}</div>
-              <div><strong class="text-red-400">ULTRÓN (Técnico):</strong> Tendencia ${a.chart_bias} (D:${a.tf_bias.daily} / 4H:${a.tf_bias.h4} / 1H:${a.tf_bias.h1}).</div>
-              <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> Entrada en ${a.setup.entry} (a ${d.units} ${d.label}), SL ${p.sl} ${p.unitLabel}, TP1 +${p.tp1} ${p.unitLabel}.</div>
-            </div>
-            <div class="grid grid-cols-4 gap-1.5 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[11px]">
-              <div><div class="text-[9px] text-sky-400">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[9px] text-slate-400">a ${d.units} ${d.label}</div></div>
-              <div><div class="text-[9px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[9px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
-              <div><div class="text-[9px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[9px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
-              <div><div class="text-[9px] text-emerald-400">TP2</div><div class="font-bold text-emerald-400">${a.setup.tp2}</div><div class="text-[9px] text-emerald-300">+${p.tp2} ${p.unitLabel}</div></div>
-            </div>
-          </div>`;
-      }).join('');
-    }
 
-    function renderPanelUltron() {
-      if (!data) return;
-      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => {
-        const st = getAssetBadgeState(a);
-        const d = getAssetUnitsDist(a);
-        return `
-          <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : 'bg-[#050811] border-slate-800 text-slate-300'}">
-            <div class="flex items-center justify-between text-[11px] font-bold">
-              <span>${a.symbol}</span>
-              <span>${st.dot}</span>
-            </div>
-            <div class="text-[9px] text-slate-400 mt-0.5">${st.text || `a ${d.units} ${d.label}`}</div>
-          </button>`;
-      }).join('');
-
-      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
-      const d = getAssetUnitsDist(a);
-      const p = getSetupPips(a);
-      const st = getAssetBadgeState(a);
-      document.getElementById('pu-sym').textContent = `${st.dot} ${a.symbol}`;
-      document.getElementById('pu-price').textContent = `${a.price}`;
-      document.getElementById('pu-status').textContent = `${st.text || a.setup.signal_tag} · a ${d.units} ${d.label}`;
-      document.getElementById('pu-entry').textContent = a.setup.entry;
-      document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
-      document.getElementById('pu-sl').textContent = a.setup.sl;
-      document.getElementById('pu-sl-pips').textContent = `-${p.sl} ${p.unitLabel}`;
-      document.getElementById('pu-tp1').textContent = a.setup.tp1;
-      document.getElementById('pu-tp1-pips').textContent = `+${p.tp1} ${p.unitLabel}`;
-      document.getElementById('pu-tp2').textContent = a.setup.tp2;
-      document.getElementById('pu-tp2-pips').textContent = `+${p.tp2} ${p.unitLabel}`;
-      drawUltronChart();
-    }
-
-    function setChartTF(tf) {
-      selectedTF = tf;
-      document.querySelectorAll('.ctf').forEach(b => {
-        b.className = b.dataset.tf === tf ? 'ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold' : 'ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300';
-      });
-      drawUltronChart();
-    }
-
-    function drawUltronChart() {
-      if (!data) return;
-      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
-      const canvas = document.getElementById('ultron-canvas');
-      if (!canvas) return;
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      if (!rect.width) return;
-      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
-      const ctx = canvas.getContext('2d');
-      ctx.scale(dpr, dpr);
-      const W = rect.width, H = rect.height, padL = 10, padR = 76, padT = 20, padB = 22;
-      const plotW = W - padL - padR, plotH = H - padT - padB;
-      ctx.fillStyle = '#030509'; ctx.fillRect(0, 0, W, H);
-      const candles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF].slice(-40) : [];
-      if (!candles.length) return;
-      const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp2, a.price];
-      const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp2, a.price];
-      const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
-      const yOf = p => padT + ((maxP - p) / span) * plotH;
-
-      const yEq = yOf((a.intraday_high + a.intraday_low) / 2);
-      ctx.setLineDash([4, 4]); ctx.strokeStyle = '#475569';
-      ctx.beginPath(); ctx.moveTo(padL, yEq); ctx.lineTo(W - padR, yEq); ctx.stroke();
-      ctx.setLineDash([]); ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono';
-      ctx.fillText('EQ 50%', W - padR - 42, yEq - 4);
-
-      const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
-      ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
-      ctx.fillRect(padL + plotW * 0.4, yObT, plotW * 0.6, Math.max(5, yObB - yObT));
-
-      const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
-      candles.forEach((c, i) => {
-        const x = padL + i * step + step / 2, bull = c.c >= c.o;
-        ctx.strokeStyle = bull ? '#10b981' : '#ef4444'; ctx.fillStyle = bull ? '#10b981' : '#ef4444';
-        ctx.beginPath(); ctx.moveTo(x, yOf(c.h)); ctx.lineTo(x, yOf(c.l)); ctx.stroke();
-        ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
-      });
-
-      const drawLvl = (val, lbl, col) => {
-        const y = yOf(val);
-        ctx.strokeStyle = col; ctx.setLineDash([3, 3]);
-        ctx.beginPath(); ctx.moveTo(padL + plotW * 0.35, y); ctx.lineTo(W - padR, y); ctx.stroke();
-        ctx.setLineDash([]); ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
-        ctx.fillStyle = '#fff'; ctx.font = 'bold 9px JetBrains Mono';
-        ctx.fillText(val.toFixed(a.decimals), W - padR + 5, y + 3);
-        ctx.fillText(lbl, padL + plotW * 0.36, y - 4);
-      };
-      drawLvl(a.setup.entry, a.setup.signal_tag, '#0284c7');
-      drawLvl(a.setup.sl, 'STOP', '#dc2626');
-      drawLvl(a.setup.tp1, 'TP1', '#059669');
-      drawLvl(a.setup.tp2, 'TP2', '#10b981');
-
-      const yLive = yOf(a.price);
-      ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(padL, yLive); ctx.lineTo(W - padR, yLive); ctx.stroke();
-      ctx.fillStyle = '#f59e0b'; ctx.fillRect(W - padR + 2, yLive - 8, padR - 4, 16);
-      ctx.fillStyle = '#000'; ctx.font = 'bold 9px JetBrains Mono';
-      ctx.fillText(a.price.toFixed(a.decimals), W - padR + 5, yLive + 3);
-    }
-
-    function renderTrades() {
-      const h = getHomerMetrics();
-      const badge = document.getElementById('homer-stats-badge');
-      const list = document.getElementById('journal-list');
-      if (badge) badge.textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
-      if (!list) return;
-      if (!trades.length) {
-        list.innerHTML = `<div class="text-slate-500 text-center py-3">Sin operaciones registradas aún.</div>`;
-        return;
-      }
-      list.innerHTML = trades.map((t, i) => `
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between gap-2">
-          <div>
-            <strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')}">${t.res}</span></strong>
-            <span class="text-slate-400"> - ${t.note}</span>
-            ${t.date ? `<span class="text-[10px] text-slate-500 ml-1">(${t.date})</span>` : ''}
-          </div>
-          <button onclick="deleteTrade(${i})" class="text-red-400 px-2 py-1 font-bold">✕</button>
-        </div>
-      `).join('');
-    }
-
-    function deleteTrade(idx) {
-      trades.splice(idx, 1);
-      saveCloudJournal();
-    }
-
-    document.getElementById('journal-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
-      trades.unshift({
-        pair: document.getElementById('j-pair').value,
-        dir: document.getElementById('j-dir').value,
-        res: document.getElementById('j-res').value,
-        note: document.getElementById('j-note').value,
-        date: nowStr
-      });
-      e.target.reset();
-      saveCloudJournal();
-    });
-
-    selectAgent('jarvis', false);
-    renderTrades();
-    updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
-    loadCloudJournal(false);
-    loadData();
-    setInterval(refreshLivePrices, 10000);
-    setInterval(() => loadCloudJournal(false), 15000);
-    setInterval(loadData, 120000);
-  </script>
-</body>
-</html>
+            ${
