@@ -311,7 +311,7 @@ def get_central_banks(dxy_val, us10y_val, ccy_labels):
         {"bank": "BoJ (Japón)", "currency": "JPY", "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DÉBIL" else "NEUTRAL"), "detail": "Flujo inverso en cruces JPY (60% 4H + 40% 1D)."}
     ]
 
-def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_ccy):
+def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_ccy, now_ts):
     try:
         sym = cfg["symbol"]
         dec = cfg["decimals"]
@@ -378,7 +378,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         # 4. DETECTOR TEMPRANO DE AGOTAMIENTO ANTES DEL GIRO
         exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
 
-        # 5. BLOQUES CLÁSICOS ORIGINALES + RE-ENTRADA OPCIONAL SOLO SI HAY ZONA INSTITUCIONAL CLARA
+        # 5. BLOQUES CLÁSICOS + RE-ENTRADA OPCIONAL EN RETROCESO (CON TP SIEMPRE POR DELANTE)
         if chart_bias == "SUBE":
             direction = "BUY"
             ob_low = round(min(x["l"] for x in recent[-12:]), dec)
@@ -398,20 +398,19 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             is_reentry_active = False
 
             if hit_tp1_real:
-                # Re-entrada OPCIONAL: solo si hubo vela bajista seguida de desplazamiento fuerte (>= 1.3x)
                 for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
                     c_ob = c_1h[idx]
                     c_imp = c_1h[idx + 1]
                     body_ob = max(pip, abs(c_ob["c"] - c_ob["o"]))
                     body_imp = abs(c_imp["c"] - c_imp["o"])
-                    if c_ob["c"] < c_ob["o"] and c_imp["c"] > c_ob["h"] and body_imp >= body_ob * 1.3:
+                    if c_ob["c"] < c_ob["o"] and c_imp["c"] > c_ob["h"] and body_imp >= body_ob * 1.3 and c_ob["h"] < price:
                         ob_low = round(c_ob["l"], dec)
                         ob_high = round(max(c_ob["h"], ob_low + 8 * pip), dec)
                         entry = round((ob_low + ob_high) / 2.0, dec)
                         sl = round(min(ob_low - (6 * pip), entry - risk), dec)
                         actual_r = abs(entry - sl)
-                        tp1 = round(entry + (actual_r * 2.0), dec)
-                        tp2 = round(entry + (actual_r * 3.0), dec)
+                        tp1 = round(max(entry + (actual_r * 2.0), price + (12 * pip)), dec)
+                        tp2 = round(max(entry + (actual_r * 3.0), tp1 + actual_r), dec)
                         is_reentry_active = True
                         break
 
@@ -448,20 +447,19 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             is_reentry_active = False
 
             if hit_tp1_real:
-                # Re-entrada OPCIONAL: solo si hubo vela alcista seguida de caída fuerte (>= 1.3x)
                 for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
                     c_ob = c_1h[idx]
                     c_imp = c_1h[idx + 1]
                     body_ob = max(pip, abs(c_ob["c"] - c_ob["o"]))
                     body_imp = abs(c_imp["c"] - c_imp["o"])
-                    if c_ob["c"] > c_ob["o"] and c_imp["c"] < c_ob["l"] and body_imp >= body_ob * 1.3:
+                    if c_ob["c"] > c_ob["o"] and c_imp["c"] < c_ob["l"] and body_imp >= body_ob * 1.3 and c_ob["l"] > price:
                         ob_high = round(c_ob["h"], dec)
                         ob_low = round(min(c_ob["l"], ob_high - 8 * pip), dec)
                         entry = round((ob_low + ob_high) / 2.0, dec)
                         sl = round(max(ob_high + (6 * pip), entry + risk), dec)
                         actual_r = abs(sl - entry)
-                        tp1 = round(entry - (actual_r * 2.0), dec)
-                        tp2 = round(entry - (actual_r * 3.0), dec)
+                        tp1 = round(min(entry - (actual_r * 2.0), price - (12 * pip)), dec)
+                        tp2 = round(min(entry - (actual_r * 3.0), tp1 - actual_r), dec)
                         is_reentry_active = True
                         break
 
@@ -542,6 +540,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             "ob_low": ob_low,
             "macro_reason": macro_reason,
             "news_warning": news_warning,
+            "created_at": now_ts,
             "confluence": {
                 "score": conf_score,
                 "alignment": alignment,
@@ -568,6 +567,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
 
 def main():
     now_utc = datetime.now(timezone.utc)
+    now_ts = int(now_utc.timestamp())
     dxy_1d = get_candles("DX-Y.NYB", "3mo", "1d", 2, 45)
     dxy_4h = group_4h(get_candles("DX-Y.NYB", "1mo", "1h", 2, 180))
     us10y_1d = get_candles("^TNX", "3mo", "1d", 2, 45)
@@ -595,7 +595,7 @@ def main():
     raw_strength, ccy_labels, spx_chg = compute_currency_strength_matrix(
         c4_map, c1d_map, dxy_4h, dxy_1d, us10y_4h, us10y_1d, c4_map.get("US500", []), c1d_map.get("US500", [])
     )
-    assets = [item for cfg in ASSETS_CONFIG if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels, high_impact_by_ccy))]
+    assets = [item for cfg in ASSETS_CONFIG if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels, high_impact_by_ccy, now_ts))]
     banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
     news = fetch_live_news()
 
@@ -619,7 +619,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados con cesta híbrida 4H/1D y re-entrada opcional.")
+    print(f"OK: {len(assets)} activos actualizados con sello de tiempo created_at.")
 
 if __name__ == "__main__":
     main()
