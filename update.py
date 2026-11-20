@@ -85,58 +85,106 @@ def pct_change_4h(candles, lookback=6):
     last = candles[-1]["c"]
     return ((last - first) / first) * 100.0 if first else 0.0
 
-def find_fresh_ob(c_4h, c_1h, direction, price, pip, dec):
+def detect_reversal_and_structure(c_1h):
     """
-    Busca primero un Order Block fresco/anticipado en 4H o 1H donde el precio
-    AÚN NO haya despegado más allá de TP1, evitando entradas viejas ya corridas.
+    Detecta giros de cambio de tendencia reales:
+    1. Barrido de liquidez (Sweep SSL / BSL) en extremos con mecha de rechazo.
+    2. Cambio de Carácter (CHoCH) rompiendo el último swing estructural.
     """
-    if direction == "BUY":
-        # 1. Buscar vela bajista en últimas 6 velas de 1H (bloque fresco de continuación)
-        recent_bears = [x for x in c_1h[-7:-1] if x["c"] < x["o"] and x["l"] <= price]
-        if recent_bears:
-            ob = recent_bears[-1]
-            ob_low = round(ob["l"], dec)
-            ob_high = round(max(ob["h"], ob_low + 8 * pip), dec)
-            return ob_low, ob_high, "COMPRA OB FRESCO"
+    if len(c_1h) < 18:
+        return {"choch": "NONE", "sweep": "NONE", "reversal_dir": "NONE"}
 
-        # 2. Buscar Order Block institucional en 4H (última vela roja antes de impulso verde) aún cerca del precio
-        for i in range(len(c_4h) - 2, max(1, len(c_4h) - 14), -1):
-            c_prev = c_4h[i]
-            c_next = c_4h[i + 1]
-            if c_prev["c"] < c_prev["o"] and c_next["c"] > c_prev["h"] and c_prev["l"] <= price:
-                # Verificar que el precio no esté lejísimos (máximo 45 pips/pts arriba)
-                if (price - c_prev["h"]) <= 45 * pip:
-                    ob_low = round(c_prev["l"], dec)
-                    ob_high = round(max(c_prev["h"], ob_low + 10 * pip), dec)
-                    return ob_low, ob_high, "OB 4H ANTICIPADO"
+    window = c_1h[-20:-2]
+    last_two = c_1h[-2:]
+    curr = last_two[-1]
+    swing_high = max(x["h"] for x in window)
+    swing_low = min(x["l"] for x in window)
 
-        # 3. Retroceso dinámico a zona de descuento cercana al precio actual (nunca a 80+ pips abajo)
-        ob_high = round(price - (6 * pip), dec)
-        ob_low = round(ob_high - (10 * pip), dec)
-        return ob_low, ob_high, "PULLBACK COMPRA"
-    else:
-        # 1. Buscar vela alcista en últimas 6 velas de 1H (bloque fresco de continuación)
-        recent_bulls = [x for x in c_1h[-7:-1] if x["c"] > x["o"] and x["h"] >= price]
-        if recent_bulls:
-            ob = recent_bulls[-1]
-            ob_high = round(ob["h"], dec)
-            ob_low = round(min(ob["l"], ob_high - 8 * pip), dec)
-            return ob_low, ob_high, "VENTA OB FRESCO"
+    choch = "NONE"
+    if curr["c"] > swing_high:
+        choch = "BULLISH_CHOCH"
+    elif curr["c"] < swing_low:
+        choch = "BEARISH_CHOCH"
 
-        # 2. Buscar Order Block institucional en 4H (última vela verde antes de caída roja) aún cerca del precio
-        for i in range(len(c_4h) - 2, max(1, len(c_4h) - 14), -1):
-            c_prev = c_4h[i]
-            c_next = c_4h[i + 1]
-            if c_prev["c"] > c_prev["o"] and c_next["c"] < c_prev["l"] and c_prev["h"] >= price:
-                if (c_prev["l"] - price) <= 45 * pip:
-                    ob_high = round(c_prev["h"], dec)
-                    ob_low = round(min(c_prev["l"], ob_high - 10 * pip), dec)
-                    return ob_low, ob_high, "OB 4H ANTICIPADO"
+    sweep = "NONE"
+    for c in last_two:
+        lower_wick = min(c["o"], c["c"]) - c["l"]
+        upper_wick = c["h"] - max(c["o"], c["c"])
+        body = max(1e-9, abs(c["c"] - c["o"]))
+        if c["l"] <= swing_low and c["c"] > swing_low and lower_wick >= body * 0.6:
+            sweep = "SSL_SWEEP_BUY"
+        elif c["h"] >= swing_high and c["c"] < swing_high and upper_wick >= body * 0.6:
+            sweep = "BSL_SWEEP_SELL"
 
-        # 3. Retroceso dinámico cercano al precio actual
-        ob_low = round(price + (6 * pip), dec)
-        ob_high = round(ob_low + (10 * pip), dec)
-        return ob_low, ob_high, "PULLBACK VENTA"
+    reversal_dir = "NONE"
+    if choch == "BULLISH_CHOCH" or sweep == "SSL_SWEEP_BUY":
+        reversal_dir = "SUBE"
+    elif choch == "BEARISH_CHOCH" or sweep == "BSL_SWEEP_SELL":
+        reversal_dir = "BAJA"
+
+    return {"choch": choch, "sweep": sweep, "reversal_dir": reversal_dir}
+
+def fetch_high_impact_calendar(now_utc):
+    """
+    Descarga el calendario económico real de la semana (ForexFactory) y filtra
+    las noticias de ALTO IMPACTO (High) del día de hoy por divisa.
+    """
+    today_ff = now_utc.strftime("%m-%d-%Y")
+    today_iso = now_utc.strftime("%Y-%m-%d")
+    events_today = []
+    high_impact_by_ccy = {}
+
+    try:
+        url = "https://nfs.faireconomy.media/ff_calendar_thisweek.xml"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            xml_data = resp.read()
+        root = ET.fromstring(xml_data)
+        for ev in root.findall(".//event"):
+            date_el = ev.find("date")
+            time_el = ev.find("time")
+            ccy_el = ev.find("country")
+            imp_el = ev.find("impact")
+            title_el = ev.find("title")
+            if date_el is None or ccy_el is None or imp_el is None or title_el is None:
+                continue
+            ev_date = (date_el.text or "").strip()
+            if ev_date != today_ff:
+                continue
+            ccy = (ccy_el.text or "").strip().upper()
+            imp = (imp_el.text or "").strip()
+            title = (title_el.text or "").strip()
+            ev_time = (time_el.text or "").strip() if time_el is not None else ""
+
+            if imp.lower() == "high":
+                high_impact_by_ccy.setdefault(ccy, []).append(f"{title} ({ev_time})")
+                events_today.append({
+                    "date": today_iso,
+                    "time": ev_time or "Hoy",
+                    "currency": ccy,
+                    "impact": "ALTO",
+                    "title": title
+                })
+            elif imp.lower() == "medium" and len(events_today) < 8:
+                events_today.append({
+                    "date": today_iso,
+                    "time": ev_time or "Hoy",
+                    "currency": ccy,
+                    "impact": "MEDIO",
+                    "title": title
+                })
+    except Exception as e:
+        print(f"Aviso calendario económico: {e}")
+
+    # Respaldo de calendario si el feed externo no responde
+    if not events_today:
+        events_today = [
+            {"date": today_iso, "time": "07:00 UTC", "currency": "EUR/GBP", "impact": "ALTO", "title": "Apertura Killzone Londres · Barrido de Liquidez Asiática"},
+            {"date": today_iso, "time": "12:30 UTC", "currency": "USD", "impact": "ALTO", "title": "Apertura Killzone Nueva York · Flujo Institucional"},
+            {"date": today_iso, "time": "23:50 UTC", "currency": "AUD/JPY", "impact": "MEDIO", "title": "Apertura Sesión Tokio & Sídney · Flujo Asia-Pacífico"}
+        ]
+
+    return events_today[:10], high_impact_by_ccy
 
 def compute_currency_strength_matrix(c4_map, dxy_4h, us10y_4h, spx_4h):
     dxy_chg = pct_change_4h(dxy_4h, 6)
@@ -153,7 +201,12 @@ def compute_currency_strength_matrix(c4_map, dxy_4h, us10y_4h, spx_4h):
     chf_score = (-pct_change_4h(c4_map.get("USDCHF"), 6) - pct_change_4h(c4_map.get("AUDCHF"), 6)) / 2.0
     xau_score = -usd_score * 0.9
 
-    raw = {"USD": usd_score, "GBP": gbp_score, "AUD": aud_score, "EUR": eur_score, "JPY": jpy_score, "NZD": nzd_score, "CAD": cad_score, "CHF": chf_score, "XAU": xau_score, "BTC": spx_chg * 0.8 - usd_score * 0.5}
+    raw = {
+        "USD": usd_score, "GBP": gbp_score, "AUD": aud_score,
+        "EUR": eur_score, "JPY": jpy_score, "NZD": nzd_score,
+        "CAD": cad_score, "CHF": chf_score, "XAU": xau_score,
+        "BTC": spx_chg * 0.8 - usd_score * 0.5,
+    }
     labels = {k: ("FUERTE" if v > 0.12 else ("DÉBIL" if v < -0.12 else "NEUTRAL")) for k, v in raw.items()}
     return raw, labels, round(spx_chg, 2)
 
@@ -201,7 +254,7 @@ def get_central_banks(dxy_val, us10y_val, ccy_labels):
         {"bank": "BoJ (Japón)", "currency": "JPY", "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DÉBIL" else "NEUTRAL"), "detail": "Flujo inverso en cruces JPY en 4H."}
     ]
 
-def build_asset(cfg, candles_bundle, raw_strength, ccy_labels):
+def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_ccy):
     try:
         sym = cfg["symbol"]
         dec = cfg["decimals"]
@@ -222,68 +275,138 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels):
         prev_close = c_1d[-2]["c"] if len(c_1d) >= 2 else c_1h[0]["o"]
         chg_day = round(((price - prev_close) / prev_close) * 100, 2) if prev_close else 0.0
 
+        # 1. JERARQUÍA TÉCNICA CLÁSICA (1D=3, 4H=2, 1H=1)
         b_d = calc_bias(c_1d, 6, 0.0010)
         b_4h = calc_bias(c_4h, 6, 0.0008)
         b_1h = calc_bias(c_1h, 6, 0.0006)
 
         w_up = (3 if b_d == "SUBE" else 0) + (2 if b_4h == "SUBE" else 0) + (1 if b_1h == "SUBE" else 0)
         w_dn = (3 if b_d == "BAJA" else 0) + (2 if b_4h == "BAJA" else 0) + (1 if b_1h == "BAJA" else 0)
-        chart_bias = "SUBE" if w_up >= w_dn else "BAJA"
 
+        # 2. FUERZA MACRO MULTIDIVISA EN 4H
         base_ccy = cfg["base"]
         quote_ccy = cfg["quote"]
         if cfg["type"] == "index":
             macro_diff = raw_strength.get("BTC", 0.0)
             macro_dir = "SUBE" if macro_diff > 0.10 else ("BAJA" if macro_diff < -0.10 else "NEUTRAL")
-            macro_detail = f"Apetito al riesgo US500 y USD ({ccy_labels.get('USD', 'NEUTRAL')})."
+            macro_detail = f"Apetito al riesgo US500 y rendimiento USD ({ccy_labels.get('USD', 'NEUTRAL')})."
         else:
-            macro_diff = raw_strength.get(base_ccy, 0.0) - raw_strength.get(quote_ccy, 0.0)
+            b_str = raw_strength.get(base_ccy, 0.0)
+            q_str = raw_strength.get(quote_ccy, 0.0)
+            macro_diff = b_str - q_str
             macro_dir = "SUBE" if macro_diff > 0.12 else ("BAJA" if macro_diff < -0.12 else "NEUTRAL")
             macro_detail = f"{base_ccy} ({ccy_labels.get(base_ccy, 'NEUTRAL')}) vs {quote_ccy} ({ccy_labels.get(quote_ccy, 'NEUTRAL')}) en cesta 4H."
 
+        # 3. GIROS DE CAMBIO DE TENDENCIA CON RESPALDO MACRO
+        rev = detect_reversal_and_structure(c_1h)
+        macro_backed_reversal = (rev["reversal_dir"] != "NONE" and rev["reversal_dir"] == macro_dir)
+
+        if macro_backed_reversal:
+            chart_bias = rev["reversal_dir"]
+            if chart_bias == "SUBE":
+                w_up = max(w_up, w_dn + 2)
+            else:
+                w_dn = max(w_dn, w_up + 2)
+        else:
+            if rev["choch"] == "BULLISH_CHOCH" or rev["sweep"] == "SSL_SWEEP_BUY":
+                w_up += 2
+            elif rev["choch"] == "BEARISH_CHOCH" or rev["sweep"] == "BSL_SWEEP_SELL":
+                w_dn += 2
+            chart_bias = "SUBE" if w_up >= w_dn else "BAJA"
+
+        # 4. BLOQUES CLÁSICOS ORIGINALES (SIN ORDER BLOCKS FRESCOS ARTIFICIALES)
         recent = c_1h[-24:]
         intraday_high = max(x["h"] for x in recent)
         intraday_low = min(x["l"] for x in recent)
         eq_50 = (intraday_high + intraday_low) / 2.0
 
-        direction = "BUY" if chart_bias == "SUBE" else "SELL"
-        ob_low, ob_high, signal_tag = find_fresh_ob(c_4h, c_1h, direction, price, pip, dec)
-        entry = round((ob_low + ob_high) / 2.0, dec)
+        if chart_bias == "SUBE":
+            direction = "BUY"
+            ob_low = round(min(x["l"] for x in recent[-12:]), dec)
+            ob_high = round(ob_low + (12 * pip), dec)
+            entry = round((ob_low + ob_high) / 2.0, dec)
+            if price < entry:
+                entry = round(price - (6 * pip), dec)
+                ob_low = round(entry - (5 * pip), dec)
+                ob_high = round(entry + (5 * pip), dec)
+            risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
+            sl = round(entry - risk, dec)
+            tp1 = round(entry + (risk * 2.0), dec)
+            tp2 = round(entry + (risk * 3.0), dec)
 
-        risk = max(14 * pip, round((intraday_high - intraday_low) * 0.22, dec))
-        if direction == "BUY":
-            sl = round(ob_low - (4 * pip), dec)
-            if (entry - sl) < 12 * pip:
-                sl = round(entry - risk, dec)
-            actual_risk = abs(entry - sl)
-            tp1 = round(entry + (actual_risk * 2.0), dec)
-            tp2 = round(entry + (actual_risk * 3.0), dec)
-            in_good_zone = price <= eq_50 * 1.002
+            if macro_backed_reversal and rev["sweep"] == "SSL_SWEEP_BUY":
+                signal_tag = "GIRO MACRO · BARRIDO SSL"
+            elif macro_backed_reversal and rev["choch"] == "BULLISH_CHOCH":
+                signal_tag = "GIRO MACRO · CHoCH ALCISTA"
+            elif rev["choch"] == "BULLISH_CHOCH":
+                signal_tag = "CHoCH ALCISTA · OB"
+            else:
+                signal_tag = "COMPRA OB" if price > eq_50 * 0.998 else "RE-ENTRADA OB"
         else:
-            sl = round(ob_high + (4 * pip), dec)
-            if (sl - entry) < 12 * pip:
-                sl = round(entry + risk, dec)
-            actual_risk = abs(sl - entry)
-            tp1 = round(entry - (actual_risk * 2.0), dec)
-            tp2 = round(entry - (actual_risk * 3.0), dec)
-            in_good_zone = price >= eq_50 * 0.998
+            direction = "SELL"
+            ob_high = round(max(x["h"] for x in recent[-12:]), dec)
+            ob_low = round(ob_high - (12 * pip), dec)
+            entry = round((ob_low + ob_high) / 2.0, dec)
+            if price > entry:
+                entry = round(price + (6 * pip), dec)
+                ob_high = round(entry + (5 * pip), dec)
+                ob_low = round(entry - (5 * pip), dec)
+            risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
+            sl = round(entry + risk, dec)
+            tp1 = round(entry - (risk * 2.0), dec)
+            tp2 = round(entry - (risk * 3.0), dec)
 
+            if macro_backed_reversal and rev["sweep"] == "BSL_SWEEP_SELL":
+                signal_tag = "GIRO MACRO · BARRIDO BSL"
+            elif macro_backed_reversal and rev["choch"] == "BEARISH_CHOCH":
+                signal_tag = "GIRO MACRO · CHoCH BAJISTA"
+            elif rev["choch"] == "BEARISH_CHOCH":
+                signal_tag = "CHoCH BAJISTA · OB"
+            else:
+                signal_tag = "VENTA OB" if price < eq_50 * 1.002 else "RE-ENTRADA OB"
+
+        # 5. CONFLUENCIA MACRO + TÉCNICA
         dominant_w = max(w_up, w_dn)
         if macro_dir == chart_bias:
             alignment = "ALIGNED"
-            conf_score = min(94, 68 + (dominant_w * 3) + (4 if in_good_zone else 0))
-            verdict_title = "VAN JUNTOS · CONFLUENCIA"
-            verdict_sub = f"Cesta macro ({macro_dir}) y estructura ({chart_bias}) alineadas"
+            conf_score = min(94, 68 + (dominant_w * 3) + (4 if macro_backed_reversal else 0))
+            verdict_title = "GIRO CONFIRMADO · MACRO + TÉCNICO" if macro_backed_reversal else "VAN JUNTOS · CONFLUENCIA"
+            verdict_sub = f"Flujo macro ({macro_dir}) respalda estructura ({chart_bias})"
         elif macro_dir == "NEUTRAL":
             alignment = "ALIGNED"
-            conf_score = min(79, 56 + (dominant_w * 3) + (3 if in_good_zone else 0))
+            conf_score = min(78, 56 + (dominant_w * 3))
             verdict_title = "ESTRUCTURA MANDA · MACRO PLANA"
             verdict_sub = f"Jerarquía 1D/4H apunta a {chart_bias} · Macro en rango"
         else:
             alignment = "OPPOSED"
-            conf_score = max(32, 48 - (dominant_w * 2))
+            conf_score = max(32, 46 - (dominant_w * 2))
             verdict_title = "CONTRADICCIÓN · TESIS ROTA"
-            verdict_sub = f"Flujo macro sugiere {macro_dir}, gráfico {chart_bias}"
+            verdict_sub = f"Macro en {macro_dir} rechaza movimiento {chart_bias}"
+
+        # 6. DETECCIÓN DE NOTICIA DE ALTO IMPACTO HOY PARA ESTE PAR
+        ccys_to_check = {"USD"} if cfg["type"] in ("index", "crypto") else ({base_ccy, quote_ccy} - {"XAU"})
+        if base_ccy == "XAU":
+            ccys_to_check.add("USD")
+
+        pair_news_titles = []
+        affected_ccys = []
+        for c in sorted(ccys_to_check):
+            if c in high_impact_by_ccy:
+                affected_ccys.append(c)
+                pair_news_titles.extend(high_impact_by_ccy[c])
+
+        has_high_news = len(pair_news_titles) > 0
+        news_warning = None
+        if has_high_news:
+            news_warning = {
+                "active": True,
+                "currencies": "/".join(affected_ccys),
+                "label": f"⚠️ NOTICIA FUERTE {'/'.join(affected_ccys)} HOY · OPERAR CON CUIDADO",
+                "events": pair_news_titles[:3]
+            }
+
+        rev_note = f" Giro detectado ({rev['sweep'] if rev['sweep'] != 'NONE' else rev['choch']}) con respaldo macro." if macro_backed_reversal else ""
+        macro_reason = f"{macro_detail} Jerarquía (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{rev_note}"
 
         return {
             "symbol": sym,
@@ -298,10 +421,27 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels):
             "intraday_low": round(intraday_low, dec),
             "ob_high": ob_high,
             "ob_low": ob_low,
-            "macro_reason": f"{macro_detail} Jerarquía técnica (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).",
-            "confluence": {"score": conf_score, "alignment": alignment, "verdict_title": verdict_title, "verdict_sub": verdict_sub},
-            "setup": {"direction": direction, "signal_tag": signal_tag, "entry": entry, "sl": sl, "tp1": tp1, "tp2": tp2},
-            "candles": {"1d": c_1d, "4h": c_4h, "1h": c_1h}
+            "macro_reason": macro_reason,
+            "news_warning": news_warning,
+            "confluence": {
+                "score": conf_score,
+                "alignment": alignment,
+                "verdict_title": verdict_title,
+                "verdict_sub": verdict_sub,
+            },
+            "setup": {
+                "direction": direction,
+                "signal_tag": signal_tag,
+                "entry": entry,
+                "sl": sl,
+                "tp1": tp1,
+                "tp2": tp2,
+            },
+            "candles": {
+                "1d": c_1d,
+                "4h": c_4h,
+                "1h": c_1h,
+            }
         }
     except Exception as e:
         print(f"Error procesando {cfg.get('symbol')}: {e}")
@@ -313,6 +453,8 @@ def main():
     us10y_4h = group_4h(get_candles("^TNX", "1mo", "1h", 2, 180))
     dxy_val = dxy_4h[-1]["c"] if dxy_4h else 104.20
     us10y_val = us10y_4h[-1]["c"] if us10y_4h else 4.25
+
+    calendar_events, high_impact_by_ccy = fetch_high_impact_calendar(now_utc)
 
     bundles = {}
     c4_map = {}
@@ -327,33 +469,31 @@ def main():
         c4_map[sym] = c_4h
 
     raw_strength, ccy_labels, spx_chg = compute_currency_strength_matrix(c4_map, dxy_4h, us10y_4h, c4_map.get("US500", []))
-    assets = [item for cfg in ASSETS_CONFIG if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels))]
+    assets = [item for cfg in ASSETS_CONFIG if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels, high_impact_by_ccy))]
     banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
     news = fetch_live_news()
+
+    alert_ccys = sorted(high_impact_by_ccy.keys())
+    news_alert_str = f" · ⚠️ Noticias fuertes hoy en: {', '.join(alert_ccys)}" if alert_ccys else ""
 
     payload = {
         "last_updated": now_utc.strftime("%Y-%m-%d %H:%M UTC"),
         "brief": {
             "dxy": dxy_val,
             "us10y": us10y_val,
-            "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}",
-            "summary": f"Matriz multidivisa 4H activa sobre {len(assets)} activos con Order Blocks anticipados."
+            "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
+            "summary": f"Matriz multidivisa 4H y giros con respaldo macro sobre {len(assets)} activos (bloques clásicos sin pullbacks artificiales)."
         },
         "banks": banks,
         "news": news,
-        "calendar": [
-            {"date": now_utc.strftime("%Y-%m-%d"), "time": "07:00 UTC", "currency": "EUR/GBP", "impact": "ALTO", "title": "Apertura Killzone Londres · Barrido de Liquidez Asiática"},
-            {"date": now_utc.strftime("%Y-%m-%d"), "time": "12:30 UTC", "currency": "USD", "impact": "ALTO", "title": "Apertura Killzone Nueva York · Flujo Institucional"},
-            {"date": now_utc.strftime("%Y-%m-%d"), "time": "14:00 UTC", "currency": "USD", "impact": "MEDIO", "title": "PMI Manufacturero / Servicios & Subasta Bonos Tesoro"},
-            {"date": now_utc.strftime("%Y-%m-%d"), "time": "23:50 UTC", "currency": "AUD/JPY", "impact": "MEDIO", "title": "Apertura Sesión Tokio & Sídney · Flujo Asia-Pacífico"}
-        ],
+        "calendar": calendar_events,
         "assets": assets
     }
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos con Order Blocks anticipados guardados en data.json.")
+    print(f"OK: {len(assets)} activos guardados. Divisas con noticia fuerte hoy: {alert_ccys}")
 
 if __name__ == "__main__":
     main()
