@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v7.4 SWING + IA LIVE (22)</title>
+  <title>ORÁCULO · Cabina v7.5 SWING + IA LIVE (22)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -416,7 +416,6 @@
     let customVoiceMap = JSON.parse(localStorage.getItem('oraculo_voice_map') || '{}');
     let ghToken = localStorage.getItem('oraculo_gh_token') || '';
     let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
-    let chatHistory = [];
     let activeLessonIndex = 0;
 
     function updateAiBrainButton() {
@@ -433,14 +432,14 @@
     updateAiBrainButton();
 
     function configureGeminiApiKey() {
-      const k = prompt('Pega tu clave gratuita de Google AI Studio (AIzaSy...) para activar el cerebro IA completo de Jarvis y los 7 agentes (déjalo vacío para usar el motor local):', geminiApiKey);
+      const k = prompt('Pega tu clave gratuita de Google AI Studio (AIzaSy...) para activar el cerebro IA completo de Jarvis y los 7 agentes (déjalo vacío para usar el motor analítico local):', geminiApiKey);
       if (k !== null) {
         geminiApiKey = k.trim();
         localStorage.setItem('oraculo_gemini_key', geminiApiKey);
         updateAiBrainButton();
         typeAgentDialogue(geminiApiKey
           ? 'Cerebro neuronal Gemini conectado, señor. Ahora puede preguntarme cualquier duda técnica, macroeconómica, de operaciones Swing o sobre cualquiera de los veintidós activos.'
-          : 'Clave eliminada. Operando con el motor analítico local de respaldo, señor.');
+          : 'Clave eliminada. Operando con el motor analítico local inteligente, señor.');
       }
     }
 
@@ -703,13 +702,13 @@
     ];
 
     const AGENTS = {
-      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, el asistente de mando táctico de Oráculo. Hablas con elegancia británica en español ("señor"), máxima precisión institucional, claridad y calma.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
-      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, el analista macroeconómico de Oráculo. Hablas con serenidad filosófica y profundidad sobre bancos centrales, DXY, bonos US10Y y flujos de divisas.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
-      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, el lector implacable de estructura técnica de Oráculo. Eres directo, frío, analítico y enfocado en liquidez, Order Blocks, CHoCH y trampas institucionales.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
-      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., la instructora ágil e ingeniosa de Oráculo. Llamas "jefe" al usuario y explicas conceptos institucionales con ejemplos claros y prácticos.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
-      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., la planificadora táctica de ejecución y riesgo de Oráculo. Calculas distancias en pips, lotajes para cuenta fondeada de $1,000 USD (riesgo 0.5% a 1%) y gestión de parciales hacia objetivos Swing.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
-      karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, la psicóloga de trading y auditora emocional de Oráculo. Cuidas la disciplina del usuario, evitas el FOMO y analizas su bitácora con empatía firme.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
-      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', personaPrompt: 'Eres H.O.M.E.R., el estadístico veterano y algo irónico de Oráculo. Evalúas probabilidades, esperanza matemática y rendimiento en R.', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
+      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Oráculo. Hablas con elegancia británica ("señor") y precisión institucional.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
+      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, analista macroeconómico de Oráculo sobre bancos centrales, DXY y bonos US10Y.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
+      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez, Order Blocks y CHoCH.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
+      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., instructora de trading institucional. Llamas "jefe" al usuario.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
+      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora de riesgo y lotaje para cuenta de $1,000 USD.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
+      karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, psicóloga de trading y auditora emocional.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
+      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', personaPrompt: 'Eres H.O.M.E.R., estadístico veterano e irónico de Oráculo.', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
     };
 
     let cachedEsVoices = [];
@@ -947,94 +946,109 @@
       return { winRate: Math.round((wins / trades.length) * 100), pnlR: `${(wins * 2 - losses) >= 0 ? '+' : ''}${wins * 2 - losses}R`, total: trades.length };
     }
 
-    function buildLiveContextSnapshot() {
-      if (!data || !data.assets) return 'Sin datos de mercado cargados aún.';
-      const header = `Fecha estructura: ${data.last_updated}. Macro: ${data.brief.headline}. ${data.brief.summary}`;
-      const assetsText = data.assets.map(a => {
+    function buildCompactMarketSnapshot() {
+      if (!data || !data.assets) return 'Sin datos.';
+      const rows = data.assets.map(a => {
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
-        const nw = (a.news_warning && a.news_warning.active) ? ` [ALERTA NOTICIA HOY: ${a.news_warning.events.join(', ')}]` : '';
-        const sw = (a.swing_potential && a.swing_potential.active) ? ` [POTENCIAL SWING: ${a.swing_potential.plan}]` : '';
-        return `- ${a.symbol}: Precio=${a.price}, Sesgo=${a.chart_bias} (1D:${a.tf_bias.daily}, 4H:${a.tf_bias.h4}, 1H:${a.tf_bias.h1}), Señal=${a.setup.signal_tag}, Entrada=${a.setup.entry} (a ${d.units} ${d.label}), SL=${a.setup.sl} (${p.sl} ${p.unitLabel}), TP1=${a.setup.tp1} (+${p.tp1} ${p.unitLabel}), TP2=${a.setup.tp2}, Confluencia=${a.confluence.score}/100 (${a.confluence.verdict_title}). Razón: ${a.macro_reason}${sw}${nw}`;
+        const sw = (a.swing_potential && a.swing_potential.active) ? `|SWING:${a.swing_potential.target}` : '';
+        const nw = (a.news_warning && a.news_warning.active) ? `|NOTICIA:${a.news_warning.currencies}` : '';
+        return `${a.symbol}:${a.setup.direction}(${a.confluence.score}pts)|P=${a.price}|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}|Tag=${a.setup.signal_tag}${sw}${nw}`;
       }).join('\n');
-      const journalText = trades.length
-        ? `Bitácora reciente del usuario (${trades.length} operaciones): ` + trades.slice(0, 5).map(t => `${t.pair} ${t.dir} ${t.res} (${t.note})`).join('; ')
-        : 'Bitácora vacía.';
-      return `${header}\n\nACTIVOS EN VIVO:\n${assetsText}\n\n${journalText}`;
+      return `Macro:${data.brief.headline}\n${rows}`;
     }
 
     async function askGeminiBrain(userQuestion, agentKey) {
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
-      const sysPrompt = `${ag.personaPrompt}
-Eres parte del sistema de trading institucional ORÁCULO (operado por Brian Aguilera en cuenta de $1,000 USD con enfoque en Order Blocks, CHoCH, liquidez, detección Potencial Swing y matriz macro híbrida 4H/1D).
-Responde en español de forma clara, completa, directa y sin rodeos (entre 3 y 7 oraciones bien estructuradas, o lista breve si piden varios pares).
-Usa SIEMPRE los datos reales en vivo proporcionados abajo; nunca inventes precios ni niveles que no estén en el contexto. Si el usuario pregunta por lotaje, calcula el riesgo sugerido (0.5% = $5 o 1% = $10 sobre $1,000) según los pips de SL del activo.
+      const promptText = `${ag.personaPrompt} Responde en español, claro y completo (3 a 6 oraciones) usando estos datos en vivo de Oráculo (cuenta $1,000 USD, riesgo 0.5%=$5 o 1%=$10):\n${buildCompactMarketSnapshot()}\n\nPregunta: ${userQuestion}`;
 
-CONTEXTO EN VIVO DEL MERCADO:
-${buildLiveContextSnapshot()}`;
+      const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
+      let lastError = 'Congestión temporal';
 
-      const contents = [
-        ...chatHistory.slice(-4),
-        { role: 'user', parts: [{ text: `${sysPrompt}\n\nPREGUNTA DEL USUARIO: ${userQuestion}` }] }
-      ];
+      for (const modelName of models) {
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(geminiApiKey)}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ role: 'user', parts: [{ text: promptText }] }],
+              generationConfig: { temperature: 0.45, maxOutputTokens: 450 }
+            })
+          });
 
-      // 1. Obtener dinámicamente los modelos activos habilitados en la clave API
-      let activeModels = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
-      try {
-        const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(geminiApiKey)}`);
-        if (listRes.ok) {
-          const listJson = await listRes.json();
-          const valid = (listJson.models || [])
-            .filter(m => (m.supportedGenerationMethods || []).includes('generateContent') && m.name.includes('gemini'))
-            .map(m => m.name.replace('models/', ''));
-          if (valid.length) {
-            const preferred = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-2.5-pro'];
-            const ordered = preferred.filter(p => valid.includes(p));
-            const rest = valid.filter(v => !ordered.includes(v));
-            activeModels = [...ordered, ...rest].slice(0, 5);
+          if (!res.ok) {
+            const errJson = await res.json().catch(() => ({}));
+            lastError = errJson?.error?.message || `HTTP ${res.status}`;
+            continue;
           }
+          const json = await res.json();
+          const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (reply) return reply.replace(/\*\*/g, '').trim();
+        } catch (e) {
+          lastError = e.message;
         }
-      } catch (e) {}
-
-      let lastError = 'Sin respuesta';
-
-      // 2. Intentar con cada modelo activo y reintentar tras pausa breve si hay pico de tráfico
-      for (let round = 0; round < 2; round++) {
-        for (const modelName of activeModels) {
-          try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(geminiApiKey)}`;
-            const res = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents,
-                generationConfig: { temperature: 0.45, maxOutputTokens: 600 }
-              })
-            });
-
-            if (!res.ok) {
-              const errJson = await res.json().catch(() => ({}));
-              lastError = errJson?.error?.message || `HTTP ${res.status}`;
-              continue;
-            }
-            const json = await res.json();
-            const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (reply) {
-              chatHistory.push({ role: 'user', parts: [{ text: userQuestion }] });
-              chatHistory.push({ role: 'model', parts: [{ text: reply }] });
-              return reply.replace(/\*\*/g, '').trim();
-            }
-          } catch (e) {
-            lastError = e.message;
-          }
-        }
-        await new Promise(r => setTimeout(r, 1500));
       }
       throw new Error(lastError);
     }
 
+    function buildSmartLocalResponse(qRaw) {
+      const q = qRaw.toUpperCase();
+      if (!data || !data.assets) return 'Sincronizando telemetría del mercado, señor.';
+
+      let asset = data.assets.find(a => q.includes(a.symbol));
+      if (!asset && (q.includes('ORO') || q.includes('GOLD') || q.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
+      if (!asset && (q.includes('BITCOIN') || q.includes('BTC'))) asset = data.assets.find(a => a.symbol === 'BTCUSD');
+
+      if (asset) {
+        const d = getAssetUnitsDist(asset);
+        const p = getSetupPips(asset);
+        const estLot = asset.type === 'forex' ? Math.max(0.01, Number((5 / (Math.max(1, p.sl) * 10)).toFixed(2))) : 0.01;
+        const sw = (asset.swing_potential && asset.swing_potential.active)
+          ? ` Además cumple condiciones de Potencial Swing (1D, 4H y Macro alineados): puede cobrar parciales en TP1 (${asset.setup.tp1}), proteger en Break Even y dejar correr hacia ${asset.swing_potential.target}.`
+          : ' Por estructura actual es una configuración táctica intradía; asegure parciales al tocar TP1.';
+        const nw = (asset.news_warning && asset.news_warning.active)
+          ? ` Precaución: tiene noticia fuerte hoy en ${asset.news_warning.currencies} (${asset.news_warning.events[0]}).`
+          : '';
+        return `${asset.symbol} cotiza actualmente en ${asset.price} bajo señal "${asset.setup.signal_tag}" con una confluencia de ${asset.confluence.score}/100 (${asset.confluence.verdict_title}). La zona de entrada está en ${asset.setup.entry} (a ${d.units} ${d.label}), con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}). Para su cuenta de $1,000 USD arriesgando 0.5% ($5), el lotaje sugerido es ${estLot} lotes.${sw}${nw}`;
+      }
+
+      if (q.includes('RECOMIENDA') || q.includes('PARE') || q.includes('MEJOR') || q.includes('OPERAR') || q.includes('OPORTUNIDAD') || q.includes('SWING')) {
+        const swings = getSwingAssets()
+          .filter(a => !(a.news_warning && a.news_warning.active))
+          .sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price);
+        const aligned = getAlignedAssets()
+          .filter(a => !(a.news_warning && a.news_warning.active))
+          .sort((a, b) => b.confluence.score - a.confluence.score);
+
+        const topSwings = swings.slice(0, 3).map(x => `${x.symbol} (${x.setup.direction === 'BUY' ? 'Compra' : 'Venta'} en ${x.setup.entry}, a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label})`).join('; ');
+        const topAligned = aligned.slice(0, 3).map(x => `${x.symbol} (${x.confluence.score}/100, entrada ${x.setup.entry})`).join('; ');
+
+        return `Analizando los veintidós activos en tiempo real, señor, los mejores candidatos con Potencial Swing limpio y sin noticias de alto impacto hoy son: ${topSwings || 'ninguno sin noticia ahora mismo'}. En confluencia general destacan: ${topAligned}. Le sugiero priorizar el que esté más cerca de su caja de entrada y esperar rechazo antes de ejecutar.`;
+      }
+
+      if (q.includes('LOTAJE') || q.includes('RIESGO') || q.includes('CUENTA')) {
+        const n = getNearestAsset();
+        const p = getSetupPips(n);
+        const estLot = n.type === 'forex' ? Math.max(0.01, Number((5 / (Math.max(1, p.sl) * 10)).toFixed(2))) : 0.01;
+        return `Para su cuenta de $1,000 USD, señor, la regla óptima es arriesgar entre 0.5% ($5) y 1% ($10) por operación. Por ejemplo, en ${n.symbol} que tiene un Stop Loss de ${p.sl} ${p.unitLabel}, corresponde entrar con ${estLot} lotes para mantener el riesgo controlado en $5 USD.`;
+      }
+
+      return null;
+    }
+
     async function processQuery(qRaw) {
       const q = qRaw.toUpperCase();
+
+      if (q.includes('CURSO') || q.includes('CLASE') || q.includes('LECCION') || q.includes('LECCIÓN') || q.includes('EMPEZAR')) {
+        if (currentAgent !== 'friday') selectAgent('friday', false);
+        startFridayLesson(getNextPendingLessonIndex()); return;
+      }
+      if (q.includes('SIGUIENTE')) { if (currentAgent !== 'friday') selectAgent('friday', false); startFridayLesson(activeLessonIndex + 1); return; }
+      if (q.includes('APROBAR') || q.includes('COMPLETAR')) { if (currentAgent !== 'friday') selectAgent('friday', false); completeCurrentLesson(); return; }
+
+      const concept = CONCEPT_DICTIONARY.find(c => c.keys.some(k => q.includes(k)));
+      if (concept && !geminiApiKey) { typeAgentDialogue(concept.answer); return; }
 
       if (geminiApiKey) {
         clearInterval(typeTimer);
@@ -1046,28 +1060,17 @@ ${buildLiveContextSnapshot()}`;
           typeAgentDialogue(aiResponse);
           return;
         } catch (err) {
-          typeAgentDialogue(`Señor, la conexión con el cerebro IA devolvió un aviso: "${err.message}". Revise su clave en el botón IA ON arriba.`);
-          return;
+          const smartLocal = buildSmartLocalResponse(qRaw);
+          if (smartLocal) {
+            typeAgentDialogue(smartLocal);
+            return;
+          }
         }
       }
 
-      if (q.includes('CURSO') || q.includes('CLASE') || q.includes('LECCION') || q.includes('LECCIÓN') || q.includes('EMPEZAR')) {
-        if (currentAgent !== 'friday') selectAgent('friday', false);
-        startFridayLesson(getNextPendingLessonIndex()); return;
-      }
-      if (q.includes('SIGUIENTE')) { if (currentAgent !== 'friday') selectAgent('friday', false); startFridayLesson(activeLessonIndex + 1); return; }
-      if (q.includes('APROBAR') || q.includes('COMPLETAR')) { if (currentAgent !== 'friday') selectAgent('friday', false); completeCurrentLesson(); return; }
-      const concept = CONCEPT_DICTIONARY.find(c => c.keys.some(k => q.includes(k)));
-      if (concept) { typeAgentDialogue(concept.answer); return; }
-      if (!data) { typeAgentDialogue('Sincronizando datos del mercado.'); return; }
-      let asset = data.assets.find(a => q.includes(a.symbol));
-      if (!asset && (q.includes('ORO') || q.includes('GOLD') || q.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
-      if (asset) {
-        const d = getAssetUnitsDist(asset);
-        const p = getSetupPips(asset);
-        const sw = (asset.swing_potential && asset.swing_potential.active) ? ` 🌊 ${asset.swing_potential.plan}` : '';
-        const nw = (asset.news_warning && asset.news_warning.active) ? ` Precaución: hoy tiene noticia fuerte en ${asset.news_warning.currencies}: ${asset.news_warning.events[0]}.` : '';
-        typeAgentDialogue(`${asset.symbol} cotiza en vivo en ${asset.price} (${asset.setup.signal_tag}). Confluencia en ${asset.confluence.score}/100 (${asset.confluence.verdict_title}). Está a ${d.units} ${d.label} de su entrada en ${asset.setup.entry}, con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}). Diagnóstico: ${asset.macro_reason}${sw}${nw}`);
+      const smartFallback = buildSmartLocalResponse(qRaw);
+      if (smartFallback) {
+        typeAgentDialogue(smartFallback);
         return;
       }
       handleQuickReply('SI');
