@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v7.5 SWING + IA LIVE (22)</title>
+  <title>ORÁCULO · Cabina v7.6 PIRÁMIDE SWING + IA (22)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -183,7 +183,7 @@
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
         <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
         <button type="button" onclick="startVoiceRecognition()" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
-        <input id="cockpit-input" type="text" placeholder="Pregunte cualquier duda sobre pares, swing, lotaje o macro..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
+        <input id="cockpit-input" type="text" placeholder="Pregunte sobre pares, pirámide swing, cestas o macro..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
         <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ENVIAR</button>
       </form>
     </div>
@@ -196,7 +196,7 @@
         <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (22)</button>
         <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
         <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 CURSO F.R.I.D.A.Y.</button>
-        <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO, BANCOS & NOTICIAS</button>
+        <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO, CESTAS & NOTICIAS</button>
         <button onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
       </div>
       <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
@@ -204,13 +204,15 @@
 
     <!-- SUBPANEL JARVIS -->
     <section id="ptab-jarvis" class="space-y-3">
+      <div id="pj-baskets-bar" class="hidden bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-3 space-y-1.5 text-xs"></div>
+
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
         <button onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-indigo-300" data-pf="SWING">🌊 POTENCIAL SWING</button>
+        <button onclick="setPanelFilter('REENTRY')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pf="REENTRY">🔵 PIRÁMIDE / RE-ENTRADA</button>
         <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
         <button onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300" data-pf="NEWS">⚠️ CON NOTICIA HOY</button>
         <button onclick="setPanelFilter('TP1')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-green-300" data-pf="TP1">🟢 EN TP1</button>
-        <button onclick="setPanelFilter('REENTRY')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pf="REENTRY">🔵 RE-ENTRADA</button>
         <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ TESIS ROTA</button>
         <button onclick="setPanelFilter('AUD')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="AUD">🇦🇺 PARES AUD</button>
         <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
@@ -232,7 +234,7 @@
         <div class="flex flex-wrap gap-3">
           <span class="text-indigo-300">🌊 Potencial Swing</span>
           <span>🟢 TP1 Alcanzado</span>
-          <span>🔵 Re-entrada</span>
+          <span>🔵 Re-entrada Pirámide</span>
           <span>🟡 Cerca OB</span>
           <span class="text-orange-300">⚠️ Noticia Hoy</span>
         </div>
@@ -257,24 +259,29 @@
       <div class="w-full bg-[#030509] border border-slate-800 rounded-lg overflow-hidden">
         <canvas id="ultron-canvas" class="w-full h-[360px] block"></canvas>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
           <div class="text-[10px] text-sky-400">ENTRADA (OB)</div>
           <div id="pu-entry" class="font-bold text-white text-sm">--</div>
           <div id="pu-dist" class="text-[10px] text-slate-400">--</div>
         </div>
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-red-400">STOP LOSS</div>
+          <div class="text-[10px] text-red-400">STOP INICIAL</div>
           <div id="pu-sl" class="font-bold text-red-400 text-sm">--</div>
           <div id="pu-sl-pips" class="text-[10px] text-red-300">--</div>
         </div>
+        <div class="bg-[#050811] border border-indigo-500/40 rounded p-2.5">
+          <div class="text-[10px] text-indigo-300">GATILLO BE (+1R)</div>
+          <div id="pu-be" class="font-bold text-indigo-300 text-sm">--</div>
+          <div class="text-[10px] text-slate-400">Subir SL a Entrada</div>
+        </div>
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-emerald-400">TP1 (1:2)</div>
+          <div class="text-[10px] text-emerald-400">TP1 (PARCIALES)</div>
           <div id="pu-tp1" class="font-bold text-emerald-400 text-sm">--</div>
           <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-emerald-400">TP2 (1:3)</div>
+          <div id="pu-tp2-lbl" class="text-[10px] text-emerald-400">TP2 / SWING TP</div>
           <div id="pu-tp2" class="font-bold text-emerald-400 text-sm">--</div>
           <div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
@@ -294,6 +301,11 @@
       <div class="space-y-1 border-b border-slate-800 pb-3">
         <h3 id="pv-headline" class="font-bold text-sky-300 text-sm">--</h3>
         <p id="pv-summary" class="text-xs text-slate-300 leading-relaxed">--</p>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="font-hud text-xs font-bold text-indigo-400 tracking-wider">🔗 CESTAS MACROECONÓMICAS CORRELACIONADAS (OPERAR EN BLOQUE)</h4>
+        <div id="pv-baskets" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
       </div>
 
       <div class="space-y-2">
@@ -438,7 +450,7 @@
         localStorage.setItem('oraculo_gemini_key', geminiApiKey);
         updateAiBrainButton();
         typeAgentDialogue(geminiApiKey
-          ? 'Cerebro neuronal Gemini conectado, señor. Ahora puede preguntarme cualquier duda técnica, macroeconómica, de operaciones Swing o sobre cualquiera de los veintidós activos.'
+          ? 'Cerebro neuronal Gemini conectado, señor. Ahora puede preguntarme cualquier duda sobre piramidación Swing, cestas correlacionadas, gestión de parciales o macroeconomía.'
           : 'Clave eliminada. Operando con el motor analítico local inteligente, señor.');
       }
     }
@@ -674,7 +686,7 @@
 
       if (hitTP1) return { code: 'TP1', dot: '🟢', text: 'TP1 ALCANZADO', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400' };
       if (missedMove) return { code: 'MISSED', dot: '⚪', text: 'SIN ACTIVAR', badgeClass: 'bg-slate-700/40 text-slate-300 border-slate-500' };
-      if (isReentry) return { code: 'REENTRY', dot: '🔵', text: 'RE-ENTRADA', badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-400' };
+      if (isReentry) return { code: 'REENTRY', dot: '🔵', text: 'RE-ENTRADA PIRÁMIDE', badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-400' };
       if (nearBlock) return { code: 'NEAR', dot: '🟡', text: 'CERCA OB', badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-400' };
       return { code: 'WAIT', dot: '', text: '', badgeClass: '' };
     }
@@ -684,29 +696,29 @@
       { id: 2, title: "2. Liquidez Externa (BSL y SSL)", body: "Lección dos: Liquidez. Las instituciones necesitan contrapartida. Por encima de los techos iguales hay liquidez compradora (BSL) y por debajo de los pisos iguales hay liquidez vendedora (SSL). El precio suele barrer esos stops antes de arrancar.", quiz: "Regla clave: Si ve una mecha barriendo SSL y cerrando arriba, prepare compras." },
       { id: 3, title: "3. Equilibrio EQ 50% (Caro vs. Barato)", body: "Lección tres: Equilibrium al 50 por ciento. La línea punteada EQ 50 divide el rango en dos: arriba es zona Premium (cara, solo para vender) y abajo es zona Discount (barata, solo para comprar).", quiz: "Regla clave: Jamás compre por encima del EQ 50 por ciento; estaría comprando caro." },
       { id: 4, title: "4. Order Blocks Institucionales (OB)", body: "Lección cuatro: Bloques de Órdenes. Son la última vela contraria antes de un impulso fuerte que rompe estructura. Allí quedaron órdenes pendientes de bancos que suelen mitigarse cuando el precio regresa.", quiz: "Regla clave: Use la caja del Order Block como zona de espera, no entre sin rechazo." },
-      { id: 5, title: "5. Confluencia Macro (DXY, US10Y y Oro)", body: "Lección cinco: Visión Macro. Si el índice del dólar DXY y los bonos US10Y suben juntos, pares como EURUSD y el oro XAUUSD tienden a caer. Si ambos bajan, los activos de riesgo y el oro suben.", quiz: "Regla clave: Cuando Visión y Ultrón coinciden, la probabilidad sube por encima del 70 por ciento." },
+      { id: 5, title: "5. Confluencia Macro y Cestas Correlacionadas", body: "Lección cinco: Visión Macro. Si el dólar DXY y los bonos US10Y suben juntos, los pares correlacionados se mueven en bloque: caen AUDUSD y EURUSD mientras suben USDCAD y USDJPY.", quiz: "Regla clave: Opere la cesta alineada en lugar de dispersarse en pares contradictorios." },
       { id: 6, title: "6. Killzones de Londres y Nueva York", body: "Lección seis: Horarios Institucionales. El volumen real entra en la Killzone de Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). En Asia el volumen es bajo y abundan las trampas.", quiz: "Regla clave: Si el indicador superior dice Fuera de Killzone, reduzca su exposición." },
-      { id: 7, title: "7. Gestión de Riesgo 1:2, 1:3 y Potencial Swing", body: "Lección siete: Matemáticas del Trader. Cuando un activo marca Potencial Swing (1D + 4H + Macro alineados), cobre parciales en TP1, proteja en Break Even y deje correr el resto hacia el objetivo semanal.", quiz: "Regla clave: Con un ratio 1 a 2, acertando solo 4 de cada 10 operaciones usted ya es rentable." },
-      { id: 8, title: "8. Re-entradas Intradía tras TP1", body: "Lección ocho: Re-entradas. Cuando un par alcanza su TP1 tras activar la entrada, el sistema busca opcionalmente un Order Block claro en el impulso para esperar retroceso. Nunca persiga el precio.", quiz: "Regla clave: Opere las re-entradas con la mitad del lotaje inicial." },
-      { id: 9, title: "9. Filtro de Tesis Rota y Noticias Fuertes", body: "Lección nueve: Protección de Capital. Si Jarvis marca Tesis Rota o el par tiene alerta de noticia fuerte de alto impacto hoy, reduzca el riesgo o espere a que pase el latigazo de la noticia.", quiz: "Regla clave: Una operación evitada en noticia de alto impacto protege su cuenta fondeada." },
+      { id: 7, title: "7. Piramidación Swing y Gestión de Parciales", body: "Lección siete: Protocolo Pirámide. Divida su entrada base en micro-órdenes; al tocar +1R o TP1 cobre parciales, suba el Stop Loss a Break Even y solo entonces añada una segunda entrada en retroceso hacia Swing TP.", quiz: "Regla clave: Jamás añada una segunda orden si la primera aún tiene riesgo abierto." },
+      { id: 8, title: "8. Re-entradas Estructurales en Retroceso", body: "Lección ocho: Re-entradas. Cuando un par alcanza su TP1 tras activar la entrada, el sistema busca un Order Block claro en el impulso para esperar retroceso. Nunca persiga el precio.", quiz: "Regla clave: Use el gráfico de 4H para mover el Stop Loss detrás de cada nuevo swing." },
+      { id: 9, title: "9. Filtro de Tesis Rota y Noticias Fuertes", body: "Lección nueve: Protección de Capital. Si Jarvis marca Tesis Rota o el par tiene alerta de noticia fuerte de alto impacto hoy, reduzca el riesgo o espere a que pase el latigazo de la noticia.", quiz: "Regla clave: Una operación evitada en noticia de alto impacto protege su cuenta." },
       { id: 10, title: "10. Auditoría Emocional con Karen y H.O.M.E.R.", body: "Lección diez: Disciplina Profesional. Anotar cada ejecución en el diario de Karen elimina el trading por venganza tras un Stop Loss y permite que H.O.M.E.R. calcule su ventaja estadística real.", quiz: "Regla clave: El éxito no está en adivinar cada vela, sino en repetir exactamente el mismo proceso." }
     ];
 
     const CONCEPT_DICTIONARY = [
-      { keys: ['SWING', 'POTENCIAL SWING', 'DEJAR CORRER'], answer: "La etiqueta Potencial Swing aparece cuando 1D, 4H y la fuerza macro híbrida apuntan exactamente en la misma dirección sin señales de agotamiento. En esos casos conviene cobrar parciales en TP1, mover el Stop Loss a Break Even y dejar correr el remanente hacia el objetivo semanal." },
+      { keys: ['PIRAMIDE', 'PIRÁMIDE', 'SEGUNDA ENTRADA', 'PARCIALES'], answer: "El protocolo de piramidación Swing consiste en dividir la entrada base en 2 o 3 micro-órdenes en el bloque inicial; al alcanzar el gatillo Break Even (+1R) o TP1, se cobran parciales, se sube el Stop Loss a precio de entrada y solo entonces se añade una segunda entrada en retroceso (🔵 RE-ENTRADA OB) hacia el objetivo semanal." },
+      { keys: ['SWING', 'POTENCIAL SWING', 'DEJAR CORRER'], answer: "La etiqueta Potencial Swing aparece cuando 1D, 4H y la fuerza macro híbrida apuntan exactamente en la misma dirección sin señales de agotamiento. En esos casos conviene cobrar parciales en TP1, mover el Stop Loss a Break Even y dejar correr el remanente hacia el Swing TP." },
+      { keys: ['CESTA', 'CORRELACION', 'CORRELACIÓN', 'BLOQUE'], answer: "Las cestas correlacionadas agrupan los pares que se mueven en bloque a favor de una divisa fuerte o débil (por ejemplo, si el USD está fuerte, se alinean ventas en AUDUSD/EURUSD y compras en USDCAD/USDJPY)." },
       { keys: ['EQ', '50%', 'EQUILIBRIUM', 'CARO', 'BARATO', 'PREMIUM', 'DISCOUNT'], answer: "La línea EQ 50% marca exactamente la mitad del rango intradía. Arriba de ella es zona Premium (cara, ideal para ventas) y abajo es zona Discount (barata, ideal para compras)." },
       { keys: ['CHOCH', 'CAMBIO DE TENDENCIA', 'GIRO'], answer: "CHoCH significa Cambio de Carácter. Ocurre cuando el precio rompe con cuerpo el último mínimo ascendente o máximo descendente, o barre liquidez con mecha de rechazo respaldado por el flujo macro." },
-      { keys: ['BOS', 'QUIEBRE'], answer: "BOS significa Break of Structure (Quiebre de Estructura). Confirma que la tendencia vigente tiene fuerza institucional al superar un máximo o mínimo anterior." },
-      { keys: ['TESIS ROTA', 'CONTRADICEN', 'OPPOSED'], answer: "Tesis Rota aparece cuando el análisis macroeconómico de Visión apunta hacia un lado y la estructura técnica de Ultrón apunta hacia el lado opuesto. Es una alerta para no operar ese par hasta que vuelvan a alinearse." },
-      { keys: ['NOTICIA', 'NOTICIAS', 'IMPACTO', 'CARPETA'], answer: "Cuando un par muestra la etiqueta naranja de Noticia Fuerte Hoy, significa que alguna de sus dos divisas tiene hoy un dato macroeconómico de alto impacto (como tasas, inflación o empleo) y debe operarse con máxima cautela." }
+      { keys: ['TESIS ROTA', 'CONTRADICEN', 'OPPOSED'], answer: "Tesis Rota aparece cuando el análisis macroeconómico de Visión apunta hacia un lado y la estructura técnica de Ultrón apunta hacia el lado opuesto. Es una alerta para no operar ese par hasta que vuelvan a alinearse." }
     ];
 
     const AGENTS = {
-      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Oráculo. Hablas con elegancia británica ("señor") y precisión institucional.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
-      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, analista macroeconómico de Oráculo sobre bancos centrales, DXY y bonos US10Y.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
-      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez, Order Blocks y CHoCH.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
+      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Oráculo. Hablas con elegancia británica ("señor") y precisión institucional. No des consejos de lotaje; enfócate en niveles de precio, Break Even, parciales y correlación.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
+      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, analista macroeconómico de Oráculo sobre bancos centrales, DXY, bonos US10Y y cestas correlacionadas de divisas.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
+      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez, Order Blocks, CHoCH y trailing estructural en 4H.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
       friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., instructora de trading institucional. Llamas "jefe" al usuario.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
-      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora de riesgo y lotaje para cuenta de $1,000 USD.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
+      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora táctica de ejecución en Oráculo. No calculas lotaje; indicas precios exactos de entrada, Stop Loss inicial, gatillo Break Even (+1R), cobro de parciales en TP1 y zonas de re-entrada en pirámide.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
       karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, psicóloga de trading y auditora emocional.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
       homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', personaPrompt: 'Eres H.O.M.E.R., estadístico veterano e irónico de Oráculo.', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
     };
@@ -770,7 +782,7 @@
     function formatTextForSpeech(raw) {
       return raw
         .replace(/<[^>]*>/g, '')
-        .replace(/[*#`⚠️🌊]/g, '')
+        .replace(/[*#`⚠️🌊🔗]/g, '')
         .replace(/XAUUSD/g, 'Oro Dólar')
         .replace(/BTCUSD/g, 'Bitcoin')
         .replace(/USTEC/g, 'Nasdaq cien')
@@ -948,19 +960,21 @@
 
     function buildCompactMarketSnapshot() {
       if (!data || !data.assets) return 'Sin datos.';
+      const basketsStr = (data.correlated_baskets || []).map(b => `${b.currency}_${b.status}:[${b.pairs.join(',')}]`).join(' ');
       const rows = data.assets.map(a => {
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
-        const sw = (a.swing_potential && a.swing_potential.active) ? `|SWING:${a.swing_potential.target}` : '';
+        const be = a.setup.be_trigger || a.setup.entry;
+        const sw = (a.swing_potential && a.swing_potential.active) ? `|SWING:${a.swing_potential.target}(BE:${be})` : '';
         const nw = (a.news_warning && a.news_warning.active) ? `|NOTICIA:${a.news_warning.currencies}` : '';
         return `${a.symbol}:${a.setup.direction}(${a.confluence.score}pts)|P=${a.price}|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}|Tag=${a.setup.signal_tag}${sw}${nw}`;
       }).join('\n');
-      return `Macro:${data.brief.headline}\n${rows}`;
+      return `Macro:${data.brief.headline} | Cestas:${basketsStr}\n${rows}`;
     }
 
     async function askGeminiBrain(userQuestion, agentKey) {
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
-      const promptText = `${ag.personaPrompt} Responde en español, claro y completo (3 a 6 oraciones) usando estos datos en vivo de Oráculo (cuenta $1,000 USD, riesgo 0.5%=$5 o 1%=$10):\n${buildCompactMarketSnapshot()}\n\nPregunta: ${userQuestion}`;
+      const promptText = `${ag.personaPrompt} Responde en español, claro y completo (3 a 6 oraciones) usando estos datos en vivo de Oráculo (sin recomendar lotajes):\n${buildCompactMarketSnapshot()}\n\nPregunta: ${userQuestion}`;
 
       const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
       let lastError = 'Congestión temporal';
@@ -1003,35 +1017,24 @@
       if (asset) {
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
-        const estLot = asset.type === 'forex' ? Math.max(0.01, Number((5 / (Math.max(1, p.sl) * 10)).toFixed(2))) : 0.01;
+        const be = asset.setup.be_trigger || asset.setup.entry;
         const sw = (asset.swing_potential && asset.swing_potential.active)
-          ? ` Además cumple condiciones de Potencial Swing (1D, 4H y Macro alineados): puede cobrar parciales en TP1 (${asset.setup.tp1}), proteger en Break Even y dejar correr hacia ${asset.swing_potential.target}.`
-          : ' Por estructura actual es una configuración táctica intradía; asegure parciales al tocar TP1.';
+          ? ` Protocolo Pirámide Swing activo: divide tu entrada base en ${asset.setup.entry} (SL ${asset.setup.sl}); al tocar ${be} (+1R) o TP1 (${asset.setup.tp1}), cobra parciales y sube el Stop Loss a ${asset.setup.entry} (Break Even); solo con la base protegida añade la 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP ${asset.swing_potential.target}.`
+          : ` Es una configuración táctica intradía: entra en ${asset.setup.entry} con Stop en ${asset.setup.sl} (${p.sl} ${p.unitLabel}), cobra parciales en TP1 (${asset.setup.tp1}) y protege en Break Even (${be}).`;
         const nw = (asset.news_warning && asset.news_warning.active)
           ? ` Precaución: tiene noticia fuerte hoy en ${asset.news_warning.currencies} (${asset.news_warning.events[0]}).`
           : '';
-        return `${asset.symbol} cotiza actualmente en ${asset.price} bajo señal "${asset.setup.signal_tag}" con una confluencia de ${asset.confluence.score}/100 (${asset.confluence.verdict_title}). La zona de entrada está en ${asset.setup.entry} (a ${d.units} ${d.label}), con Stop Loss en ${asset.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${asset.setup.tp1} (+${p.tp1} ${p.unitLabel}). Para su cuenta de $1,000 USD arriesgando 0.5% ($5), el lotaje sugerido es ${estLot} lotes.${sw}${nw}`;
+        return `${asset.symbol} cotiza en ${asset.price} bajo señal "${asset.setup.signal_tag}" con confluencia ${asset.confluence.score}/100 (${asset.confluence.verdict_title}), a ${d.units} ${d.label} del bloque.${sw}${nw}`;
       }
 
-      if (q.includes('RECOMIENDA') || q.includes('PARE') || q.includes('MEJOR') || q.includes('OPERAR') || q.includes('OPORTUNIDAD') || q.includes('SWING')) {
+      if (q.includes('RECOMIENDA') || q.includes('PARE') || q.includes('MEJOR') || q.includes('OPERAR') || q.includes('OPORTUNIDAD') || q.includes('SWING') || q.includes('CESTA')) {
         const swings = getSwingAssets()
           .filter(a => !(a.news_warning && a.news_warning.active))
           .sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price);
-        const aligned = getAlignedAssets()
-          .filter(a => !(a.news_warning && a.news_warning.active))
-          .sort((a, b) => b.confluence.score - a.confluence.score);
+        const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status}: ${b.pairs.join(', ')}`).join(' | ');
 
-        const topSwings = swings.slice(0, 3).map(x => `${x.symbol} (${x.setup.direction === 'BUY' ? 'Compra' : 'Venta'} en ${x.setup.entry}, a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label})`).join('; ');
-        const topAligned = aligned.slice(0, 3).map(x => `${x.symbol} (${x.confluence.score}/100, entrada ${x.setup.entry})`).join('; ');
-
-        return `Analizando los veintidós activos en tiempo real, señor, los mejores candidatos con Potencial Swing limpio y sin noticias de alto impacto hoy son: ${topSwings || 'ninguno sin noticia ahora mismo'}. En confluencia general destacan: ${topAligned}. Le sugiero priorizar el que esté más cerca de su caja de entrada y esperar rechazo antes de ejecutar.`;
-      }
-
-      if (q.includes('LOTAJE') || q.includes('RIESGO') || q.includes('CUENTA')) {
-        const n = getNearestAsset();
-        const p = getSetupPips(n);
-        const estLot = n.type === 'forex' ? Math.max(0.01, Number((5 / (Math.max(1, p.sl) * 10)).toFixed(2))) : 0.01;
-        return `Para su cuenta de $1,000 USD, señor, la regla óptima es arriesgar entre 0.5% ($5) y 1% ($10) por operación. Por ejemplo, en ${n.symbol} que tiene un Stop Loss de ${p.sl} ${p.unitLabel}, corresponde entrar con ${estLot} lotes para mantener el riesgo controlado en $5 USD.`;
+        const topSwings = swings.slice(0, 3).map(x => `${x.symbol} (${x.setup.direction === 'BUY' ? 'Compra' : 'Venta'} en ${x.setup.entry}, BE en ${x.setup.be_trigger || x.setup.entry}, Swing TP ${x.swing_potential.target})`).join('; ');
+        return `Analizando los veintidós activos en tiempo real, señor, los mejores candidatos con Potencial Swing para operar con parciales y piramidación son: ${topSwings || 'ninguno sin noticia ahora mismo'}. ${baskets ? `Cestas macro correlacionadas activas: ${baskets}.` : ''} Recuerde abrir 2 o 3 micro-órdenes en el bloque inicial, cobrar parciales en TP1, subir el Stop a Break Even y esperar la etiqueta azul de Re-entrada en 4H/1H para añadir la segunda posición.`;
       }
 
       return null;
@@ -1151,43 +1154,44 @@
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
         document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
         renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
-        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}", o puede preguntarme cualquier duda técnica.`);
+        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}", o puede preguntarme sobre el protocolo de piramidación Swing.`);
         return;
       }
       renderDefaultQuickReplies();
 
       if (key === 'jarvis') {
         const newsPairsCount = data ? data.assets.filter(a => a.news_warning && a.news_warning.active).length : 0;
-        document.getElementById('agent-hero-metric').textContent = `${swings.length} SWING · ${broken.length} ALERTAS`;
-        document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${newsPairsCount} NOTICIAS`;
-        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos: tenemos ${swings.length} pares con Potencial Swing multi-día, ${newsPairsCount} con noticia fuerte hoy y ${broken.length} tesis rotas. ¿Desea el reporte o tiene alguna consulta específica?`);
+        const basketsCount = (data && data.correlated_baskets) ? data.correlated_baskets.length : 0;
+        document.getElementById('agent-hero-metric').textContent = `${swings.length} SWING · ${basketsCount} CESTAS`;
+        document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${newsPairsCount} NOTICIAS · ${broken.length} ALERTAS`;
+        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos: tenemos ${swings.length} pares con Potencial Swing listos para gestión de parciales y pirámide, y ${basketsCount} cestas correlacionadas activas. ¿Desea el reporte?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
-        document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & BANCOS';
-        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: el dinero siempre persigue la tasa real. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he actualizado el calendario de noticias fuertes y bancos centrales. ¿Qué desea analizar?`);
+        document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & CESTAS';
+        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: las divisas fuertes arrastran a toda su cesta correlacionada en bloque. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he agrupado los pares sincronizados. ¿Analizamos las cestas?`);
       } else if (key === 'ultron') {
         const target = nearest || (data && data.assets[0]);
         document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
-        document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · GIROS Y SWING` : 'ESTRUCTURA';
-        typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez esperando ser barrida. Usted ponga la disciplina, yo pongo la estructura. ¿Qué gráfico auditamos?`);
+        document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · TRAILING 4H` : 'ESTRUCTURA';
+        typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez esperando ser barrida. En 4H y 1H marco los retrocesos para piramidar y los niveles donde proteger tu Stop Loss. ¿Qué gráfico auditamos?`);
       } else if (key === 'edith') {
         if (nearest) {
           const d = getAssetUnitsDist(nearest);
           document.getElementById('agent-hero-metric').textContent = `${d.units} ${d.label}`;
-          document.getElementById('agent-hero-sub').textContent = `${nearest.symbol} · EN VIVO (${nearest.price})`;
+          document.getElementById('agent-hero-sub').textContent = `${nearest.symbol} · BE EN ${nearest.setup.be_trigger || nearest.setup.entry}`;
         } else {
           document.getElementById('agent-hero-metric').textContent = '--';
-          document.getElementById('agent-hero-sub').textContent = 'CALCULANDO DISTANCIA';
+          document.getElementById('agent-hero-sub').textContent = 'CALCULANDO COORDENADAS';
         }
-        typeAgentDialogue(`Sistemas ópticos calibrados en tiempo real. He medido el riesgo, los bloques, los objetivos Swing y las noticias de alto impacto del día; lo único que no puedo calcular es su paciencia. ¿Le entrego las coordenadas exactas?`);
+        typeAgentDialogue(`Sistemas ópticos calibrados. He fijado los niveles exactos de entrada, Stop inicial, gatillo Break Even (+1R) y zonas de re-entrada en pirámide. ¿Le entrego las coordenadas?`);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES SINCRONIZADAS`;
-        typeAgentDialogue(`Hola, me alegra verlo operando con calma. Tiene ${trades.length} operaciones sincronizadas en su bitácora entre computadora y celular. ¿Revisamos sus registros?`);
+        typeAgentDialogue(`Hola, me alegra verlo operando con disciplina. Recuerde: nunca añada una segunda orden en pirámide hasta que la primera tenga el Stop Loss asegurado en Break Even. Tiene ${trades.length} operaciones registradas.`);
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Los números nunca mienten, aunque a veces nos pongan a prueba. Sobre ${homer.total} operaciones anotadas tiene ${homer.winRate}% de acierto y ${homer.pnlR}. ¿Quiere escuchar el veredicto?`);
+        typeAgentDialogue(`Los números nunca mienten: cobrar parciales en TP1 y dejar correr los Potencial Swing multiplica tu esperanza matemática sin aumentar el riesgo inicial. Tienes ${homer.winRate}% de acierto y ${homer.pnlR}.`);
       }
     }
 
@@ -1195,24 +1199,21 @@
       if (choice === 'NO') { typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa.'); return; }
       if (!data) { typeAgentDialogue('Sincronizando datos del mercado, señor.'); return; }
       if (currentAgent === 'jarvis') {
-        const swings = getSwingAssets().map(x => x.symbol);
-        const revs = data.assets.filter(a => (a.setup.signal_tag || '').includes('GIRO MACRO')).map(x => x.symbol);
-        const exhaust = data.assets.filter(a => (a.setup.signal_tag || '').includes('RIESGO GIRO')).map(x => x.symbol);
-        const newsP = data.assets.filter(a => a.news_warning && a.news_warning.active).map(x => x.symbol);
-        typeAgentDialogue(`Reporte completo, señor: Activos con Potencial Swing multi-día (1D + 4H + Macro alineados): ${swings.length ? swings.join(', ') : 'ninguno por ahora'}. Giros confirmados con respaldo macro: ${revs.length ? revs.join(', ') : 'ninguno'}. Alertas tempranas de agotamiento: ${exhaust.length ? exhaust.join(', ') : 'ninguna'}. Pares con noticia fuerte hoy: ${newsP.length ? newsP.join(', ') : 'ninguno'}.`);
+        const swings = getSwingAssets().map(x => `${x.symbol} (BE ${x.setup.be_trigger || x.setup.entry} → Swing ${x.swing_potential.target})`);
+        const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status}: ${b.pairs.join(', ')}`);
+        typeAgentDialogue(`Reporte táctico, señor: Pares con Potencial Swing para gestionar por parciales y pirámide: ${swings.length ? swings.slice(0, 4).join('; ') : 'ninguno por ahora'}. ${baskets.length ? `Cestas correlacionadas en bloque: ${baskets.join(' | ')}.` : ''}`);
       } else if (currentAgent === 'vision') {
-        const topNews = (data.news && data.news.length) ? ` Titular destacado: ${data.news[0].title}.` : '';
-        typeAgentDialogue(`${data.brief.headline}. ${data.brief.summary}${topNews}`);
+        const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status} (${b.pairs.join(', ')})`).join('; ');
+        typeAgentDialogue(`${data.brief.headline}. ${baskets ? `Cestas sincronizadas hoy: ${baskets}.` : data.brief.summary}`);
       } else if (currentAgent === 'ultron') {
         const n = getNearestAsset();
         const d = getAssetUnitsDist(n);
         const p = getSetupPips(n);
-        const sw = (n.swing_potential && n.swing_potential.active) ? ` Tiene Potencial Swing hacia ${n.swing_potential.target}.` : '';
-        const nw = (n.news_warning && n.news_warning.active) ? ` Atención: tiene noticia fuerte hoy (${n.news_warning.events[0]}).` : '';
-        typeAgentDialogue(`Objetivo prioritario en vivo: ${n.symbol} (${n.price}). Está a ${d.units} ${d.label} de su entrada en ${n.setup.entry}. Stop en ${n.setup.sl} (${p.sl} ${p.unitLabel}) y TP1 en ${n.setup.tp1} (+${p.tp1} ${p.unitLabel}).${sw}${nw}`);
+        const be = n.setup.be_trigger || n.setup.entry;
+        typeAgentDialogue(`Objetivo prioritario: ${n.symbol} (${n.price}), a ${d.units} ${d.label} del bloque ${n.setup.entry}. Stop inicial en ${n.setup.sl} (${p.sl} ${p.unitLabel}). Gatillo Break Even en ${be} y TP1 de parciales en ${n.setup.tp1}.`);
       } else if (currentAgent === 'edith') {
         const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
-        typeAgentDialogue(`Los tres blancos más cercanos en vivo son: ` + top3.map(x => `${x.symbol} a ${getAssetUnitsDist(x).units} ${getAssetUnitsDist(x).label} (${x.setup.entry})${(x.swing_potential && x.swing_potential.active) ? ' [Potencial Swing]' : ''}`).join('; ') + `.`);
+        typeAgentDialogue(`Coordenadas más cercanas: ` + top3.map(x => `${x.symbol} entrada ${x.setup.entry}, SL ${x.setup.sl}, subir SL a BE en ${x.setup.be_trigger || x.setup.entry}`).join('; ') + `.`);
       } else if (currentAgent === 'karen') {
         typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía. Abra el panel y pulse Vincular Nube para sincronizar PC y celular.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
       } else if (currentAgent === 'homer') {
@@ -1324,6 +1325,19 @@
       document.getElementById('pv-headline').textContent = data.brief.headline;
       document.getElementById('pv-summary').textContent = data.brief.summary;
 
+      const basketsList = data.correlated_baskets || [];
+      document.getElementById('pv-baskets').innerHTML = basketsList.length
+        ? basketsList.map(b => `
+            <div class="bg-[#050811] border border-indigo-500/40 rounded-lg p-3 space-y-1">
+              <div class="flex items-center justify-between">
+                <strong class="text-indigo-300">CESTA ${b.currency} (${b.status})</strong>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-200 font-bold">CORRELACIÓN ACTIVA</span>
+              </div>
+              <p class="text-[11px] text-slate-200">${b.pairs.join(' · ')}</p>
+            </div>
+          `).join('')
+        : `<div class="col-span-full text-slate-500 text-xs">Sin cestas dominantes en este momento; operar pares individuales con mayor puntaje.</div>`;
+
       const banksList = data.banks || [
         { bank: "FED (EE.UU.)", currency: "USD", stance: "RESTRICTIVA (HAWKISH)", bias: "BULLISH", detail: `DXY en ${data.brief.dxy} · Bonos US10Y en ${data.brief.us10y}%.` }
       ];
@@ -1360,6 +1374,19 @@
 
     function renderPanelJarvis() {
       if (!data) return;
+
+      const basketsBar = document.getElementById('pj-baskets-bar');
+      if (basketsBar) {
+        const baskets = data.correlated_baskets || [];
+        if (baskets.length) {
+          basketsBar.classList.remove('hidden');
+          basketsBar.innerHTML = `<div class="font-bold text-indigo-300">🔗 CESTAS MACROECONÓMICAS CORRELACIONADAS HOY (ENTRADA EN BLOQUE):</div>` +
+            baskets.map(b => `<div class="text-slate-200">• <strong>${b.currency} ${b.status}:</strong> ${b.pairs.join('  |  ')}</div>`).join('');
+        } else {
+          basketsBar.classList.add('hidden');
+        }
+      }
+
       let list = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score);
       if (panelFilter === 'SWING') list = list.filter(a => a.swing_potential && a.swing_potential.active);
       if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
@@ -1393,6 +1420,7 @@
         const isAligned = a.confluence.alignment === 'ALIGNED';
         const hasNews = a.news_warning && a.news_warning.active;
         const hasSwing = a.swing_potential && a.swing_potential.active;
+        const bePrice = a.setup.be_trigger || a.setup.entry;
 
         return `
           <div class="hud-panel rounded-xl p-4 space-y-3 border ${hasSwing ? 'border-indigo-400/70' : (hasNews ? 'border-orange-400/70' : (st.code === 'TP1' ? 'border-emerald-400' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800'))))}">
@@ -1409,7 +1437,7 @@
             </div>
 
             ${hasSwing ? `
-              <div class="bg-indigo-500/15 border border-indigo-400/50 rounded-lg px-2.5 py-1.5 text-[10px] text-indigo-200">
+              <div class="bg-indigo-500/15 border border-indigo-400/50 rounded-lg px-2.5 py-2 text-[10px] text-indigo-200 leading-relaxed">
                 <strong>${a.swing_potential.label}:</strong> ${a.swing_potential.plan}
               </div>
             ` : ''}
@@ -1429,14 +1457,15 @@
             </div>
             <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
               <div><strong class="text-sky-400">VISIÓN (Macro):</strong> ${a.macro_reason}</div>
-              <div><strong class="text-red-400">ULTRÓN (Técnico):</strong> Tendencia ${a.chart_bias} (D:${a.tf_bias.daily} / 4H:${a.tf_bias.h4} / 1H:${a.tf_bias.h1}).</div>
-              <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> Entrada en ${a.setup.entry} (a ${d.units} ${d.label}), SL ${p.sl} ${p.unitLabel}, TP1 +${p.tp1} ${p.unitLabel}${hasSwing ? `, Objetivo Swing ${a.swing_potential.target}` : ''}.</div>
+              <div><strong class="text-red-400">ULTRÓN (Técnico):</strong> Tendencia ${a.chart_bias} (D:${a.tf_bias.daily} / 4H:${a.tf_bias.h4} / 1H:${a.tf_bias.h1}). Trailing por cierres de vela en 4H.</div>
+              <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> Entrada base ${a.setup.entry} (a ${d.units} ${d.label}), SL ${a.setup.sl}, subir SL a BE en ${bePrice}, parciales TP1 ${a.setup.tp1}${hasSwing ? `, Swing TP ${a.swing_potential.target}` : ''}.</div>
             </div>
-            <div class="grid grid-cols-4 gap-1.5 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[11px]">
-              <div><div class="text-[9px] text-sky-400">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[9px] text-slate-400">a ${d.units} ${d.label}</div></div>
-              <div><div class="text-[9px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[9px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
-              <div><div class="text-[9px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[9px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
-              <div><div class="text-[9px] text-emerald-400">${hasSwing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${hasSwing ? a.swing_potential.target : a.setup.tp2}</div><div class="text-[9px] text-emerald-300">+${p.tp2} ${p.unitLabel}</div></div>
+            <div class="grid grid-cols-5 gap-1 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[10px]">
+              <div><div class="text-[8px] text-sky-400 truncate">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[8px] text-slate-400">a ${d.units} ${d.label}</div></div>
+              <div><div class="text-[8px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[8px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
+              <div><div class="text-[8px] text-indigo-300">GATILLO BE</div><div class="font-bold text-indigo-300">${bePrice}</div><div class="text-[8px] text-slate-400">+1R Proteger</div></div>
+              <div><div class="text-[8px] text-emerald-400">TP1 PARCIAL</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[8px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
+              <div><div class="text-[8px] text-emerald-400">${hasSwing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${hasSwing ? a.swing_potential.target : a.setup.tp2}</div><div class="text-[8px] text-emerald-300">${hasSwing ? 'Extendido' : `+${p.tp2} ${p.unitLabel}`}</div></div>
             </div>
           </div>`;
       }).join('');
@@ -1463,6 +1492,9 @@
       const d = getAssetUnitsDist(a);
       const p = getSetupPips(a);
       const st = getAssetBadgeState(a);
+      const hasSwing = a.swing_potential && a.swing_potential.active;
+      const bePrice = a.setup.be_trigger || a.setup.entry;
+
       const newsBanner = document.getElementById('pu-news-banner');
       if (newsBanner) {
         if (a.news_warning && a.news_warning.active) {
@@ -1474,7 +1506,7 @@
       }
       const swingBanner = document.getElementById('pu-swing-banner');
       if (swingBanner) {
-        if (a.swing_potential && a.swing_potential.active) {
+        if (hasSwing) {
           swingBanner.classList.remove('hidden');
           swingBanner.innerHTML = `<strong>${a.swing_potential.label}:</strong> ${a.swing_potential.plan}`;
         } else {
@@ -1489,10 +1521,12 @@
       document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
       document.getElementById('pu-sl').textContent = a.setup.sl;
       document.getElementById('pu-sl-pips').textContent = `-${p.sl} ${p.unitLabel}`;
+      document.getElementById('pu-be').textContent = bePrice;
       document.getElementById('pu-tp1').textContent = a.setup.tp1;
       document.getElementById('pu-tp1-pips').textContent = `+${p.tp1} ${p.unitLabel}`;
-      document.getElementById('pu-tp2').textContent = a.setup.tp2;
-      document.getElementById('pu-tp2-pips').textContent = `+${p.tp2} ${p.unitLabel}`;
+      document.getElementById('pu-tp2-lbl').textContent = hasSwing ? 'SWING TP' : 'TP2 (1:3)';
+      document.getElementById('pu-tp2').textContent = hasSwing ? a.swing_potential.target : a.setup.tp2;
+      document.getElementById('pu-tp2-pips').textContent = hasSwing ? 'Objetivo Multi-día' : `+${p.tp2} ${p.unitLabel}`;
       drawUltronChart();
     }
 
@@ -1520,8 +1554,10 @@
       ctx.fillStyle = '#030509'; ctx.fillRect(0, 0, W, H);
       const candles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF].slice(-40) : [];
       if (!candles.length) return;
-      const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp2, a.price];
-      const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp2, a.price];
+      const hasSwing = a.swing_potential && a.swing_potential.active;
+      const targetTop = hasSwing ? a.swing_potential.target : a.setup.tp2;
+      const highs = [...candles.map(c => c.h), a.setup.sl, targetTop, a.price];
+      const lows = [...candles.map(c => c.l), a.setup.sl, targetTop, a.price];
       const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
       const yOf = p => padT + ((maxP - p) / span) * plotH;
 
@@ -1553,9 +1589,10 @@
         ctx.fillText(lbl, padL + plotW * 0.36, y - 4);
       };
       drawLvl(a.setup.entry, a.setup.signal_tag, '#0284c7');
+      if (a.setup.be_trigger) drawLvl(a.setup.be_trigger, 'GATILLO BE (+1R)', '#6366f1');
       drawLvl(a.setup.sl, 'STOP', '#dc2626');
-      drawLvl(a.setup.tp1, 'TP1', '#059669');
-      drawLvl(a.setup.tp2, 'TP2', '#10b981');
+      drawLvl(a.setup.tp1, 'TP1 PARCIAL', '#059669');
+      drawLvl(targetTop, hasSwing ? 'SWING TP' : 'TP2', '#10b981');
 
       const yLive = yOf(a.price);
       ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
