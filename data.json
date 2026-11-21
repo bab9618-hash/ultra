@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-21 05:36 UTC",
+  "last_updated": "2026-11-21 06:38 UTC",
   "brief": {
     "dxy": 103.84,
     "us10y": 4.91,
@@ -97,9 +97,9 @@
   "news": [
     {
       "source": "FXStreet / Macro",
-      "title": "Bitcoin falls 5.10% to $55,830",
+      "title": "Bitcoin falls to its lowest in two years",
       "link": "https://www.investing.com/news/forex-news/bitcoin-falls-357-to-56814-5043137",
-      "time": "2026-11-21 04:30:19"
+      "time": "2026-11-21 06:06:19"
     },
     {
       "source": "FXStreet / Macro",
@@ -121,7 +121,7 @@
     },
     {
       "source": "Forex & Divisas",
-      "title": "FBI investigates suspected breach of nationwide crime database",
+      "title": "FBI investigates suspected breach of nationwide crime database, CNN reports",
       "link": "https://www.investing.com/news/economy-news/fbi-investigates-suspected-breach-of-nationwide-crime-database-5043145",
       "time": "2026-11-21 04:21:38"
     },
@@ -190,7 +190,7 @@
       "macro_reason": "XAU (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -1182,7 +1182,7 @@
       "macro_reason": "EUR (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -2180,7 +2180,7 @@
         "be_trigger": 158.608,
         "plan": "1) Divide la entrada base en 158.923 (SL 159.238). 2) Al tocar 158.608 (+1R) o TP1 (158.293), cobra parciales y sube el SL a 158.923 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 157.6."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -3172,7 +3172,7 @@
       "macro_reason": "GBP (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (SSL_SWEEP_BUY) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 94,
         "alignment": "ALIGNED",
@@ -4164,7 +4164,7 @@
       "macro_reason": "GBP (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -5162,7 +5162,7 @@
         "be_trigger": 1.96909,
         "plan": "1) Divide la entrada base en 1.96532 (SL 1.96155). 2) Al tocar 1.96909 (+1R) o TP1 (1.97286), cobra parciales y sube el SL a 1.96532 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.98115."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -6154,7 +6154,7 @@
       "macro_reason": "GBP (DÉBIL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1D:NEUTRAL, 4H:SUBE, 1H:SUBE).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -7146,7 +7146,7 @@
       "macro_reason": "GBP (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 77,
         "alignment": "ALIGNED",
@@ -8144,7 +8144,7 @@
         "be_trigger": 0.66511,
         "plan": "1) Divide la entrada base en 0.66669 (SL 0.66827). 2) Al tocar 0.66511 (+1R) o TP1 (0.66353), cobra parciales y sube el SL a 0.66669 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 0.66005."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -9142,7 +9142,7 @@
         "be_trigger": 105.566,
         "plan": "1) Divide la entrada base en 105.943 (SL 106.32). 2) Al tocar 105.566 (+1R) o TP1 (105.189), cobra parciales y sube el SL a 105.943 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 104.36."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -10134,7 +10134,7 @@
       "macro_reason": "AUD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -11126,7 +11126,7 @@
       "macro_reason": "AUD (DÉBIL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:NEUTRAL). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -12124,7 +12124,7 @@
         "be_trigger": 1.64844,
         "plan": "1) Divide la entrada base en 1.64506 (SL 1.64168). 2) Al tocar 1.64844 (+1R) o TP1 (1.65182), cobra parciales y sube el SL a 1.64506 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.65926."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -13116,7 +13116,7 @@
       "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -14108,7 +14108,7 @@
       "macro_reason": "NZD (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -15100,7 +15100,7 @@
       "macro_reason": "USD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL). Giro detectado (BSL_SWEEP_SELL) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
@@ -16092,7 +16092,7 @@
       "macro_reason": "USD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:BAJA, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -17084,7 +17084,7 @@
       "macro_reason": "EUR (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -18061,8 +18061,8 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 55758.82,
-      "chg_day": -9.92,
+      "price": 56555.48,
+      "chg_day": -8.64,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
@@ -18070,33 +18070,33 @@
         "h1": "BAJA"
       },
       "intraday_high": 62261.77,
-      "intraday_low": 55518.44,
+      "intraday_low": 55180.67,
       "ob_high": 59278.93,
       "ob_low": 59266.93,
-      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro. 🌊 Potencial Swing activo (BE en 57789.4, Swing TP 53042.1).",
+      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). 🌊 Potencial Swing activo (BE en 57715.09, Swing TP 52730.0).",
       "news_warning": null,
       "swing_potential": {
         "active": true,
         "label": "🌊 POTENCIAL SWING · PROTOCOLO PIRÁMIDE",
-        "target": 53042.1,
-        "be_trigger": 57789.4,
-        "plan": "1) Divide la entrada base en 59272.93 (SL 60756.46). 2) Al tocar 57789.4 (+1R) o TP1 (56305.87), cobra parciales y sube el SL a 59272.93 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 53042.1."
+        "target": 52730.0,
+        "be_trigger": 57715.09,
+        "plan": "1) Divide la entrada base en 59272.93 (SL 60830.77). 2) Al tocar 57715.09 (+1R) o TP1 (56157.25), cobra parciales y sube el SL a 59272.93 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 52730.0."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
-        "score": 90,
+        "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "GIRO CONFIRMADO · MACRO + TÉCNICO",
+        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
         "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "GIRO MACRO · CHoCH BAJISTA",
+        "signal_tag": "VENTA OB",
         "entry": 59272.93,
-        "be_trigger": 57789.4,
-        "sl": 60756.46,
-        "tp1": 56305.87,
-        "tp2": 54822.34
+        "be_trigger": 57715.09,
+        "sl": 60830.77,
+        "tp1": 56157.25,
+        "tp2": 54599.41
       },
       "candles": {
         "1d": [
@@ -18412,335 +18412,328 @@
             "t": 1795219200,
             "o": 58802.6,
             "h": 59081.54,
-            "l": 55659.47,
-            "c": 55758.82
+            "l": 55631.57,
+            "c": 56563.67
           }
         ],
         "4h": [
           {
-            "t": 1794592800,
-            "o": 68872.03,
+            "t": 1794596400,
+            "o": 68906.01,
             "h": 69060.44,
-            "l": 68008.93,
-            "c": 68319.04
+            "l": 67912.04,
+            "c": 68184.62
           },
           {
-            "t": 1794607200,
-            "o": 68319.05,
-            "h": 68408.88,
-            "l": 67790.75,
-            "c": 68222.61
+            "t": 1794610800,
+            "o": 68167.34,
+            "h": 68374.66,
+            "l": 66912.33,
+            "c": 67616.97
           },
           {
-            "t": 1794621600,
-            "o": 68223.37,
-            "h": 68249.62,
+            "t": 1794625200,
+            "o": 67623.01,
+            "h": 67688.14,
             "l": 66434.99,
-            "c": 67162.24
+            "c": 67307.22
           },
           {
-            "t": 1794636000,
-            "o": 67171.09,
+            "t": 1794639600,
+            "o": 67312.34,
             "h": 67452.28,
             "l": 66908.51,
-            "c": 67346.46
+            "c": 67231.31
           },
           {
-            "t": 1794650400,
-            "o": 67344.01,
-            "h": 67373.67,
-            "l": 66495.96,
-            "c": 66791.19
+            "t": 1794654000,
+            "o": 67222.5,
+            "h": 67286.42,
+            "l": 65770.26,
+            "c": 65862.77
           },
           {
-            "t": 1794664800,
-            "o": 66792.9,
-            "h": 66814.2,
+            "t": 1794668400,
+            "o": 65863.56,
+            "h": 66126.55,
             "l": 65000.71,
-            "c": 65870.83
+            "c": 65497.34
           },
           {
-            "t": 1794679200,
-            "o": 65859.73,
-            "h": 66025.29,
-            "l": 63941.62,
-            "c": 64409.26
+            "t": 1794682800,
+            "o": 65516.98,
+            "h": 65831.15,
+            "l": 63300.01,
+            "c": 63500.69
           },
           {
-            "t": 1794693600,
-            "o": 64384.28,
-            "h": 64529.46,
+            "t": 1794697200,
+            "o": 63500.36,
+            "h": 64920.46,
             "l": 62001.55,
-            "c": 62573.87
+            "c": 64879.61
           },
           {
-            "t": 1794708000,
-            "o": 62598.97,
+            "t": 1794711600,
+            "o": 64859.61,
             "h": 65535.25,
-            "l": 62456.97,
-            "c": 64460.02
+            "l": 64149.08,
+            "c": 64424.08
           },
           {
-            "t": 1794722400,
-            "o": 64493.34,
+            "t": 1794726000,
+            "o": 64430.14,
             "h": 66028.6,
             "l": 63735.98,
-            "c": 65314.64
+            "c": 65553.77
           },
           {
-            "t": 1794736800,
-            "o": 65304.35,
+            "t": 1794740400,
+            "o": 65541.05,
             "h": 65763.14,
-            "l": 65200.23,
-            "c": 65402.6
+            "l": 64429.17,
+            "c": 64720.94
           },
           {
-            "t": 1794751200,
-            "o": 65393.95,
-            "h": 65476.91,
+            "t": 1794754800,
+            "o": 64720.9,
+            "h": 64897.36,
             "l": 64239.59,
-            "c": 64528.21
+            "c": 64691.71
           },
           {
-            "t": 1794765600,
-            "o": 64507.91,
-            "h": 65236.68,
-            "l": 64451.64,
-            "c": 64972.45
+            "t": 1794769200,
+            "o": 64665.93,
+            "h": 65246.42,
+            "l": 64655.3,
+            "c": 65197.46
           },
           {
-            "t": 1794780000,
-            "o": 64932.57,
+            "t": 1794783600,
+            "o": 65225.55,
             "h": 65461.27,
             "l": 64526.77,
-            "c": 64603.9
+            "c": 65135.97
           },
           {
-            "t": 1794794400,
-            "o": 64529.67,
-            "h": 65303.21,
-            "l": 64294.08,
-            "c": 64399.81
+            "t": 1794798000,
+            "o": 65133.88,
+            "h": 65184.91,
+            "l": 64242.5,
+            "c": 64651.82
           },
           {
-            "t": 1794808800,
-            "o": 64401.32,
+            "t": 1794812400,
+            "o": 64676.41,
             "h": 64988.9,
             "l": 64081.45,
-            "c": 64271.13
+            "c": 64518.32
           },
           {
-            "t": 1794823200,
-            "o": 64282.48,
-            "h": 64731.01,
-            "l": 63835.65,
-            "c": 64112.35
-          },
-          {
-            "t": 1794837600,
-            "o": 64106.53,
+            "t": 1794826800,
+            "o": 64525.77,
             "h": 65602.21,
-            "l": 63937.83,
-            "c": 64836.64
+            "l": 63835.65,
+            "c": 65101.35
           },
           {
-            "t": 1794852000,
-            "o": 64829.5,
-            "h": 65359.11,
-            "l": 64661.83,
-            "c": 65241.03
+            "t": 1794841200,
+            "o": 65089.4,
+            "h": 65125.17,
+            "l": 64042.79,
+            "c": 64980.79
           },
           {
-            "t": 1794866400,
-            "o": 65237.73,
+            "t": 1794855600,
+            "o": 64958.39,
             "h": 65467.29,
-            "l": 64380.41,
-            "c": 64684.8
+            "l": 64697.83,
+            "c": 65256.53
           },
           {
-            "t": 1794880800,
-            "o": 64679.06,
-            "h": 65119.28,
+            "t": 1794870000,
+            "o": 65234.75,
+            "h": 65282.71,
             "l": 64315.75,
-            "c": 64773.32
+            "c": 64438.12
           },
           {
-            "t": 1794895200,
-            "o": 64741.88,
-            "h": 64766.56,
-            "l": 64110.25,
-            "c": 64301.2
+            "t": 1794884400,
+            "o": 64430.79,
+            "h": 65119.28,
+            "l": 64238.34,
+            "c": 64490.32
           },
           {
-            "t": 1794909600,
-            "o": 64297.42,
-            "h": 65100.0,
+            "t": 1794898800,
+            "o": 64491.25,
+            "h": 64689.34,
             "l": 64004.94,
-            "c": 65091.26
+            "c": 64029.37
           },
           {
-            "t": 1794924000,
-            "o": 65073.67,
+            "t": 1794913200,
+            "o": 64041.22,
             "h": 65356.56,
+            "l": 64034.55,
+            "c": 64949.43
+          },
+          {
+            "t": 1794927600,
+            "o": 64949.1,
+            "h": 65100.24,
             "l": 63278.41,
-            "c": 63756.61
+            "c": 63695.49
           },
           {
-            "t": 1794938400,
-            "o": 63722.53,
-            "h": 64593.22,
+            "t": 1794942000,
+            "o": 63680.36,
+            "h": 64810.53,
             "l": 63575.67,
-            "c": 64289.27
+            "c": 64657.19
           },
           {
-            "t": 1794952800,
-            "o": 64269.27,
+            "t": 1794956400,
+            "o": 64672.63,
             "h": 65189.22,
-            "l": 64105.52,
-            "c": 64234.55
-          },
-          {
-            "t": 1794967200,
-            "o": 64252.25,
-            "h": 64771.88,
             "l": 64062.48,
-            "c": 64600.5
+            "c": 64249.58
           },
           {
-            "t": 1794981600,
-            "o": 64600.17,
+            "t": 1794970800,
+            "o": 64245.16,
+            "h": 64771.88,
+            "l": 64235.51,
+            "c": 64539.54
+          },
+          {
+            "t": 1794985200,
+            "o": 64498.05,
             "h": 64889.54,
-            "l": 64404.23,
-            "c": 64550.11
+            "l": 64099.5,
+            "c": 64292.37
           },
           {
-            "t": 1794996000,
-            "o": 64565.53,
-            "h": 64573.2,
-            "l": 63848.66,
-            "c": 63865.27
+            "t": 1794999600,
+            "o": 64287.68,
+            "h": 64316.49,
+            "l": 63004.31,
+            "c": 63588.21
           },
           {
-            "t": 1795010400,
-            "o": 63860.89,
-            "h": 64000.67,
+            "t": 1795014000,
+            "o": 63591.58,
+            "h": 63808.92,
             "l": 62220.07,
-            "c": 63037.3
+            "c": 63107.14
           },
           {
-            "t": 1795024800,
-            "o": 63026.97,
-            "h": 63207.46,
-            "l": 62210.06,
-            "c": 62257.1
-          },
-          {
-            "t": 1795039200,
-            "o": 62257.62,
-            "h": 63226.12,
+            "t": 1795028400,
+            "o": 63091.2,
+            "h": 63091.2,
             "l": 62012.27,
-            "c": 62787.2
+            "c": 62168.73
           },
           {
-            "t": 1795053600,
-            "o": 62775.33,
+            "t": 1795042800,
+            "o": 62175.04,
+            "h": 63226.12,
+            "l": 62175.04,
+            "c": 62534.1
+          },
+          {
+            "t": 1795057200,
+            "o": 62520.7,
             "h": 63678.13,
             "l": 62330.89,
-            "c": 63288.5
+            "c": 63653.48
           },
           {
-            "t": 1795068000,
-            "o": 63280.69,
-            "h": 63864.1,
-            "l": 63279.86,
-            "c": 63785.27
+            "t": 1795071600,
+            "o": 63682.52,
+            "h": 63900.05,
+            "l": 63471.55,
+            "c": 63719.99
           },
           {
-            "t": 1795082400,
-            "o": 63794.2,
+            "t": 1795086000,
+            "o": 63719.99,
             "h": 64011.1,
-            "l": 63509.1,
-            "c": 63968.95
+            "l": 63393.32,
+            "c": 63483.06
           },
           {
-            "t": 1795096800,
-            "o": 63975.87,
-            "h": 63984.14,
+            "t": 1795100400,
+            "o": 63430.84,
+            "h": 63825.42,
             "l": 62176.2,
-            "c": 62670.31
+            "c": 62807.69
           },
           {
-            "t": 1795111200,
-            "o": 62656.59,
-            "h": 63226.52,
+            "t": 1795114800,
+            "o": 62818.85,
+            "h": 62822.12,
             "l": 61370.38,
-            "c": 61466.91
+            "c": 62112.12
           },
           {
-            "t": 1795125600,
-            "o": 61472.08,
+            "t": 1795129200,
+            "o": 62095.05,
             "h": 62541.98,
-            "l": 61230.53,
-            "c": 61501.34
-          },
-          {
-            "t": 1795140000,
-            "o": 61495.75,
-            "h": 62324.6,
             "l": 61230.42,
-            "c": 61853.08
+            "c": 62188.49
           },
           {
-            "t": 1795154400,
-            "o": 61842.94,
-            "h": 62004.01,
-            "l": 61416.91,
-            "c": 61583.63
+            "t": 1795143600,
+            "o": 62175.82,
+            "h": 62324.6,
+            "l": 61330.29,
+            "c": 62000.9
           },
           {
-            "t": 1795168800,
-            "o": 61579.21,
+            "t": 1795158000,
+            "o": 61997.43,
             "h": 62261.77,
-            "l": 61171.46,
-            "c": 61812.17
+            "l": 61416.91,
+            "c": 61985.86
           },
           {
-            "t": 1795183200,
-            "o": 61815.6,
+            "t": 1795172400,
+            "o": 61992.5,
             "h": 62106.69,
-            "l": 58742.55,
-            "c": 59094.05
+            "l": 61171.46,
+            "c": 61696.84
           },
           {
-            "t": 1795197600,
-            "o": 59061.69,
+            "t": 1795186800,
+            "o": 61785.48,
+            "h": 61865.92,
+            "l": 58028.51,
+            "c": 58329.25
+          },
+          {
+            "t": 1795201200,
+            "o": 58339.47,
             "h": 59278.93,
             "l": 57680.1,
-            "c": 58884.09
+            "c": 59033.87
           },
           {
-            "t": 1795212000,
-            "o": 58889.34,
-            "h": 59178.06,
-            "l": 58725.31,
-            "c": 58909.62
+            "t": 1795215600,
+            "o": 59005.42,
+            "h": 59157.59,
+            "l": 58483.04,
+            "c": 58492.37
           },
           {
-            "t": 1795226400,
-            "o": 58907.25,
-            "h": 58969.64,
-            "l": 55518.44,
-            "c": 55758.82
+            "t": 1795230000,
+            "o": 58478.96,
+            "h": 58488.03,
+            "l": 55180.67,
+            "c": 56555.48
           }
         ],
         "1h": [
-          {
-            "t": 1795078800,
-            "o": 63671.69,
-            "h": 63864.1,
-            "l": 63613.78,
-            "c": 63785.27
-          },
           {
             "t": 1795082400,
             "o": 63794.2,
@@ -19046,8 +19039,15 @@
             "t": 1795237200,
             "o": 56231.29,
             "h": 56414.8,
-            "l": 55754.65,
-            "c": 55758.82
+            "l": 55656.78,
+            "c": 55699.18
+          },
+          {
+            "t": 1795240800,
+            "o": 55721.21,
+            "h": 56571.55,
+            "l": 55180.67,
+            "c": 56555.48
           }
         ]
       }
@@ -19080,7 +19080,7 @@
         "be_trigger": 49176.42,
         "plan": "1) Divide la entrada base en 49830.85 (SL 50485.28). 2) Al tocar 49176.42 (+1R) o TP1 (48521.99), cobra parciales y sube el SL a 49830.85 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 47082.24."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 90,
         "alignment": "ALIGNED",
@@ -20050,7 +20050,7 @@
         "be_trigger": 24073.04,
         "plan": "1) Divide la entrada base en 24606.11 (SL 25139.18). 2) Al tocar 24073.04 (+1R) o TP1 (23539.97), cobra parciales y sube el SL a 24606.11 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 22367.22."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 90,
         "alignment": "ALIGNED",
@@ -21020,7 +21020,7 @@
         "be_trigger": 7211.28,
         "plan": "1) Divide la entrada base en 7328.54 (SL 7445.8). 2) Al tocar 7211.28 (+1R) o TP1 (7094.02), cobra parciales y sube el SL a 7328.54 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 6836.05."
       },
-      "created_at": 1795239388,
+      "created_at": 1795243107,
       "confluence": {
         "score": 90,
         "alignment": "ALIGNED",
