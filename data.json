@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-21 22:18 UTC",
+  "last_updated": "2026-11-21 22:47 UTC",
   "brief": {
     "dxy": 103.84,
     "us10y": 4.91,
@@ -113,6 +113,12 @@
     },
     {
       "source": "Forex & Divisas",
+      "title": "UK and Netherlands leaders discuss security and Ukraine support",
+      "link": "https://www.investing.com/news/economy-news/uk-and-netherlands-leaders-discuss-security-and-ukraine-support-5043603",
+      "time": "2026-11-21 22:32:53"
+    },
+    {
+      "source": "Forex & Divisas",
       "title": "Bahrain blames Iran for strike on industrial site; Trump seeks \"permanent\" deal",
       "link": "https://www.investing.com/news/economy-news/iran-war-sees-tanker-hit-near-hormuz-as-saudi-arabia-intercepts-houthi-missiles-5043277",
       "time": "2026-11-21 20:34:46"
@@ -128,12 +134,6 @@
       "title": "EU budget chief proposes €40 bln cut and digital tax plan",
       "link": "https://www.investing.com/news/economy-news/eu-budget-chief-proposes-40-bln-cut-and-digital-tax-plan-5043471",
       "time": "2026-11-21 14:01:00"
-    },
-    {
-      "source": "Forex & Divisas",
-      "title": "Goldman upgrades China H-shares on faster earnings growth outlook",
-      "link": "https://www.investing.com/news/economy-news/goldman-upgrades-china-hshares-on-faster-earnings-growth-outlook-5043437",
-      "time": "2026-11-21 12:54:24"
     }
   ],
   "calendar": [
@@ -198,7 +198,7 @@
       "macro_reason": "XAU (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -1206,7 +1206,7 @@
       "macro_reason": "EUR (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -2220,7 +2220,7 @@
         "be_trigger": 158.608,
         "plan": "1) Divide la entrada base en 158.923 (SL 159.238). 2) Al tocar 158.608 (+1R) o TP1 (158.293), cobra parciales y sube el SL a 158.923 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 157.6."
       },
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -3228,7 +3228,7 @@
       "macro_reason": "GBP (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (SSL_SWEEP_BUY) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 94,
         "alignment": "ALIGNED",
@@ -4236,7 +4236,7 @@
       "macro_reason": "GBP (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -5250,7 +5250,7 @@
         "be_trigger": 1.96909,
         "plan": "1) Divide la entrada base en 1.96532 (SL 1.96155). 2) Al tocar 1.96909 (+1R) o TP1 (1.97286), cobra parciales y sube el SL a 1.96532 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.98115."
       },
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -6258,7 +6258,7 @@
       "macro_reason": "GBP (NEUTRAL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -7266,7 +7266,7 @@
       "macro_reason": "GBP (NEUTRAL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 77,
         "alignment": "ALIGNED",
@@ -8280,7 +8280,7 @@
         "be_trigger": 0.66511,
         "plan": "1) Divide la entrada base en 0.66669 (SL 0.66827). 2) Al tocar 0.66511 (+1R) o TP1 (0.66353), cobra parciales y sube el SL a 0.66669 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 0.66005."
       },
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -9294,7 +9294,7 @@
         "be_trigger": 105.566,
         "plan": "1) Divide la entrada base en 105.943 (SL 106.32). 2) Al tocar 105.566 (+1R) o TP1 (105.189), cobra parciales y sube el SL a 105.943 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 104.36."
       },
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -10302,7 +10302,7 @@
       "macro_reason": "AUD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -11310,7 +11310,7 @@
       "macro_reason": "AUD (DÉBIL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:NEUTRAL). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -12324,7 +12324,7 @@
         "be_trigger": 1.64844,
         "plan": "1) Divide la entrada base en 1.64506 (SL 1.64168). 2) Al tocar 1.64844 (+1R) o TP1 (1.65182), cobra parciales y sube el SL a 1.64506 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.65926."
       },
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -13332,7 +13332,7 @@
       "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -14340,7 +14340,7 @@
       "macro_reason": "NZD (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -15348,7 +15348,7 @@
       "macro_reason": "USD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL). Giro detectado (BSL_SWEEP_SELL) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
@@ -16356,7 +16356,7 @@
       "macro_reason": "USD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:SUBE, 4H:BAJA, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -17364,7 +17364,7 @@
       "macro_reason": "EUR (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -18341,8 +18341,8 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 60181.98,
-      "chg_day": 2.35,
+      "price": 60083.06,
+      "chg_day": 2.18,
       "chart_bias": "SUBE",
       "macro_dir": "BAJA",
       "economy_short": "BTC DÉBIL / USD DÉBIL",
@@ -18372,7 +18372,7 @@
       "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:SUBE). Agotamiento alcista en techo de rango (3 velas perdiendo cuerpo + rechazo/macro en contra). Proteger compras.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 44,
         "alignment": "OPPOSED",
@@ -18703,7 +18703,7 @@
             "o": 58802.6,
             "h": 60619.18,
             "l": 55631.57,
-            "c": 60181.98
+            "c": 60083.06
           }
         ],
         "4h": [
@@ -19020,7 +19020,7 @@
             "o": 60045.17,
             "h": 60393.25,
             "l": 59979.39,
-            "c": 60181.98
+            "c": 60083.06
           }
         ],
         "1h": [
@@ -19336,8 +19336,8 @@
             "t": 1795298400,
             "o": 60336.78,
             "h": 60339.07,
-            "l": 60072.61,
-            "c": 60181.98
+            "l": 60028.7,
+            "c": 60083.06
           }
         ]
       }
@@ -19380,7 +19380,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -20360,7 +20360,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -21340,7 +21340,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299495,
+      "created_at": 1795301276,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
