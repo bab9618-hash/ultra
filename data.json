@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-11-21 22:10 UTC",
+  "last_updated": "2026-11-21 22:18 UTC",
   "brief": {
     "dxy": 103.84,
     "us10y": 4.91,
     "headline": "USD DÉBIL (DXY 103.84 · US10Y 4.91%) | GBP NEUTRAL | AUD DÉBIL",
-    "summary": "Matriz híbrida 4H/1D, cestas correlacionadas, protocolo Pirámide Swing + parciales y giros con respaldo macro sobre 22 activos."
+    "summary": "Mesa Economía vs Gráfico, liquidez BSL/SSL, CHoCH/BOS, ATR y protocolo Pirámide Swing sobre 22 activos."
   },
   "correlated_baskets": [
     {
@@ -170,24 +170,40 @@
       "price": 3515.4,
       "chg_day": -4.62,
       "chart_bias": "BAJA",
+      "macro_dir": "SUBE",
+      "economy_short": "XAU FUERTE / USD DÉBIL",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 3596.7,
+        "ssl": 3502.9,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 107.81,
+        "atr_units": 1078.1,
+        "range20": 654.8,
+        "range20_units": 6548.0
       },
       "intraday_high": 3638.1,
       "intraday_low": 3502.9,
       "ob_high": 3596.7,
       "ob_low": 3595.5,
-      "macro_reason": "XAU (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
+      "macro_reason": "XAU (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
-        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
-        "verdict_sub": "Macro en SUBE rechaza movimiento BAJA"
+        "verdict_title": "SE CONTRADICEN · ESPERAR",
+        "verdict_sub": "Economía en SUBE rechaza gráfico en BAJA"
       },
       "setup": {
         "direction": "SELL",
@@ -1162,24 +1178,40 @@
       "price": 1.09745,
       "chg_day": 0.02,
       "chart_bias": "BAJA",
+      "macro_dir": "SUBE",
+      "economy_short": "EUR NEUTRAL / USD DÉBIL",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "NEUTRAL",
         "h1": "NEUTRAL"
+      },
+      "liquidity": {
+        "bsl": 1.10023,
+        "ssl": 1.09613,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.00751,
+        "atr_units": 75.1,
+        "range20": 0.03207,
+        "range20_units": 320.7
       },
       "intraday_high": 1.10023,
       "intraday_low": 1.09613,
       "ob_high": 1.10023,
       "ob_low": 1.09903,
-      "macro_reason": "EUR (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
+      "macro_reason": "EUR (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
-        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
-        "verdict_sub": "Macro en SUBE rechaza movimiento BAJA"
+        "verdict_title": "SE CONTRADICEN · ESPERAR",
+        "verdict_sub": "Economía en SUBE rechaza gráfico en BAJA"
       },
       "setup": {
         "direction": "SELL",
@@ -2154,16 +2186,32 @@
       "price": 158.512,
       "chg_day": -0.55,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "USD DÉBIL / JPY FUERTE",
       "tf_bias": {
+        "weekly": "SUBE",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 159.359,
+        "ssl": 158.415,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "SSL_SWEEP_BUY"
+      },
+      "volatility": {
+        "atr": 0.962,
+        "atr_units": 96.2,
+        "range20": 3.519,
+        "range20_units": 351.9
       },
       "intraday_high": 159.841,
       "intraday_low": 158.408,
       "ob_high": 158.983,
       "ob_low": 158.863,
-      "macro_reason": "USD (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). 🌊 Potencial Swing activo (BE en 158.608, Swing TP 157.6).",
+      "macro_reason": "USD (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:BAJA, 4H:BAJA, 1H:BAJA). 🌊 Potencial Swing activo (BE en 158.608, Swing TP 157.6).",
       "news_warning": null,
       "swing_potential": {
         "active": true,
@@ -2172,12 +2220,12 @@
         "be_trigger": 158.608,
         "plan": "1) Divide la entrada base en 158.923 (SL 159.238). 2) Al tocar 158.608 (+1R) o TP1 (158.293), cobra parciales y sube el SL a 158.923 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 157.6."
       },
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
+        "verdict_title": "VAN JUNTOS · BUSCAR VENTAS",
+        "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
@@ -3152,24 +3200,40 @@
       "price": 1.30818,
       "chg_day": -0.04,
       "chart_bias": "SUBE",
+      "macro_dir": "SUBE",
+      "economy_short": "GBP NEUTRAL / USD DÉBIL",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 1.3128,
+        "ssl": 1.30799,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "SSL_SWEEP_BUY"
+      },
+      "volatility": {
+        "atr": 0.0089,
+        "atr_units": 89.0,
+        "range20": 0.04228,
+        "range20_units": 422.8
       },
       "intraday_high": 1.3128,
       "intraday_low": 1.30763,
       "ob_high": 1.30808,
       "ob_low": 1.30708,
-      "macro_reason": "GBP (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (SSL_SWEEP_BUY) con respaldo macro.",
+      "macro_reason": "GBP (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (SSL_SWEEP_BUY) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 94,
         "alignment": "ALIGNED",
         "verdict_title": "GIRO CONFIRMADO · MACRO + TÉCNICO",
-        "verdict_sub": "Flujo macro (SUBE) respalda estructura (SUBE)"
+        "verdict_sub": "Economía (SUBE) y Gráfico (SUBE) empujan juntos"
       },
       "setup": {
         "direction": "BUY",
@@ -4144,19 +4208,35 @@
       "price": 207.49,
       "chg_day": -0.97,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "GBP NEUTRAL / JPY FUERTE",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 208.91,
+        "ssl": 207.254,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "SSL_SWEEP_BUY"
+      },
+      "volatility": {
+        "atr": 1.335,
+        "atr_units": 133.5,
+        "range20": 5.878,
+        "range20_units": 587.8
       },
       "intraday_high": 209.192,
       "intraday_low": 207.223,
       "ob_high": 208.32,
       "ob_low": 208.2,
-      "macro_reason": "GBP (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
+      "macro_reason": "GBP (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -5136,16 +5216,32 @@
       "price": 1.97755,
       "chg_day": 0.59,
       "chart_bias": "SUBE",
+      "macro_dir": "SUBE",
+      "economy_short": "GBP NEUTRAL / AUD DÉBIL",
       "tf_bias": {
+        "weekly": "SUBE",
         "daily": "SUBE",
         "h4": "SUBE",
         "h1": "SUBE"
+      },
+      "liquidity": {
+        "bsl": 1.97913,
+        "ssl": 1.96199,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.014,
+        "atr_units": 140.0,
+        "range20": 0.09123,
+        "range20_units": 912.3
       },
       "intraday_high": 1.97913,
       "intraday_low": 1.96199,
       "ob_high": 1.96592,
       "ob_low": 1.96472,
-      "macro_reason": "GBP (NEUTRAL) vs AUD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:SUBE, 1H:SUBE). 🌊 Potencial Swing activo (BE en 1.96909, Swing TP 1.98115).",
+      "macro_reason": "GBP (NEUTRAL) vs AUD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:SUBE, 4H:SUBE, 1H:SUBE). 🌊 Potencial Swing activo (BE en 1.96909, Swing TP 1.98115).",
       "news_warning": null,
       "swing_potential": {
         "active": true,
@@ -5154,12 +5250,12 @@
         "be_trigger": 1.96909,
         "plan": "1) Divide la entrada base en 1.96532 (SL 1.96155). 2) Al tocar 1.96909 (+1R) o TP1 (1.97286), cobra parciales y sube el SL a 1.96532 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.98115."
       },
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Flujo macro (SUBE) respalda estructura (SUBE)"
+        "verdict_title": "VAN JUNTOS · BUSCAR COMPRAS",
+        "verdict_sub": "Economía (SUBE) y Gráfico (SUBE) empujan juntos"
       },
       "setup": {
         "direction": "BUY",
@@ -6134,24 +6230,40 @@
       "price": 2.39221,
       "chg_day": 0.2,
       "chart_bias": "SUBE",
+      "macro_dir": "BAJA",
+      "economy_short": "GBP NEUTRAL / NZD NEUTRAL",
       "tf_bias": {
+        "weekly": "SUBE",
         "daily": "NEUTRAL",
         "h4": "SUBE",
         "h1": "SUBE"
+      },
+      "liquidity": {
+        "bsl": 2.39389,
+        "ssl": 2.37927,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.01488,
+        "atr_units": 148.8,
+        "range20": 0.08257,
+        "range20_units": 825.7
       },
       "intraday_high": 2.39389,
       "intraday_low": 2.37927,
       "ob_high": 2.38313,
       "ob_low": 2.38193,
-      "macro_reason": "GBP (NEUTRAL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1D:NEUTRAL, 4H:SUBE, 1H:SUBE).",
+      "macro_reason": "GBP (NEUTRAL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
-        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
-        "verdict_sub": "Macro en BAJA rechaza movimiento SUBE"
+        "verdict_title": "SE CONTRADICEN · ESPERAR",
+        "verdict_sub": "Economía en BAJA rechaza gráfico en SUBE"
       },
       "setup": {
         "direction": "BUY",
@@ -7126,24 +7238,40 @@
       "price": 1.87657,
       "chg_day": -0.01,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "GBP NEUTRAL / CAD FUERTE",
       "tf_bias": {
+        "weekly": "SUBE",
         "daily": "BAJA",
         "h4": "NEUTRAL",
         "h1": "NEUTRAL"
+      },
+      "liquidity": {
+        "bsl": 1.87915,
+        "ssl": 1.87421,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.00776,
+        "atr_units": 77.6,
+        "range20": 0.03863,
+        "range20_units": 386.3
       },
       "intraday_high": 1.87915,
       "intraday_low": 1.87421,
       "ob_high": 1.87851,
       "ob_low": 1.87731,
-      "macro_reason": "GBP (NEUTRAL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
+      "macro_reason": "GBP (NEUTRAL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 77,
         "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
+        "verdict_title": "VAN JUNTOS · BUSCAR VENTAS",
+        "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
@@ -8118,16 +8246,32 @@
       "price": 0.6619,
       "chg_day": -0.56,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "AUD DÉBIL / USD DÉBIL",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 0.6684,
+        "ssl": 0.66124,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.00717,
+        "atr_units": 71.7,
+        "range20": 0.04488,
+        "range20_units": 448.8
       },
       "intraday_high": 0.6684,
       "intraday_low": 0.66124,
       "ob_high": 0.66729,
       "ob_low": 0.66609,
-      "macro_reason": "AUD (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). 🌊 Potencial Swing activo (BE en 0.66511, Swing TP 0.66005).",
+      "macro_reason": "AUD (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). 🌊 Potencial Swing activo (BE en 0.66511, Swing TP 0.66005).",
       "news_warning": null,
       "swing_potential": {
         "active": true,
@@ -8136,12 +8280,12 @@
         "be_trigger": 0.66511,
         "plan": "1) Divide la entrada base en 0.66669 (SL 0.66827). 2) Al tocar 0.66511 (+1R) o TP1 (0.66353), cobra parciales y sube el SL a 0.66669 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 0.66005."
       },
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
+        "verdict_title": "VAN JUNTOS · BUSCAR VENTAS",
+        "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
@@ -9116,16 +9260,32 @@
       "price": 104.918,
       "chg_day": -1.92,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "AUD DÉBIL / JPY FUERTE",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 106.392,
+        "ssl": 104.717,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 1.197,
+        "atr_units": 119.7,
+        "range20": 6.25,
+        "range20_units": 625.0
       },
       "intraday_high": 106.429,
       "intraday_low": 104.717,
       "ob_high": 106.003,
       "ob_low": 105.883,
-      "macro_reason": "AUD (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). 🌊 Potencial Swing activo (BE en 105.566, Swing TP 104.36).",
+      "macro_reason": "AUD (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). 🌊 Potencial Swing activo (BE en 105.566, Swing TP 104.36).",
       "news_warning": null,
       "swing_potential": {
         "active": true,
@@ -9134,12 +9294,12 @@
         "be_trigger": 105.566,
         "plan": "1) Divide la entrada base en 105.943 (SL 106.32). 2) Al tocar 105.566 (+1R) o TP1 (105.189), cobra parciales y sube el SL a 105.943 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 104.36."
       },
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
+        "verdict_title": "VAN JUNTOS · BUSCAR VENTAS",
+        "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
@@ -10114,19 +10274,35 @@
       "price": 0.94804,
       "chg_day": -0.69,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "AUD DÉBIL / CAD FUERTE",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 0.95679,
+        "ssl": 0.94723,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.00763,
+        "atr_units": 76.3,
+        "range20": 0.0428,
+        "range20_units": 428.0
       },
       "intraday_high": 0.95679,
       "intraday_low": 0.94723,
       "ob_high": 0.95521,
       "ob_low": 0.95401,
-      "macro_reason": "AUD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
+      "macro_reason": "AUD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -11106,19 +11282,35 @@
       "price": 1.20941,
       "chg_day": -0.4,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "AUD DÉBIL / NZD NEUTRAL",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "NEUTRAL"
+      },
+      "liquidity": {
+        "bsl": 1.21365,
+        "ssl": 1.20836,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "SSL_SWEEP_BUY"
+      },
+      "volatility": {
+        "atr": 0.00818,
+        "atr_units": 81.8,
+        "range20": 0.05064,
+        "range20_units": 506.4
       },
       "intraday_high": 1.21463,
       "intraday_low": 1.20831,
       "ob_high": 1.21362,
       "ob_low": 1.21242,
-      "macro_reason": "AUD (DÉBIL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:NEUTRAL). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
+      "macro_reason": "AUD (DÉBIL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:NEUTRAL). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -12098,16 +12290,32 @@
       "price": 1.65697,
       "chg_day": 0.56,
       "chart_bias": "SUBE",
+      "macro_dir": "SUBE",
+      "economy_short": "EUR NEUTRAL / AUD DÉBIL",
       "tf_bias": {
+        "weekly": "SUBE",
         "daily": "SUBE",
         "h4": "SUBE",
         "h1": "SUBE"
+      },
+      "liquidity": {
+        "bsl": 1.65906,
+        "ssl": 1.64369,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.01244,
+        "atr_units": 124.4,
+        "range20": 0.07913,
+        "range20_units": 791.3
       },
       "intraday_high": 1.65906,
       "intraday_low": 1.64369,
       "ob_high": 1.64566,
       "ob_low": 1.64446,
-      "macro_reason": "EUR (NEUTRAL) vs AUD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:SUBE, 1H:SUBE). 🌊 Potencial Swing activo (BE en 1.64844, Swing TP 1.65926).",
+      "macro_reason": "EUR (NEUTRAL) vs AUD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:SUBE, 4H:SUBE, 1H:SUBE). 🌊 Potencial Swing activo (BE en 1.64844, Swing TP 1.65926).",
       "news_warning": null,
       "swing_potential": {
         "active": true,
@@ -12116,12 +12324,12 @@
         "be_trigger": 1.64844,
         "plan": "1) Divide la entrada base en 1.64506 (SL 1.64168). 2) Al tocar 1.64844 (+1R) o TP1 (1.65182), cobra parciales y sube el SL a 1.64506 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.65926."
       },
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "VAN JUNTOS · CONFLUENCIA",
-        "verdict_sub": "Flujo macro (SUBE) respalda estructura (SUBE)"
+        "verdict_title": "VAN JUNTOS · BUSCAR COMPRAS",
+        "verdict_sub": "Economía (SUBE) y Gráfico (SUBE) empujan juntos"
       },
       "setup": {
         "direction": "BUY",
@@ -13096,19 +13304,35 @@
       "price": 0.5551,
       "chg_day": -1.21,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "AUD DÉBIL / CHF FUERTE",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 0.56284,
+        "ssl": 0.55426,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.00587,
+        "atr_units": 58.7,
+        "range20": 0.02948,
+        "range20_units": 294.8
       },
       "intraday_high": 0.56284,
       "intraday_low": 0.55426,
       "ob_high": 0.56101,
       "ob_low": 0.55981,
-      "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
+      "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -14088,24 +14312,40 @@
       "price": 0.54705,
       "chg_day": -0.2,
       "chart_bias": "BAJA",
+      "macro_dir": "SUBE",
+      "economy_short": "NZD NEUTRAL / USD DÉBIL",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 0.5513,
+        "ssl": 0.54657,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.00539,
+        "atr_units": 53.9,
+        "range20": 0.02373,
+        "range20_units": 237.3
       },
       "intraday_high": 0.5513,
       "intraday_low": 0.54657,
       "ob_high": 0.55075,
       "ob_low": 0.54955,
-      "macro_reason": "NZD (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
+      "macro_reason": "NZD (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
-        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
-        "verdict_sub": "Macro en SUBE rechaza movimiento BAJA"
+        "verdict_title": "SE CONTRADICEN · ESPERAR",
+        "verdict_sub": "Economía en SUBE rechaza gráfico en BAJA"
       },
       "setup": {
         "direction": "SELL",
@@ -15080,24 +15320,40 @@
       "price": 1.4339,
       "chg_day": -0.03,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "USD DÉBIL / CAD FUERTE",
       "tf_bias": {
+        "weekly": "SUBE",
         "daily": "SUBE",
         "h4": "NEUTRAL",
         "h1": "NEUTRAL"
+      },
+      "liquidity": {
+        "bsl": 1.43509,
+        "ssl": 1.4295,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "BSL_SWEEP_SELL"
+      },
+      "volatility": {
+        "atr": 0.00734,
+        "atr_units": 73.4,
+        "range20": 0.04265,
+        "range20_units": 426.5
       },
       "intraday_high": 1.43564,
       "intraday_low": 1.4295,
       "ob_high": 1.43564,
       "ob_low": 1.43444,
-      "macro_reason": "USD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL). Giro detectado (BSL_SWEEP_SELL) con respaldo macro.",
+      "macro_reason": "USD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL). Giro detectado (BSL_SWEEP_SELL) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
         "verdict_title": "GIRO CONFIRMADO · MACRO + TÉCNICO",
-        "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
+        "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
@@ -16072,24 +16328,40 @@
       "price": 0.83955,
       "chg_day": -0.47,
       "chart_bias": "SUBE",
+      "macro_dir": "BAJA",
+      "economy_short": "USD DÉBIL / CHF FUERTE",
       "tf_bias": {
+        "weekly": "SUBE",
         "daily": "SUBE",
         "h4": "BAJA",
         "h1": "NEUTRAL"
+      },
+      "liquidity": {
+        "bsl": 0.84327,
+        "ssl": 0.83754,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 0.00708,
+        "atr_units": 70.8,
+        "range20": 0.03139,
+        "range20_units": 313.9
       },
       "intraday_high": 0.84434,
       "intraday_low": 0.83754,
       "ob_high": 0.83874,
       "ob_low": 0.83754,
-      "macro_reason": "USD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:BAJA, 1H:NEUTRAL).",
+      "macro_reason": "USD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:SUBE, 4H:BAJA, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
-        "verdict_title": "CONTRADICCIÓN · TESIS ROTA",
-        "verdict_sub": "Macro en BAJA rechaza movimiento SUBE"
+        "verdict_title": "SE CONTRADICEN · ESPERAR",
+        "verdict_sub": "Economía en BAJA rechaza gráfico en SUBE"
       },
       "setup": {
         "direction": "BUY",
@@ -17064,19 +17336,35 @@
       "price": 173.904,
       "chg_day": -0.55,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "EUR NEUTRAL / JPY FUERTE",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 174.95,
+        "ssl": 173.732,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 1.179,
+        "atr_units": 117.9,
+        "range20": 4.461,
+        "range20_units": 446.1
       },
       "intraday_high": 175.344,
       "intraday_low": 173.732,
       "ob_high": 174.546,
       "ob_low": 174.426,
-      "macro_reason": "EUR (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
+      "macro_reason": "EUR (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -18053,22 +18341,38 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 60130.62,
-      "chg_day": 2.26,
+      "price": 60181.98,
+      "chg_day": 2.35,
       "chart_bias": "SUBE",
+      "macro_dir": "BAJA",
+      "economy_short": "BTC DÉBIL / USD DÉBIL",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "SUBE",
         "h1": "SUBE"
+      },
+      "liquidity": {
+        "bsl": 60861.99,
+        "ssl": 55180.67,
+        "choch": "NONE",
+        "bos": "NONE",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 3110.62,
+        "atr_units": 3110.6,
+        "range20": 25448.22,
+        "range20_units": 25448.2
       },
       "intraday_high": 60861.99,
       "intraday_low": 55180.67,
       "ob_high": 57771.61,
       "ob_low": 57759.61,
-      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:SUBE, 1H:SUBE). Agotamiento alcista en techo de rango (3 velas perdiendo cuerpo + rechazo/macro en contra). Proteger compras.",
+      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:SUBE). Agotamiento alcista en techo de rango (3 velas perdiendo cuerpo + rechazo/macro en contra). Proteger compras.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795299007,
+      "created_at": 1795299495,
       "confluence": {
         "score": 44,
         "alignment": "OPPOSED",
@@ -18399,7 +18703,7 @@
             "o": 58802.6,
             "h": 60619.18,
             "l": 55631.57,
-            "c": 60130.62
+            "c": 60181.98
           }
         ],
         "4h": [
@@ -18716,7 +19020,7 @@
             "o": 60045.17,
             "h": 60393.25,
             "l": 59979.39,
-            "c": 60130.62
+            "c": 60181.98
           }
         ],
         "1h": [
@@ -19033,7 +19337,7 @@
             "o": 60336.78,
             "h": 60339.07,
             "l": 60072.61,
-            "c": 60130.62
+            "c": 60181.98
           }
         ]
       }
@@ -19048,34 +19352,44 @@
       "price": 48184.69,
       "chg_day": -1.86,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "DÉBIL (BAJISTA)",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 50462.4,
+        "ssl": 48454.7,
+        "choch": "NONE",
+        "bos": "BEARISH_BOS",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 978.48,
+        "atr_units": 978.5,
+        "range20": 5711.75,
+        "range20_units": 5711.8
       },
       "intraday_high": 50973.52,
       "intraday_low": 47998.86,
       "ob_high": 49836.85,
       "ob_low": 49824.85,
-      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro. 🌊 Potencial Swing activo (BE en 49176.42, Swing TP 47082.24).",
+      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
-      "swing_potential": {
-        "active": true,
-        "label": "🌊 POTENCIAL SWING · PROTOCOLO PIRÁMIDE",
-        "target": 47082.24,
-        "be_trigger": 49176.42,
-        "plan": "1) Divide la entrada base en 49830.85 (SL 50485.28). 2) Al tocar 49176.42 (+1R) o TP1 (48521.99), cobra parciales y sube el SL a 49830.85 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 47082.24."
-      },
-      "created_at": 1795299007,
+      "swing_potential": null,
+      "created_at": 1795299495,
       "confluence": {
-        "score": 90,
+        "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "GIRO CONFIRMADO · MACRO + TÉCNICO",
-        "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
+        "verdict_title": "VAN JUNTOS · BUSCAR VENTAS",
+        "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "GIRO MACRO · CHoCH BAJISTA",
+        "signal_tag": "VENTA OB",
         "entry": 49830.85,
         "be_trigger": 49176.42,
         "sl": 50485.28,
@@ -20018,34 +20332,44 @@
       "price": 22651.52,
       "chg_day": -5.14,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "DÉBIL (BAJISTA)",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 24936.06,
+        "ssl": 22817.44,
+        "choch": "NONE",
+        "bos": "BEARISH_BOS",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 704.59,
+        "atr_units": 704.6,
+        "range20": 4074.33,
+        "range20_units": 4074.3
       },
       "intraday_high": 24936.06,
       "intraday_low": 22513.01,
       "ob_high": 24612.11,
       "ob_low": 24600.11,
-      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro. 🌊 Potencial Swing activo (BE en 24073.04, Swing TP 22367.22).",
+      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
-      "swing_potential": {
-        "active": true,
-        "label": "🌊 POTENCIAL SWING · PROTOCOLO PIRÁMIDE",
-        "target": 22367.22,
-        "be_trigger": 24073.04,
-        "plan": "1) Divide la entrada base en 24606.11 (SL 25139.18). 2) Al tocar 24073.04 (+1R) o TP1 (23539.97), cobra parciales y sube el SL a 24606.11 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 22367.22."
-      },
-      "created_at": 1795299007,
+      "swing_potential": null,
+      "created_at": 1795299495,
       "confluence": {
-        "score": 90,
+        "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "GIRO CONFIRMADO · MACRO + TÉCNICO",
-        "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
+        "verdict_title": "VAN JUNTOS · BUSCAR VENTAS",
+        "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "GIRO MACRO · CHoCH BAJISTA",
+        "signal_tag": "VENTA OB",
         "entry": 24606.11,
         "be_trigger": 24073.04,
         "sl": 25139.18,
@@ -20988,34 +21312,44 @@
       "price": 6918.45,
       "chg_day": -3.59,
       "chart_bias": "BAJA",
+      "macro_dir": "BAJA",
+      "economy_short": "DÉBIL (BAJISTA)",
       "tf_bias": {
+        "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
         "h1": "BAJA"
+      },
+      "liquidity": {
+        "bsl": 7415.64,
+        "ssl": 6963.72,
+        "choch": "NONE",
+        "bos": "BEARISH_BOS",
+        "sweep": "NONE"
+      },
+      "volatility": {
+        "atr": 156.35,
+        "atr_units": 156.4,
+        "range20": 875.77,
+        "range20_units": 875.8
       },
       "intraday_high": 7415.64,
       "intraday_low": 6882.66,
       "ob_high": 7334.54,
       "ob_low": 7322.54,
-      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (BEARISH_CHOCH) con respaldo macro. 🌊 Potencial Swing activo (BE en 7211.28, Swing TP 6836.05).",
+      "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
-      "swing_potential": {
-        "active": true,
-        "label": "🌊 POTENCIAL SWING · PROTOCOLO PIRÁMIDE",
-        "target": 6836.05,
-        "be_trigger": 7211.28,
-        "plan": "1) Divide la entrada base en 7328.54 (SL 7445.8). 2) Al tocar 7211.28 (+1R) o TP1 (7094.02), cobra parciales y sube el SL a 7328.54 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 6836.05."
-      },
-      "created_at": 1795299007,
+      "swing_potential": null,
+      "created_at": 1795299495,
       "confluence": {
-        "score": 90,
+        "score": 86,
         "alignment": "ALIGNED",
-        "verdict_title": "GIRO CONFIRMADO · MACRO + TÉCNICO",
-        "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
+        "verdict_title": "VAN JUNTOS · BUSCAR VENTAS",
+        "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "GIRO MACRO · CHoCH BAJISTA",
+        "signal_tag": "VENTA OB",
         "entry": 7328.54,
         "be_trigger": 7211.28,
         "sl": 7445.8,
