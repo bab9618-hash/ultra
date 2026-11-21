@@ -67,6 +67,21 @@ def group_4h(c_1h_long):
         })
     return grouped[-45:]
 
+def group_weekly(c_1d):
+    if not c_1d:
+        return []
+    grouped = []
+    for i in range(0, len(c_1d), 5):
+        chunk = c_1d[i:i+5]
+        grouped.append({
+            "t": chunk[0]["t"],
+            "o": chunk[0]["o"],
+            "h": max(x["h"] for x in chunk),
+            "l": min(x["l"] for x in chunk),
+            "c": chunk[-1]["c"],
+        })
+    return grouped[-20:]
+
 def calc_bias(candles, lookback=6, threshold=0.0006):
     if not candles or len(candles) < lookback:
         return "NEUTRAL"
@@ -78,6 +93,24 @@ def calc_bias(candles, lookback=6, threshold=0.0006):
         return "BAJA"
     return "NEUTRAL"
 
+def calc_atr_and_range(c_1d, pip, dec):
+    if not c_1d or len(c_1d) < 3:
+        return {"atr": 0, "atr_units": 0, "range20": 0, "range20_units": 0}
+    trs = []
+    for i in range(1, len(c_1d)):
+        h = c_1d[i]["h"]
+        l = c_1d[i]["l"]
+        pc = c_1d[i - 1]["c"]
+        trs.append(max(h - l, abs(h - pc), abs(l - pc)))
+    recent_tr = trs[-14:] if len(trs) >= 14 else trs
+    atr = round(sum(recent_tr) / max(1, len(recent_tr)), dec)
+    atr_units = round((atr / pip) * 10) / 10 if pip else atr
+
+    last20 = c_1d[-20:] if len(c_1d) >= 20 else c_1d
+    r20 = round(max(x["h"] for x in last20) - min(x["l"] for x in last20), dec)
+    r20_units = round((r20 / pip) * 10) / 10 if pip else r20
+    return {"atr": atr, "atr_units": atr_units, "range20": r20, "range20_units": r20_units}
+
 def pct_change_lookback(candles, lookback=6):
     if not candles or len(candles) < lookback:
         return 0.0
@@ -85,21 +118,31 @@ def pct_change_lookback(candles, lookback=6):
     last = candles[-1]["c"]
     return ((last - first) / first) * 100.0 if first else 0.0
 
-def detect_reversal_and_structure(c_1h):
+def detect_reversal_and_structure(c_1h, dec):
     if len(c_1h) < 18:
-        return {"choch": "NONE", "sweep": "NONE", "reversal_dir": "NONE"}
+        swing_h = round(max((x["h"] for x in c_1h), default=0), dec)
+        swing_l = round(min((x["l"] for x in c_1h), default=0), dec)
+        return {"choch": "NONE", "sweep": "NONE", "bos": "NONE", "reversal_dir": "NONE", "bsl": swing_h, "ssl": swing_l}
 
     window = c_1h[-20:-2]
     last_two = c_1h[-2:]
     curr = last_two[-1]
-    swing_high = max(x["h"] for x in window)
-    swing_low = min(x["l"] for x in window)
+    prev = c_1h[-3]
+    swing_high = round(max(x["h"] for x in window), dec)
+    swing_low = round(min(x["l"] for x in window), dec)
 
     choch = "NONE"
+    bos = "NONE"
     if curr["c"] > swing_high:
-        choch = "BULLISH_CHOCH"
+        if prev["c"] < (swing_high + swing_low) / 2.0:
+            choch = "BULLISH_CHOCH"
+        else:
+            bos = "BULLISH_BOS"
     elif curr["c"] < swing_low:
-        choch = "BEARISH_CHOCH"
+        if prev["c"] > (swing_high + swing_low) / 2.0:
+            choch = "BEARISH_CHOCH"
+        else:
+            bos = "BEARISH_BOS"
 
     sweep = "NONE"
     for c in last_two:
@@ -117,7 +160,14 @@ def detect_reversal_and_structure(c_1h):
     elif choch == "BEARISH_CHOCH" or sweep == "BSL_SWEEP_SELL":
         reversal_dir = "BAJA"
 
-    return {"choch": choch, "sweep": sweep, "reversal_dir": reversal_dir}
+    return {
+        "choch": choch,
+        "bos": bos,
+        "sweep": sweep,
+        "reversal_dir": reversal_dir,
+        "bsl": swing_high,
+        "ssl": swing_low
+    }
 
 def detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low):
     if len(c_1h) < 12:
@@ -306,6 +356,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         c_1d = candles_bundle.get("1d", [])
         c_4h = candles_bundle.get("4h", [])
         c_1h = candles_bundle.get("1h", [])
+        c_1w = group_weekly(c_1d)
 
         if not c_1h and c_1d:
             c_1h = c_1d[-30:]
@@ -318,9 +369,11 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         prev_close = c_1d[-2]["c"] if len(c_1d) >= 2 else c_1h[0]["o"]
         chg_day = round(((price - prev_close) / prev_close) * 100, 2) if prev_close else 0.0
 
+        b_w = calc_bias(c_1w, 4, 0.0015) if len(c_1w) >= 4 else calc_bias(c_1d, 6, 0.0010)
         b_d = calc_bias(c_1d, 6, 0.0010)
         b_4h = calc_bias(c_4h, 6, 0.0008)
         b_1h = calc_bias(c_1h, 6, 0.0006)
+        vol_metrics = calc_atr_and_range(c_1d, pip, dec)
 
         w_up = (3 if b_d == "SUBE" else 0) + (2 if b_4h == "SUBE" else 0) + (1 if b_1h == "SUBE" else 0)
         w_dn = (3 if b_d == "BAJA" else 0) + (2 if b_4h == "BAJA" else 0) + (1 if b_1h == "BAJA" else 0)
@@ -331,15 +384,31 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             macro_diff = raw_strength.get("BTC", 0.0)
             macro_dir = "SUBE" if macro_diff > 0.10 else ("BAJA" if macro_diff < -0.10 else "NEUTRAL")
             macro_detail = f"Apetito al riesgo US500 y rendimiento USD ({ccy_labels.get('USD', 'NEUTRAL')})."
+            economy_short = "FUERTE (ALCISTA)" if macro_dir == "SUBE" else ("DÉBIL (BAJISTA)" if macro_dir == "BAJA" else "NEUTRAL")
         else:
             b_str = raw_strength.get(base_ccy, 0.0)
             q_str = raw_strength.get(quote_ccy, 0.0)
             macro_diff = b_str - q_str
             macro_dir = "SUBE" if macro_diff > 0.14 else ("BAJA" if macro_diff < -0.14 else "NEUTRAL")
-            macro_detail = f"{base_ccy} ({ccy_labels.get(base_ccy, 'NEUTRAL')}) vs {quote_ccy} ({ccy_labels.get(quote_ccy, 'NEUTRAL')}) en cesta híbrida 4H/1D."
+            b_lbl = ccy_labels.get(base_ccy, "NEUTRAL")
+            q_lbl = ccy_labels.get(quote_ccy, "NEUTRAL")
+            macro_detail = f"{base_ccy} ({b_lbl}) vs {quote_ccy} ({q_lbl}) en cesta híbrida 4H/1D."
+            economy_short = f"{base_ccy} {b_lbl} / {quote_ccy} {q_lbl}"
 
-        rev = detect_reversal_and_structure(c_1h)
-        macro_backed_reversal = (rev["reversal_dir"] != "NONE" and rev["reversal_dir"] == macro_dir)
+        rev = detect_reversal_and_structure(c_1h, dec)
+        base_label = ccy_labels.get(base_ccy, "NEUTRAL")
+        base_supports_reversal = True
+        if cfg["type"] == "forex":
+            if rev["reversal_dir"] == "SUBE" and base_label == "DÉBIL":
+                base_supports_reversal = False
+            elif rev["reversal_dir"] == "BAJA" and base_label == "FUERTE":
+                base_supports_reversal = False
+
+        macro_backed_reversal = (
+            rev["reversal_dir"] != "NONE"
+            and rev["reversal_dir"] == macro_dir
+            and base_supports_reversal
+        )
 
         if macro_backed_reversal:
             chart_bias = rev["reversal_dir"]
@@ -472,27 +541,39 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         elif macro_dir == chart_bias:
             alignment = "ALIGNED"
             conf_score = min(94, 68 + (dominant_w * 3) + (4 if macro_backed_reversal else 0))
-            verdict_title = "GIRO CONFIRMADO · MACRO + TÉCNICO" if macro_backed_reversal else "VAN JUNTOS · CONFLUENCIA"
-            verdict_sub = f"Flujo macro ({macro_dir}) respalda estructura ({chart_bias})"
+            verdict_title = "GIRO CONFIRMADO · MACRO + TÉCNICO" if macro_backed_reversal else f"VAN JUNTOS · BUSCAR {'COMPRAS' if direction == 'BUY' else 'VENTAS'}"
+            verdict_sub = f"Economía ({macro_dir}) y Gráfico ({chart_bias}) empujan juntos"
         elif macro_dir == "NEUTRAL":
-            alignment = "ALIGNED"
-            conf_score = min(78, 56 + (dominant_w * 3))
-            verdict_title = "ESTRUCTURA MANDA · MACRO PLANA"
-            verdict_sub = f"Jerarquía 1D/4H apunta a {chart_bias} · Macro en rango"
+            alignment = "NEUTRAL"
+            conf_score = min(74, 52 + (dominant_w * 3))
+            verdict_title = "SIN DIRECCIÓN CLARA · ECONOMÍA NEUTRAL"
+            verdict_sub = f"Economía plana · Gráfico marca {chart_bias} (esperar confluencia)"
         else:
             alignment = "OPPOSED"
             conf_score = max(32, 46 - (dominant_w * 2))
-            verdict_title = "CONTRADICCIÓN · TESIS ROTA"
-            verdict_sub = f"Macro en {macro_dir} rechaza movimiento {chart_bias}"
+            verdict_title = "SE CONTRADICEN · ESPERAR"
+            verdict_sub = f"Economía en {macro_dir} rechaza gráfico en {chart_bias}"
 
-        # PROTOCOLO INSTITUCIONAL DE PIRAMIDACIÓN SWING + PARCIALES (SIN LOTAJE)
+        dist_ratio = abs(price - entry) / max(1e-9, price)
+        max_swing_dist = 0.025 if cfg["type"] == "crypto" else 0.012
+        ccy_swing_ok = True
+        if cfg["type"] == "forex":
+            if direction == "BUY" and ccy_labels.get(base_ccy) == "DÉBIL":
+                ccy_swing_ok = False
+            elif direction == "SELL" and ccy_labels.get(base_ccy) == "FUERTE":
+                ccy_swing_ok = False
+
         is_swing_potential = (
             not exhaustion["active"]
+            and ccy_swing_ok
             and b_d == chart_bias
             and b_4h == chart_bias
+            and b_1h == chart_bias
             and macro_dir == chart_bias
-            and conf_score >= 80
+            and conf_score >= 84
+            and dist_ratio <= max_swing_dist
         )
+
         swing_tp = round(entry + (risk * 4.2), dec) if direction == "BUY" else round(entry - (risk * 4.2), dec)
         swing_info = None
         if is_swing_potential:
@@ -530,7 +611,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
 
         swing_note = f" 🌊 Potencial Swing activo (BE en {be_trigger}, Swing TP {swing_tp})." if is_swing_potential else ""
         extra_note = f" {exhaustion['reason']}" if exhaustion["active"] else (f" Giro detectado ({rev['sweep'] if rev['sweep'] != 'NONE' else rev['choch']}) con respaldo macro." if macro_backed_reversal else "")
-        macro_reason = f"{macro_detail} Jerarquía (1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{extra_note}{swing_note}"
+        macro_reason = f"{macro_detail} Jerarquía (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{extra_note}{swing_note}"
 
         return {
             "symbol": sym,
@@ -542,7 +623,17 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             "price": price,
             "chg_day": chg_day,
             "chart_bias": chart_bias,
-            "tf_bias": {"daily": b_d, "h4": b_4h, "h1": b_1h},
+            "macro_dir": macro_dir,
+            "economy_short": economy_short,
+            "tf_bias": {"weekly": b_w, "daily": b_d, "h4": b_4h, "h1": b_1h},
+            "liquidity": {
+                "bsl": rev["bsl"],
+                "ssl": rev["ssl"],
+                "choch": rev["choch"],
+                "bos": rev["bos"],
+                "sweep": rev["sweep"]
+            },
+            "volatility": vol_metrics,
             "intraday_high": round(intraday_high, dec),
             "intraday_low": round(intraday_low, dec),
             "ob_high": ob_high,
@@ -577,10 +668,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         return None
 
 def build_correlated_baskets(assets, ccy_labels):
-    """
-    Agrupa los pares correlacionados que apuntan en bloque a favor de las divisas
-    con fuerza/debilidad confirmada (ej. USD FUERTE -> vender AUDUSD/EURUSD y comprar USDCAD/USDJPY).
-    """
     baskets = []
     for ccy in ["USD", "GBP", "AUD", "EUR", "JPY", "CAD", "NZD", "CHF"]:
         st = ccy_labels.get(ccy, "NEUTRAL")
@@ -649,7 +736,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"Matriz híbrida 4H/1D, cestas correlacionadas, protocolo Pirámide Swing + parciales y giros con respaldo macro sobre {len(assets)} activos."
+            "summary": f"Mesa Economía vs Gráfico, liquidez BSL/SSL, CHoCH/BOS, ATR y protocolo Pirámide Swing sobre {len(assets)} activos."
         },
         "correlated_baskets": baskets,
         "banks": banks,
@@ -661,7 +748,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados con protocolo Pirámide Swing y cestas correlacionadas.")
+    print(f"OK: {len(assets)} activos actualizados (v7.7 Mesa Economía vs Gráfico + Liquidez BSL/SSL).")
 
 if __name__ == "__main__":
     main()
