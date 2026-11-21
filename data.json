@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-21 11:11 UTC",
+  "last_updated": "2026-11-21 11:52 UTC",
   "brief": {
     "dxy": 103.84,
     "us10y": 4.91,
@@ -121,6 +121,18 @@
     },
     {
       "source": "Forex & Divisas",
+      "title": "France rejects EU budget proposal over farm funding concerns",
+      "link": "https://www.investing.com/news/economy-news/france-rejects-eu-budget-proposal-over-farm-funding-concerns-5043402",
+      "time": "2026-11-21 11:38:45"
+    },
+    {
+      "source": "Forex & Divisas",
+      "title": "EU proposes digital tax to fund budget amid member state divisions",
+      "link": "https://www.investing.com/news/economy-news/eu-proposes-digital-tax-to-fund-budget-amid-member-state-divisions-5043390",
+      "time": "2026-11-21 11:29:34"
+    },
+    {
+      "source": "Forex & Divisas",
       "title": "Iran war sees tanker hit near Hormuz as Saudi Arabia intercepts Houthi missiles",
       "link": "https://www.investing.com/news/economy-news/iran-war-sees-tanker-hit-near-hormuz-as-saudi-arabia-intercepts-houthi-missiles-5043277",
       "time": "2026-11-21 08:13:08"
@@ -130,18 +142,6 @@
       "title": "FBI investigates suspected breach of nationwide crime database, CNN reports",
       "link": "https://www.investing.com/news/economy-news/fbi-investigates-suspected-breach-of-nationwide-crime-database-5043145",
       "time": "2026-11-21 04:21:38"
-    },
-    {
-      "source": "Forex & Divisas",
-      "title": "Anthropic’s post-debut stumble delivers reality check for AI trade",
-      "link": "https://www.investing.com/news/economy-news/anthropics-postdebut-stumble-delivers-reality-check-for-ai-trade-5041125",
-      "time": "2026-11-21 00:36:47"
-    },
-    {
-      "source": "Forex & Divisas",
-      "title": "Tech leads global stocks rout, Treasury yields fall",
-      "link": "https://www.investing.com/news/economy-news/asian-shares-head-for-worst-week-since-2020-as-ai-trade-gloom-fails-to-abate-5040496",
-      "time": "2026-11-20 22:48:47"
     }
   ],
   "calendar": [
@@ -190,7 +190,7 @@
       "macro_reason": "XAU (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -1182,7 +1182,7 @@
       "macro_reason": "EUR (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -2180,7 +2180,7 @@
         "be_trigger": 158.608,
         "plan": "1) Divide la entrada base en 158.923 (SL 159.238). 2) Al tocar 158.608 (+1R) o TP1 (158.293), cobra parciales y sube el SL a 158.923 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 157.6."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -3172,7 +3172,7 @@
       "macro_reason": "GBP (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (SSL_SWEEP_BUY) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 94,
         "alignment": "ALIGNED",
@@ -4164,7 +4164,7 @@
       "macro_reason": "GBP (DÉBIL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -5162,7 +5162,7 @@
         "be_trigger": 1.96909,
         "plan": "1) Divide la entrada base en 1.96532 (SL 1.96155). 2) Al tocar 1.96909 (+1R) o TP1 (1.97286), cobra parciales y sube el SL a 1.96532 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.98115."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -6154,7 +6154,7 @@
       "macro_reason": "GBP (DÉBIL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1D:NEUTRAL, 4H:SUBE, 1H:SUBE).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -7146,7 +7146,7 @@
       "macro_reason": "GBP (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 77,
         "alignment": "ALIGNED",
@@ -8144,7 +8144,7 @@
         "be_trigger": 0.66511,
         "plan": "1) Divide la entrada base en 0.66669 (SL 0.66827). 2) Al tocar 0.66511 (+1R) o TP1 (0.66353), cobra parciales y sube el SL a 0.66669 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 0.66005."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -9142,7 +9142,7 @@
         "be_trigger": 105.566,
         "plan": "1) Divide la entrada base en 105.943 (SL 106.32). 2) Al tocar 105.566 (+1R) o TP1 (105.189), cobra parciales y sube el SL a 105.943 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 104.36."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -10134,7 +10134,7 @@
       "macro_reason": "AUD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -11126,7 +11126,7 @@
       "macro_reason": "AUD (DÉBIL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:NEUTRAL). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -12124,7 +12124,7 @@
         "be_trigger": 1.64844,
         "plan": "1) Divide la entrada base en 1.64506 (SL 1.64168). 2) Al tocar 1.64844 (+1R) o TP1 (1.65182), cobra parciales y sube el SL a 1.64506 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.65926."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -13116,7 +13116,7 @@
       "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -14108,7 +14108,7 @@
       "macro_reason": "NZD (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -15100,7 +15100,7 @@
       "macro_reason": "USD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL). Giro detectado (BSL_SWEEP_SELL) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
@@ -16092,7 +16092,7 @@
       "macro_reason": "USD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:SUBE, 4H:BAJA, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -17084,7 +17084,7 @@
       "macro_reason": "EUR (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -18061,19 +18061,19 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 57907.73,
-      "chg_day": -1.52,
+      "price": 58058.41,
+      "chg_day": -1.26,
       "chart_bias": "BAJA",
       "tf_bias": {
         "daily": "BAJA",
         "h4": "BAJA",
-        "h1": "BAJA"
+        "h1": "SUBE"
       },
       "intraday_high": 62110.66,
       "intraday_low": 55138.06,
       "ob_high": 59108.24,
       "ob_low": 59096.24,
-      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:BAJA). 🌊 Potencial Swing activo (BE en 57568.27, Swing TP 52659.57).",
+      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1D:BAJA, 4H:BAJA, 1H:SUBE). 🌊 Potencial Swing activo (BE en 57568.27, Swing TP 52659.57).",
       "news_warning": null,
       "swing_potential": {
         "active": true,
@@ -18082,9 +18082,9 @@
         "be_trigger": 57568.27,
         "plan": "1) Divide la entrada base en 59102.24 (SL 60636.21). 2) Al tocar 57568.27 (+1R) o TP1 (56034.3), cobra parciales y sube el SL a 59102.24 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 52659.57."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
-        "score": 86,
+        "score": 83,
         "alignment": "ALIGNED",
         "verdict_title": "VAN JUNTOS · CONFLUENCIA",
         "verdict_sub": "Flujo macro (BAJA) respalda estructura (BAJA)"
@@ -18413,7 +18413,7 @@
             "o": 58802.6,
             "h": 59081.54,
             "l": 55631.57,
-            "c": 57907.73
+            "c": 58058.41
           }
         ],
         "4h": [
@@ -18728,9 +18728,9 @@
           {
             "t": 1795248000,
             "o": 57893.83,
-            "h": 58096.9,
+            "h": 58500.95,
             "l": 57271.62,
-            "c": 57907.73
+            "c": 58058.41
           }
         ],
         "1h": [
@@ -19045,9 +19045,9 @@
           {
             "t": 1795258800,
             "o": 57829.59,
-            "h": 57918.99,
-            "l": 57782.57,
-            "c": 57907.73
+            "h": 58500.95,
+            "l": 57759.62,
+            "c": 58058.41
           }
         ]
       }
@@ -19080,7 +19080,7 @@
         "be_trigger": 49176.42,
         "plan": "1) Divide la entrada base en 49830.85 (SL 50485.28). 2) Al tocar 49176.42 (+1R) o TP1 (48521.99), cobra parciales y sube el SL a 49830.85 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 47082.24."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 90,
         "alignment": "ALIGNED",
@@ -20050,7 +20050,7 @@
         "be_trigger": 24073.04,
         "plan": "1) Divide la entrada base en 24606.11 (SL 25139.18). 2) Al tocar 24073.04 (+1R) o TP1 (23539.97), cobra parciales y sube el SL a 24606.11 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 22367.22."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 90,
         "alignment": "ALIGNED",
@@ -21020,7 +21020,7 @@
         "be_trigger": 7211.28,
         "plan": "1) Divide la entrada base en 7328.54 (SL 7445.8). 2) Al tocar 7211.28 (+1R) o TP1 (7094.02), cobra parciales y sube el SL a 7328.54 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 6836.05."
       },
-      "created_at": 1795259504,
+      "created_at": 1795261972,
       "confluence": {
         "score": 90,
         "alignment": "ALIGNED",
