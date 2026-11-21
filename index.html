@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v7.6 PIRÁMIDE SWING + IA (22)</title>
+  <title>ORÁCULO · Cabina v7.7 MESA SWING + LIQUIDEZ BSL/SSL</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
@@ -213,7 +213,7 @@
         <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
         <button onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300" data-pf="NEWS">⚠️ CON NOTICIA HOY</button>
         <button onclick="setPanelFilter('TP1')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-green-300" data-pf="TP1">🟢 EN TP1</button>
-        <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ TESIS ROTA</button>
+        <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ SE CONTRADICEN</button>
         <button onclick="setPanelFilter('AUD')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="AUD">🇦🇺 PARES AUD</button>
         <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
       </div>
@@ -230,13 +230,12 @@
     <!-- SUBPANEL ULTRÓN -->
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-b border-slate-800 pb-2">
-        <span class="font-bold text-slate-200">LEYENDA DE ESTADOS:</span>
+        <span class="font-bold text-slate-200">CAPAS ESTRUCTURALES:</span>
         <div class="flex flex-wrap gap-3">
+          <span class="text-rose-300">▲ BSL (Liquidez Arriba)</span>
+          <span class="text-teal-300">▼ SSL (Liquidez Abajo)</span>
+          <span class="text-purple-300">⚡ CHoCH / BOS</span>
           <span class="text-indigo-300">🌊 Potencial Swing</span>
-          <span>🟢 TP1 Alcanzado</span>
-          <span>🔵 Re-entrada Pirámide</span>
-          <span>🟡 Cerca OB</span>
-          <span class="text-orange-300">⚠️ Noticia Hoy</span>
         </div>
       </div>
 
@@ -259,6 +258,31 @@
       <div class="w-full bg-[#030509] border border-slate-800 rounded-lg overflow-hidden">
         <canvas id="ultron-canvas" class="w-full h-[360px] block"></canvas>
       </div>
+
+      <!-- TELEMETRÍA MULTI-TEMPORALIDAD Y VOLATILIDAD (1S / 1D / 4H + ATR + RANGO 20D) -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+        <div class="bg-[#050811] border border-slate-800 rounded p-2">
+          <div class="text-[9px] text-slate-400">SEMANAL (1S)</div>
+          <div id="pu-tf-w" class="font-bold text-white text-xs mt-0.5">--</div>
+        </div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2">
+          <div class="text-[9px] text-slate-400">DIARIO (1D)</div>
+          <div id="pu-tf-d" class="font-bold text-white text-xs mt-0.5">--</div>
+        </div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2">
+          <div class="text-[9px] text-slate-400">4 HORAS (4H)</div>
+          <div id="pu-tf-4h" class="font-bold text-white text-xs mt-0.5">--</div>
+        </div>
+        <div class="bg-[#050811] border border-cyan-500/30 rounded p-2">
+          <div class="text-[9px] text-cyan-400">ATR DIARIO (14)</div>
+          <div id="pu-atr" class="font-bold text-cyan-200 text-xs mt-0.5">--</div>
+        </div>
+        <div class="bg-[#050811] border border-amber-500/30 rounded p-2">
+          <div class="text-[9px] text-amber-400">RANGO 20 DÍAS</div>
+          <div id="pu-r20" class="font-bold text-amber-200 text-xs mt-0.5">--</div>
+        </div>
+      </div>
+
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
           <div class="text-[10px] text-sky-400">ENTRADA (OB)</div>
@@ -450,7 +474,7 @@
         localStorage.setItem('oraculo_gemini_key', geminiApiKey);
         updateAiBrainButton();
         typeAgentDialogue(geminiApiKey
-          ? 'Cerebro neuronal Gemini conectado, señor. Ahora puede preguntarme cualquier duda sobre piramidación Swing, cestas correlacionadas, gestión de parciales o macroeconomía.'
+          ? 'Cerebro neuronal Gemini conectado, señor. Ahora puede preguntarme cualquier duda sobre piramidación Swing, liquidez BSL/SSL, cestas o macroeconomía.'
           : 'Clave eliminada. Operando con el motor analítico local inteligente, señor.');
       }
     }
@@ -696,27 +720,27 @@
       { id: 2, title: "2. Liquidez Externa (BSL y SSL)", body: "Lección dos: Liquidez. Las instituciones necesitan contrapartida. Por encima de los techos iguales hay liquidez compradora (BSL) y por debajo de los pisos iguales hay liquidez vendedora (SSL). El precio suele barrer esos stops antes de arrancar.", quiz: "Regla clave: Si ve una mecha barriendo SSL y cerrando arriba, prepare compras." },
       { id: 3, title: "3. Equilibrio EQ 50% (Caro vs. Barato)", body: "Lección tres: Equilibrium al 50 por ciento. La línea punteada EQ 50 divide el rango en dos: arriba es zona Premium (cara, solo para vender) y abajo es zona Discount (barata, solo para comprar).", quiz: "Regla clave: Jamás compre por encima del EQ 50 por ciento; estaría comprando caro." },
       { id: 4, title: "4. Order Blocks Institucionales (OB)", body: "Lección cuatro: Bloques de Órdenes. Son la última vela contraria antes de un impulso fuerte que rompe estructura. Allí quedaron órdenes pendientes de bancos que suelen mitigarse cuando el precio regresa.", quiz: "Regla clave: Use la caja del Order Block como zona de espera, no entre sin rechazo." },
-      { id: 5, title: "5. Confluencia Macro y Cestas Correlacionadas", body: "Lección cinco: Visión Macro. Si el dólar DXY y los bonos US10Y suben juntos, los pares correlacionados se mueven en bloque: caen AUDUSD y EURUSD mientras suben USDCAD y USDJPY.", quiz: "Regla clave: Opere la cesta alineada en lugar de dispersarse en pares contradictorios." },
+      { id: 5, title: "5. Mesa Economía vs. Gráfico y Cestas", body: "Lección cinco: Visión Macro. Si Economía y Gráfico empujan hacia el mismo lado, tenemos confluencia. Si uno está neutral o se contradicen, esperamos.", quiz: "Regla clave: Opere cuando Economía y Gráfico estén del mismo color." },
       { id: 6, title: "6. Killzones de Londres y Nueva York", body: "Lección seis: Horarios Institucionales. El volumen real entra en la Killzone de Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). En Asia el volumen es bajo y abundan las trampas.", quiz: "Regla clave: Si el indicador superior dice Fuera de Killzone, reduzca su exposición." },
       { id: 7, title: "7. Piramidación Swing y Gestión de Parciales", body: "Lección siete: Protocolo Pirámide. Divida su entrada base en micro-órdenes; al tocar +1R o TP1 cobre parciales, suba el Stop Loss a Break Even y solo entonces añada una segunda entrada en retroceso hacia Swing TP.", quiz: "Regla clave: Jamás añada una segunda orden si la primera aún tiene riesgo abierto." },
-      { id: 8, title: "8. Re-entradas Estructurales en Retroceso", body: "Lección ocho: Re-entradas. Cuando un par alcanza su TP1 tras activar la entrada, el sistema busca un Order Block claro en el impulso para esperar retroceso. Nunca persiga el precio.", quiz: "Regla clave: Use el gráfico de 4H para mover el Stop Loss detrás de cada nuevo swing." },
-      { id: 9, title: "9. Filtro de Tesis Rota y Noticias Fuertes", body: "Lección nueve: Protección de Capital. Si Jarvis marca Tesis Rota o el par tiene alerta de noticia fuerte de alto impacto hoy, reduzca el riesgo o espere a que pase el latigazo de la noticia.", quiz: "Regla clave: Una operación evitada en noticia de alto impacto protege su cuenta." },
+      { id: 8, title: "8. Re-entradas Estructurales y ATR Diario", body: "Lección ocho: Volatilidad y Re-entradas. Revise el ATR diario en Ultrón para saber cuánto se mueve el par por sesión antes de fijar objetivos largos.", quiz: "Regla clave: Use el gráfico de 4H para mover el Stop Loss detrás de cada nuevo swing." },
+      { id: 9, title: "9. Filtro de Contradicción y Noticias Fuertes", body: "Lección nueve: Protección de Capital. Si Jarvis marca Se Contradicen o el par tiene alerta de noticia fuerte de alto impacto hoy, espere a que pase el latigazo de la noticia.", quiz: "Regla clave: Una operación evitada en noticia de alto impacto protege su cuenta." },
       { id: 10, title: "10. Auditoría Emocional con Karen y H.O.M.E.R.", body: "Lección diez: Disciplina Profesional. Anotar cada ejecución en el diario de Karen elimina el trading por venganza tras un Stop Loss y permite que H.O.M.E.R. calcule su ventaja estadística real.", quiz: "Regla clave: El éxito no está en adivinar cada vela, sino en repetir exactamente el mismo proceso." }
     ];
 
     const CONCEPT_DICTIONARY = [
       { keys: ['PIRAMIDE', 'PIRÁMIDE', 'SEGUNDA ENTRADA', 'PARCIALES'], answer: "El protocolo de piramidación Swing consiste en dividir la entrada base en 2 o 3 micro-órdenes en el bloque inicial; al alcanzar el gatillo Break Even (+1R) o TP1, se cobran parciales, se sube el Stop Loss a precio de entrada y solo entonces se añade una segunda entrada en retroceso (🔵 RE-ENTRADA OB) hacia el objetivo semanal." },
-      { keys: ['SWING', 'POTENCIAL SWING', 'DEJAR CORRER'], answer: "La etiqueta Potencial Swing aparece cuando 1D, 4H y la fuerza macro híbrida apuntan exactamente en la misma dirección sin señales de agotamiento. En esos casos conviene cobrar parciales en TP1, mover el Stop Loss a Break Even y dejar correr el remanente hacia el Swing TP." },
-      { keys: ['CESTA', 'CORRELACION', 'CORRELACIÓN', 'BLOQUE'], answer: "Las cestas correlacionadas agrupan los pares que se mueven en bloque a favor de una divisa fuerte o débil (por ejemplo, si el USD está fuerte, se alinean ventas en AUDUSD/EURUSD y compras en USDCAD/USDJPY)." },
+      { keys: ['SWING', 'POTENCIAL SWING', 'DEJAR CORRER'], answer: "La etiqueta Potencial Swing aparece cuando 1D, 4H, 1H y Economía apuntan exactamente en la misma dirección sin señales de agotamiento. En esos casos conviene cobrar parciales en TP1, mover el Stop Loss a Break Even y dejar correr el remanente hacia el Swing TP." },
+      { keys: ['BSL', 'SSL', 'LIQUIDEZ'], answer: "BSL marca la liquidez compradora sobre los máximos recientes y SSL la liquidez vendedora bajo los mínimos recientes. Ultrón los dibuja directamente en el gráfico para que no pongas compras justo bajo un piso a barrer." },
       { keys: ['EQ', '50%', 'EQUILIBRIUM', 'CARO', 'BARATO', 'PREMIUM', 'DISCOUNT'], answer: "La línea EQ 50% marca exactamente la mitad del rango intradía. Arriba de ella es zona Premium (cara, ideal para ventas) y abajo es zona Discount (barata, ideal para compras)." },
-      { keys: ['CHOCH', 'CAMBIO DE TENDENCIA', 'GIRO'], answer: "CHoCH significa Cambio de Carácter. Ocurre cuando el precio rompe con cuerpo el último mínimo ascendente o máximo descendente, o barre liquidez con mecha de rechazo respaldado por el flujo macro." },
-      { keys: ['TESIS ROTA', 'CONTRADICEN', 'OPPOSED'], answer: "Tesis Rota aparece cuando el análisis macroeconómico de Visión apunta hacia un lado y la estructura técnica de Ultrón apunta hacia el lado opuesto. Es una alerta para no operar ese par hasta que vuelvan a alinearse." }
+      { keys: ['CHOCH', 'BOS', 'CAMBIO DE TENDENCIA', 'GIRO'], answer: "CHoCH significa Cambio de Carácter y BOS Ruptura de Estructura. Ultrón los etiqueta en el gráfico cuando el precio quiebra con cuerpo un máximo o mínimo estructural." },
+      { keys: ['CONTRADICEN', 'TESIS ROTA', 'OPPOSED'], answer: "Se Contradicen aparece cuando Economía y el Gráfico apuntan en direcciones opuestas. Es una señal clara para esperar hasta que ambos motores vuelvan a alinearse." }
     ];
 
     const AGENTS = {
-      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Oráculo. Hablas con elegancia británica ("señor") y precisión institucional. No des consejos de lotaje; enfócate en niveles de precio, Break Even, parciales y correlación.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
+      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Oráculo. Hablas con elegancia británica ("señor") y precisión institucional. No des consejos de lotaje; enfócate en la mesa Economía vs Gráfico, niveles de precio, Break Even y parciales.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
       vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, analista macroeconómico de Oráculo sobre bancos centrales, DXY, bonos US10Y y cestas correlacionadas de divisas.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
-      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez, Order Blocks, CHoCH y trailing estructural en 4H.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
+      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez BSL/SSL, Order Blocks, CHoCH/BOS, ATR y trailing estructural en 4H.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
       friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., instructora de trading institucional. Llamas "jefe" al usuario.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
       edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora táctica de ejecución en Oráculo. No calculas lotaje; indicas precios exactos de entrada, Stop Loss inicial, gatillo Break Even (+1R), cobro de parciales en TP1 y zonas de re-entrada en pirámide.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
       karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, psicóloga de trading y auditora emocional.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
@@ -967,7 +991,7 @@
         const be = a.setup.be_trigger || a.setup.entry;
         const sw = (a.swing_potential && a.swing_potential.active) ? `|SWING:${a.swing_potential.target}(BE:${be})` : '';
         const nw = (a.news_warning && a.news_warning.active) ? `|NOTICIA:${a.news_warning.currencies}` : '';
-        return `${a.symbol}:${a.setup.direction}(${a.confluence.score}pts)|P=${a.price}|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}|Tag=${a.setup.signal_tag}${sw}${nw}`;
+        return `${a.symbol}:${a.setup.direction}(${a.confluence.score}pts)|Econ:${a.macro_dir||'-'}|Graf:${a.chart_bias}|P=${a.price}|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}${sw}${nw}`;
       }).join('\n');
       return `Macro:${data.brief.headline} | Cestas:${basketsStr}\n${rows}`;
     }
@@ -1018,13 +1042,11 @@
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
         const be = asset.setup.be_trigger || asset.setup.entry;
+        const econTxt = asset.economy_short || asset.macro_dir || 'NEUTRAL';
         const sw = (asset.swing_potential && asset.swing_potential.active)
           ? ` Protocolo Pirámide Swing activo: divide tu entrada base en ${asset.setup.entry} (SL ${asset.setup.sl}); al tocar ${be} (+1R) o TP1 (${asset.setup.tp1}), cobra parciales y sube el Stop Loss a ${asset.setup.entry} (Break Even); solo con la base protegida añade la 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP ${asset.swing_potential.target}.`
-          : ` Es una configuración táctica intradía: entra en ${asset.setup.entry} con Stop en ${asset.setup.sl} (${p.sl} ${p.unitLabel}), cobra parciales en TP1 (${asset.setup.tp1}) y protege en Break Even (${be}).`;
-        const nw = (asset.news_warning && asset.news_warning.active)
-          ? ` Precaución: tiene noticia fuerte hoy en ${asset.news_warning.currencies} (${asset.news_warning.events[0]}).`
-          : '';
-        return `${asset.symbol} cotiza en ${asset.price} bajo señal "${asset.setup.signal_tag}" con confluencia ${asset.confluence.score}/100 (${asset.confluence.verdict_title}), a ${d.units} ${d.label} del bloque.${sw}${nw}`;
+          : ` Entrada en ${asset.setup.entry} con Stop en ${asset.setup.sl} (${p.sl} ${p.unitLabel}), parciales en TP1 (${asset.setup.tp1}) y Break Even en ${be}.`;
+        return `${asset.symbol} cotiza en ${asset.price}. Mesa cara a cara: Economía (${econTxt}) vs Gráfico (${asset.chart_bias}) con confluencia ${asset.confluence.score}/100 (${asset.confluence.verdict_title}), a ${d.units} ${d.label} del bloque.${sw}`;
       }
 
       if (q.includes('RECOMIENDA') || q.includes('PARE') || q.includes('MEJOR') || q.includes('OPERAR') || q.includes('OPORTUNIDAD') || q.includes('SWING') || q.includes('CESTA')) {
@@ -1034,7 +1056,7 @@
         const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status}: ${b.pairs.join(', ')}`).join(' | ');
 
         const topSwings = swings.slice(0, 3).map(x => `${x.symbol} (${x.setup.direction === 'BUY' ? 'Compra' : 'Venta'} en ${x.setup.entry}, BE en ${x.setup.be_trigger || x.setup.entry}, Swing TP ${x.swing_potential.target})`).join('; ');
-        return `Analizando los veintidós activos en tiempo real, señor, los mejores candidatos con Potencial Swing para operar con parciales y piramidación son: ${topSwings || 'ninguno sin noticia ahora mismo'}. ${baskets ? `Cestas macro correlacionadas activas: ${baskets}.` : ''} Recuerde abrir 2 o 3 micro-órdenes en el bloque inicial, cobrar parciales en TP1, subir el Stop a Break Even y esperar la etiqueta azul de Re-entrada en 4H/1H para añadir la segunda posición.`;
+        return `Analizando los veintidós activos en tiempo real, señor, los mejores candidatos con Potencial Swing para operar con parciales y piramidación son: ${topSwings || 'ninguno sin noticia ahora mismo'}. ${baskets ? `Cestas macro correlacionadas activas: ${baskets}.` : ''}`;
       }
 
       return null;
@@ -1154,7 +1176,7 @@
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
         document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
         renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
-        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}", o puede preguntarme sobre el protocolo de piramidación Swing.`);
+        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}", o puede preguntarme sobre la mesa Economía vs Gráfico.`);
         return;
       }
       renderDefaultQuickReplies();
@@ -1164,7 +1186,7 @@
         const basketsCount = (data && data.correlated_baskets) ? data.correlated_baskets.length : 0;
         document.getElementById('agent-hero-metric').textContent = `${swings.length} SWING · ${basketsCount} CESTAS`;
         document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${newsPairsCount} NOTICIAS · ${broken.length} ALERTAS`;
-        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos: tenemos ${swings.length} pares con Potencial Swing listos para gestión de parciales y pirámide, y ${basketsCount} cestas correlacionadas activas. ¿Desea el reporte?`);
+        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos comparando Economía frente a Gráfico: tenemos ${swings.length} pares con Potencial Swing listos para gestión de parciales y pirámide. ¿Desea el reporte?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & CESTAS';
@@ -1172,8 +1194,8 @@
       } else if (key === 'ultron') {
         const target = nearest || (data && data.assets[0]);
         document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
-        document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · TRAILING 4H` : 'ESTRUCTURA';
-        typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez esperando ser barrida. En 4H y 1H marco los retrocesos para piramidar y los niveles donde proteger tu Stop Loss. ¿Qué gráfico auditamos?`);
+        document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · LIQUIDEZ BSL/SSL` : 'ESTRUCTURA';
+        typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez BSL y SSL esperando ser barrida. En el gráfico marco los cambios de carácter CHoCH, rupturas BOS y el ATR diario. ¿Qué gráfico auditamos?`);
       } else if (key === 'edith') {
         if (nearest) {
           const d = getAssetUnitsDist(nearest);
@@ -1191,7 +1213,7 @@
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Los números nunca mienten: cobrar parciales en TP1 y dejar correr los Potencial Swing multiplica tu esperanza matemática sin aumentar el riesgo inicial. Tienes ${homer.winRate}% de acierto y ${homer.pnlR}.`);
+        typeAgentDialogue(`Los números nunca mienten: operar solo cuando Economía y Gráfico van juntos multiplica tu ventaja estadística sin aumentar el riesgo. Tienes ${homer.winRate}% de acierto y ${homer.pnlR}.`);
       }
     }
 
@@ -1209,8 +1231,8 @@
         const n = getNearestAsset();
         const d = getAssetUnitsDist(n);
         const p = getSetupPips(n);
-        const be = n.setup.be_trigger || n.setup.entry;
-        typeAgentDialogue(`Objetivo prioritario: ${n.symbol} (${n.price}), a ${d.units} ${d.label} del bloque ${n.setup.entry}. Stop inicial en ${n.setup.sl} (${p.sl} ${p.unitLabel}). Gatillo Break Even en ${be} y TP1 de parciales en ${n.setup.tp1}.`);
+        const liq = n.liquidity || {};
+        typeAgentDialogue(`Objetivo prioritario: ${n.symbol} (${n.price}), a ${d.units} ${d.label} del bloque ${n.setup.entry}. Liquidez BSL en ${liq.bsl || '--'} y SSL en ${liq.ssl || '--'}. Stop inicial en ${n.setup.sl} (${p.sl} ${p.unitLabel}).`);
       } else if (currentAgent === 'edith') {
         const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
         typeAgentDialogue(`Coordenadas más cercanas: ` + top3.map(x => `${x.symbol} entrada ${x.setup.entry}, SL ${x.setup.sl}, subir SL a BE en ${x.setup.be_trigger || x.setup.entry}`).join('; ') + `.`);
@@ -1422,6 +1444,13 @@
         const hasSwing = a.swing_potential && a.swing_potential.active;
         const bePrice = a.setup.be_trigger || a.setup.entry;
 
+        const mDir = a.macro_dir || (a.confluence.alignment === 'ALIGNED' ? a.chart_bias : 'NEUTRAL');
+        const econColor = mDir === 'SUBE' ? 'text-emerald-300 border-emerald-500/40 bg-emerald-500/10' : (mDir === 'BAJA' ? 'text-red-300 border-red-500/40 bg-red-500/10' : 'text-slate-300 border-slate-700 bg-slate-800/40');
+        const econLabel = mDir === 'SUBE' ? 'FUERTE (ALCISTA ▲)' : (mDir === 'BAJA' ? 'DÉBIL (BAJISTA ▼)' : 'NEUTRAL (EN RANGO)');
+
+        const chartColor = a.chart_bias === 'SUBE' ? 'text-emerald-300 border-emerald-500/40 bg-emerald-500/10' : 'text-red-300 border-red-500/40 bg-red-500/10';
+        const chartLabel = a.chart_bias === 'SUBE' ? 'ALCISTA (SUBE ▲)' : 'BAJISTA (BAJA ▼)';
+
         return `
           <div class="hud-panel rounded-xl p-4 space-y-3 border ${hasSwing ? 'border-indigo-400/70' : (hasNews ? 'border-orange-400/70' : (st.code === 'TP1' ? 'border-emerald-400' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800'))))}">
             <div class="flex items-center justify-between gap-2">
@@ -1431,9 +1460,23 @@
                 ${hasSwing ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400 font-bold">🌊 POTENCIAL SWING</span>` : ''}
                 ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
                 ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA ${a.news_warning.currencies}</span>` : ''}
-                ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">TESIS ROTA</span>' : ''}
+                ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">SE CONTRADICEN</span>' : ''}
               </div>
               <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400 shrink-0">Gráfico →</button>
+            </div>
+
+            <!-- MESA CARA A CARA: ECONOMÍA VS SU GRÁFICO -->
+            <div class="grid grid-cols-2 gap-2 text-[10px]">
+              <div class="rounded-lg border p-2 ${econColor}">
+                <div class="text-[8px] tracking-widest opacity-80">🌐 ECONOMÍA</div>
+                <div class="font-bold text-[11px] mt-0.5">${econLabel}</div>
+                <div class="text-[9px] opacity-80 truncate mt-0.5">${a.economy_short || 'Flujo macro'}</div>
+              </div>
+              <div class="rounded-lg border p-2 ${chartColor}">
+                <div class="text-[8px] tracking-widest opacity-80">🎯 SU GRÁFICO</div>
+                <div class="font-bold text-[11px] mt-0.5">${chartLabel}</div>
+                <div class="text-[9px] opacity-80 truncate mt-0.5">1D:${a.tf_bias.daily} · 4H:${a.tf_bias.h4} · 1H:${a.tf_bias.h1}</div>
+              </div>
             </div>
 
             ${hasSwing ? `
@@ -1457,7 +1500,7 @@
             </div>
             <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
               <div><strong class="text-sky-400">VISIÓN (Macro):</strong> ${a.macro_reason}</div>
-              <div><strong class="text-red-400">ULTRÓN (Técnico):</strong> Tendencia ${a.chart_bias} (D:${a.tf_bias.daily} / 4H:${a.tf_bias.h4} / 1H:${a.tf_bias.h1}). Trailing por cierres de vela en 4H.</div>
+              <div><strong class="text-red-400">ULTRÓN (Liquidez & Estructura):</strong> BSL en ${(a.liquidity && a.liquidity.bsl) || '--'} · SSL en ${(a.liquidity && a.liquidity.ssl) || '--'}. ATR diario: ${(a.volatility && a.volatility.atr_units) || '--'} ${p.unitLabel}.</div>
               <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> Entrada base ${a.setup.entry} (a ${d.units} ${d.label}), SL ${a.setup.sl}, subir SL a BE en ${bePrice}, parciales TP1 ${a.setup.tp1}${hasSwing ? `, Swing TP ${a.swing_potential.target}` : ''}.</div>
             </div>
             <div class="grid grid-cols-5 gap-1 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[10px]">
@@ -1494,6 +1537,8 @@
       const st = getAssetBadgeState(a);
       const hasSwing = a.swing_potential && a.swing_potential.active;
       const bePrice = a.setup.be_trigger || a.setup.entry;
+      const vol = a.volatility || {};
+      const tf = a.tf_bias || {};
 
       const newsBanner = document.getElementById('pu-news-banner');
       if (newsBanner) {
@@ -1513,6 +1558,13 @@
           swingBanner.classList.add('hidden');
         }
       }
+
+      const fmtBias = b => b === 'SUBE' ? '<span class="text-emerald-400">ALCISTA ▲</span>' : (b === 'BAJA' ? '<span class="text-red-400">BAJISTA ▼</span>' : '<span class="text-slate-400">NEUTRAL</span>');
+      document.getElementById('pu-tf-w').innerHTML = fmtBias(tf.weekly || tf.daily);
+      document.getElementById('pu-tf-d').innerHTML = fmtBias(tf.daily);
+      document.getElementById('pu-tf-4h').innerHTML = fmtBias(tf.h4);
+      document.getElementById('pu-atr').textContent = vol.atr_units ? `${vol.atr_units} ${p.unitLabel} (${vol.atr})` : '--';
+      document.getElementById('pu-r20').textContent = vol.range20_units ? `${vol.range20_units} ${p.unitLabel}` : '--';
 
       document.getElementById('pu-sym').textContent = `${st.dot} ${a.symbol}`;
       document.getElementById('pu-price').textContent = `${a.price}`;
@@ -1549,28 +1601,49 @@
       canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
       const ctx = canvas.getContext('2d');
       ctx.scale(dpr, dpr);
-      const W = rect.width, H = rect.height, padL = 10, padR = 76, padT = 20, padB = 22;
+      const W = rect.width, H = rect.height, padL = 10, padR = 76, padT = 22, padB = 22;
       const plotW = W - padL - padR, plotH = H - padT - padB;
       ctx.fillStyle = '#030509'; ctx.fillRect(0, 0, W, H);
       const candles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF].slice(-40) : [];
       if (!candles.length) return;
+
+      const liq = a.liquidity || {};
+      const bslVal = liq.bsl || Math.max(...candles.slice(-20).map(c => c.h));
+      const sslVal = liq.ssl || Math.min(...candles.slice(-20).map(c => c.l));
+
       const hasSwing = a.swing_potential && a.swing_potential.active;
       const targetTop = hasSwing ? a.swing_potential.target : a.setup.tp2;
-      const highs = [...candles.map(c => c.h), a.setup.sl, targetTop, a.price];
-      const lows = [...candles.map(c => c.l), a.setup.sl, targetTop, a.price];
+      const highs = [...candles.map(c => c.h), a.setup.sl, targetTop, a.price, bslVal];
+      const lows = [...candles.map(c => c.l), a.setup.sl, targetTop, a.price, sslVal];
       const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
       const yOf = p => padT + ((maxP - p) / span) * plotH;
 
+      // BSL (Liquidez Compradora Arriba) y SSL (Liquidez Vendedora Abajo)
+      const yBsl = yOf(bslVal);
+      ctx.setLineDash([2, 3]); ctx.strokeStyle = '#fb7185'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padL, yBsl); ctx.lineTo(W - padR, yBsl); ctx.stroke();
+      ctx.setLineDash([]); ctx.fillStyle = '#fda4af'; ctx.font = 'bold 9px JetBrains Mono';
+      ctx.fillText(`▲ BSL ${bslVal.toFixed(a.decimals)}`, padL + 4, Math.max(12, yBsl - 4));
+
+      const ySsl = yOf(sslVal);
+      ctx.setLineDash([2, 3]); ctx.strokeStyle = '#2dd4bf'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padL, ySsl); ctx.lineTo(W - padR, ySsl); ctx.stroke();
+      ctx.setLineDash([]); ctx.fillStyle = '#5eead4'; ctx.font = 'bold 9px JetBrains Mono';
+      ctx.fillText(`▼ SSL ${sslVal.toFixed(a.decimals)}`, padL + 4, Math.min(H - 6, ySsl + 11));
+
+      // EQ 50%
       const yEq = yOf((a.intraday_high + a.intraday_low) / 2);
       ctx.setLineDash([4, 4]); ctx.strokeStyle = '#475569';
       ctx.beginPath(); ctx.moveTo(padL, yEq); ctx.lineTo(W - padR, yEq); ctx.stroke();
       ctx.setLineDash([]); ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono';
       ctx.fillText('EQ 50%', W - padR - 42, yEq - 4);
 
+      // Caja Order Block
       const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
       ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
       ctx.fillRect(padL + plotW * 0.4, yObT, plotW * 0.6, Math.max(5, yObB - yObT));
 
+      // Velas
       const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
       candles.forEach((c, i) => {
         const x = padL + i * step + step / 2, bull = c.c >= c.o;
@@ -1578,6 +1651,20 @@
         ctx.beginPath(); ctx.moveTo(x, yOf(c.h)); ctx.lineTo(x, yOf(c.l)); ctx.stroke();
         ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
       });
+
+      // Etiqueta estructural CHoCH / BOS sobre el gráfico
+      const structLabel = (liq.choch && liq.choch !== 'NONE')
+        ? `⚡ ${liq.choch.replace('_', ' ')}`
+        : ((liq.bos && liq.bos !== 'NONE') ? `⚡ ${liq.bos.replace('_', ' ')}` : '');
+      if (structLabel) {
+        const lastX = padL + (candles.length - 2) * step;
+        const lastY = yOf(candles[candles.length - 1].c);
+        ctx.fillStyle = 'rgba(168,85,247,0.22)';
+        ctx.fillRect(Math.max(padL, lastX - 65), Math.max(16, lastY - 22), 115, 16);
+        ctx.fillStyle = '#e9d5ff';
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(structLabel, Math.max(padL + 3, lastX - 61), Math.max(27, lastY - 11));
+      }
 
       const drawLvl = (val, lbl, col) => {
         const y = yOf(val);
