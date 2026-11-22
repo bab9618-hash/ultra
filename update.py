@@ -7,6 +7,7 @@ import yfinance as yf
 
 NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "").strip()
 ALERTS_STATE_FILE = "alerts_sent.json"
+HISTORICAL_CUTOFF_TS = int(datetime(2017, 1, 1, tzinfo=timezone.utc).timestamp())
 
 ASSETS_CONFIG = [
     {"symbol": "XAUUSD", "yf": "GC=F",       "type": "metal",  "pip": 0.1,    "decimals": 2, "base": "XAU", "quote": "USD"},
@@ -74,7 +75,9 @@ def get_candles(ticker_str, period, interval, decimals, limit=45):
         df = t.history(period=period, interval=interval)
         if df is None or df.empty:
             return []
-        df = df.dropna(subset=["Open", "High", "Low", "Close"]).tail(limit)
+        df = df.dropna(subset=["Open", "High", "Low", "Close"])
+        if limit:
+            df = df.tail(limit)
         out = []
         for idx, row in df.iterrows():
             try:
@@ -91,6 +94,74 @@ def get_candles(ticker_str, period, interval, decimals, limit=45):
         print(f"Aviso {ticker_str} ({interval}): {e}")
         return []
 
+def find_clean_weekly_pivots_pre2017(c_1w_all, dec, pip):
+    """
+    Escanea el historial semanal anterior a 2017 buscando giros limpios en V (sin acumulación):
+    - VENTA LIMPIA: 1 vela semanal alcista (verde) seguida inmediatamente de 1 vela semanal bajista (roja)
+      con caída directa posterior y sin consolidación previa.
+    - COMPRA LIMPIA: 1 vela semanal bajista (roja) seguida inmediatamente de 1 vela semanal alcista (verde)
+      con subida directa posterior y sin consolidación previa.
+    """
+    buy_pivots = []
+    sell_pivots = []
+    if not c_1w_all or len(c_1w_all) < 10:
+        return buy_pivots, sell_pivots
+
+    for i in range(4, len(c_1w_all) - 3):
+        c1 = c_1w_all[i]      # Vela de llegada
+        c2 = c_1w_all[i + 1]  # Vela única de rechazo / cambio de dirección
+        if c2["t"] >= HISTORICAL_CUTOFF_TS:
+            break
+
+        prev_slice = c_1w_all[i - 3:i]
+        next_slice = c_1w_all[i + 2:i + 4]
+
+        b1 = abs(c1["c"] - c1["o"])
+        b2 = abs(c2["c"] - c2["o"])
+        r1 = max(pip, c1["h"] - c1["l"])
+        r2 = max(pip, c2["h"] - c2["l"])
+
+        # Ambas velas deben tener cuerpo limpio (no dojis indecisos)
+        if b1 < r1 * 0.45 or b2 < r2 * 0.45:
+            continue
+
+        year_str = datetime.fromtimestamp(c2["t"], tz=timezone.utc).strftime("%Y-%m")
+
+        # --- PATRÓN VENTA LIMPIA: 1 Verde + 1 Roja sin acumulación ---
+        if c1["c"] > c1["o"] and c2["c"] < c2["o"]:
+            # Venía subiendo limpio (sin zig-zag ni acumulación en el mismo nivel)
+            came_up_clean = (prev_slice[0]["o"] < c1["o"]) and (max(x["h"] for x in prev_slice) <= c1["h"])
+            # La vela roja rechaza y cae directo en las semanas siguientes
+            drops_clean = (c2["c"] <= c1["o"] + b1 * 0.35) and (min(x["l"] for x in next_slice) < c2["l"])
+            # No vuelve a retestear inmediatamente el techo en las siguientes 2 semanas (sin acumulación)
+            pivot_high = max(c1["h"], c2["h"])
+            no_immediate_chop = max(x["h"] for x in next_slice) < pivot_high
+            if came_up_clean and drops_clean and no_immediate_chop:
+                entry_lvl = round((c1["c"] + pivot_high) / 2.0, dec)
+                sell_pivots.append({
+                    "entry": entry_lvl,
+                    "extreme": round(pivot_high, dec),
+                    "date": year_str
+                })
+
+        # --- PATRÓN COMPRA LIMPIA: 1 Roja + 1 Verde sin acumulación ---
+        if c1["c"] < c1["o"] and c2["c"] > c2["o"]:
+            # Venía bajando limpio (sin zig-zag ni acumulación en el mismo nivel)
+            came_down_clean = (prev_slice[0]["o"] > c1["o"]) and (min(x["l"] for x in prev_slice) >= c1["l"])
+            # La vela verde rechaza y sube directo en las semanas siguientes
+            rises_clean = (c2["c"] >= c1["o"] - b1 * 0.35) and (max(x["h"] for x in next_slice) > c2["h"])
+            pivot_low = min(c1["l"], c2["l"])
+            no_immediate_chop = min(x["l"] for x in next_slice) > pivot_low
+            if came_down_clean and rises_clean and no_immediate_chop:
+                entry_lvl = round((c1["c"] + pivot_low) / 2.0, dec)
+                buy_pivots.append({
+                    "entry": entry_lvl,
+                    "extreme": round(pivot_low, dec),
+                    "date": year_str
+                })
+
+    return buy_pivots, sell_pivots
+
 def group_4h(c_1h_long):
     if not c_1h_long:
         return []
@@ -105,21 +176,6 @@ def group_4h(c_1h_long):
             "c": chunk[-1]["c"],
         })
     return grouped[-45:]
-
-def group_weekly(c_1d):
-    if not c_1d:
-        return []
-    grouped = []
-    for i in range(0, len(c_1d), 5):
-        chunk = c_1d[i:i+5]
-        grouped.append({
-            "t": chunk[0]["t"],
-            "o": chunk[0]["o"],
-            "h": max(x["h"] for x in chunk),
-            "l": min(x["l"] for x in chunk),
-            "c": chunk[-1]["c"],
-        })
-    return grouped[-20:]
 
 def calc_bias(candles, lookback=6, threshold=0.0006):
     if not candles or len(candles) < lookback:
@@ -161,7 +217,11 @@ def detect_reversal_and_structure(c_1h, dec):
     if len(c_1h) < 18:
         swing_h = round(max((x["h"] for x in c_1h), default=0), dec)
         swing_l = round(min((x["l"] for x in c_1h), default=0), dec)
-        return {"choch": "NONE", "sweep": "NONE", "bos": "NONE", "reversal_dir": "NONE", "bsl": swing_h, "ssl": swing_l}
+        return {
+            "choch": "NONE", "sweep": "NONE", "bos": "NONE",
+            "reversal_dir": "NONE", "strong_pullback": False,
+            "bsl": swing_h, "ssl": swing_l
+        }
 
     window = c_1h[-20:-2]
     last_two = c_1h[-2:]
@@ -169,6 +229,10 @@ def detect_reversal_and_structure(c_1h, dec):
     prev = c_1h[-3]
     swing_high = round(max(x["h"] for x in window), dec)
     swing_low = round(min(x["l"] for x in window), dec)
+
+    avg_body = sum(abs(x["c"] - x["o"]) for x in c_1h[-12:-2]) / 10.0
+    curr_body = abs(curr["c"] - curr["o"])
+    has_displacement = avg_body > 0 and (curr_body >= avg_body * 1.4)
 
     choch = "NONE"
     bos = "NONE"
@@ -194,16 +258,20 @@ def detect_reversal_and_structure(c_1h, dec):
             sweep = "BSL_SWEEP_SELL"
 
     reversal_dir = "NONE"
-    if choch == "BULLISH_CHOCH" or sweep == "SSL_SWEEP_BUY":
+    strong_pullback = False
+    if choch == "BULLISH_CHOCH" and has_displacement:
         reversal_dir = "SUBE"
-    elif choch == "BEARISH_CHOCH" or sweep == "BSL_SWEEP_SELL":
+        strong_pullback = True
+    elif choch == "BEARISH_CHOCH" and has_displacement:
         reversal_dir = "BAJA"
+        strong_pullback = True
 
     return {
         "choch": choch,
         "bos": bos,
         "sweep": sweep,
         "reversal_dir": reversal_dir,
+        "strong_pullback": strong_pullback,
         "bsl": swing_high,
         "ssl": swing_low
     }
@@ -395,7 +463,8 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         c_1d = candles_bundle.get("1d", [])
         c_4h = candles_bundle.get("4h", [])
         c_1h = candles_bundle.get("1h", [])
-        c_1w = group_weekly(c_1d)
+        c_1w_all = candles_bundle.get("1w_all", [])
+        c_1w = c_1w_all[-20:] if c_1w_all else []
 
         if not c_1h and c_1d:
             c_1h = c_1d[-30:]
@@ -413,6 +482,9 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         b_4h = calc_bias(c_4h, 6, 0.0008)
         b_1h = calc_bias(c_1h, 6, 0.0006)
         vol_metrics = calc_atr_and_range(c_1d, pip, dec)
+
+        # Escaneo de Giros Semanales Limpios Históricos (Pre-2017: 1 vela + 1 vela rechazo sin acumulación)
+        hist_buys, hist_sells = find_clean_weekly_pivots_pre2017(c_1w_all, dec, pip)
 
         w_up = (3 if b_d == "SUBE" else 0) + (2 if b_4h == "SUBE" else 0) + (1 if b_1h == "SUBE" else 0)
         w_dn = (3 if b_d == "BAJA" else 0) + (2 if b_4h == "BAJA" else 0) + (1 if b_1h == "BAJA" else 0)
@@ -443,24 +515,28 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             elif rev["reversal_dir"] == "BAJA" and base_label == "FUERTE":
                 base_supports_reversal = False
 
-        macro_backed_reversal = (
-            rev["reversal_dir"] != "NONE"
+        h4_allows_pullback = (b_4h == "NEUTRAL" or b_4h == rev["reversal_dir"])
+        is_strong_pullback = (
+            rev["strong_pullback"]
             and rev["reversal_dir"] == macro_dir
             and base_supports_reversal
+            and h4_allows_pullback
         )
 
-        if macro_backed_reversal:
+        if is_strong_pullback:
             chart_bias = rev["reversal_dir"]
             if chart_bias == "SUBE":
                 w_up = max(w_up, w_dn + 2)
             else:
                 w_dn = max(w_dn, w_up + 2)
         else:
-            if rev["choch"] == "BULLISH_CHOCH" or rev["sweep"] == "SSL_SWEEP_BUY":
+            if rev["choch"] == "BULLISH_CHOCH" and b_d != "BAJA":
                 w_up += 2
-            elif rev["choch"] == "BEARISH_CHOCH" or rev["sweep"] == "BSL_SWEEP_SELL":
+            elif rev["choch"] == "BEARISH_CHOCH" and b_d != "SUBE":
                 w_dn += 2
             chart_bias = "SUBE" if w_up >= w_dn else "BAJA"
+
+        is_counter_daily = (b_d in ("SUBE", "BAJA") and chart_bias != b_d)
 
         recent = c_1h[-24:]
         intraday_high = max(x["h"] for x in recent)
@@ -468,26 +544,46 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
 
         exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
 
+        # Seleccionar el Giro Semanal Limpio Histórico (Pre-2017) más cercano dentro de un rango razonable (<= 2.5%)
+        matched_hist_pivot = None
+        if chart_bias == "SUBE" and hist_buys:
+            valid_buys = [p for p in hist_buys if abs(price - p["entry"]) / max(1e-9, price) <= 0.025]
+            if valid_buys:
+                matched_hist_pivot = min(valid_buys, key=lambda p: abs(price - p["entry"]))
+        elif chart_bias == "BAJA" and hist_sells:
+            valid_sells = [p for p in hist_sells if abs(price - p["entry"]) / max(1e-9, price) <= 0.025]
+            if valid_sells:
+                matched_hist_pivot = min(valid_sells, key=lambda p: abs(price - p["entry"]))
+
         if chart_bias == "SUBE":
             direction = "BUY"
-            ob_low = round(min(x["l"] for x in recent[-12:]), dec)
-            ob_high = round(ob_low + (12 * pip), dec)
-            entry = round((ob_low + ob_high) / 2.0, dec)
-            if price < entry:
-                entry = round(price - (6 * pip), dec)
-                ob_low = round(entry - (5 * pip), dec)
-                ob_high = round(entry + (5 * pip), dec)
             risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
-            sl = round(entry - risk, dec)
-            tp1 = round(entry + (risk * 2.0), dec)
-            tp2 = round(entry + (risk * 3.0), dec)
-            be_trigger = round(entry + risk, dec)
+
+            if matched_hist_pivot:
+                entry = matched_hist_pivot["entry"]
+                ob_low = round(min(matched_hist_pivot["extreme"], entry - 5 * pip), dec)
+                ob_high = round(entry + 5 * pip, dec)
+                sl = round(min(ob_low - 6 * pip, entry - risk), dec)
+            else:
+                ob_low = round(min(x["l"] for x in recent[-12:]), dec)
+                ob_high = round(ob_low + (12 * pip), dec)
+                entry = round((ob_low + ob_high) / 2.0, dec)
+                if price < entry:
+                    entry = round(price - (6 * pip), dec)
+                    ob_low = round(entry - (5 * pip), dec)
+                    ob_high = round(entry + (5 * pip), dec)
+                sl = round(entry - risk, dec)
+
+            actual_r = max(10 * pip, abs(entry - sl))
+            tp1 = round(entry + (actual_r * 2.0), dec)
+            tp2 = round(entry + (actual_r * 3.0), dec)
+            be_trigger = round(entry + actual_r, dec)
 
             touched_orig = any(x["l"] <= ob_high for x in c_1h[-6:])
             hit_tp1_real = touched_orig and price >= tp1
             is_reentry_active = False
 
-            if hit_tp1_real:
+            if hit_tp1_real and not matched_hist_pivot:
                 for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
                     c_ob = c_1h[idx]
                     c_imp = c_1h[idx + 1]
@@ -507,13 +603,15 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
 
             if exhaustion["active"]:
                 signal_tag = "⚠️ RIESGO GIRO · PROTEGER"
+            elif matched_hist_pivot:
+                signal_tag = f"GIRO LIMPIO 1S ({matched_hist_pivot['date']})"
             elif is_reentry_active:
                 signal_tag = "RE-ENTRADA OB (PIRÁMIDE)"
             elif hit_tp1_real:
                 signal_tag = "TP1 CUMPLIDO · SIN RE-ENTRADA"
-            elif macro_backed_reversal and rev["sweep"] == "SSL_SWEEP_BUY":
-                signal_tag = "GIRO MACRO · BARRIDO SSL"
-            elif macro_backed_reversal and rev["choch"] == "BULLISH_CHOCH":
+            elif is_strong_pullback and is_counter_daily:
+                signal_tag = "PULLBACK FUERTE · CHoCH ALCISTA"
+            elif is_strong_pullback:
                 signal_tag = "GIRO MACRO · CHoCH ALCISTA"
             elif rev["choch"] == "BULLISH_CHOCH":
                 signal_tag = "CHoCH ALCISTA · OB"
@@ -521,24 +619,33 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 signal_tag = "COMPRA OB"
         else:
             direction = "SELL"
-            ob_high = round(max(x["h"] for x in recent[-12:]), dec)
-            ob_low = round(ob_high - (12 * pip), dec)
-            entry = round((ob_low + ob_high) / 2.0, dec)
-            if price > entry:
-                entry = round(price + (6 * pip), dec)
-                ob_high = round(entry + (5 * pip), dec)
-                ob_low = round(entry - (5 * pip), dec)
             risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
-            sl = round(entry + risk, dec)
-            tp1 = round(entry - (risk * 2.0), dec)
-            tp2 = round(entry - (risk * 3.0), dec)
-            be_trigger = round(entry - risk, dec)
+
+            if matched_hist_pivot:
+                entry = matched_hist_pivot["entry"]
+                ob_high = round(max(matched_hist_pivot["extreme"], entry + 5 * pip), dec)
+                ob_low = round(entry - 5 * pip, dec)
+                sl = round(max(ob_high + 6 * pip, entry + risk), dec)
+            else:
+                ob_high = round(max(x["h"] for x in recent[-12:]), dec)
+                ob_low = round(ob_high - (12 * pip), dec)
+                entry = round((ob_low + ob_high) / 2.0, dec)
+                if price > entry:
+                    entry = round(price + (6 * pip), dec)
+                    ob_high = round(entry + (5 * pip), dec)
+                    ob_low = round(entry - (5 * pip), dec)
+                sl = round(entry + risk, dec)
+
+            actual_r = max(10 * pip, abs(sl - entry))
+            tp1 = round(entry - (actual_r * 2.0), dec)
+            tp2 = round(entry - (actual_r * 3.0), dec)
+            be_trigger = round(entry - actual_r, dec)
 
             touched_orig = any(x["h"] >= ob_low for x in c_1h[-6:])
             hit_tp1_real = touched_orig and price <= tp1
             is_reentry_active = False
 
-            if hit_tp1_real:
+            if hit_tp1_real and not matched_hist_pivot:
                 for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
                     c_ob = c_1h[idx]
                     c_imp = c_1h[idx + 1]
@@ -558,13 +665,15 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
 
             if exhaustion["active"]:
                 signal_tag = "⚠️ RIESGO GIRO · PROTEGER"
+            elif matched_hist_pivot:
+                signal_tag = f"GIRO LIMPIO 1S ({matched_hist_pivot['date']})"
             elif is_reentry_active:
                 signal_tag = "RE-ENTRADA OB (PIRÁMIDE)"
             elif hit_tp1_real:
                 signal_tag = "TP1 CUMPLIDO · SIN RE-ENTRADA"
-            elif macro_backed_reversal and rev["sweep"] == "BSL_SWEEP_SELL":
-                signal_tag = "GIRO MACRO · BARRIDO BSL"
-            elif macro_backed_reversal and rev["choch"] == "BEARISH_CHOCH":
+            elif is_strong_pullback and is_counter_daily:
+                signal_tag = "PULLBACK FUERTE · CHoCH BAJISTA"
+            elif is_strong_pullback:
                 signal_tag = "GIRO MACRO · CHoCH BAJISTA"
             elif rev["choch"] == "BEARISH_CHOCH":
                 signal_tag = "CHoCH BAJISTA · OB"
@@ -579,9 +688,19 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             verdict_sub = "Momentum en extremo se frena · Asegurar parciales / BE"
         elif macro_dir == chart_bias:
             alignment = "ALIGNED"
-            conf_score = min(94, 68 + (dominant_w * 3) + (4 if macro_backed_reversal else 0))
-            verdict_title = "GIRO CONFIRMADO · MACRO + TÉCNICO" if macro_backed_reversal else f"VAN JUNTOS · BUSCAR {'COMPRAS' if direction == 'BUY' else 'VENTAS'}"
-            verdict_sub = f"Economía ({macro_dir}) y Gráfico ({chart_bias}) empujan juntos"
+            conf_score = min(96, 68 + (dominant_w * 3) + (4 if is_strong_pullback else 0) + (5 if matched_hist_pivot else 0))
+            if matched_hist_pivot:
+                verdict_title = f"GIRO SEMANAL LIMPIO ({matched_hist_pivot['date']}) + MACRO"
+                verdict_sub = f"Vela única de giro sin acumulación (pre-2017) + Economía ({macro_dir})"
+            elif is_strong_pullback and is_counter_daily:
+                verdict_title = "PULLBACK FUERTE CONFIRMADO (CHoCH)"
+                verdict_sub = f"Ruptura con desplazamiento en 1H + Macro ({macro_dir}) · Cobrar en TP1"
+            elif is_strong_pullback:
+                verdict_title = "GIRO CONFIRMADO · MACRO + TÉCNICO"
+                verdict_sub = f"Economía ({macro_dir}) y Gráfico ({chart_bias}) empujan juntos"
+            else:
+                verdict_title = f"VAN JUNTOS · BUSCAR {'COMPRAS' if direction == 'BUY' else 'VENTAS'}"
+                verdict_sub = f"Economía ({macro_dir}) y Gráfico ({chart_bias}) empujan juntos"
         elif macro_dir == "NEUTRAL":
             alignment = "NEUTRAL"
             conf_score = min(74, 52 + (dominant_w * 3))
@@ -604,6 +723,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
 
         is_swing_potential = (
             not exhaustion["active"]
+            and not is_counter_daily
             and ccy_swing_ok
             and b_d == chart_bias
             and b_4h == chart_bias
@@ -613,7 +733,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             and dist_ratio <= max_swing_dist
         )
 
-        swing_tp = round(entry + (risk * 4.2), dec) if direction == "BUY" else round(entry - (risk * 4.2), dec)
+        swing_tp = round(entry + (actual_r * 4.2), dec) if direction == "BUY" else round(entry - (actual_r * 4.2), dec)
         swing_info = None
         if is_swing_potential:
             swing_info = {
@@ -648,9 +768,10 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "events": pair_news_titles[:3]
             }
 
+        hist_note = f" Giro semanal limpio histórico detectado en {matched_hist_pivot['date']} (nivel {matched_hist_pivot['entry']}, sin acumulación previa)." if matched_hist_pivot else ""
         swing_note = f" 🌊 Potencial Swing activo (BE en {be_trigger}, Swing TP {swing_tp})." if is_swing_potential else ""
-        extra_note = f" {exhaustion['reason']}" if exhaustion["active"] else (f" Giro detectado ({rev['sweep'] if rev['sweep'] != 'NONE' else rev['choch']}) con respaldo macro." if macro_backed_reversal else "")
-        macro_reason = f"{macro_detail} Jerarquía (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{extra_note}{swing_note}"
+        extra_note = f" {exhaustion['reason']}" if exhaustion["active"] else (f" Pullback fuerte confirmado ({rev['choch']} con desplazamiento) respaldado por macro." if is_strong_pullback else "")
+        macro_reason = f"{macro_detail} Jerarquía (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{hist_note}{extra_note}{swing_note}"
 
         return {
             "symbol": sym,
@@ -664,6 +785,8 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             "chart_bias": chart_bias,
             "macro_dir": macro_dir,
             "economy_short": economy_short,
+            "is_strong_pullback": is_strong_pullback and is_counter_daily,
+            "historical_pivot": matched_hist_pivot,
             "tf_bias": {"weekly": b_w, "daily": b_d, "h4": b_4h, "h1": b_1h},
             "liquidity": {
                 "bsl": rev["bsl"],
@@ -743,6 +866,8 @@ def dispatch_push_notifications(assets, now_ts):
         direction = a["setup"]["direction"]
         d_txt = "COMPRA" if direction == "BUY" else "VENTA"
         is_aligned = (a.get("confluence", {}).get("alignment") == "ALIGNED")
+        is_pullback = bool(a.get("is_strong_pullback"))
+        hist_p = a.get("historical_pivot")
 
         price = a["price"]
         entry = a["setup"]["entry"]
@@ -754,10 +879,6 @@ def dispatch_push_notifications(assets, now_ts):
         pct_dist = abs(price - entry) / max(1e-9, price)
         right_side = (price >= sl and price < tp1) if direction == "BUY" else (price <= sl and price > tp1)
 
-        # Alarma tipo TradingView:
-        # - Divisas (forex): <= 25 pips (cubre 15-25 pips y más cerca)
-        # - XAUUSD (metal): <= 40 pips
-        # - Índices / Cripto: <= 0.15%
         if sym == "XAUUSD" or a_type == "metal":
             in_trigger_zone = (units <= 40.0)
             u_lbl = "pips"
@@ -774,13 +895,22 @@ def dispatch_push_notifications(assets, now_ts):
                 be_p = a["setup"].get("be_trigger", entry)
                 is_swing = bool(a.get("swing_potential") and a["swing_potential"].get("active"))
                 swing_line = f" | Swing TP: {a['swing_potential']['target']}" if is_swing else ""
+                if hist_p:
+                    header_tag = f"GIRO 1S ({hist_p['date']})"
+                    extra_warn = f"\n(Nivel semanal limpio pre-2017 sin acumulación)"
+                elif is_pullback:
+                    header_tag = "PULLBACK FUERTE"
+                    extra_warn = "\n(Giro CHoCH con desplazamiento contra 1D: asegurar en TP1)"
+                else:
+                    header_tag = "ALARMA"
+                    extra_warn = ""
                 body = (
                     f"{sym} ({d_txt}) a {units} {u_lbl} del punto de entrada ({entry}).\n"
                     f"Precio actual: {price} | SL: {sl}\n"
-                    f"BE (+1R): {be_p} | TP1: {tp1}{swing_line}"
+                    f"BE (+1R): {be_p} | TP1: {tp1}{swing_line}{extra_warn}"
                 )
                 send_mobile_push(
-                    f"LATICCE ALARMA: {sym} ({d_txt}) a {units} {u_lbl}",
+                    f"LATICCE {header_tag}: {sym} ({d_txt}) a {units} {u_lbl}",
                     body,
                     "high",
                     "dart,bell"
@@ -817,7 +947,8 @@ def main():
         c_1h_long = get_candles(cfg["yf"], "1mo", "1h", dec, 180)
         c_4h = group_4h(c_1h_long)
         c_1h = c_1h_long[-45:] if c_1h_long else []
-        bundles[sym] = {"1d": c_1d, "4h": c_4h, "1h": c_1h}
+        c_1w_all = get_candles(cfg["yf"], "max", "1wk", dec, None)
+        bundles[sym] = {"1d": c_1d, "4h": c_4h, "1h": c_1h, "1w_all": c_1w_all}
         c4_map[sym] = c_4h
         c1d_map[sym] = c_1d
 
@@ -840,7 +971,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"LATICCE v8.0 · Alarmas de precisión (<=25 pips divisas / <=40 pips XAUUSD) sobre {len(assets)} activos."
+            "summary": f"LATICCE v9.0 · Giros Semanales Limpios Pre-2017 (1 vela + 1 rechazo sin acumulación) + Alarmas TradingView sobre {len(assets)} activos."
         },
         "correlated_baskets": baskets,
         "banks": banks,
@@ -852,7 +983,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados (LATICCE v8.0 Alarmas TradingView).")
+    print(f"OK: {len(assets)} activos actualizados (LATICCE v9.0 Giros Limpios Pre-2017).")
 
 if __name__ == "__main__":
     main()
