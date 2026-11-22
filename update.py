@@ -743,31 +743,52 @@ def dispatch_push_notifications(assets, now_ts):
         d_txt = "COMPRA" if a["setup"]["direction"] == "BUY" else "VENTA"
         is_swing = bool(a.get("swing_potential") and a["swing_potential"].get("active"))
         is_reentry = "RE-ENTRADA" in (a["setup"].get("signal_tag") or "").upper()
+        is_aligned = (a.get("confluence", {}).get("alignment") == "ALIGNED")
+
+        price = a["price"]
+        entry = a["setup"]["entry"]
+        sl = a["setup"]["sl"]
+        tp1 = a["setup"]["tp1"]
+        pct_dist = abs(price - entry) / max(1e-9, price)
+        right_side = (price >= sl and price < tp1) if a["setup"]["direction"] == "BUY" else (price <= sl and price > tp1)
+        near_entry = is_aligned and right_side and (pct_dist <= 0.004)
 
         if is_swing:
             key = f"SWING_{sym}_{a['setup']['direction']}"
-            last_t = sent_state.get(key, 0)
-            if (now_ts - last_t) > cooldown:
+            if (now_ts - sent_state.get(key, 0)) > cooldown:
                 sw_tp = a["swing_potential"]["target"]
-                be_p = a["setup"].get("be_trigger", a["setup"]["entry"])
+                be_p = a["setup"].get("be_trigger", entry)
                 body = (
                     f"{sym} ({d_txt}) · Confluencia {a['confluence']['score']}/100\n"
-                    f"Entrada OB: {a['setup']['entry']} | SL: {a['setup']['sl']}\n"
-                    f"Gatillo BE (+1R): {be_p} | TP1: {a['setup']['tp1']} | Swing TP: {sw_tp}"
+                    f"Entrada OB: {entry} | SL: {sl}\n"
+                    f"Gatillo BE (+1R): {be_p} | TP1: {tp1} | Swing TP: {sw_tp}"
                 )
-                send_mobile_push(f"POTENCIAL SWING: {sym} ({d_txt})", body, "high", "ocean,chart_with_upwards_trend")
+                send_mobile_push(f"LATICCE · POTENCIAL SWING: {sym} ({d_txt})", body, "high", "ocean,chart_with_upwards_trend")
                 sent_state[key] = now_ts
                 updated = True
 
         if is_reentry:
             key = f"REENTRY_{sym}_{a['setup']['direction']}"
-            last_t = sent_state.get(key, 0)
-            if (now_ts - last_t) > cooldown:
+            if (now_ts - sent_state.get(key, 0)) > cooldown:
                 body = (
                     f"{sym} ({d_txt}) confirmó re-entrada estructural.\n"
-                    f"Nuevo bloque: {a['setup']['entry']} | SL: {a['setup']['sl']} | TP1: {a['setup']['tp1']}"
+                    f"Nuevo bloque: {entry} | SL: {sl} | TP1: {tp1}"
                 )
-                send_mobile_push(f"RE-ENTRADA PIRAMIDE: {sym}", body, "high", "large_blue_circle,rocket")
+                send_mobile_push(f"LATICCE · RE-ENTRADA PIRAMIDE: {sym}", body, "high", "large_blue_circle,rocket")
+                sent_state[key] = now_ts
+                updated = True
+
+        if near_entry:
+            key = f"NEAR_{sym}_{a['setup']['direction']}"
+            if (now_ts - sent_state.get(key, 0)) > cooldown:
+                pip = a.get("pip", 0.0001)
+                units = round((abs(price - entry) / pip) * 10) / 10
+                u_lbl = "pips" if a.get("type") == "forex" else "pts"
+                body = (
+                    f"{sym} ({d_txt}) a {units} {u_lbl} del Order Block ({entry}).\n"
+                    f"Precio actual: {price} | SL: {sl} | TP1: {tp1}"
+                )
+                send_mobile_push(f"LATICCE · CERCA DE ENTRADA OB: {sym} ({d_txt})", body, "default", "dart,bell")
                 sent_state[key] = now_ts
                 updated = True
 
@@ -820,7 +841,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"App PWA v7.8 · Mesa Economía vs Gráfico, liquidez BSL/SSL, CHoCH/BOS, ATR y notificaciones Push sobre {len(assets)} activos."
+            "summary": f"LATICCE v7.9 · Red Neuronal Macro vs Gráfico, liquidez BSL/SSL, CHoCH/BOS, ATR y alertas Push sobre {len(assets)} activos."
         },
         "correlated_baskets": baskets,
         "banks": banks,
@@ -832,7 +853,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados (v7.8 PWA + Notificaciones Push).")
+    print(f"OK: {len(assets)} activos actualizados (LATICCE v7.9).")
 
 if __name__ == "__main__":
     main()
