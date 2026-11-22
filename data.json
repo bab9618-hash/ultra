@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-22 13:49 UTC",
+  "last_updated": "2026-11-22 14:40 UTC",
   "brief": {
     "dxy": 103.84,
     "us10y": 4.91,
@@ -198,7 +198,7 @@
       "macro_reason": "XAU (FUERTE) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -1206,7 +1206,7 @@
       "macro_reason": "EUR (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -2220,7 +2220,7 @@
         "be_trigger": 158.608,
         "plan": "1) Divide la entrada base en 158.923 (SL 159.238). 2) Al tocar 158.608 (+1R) o TP1 (158.293), cobra parciales y sube el SL a 158.923 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 157.6."
       },
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -3228,7 +3228,7 @@
       "macro_reason": "GBP (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Giro detectado (SSL_SWEEP_BUY) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 94,
         "alignment": "ALIGNED",
@@ -4236,7 +4236,7 @@
       "macro_reason": "GBP (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -5250,7 +5250,7 @@
         "be_trigger": 1.96909,
         "plan": "1) Divide la entrada base en 1.96532 (SL 1.96155). 2) Al tocar 1.96909 (+1R) o TP1 (1.97286), cobra parciales y sube el SL a 1.96532 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.98115."
       },
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -6258,7 +6258,7 @@
       "macro_reason": "GBP (NEUTRAL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -7266,7 +7266,7 @@
       "macro_reason": "GBP (NEUTRAL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 77,
         "alignment": "ALIGNED",
@@ -8280,7 +8280,7 @@
         "be_trigger": 0.66511,
         "plan": "1) Divide la entrada base en 0.66669 (SL 0.66827). 2) Al tocar 0.66511 (+1R) o TP1 (0.66353), cobra parciales y sube el SL a 0.66669 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 0.66005."
       },
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -9294,7 +9294,7 @@
         "be_trigger": 105.566,
         "plan": "1) Divide la entrada base en 105.943 (SL 106.32). 2) Al tocar 105.566 (+1R) o TP1 (105.189), cobra parciales y sube el SL a 105.943 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 104.36."
       },
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -10302,7 +10302,7 @@
       "macro_reason": "AUD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -11310,7 +11310,7 @@
       "macro_reason": "AUD (DÉBIL) vs NZD (NEUTRAL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:NEUTRAL). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -12324,7 +12324,7 @@
         "be_trigger": 1.64844,
         "plan": "1) Divide la entrada base en 1.64506 (SL 1.64168). 2) Al tocar 1.64844 (+1R) o TP1 (1.65182), cobra parciales y sube el SL a 1.64506 (Break Even). 3) Solo con la orden base ya protegida, añade 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP 1.65926."
       },
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -13332,7 +13332,7 @@
       "macro_reason": "AUD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -14340,7 +14340,7 @@
       "macro_reason": "NZD (NEUTRAL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 34,
         "alignment": "OPPOSED",
@@ -15336,8 +15336,8 @@
         "sweep": "BSL_SWEEP_SELL"
       },
       "volatility": {
-        "atr": 0.00734,
-        "atr_units": 73.4,
+        "atr": 0.00735,
+        "atr_units": 73.5,
         "range20": 0.04265,
         "range20_units": 426.5
       },
@@ -15348,7 +15348,7 @@
       "macro_reason": "USD (DÉBIL) vs CAD (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL). Giro detectado (BSL_SWEEP_SELL) con respaldo macro.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 87,
         "alignment": "ALIGNED",
@@ -15678,8 +15678,8 @@
             "t": 1795305600,
             "o": 1.434,
             "h": 1.434,
-            "l": 1.434,
-            "c": 1.434
+            "l": 1.4339,
+            "c": 1.4339
           }
         ],
         "4h": [
@@ -16356,7 +16356,7 @@
       "macro_reason": "USD (DÉBIL) vs CHF (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:SUBE, 1D:SUBE, 4H:BAJA, 1H:NEUTRAL).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 40,
         "alignment": "OPPOSED",
@@ -17364,7 +17364,7 @@
       "macro_reason": "EUR (NEUTRAL) vs JPY (FUERTE) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorción/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 58,
         "alignment": "ALIGNED",
@@ -18341,8 +18341,8 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 60491.94,
-      "chg_day": 0.66,
+      "price": 60650.07,
+      "chg_day": 0.93,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "BTC DÉBIL / USD DÉBIL",
@@ -18350,14 +18350,14 @@
         "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "SUBE",
-        "h1": "SUBE"
+        "h1": "BAJA"
       },
       "liquidity": {
-        "bsl": 61229.37,
+        "bsl": 61543.31,
         "ssl": 58657.42,
         "choch": "NONE",
         "bos": "NONE",
-        "sweep": "BSL_SWEEP_SELL"
+        "sweep": "NONE"
       },
       "volatility": {
         "atr": 3178.5,
@@ -18369,19 +18369,19 @@
       "intraday_low": 58657.42,
       "ob_high": 61543.31,
       "ob_low": 61531.31,
-      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:SUBE). Giro detectado (BSL_SWEEP_SELL) con respaldo macro.",
+      "macro_reason": "BTC (DÉBIL) vs USD (DÉBIL) en cesta híbrida 4H/1D. Jerarquía (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
-        "score": 87,
+        "score": 80,
         "alignment": "ALIGNED",
-        "verdict_title": "GIRO CONFIRMADO · MACRO + TÉCNICO",
+        "verdict_title": "VAN JUNTOS · BUSCAR VENTAS",
         "verdict_sub": "Economía (BAJA) y Gráfico (BAJA) empujan juntos"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "GIRO MACRO · BARRIDO BSL",
+        "signal_tag": "VENTA OB",
         "entry": 61537.31,
         "be_trigger": 60902.41,
         "sl": 62172.21,
@@ -18703,334 +18703,327 @@
             "o": 60093.01,
             "h": 61328.95,
             "l": 58680.21,
-            "c": 60491.94
+            "c": 60650.07
           }
         ],
         "4h": [
           {
-            "t": 1794708000,
-            "o": 62598.97,
+            "t": 1794711600,
+            "o": 64854.83,
             "h": 65534.21,
-            "l": 62457.12,
-            "c": 64457.96
+            "l": 64149.66,
+            "c": 64425.4
           },
           {
-            "t": 1794722400,
-            "o": 64482.31,
+            "t": 1794726000,
+            "o": 64429.72,
             "h": 66052.92,
             "l": 63731.17,
-            "c": 65303.79
+            "c": 65552.04
           },
           {
-            "t": 1794736800,
-            "o": 65301.21,
+            "t": 1794740400,
+            "o": 65541.05,
             "h": 65767.28,
-            "l": 65194.23,
-            "c": 65398.92
+            "l": 64417.3,
+            "c": 64720.93
           },
           {
-            "t": 1794751200,
-            "o": 65387.7,
-            "h": 65473.35,
+            "t": 1794754800,
+            "o": 64720.9,
+            "h": 64895.27,
             "l": 64250.79,
-            "c": 64528.41
+            "c": 64691.58
           },
           {
-            "t": 1794765600,
-            "o": 64516.96,
+            "t": 1794769200,
+            "o": 64664.65,
             "h": 65245.7,
-            "l": 64454.65,
-            "c": 64976.83
+            "l": 64653.19,
+            "c": 65199.9
           },
           {
-            "t": 1794780000,
-            "o": 64954.84,
+            "t": 1794783600,
+            "o": 65289.42,
             "h": 65463.74,
             "l": 64517.35,
-            "c": 64592.89
+            "c": 65135.97
           },
           {
-            "t": 1794794400,
-            "o": 64532.85,
-            "h": 65299.99,
-            "l": 64295.4,
-            "c": 64418.76
+            "t": 1794798000,
+            "o": 65143.53,
+            "h": 65182.88,
+            "l": 64237.15,
+            "c": 64651.86
           },
           {
-            "t": 1794808800,
-            "o": 64379.0,
+            "t": 1794812400,
+            "o": 64668.28,
             "h": 64988.89,
             "l": 64066.71,
-            "c": 64271.13
+            "c": 64510.6
           },
           {
-            "t": 1794823200,
-            "o": 64282.48,
-            "h": 64731.01,
-            "l": 63835.65,
-            "c": 64110.03
-          },
-          {
-            "t": 1794837600,
-            "o": 64112.3,
+            "t": 1794826800,
+            "o": 64522.93,
             "h": 65598.66,
-            "l": 63937.83,
-            "c": 64836.1
+            "l": 63835.65,
+            "c": 65099.3
           },
           {
-            "t": 1794852000,
-            "o": 64829.49,
-            "h": 65359.12,
-            "l": 64651.54,
-            "c": 65241.04
+            "t": 1794841200,
+            "o": 65069.63,
+            "h": 65120.41,
+            "l": 64041.52,
+            "c": 64978.67
           },
           {
-            "t": 1794866400,
-            "o": 65237.74,
+            "t": 1794855600,
+            "o": 64973.35,
             "h": 65467.29,
-            "l": 64380.41,
-            "c": 64693.19
+            "l": 64697.82,
+            "c": 65256.53
           },
           {
-            "t": 1794880800,
-            "o": 64679.06,
-            "h": 65120.34,
+            "t": 1794870000,
+            "o": 65239.04,
+            "h": 65282.71,
             "l": 64321.51,
-            "c": 64773.32
+            "c": 64438.12
           },
           {
-            "t": 1794895200,
-            "o": 64741.21,
-            "h": 64767.88,
-            "l": 64110.25,
-            "c": 64297.42
+            "t": 1794884400,
+            "o": 64438.13,
+            "h": 65120.34,
+            "l": 64230.5,
+            "c": 64488.19
           },
           {
-            "t": 1794909600,
-            "o": 64297.42,
-            "h": 65100.0,
+            "t": 1794898800,
+            "o": 64490.32,
+            "h": 64689.34,
             "l": 64003.06,
-            "c": 65076.53
+            "c": 64032.19
           },
           {
-            "t": 1794924000,
-            "o": 65063.21,
+            "t": 1794913200,
+            "o": 64032.19,
             "h": 65379.0,
+            "l": 64028.47,
+            "c": 64948.44
+          },
+          {
+            "t": 1794927600,
+            "o": 64943.07,
+            "h": 65096.17,
             "l": 63299.84,
-            "c": 63756.6
+            "c": 63697.83
           },
           {
-            "t": 1794938400,
-            "o": 63722.54,
-            "h": 64593.22,
+            "t": 1794942000,
+            "o": 63680.37,
+            "h": 64811.18,
             "l": 63577.58,
-            "c": 64289.27
+            "c": 64657.19
           },
           {
-            "t": 1794952800,
-            "o": 64268.34,
+            "t": 1794956400,
+            "o": 64671.0,
             "h": 65188.09,
-            "l": 64101.21,
-            "c": 64234.55
-          },
-          {
-            "t": 1794967200,
-            "o": 64234.56,
-            "h": 64770.85,
             "l": 64059.83,
-            "c": 64600.17
+            "c": 64249.56
           },
           {
-            "t": 1794981600,
-            "o": 64590.92,
+            "t": 1794970800,
+            "o": 64257.03,
+            "h": 64770.85,
+            "l": 64244.9,
+            "c": 64539.58
+          },
+          {
+            "t": 1794985200,
+            "o": 64517.51,
             "h": 64871.58,
-            "l": 64405.89,
-            "c": 64565.36
+            "l": 64094.88,
+            "c": 64289.56
           },
           {
-            "t": 1794996000,
-            "o": 64565.53,
-            "h": 64574.15,
-            "l": 63848.57,
-            "c": 63865.01
+            "t": 1794999600,
+            "o": 64284.75,
+            "h": 64317.03,
+            "l": 63001.25,
+            "c": 63586.62
           },
           {
-            "t": 1795010400,
-            "o": 63848.37,
-            "h": 63999.76,
+            "t": 1795014000,
+            "o": 63603.59,
+            "h": 63805.64,
             "l": 62211.44,
-            "c": 63041.13
+            "c": 63104.9
           },
           {
-            "t": 1795024800,
-            "o": 63033.13,
-            "h": 63209.3,
-            "l": 62210.06,
-            "c": 62257.06
-          },
-          {
-            "t": 1795039200,
-            "o": 62259.43,
-            "h": 63220.52,
+            "t": 1795028400,
+            "o": 63088.12,
+            "h": 63088.12,
             "l": 62004.0,
-            "c": 62795.11
+            "c": 62168.73
           },
           {
-            "t": 1795053600,
-            "o": 62775.33,
+            "t": 1795042800,
+            "o": 62171.93,
+            "h": 63220.52,
+            "l": 62171.93,
+            "c": 62534.09
+          },
+          {
+            "t": 1795057200,
+            "o": 62520.69,
             "h": 63678.13,
             "l": 62331.21,
-            "c": 63288.49
+            "c": 63653.53
           },
           {
-            "t": 1795068000,
-            "o": 63276.44,
-            "h": 63864.75,
-            "l": 63276.44,
-            "c": 63786.82
+            "t": 1795071600,
+            "o": 63682.52,
+            "h": 63900.13,
+            "l": 63471.26,
+            "c": 63719.99
           },
           {
-            "t": 1795082400,
-            "o": 63805.87,
+            "t": 1795086000,
+            "o": 63721.78,
             "h": 64011.58,
-            "l": 63514.85,
-            "c": 63971.48
+            "l": 63394.03,
+            "c": 63492.17
           },
           {
-            "t": 1795096800,
-            "o": 63981.23,
-            "h": 63981.23,
+            "t": 1795100400,
+            "o": 63450.04,
+            "h": 63840.02,
             "l": 62181.31,
-            "c": 62669.89
+            "c": 62807.41
           },
           {
-            "t": 1795111200,
-            "o": 62650.18,
-            "h": 63222.28,
+            "t": 1795114800,
+            "o": 62820.25,
+            "h": 62822.04,
             "l": 61363.56,
-            "c": 61475.16
+            "c": 62096.3
           },
           {
-            "t": 1795125600,
-            "o": 61471.71,
+            "t": 1795129200,
+            "o": 62095.05,
             "h": 62533.66,
-            "l": 61256.26,
-            "c": 61483.6
-          },
-          {
-            "t": 1795140000,
-            "o": 61502.9,
-            "h": 62322.56,
             "l": 61220.0,
-            "c": 61879.48
+            "c": 62180.87
           },
           {
-            "t": 1795154400,
-            "o": 61845.72,
-            "h": 62004.01,
-            "l": 61416.91,
-            "c": 61582.41
+            "t": 1795143600,
+            "o": 62200.75,
+            "h": 62322.56,
+            "l": 61318.59,
+            "c": 62000.9
           },
           {
-            "t": 1795168800,
-            "o": 61579.2,
+            "t": 1795158000,
+            "o": 61992.07,
             "h": 62273.59,
-            "l": 61179.66,
-            "c": 61814.96
+            "l": 61416.91,
+            "c": 61985.83
           },
           {
-            "t": 1795183200,
-            "o": 61812.17,
+            "t": 1795172400,
+            "o": 61992.51,
             "h": 62110.66,
-            "l": 58723.66,
-            "c": 59095.24
+            "l": 61179.66,
+            "c": 61701.5
           },
           {
-            "t": 1795197600,
-            "o": 59061.84,
+            "t": 1795186800,
+            "o": 61783.83,
+            "h": 61864.6,
+            "l": 58000.0,
+            "c": 58337.51
+          },
+          {
+            "t": 1795201200,
+            "o": 58322.4,
             "h": 59278.92,
             "l": 57676.29,
-            "c": 58884.09
+            "c": 59033.86
           },
           {
-            "t": 1795212000,
-            "o": 58879.21,
-            "h": 59178.06,
-            "l": 58723.86,
-            "c": 58908.15
+            "t": 1795215600,
+            "o": 58996.55,
+            "h": 59159.21,
+            "l": 58470.65,
+            "c": 58493.23
           },
           {
-            "t": 1795226400,
-            "o": 58907.25,
-            "h": 58969.8,
-            "l": 55513.91,
-            "c": 55699.17
-          },
-          {
-            "t": 1795240800,
-            "o": 55721.21,
-            "h": 58530.81,
+            "t": 1795230000,
+            "o": 58492.06,
+            "h": 58492.06,
             "l": 55138.06,
-            "c": 57912.14
+            "c": 57974.27
           },
           {
-            "t": 1795255200,
-            "o": 57893.53,
-            "h": 60786.72,
-            "l": 57729.4,
-            "c": 60480.26
+            "t": 1795244400,
+            "o": 57911.99,
+            "h": 58530.81,
+            "l": 57271.62,
+            "c": 57846.27
           },
           {
-            "t": 1795269600,
-            "o": 60469.65,
+            "t": 1795258800,
+            "o": 57829.59,
             "h": 60838.08,
+            "l": 57759.62,
+            "c": 60230.89
+          },
+          {
+            "t": 1795273200,
+            "o": 60237.37,
+            "h": 60376.74,
             "l": 59597.19,
-            "c": 59967.34
+            "c": 60040.26
           },
           {
-            "t": 1795284000,
-            "o": 59968.39,
+            "t": 1795287600,
+            "o": 60045.16,
             "h": 60392.39,
-            "l": 59961.9,
-            "c": 60347.64
+            "l": 59981.7,
+            "c": 60017.21
           },
           {
-            "t": 1795298400,
-            "o": 60338.12,
-            "h": 60339.06,
-            "l": 59861.12,
-            "c": 59980.35
+            "t": 1795302000,
+            "o": 60024.39,
+            "h": 60217.77,
+            "l": 59296.79,
+            "c": 59362.19
           },
           {
-            "t": 1795312800,
-            "o": 59992.99,
-            "h": 60051.71,
+            "t": 1795316400,
+            "o": 59352.46,
+            "h": 59534.23,
             "l": 58657.42,
-            "c": 58787.77
+            "c": 59023.8
           },
           {
-            "t": 1795327200,
-            "o": 58793.74,
+            "t": 1795330800,
+            "o": 59023.56,
             "h": 61229.37,
-            "l": 58793.74,
-            "c": 61027.03
+            "l": 58891.0,
+            "c": 60785.96
           },
           {
-            "t": 1795341600,
-            "o": 60944.53,
+            "t": 1795345200,
+            "o": 60760.87,
             "h": 61543.31,
             "l": 60358.25,
-            "c": 60491.94
+            "c": 60650.07
           }
         ],
         "1h": [
-          {
-            "t": 1795194000,
-            "o": 59407.72,
-            "h": 59504.24,
-            "l": 58816.99,
-            "c": 59095.24
-          },
           {
             "t": 1795197600,
             "o": 59061.84,
@@ -19337,7 +19330,14 @@
             "o": 60746.75,
             "h": 60848.98,
             "l": 60442.39,
-            "c": 60491.94
+            "c": 60647.02
+          },
+          {
+            "t": 1795356000,
+            "o": 60646.69,
+            "h": 60760.81,
+            "l": 60528.36,
+            "c": 60650.07
           }
         ]
       }
@@ -19380,7 +19380,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -20360,7 +20360,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
@@ -21340,7 +21340,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DÉBIL). Jerarquía (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795355340,
+      "created_at": 1795358406,
       "confluence": {
         "score": 86,
         "alignment": "ALIGNED",
