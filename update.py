@@ -1,8 +1,12 @@
 import json
+import os
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 import yfinance as yf
+
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "").strip()
+ALERTS_STATE_FILE = "alerts_sent.json"
 
 ASSETS_CONFIG = [
     {"symbol": "XAUUSD", "yf": "GC=F",       "type": "metal",  "pip": 0.1,    "decimals": 2, "base": "XAU", "quote": "USD"},
@@ -28,6 +32,41 @@ ASSETS_CONFIG = [
     {"symbol": "USTEC",  "yf": "^IXIC",      "type": "index",  "pip": 1.0,    "decimals": 2, "base": "USD", "quote": "USD"},
     {"symbol": "US500",  "yf": "^GSPC",      "type": "index",  "pip": 1.0,    "decimals": 2, "base": "USD", "quote": "USD"},
 ]
+
+def load_sent_alerts():
+    if os.path.exists(ALERTS_STATE_FILE):
+        try:
+            with open(ALERTS_STATE_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+    return {}
+
+def save_sent_alerts(state):
+    with open(ALERTS_STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump(state, f, ensure_ascii=False, indent=2)
+
+def send_mobile_push(title, body, priority="high", tags="chart_with_upwards_trend"):
+    if not NTFY_TOPIC:
+        return
+    try:
+        url = f"https://ntfy.sh/{NTFY_TOPIC}"
+        req = urllib.request.Request(
+            url,
+            data=body.encode("utf-8"),
+            headers={
+                "Title": title.encode("latin-1", "ignore").decode("latin-1"),
+                "Priority": priority,
+                "Tags": tags,
+                "Click": "https://bab9618-hash.github.io/ultra/"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            resp.read()
+        print(f"Push enviado: {title}")
+    except Exception as e:
+        print(f"Aviso push ntfy: {e}")
 
 def get_candles(ticker_str, period, interval, decimals, limit=45):
     try:
@@ -692,6 +731,49 @@ def build_correlated_baskets(assets, ccy_labels):
             })
     return baskets
 
+def dispatch_push_notifications(assets, now_ts):
+    if not NTFY_TOPIC:
+        return
+    sent_state = load_sent_alerts()
+    updated = False
+    cooldown = 6 * 3600
+
+    for a in assets:
+        sym = a["symbol"]
+        d_txt = "COMPRA" if a["setup"]["direction"] == "BUY" else "VENTA"
+        is_swing = bool(a.get("swing_potential") and a["swing_potential"].get("active"))
+        is_reentry = "RE-ENTRADA" in (a["setup"].get("signal_tag") or "").upper()
+
+        if is_swing:
+            key = f"SWING_{sym}_{a['setup']['direction']}"
+            last_t = sent_state.get(key, 0)
+            if (now_ts - last_t) > cooldown:
+                sw_tp = a["swing_potential"]["target"]
+                be_p = a["setup"].get("be_trigger", a["setup"]["entry"])
+                body = (
+                    f"{sym} ({d_txt}) · Confluencia {a['confluence']['score']}/100\n"
+                    f"Entrada OB: {a['setup']['entry']} | SL: {a['setup']['sl']}\n"
+                    f"Gatillo BE (+1R): {be_p} | TP1: {a['setup']['tp1']} | Swing TP: {sw_tp}"
+                )
+                send_mobile_push(f"POTENCIAL SWING: {sym} ({d_txt})", body, "high", "ocean,chart_with_upwards_trend")
+                sent_state[key] = now_ts
+                updated = True
+
+        if is_reentry:
+            key = f"REENTRY_{sym}_{a['setup']['direction']}"
+            last_t = sent_state.get(key, 0)
+            if (now_ts - last_t) > cooldown:
+                body = (
+                    f"{sym} ({d_txt}) confirmó re-entrada estructural.\n"
+                    f"Nuevo bloque: {a['setup']['entry']} | SL: {a['setup']['sl']} | TP1: {a['setup']['tp1']}"
+                )
+                send_mobile_push(f"RE-ENTRADA PIRAMIDE: {sym}", body, "high", "large_blue_circle,rocket")
+                sent_state[key] = now_ts
+                updated = True
+
+    if updated:
+        save_sent_alerts(sent_state)
+
 def main():
     now_utc = datetime.now(timezone.utc)
     now_ts = int(now_utc.timestamp())
@@ -727,6 +809,8 @@ def main():
     baskets = build_correlated_baskets(assets, ccy_labels)
     news = fetch_live_news()
 
+    dispatch_push_notifications(assets, now_ts)
+
     alert_ccys = sorted(high_impact_by_ccy.keys())
     news_alert_str = f" · ⚠️ Noticias fuertes hoy en: {', '.join(alert_ccys)}" if alert_ccys else ""
 
@@ -736,7 +820,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"Mesa Economía vs Gráfico, liquidez BSL/SSL, CHoCH/BOS, ATR y protocolo Pirámide Swing sobre {len(assets)} activos."
+            "summary": f"App PWA v7.8 · Mesa Economía vs Gráfico, liquidez BSL/SSL, CHoCH/BOS, ATR y notificaciones Push sobre {len(assets)} activos."
         },
         "correlated_baskets": baskets,
         "banks": banks,
@@ -748,7 +832,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados (v7.7 Mesa Economía vs Gráfico + Liquidez BSL/SSL).")
+    print(f"OK: {len(assets)} activos actualizados (v7.8 PWA + Notificaciones Push).")
 
 if __name__ == "__main__":
     main()
