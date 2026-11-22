@@ -1,7 +1,7 @@
 {
-  "name": "ORÁCULO · Cabina Neuronal",
-  "short_name": "ORÁCULO",
-  "description": "Sistema de Inteligencia Macro, Liquidez BSL/SSL y Pirámide Swing",
+  "name": "LATICCE · Cabina Neuronal",
+  "short_name": "LATICCE",
+  "description": "Red Neuronal de Inteligencia Macro, Liquidez BSL/SSL y Pirámide Swing",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#030407",
@@ -9,7 +9,7 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%23030407'/%3E%3Ccircle cx='256' cy='256' r='190' fill='none' stroke='%23f59e0b' stroke-width='28'/%3E%3Ccircle cx='256' cy='256' r='115' fill='none' stroke='%2338bdf8' stroke-width='16' stroke-dasharray='45 25'/%3E%3Ccircle cx='256' cy='256' r='42' fill='%23f59e0b'/%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%23050307'/%3E%3Ccircle cx='256' cy='256' r='195' fill='none' stroke='%23ef4444' stroke-width='18' stroke-dasharray='30 18'/%3E%3Ccircle cx='256' cy='256' r='130' fill='none' stroke='%23f97316' stroke-width='14'/%3E%3Ccircle cx='256' cy='256' r='62' fill='%23fbbf24' opacity='0.28'/%3E%3Ccircle cx='256' cy='256' r='22' fill='%23030407' stroke='%23ef4444' stroke-width='10'/%3E%3C/svg%3E",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
