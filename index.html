@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Cabina Neuronal v7.9</title>
+  <title>LATICCE · Cabina Neuronal v9.1</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -98,19 +98,16 @@
           </radialGradient>
         </defs>
 
-        <!-- Halo del túnel cósmico -->
         <circle cx="180" cy="180" r="152" fill="url(#latticeVortex)"/>
         <circle cx="180" cy="180" r="134" fill="none" stroke="#7f1d1d" stroke-width="1" stroke-dasharray="3 4"/>
         <circle cx="180" cy="180" r="95" fill="none" stroke="#9a3412" stroke-width="0.9" stroke-dasharray="2 5"/>
 
-        <!-- Entramado poligonal tipo lattice -->
         <g class="spin-slow" style="transform-origin: 180px 180px;" opacity="0.65">
           <polygon points="180,36 304,108 304,252 180,324 56,252 56,108" fill="none" stroke="#ef4444" stroke-width="1"/>
           <polygon points="180,68 277,124 277,236 180,292 83,236 83,124" fill="none" stroke="#f97316" stroke-width="1" stroke-dasharray="6 4"/>
           <circle cx="180" cy="180" r="56" fill="none" stroke="#fbbf24" stroke-width="3" stroke-dasharray="14 8 4 8" opacity="0.9"/>
         </g>
 
-        <!-- Conexiones radiales hacia los 7 nodos -->
         <g stroke="#7f1d1d" stroke-width="1.1">
           <line x1="180" y1="180" x2="180" y2="46"/><line x1="180" y1="180" x2="285" y2="96"/>
           <line x1="180" y1="180" x2="310" y2="210"/><line x1="180" y1="180" x2="238" y2="300"/>
@@ -118,12 +115,10 @@
           <line x1="180" y1="180" x2="75" y2="96"/>
         </g>
 
-        <!-- Singularidad central (agujero negro con anillo de fuego) -->
         <circle cx="180" cy="180" r="24" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.9"/>
         <circle cx="180" cy="180" r="14" fill="none" stroke="#ef4444" stroke-width="1.5"/>
         <circle cx="180" cy="180" r="7" fill="#030407" stroke="#fbbf24" stroke-width="1.5"/>
 
-        <!-- 7 Agentes Orbitales -->
         <g transform="translate(180,46)"><circle r="24" fill="#090508" stroke="#f59e0b" stroke-width="1.5"/><polygon points="0,-9 8,6 -8,6" fill="none" stroke="#f59e0b" stroke-width="1.4"/><text y="36" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">JARVIS</text></g>
         <g transform="translate(285,96)"><circle r="24" fill="#090508" stroke="#10b981" stroke-width="1.5"/><circle r="14" fill="none" stroke="#10b981" stroke-width="1"/><text y="36" text-anchor="middle" fill="#34d399" font-size="9" font-weight="bold">E.D.I.T.H.</text></g>
         <g transform="translate(310,210)"><circle r="24" fill="#090508" stroke="#a855f7" stroke-width="1.5"/><circle r="5" fill="#a855f7"/><text y="36" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="bold">F.R.I.D.A.Y.</text></g>
@@ -204,7 +199,7 @@
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
         <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
         <button type="button" onclick="startVoiceRecognition()" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
-        <input id="cockpit-input" type="text" placeholder="Pregunte sobre pares, pirámide swing, cestas o macro..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
+        <input id="cockpit-input" type="text" placeholder="Pregunte sobre pares, giros 1S, pirámide swing o macro..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
         <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ENVIAR</button>
       </form>
     </div>
@@ -215,6 +210,7 @@
     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (22)</button>
+        <button onclick="switchPanelTab('weekly1s')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-cyan-500/50 text-cyan-300 font-bold" data-pt="weekly1s">🏛️ 1S HISTÓRICO</button>
         <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
         <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 CURSO F.R.I.D.A.Y.</button>
         <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO, CESTAS & NOTICIAS</button>
@@ -223,7 +219,7 @@
       <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
     </div>
 
-    <!-- SUBPANEL JARVIS -->
+    <!-- SUBPANEL JARVIS (INTRADÍA / SWING) -->
     <section id="ptab-jarvis" class="space-y-3">
       <div id="pj-baskets-bar" class="hidden bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-3 space-y-1.5 text-xs"></div>
 
@@ -246,6 +242,18 @@
       </div>
 
       <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
+    </section>
+
+    <!-- NUEVA PESTAÑA SEPARADA: GIROS SEMANALES LIMPIOS PRE-2017 -->
+    <section id="ptab-weekly1s" class="hidden hud-panel rounded-xl p-4 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="font-hud text-sm font-bold text-cyan-300">🏛️ GIROS SEMANALES LIMPIOS HISTÓRICOS (PRE-2017)</h3>
+          <p class="text-[11px] text-slate-400 mt-0.5">Escaneo en 1S (1 vela + 1 vela única de rechazo sin acumulación) separados del gráfico intradía.</p>
+        </div>
+        <span id="weekly1s-count-badge" class="text-xs px-2.5 py-1 rounded bg-cyan-500/15 border border-cyan-400/50 text-cyan-300 font-bold">0 NIVELES CERCANOS</span>
+      </div>
+      <div id="panel-weekly1s-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
 
     <!-- SUBPANEL ULTRÓN -->
@@ -280,7 +288,6 @@
         <canvas id="ultron-canvas" class="w-full h-[360px] block"></canvas>
       </div>
 
-      <!-- TELEMETRÍA MULTI-TEMPORALIDAD Y VOLATILIDAD (1S / 1D / 4H + ATR + RANGO 20D) -->
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
         <div class="bg-[#050811] border border-slate-800 rounded p-2">
           <div class="text-[9px] text-slate-400">SEMANAL (1S)</div>
@@ -326,7 +333,7 @@
           <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-emerald-400">TP2 / SWING TP</div>
+          <div id="pu-tp2-lbl" class="text-[10px] text-emerald-400">TP2 / SWING TP</div>
           <div id="pu-tp2" class="font-bold text-emerald-400 text-sm">--</div>
           <div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
@@ -426,9 +433,7 @@
       <button onclick="selectAgent('homer')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="homer"><span class="text-sm">📊</span><span class="text-[10px] font-bold">H.O.M.E.R.</span></button>
     </div>
   </nav>
-
   <script>
-    // Animación de Red Neuronal Roja/Dorada para la pantalla de inicio LATICCE
     (function initLatticeBootCanvas() {
       const c = document.getElementById('lattice-boot-canvas');
       if (!c) return;
@@ -464,7 +469,6 @@
         ctx.clearRect(0, 0, w, h);
         const cx = w / 2, cy = h / 2;
 
-        // Resplandor radial rojo profundo
         const bgGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, Math.max(w, h) * 0.65);
         bgGrad.addColorStop(0, 'rgba(251, 146, 60, 0.26)');
         bgGrad.addColorStop(0.32, 'rgba(220, 38, 38, 0.16)');
@@ -473,7 +477,6 @@
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, w, h);
 
-        // Estrellas / partículas cósmicas
         stars.forEach(s => {
           ctx.fillStyle = `rgba(254, 215, 170, ${s.a})`;
           ctx.beginPath();
@@ -481,14 +484,12 @@
           ctx.fill();
         });
 
-        // Actualizar posiciones de nodos de la red Lattice
         nodes.forEach(n => {
           n.baseAngle += n.speed;
           n.x = cx + Math.cos(n.baseAngle) * n.dist;
           n.y = cy + Math.sin(n.baseAngle) * n.dist;
         });
 
-        // Conectar nodos cercanos formando malla neuronal roja
         for (let i = 0; i < nodes.length; i++) {
           for (let j = i + 1; j < nodes.length; j++) {
             const dx = nodes[i].x - nodes[j].x;
@@ -505,7 +506,6 @@
           }
         }
 
-        // Dibujar esferas nodales rojas con halo brillante
         nodes.forEach(n => {
           const glow = ctx.createRadialGradient(n.x, n.y, 0.5, n.x, n.y, n.r * 3.5);
           glow.addColorStop(0, 'rgba(252, 165, 165, 0.95)');
@@ -589,7 +589,7 @@
         localStorage.setItem('oraculo_gemini_key', geminiApiKey);
         updateAiBrainButton();
         typeAgentDialogue(geminiApiKey
-          ? 'Cerebro neuronal Gemini conectado a Laticce, señor. Ahora puede preguntarme cualquier duda sobre piramidación Swing, liquidez BSL/SSL, cestas o macroeconomía.'
+          ? 'Cerebro neuronal Gemini conectado a Laticce, señor. Ahora puede preguntarme cualquier duda sobre giros semanales 1S, piramidación Swing, liquidez BSL/SSL o macroeconomía.'
           : 'Clave eliminada. Operando con el motor analítico local inteligente de Laticce, señor.');
       }
     }
@@ -655,6 +655,12 @@
                 if (a.price < lastC.l) lastC.l = a.price;
               }
             });
+            if (Array.isArray(a.weekly_pivots)) {
+              a.weekly_pivots.forEach(wp => {
+                wp.price = a.price;
+                wp.dist_units = a.pip ? Math.round((Math.abs(a.price - wp.entry) / a.pip) * 10) / 10 : Math.abs(a.price - wp.entry);
+              });
+            }
             updatedAny = true;
           }
         } catch (e) {}
@@ -666,6 +672,7 @@
         updateTickerBar();
         if (isPanelMode) {
           renderPanelJarvis();
+          renderPanelWeekly1S();
           renderPanelUltron();
         } else if (currentAgent === 'edith') {
           const n = getNearestAsset();
@@ -1075,6 +1082,13 @@
     function getBrokenTheses() { return (data && data.assets) ? data.assets.filter(a => a.confluence && a.confluence.alignment === 'OPPOSED') : []; }
     function getAlignedAssets() { return (data && data.assets) ? data.assets.filter(a => a.confluence && a.confluence.alignment === 'ALIGNED') : []; }
     function getSwingAssets() { return (data && data.assets) ? data.assets.filter(a => a.swing_potential && a.swing_potential.active) : []; }
+    function getWeeklyPivotsList() {
+      if (!data) return [];
+      if (Array.isArray(data.weekly_pivots)) return data.weekly_pivots;
+      const out = [];
+      (data.assets || []).forEach(a => { if (Array.isArray(a.weekly_pivots)) out.push(...a.weekly_pivots); });
+      return out.sort((a, b) => a.dist_units - b.dist_units);
+    }
     function getNearestAsset() {
       if (!data || !data.assets || !data.assets.length) return null;
       return [...data.assets].sort((a, b) => (Math.abs(a.price - a.setup.entry) / a.price) - (Math.abs(b.price - b.setup.entry) / b.price))[0];
@@ -1100,6 +1114,7 @@
     function buildCompactMarketSnapshot() {
       if (!data || !data.assets) return 'Sin datos.';
       const basketsStr = (data.correlated_baskets || []).map(b => `${b.currency}_${b.status}:[${b.pairs.join(',')}]`).join(' ');
+      const wpStr = getWeeklyPivotsList().slice(0, 6).map(w => `${w.symbol}(${w.direction} en ${w.entry}, fecha ${w.date}, a ${w.dist_units}${w.unit_label})`).join(' ');
       const rows = data.assets.map(a => {
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
@@ -1108,7 +1123,7 @@
         const nw = (a.news_warning && a.news_warning.active) ? `|NOTICIA:${a.news_warning.currencies}` : '';
         return `${a.symbol}:${a.setup.direction}(${a.confluence.score}pts)|Econ:${a.macro_dir||'-'}|Graf:${a.chart_bias}|P=${a.price}|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}${sw}${nw}`;
       }).join('\n');
-      return `Macro:${data.brief.headline} | Cestas:${basketsStr}\n${rows}`;
+      return `Macro:${data.brief.headline} | Cestas:${basketsStr} | Giros1S:${wpStr}\n${rows}`;
     }
 
     async function askGeminiBrain(userQuestion, agentKey) {
@@ -1160,8 +1175,15 @@
         const econTxt = asset.economy_short || asset.macro_dir || 'NEUTRAL';
         const sw = (asset.swing_potential && asset.swing_potential.active)
           ? ` Protocolo Pirámide Swing activo: divide tu entrada base en ${asset.setup.entry} (SL ${asset.setup.sl}); al tocar ${be} (+1R) o TP1 (${asset.setup.tp1}), cobra parciales y sube el Stop Loss a ${asset.setup.entry} (Break Even); solo con la base protegida añade la 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP ${asset.swing_potential.target}.`
-          : ` Entrada en ${asset.setup.entry} con Stop en ${asset.setup.sl} (${p.sl} ${p.unitLabel}), parciales en TP1 (${asset.setup.tp1}) y Break Even en ${be}.`;
+          : ` Entrada intradía en ${asset.setup.entry} con Stop en ${asset.setup.sl} (${p.sl} ${p.unitLabel}), parciales en TP1 (${asset.setup.tp1}) y Break Even en ${be}.`;
         return `${asset.symbol} cotiza en ${asset.price}. Mesa cara a cara: Economía (${econTxt}) vs Gráfico (${asset.chart_bias}) con confluencia ${asset.confluence.score}/100 (${asset.confluence.verdict_title}), a ${d.units} ${d.label} del bloque.${sw}`;
+      }
+
+      if (q.includes('SEMANAL') || q.includes('1S') || q.includes('HISTORICO') || q.includes('HISTÓRICO') || q.includes('2017')) {
+        const wList = getWeeklyPivotsList().slice(0, 4);
+        if (!wList.length) return 'No hay giros semanales limpios pre-2017 a menos de 3.5% del precio actual en este momento, señor.';
+        const desc = wList.map(w => `${w.symbol} (${w.direction === 'BUY' ? 'Compra' : 'Venta'} en ${w.entry}, fecha ${w.date}, a ${w.dist_units} ${w.unit_label})`).join('; ');
+        return `Giros semanales limpios históricos (pre-2017) más cercanos ahora mismo: ${desc}. Puede revisarlos todos en la pestaña 1S HISTÓRICO del panel.`;
       }
 
       if (q.includes('RECOMIENDA') || q.includes('PARE') || q.includes('MEJOR') || q.includes('OPERAR') || q.includes('OPORTUNIDAD') || q.includes('SWING') || q.includes('CESTA')) {
@@ -1280,6 +1302,7 @@
       const broken = getBrokenTheses();
       const aligned = getAlignedAssets();
       const swings = getSwingAssets();
+      const weeklyCount = getWeeklyPivotsList().length;
       const nearest = getNearestAsset();
       const homer = getHomerMetrics();
       const totalCount = data ? data.assets.length : 22;
@@ -1298,10 +1321,9 @@
 
       if (key === 'jarvis') {
         const newsPairsCount = data ? data.assets.filter(a => a.news_warning && a.news_warning.active).length : 0;
-        const basketsCount = (data && data.correlated_baskets) ? data.correlated_baskets.length : 0;
-        document.getElementById('agent-hero-metric').textContent = `${swings.length} SWING · ${basketsCount} CESTAS`;
+        document.getElementById('agent-hero-metric').textContent = `${swings.length} SWING · ${weeklyCount} 1S`;
         document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${newsPairsCount} NOTICIAS · ${broken.length} ALERTAS`;
-        typeAgentDialogue(`A sus órdenes, señor. Red Laticce activa: he auditado los ${totalCount} activos comparando Economía frente a Gráfico y tenemos ${swings.length} pares con Potencial Swing listos para gestión de parciales y pirámide. ¿Desea el reporte?`);
+        typeAgentDialogue(`A sus órdenes, señor. Red Laticce activa: tenemos ${swings.length} pares con Potencial Swing intradía y ${weeklyCount} niveles de Giros Semanales Limpios pre-2017 listos en su pestaña 1S HISTÓRICO. ¿Desea el reporte?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & CESTAS';
@@ -1381,13 +1403,14 @@
     }
 
     function switchPanelTab(tab) {
-      ['jarvis', 'ultron', 'friday', 'vision', 'karen'].forEach(t => {
+      ['jarvis', 'weekly1s', 'ultron', 'friday', 'vision', 'karen'].forEach(t => {
         const el = document.getElementById(`ptab-${t}`);
         if (el) el.classList.toggle('hidden', t !== tab);
       });
       document.querySelectorAll('.ptab').forEach(b => {
         b.className = b.dataset.pt === tab ? 'ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold' : 'ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
       });
+      if (tab === 'weekly1s') renderPanelWeekly1S();
       if (tab === 'ultron') setTimeout(drawUltronChart, 60);
       if (tab === 'friday') renderPanelCourse();
       if (tab === 'karen') {
@@ -1452,10 +1475,63 @@
       renderPanelUltron();
     }
 
+    function renderPanelWeekly1S() {
+      const grid = document.getElementById('panel-weekly1s-grid');
+      const badge = document.getElementById('weekly1s-count-badge');
+      if (!grid) return;
+      const list = getWeeklyPivotsList();
+      if (badge) badge.textContent = `${list.length} NIVELES CERCANOS`;
+
+      if (!list.length) {
+        grid.innerHTML = `<div class="col-span-full bg-[#050811] border border-slate-800 rounded-xl p-6 text-center text-xs text-slate-400">Ningún par se encuentra actualmente dentro del rango cercano (<= 3.5%) de un giro semanal limpio pre-2017. Cuando uno se aproxime, aparecerá aquí y sonará tu alarma.</div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(w => {
+        const isBuy = w.direction === 'BUY';
+        const isAlarmZone = (w.symbol === 'XAUUSD' || w.type === 'metal') ? w.dist_units <= 40 : (w.type === 'forex' ? w.dist_units <= 25 : true);
+        return `
+          <div class="bg-[#050811] border ${isAlarmZone ? 'border-cyan-400' : 'border-slate-800'} rounded-xl p-3.5 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="font-hud font-bold text-white text-sm">${w.symbol}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isBuy ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50' : 'bg-red-500/20 text-red-300 border border-red-500/50'}">${isBuy ? 'COMPRA 1S ▲' : 'VENTA 1S ▼'}</span>
+                ${isAlarmZone ? '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400 text-[9px] font-bold">🔔 ZONA ALARMA</span>' : ''}
+              </div>
+              <span class="text-[11px] font-bold text-cyan-300">📅 ${w.date}</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 bg-[#030509] border border-slate-800/80 rounded-lg p-2 text-center">
+              <div>
+                <div class="text-[9px] text-slate-400">NIVEL ENTRADA 1S</div>
+                <div class="font-bold text-white text-xs mt-0.5">${w.entry}</div>
+              </div>
+              <div>
+                <div class="text-[9px] text-slate-400">EXTREMO MECHA 1S</div>
+                <div class="font-bold text-amber-300 text-xs mt-0.5">${w.extreme}</div>
+              </div>
+              <div>
+                <div class="text-[9px] text-slate-400">DISTANCIA ACTUAL</div>
+                <div class="font-bold text-cyan-300 text-xs mt-0.5">a ${w.dist_units} ${w.unit_label}</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-[10px]">
+              <span class="${w.macro_aligned ? 'text-emerald-400 font-bold' : 'text-slate-400'}">
+                ${w.macro_aligned ? '✔ Economía respalda este giro' : `ℹ️ Economía hoy: ${w.economy_short}`}
+              </span>
+              <span class="text-slate-400">Precio hoy: <strong class="text-white">${w.price}</strong></span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function renderPanelAll() {
       renderTrades();
       if (!data) return;
       renderPanelJarvis();
+      renderPanelWeekly1S();
       renderPanelUltron();
       renderPanelCourse();
 
@@ -1580,7 +1656,6 @@
               <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400 shrink-0">Gráfico →</button>
             </div>
 
-            <!-- MESA CARA A CARA: ECONOMÍA VS SU GRÁFICO -->
             <div class="grid grid-cols-2 gap-2 text-[10px]">
               <div class="rounded-lg border p-2 ${econColor}">
                 <div class="text-[8px] tracking-widest opacity-80">🌐 ECONOMÍA</div>
