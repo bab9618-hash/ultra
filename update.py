@@ -754,8 +754,8 @@ def dispatch_push_notifications(assets, now_ts):
         pct_dist = abs(price - entry) / max(1e-9, price)
         right_side = (price >= sl and price < tp1) if direction == "BUY" else (price <= sl and price > tp1)
 
-        # Umbral exacto tipo alarma TradingView:
-        # - Divisas (forex): <= 25 pips (cubre ventana 15-25 pips y más cerca)
+        # Alarma tipo TradingView:
+        # - Divisas (forex): <= 25 pips (cubre 15-25 pips y más cerca)
         # - XAUUSD (metal): <= 40 pips
         # - Índices / Cripto: <= 0.15%
         if sym == "XAUUSD" or a_type == "metal":
@@ -769,9 +769,6 @@ def dispatch_push_notifications(assets, now_ts):
             u_lbl = "pts"
 
         if is_aligned and right_side and in_trigger_zone:
-            # Clave vinculada al precio exacto del Order Block:
-            # Solo avisa UNA vez para este punto de entrada (sin límite horario).
-            # Si luego nace un punto de entrada nuevo en este par, se dispara de nuevo.
             entry_key = f"ALARM_{sym}_{direction}_{entry}"
             if entry_key not in sent_state:
                 be_p = a["setup"].get("be_trigger", entry)
@@ -792,7 +789,6 @@ def dispatch_push_notifications(assets, now_ts):
                 updated = True
 
     if updated:
-        # Conservar las últimas 150 alarmas registradas para mantener limpio el archivo
         if len(sent_state) > 150:
             sorted_items = sorted(sent_state.items(), key=lambda x: x[1])[-150:]
             sent_state = dict(sorted_items)
