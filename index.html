@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORÁCULO · Cabina v7.8 PWA + MESA SWING + LIQUIDEZ BSL/SSL</title>
+  <title>LATICCE · Cabina Neuronal v7.9</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -26,7 +26,7 @@
     }
   </script>
   <style>
-    :root { --agent-color: #f59e0b; }
+    :root { --agent-color: #ef4444; }
     body {
       background-color: #030407;
       color: #e2e8f0;
@@ -53,10 +53,10 @@
     @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     @keyframes blinkCursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
     @keyframes bootAutoFade {
-      0%, 82% { opacity: 1; visibility: visible; pointer-events: auto; }
+      0%, 84% { opacity: 1; visibility: visible; pointer-events: auto; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
     }
-    #boot-screen { animation: bootAutoFade 2.5s ease-out forwards; }
+    #boot-screen { animation: bootAutoFade 3.0s ease-out forwards; }
     .spin-slow { animation: spinSlow 24s linear infinite; }
     .spin-med { animation: spinSlow 14s linear infinite; }
     .spin-rev { animation: spinRev 18s linear infinite; }
@@ -76,52 +76,69 @@
     .hud-brackets::after { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-32 antialiased selection:bg-amber-400 selection:text-black">
+<body class="min-h-screen flex flex-col pb-32 antialiased selection:bg-red-500 selection:text-white">
 
   <canvas id="neural-bg"></canvas>
 
-  <!-- PANTALLA DE ARRANQUE ORBITAL DE 7 AGENTES -->
-  <div id="boot-screen" onclick="this.style.display='none'; if(window.enterOraculo) enterOraculo(true);" ontouchstart="this.style.display='none'; if(window.enterOraculo) enterOraculo(true);" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2rem 1.25rem;text-align:center;cursor:pointer;touch-action:manipulation;">
-    <div class="text-[10px] font-mono tracking-[0.35em] text-slate-500">TELEMETRÍA NEURONAL EN LÍNEA</div>
-    <div class="relative w-[290px] h-[290px] sm:w-[340px] sm:h-[340px] flex items-center justify-center my-auto pointer-events-none">
+  <!-- PANTALLA DE ARRANQUE RED NEURONAL LATICCE -->
+  <div id="boot-screen" onclick="this.style.display='none'; if(window.enterLaticce) enterLaticce(true);" ontouchstart="this.style.display='none'; if(window.enterLaticce) enterLaticce(true);" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2rem 1.25rem;text-align:center;cursor:pointer;touch-action:manipulation;overflow:hidden;">
+    <canvas id="lattice-boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+
+    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-red-200/80">RED NEURONAL EN LÍNEA</div>
+
+    <div class="relative z-10 w-[305px] h-[305px] sm:w-[355px] sm:h-[355px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 360 360" class="w-full h-full overflow-visible">
         <defs>
-          <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.35"/>
-            <stop offset="60%" stop-color="#38bdf8" stop-opacity="0.12"/>
+          <radialGradient id="latticeVortex" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#030407" stop-opacity="1"/>
+            <stop offset="14%" stop-color="#fbbf24" stop-opacity="0.88"/>
+            <stop offset="34%" stop-color="#f97316" stop-opacity="0.52"/>
+            <stop offset="65%" stop-color="#dc2626" stop-opacity="0.22"/>
             <stop offset="100%" stop-color="#030407" stop-opacity="0"/>
           </radialGradient>
         </defs>
-        <circle cx="180" cy="180" r="134" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="3 4"/>
-        <circle cx="180" cy="180" r="95" fill="none" stroke="#334155" stroke-width="0.8" stroke-dasharray="1 5"/>
-        <circle cx="180" cy="180" r="64" fill="url(#coreGrad)"/>
-        <g class="spin-slow" style="transform-origin: 180px 180px;">
-          <circle cx="180" cy="180" r="54" fill="none" stroke="#f59e0b" stroke-width="4" stroke-dasharray="16 8 6 8 24 10" opacity="0.85"/>
-          <circle cx="180" cy="180" r="44" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="28 14" opacity="0.7"/>
+
+        <!-- Halo del túnel cósmico -->
+        <circle cx="180" cy="180" r="152" fill="url(#latticeVortex)"/>
+        <circle cx="180" cy="180" r="134" fill="none" stroke="#7f1d1d" stroke-width="1" stroke-dasharray="3 4"/>
+        <circle cx="180" cy="180" r="95" fill="none" stroke="#9a3412" stroke-width="0.9" stroke-dasharray="2 5"/>
+
+        <!-- Entramado poligonal tipo lattice -->
+        <g class="spin-slow" style="transform-origin: 180px 180px;" opacity="0.65">
+          <polygon points="180,36 304,108 304,252 180,324 56,252 56,108" fill="none" stroke="#ef4444" stroke-width="1"/>
+          <polygon points="180,68 277,124 277,236 180,292 83,236 83,124" fill="none" stroke="#f97316" stroke-width="1" stroke-dasharray="6 4"/>
+          <circle cx="180" cy="180" r="56" fill="none" stroke="#fbbf24" stroke-width="3" stroke-dasharray="14 8 4 8" opacity="0.9"/>
         </g>
-        <g stroke="#1e293b" stroke-width="1">
+
+        <!-- Conexiones radiales hacia los 7 nodos -->
+        <g stroke="#7f1d1d" stroke-width="1.1">
           <line x1="180" y1="180" x2="180" y2="46"/><line x1="180" y1="180" x2="285" y2="96"/>
           <line x1="180" y1="180" x2="310" y2="210"/><line x1="180" y1="180" x2="238" y2="300"/>
           <line x1="180" y1="180" x2="122" y2="300"/><line x1="180" y1="180" x2="50" y2="210"/>
           <line x1="180" y1="180" x2="75" y2="96"/>
         </g>
-        <circle cx="180" cy="180" r="26" fill="#060911" stroke="#f59e0b" stroke-width="1.5"/>
-        <line x1="158" y1="180" x2="202" y2="180" stroke="#38bdf8" stroke-width="1.5"/>
-        <circle cx="180" cy="180" r="6" fill="#f59e0b"/>
-        <g transform="translate(180,46)"><circle r="24" fill="#070a12" stroke="#f59e0b" stroke-width="1.5"/><polygon points="0,-9 8,6 -8,6" fill="none" stroke="#f59e0b" stroke-width="1.4"/><text y="36" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="bold">JARVIS</text></g>
-        <g transform="translate(285,96)"><circle r="24" fill="#070a12" stroke="#10b981" stroke-width="1.5"/><circle r="14" fill="none" stroke="#10b981" stroke-width="1"/><text y="36" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold">E.D.I.T.H.</text></g>
-        <g transform="translate(310,210)"><circle r="24" fill="#070a12" stroke="#a855f7" stroke-width="1.5"/><circle r="5" fill="#a855f7"/><text y="36" text-anchor="middle" fill="#a855f7" font-size="9" font-weight="bold">F.R.I.D.A.Y.</text></g>
-        <g transform="translate(238,300)"><circle r="24" fill="#070a12" stroke="#84cc16" stroke-width="1.5"/><rect x="-2" y="-4" width="4" height="14" fill="#84cc16"/><text y="36" text-anchor="middle" fill="#84cc16" font-size="9" font-weight="bold">H.O.M.E.R.</text></g>
-        <g transform="translate(122,300)"><circle r="24" fill="#070a12" stroke="#ef4444" stroke-width="1.5"/><circle r="4" fill="#ef4444"/><text y="36" text-anchor="middle" fill="#ef4444" font-size="9" font-weight="bold">ULTRÓN</text></g>
-        <g transform="translate(50,210)"><circle r="24" fill="#070a12" stroke="#f43f5e" stroke-width="1.5"/><circle r="4" fill="#f43f5e"/><text y="36" text-anchor="middle" fill="#f43f5e" font-size="9" font-weight="bold">KAREN</text></g>
-        <g transform="translate(75,96)"><circle r="24" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/><circle r="3" fill="#38bdf8"/><text y="36" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold">VISIÓN</text></g>
+
+        <!-- Singularidad central (agujero negro con anillo de fuego) -->
+        <circle cx="180" cy="180" r="24" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.9"/>
+        <circle cx="180" cy="180" r="14" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+        <circle cx="180" cy="180" r="7" fill="#030407" stroke="#fbbf24" stroke-width="1.5"/>
+
+        <!-- 7 Agentes Orbitales -->
+        <g transform="translate(180,46)"><circle r="24" fill="#090508" stroke="#f59e0b" stroke-width="1.5"/><polygon points="0,-9 8,6 -8,6" fill="none" stroke="#f59e0b" stroke-width="1.4"/><text y="36" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">JARVIS</text></g>
+        <g transform="translate(285,96)"><circle r="24" fill="#090508" stroke="#10b981" stroke-width="1.5"/><circle r="14" fill="none" stroke="#10b981" stroke-width="1"/><text y="36" text-anchor="middle" fill="#34d399" font-size="9" font-weight="bold">E.D.I.T.H.</text></g>
+        <g transform="translate(310,210)"><circle r="24" fill="#090508" stroke="#a855f7" stroke-width="1.5"/><circle r="5" fill="#a855f7"/><text y="36" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="bold">F.R.I.D.A.Y.</text></g>
+        <g transform="translate(238,300)"><circle r="24" fill="#090508" stroke="#84cc16" stroke-width="1.5"/><rect x="-2" y="-4" width="4" height="14" fill="#84cc16"/><text y="36" text-anchor="middle" fill="#a3e635" font-size="9" font-weight="bold">H.O.M.E.R.</text></g>
+        <g transform="translate(122,300)"><circle r="24" fill="#090508" stroke="#ef4444" stroke-width="1.5"/><circle r="4" fill="#ef4444"/><text y="36" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">ULTRÓN</text></g>
+        <g transform="translate(50,210)"><circle r="24" fill="#090508" stroke="#f43f5e" stroke-width="1.5"/><circle r="4" fill="#f43f5e"/><text y="36" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="bold">KAREN</text></g>
+        <g transform="translate(75,96)"><circle r="24" fill="#090508" stroke="#38bdf8" stroke-width="1.5"/><circle r="3" fill="#38bdf8"/><text y="36" text-anchor="middle" fill="#7dd3fc" font-size="9" font-weight="bold">VISIÓN</text></g>
       </svg>
     </div>
-    <div class="space-y-2 max-w-md w-full">
-      <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-amber-400">ORÁCULO</h1>
-      <div class="text-[11px] font-mono tracking-[0.28em] text-slate-300">LO QUE USTED NO SABE</div>
+
+    <div class="relative z-10 space-y-2 max-w-md w-full">
+      <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-amber-300 to-red-400 drop-shadow">LATICCE</h1>
+      <div class="text-[11px] font-mono tracking-[0.28em] text-red-200/80">LO QUE USTED NO SABE</div>
       <div class="pt-2">
-        <button type="button" onclick="document.getElementById('boot-screen').style.display='none'; if(window.enterOraculo) enterOraculo(true);" style="padding:10px 24px;border-radius:8px;border:1px solid #fbbf24;background:rgba(245,158,11,0.2);color:#fcd34d;font-weight:bold;font-size:12px;letter-spacing:0.2em;">
+        <button type="button" onclick="document.getElementById('boot-screen').style.display='none'; if(window.enterLaticce) enterLaticce(true);" style="padding:10px 24px;border-radius:8px;border:1px solid #ef4444;background:rgba(239,68,68,0.22);color:#fecaca;font-weight:bold;font-size:12px;letter-spacing:0.2em;box-shadow:0 0 18px rgba(239,68,68,0.3);">
           ENTRAR A LA CABINA ▸
         </button>
       </div>
@@ -145,10 +162,10 @@
     </div>
     <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
-        <button onclick="showBoot()" title="Pantalla Orbital" class="w-8 h-8 rounded border border-amber-500/50 bg-amber-500/10 flex items-center justify-center font-hud font-black text-amber-400 text-xs">O</button>
+        <button onclick="showBoot()" title="Pantalla Red Neuronal" class="w-8 h-8 rounded border border-red-500/60 bg-red-500/15 flex items-center justify-center font-hud font-black text-red-400 text-xs">L</button>
         <div class="text-[10px] font-mono">
           <div class="flex items-center gap-1.5">
-            <span class="font-hud font-bold text-white tracking-widest">ORÁCULO</span>
+            <span class="font-hud font-bold text-white tracking-widest">LATICCE</span>
             <span id="killzone-badge" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">UTC --:--</span>
           </div>
           <div class="flex flex-wrap items-center gap-2 text-[9px]">
@@ -161,7 +178,7 @@
         <button onclick="configureGeminiApiKey()" id="ai-brain-btn" title="Conectar Cerebro IA Real (Gemini API)" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 hover:border-purple-400 text-[10px] font-bold">🧠 IA</button>
         <button onclick="cycleAgentVoice()" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-cyan-300 hover:border-cyan-400 text-[10px]">🎙️ TIMBRE</button>
         <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400 text-[10px]">VOZ ON</button>
-        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-2.5 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold text-[10px]">PANEL ▸</button>
+        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-2.5 py-1 rounded border border-red-500/70 bg-red-500/15 text-red-300 hover:bg-red-500/25 font-bold text-[10px]">PANEL ▸</button>
       </div>
     </div>
   </header>
@@ -181,7 +198,7 @@
 
     <div class="space-y-2.5 bg-[#04060c]/85 p-3 rounded-xl border border-slate-800/80">
       <div id="agent-dialogue-box" class="min-h-[82px] max-h-[210px] overflow-y-auto pr-1 text-xs sm:text-sm font-mono text-slate-200 leading-relaxed whitespace-pre-line">
-        A sus órdenes, señor. Sincronizando telemetría del mercado.<span class="typing-cursor"></span>
+        A sus órdenes, señor. Sincronizando red neuronal Laticce.<span class="typing-cursor"></span>
       </div>
       <div id="quick-replies" class="flex flex-wrap gap-2"></div>
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
@@ -309,7 +326,7 @@
           <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div id="pu-tp2-lbl" class="text-[10px] text-emerald-400">TP2 / SWING TP</div>
+          <div class="text-[10px] text-emerald-400">TP2 / SWING TP</div>
           <div id="pu-tp2" class="font-bold text-emerald-400 text-sm">--</div>
           <div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
@@ -411,6 +428,100 @@
   </nav>
 
   <script>
+    // Animación de Red Neuronal Roja/Dorada para la pantalla de inicio LATICCE
+    (function initLatticeBootCanvas() {
+      const c = document.getElementById('lattice-boot-canvas');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      let w, h, nodes = [], stars = [];
+      function resize() {
+        w = c.width = window.innerWidth;
+        h = c.height = window.innerHeight;
+        const cx = w / 2, cy = h / 2;
+        stars = Array.from({ length: 160 }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.4 + 0.3,
+          a: Math.random() * 0.7 + 0.2
+        }));
+        nodes = Array.from({ length: 34 }, (_, i) => {
+          const angle = (i / 34) * Math.PI * 2 + Math.random() * 0.4;
+          const dist = 60 + Math.random() * Math.max(w, h) * 0.55;
+          return {
+            baseAngle: angle,
+            dist: dist,
+            speed: (Math.random() * 0.002 + 0.0008) * (i % 2 === 0 ? 1 : -1),
+            r: dist > 190 ? (Math.random() * 3.5 + 2.5) : (Math.random() * 2 + 1.2),
+            x: cx + Math.cos(angle) * dist,
+            y: cy + Math.sin(angle) * dist
+          };
+        });
+      }
+      window.addEventListener('resize', resize);
+      resize();
+      function loop() {
+        if (!document.getElementById('boot-screen')) return;
+        ctx.clearRect(0, 0, w, h);
+        const cx = w / 2, cy = h / 2;
+
+        // Resplandor radial rojo profundo
+        const bgGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, Math.max(w, h) * 0.65);
+        bgGrad.addColorStop(0, 'rgba(251, 146, 60, 0.26)');
+        bgGrad.addColorStop(0.32, 'rgba(220, 38, 38, 0.16)');
+        bgGrad.addColorStop(0.75, 'rgba(69, 10, 10, 0.08)');
+        bgGrad.addColorStop(1, 'rgba(3, 4, 7, 0)');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Estrellas / partículas cósmicas
+        stars.forEach(s => {
+          ctx.fillStyle = `rgba(254, 215, 170, ${s.a})`;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Actualizar posiciones de nodos de la red Lattice
+        nodes.forEach(n => {
+          n.baseAngle += n.speed;
+          n.x = cx + Math.cos(n.baseAngle) * n.dist;
+          n.y = cy + Math.sin(n.baseAngle) * n.dist;
+        });
+
+        // Conectar nodos cercanos formando malla neuronal roja
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const d = Math.hypot(dx, dy);
+            if (d < 165) {
+              ctx.strokeStyle = `rgba(239, 68, 68, ${(1 - d / 165) * 0.42})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Dibujar esferas nodales rojas con halo brillante
+        nodes.forEach(n => {
+          const glow = ctx.createRadialGradient(n.x, n.y, 0.5, n.x, n.y, n.r * 3.5);
+          glow.addColorStop(0, 'rgba(252, 165, 165, 0.95)');
+          glow.addColorStop(0.4, 'rgba(239, 68, 68, 0.65)');
+          glow.addColorStop(1, 'rgba(239, 68, 68, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r * 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+
     (function initBg() {
       const c = document.getElementById('neural-bg');
       if (!c) return;
@@ -428,7 +539,7 @@
           d.x += d.vx; d.y += d.vy;
           if (d.x < 0 || d.x > w) d.vx *= -1;
           if (d.y < 0 || d.y > h) d.vy *= -1;
-          ctx.fillStyle = 'rgba(148, 163, 184, 0.25)';
+          ctx.fillStyle = 'rgba(248, 113, 113, 0.22)';
           ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
         });
         requestAnimationFrame(loop);
@@ -472,14 +583,14 @@
     updateAiBrainButton();
 
     function configureGeminiApiKey() {
-      const k = prompt('Pega tu clave gratuita de Google AI Studio (AIzaSy...) para activar el cerebro IA completo de Jarvis y los 7 agentes (déjalo vacío para usar el motor analítico local):', geminiApiKey);
+      const k = prompt('Pega tu clave gratuita de Google AI Studio (AIzaSy...) para activar el cerebro IA completo de Laticce (déjalo vacío para usar el motor analítico local):', geminiApiKey);
       if (k !== null) {
         geminiApiKey = k.trim();
         localStorage.setItem('oraculo_gemini_key', geminiApiKey);
         updateAiBrainButton();
         typeAgentDialogue(geminiApiKey
-          ? 'Cerebro neuronal Gemini conectado, señor. Ahora puede preguntarme cualquier duda sobre piramidación Swing, liquidez BSL/SSL, cestas o macroeconomía.'
-          : 'Clave eliminada. Operando con el motor analítico local inteligente, señor.');
+          ? 'Cerebro neuronal Gemini conectado a Laticce, señor. Ahora puede preguntarme cualquier duda sobre piramidación Swing, liquidez BSL/SSL, cestas o macroeconomía.'
+          : 'Clave eliminada. Operando con el motor analítico local inteligente de Laticce, señor.');
       }
     }
 
@@ -742,13 +853,13 @@
     ];
 
     const AGENTS = {
-      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Oráculo. Hablas con elegancia británica ("señor") y precisión institucional. No des consejos de lotaje; enfócate en la mesa Economía vs Gráfico, niveles de precio, Break Even y parciales.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
-      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, analista macroeconómico de Oráculo sobre bancos centrales, DXY, bonos US10Y y cestas correlacionadas de divisas.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
+      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Laticce. Hablas con elegancia británica ("señor") y precisión institucional. No des consejos de lotaje; enfócate en la mesa Economía vs Gráfico, niveles de precio, Break Even y parciales.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
+      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, analista macroeconómico de Laticce sobre bancos centrales, DXY, bonos US10Y y cestas correlacionadas de divisas.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
       ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez BSL/SSL, Order Blocks, CHoCH/BOS, ATR y trailing estructural en 4H.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
-      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., instructora de trading institucional. Llamas "jefe" al usuario.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
-      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora táctica de ejecución en Oráculo. No calculas lotaje; indicas precios exactos de entrada, Stop Loss inicial, gatillo Break Even (+1R), cobro de parciales en TP1 y zonas de re-entrada en pirámide.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
-      karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, psicóloga de trading y auditora emocional.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
-      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', personaPrompt: 'Eres H.O.M.E.R., estadístico veterano e irónico de Oráculo.', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
+      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., instructora de trading institucional en Laticce. Llamas "jefe" al usuario.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
+      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora táctica de ejecución en Laticce. No calculas lotaje; indicas precios exactos de entrada, Stop Loss inicial, gatillo Break Even (+1R), cobro de parciales en TP1 y zonas de re-entrada en pirámide.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
+      karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, psicóloga de trading y auditora emocional de Laticce.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
+      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', personaPrompt: 'Eres H.O.M.E.R., estadístico veterano e irónico de Laticce.', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
     };
 
     let cachedEsVoices = [];
@@ -917,7 +1028,7 @@
       document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
       renderPanelCourse();
       if (completedLessons.length >= COURSE_LESSONS.length) {
-        typeAgentDialogue(`¡Felicidades, jefe! Ha completado el cien por ciento del entrenamiento institucional de Oráculo.`);
+        typeAgentDialogue(`¡Felicidades, jefe! Ha completado el cien por ciento del entrenamiento institucional de Laticce.`);
         renderFridayButtons(lesson, true);
       } else {
         const nextIdx = getNextPendingLessonIndex();
@@ -1002,7 +1113,7 @@
 
     async function askGeminiBrain(userQuestion, agentKey) {
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
-      const promptText = `${ag.personaPrompt} Responde en español, claro y completo (3 a 6 oraciones) usando estos datos en vivo de Oráculo (sin recomendar lotajes):\n${buildCompactMarketSnapshot()}\n\nPregunta: ${userQuestion}`;
+      const promptText = `${ag.personaPrompt} Responde en español, claro y completo (3 a 6 oraciones) usando estos datos en vivo de Laticce (sin recomendar lotajes):\n${buildCompactMarketSnapshot()}\n\nPregunta: ${userQuestion}`;
 
       const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
       let lastError = 'Congestión temporal';
@@ -1036,7 +1147,7 @@
 
     function buildSmartLocalResponse(qRaw) {
       const q = qRaw.toUpperCase();
-      if (!data || !data.assets) return 'Sincronizando telemetría del mercado, señor.';
+      if (!data || !data.assets) return 'Sincronizando telemetría de Laticce, señor.';
 
       let asset = data.assets.find(a => q.includes(a.symbol));
       if (!asset && (q.includes('ORO') || q.includes('GOLD') || q.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
@@ -1060,7 +1171,7 @@
         const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status}: ${b.pairs.join(', ')}`).join(' | ');
 
         const topSwings = swings.slice(0, 3).map(x => `${x.symbol} (${x.setup.direction === 'BUY' ? 'Compra' : 'Venta'} en ${x.setup.entry}, BE en ${x.setup.be_trigger || x.setup.entry}, Swing TP ${x.swing_potential.target})`).join('; ');
-        return `Analizando los veintidós activos en tiempo real, señor, los mejores candidatos con Potencial Swing para operar con parciales y piramidación son: ${topSwings || 'ninguno sin noticia ahora mismo'}. ${baskets ? `Cestas macro correlacionadas activas: ${baskets}.` : ''}`;
+        return `Analizando los veintidós activos en Laticce, señor, los mejores candidatos con Potencial Swing para operar con parciales y piramidación son: ${topSwings || 'ninguno sin noticia ahora mismo'}. ${baskets ? `Cestas macro correlacionadas activas: ${baskets}.` : ''}`;
       }
 
       return null;
@@ -1082,7 +1193,7 @@
       if (geminiApiKey) {
         clearInterval(typeTimer);
         const box = document.getElementById('agent-dialogue-box');
-        if (box) box.innerHTML = `<span class="text-slate-400">Analizando telemetría en vivo...</span><span class="typing-cursor"></span>`;
+        if (box) box.innerHTML = `<span class="text-slate-400">Analizando red neuronal en vivo...</span><span class="typing-cursor"></span>`;
         setStateLabel('PROCESANDO');
         try {
           const aiResponse = await askGeminiBrain(qRaw, currentAgent);
@@ -1180,7 +1291,7 @@
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
         document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
         renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
-        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo es "${COURSE_LESSONS[nextIdx].title}", o puede preguntarme sobre la mesa Economía vs Gráfico.`);
+        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo en Laticce es "${COURSE_LESSONS[nextIdx].title}", o puede preguntarme sobre la mesa Economía vs Gráfico.`);
         return;
       }
       renderDefaultQuickReplies();
@@ -1190,7 +1301,7 @@
         const basketsCount = (data && data.correlated_baskets) ? data.correlated_baskets.length : 0;
         document.getElementById('agent-hero-metric').textContent = `${swings.length} SWING · ${basketsCount} CESTAS`;
         document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${newsPairsCount} NOTICIAS · ${broken.length} ALERTAS`;
-        typeAgentDialogue(`A sus órdenes, señor. He auditado los ${totalCount} activos comparando Economía frente a Gráfico: tenemos ${swings.length} pares con Potencial Swing listos para gestión de parciales y pirámide. ¿Desea el reporte?`);
+        typeAgentDialogue(`A sus órdenes, señor. Red Laticce activa: he auditado los ${totalCount} activos comparando Economía frente a Gráfico y tenemos ${swings.length} pares con Potencial Swing listos para gestión de parciales y pirámide. ¿Desea el reporte?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & CESTAS';
@@ -1209,7 +1320,7 @@
           document.getElementById('agent-hero-metric').textContent = '--';
           document.getElementById('agent-hero-sub').textContent = 'CALCULANDO COORDENADAS';
         }
-        typeAgentDialogue(`Sistemas ópticos calibrados. He fijado los niveles exactos de entrada, Stop inicial, gatillo Break Even (+1R) y zonas de re-entrada en pirámide. ¿Le entrego las coordenadas?`);
+        typeAgentDialogue(`Sistemas ópticos de Laticce calibrados. He fijado los niveles exactos de entrada, Stop inicial, gatillo Break Even (+1R) y zonas de re-entrada en pirámide. ¿Le entrego las coordenadas?`);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES SINCRONIZADAS`;
@@ -1257,8 +1368,8 @@
     }
 
     function speakCurrentAgent() { speakText(document.getElementById('agent-dialogue-box').innerText, currentAgent); }
-    function enterOraculo(withIntro = false) { const el = document.getElementById('boot-screen'); if (el) el.remove(); selectAgent('jarvis', withIntro); }
-    window.enterOraculo = enterOraculo;
+    function enterLaticce(withIntro = false) { const el = document.getElementById('boot-screen'); if (el) el.remove(); selectAgent('jarvis', withIntro); }
+    window.enterLaticce = enterLaticce;
     function showBoot() { location.reload(); }
 
     function toggleViewMode() {
@@ -1622,7 +1733,6 @@
       const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
       const yOf = p => padT + ((maxP - p) / span) * plotH;
 
-      // BSL (Liquidez Compradora Arriba) y SSL (Liquidez Vendedora Abajo)
       const yBsl = yOf(bslVal);
       ctx.setLineDash([2, 3]); ctx.strokeStyle = '#fb7185'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(padL, yBsl); ctx.lineTo(W - padR, yBsl); ctx.stroke();
@@ -1635,19 +1745,16 @@
       ctx.setLineDash([]); ctx.fillStyle = '#5eead4'; ctx.font = 'bold 9px JetBrains Mono';
       ctx.fillText(`▼ SSL ${sslVal.toFixed(a.decimals)}`, padL + 4, Math.min(H - 6, ySsl + 11));
 
-      // EQ 50%
       const yEq = yOf((a.intraday_high + a.intraday_low) / 2);
       ctx.setLineDash([4, 4]); ctx.strokeStyle = '#475569';
       ctx.beginPath(); ctx.moveTo(padL, yEq); ctx.lineTo(W - padR, yEq); ctx.stroke();
       ctx.setLineDash([]); ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono';
       ctx.fillText('EQ 50%', W - padR - 42, yEq - 4);
 
-      // Caja Order Block
       const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
       ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
       ctx.fillRect(padL + plotW * 0.4, yObT, plotW * 0.6, Math.max(5, yObB - yObT));
 
-      // Velas
       const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
       candles.forEach((c, i) => {
         const x = padL + i * step + step / 2, bull = c.c >= c.o;
@@ -1656,7 +1763,6 @@
         ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
       });
 
-      // Etiqueta estructural CHoCH / BOS sobre el gráfico
       const structLabel = (liq.choch && liq.choch !== 'NONE')
         ? `⚡ ${liq.choch.replace('_', ' ')}`
         : ((liq.bos && liq.bos !== 'NONE') ? `⚡ ${liq.bos.replace('_', ' ')}` : '');
