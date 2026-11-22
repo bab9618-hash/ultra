@@ -1,8 +1,8 @@
-name: Actualización automática Oráculo
+name: Actualización automática Laticce
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -30,8 +30,8 @@ jobs:
 
       - name: Guardar data.json y alertas
         run: |
-          git config user.name "Oraculo Bot"
-          git config user.email "bot@oraculo.local"
+          git config user.name "Laticce Bot"
+          git config user.email "bot@laticce.local"
           git add data.json alerts_sent.json || git add data.json
-          git diff --staged --quiet || git commit -m "Actualización automática Oráculo"
+          git diff --staged --quiet || git commit -m "Actualización automática Laticce"
           git push
