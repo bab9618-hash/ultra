@@ -189,5 +189,20 @@
     "ob_high": 159.214,
     "ob_low": 159.127,
     "locked_at": 1795460687
+  },
+  "EURAUD": {
+    "valid_ob": true,
+    "kind": "FVG",
+    "fvg_range": "1.64436 - 1.64466",
+    "direction": "BUY",
+    "signal_tag": "COMPRA FVG RETROCESO",
+    "entry": 1.64451,
+    "be_trigger": 1.647,
+    "sl": 1.64202,
+    "tp1": 1.64949,
+    "tp2": 1.65198,
+    "ob_high": 1.64466,
+    "ob_low": 1.64436,
+    "locked_at": 1795464491
   }
 }
