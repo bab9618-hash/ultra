@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-11-23 21:15 UTC",
+  "last_updated": "2026-11-23 21:45 UTC",
   "brief": {
-    "dxy": 104.31,
+    "dxy": 104.33,
     "us10y": 4.92,
-    "headline": "USD DEBIL (DXY 104.31 - US10Y 4.92%) | GBP DEBIL | AUD DEBIL",
+    "headline": "USD DEBIL (DXY 104.33 - US10Y 4.92%) | GBP DEBIL | AUD DEBIL",
     "summary": "LATICCE v9.9 - Radar Foco Principal + Cascada OB/FVG Estructural + Giros 1S (0 niveles) | Foco #1: AUDUSD (79% prob)."
   },
   "focus_pick": {
@@ -15,20 +15,20 @@
       "dir_label": "VENTA",
       "zone_kind": "OB",
       "signal_tag": "VENTA OB REAL",
-      "price": 0.66273,
+      "price": 0.66287,
       "entry": 0.66443,
       "sl": 0.66607,
       "be_trigger": 0.66279,
       "tp1": 0.66115,
       "tp2": 0.65951,
       "is_swing": false,
-      "dist_units": 17.0,
+      "dist_units": 15.6,
       "unit_label": "pips",
       "probability": 79,
       "reasons": [
         "OB estructural limpio",
         "Tendencia 1D + 4H a favor",
-        "En zona de gatillo (a 17.0 pips)",
+        "En zona de gatillo (a 15.6 pips)",
         "Liderando cesta macro hoy"
       ]
     },
@@ -40,20 +40,20 @@
       "dir_label": "VENTA",
       "zone_kind": "FVG",
       "signal_tag": "VENTA FVG RETROCESO",
-      "price": 1.87225,
+      "price": 1.87146,
       "entry": 1.87438,
       "sl": 1.87858,
       "be_trigger": 1.87018,
       "tp1": 1.86598,
       "tp2": 1.86178,
       "is_swing": false,
-      "dist_units": 21.3,
+      "dist_units": 29.2,
       "unit_label": "pips",
-      "probability": 57,
+      "probability": 47,
       "reasons": [
         "FVG de retroceso",
         "Tendencia 1D + 4H a favor",
-        "En zona de gatillo (a 21.3 pips)",
+        "Cerca de entrada (a 29.2 pips)",
         "Liderando cesta macro hoy"
       ]
     }
@@ -110,7 +110,7 @@
       "currency": "USD",
       "stance": "USD DEBIL",
       "bias": "BEARISH",
-      "detail": "DXY (104.31) + Bonos US10Y (4.92%) en cesta hibrida 4H/1D."
+      "detail": "DXY (104.33) + Bonos US10Y (4.92%) en cesta hibrida 4H/1D."
     },
     {
       "bank": "BoE (Reino Unido)",
@@ -168,6 +168,12 @@
     },
     {
       "source": "Forex & Divisas",
+      "title": "Fed has ’work to do’ to lower inflation, Williams says",
+      "link": "https://www.investing.com/news/economy-news/fed-has-work-to-do-to-lower-inflation-williams-says-5046374",
+      "time": "2026-11-23 21:06:26"
+    },
+    {
+      "source": "Forex & Divisas",
       "title": "Dollar jumps on hawkish Fed bets, AI rally",
       "link": "https://www.investing.com/news/economy-news/dollar-edges-off-19month-high-after-market-rout-yen-softens-5044182",
       "time": "2026-11-23 20:30:42"
@@ -183,12 +189,6 @@
       "title": "Brazil targets primary surplus of up to 2% of GDP by end of Lula’s next term",
       "link": "https://www.investing.com/news/economy-news/brazil-targets-primary-surplus-of-up-to-2-of-gdp-by-end-of-lulas-next-term-5046231",
       "time": "2026-11-23 19:36:57"
-    },
-    {
-      "source": "Forex & Divisas",
-      "title": "Bond market flattening and Wednesday’s PCE test for rate-hike pricing",
-      "link": "https://www.investing.com/news/economy-news/bond-market-flattening-and-wednesdays-pce-test-for-ratehike-pricing-93CH-5046275",
-      "time": "2026-11-23 19:33:37"
     }
   ],
   "calendar": [
@@ -257,8 +257,8 @@
       "type": "metal",
       "pip": 0.1,
       "decimals": 2,
-      "price": 3635.2,
-      "chg_day": 3.41,
+      "price": 3634.1,
+      "chg_day": 3.38,
       "chart_bias": "BAJA",
       "macro_dir": "SUBE",
       "economy_short": "XAU FUERTE / USD DEBIL",
@@ -294,7 +294,7 @@
       "macro_reason": "XAU (FUERTE) vs USD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795468511,
+      "created_at": 1795470316,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -304,11 +304,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 3635.2,
-        "be_trigger": 3635.2,
+        "entry": 3634.1,
+        "be_trigger": 3634.1,
         "sl": 3691.0,
-        "tp1": 3635.2,
-        "tp2": 3635.2
+        "tp1": 3634.1,
+        "tp2": 3634.1
       },
       "candles": {
         "1d": [
@@ -625,7 +625,7 @@
             "o": 3570.5,
             "h": 3691.0,
             "l": 3552.3,
-            "c": 3635.2
+            "c": 3634.1
           }
         ],
         "4h": [
@@ -942,7 +942,7 @@
             "o": 3653.2,
             "h": 3659.4,
             "l": 3629.8,
-            "c": 3635.2
+            "c": 3634.1
           }
         ],
         "1h": [
@@ -1258,8 +1258,8 @@
             "t": 1795467600,
             "o": 3635.3,
             "h": 3638.2,
-            "l": 3634.6,
-            "c": 3635.2
+            "l": 3632.8,
+            "c": 3634.1
           }
         ]
       }
@@ -1271,8 +1271,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.09051,
-      "chg_day": -0.59,
+      "price": 1.09039,
+      "chg_day": -0.6,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "EUR DEBIL / USD DEBIL",
@@ -1639,7 +1639,7 @@
             "o": 1.09649,
             "h": 1.10084,
             "l": 1.08849,
-            "c": 1.09051
+            "c": 1.09039
           }
         ],
         "4h": [
@@ -1956,7 +1956,7 @@
             "o": 1.08885,
             "h": 1.09075,
             "l": 1.08861,
-            "c": 1.09051
+            "c": 1.09039
           }
         ],
         "1h": [
@@ -2273,7 +2273,7 @@
             "o": 1.09039,
             "h": 1.09075,
             "l": 1.09039,
-            "c": 1.09051
+            "c": 1.09039
           }
         ]
       }
@@ -2285,8 +2285,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 158.944,
-      "chg_day": -0.48,
+      "price": 158.972,
+      "chg_day": -0.46,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "USD DEBIL / JPY FUERTE",
@@ -2653,7 +2653,7 @@
             "o": 158.601,
             "h": 159.503,
             "l": 158.474,
-            "c": 158.944
+            "c": 158.972
           }
         ],
         "4h": [
@@ -2970,7 +2970,7 @@
             "o": 159.271,
             "h": 159.286,
             "l": 158.865,
-            "c": 158.944
+            "c": 158.972
           }
         ],
         "1h": [
@@ -3285,9 +3285,9 @@
           {
             "t": 1795467600,
             "o": 158.951,
-            "h": 158.958,
+            "h": 159.002,
             "l": 158.895,
-            "c": 158.944
+            "c": 158.972
           }
         ]
       }
@@ -3299,8 +3299,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.30337,
-      "chg_day": -0.4,
+      "price": 1.30317,
+      "chg_day": -0.42,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "GBP DEBIL / USD DEBIL",
@@ -3667,7 +3667,7 @@
             "o": 1.30863,
             "h": 1.31442,
             "l": 1.30115,
-            "c": 1.30337
+            "c": 1.30317
           }
         ],
         "4h": [
@@ -3984,7 +3984,7 @@
             "o": 1.30156,
             "h": 1.30366,
             "l": 1.30149,
-            "c": 1.30337
+            "c": 1.30317
           }
         ],
         "1h": [
@@ -4300,8 +4300,8 @@
             "t": 1795467600,
             "o": 1.30337,
             "h": 1.30366,
-            "l": 1.30336,
-            "c": 1.30337
+            "l": 1.30303,
+            "c": 1.30317
           }
         ]
       }
@@ -4313,8 +4313,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 207.157,
-      "chg_day": -0.88,
+      "price": 207.173,
+      "chg_day": -0.87,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "GBP DEBIL / JPY FUERTE",
@@ -4681,7 +4681,7 @@
             "o": 207.11,
             "h": 209.176,
             "l": 207.0,
-            "c": 207.157
+            "c": 207.173
           }
         ],
         "4h": [
@@ -4998,7 +4998,7 @@
             "o": 207.304,
             "h": 207.346,
             "l": 207.083,
-            "c": 207.157
+            "c": 207.173
           }
         ],
         "1h": [
@@ -5313,9 +5313,9 @@
           {
             "t": 1795467600,
             "o": 207.158,
-            "h": 207.188,
+            "h": 207.218,
             "l": 207.123,
-            "c": 207.157
+            "c": 207.173
           }
         ]
       }
@@ -5327,8 +5327,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.96717,
-      "chg_day": 0.06,
+      "price": 1.96661,
+      "chg_day": 0.04,
       "chart_bias": "SUBE",
       "macro_dir": "SUBE",
       "economy_short": "GBP DEBIL / AUD DEBIL",
@@ -5695,7 +5695,7 @@
             "o": 1.97705,
             "h": 1.9787,
             "l": 1.96359,
-            "c": 1.96717
+            "c": 1.96661
           }
         ],
         "4h": [
@@ -6012,7 +6012,7 @@
             "o": 1.96629,
             "h": 1.96809,
             "l": 1.96427,
-            "c": 1.96717
+            "c": 1.96661
           }
         ],
         "1h": [
@@ -6328,8 +6328,8 @@
             "t": 1795467600,
             "o": 1.96753,
             "h": 1.96809,
-            "l": 1.96696,
-            "c": 1.96717
+            "l": 1.96637,
+            "c": 1.96661
           }
         ]
       }
@@ -6341,9 +6341,9 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 2.39272,
-      "chg_day": 0.22,
-      "chart_bias": "SUBE",
+      "price": 2.39193,
+      "chg_day": 0.19,
+      "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "GBP DEBIL / NZD DEBIL",
       "has_valid_ob": false,
@@ -6356,7 +6356,7 @@
         "weekly": "BAJA",
         "daily": "NEUTRAL",
         "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h1": "BAJA"
       },
       "liquidity": {
         "bsl": 2.40088,
@@ -6375,10 +6375,10 @@
       "intraday_low": 2.38904,
       "ob_high": 2.40088,
       "ob_low": 2.38904,
-      "macro_reason": "GBP (DEBIL) vs NZD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL). Sin Order Block ni FVG limpio en este grafico (no operar).",
+      "macro_reason": "GBP (DEBIL) vs NZD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795468511,
+      "created_at": 1795470316,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -6386,13 +6386,13 @@
         "verdict_sub": "Este grafico no presenta Order Block ni imbalance FVG vigente en 1H"
       },
       "setup": {
-        "direction": "BUY",
+        "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 2.39272,
-        "be_trigger": 2.39272,
-        "sl": 2.38904,
-        "tp1": 2.39272,
-        "tp2": 2.39272
+        "entry": 2.39193,
+        "be_trigger": 2.39193,
+        "sl": 2.40088,
+        "tp1": 2.39193,
+        "tp2": 2.39193
       },
       "candles": {
         "1d": [
@@ -6709,7 +6709,7 @@
             "o": 2.39162,
             "h": 2.40088,
             "l": 2.38925,
-            "c": 2.39272
+            "c": 2.39193
           }
         ],
         "4h": [
@@ -7026,7 +7026,7 @@
             "o": 2.39399,
             "h": 2.39423,
             "l": 2.3912,
-            "c": 2.39272
+            "c": 2.39193
           }
         ],
         "1h": [
@@ -7342,8 +7342,8 @@
             "t": 1795467600,
             "o": 2.39341,
             "h": 2.3936,
-            "l": 2.39226,
-            "c": 2.39272
+            "l": 2.39147,
+            "c": 2.39193
           }
         ]
       }
@@ -7355,8 +7355,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.87225,
-      "chg_day": -0.24,
+      "price": 1.87146,
+      "chg_day": -0.29,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "GBP DEBIL / CAD NEUTRAL",
@@ -7370,7 +7370,7 @@
         "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
-        "h1": "SUBE"
+        "h1": "NEUTRAL"
       },
       "liquidity": {
         "bsl": 1.88155,
@@ -7389,7 +7389,7 @@
       "intraday_low": 1.86894,
       "ob_high": 1.87456,
       "ob_low": 1.8742,
-      "macro_reason": "GBP (DEBIL) vs CAD (NEUTRAL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:SUBE). FVG aislado en retroceso (1.8742 - 1.87456) con SL estructural en 1.87858 congelado hasta TP1/SL.",
+      "macro_reason": "GBP (DEBIL) vs CAD (NEUTRAL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:NEUTRAL). FVG aislado en retroceso (1.8742 - 1.87456) con SL estructural en 1.87858 congelado hasta TP1/SL.",
       "news_warning": null,
       "swing_potential": null,
       "created_at": 1795449574,
@@ -7723,7 +7723,7 @@
             "o": 1.87611,
             "h": 1.88155,
             "l": 1.86894,
-            "c": 1.87225
+            "c": 1.87146
           }
         ],
         "4h": [
@@ -8040,7 +8040,7 @@
             "o": 1.87165,
             "h": 1.8735,
             "l": 1.87132,
-            "c": 1.87225
+            "c": 1.87146
           }
         ],
         "1h": [
@@ -8356,8 +8356,8 @@
             "t": 1795467600,
             "o": 1.87322,
             "h": 1.87327,
-            "l": 1.87189,
-            "c": 1.87225
+            "l": 1.87144,
+            "c": 1.87146
           }
         ]
       }
@@ -8369,8 +8369,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.66273,
-      "chg_day": -0.43,
+      "price": 0.66287,
+      "chg_day": -0.41,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "AUD DEBIL / USD DEBIL",
@@ -8737,7 +8737,7 @@
             "o": 0.6619,
             "h": 0.66587,
             "l": 0.66011,
-            "c": 0.66273
+            "c": 0.66287
           }
         ],
         "4h": [
@@ -9054,7 +9054,7 @@
             "o": 0.66256,
             "h": 0.66322,
             "l": 0.66243,
-            "c": 0.66273
+            "c": 0.66287
           }
         ],
         "1h": [
@@ -9369,9 +9369,9 @@
           {
             "t": 1795467600,
             "o": 0.66265,
-            "h": 0.66273,
+            "h": 0.66287,
             "l": 0.6626,
-            "c": 0.66273
+            "c": 0.66287
           }
         ]
       }
@@ -9383,8 +9383,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 105.296,
-      "chg_day": -0.94,
+      "price": 105.345,
+      "chg_day": -0.89,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "AUD DEBIL / JPY FUERTE",
@@ -9420,7 +9420,7 @@
       "macro_reason": "AUD (DEBIL) vs JPY (FUERTE) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795468511,
+      "created_at": 1795470316,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -9430,11 +9430,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 105.296,
-        "be_trigger": 105.296,
+        "entry": 105.345,
+        "be_trigger": 105.345,
         "sl": 106.128,
-        "tp1": 105.296,
-        "tp2": 105.296
+        "tp1": 105.345,
+        "tp2": 105.345
       },
       "candles": {
         "1d": [
@@ -9751,7 +9751,7 @@
             "o": 104.476,
             "h": 106.128,
             "l": 104.476,
-            "c": 105.296
+            "c": 105.345
           }
         ],
         "4h": [
@@ -10068,7 +10068,7 @@
             "o": 105.426,
             "h": 105.523,
             "l": 105.224,
-            "c": 105.296
+            "c": 105.345
           }
         ],
         "1h": [
@@ -10383,9 +10383,9 @@
           {
             "t": 1795467600,
             "o": 105.276,
-            "h": 105.303,
+            "h": 105.353,
             "l": 105.252,
-            "c": 105.296
+            "c": 105.345
           }
         ]
       }
@@ -10397,7 +10397,7 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.95161,
+      "price": 0.95159,
       "chg_day": -0.32,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
@@ -10434,7 +10434,7 @@
       "macro_reason": "AUD (DEBIL) vs CAD (NEUTRAL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795468511,
+      "created_at": 1795470316,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -10444,11 +10444,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 0.95161,
-        "be_trigger": 0.95161,
+        "entry": 0.95159,
+        "be_trigger": 0.95159,
         "sl": 0.95527,
-        "tp1": 0.95161,
-        "tp2": 0.95161
+        "tp1": 0.95159,
+        "tp2": 0.95159
       },
       "candles": {
         "1d": [
@@ -10765,7 +10765,7 @@
             "o": 0.94804,
             "h": 0.95527,
             "l": 0.94729,
-            "c": 0.95161
+            "c": 0.95159
           }
         ],
         "4h": [
@@ -11081,8 +11081,8 @@
             "t": 1795456800,
             "o": 0.95185,
             "h": 0.95295,
-            "l": 0.95067,
-            "c": 0.95161
+            "l": 0.95066,
+            "c": 0.95159
           }
         ],
         "1h": [
@@ -11398,8 +11398,8 @@
             "t": 1795467600,
             "o": 0.95192,
             "h": 0.95205,
-            "l": 0.95067,
-            "c": 0.95161
+            "l": 0.95066,
+            "c": 0.95159
           }
         ]
       }
@@ -11411,8 +11411,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.21604,
-      "chg_day": 0.14,
+      "price": 1.2161,
+      "chg_day": 0.15,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "AUD DEBIL / NZD DEBIL",
@@ -11448,7 +11448,7 @@
       "macro_reason": "AUD (DEBIL) vs NZD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795468511,
+      "created_at": 1795470316,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -11458,11 +11458,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 1.21604,
-        "be_trigger": 1.21604,
+        "entry": 1.2161,
+        "be_trigger": 1.2161,
         "sl": 1.21921,
-        "tp1": 1.21604,
-        "tp2": 1.21604
+        "tp1": 1.2161,
+        "tp2": 1.2161
       },
       "candles": {
         "1d": [
@@ -11779,7 +11779,7 @@
             "o": 1.20941,
             "h": 1.21921,
             "l": 1.20659,
-            "c": 1.21604
+            "c": 1.2161
           }
         ],
         "4h": [
@@ -12095,8 +12095,8 @@
             "t": 1795456800,
             "o": 1.2175,
             "h": 1.21782,
-            "l": 1.21573,
-            "c": 1.21604
+            "l": 1.21568,
+            "c": 1.2161
           }
         ],
         "1h": [
@@ -12412,8 +12412,8 @@
             "t": 1795467600,
             "o": 1.21632,
             "h": 1.21636,
-            "l": 1.21573,
-            "c": 1.21604
+            "l": 1.21568,
+            "c": 1.2161
           }
         ]
       }
@@ -12425,8 +12425,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.64566,
-      "chg_day": -0.12,
+      "price": 1.64509,
+      "chg_day": -0.16,
       "chart_bias": "SUBE",
       "macro_dir": "SUBE",
       "economy_short": "EUR DEBIL / AUD DEBIL",
@@ -12793,7 +12793,7 @@
             "o": 1.6569,
             "h": 1.65929,
             "l": 1.64222,
-            "c": 1.64566
+            "c": 1.64509
           }
         ],
         "4h": [
@@ -13110,7 +13110,7 @@
             "o": 1.64428,
             "h": 1.64638,
             "l": 1.64222,
-            "c": 1.64566
+            "c": 1.64509
           }
         ],
         "1h": [
@@ -13426,8 +13426,8 @@
             "t": 1795467600,
             "o": 1.64567,
             "h": 1.64638,
-            "l": 1.64504,
-            "c": 1.64566
+            "l": 1.64469,
+            "c": 1.64509
           }
         ]
       }
@@ -13439,8 +13439,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.5574,
-      "chg_day": -0.8,
+      "price": 0.5576,
+      "chg_day": -0.76,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "AUD DEBIL / CHF FUERTE",
@@ -13454,7 +13454,7 @@
         "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "NEUTRAL",
-        "h1": "BAJA"
+        "h1": "NEUTRAL"
       },
       "liquidity": {
         "bsl": 0.5602,
@@ -13473,10 +13473,10 @@
       "intraday_low": 0.55399,
       "ob_high": 0.5602,
       "ob_low": 0.55399,
-      "macro_reason": "AUD (DEBIL) vs CHF (FUERTE) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
+      "macro_reason": "AUD (DEBIL) vs CHF (FUERTE) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795468511,
+      "created_at": 1795470316,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -13486,11 +13486,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 0.5574,
-        "be_trigger": 0.5574,
+        "entry": 0.5576,
+        "be_trigger": 0.5576,
         "sl": 0.5602,
-        "tp1": 0.5574,
-        "tp2": 0.5574
+        "tp1": 0.5576,
+        "tp2": 0.5576
       },
       "candles": {
         "1d": [
@@ -13807,7 +13807,7 @@
             "o": 0.5557,
             "h": 0.5602,
             "l": 0.55236,
-            "c": 0.5574
+            "c": 0.5576
           }
         ],
         "4h": [
@@ -14124,7 +14124,7 @@
             "o": 0.55817,
             "h": 0.55879,
             "l": 0.55653,
-            "c": 0.5574
+            "c": 0.5576
           }
         ],
         "1h": [
@@ -14439,9 +14439,9 @@
           {
             "t": 1795467600,
             "o": 0.55732,
-            "h": 0.5575,
+            "h": 0.5577,
             "l": 0.55653,
-            "c": 0.5574
+            "c": 0.5576
           }
         ]
       }
@@ -14453,8 +14453,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.54484,
-      "chg_day": -0.6,
+      "price": 0.54493,
+      "chg_day": -0.59,
       "chart_bias": "BAJA",
       "macro_dir": "NEUTRAL",
       "economy_short": "NZD DEBIL / USD DEBIL",
@@ -14821,7 +14821,7 @@
             "o": 0.54705,
             "h": 0.54837,
             "l": 0.5436,
-            "c": 0.54484
+            "c": 0.54493
           }
         ],
         "4h": [
@@ -15138,7 +15138,7 @@
             "o": 0.5441,
             "h": 0.54502,
             "l": 0.54395,
-            "c": 0.54484
+            "c": 0.54493
           }
         ],
         "1h": [
@@ -15453,9 +15453,9 @@
           {
             "t": 1795467600,
             "o": 0.54475,
-            "h": 0.54484,
+            "h": 0.54499,
             "l": 0.54475,
-            "c": 0.54484
+            "c": 0.54493
           }
         ]
       }
@@ -15467,8 +15467,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.43652,
-      "chg_day": 0.15,
+      "price": 1.43615,
+      "chg_day": 0.13,
       "chart_bias": "SUBE",
       "macro_dir": "BAJA",
       "economy_short": "USD DEBIL / CAD NEUTRAL",
@@ -15835,7 +15835,7 @@
             "o": 1.434,
             "h": 1.43845,
             "l": 1.4307,
-            "c": 1.43652
+            "c": 1.43615
           }
         ],
         "4h": [
@@ -16151,8 +16151,8 @@
             "t": 1795456800,
             "o": 1.4381,
             "h": 1.43821,
-            "l": 1.4362,
-            "c": 1.43652
+            "l": 1.4359,
+            "c": 1.43615
           }
         ],
         "1h": [
@@ -16468,8 +16468,8 @@
             "t": 1795467600,
             "o": 1.43733,
             "h": 1.43737,
-            "l": 1.4362,
-            "c": 1.43652
+            "l": 1.4359,
+            "c": 1.43615
           }
         ]
       }
@@ -16481,8 +16481,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.84142,
-      "chg_day": -0.32,
+      "price": 0.84155,
+      "chg_day": -0.3,
       "chart_bias": "SUBE",
       "macro_dir": "BAJA",
       "economy_short": "USD DEBIL / CHF FUERTE",
@@ -16849,7 +16849,7 @@
             "o": 0.83937,
             "h": 0.84407,
             "l": 0.83663,
-            "c": 0.84142
+            "c": 0.84155
           }
         ],
         "4h": [
@@ -17166,7 +17166,7 @@
             "o": 0.84327,
             "h": 0.84339,
             "l": 0.84119,
-            "c": 0.84142
+            "c": 0.84155
           }
         ],
         "1h": [
@@ -17481,9 +17481,9 @@
           {
             "t": 1795467600,
             "o": 0.84144,
-            "h": 0.84153,
+            "h": 0.84173,
             "l": 0.84119,
-            "c": 0.84142
+            "c": 0.84155
           }
         ]
       }
@@ -17495,8 +17495,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 173.295,
-      "chg_day": -1.07,
+      "price": 173.306,
+      "chg_day": -1.06,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "EUR DEBIL / JPY FUERTE",
@@ -17863,7 +17863,7 @@
             "o": 173.577,
             "h": 175.046,
             "l": 173.202,
-            "c": 173.295
+            "c": 173.306
           }
         ],
         "4h": [
@@ -18180,7 +18180,7 @@
             "o": 173.365,
             "h": 173.408,
             "l": 173.202,
-            "c": 173.295
+            "c": 173.306
           }
         ],
         "1h": [
@@ -18495,9 +18495,9 @@
           {
             "t": 1795467600,
             "o": 173.267,
-            "h": 173.319,
+            "h": 173.356,
             "l": 173.257,
-            "c": 173.295
+            "c": 173.306
           }
         ]
       }
@@ -18509,15 +18509,15 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 61293.7,
-      "chg_day": 0.22,
+      "price": 61116.51,
+      "chg_day": -0.07,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "BTC DEBIL / USD DEBIL",
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "fvg_range": "61692.74 - 61769.81",
-      "exhaustion_active": false,
+      "exhaustion_active": true,
       "is_strong_pullback": false,
       "weekly_pivots": [],
       "tf_bias": {
@@ -18543,15 +18543,15 @@
       "intraday_low": 60287.47,
       "ob_high": 61769.81,
       "ob_low": 61692.74,
-      "macro_reason": "BTC (DEBIL) vs USD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:BAJA). FVG aislado en retroceso (61692.74 - 61769.81) con SL estructural en 62857.29 congelado hasta TP1/SL.",
+      "macro_reason": "BTC (DEBIL) vs USD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:BAJA). FVG aislado en retroceso (61692.74 - 61769.81) con SL estructural en 62857.29 congelado hasta TP1/SL. Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorcion/macro en contra). Proteger ventas.",
       "news_warning": null,
       "swing_potential": null,
       "created_at": 1795456989,
       "confluence": {
-        "score": 84,
+        "score": 58,
         "alignment": "ALIGNED",
-        "verdict_title": "FVG RETROCESO (VENTA)",
-        "verdict_sub": "Vacio de liquidez (61692.74 - 61769.81) con SL estructural (62857.29) + Macro (BAJA)"
+        "verdict_title": "AGOTAMIENTO - RIESGO DE GIRO",
+        "verdict_sub": "Momentum en extremo se frena - Asegurar parciales / BE"
       },
       "setup": {
         "direction": "SELL",
@@ -18877,7 +18877,7 @@
             "o": 61162.2,
             "h": 64217.27,
             "l": 60367.81,
-            "c": 61293.7
+            "c": 61116.51
           }
         ],
         "4h": [
@@ -19194,7 +19194,7 @@
             "o": 61602.25,
             "h": 61706.13,
             "l": 60716.57,
-            "c": 61293.7
+            "c": 61116.51
           }
         ],
         "1h": [
@@ -19509,9 +19509,9 @@
           {
             "t": 1795467600,
             "o": 61213.45,
-            "h": 61370.89,
-            "l": 61147.96,
-            "c": 61293.7
+            "h": 61382.54,
+            "l": 61116.51,
+            "c": 61116.51
           }
         ]
       }
@@ -20524,7 +20524,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DEBIL). Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795468511,
+      "created_at": 1795470316,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -21482,7 +21482,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DEBIL). Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795468511,
+      "created_at": 1795470316,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
