@@ -170,10 +170,10 @@ def find_verified_intraday_zone(c_1h, direction, price, dec, pip):
     fvg_only_candidates = []
 
     for i in range(len(c_1h) - 3, max(3, len(c_1h) - 24), -1):
-        c0 = c_1h[i]       # Vela base (OB o vela 1 del FVG)
+        c0 = c_1h[i]
         prev_c = c_1h[i - 1]
-        c1 = c_1h[i + 1]   # Vela de impulso / desplazamiento
-        c2 = c_1h[i + 2]   # Vela 3 (confirma FVG si no solapa con c0)
+        c1 = c_1h[i + 1]
+        c2 = c_1h[i + 2]
         after_candles = c_1h[i + 2:]
 
         c0_body = abs(c0["c"] - c0["o"])
@@ -184,20 +184,17 @@ def find_verified_intraday_zone(c_1h, direction, price, dec, pip):
         has_clean_ob_shape = (c0_range > 0 and c0_body >= c0_range * 0.35 and c0_body >= avg_body * 0.4)
 
         if direction == "BUY":
-            # --- 1) Evaluar Order Block Alcista (vela roja + desplazamiento verde) ---
             is_ob_bear = c0["c"] < c0["o"]
             has_strong_disp = (
                 (c1["c"] > c1["o"] and c1["c"] > c0["h"] and c1_body >= avg_body * 1.45)
                 or (c2["c"] > c2["o"] and c2["c"] > c0["h"] and c2_body >= avg_body * 1.45)
             )
-            # FVG Alcista: hueco entre el maximo de c0 y el minimo de c2
             has_bull_fvg = (c2["l"] > c0["h"]) and (c1["c"] > c1["o"]) and (c1_body >= avg_body * 1.35)
 
             if has_clean_ob_shape and is_ob_bear and has_strong_disp:
                 structural_low = min(c0["l"], prev_c["l"]) if prev_c["l"] >= c0["l"] - c0_range * 0.35 else c0["l"]
                 ob_low = round(structural_low, dec)
                 if has_bull_fvg:
-                    # Confluencia OB + FVG: entrada afinada en el borde superior del OB / inicio del FVG
                     zone_high = round(c2["l"], dec)
                     entry = round(c0["h"], dec)
                     sl = round(ob_low - spread_buffer, dec)
@@ -222,11 +219,9 @@ def find_verified_intraday_zone(c_1h, direction, price, dec, pip):
                             "fvg_range": None
                         })
 
-            # --- 2) Evaluar FVG Alcista Aislado (imbalance fuerte como zona de retroceso) ---
             if has_bull_fvg and (c2["l"] - c0["h"]) >= (2 * pip):
                 fvg_top = round(c2["l"], dec)
                 fvg_bot = round(c0["h"], dec)
-                # Entrada en el 50% (CE) del FVG y SL debajo del minimo de la vela de impulso c1
                 entry = round((fvg_top + fvg_bot) / 2.0, dec)
                 sl = round(min(c1["l"], c0["l"]) - spread_buffer, dec)
                 block_risk = max(pip, abs(entry - sl))
@@ -239,20 +234,17 @@ def find_verified_intraday_zone(c_1h, direction, price, dec, pip):
                     })
 
         elif direction == "SELL":
-            # --- 1) Evaluar Order Block Bajista (vela verde + desplazamiento rojo) ---
             is_ob_bull = c0["c"] > c0["o"]
             has_strong_disp = (
                 (c1["c"] < c1["o"] and c1["c"] < c0["l"] and c1_body >= avg_body * 1.45)
                 or (c2["c"] < c2["o"] and c2["c"] < c0["l"] and c2_body >= avg_body * 1.45)
             )
-            # FVG Bajista: hueco entre el minimo de c0 y el maximo de c2
             has_bear_fvg = (c2["h"] < c0["l"]) and (c1["c"] < c1["o"]) and (c1_body >= avg_body * 1.35)
 
             if has_clean_ob_shape and is_ob_bull and has_strong_disp:
                 structural_high = max(c0["h"], prev_c["h"]) if prev_c["h"] <= c0["h"] + c0_range * 0.35 else c0["h"]
                 ob_high = round(structural_high, dec)
                 if has_bear_fvg:
-                    # Confluencia OB + FVG: entrada afinada en el borde inferior del OB / inicio del FVG
                     zone_low = round(c2["h"], dec)
                     entry = round(c0["l"], dec)
                     sl = round(ob_high + spread_buffer, dec)
@@ -277,11 +269,9 @@ def find_verified_intraday_zone(c_1h, direction, price, dec, pip):
                             "fvg_range": None
                         })
 
-            # --- 2) Evaluar FVG Bajista Aislado (imbalance fuerte como zona de retroceso) ---
             if has_bear_fvg and (c0["l"] - c2["h"]) >= (2 * pip):
                 fvg_top = round(c0["l"], dec)
                 fvg_bot = round(c2["h"], dec)
-                # Entrada en el 50% (CE) del FVG y SL encima del maximo de la vela de impulso c1
                 entry = round((fvg_top + fvg_bot) / 2.0, dec)
                 sl = round(max(c1["h"], c0["h"]) + spread_buffer, dec)
                 block_risk = max(pip, abs(sl - entry))
@@ -683,7 +673,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
         direction = "BUY" if chart_bias == "SUBE" else "SELL"
 
-        # 1) Verificar setup congelado vigente (OB+FVG, OB o FVG aislado)
         prev_setup = active_setups.get(sym)
         use_frozen = False
         has_valid_ob = False
@@ -712,7 +701,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 ob_low = prev_setup["ob_low"]
                 signal_tag = prev_setup["signal_tag"]
 
-        # 2) Si no hay setup congelado vigente, escanear cascada: OB+FVG -> OB -> FVG aislado
         if not use_frozen:
             verified_zone = find_verified_intraday_zone(c_1h, direction, price, dec, pip)
             if verified_zone:
@@ -781,7 +769,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
 
         actual_r = max(pip, abs(entry - sl))
 
-        # Filtro estricto 1S Historico:
         nearby_weekly_pivots = []
         current_trend = b_d if b_d in ("SUBE", "BAJA") else chart_bias
 
@@ -946,6 +933,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             "has_valid_ob": has_valid_ob,
             "zone_kind": zone_kind,
             "fvg_range": fvg_info,
+            "exhaustion_active": exhaustion["active"],
             "is_strong_pullback": is_strong_pullback and is_counter_daily,
             "weekly_pivots": nearby_weekly_pivots,
             "tf_bias": {"weekly": b_w, "daily": b_d, "h4": b_4h, "h1": b_1h},
@@ -1014,6 +1002,114 @@ def build_correlated_baskets(assets, ccy_labels):
                 "pairs": matched_pairs[:5]
             })
     return baskets
+
+def compute_best_focus_pick(assets, baskets):
+    """
+    Calcula el UNICO activo con mayor probabilidad matematica de rentabilidad en la sesion actual
+    para concentrar el capital sin dispersar riesgo en varios pares.
+    """
+    basket_ccys = {b["currency"] for b in baskets}
+    candidates = []
+
+    for a in assets:
+        if not a.get("has_valid_ob") or a.get("confluence", {}).get("alignment") != "ALIGNED":
+            continue
+
+        score = 0
+        reasons = []
+        z_kind = a.get("zone_kind", "OB")
+        direction = a["setup"]["direction"]
+        price = a["price"]
+        entry = a["setup"]["entry"]
+        pip = a.get("pip", 0.0001)
+        tf = a.get("tf_bias", {})
+
+        # 1. Calidad de zona institucional (hasta +25)
+        if z_kind == "OB_FVG":
+            score += 25
+            reasons.append("Confluencia doble OB + FVG")
+        elif z_kind == "OB":
+            score += 18
+            reasons.append("OB estructural limpio")
+        else:
+            score += 14
+            reasons.append("FVG de retroceso")
+
+        # 2. Alineacion multitemporal (hasta +25)
+        all_4_aligned = (tf.get("weekly") == a["chart_bias"] and tf.get("daily") == a["chart_bias"] and tf.get("h4") == a["chart_bias"] and tf.get("h1") == a["chart_bias"])
+        if a.get("swing_potential") and a["swing_potential"].get("active"):
+            score += 25
+            reasons.append("Potencial Swing (1S/1D/4H/1H alineados)")
+        elif all_4_aligned or (tf.get("daily") == a["chart_bias"] and tf.get("h4") == a["chart_bias"]):
+            score += 16
+            reasons.append("Tendencia 1D + 4H a favor")
+
+        # 3. Proximidad real al punto de gatillo (hasta +20)
+        dist_u = round((abs(price - entry) / pip) * 10) / 10 if pip else abs(price - entry)
+        u_lbl = "pips" if a["type"] in ("forex", "metal") else "pts"
+        in_trigger = (dist_u <= 40.0) if (a["symbol"] == "XAUUSD" or a["type"] == "metal") else ((dist_u <= 25.0) if a["type"] == "forex" else (abs(price - entry) / max(1e-9, price) <= 0.0015))
+        if in_trigger:
+            score += 20
+            reasons.append(f"En zona de gatillo (a {dist_u} {u_lbl})")
+        elif dist_u <= 50.0:
+            score += 10
+            reasons.append(f"Cerca de entrada (a {dist_u} {u_lbl})")
+
+        # 4. Respaldo de cesta macroeconomica (hasta +15)
+        if a["base"] in basket_ccys or a["quote"] in basket_ccys:
+            score += 15
+            reasons.append("Liderando cesta macro hoy")
+
+        # 5. Zona Premium/Discount (EQ 50%)
+        eq50 = (a["intraday_high"] + a["intraday_low"]) / 2.0
+        if (direction == "BUY" and entry <= eq50) or (direction == "SELL" and entry >= eq50):
+            score += 10
+            reasons.append("Zona barata/cara optima (EQ 50%)")
+        else:
+            score -= 8
+
+        # 6. Penalizaciones por riesgo
+        if a.get("news_warning") and a["news_warning"].get("active"):
+            score -= 25
+            reasons.append(f"Precaucion noticia {a['news_warning']['currencies']}")
+        if a.get("exhaustion_active"):
+            score -= 30
+
+        final_prob = max(40, min(99, score))
+        candidates.append({
+            "symbol": a["symbol"],
+            "base": a["base"],
+            "quote": a["quote"],
+            "direction": direction,
+            "dir_label": "COMPRA" if direction == "BUY" else "VENTA",
+            "zone_kind": z_kind,
+            "signal_tag": a["setup"]["signal_tag"],
+            "price": price,
+            "entry": entry,
+            "sl": a["setup"]["sl"],
+            "be_trigger": a["setup"].get("be_trigger", entry),
+            "tp1": a["setup"]["tp1"],
+            "tp2": a["swing_potential"]["target"] if (a.get("swing_potential") and a["swing_potential"].get("active")) else a["setup"]["tp2"],
+            "is_swing": bool(a.get("swing_potential") and a["swing_potential"].get("active")),
+            "dist_units": dist_u,
+            "unit_label": u_lbl,
+            "probability": final_prob,
+            "reasons": reasons[:4]
+        })
+
+    candidates.sort(key=lambda x: x["probability"], reverse=True)
+    if not candidates:
+        return None
+
+    primary = candidates[0]
+    backup = None
+    for c in candidates[1:]:
+        # Respaldo debe ser de divisas distintas para no duplicar exposicion
+        if c["base"] not in (primary["base"], primary["quote"]) and c["quote"] not in (primary["base"], primary["quote"]):
+            backup = c
+            break
+
+    return {"primary": primary, "backup": backup}
 
 def dispatch_push_notifications(assets, now_ts):
     if not NTFY_TOPIC:
@@ -1139,6 +1235,7 @@ def main():
 
     banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
     baskets = build_correlated_baskets(assets, ccy_labels)
+    focus_pick = compute_best_focus_pick(assets, baskets)
     news = fetch_live_news()
 
     all_weekly_pivots = []
@@ -1150,6 +1247,7 @@ def main():
 
     alert_ccys = sorted(high_impact_by_ccy.keys())
     news_alert_str = f" - Noticias fuertes hoy en: {', '.join(alert_ccys)}" if alert_ccys else ""
+    focus_str = f" | Foco #1: {focus_pick['primary']['symbol']} ({focus_pick['primary']['probability']}% prob)" if (focus_pick and focus_pick.get("primary")) else ""
 
     payload = {
         "last_updated": now_utc.strftime("%Y-%m-%d %H:%M UTC"),
@@ -1157,8 +1255,9 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} - US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"LATICCE v9.8 - Cascada OB + FVG / OB Estructural / FVG Retroceso + Giros 1S ({len(all_weekly_pivots)} niveles) sobre {len(assets)} activos."
+            "summary": f"LATICCE v9.9 - Radar Foco Principal + Cascada OB/FVG Estructural + Giros 1S ({len(all_weekly_pivots)} niveles){focus_str}."
         },
+        "focus_pick": focus_pick,
         "weekly_pivots": all_weekly_pivots,
         "correlated_baskets": baskets,
         "banks": banks,
@@ -1170,7 +1269,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos y {len(all_weekly_pivots)} giros semanales limpios actualizados (LATICCE v9.8).")
+    print(f"OK: {len(assets)} activos actualizados (LATICCE v9.9).")
 
 if __name__ == "__main__":
     main()
