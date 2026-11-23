@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Cabina Neuronal v9.2</title>
+  <title>LATICCE · Cabina Neuronal v9.9</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -199,7 +199,7 @@
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
         <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
         <button type="button" onclick="startVoiceRecognition()" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
-        <input id="cockpit-input" type="text" placeholder="Pregunte sobre pares, giros 1S, pirámide swing o macro..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
+        <input id="cockpit-input" type="text" placeholder="Pregunte en qué activo enfocarse, OB+FVG, giros 1S o swing..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
         <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ENVIAR</button>
       </form>
     </div>
@@ -219,17 +219,17 @@
       <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
     </div>
 
-    <!-- SUBPANEL JARVIS (INTRADÍA / SWING) -->
+    <!-- SUBPANEL JARVIS (CON RADAR DE FOCO PRINCIPAL) -->
     <section id="ptab-jarvis" class="space-y-3">
+      <div id="pj-focus-card" class="hidden rounded-xl p-4 bg-gradient-to-r from-amber-500/15 via-emerald-500/10 to-[#060912] border border-amber-400/70 space-y-2.5"></div>
       <div id="pj-baskets-bar" class="hidden bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-3 space-y-1.5 text-xs"></div>
 
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
+        <button onclick="setPanelFilter('VALID_OB')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300 font-bold" data-pf="VALID_OB">💎 CON OB / FVG VÁLIDO</button>
         <button onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-indigo-300" data-pf="SWING">🌊 POTENCIAL SWING</button>
-        <button onclick="setPanelFilter('REENTRY')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pf="REENTRY">🔵 PIRÁMIDE / RE-ENTRADA</button>
         <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
         <button onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300" data-pf="NEWS">⚠️ CON NOTICIA HOY</button>
-        <button onclick="setPanelFilter('TP1')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-green-300" data-pf="TP1">🟢 EN TP1</button>
         <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ SE CONTRADICEN</button>
         <button onclick="setPanelFilter('AUD')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="AUD">🇦🇺 PARES AUD</button>
         <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
@@ -244,12 +244,12 @@
       <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
     </section>
 
-    <!-- NUEVA PESTAÑA SEPARADA: GIROS SEMANALES LIMPIOS PRE-2017 (<= 60 PIPS) -->
+    <!-- PESTAÑA SEPARADA: GIROS SEMANALES LIMPIOS PRE-2017 -->
     <section id="ptab-weekly1s" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
         <div>
           <h3 class="font-hud text-sm font-bold text-cyan-300">🏛️ GIROS SEMANALES LIMPIOS HISTÓRICOS (PRE-2017)</h3>
-          <p class="text-[11px] text-slate-400 mt-0.5">Solo entradas cercanas (<= 60 pips) con 1 vela + 1 vela única de rechazo sin acumulación previa.</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Solo entradas contra-tendencia cercanas (<= 60 pips) con 1 vela + 1 vela única de rechazo sin acumulación.</p>
         </div>
         <span id="weekly1s-count-badge" class="text-xs px-2.5 py-1 rounded bg-cyan-500/15 border border-cyan-400/50 text-cyan-300 font-bold">0 ACTIVOS</span>
       </div>
@@ -313,12 +313,12 @@
 
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-sky-400">ENTRADA (OB)</div>
+          <div class="text-[10px] text-sky-400">ENTRADA (OB/FVG)</div>
           <div id="pu-entry" class="font-bold text-white text-sm">--</div>
           <div id="pu-dist" class="text-[10px] text-slate-400">--</div>
         </div>
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-red-400">STOP INICIAL</div>
+          <div class="text-[10px] text-red-400">STOP ESTRUCTURAL</div>
           <div id="pu-sl" class="font-bold text-red-400 text-sm">--</div>
           <div id="pu-sl-pips" class="text-[10px] text-red-300">--</div>
         </div>
@@ -348,7 +348,6 @@
       <div id="panel-lessons-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
 
-    <!-- SUBPANEL VISIÓN -->
     <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-5">
       <div class="space-y-1 border-b border-slate-800 pb-3">
         <h3 id="pv-headline" class="font-bold text-sky-300 text-sm">--</h3>
@@ -356,7 +355,7 @@
       </div>
 
       <div class="space-y-2">
-        <h4 class="font-hud text-xs font-bold text-indigo-400 tracking-wider">🔗 CESTAS MACROECONÓMICAS CORRELACIONADAS (OPERAR EN BLOQUE)</h4>
+        <h4 class="font-hud text-xs font-bold text-indigo-400 tracking-wider">🔗 CESTAS MACROECONÓMICAS CORRELACIONADAS</h4>
         <div id="pv-baskets" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
       </div>
 
@@ -376,7 +375,6 @@
       </div>
     </section>
 
-    <!-- SUBPANEL DIARIO KAREN -->
     <section id="ptab-karen" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <h3 class="font-hud text-sm font-bold text-rose-400">🕸️ AUDITORÍA DE KAREN & ESTADÍSTICA H.O.M.E.R.</h3>
@@ -591,7 +589,7 @@
         localStorage.setItem('oraculo_gemini_key', geminiApiKey);
         updateAiBrainButton();
         typeAgentDialogue(geminiApiKey
-          ? 'Cerebro neuronal Gemini conectado a Laticce, señor. Ahora puede preguntarme cualquier duda sobre giros semanales 1S, piramidación Swing, liquidez BSL/SSL o macroeconomía.'
+          ? 'Cerebro neuronal Gemini conectado a Laticce, señor. Ahora puede preguntarme en qué activo enfocarse hoy, sobre zonas OB+FVG, piramidación Swing o giros 1S.'
           : 'Clave eliminada. Operando con el motor analítico local inteligente de Laticce, señor.');
       }
     }
@@ -663,6 +661,10 @@
                 wp.dist_units = a.pip ? Math.round((Math.abs(a.price - wp.entry) / a.pip) * 10) / 10 : Math.abs(a.price - wp.entry);
               });
             }
+            if (data.focus_pick && data.focus_pick.primary && data.focus_pick.primary.symbol === sym) {
+              data.focus_pick.primary.price = a.price;
+              data.focus_pick.primary.dist_units = a.pip ? Math.round((Math.abs(a.price - data.focus_pick.primary.entry) / a.pip) * 10) / 10 : Math.abs(a.price - data.focus_pick.primary.entry);
+            }
             updatedAny = true;
           }
         } catch (e) {}
@@ -677,11 +679,12 @@
           renderPanelWeekly1S();
           renderPanelUltron();
         } else if (currentAgent === 'edith') {
-          const n = getNearestAsset();
+          const fp = getFocusPick();
+          const n = fp ? data.assets.find(x => x.symbol === fp.symbol) : getNearestAsset();
           if (n) {
             const d = getAssetUnitsDist(n);
-            document.getElementById('agent-hero-metric').textContent = `${d.units} ${d.label}`;
-            document.getElementById('agent-hero-sub').textContent = `${n.symbol} · EN VIVO (${n.price})`;
+            document.getElementById('agent-hero-metric').textContent = `${n.symbol} (${d.units} ${d.label})`;
+            document.getElementById('agent-hero-sub').textContent = `FOCO #1 · EN VIVO (${n.price})`;
           }
         }
       }
@@ -689,11 +692,13 @@
 
     function updateTickerBar() {
       if (!data || !data.assets) return;
+      const fpSym = data.focus_pick && data.focus_pick.primary ? data.focus_pick.primary.symbol : '';
       const items = data.assets.map(a => {
         const st = getAssetBadgeState(a);
+        const focusTag = a.symbol === fpSym ? ' <span class="text-amber-300 font-bold">🎯FOCO#1</span>' : '';
         const swingTag = (a.swing_potential && a.swing_potential.active) ? ' <span class="text-indigo-300 font-bold">🌊SWING</span>' : '';
         const newsTag = (a.news_warning && a.news_warning.active) ? ' <span class="text-orange-400 font-bold">⚠️NOTICIA</span>' : '';
-        return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong>${swingTag}${newsTag} <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`;
+        return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong>${focusTag}${swingTag}${newsTag} <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`;
       }).join('<span class="text-slate-600">|</span>');
       const track = document.getElementById('live-ticker-track');
       if (track) track.innerHTML = items + items;
@@ -819,6 +824,9 @@
     }
 
     function getAssetBadgeState(a) {
+      if (!a.has_valid_ob) {
+        return { code: 'NO_OB', dot: '⚪', text: 'SIN OB / FVG', badgeClass: 'bg-slate-800/70 text-slate-400 border-slate-700' };
+      }
       const isBuy = a.setup.direction === 'BUY';
       const createdTs = a.created_at || 0;
       const futureCandles = (a.candles && a.candles['1h'])
@@ -826,47 +834,44 @@
         : [];
       const touchedEntry = futureCandles.some(c => isBuy ? (c.l <= a.setup.entry) : (c.h >= a.setup.entry));
       const hitTP1 = touchedEntry && (isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1));
-      const missedMove = !touchedEntry && (isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1));
-      const isReentry = (a.setup.signal_tag || '').toUpperCase().includes('RE-ENTRADA');
       const pctDist = Math.abs(a.price - a.setup.entry) / a.price;
-      const rightSide = isBuy ? (a.price >= a.setup.sl && a.price < a.setup.tp1) : (a.price <= a.setup.sl && a.price > a.setup.tp1);
+      const rightSide = isBuy ? (a.price > a.setup.sl && a.price < a.setup.tp1) : (a.price < a.setup.sl && a.price > a.setup.tp1);
       const nearBlock = rightSide && pctDist <= 0.004;
 
       if (hitTP1) return { code: 'TP1', dot: '🟢', text: 'TP1 ALCANZADO', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400' };
-      if (missedMove) return { code: 'MISSED', dot: '⚪', text: 'SIN ACTIVAR', badgeClass: 'bg-slate-700/40 text-slate-300 border-slate-500' };
-      if (isReentry) return { code: 'REENTRY', dot: '🔵', text: 'RE-ENTRADA PIRÁMIDE', badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-400' };
+      if (a.zone_kind === 'OB_FVG') return { code: 'OB_FVG', dot: '💎', text: nearBlock ? 'CERCA OB+FVG' : 'OB + FVG', badgeClass: 'bg-cyan-500/20 text-cyan-300 border-cyan-400' };
+      if (a.zone_kind === 'FVG') return { code: 'FVG', dot: '🔷', text: nearBlock ? 'CERCA FVG' : 'FVG RETROCESO', badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-400' };
       if (nearBlock) return { code: 'NEAR', dot: '🟡', text: 'CERCA OB', badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-400' };
-      return { code: 'WAIT', dot: '', text: '', badgeClass: '' };
+      return { code: 'OB', dot: '🟢', text: 'OB ESTRUCTURAL', badgeClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40' };
     }
 
     const COURSE_LESSONS = [
       { id: 1, title: "1. Estructura Institucional (BOS y CHoCH)", body: "Lección uno: Estructura. Un BOS confirma que la tendencia continúa rompiendo un máximo o mínimo previo. Un CHoCH es el primer aviso de cambio de tendencia cuando el precio quiebra el último soporte u oferta que impulsó el movimiento.", quiz: "Regla clave: Nunca opere en contra de un BOS confirmado en 4 horas." },
       { id: 2, title: "2. Liquidez Externa (BSL y SSL)", body: "Lección dos: Liquidez. Las instituciones necesitan contrapartida. Por encima de los techos iguales hay liquidez compradora (BSL) y por debajo de los pisos iguales hay liquidez vendedora (SSL). El precio suele barrer esos stops antes de arrancar.", quiz: "Regla clave: Si ve una mecha barriendo SSL y cerrando arriba, prepare compras." },
       { id: 3, title: "3. Equilibrio EQ 50% (Caro vs. Barato)", body: "Lección tres: Equilibrium al 50 por ciento. La línea punteada EQ 50 divide el rango en dos: arriba es zona Premium (cara, solo para vender) y abajo es zona Discount (barata, solo para comprar).", quiz: "Regla clave: Jamás compre por encima del EQ 50 por ciento; estaría comprando caro." },
-      { id: 4, title: "4. Order Blocks Institucionales (OB)", body: "Lección cuatro: Bloques de Órdenes. Son la última vela contraria antes de un impulso fuerte que rompe estructura. Allí quedaron órdenes pendientes de bancos que suelen mitigarse cuando el precio regresa.", quiz: "Regla clave: Use la caja del Order Block como zona de espera, no entre sin rechazo." },
-      { id: 5, title: "5. Mesa Economía vs. Gráfico y Cestas", body: "Lección cinco: Visión Macro. Si Economía y Gráfico empujan hacia el mismo lado, tenemos confluencia. Si uno está neutral o se contradicen, esperamos.", quiz: "Regla clave: Opere cuando Economía y Gráfico estén del mismo color." },
+      { id: 4, title: "4. Order Blocks + Fair Value Gaps (OB + FVG)", body: "Lección cuatro: Bloques y Vacíos Institucionales. Un Order Block acompañado de un Fair Value Gap (imbalance de 3 velas) confirma inyección bancaria real. El Stop Loss se coloca siempre detrás del extremo estructural del bloque.", quiz: "Regla clave: Priorice siempre los activos con OB + FVG en el Radar de Foco Principal." },
+      { id: 5, title: "5. Concentración en un Solo Activo (Foco #1)", body: "Lección cinco: Concentración de Capital. En lugar de abrir 5 pares de la misma divisa multiplicando el riesgo, concéntrese en el único par con mayor probabilidad del Radar de Foco Principal.", quiz: "Regla clave: Un solo activo limpio rinde más y protege mejor su cuenta que cinco pares dispersos." },
       { id: 6, title: "6. Killzones de Londres y Nueva York", body: "Lección seis: Horarios Institucionales. El volumen real entra en la Killzone de Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). En Asia el volumen es bajo y abundan las trampas.", quiz: "Regla clave: Si el indicador superior dice Fuera de Killzone, reduzca su exposición." },
-      { id: 7, title: "7. Piramidación Swing y Gestión de Parciales", body: "Lección siete: Protocolo Pirámide. Divida su entrada base en micro-órdenes; al tocar +1R o TP1 cobre parciales, suba el Stop Loss a Break Even y solo entonces añada una segunda entrada en retroceso hacia Swing TP.", quiz: "Regla clave: Jamás añada una segunda orden si la primera aún tiene riesgo abierto." },
-      { id: 8, title: "8. Re-entradas Estructurales y ATR Diario", body: "Lección ocho: Volatilidad y Re-entradas. Revise el ATR diario en Ultrón para saber cuánto se mueve el par por sesión antes de fijar objetivos largos.", quiz: "Regla clave: Use el gráfico de 4H para mover el Stop Loss detrás de cada nuevo swing." },
+      { id: 7, title: "7. Piramidación Swing y Gestión de Parciales", body: "Lección siete: Protocolo Pirámide. Entre con su orden base; al tocar +1R o TP1 cobre parciales, suba el Stop Loss a Break Even y solo entonces añada una segunda entrada en retroceso hacia Swing TP.", quiz: "Regla clave: Jamás añada una segunda orden si la primera aún tiene riesgo abierto." },
+      { id: 8, title: "8. Giros Semanales Limpios Pre-2017 (1S)", body: "Lección ocho: Giros Históricos 1S. Busque velas semanales limpias (1 vela + 1 vela única de rechazo sin acumulación) para operar giros en contra-tendencia cuando el precio llegue desde el lado correcto.", quiz: "Regla clave: En 1S, solo entre cuando el precio venga del lado opuesto al giro." },
       { id: 9, title: "9. Filtro de Contradicción y Noticias Fuertes", body: "Lección nueve: Protección de Capital. Si Jarvis marca Se Contradicen o el par tiene alerta de noticia fuerte de alto impacto hoy, espere a que pase el latigazo de la noticia.", quiz: "Regla clave: Una operación evitada en noticia de alto impacto protege su cuenta." },
       { id: 10, title: "10. Auditoría Emocional con Karen y H.O.M.E.R.", body: "Lección diez: Disciplina Profesional. Anotar cada ejecución en el diario de Karen elimina el trading por venganza tras un Stop Loss y permite que H.O.M.E.R. calcule su ventaja estadística real.", quiz: "Regla clave: El éxito no está en adivinar cada vela, sino en repetir exactamente el mismo proceso." }
     ];
 
     const CONCEPT_DICTIONARY = [
-      { keys: ['PIRAMIDE', 'PIRÁMIDE', 'SEGUNDA ENTRADA', 'PARCIALES'], answer: "El protocolo de piramidación Swing consiste en dividir la entrada base en 2 o 3 micro-órdenes en el bloque inicial; al alcanzar el gatillo Break Even (+1R) o TP1, se cobran parciales, se sube el Stop Loss a precio de entrada y solo entonces se añade una segunda entrada en retroceso (🔵 RE-ENTRADA OB) hacia el objetivo semanal." },
-      { keys: ['SWING', 'POTENCIAL SWING', 'DEJAR CORRER'], answer: "La etiqueta Potencial Swing aparece cuando 1D, 4H, 1H y Economía apuntan exactamente en la misma dirección sin señales de agotamiento. En esos casos conviene cobrar parciales en TP1, mover el Stop Loss a Break Even y dejar correr el remanente hacia el Swing TP." },
-      { keys: ['BSL', 'SSL', 'LIQUIDEZ'], answer: "BSL marca la liquidez compradora sobre los máximos recientes y SSL la liquidez vendedora bajo los mínimos recientes. Ultrón los dibuja directamente en el gráfico para que no pongas compras justo bajo un piso a barrer." },
-      { keys: ['EQ', '50%', 'EQUILIBRIUM', 'CARO', 'BARATO', 'PREMIUM', 'DISCOUNT'], answer: "La línea EQ 50% marca exactamente la mitad del rango intradía. Arriba de ella es zona Premium (cara, ideal para ventas) y abajo es zona Discount (barata, ideal para compras)." },
-      { keys: ['CHOCH', 'BOS', 'CAMBIO DE TENDENCIA', 'GIRO'], answer: "CHoCH significa Cambio de Carácter y BOS Ruptura de Estructura. Ultrón los etiqueta en el gráfico cuando el precio quiebra con cuerpo un máximo o mínimo estructural." },
-      { keys: ['CONTRADICEN', 'TESIS ROTA', 'OPPOSED'], answer: "Se Contradicen aparece cuando Economía y el Gráfico apuntan en direcciones opuestas. Es una señal clara para esperar hasta que ambos motores vuelvan a alinearse." }
+      { keys: ['PIRAMIDE', 'PIRÁMIDE', 'SEGUNDA ENTRADA', 'PARCIALES'], answer: "El protocolo de piramidación Swing consiste en abrir la entrada base en el bloque inicial con Stop Loss estructural; al alcanzar el gatillo Break Even (+1R) o TP1, se cobran parciales, se sube el Stop Loss a precio de entrada y solo entonces se añade una segunda entrada en retroceso hacia el objetivo Swing TP." },
+      { keys: ['FVG', 'IMBALANCE', 'VACIO', 'VACÍO'], answer: "El Fair Value Gap (FVG) es un vacío de liquidez de 3 velas dejado por un impulso institucional rápido. Cuando coincide con un Order Block (OB + FVG) afina el punto de entrada al pip; si aparece aislado tras una ruptura, sirve como zona de retroceso." },
+      { keys: ['SWING', 'POTENCIAL SWING', 'DEJAR CORRER'], answer: "La etiqueta Potencial Swing aparece cuando 1S, 1D, 4H, 1H y Economía apuntan exactamente en la misma dirección con un bloque estructural limpio. Conviene cobrar parciales en TP1, mover el Stop Loss a Break Even y dejar correr hacia Swing TP." },
+      { keys: ['BSL', 'SSL', 'LIQUIDEZ'], answer: "BSL marca la liquidez compradora sobre los máximos recientes y SSL la liquidez vendedora bajo los mínimos recientes. Ultrón los dibuja en el gráfico para evitar compras justo bajo un piso a barrer." },
+      { keys: ['EQ', '50%', 'EQUILIBRIUM', 'CARO', 'BARATO', 'PREMIUM', 'DISCOUNT'], answer: "La línea EQ 50% marca la mitad del rango intradía. Arriba es zona Premium (cara, ideal para ventas) y abajo es zona Discount (barata, ideal para compras)." }
     ];
 
     const AGENTS = {
-      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Laticce. Hablas con elegancia británica ("señor") y precisión institucional. No des consejos de lotaje; enfócate en la mesa Economía vs Gráfico, niveles de precio, Break Even y parciales.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
+      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Laticce. Hablas con elegancia británica ("señor") y precisión institucional. Enfócate en recomendar el único activo ganador del Radar de Foco Principal (focus_pick) para concentrar el capital sin dispersar riesgo.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
       vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, analista macroeconómico de Laticce sobre bancos centrales, DXY, bonos US10Y y cestas correlacionadas de divisas.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
-      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez BSL/SSL, Order Blocks, CHoCH/BOS, ATR y trailing estructural en 4H.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
+      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez BSL/SSL, Order Blocks, Fair Value Gaps (FVG) y Stop Loss estructurales en 1H/4H.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
       friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., instructora de trading institucional en Laticce. Llamas "jefe" al usuario.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
-      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora táctica de ejecución en Laticce. No calculas lotaje; indicas precios exactos de entrada, Stop Loss inicial, gatillo Break Even (+1R), cobro de parciales en TP1 y zonas de re-entrada en pirámide.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
+      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora táctica de ejecución en Laticce. Indicas precios exactos de entrada, Stop Loss estructural del OB/FVG, gatillo Break Even (+1R) y cobro de parciales en TP1.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
       karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, psicóloga de trading y auditora emocional de Laticce.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
       homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', personaPrompt: 'Eres H.O.M.E.R., estadístico veterano e irónico de Laticce.', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
     };
@@ -930,7 +935,7 @@
     function formatTextForSpeech(raw) {
       return raw
         .replace(/<[^>]*>/g, '')
-        .replace(/[*#`⚠️🌊🔗]/g, '')
+        .replace(/[*#`⚠️🌊🔗🎯💎]/g, '')
         .replace(/XAUUSD/g, 'Oro Dólar')
         .replace(/BTCUSD/g, 'Bitcoin')
         .replace(/USTEC/g, 'Nasdaq cien')
@@ -1081,6 +1086,34 @@
       }).join('');
     }
 
+    function getFocusPick() {
+      if (data && data.focus_pick && data.focus_pick.primary) return data.focus_pick.primary;
+      if (!data || !data.assets) return null;
+      const valid = data.assets.filter(a => a.has_valid_ob && a.confluence && a.confluence.alignment === 'ALIGNED')
+        .sort((a, b) => b.confluence.score - a.confluence.score);
+      if (!valid.length) return null;
+      const top = valid[0];
+      const d = getAssetUnitsDist(top);
+      return {
+        symbol: top.symbol,
+        direction: top.setup.direction,
+        dir_label: top.setup.direction === 'BUY' ? 'COMPRA' : 'VENTA',
+        zone_kind: top.zone_kind || 'OB',
+        signal_tag: top.setup.signal_tag,
+        price: top.price,
+        entry: top.setup.entry,
+        sl: top.setup.sl,
+        be_trigger: top.setup.be_trigger || top.setup.entry,
+        tp1: top.setup.tp1,
+        tp2: top.swing_potential ? top.swing_potential.target : top.setup.tp2,
+        is_swing: Boolean(top.swing_potential && top.swing_potential.active),
+        dist_units: d.units,
+        unit_label: d.label,
+        probability: top.confluence.score,
+        reasons: [top.confluence.verdict_title, top.confluence.verdict_sub]
+      };
+    }
+
     function getBrokenTheses() { return (data && data.assets) ? data.assets.filter(a => a.confluence && a.confluence.alignment === 'OPPOSED') : []; }
     function getAlignedAssets() { return (data && data.assets) ? data.assets.filter(a => a.confluence && a.confluence.alignment === 'ALIGNED') : []; }
     function getSwingAssets() { return (data && data.assets) ? data.assets.filter(a => a.swing_potential && a.swing_potential.active) : []; }
@@ -1095,7 +1128,9 @@
     }
     function getNearestAsset() {
       if (!data || !data.assets || !data.assets.length) return null;
-      return [...data.assets].sort((a, b) => (Math.abs(a.price - a.setup.entry) / a.price) - (Math.abs(b.price - b.setup.entry) / b.price))[0];
+      const valid = data.assets.filter(a => a.has_valid_ob);
+      const pool = valid.length ? valid : data.assets;
+      return [...pool].sort((a, b) => (Math.abs(a.price - a.setup.entry) / a.price) - (Math.abs(b.price - b.setup.entry) / b.price))[0];
     }
     function getAssetUnitsDist(a) {
       const diff = Math.abs(a.price - a.setup.entry);
@@ -1117,22 +1152,20 @@
 
     function buildCompactMarketSnapshot() {
       if (!data || !data.assets) return 'Sin datos.';
+      const fp = getFocusPick();
+      const focusStr = fp ? `FOCO_#1:${fp.symbol}(${fp.dir_label}, prob ${fp.probability}%, Ent=${fp.entry}, SL=${fp.sl}, TP1=${fp.tp1}, razones:${fp.reasons.join(',')})` : 'FOCO_#1:Ninguno';
       const basketsStr = (data.correlated_baskets || []).map(b => `${b.currency}_${b.status}:[${b.pairs.join(',')}]`).join(' ');
-      const wpStr = getWeeklyPivotsList().slice(0, 6).map(w => `${w.symbol}(${w.direction} en ${w.entry}, fecha ${w.date}, a ${w.dist_units}${w.unit_label})`).join(' ');
-      const rows = data.assets.map(a => {
+      const rows = data.assets.filter(a => a.has_valid_ob).map(a => {
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
-        const be = a.setup.be_trigger || a.setup.entry;
-        const sw = (a.swing_potential && a.swing_potential.active) ? `|SWING:${a.swing_potential.target}(BE:${be})` : '';
-        const nw = (a.news_warning && a.news_warning.active) ? `|NOTICIA:${a.news_warning.currencies}` : '';
-        return `${a.symbol}:${a.setup.direction}(${a.confluence.score}pts)|Econ:${a.macro_dir||'-'}|Graf:${a.chart_bias}|P=${a.price}|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}${sw}${nw}`;
+        return `${a.symbol}:${a.setup.signal_tag}(${a.confluence.score}pts)|P=${a.price}|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}`;
       }).join('\n');
-      return `Macro:${data.brief.headline} | Cestas:${basketsStr} | Giros1S:${wpStr}\n${rows}`;
+      return `${focusStr}\nMacro:${data.brief.headline} | Cestas:${basketsStr}\n${rows}`;
     }
 
     async function askGeminiBrain(userQuestion, agentKey) {
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
-      const promptText = `${ag.personaPrompt} Responde en español, claro y completo (3 a 6 oraciones) usando estos datos en vivo de Laticce (sin recomendar lotajes):\n${buildCompactMarketSnapshot()}\n\nPregunta: ${userQuestion}`;
+      const promptText = `${ag.personaPrompt} Responde en español, claro y directo (3 a 6 oraciones) usando estos datos en vivo de Laticce (sin recomendar lotajes):\n${buildCompactMarketSnapshot()}\n\nPregunta: ${userQuestion}`;
 
       const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
       let lastError = 'Congestión temporal';
@@ -1173,31 +1206,30 @@
       if (!asset && (q.includes('BITCOIN') || q.includes('BTC'))) asset = data.assets.find(a => a.symbol === 'BTCUSD');
 
       if (asset) {
+        if (!asset.has_valid_ob) {
+          return `${asset.symbol} cotiza en ${asset.price}, pero ahora mismo NO presenta ningún Order Block ni Fair Value Gap limpio en 1H (${asset.confluence.verdict_title}). Recomiendo no entrar aquí y concentrarnos en nuestro Foco Principal.`;
+        }
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
         const be = asset.setup.be_trigger || asset.setup.entry;
-        const econTxt = asset.economy_short || asset.macro_dir || 'NEUTRAL';
-        const sw = (asset.swing_potential && asset.swing_potential.active)
-          ? ` Protocolo Pirámide Swing activo: divide tu entrada base en ${asset.setup.entry} (SL ${asset.setup.sl}); al tocar ${be} (+1R) o TP1 (${asset.setup.tp1}), cobra parciales y sube el Stop Loss a ${asset.setup.entry} (Break Even); solo con la base protegida añade la 2.ª entrada en retroceso (🔵 RE-ENTRADA OB en 4H/1H) hacia Swing TP ${asset.swing_potential.target}.`
-          : ` Entrada intradía en ${asset.setup.entry} con Stop en ${asset.setup.sl} (${p.sl} ${p.unitLabel}), parciales en TP1 (${asset.setup.tp1}) y Break Even en ${be}.`;
-        return `${asset.symbol} cotiza en ${asset.price}. Mesa cara a cara: Economía (${econTxt}) vs Gráfico (${asset.chart_bias}) con confluencia ${asset.confluence.score}/100 (${asset.confluence.verdict_title}), a ${d.units} ${d.label} del bloque.${sw}`;
+        return `${asset.symbol} (${asset.setup.signal_tag}) cotiza en ${asset.price}, a ${d.units} ${d.label} de la entrada en ${asset.setup.entry} con Stop Loss estructural en ${asset.setup.sl} (${p.sl} ${p.unitLabel}), gatillo Break Even en ${be} y TP1 en ${asset.setup.tp1}.`;
       }
 
-      if (q.includes('SEMANAL') || q.includes('1S') || q.includes('HISTORICO') || q.includes('HISTÓRICO') || q.includes('2017')) {
+      if (q.includes('ENFOC') || q.includes('MEJOR') || q.includes('RECOMIENDA') || q.includes('RENTABLE') || q.includes('PROBABILIDAD') || q.includes('OPERAR') || q.includes('FOCO')) {
+        const fp = getFocusPick();
+        if (!fp) {
+          return 'En este momento ningún par cumple simultáneamente con bloque OB/FVG estructural y alineación macro completa, señor. La decisión más rentable ahora es proteger capital y esperar la próxima Killzone.';
+        }
+        const backup = data.focus_pick && data.focus_pick.backup;
+        const backupTxt = backup ? ` Como respaldo independiente (sin cruzar divisas) tiene ${backup.symbol} (${backup.dir_label}, ${backup.probability}% prob).` : '';
+        return `El activo número uno con mayor probabilidad matemática hoy es ${fp.symbol} en ${fp.dir_label} (${fp.probability}% de probabilidad, ${fp.signal_tag}). Razones: ${fp.reasons.join(', ')}. Entrada en ${fp.entry} (a ${fp.dist_units} ${fp.unit_label}), Stop estructural en ${fp.sl}, subir a BE en ${fp.be_trigger} y TP1 en ${fp.tp1}. Concéntrese solo en este activo.${backupTxt}`;
+      }
+
+      if (q.includes('SEMANAL') || q.includes('1S') || q.includes('HISTORICO') || q.includes('HISTÓRICO')) {
         const wList = getWeeklyPivotsList().slice(0, 4);
-        if (!wList.length) return 'No hay giros semanales limpios pre-2017 a 60 pips o menos en este momento, señor.';
+        if (!wList.length) return 'No hay giros semanales limpios contra-tendencia pre-2017 a 60 pips o menos en este momento, señor.';
         const desc = wList.map(w => `${w.symbol} (${w.direction === 'BUY' ? 'Compra' : 'Venta'} en ${w.entry}, fecha ${w.date}, a ${w.dist_units} ${w.unit_label})`).join('; ');
-        return `Giros semanales limpios históricos (pre-2017) a 60 pips o menos ahora mismo: ${desc}. Puede revisarlos todos en la pestaña 1S HISTÓRICO del panel.`;
-      }
-
-      if (q.includes('RECOMIENDA') || q.includes('PARE') || q.includes('MEJOR') || q.includes('OPERAR') || q.includes('OPORTUNIDAD') || q.includes('SWING') || q.includes('CESTA')) {
-        const swings = getSwingAssets()
-          .filter(a => !(a.news_warning && a.news_warning.active))
-          .sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price);
-        const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status}: ${b.pairs.join(', ')}`).join(' | ');
-
-        const topSwings = swings.slice(0, 3).map(x => `${x.symbol} (${x.setup.direction === 'BUY' ? 'Compra' : 'Venta'} en ${x.setup.entry}, BE en ${x.setup.be_trigger || x.setup.entry}, Swing TP ${x.swing_potential.target})`).join('; ');
-        return `Analizando los veintidós activos en Laticce, señor, los mejores candidatos con Potencial Swing para operar con parciales y piramidación son: ${topSwings || 'ninguno sin noticia ahora mismo'}. ${baskets ? `Cestas macro correlacionadas activas: ${baskets}.` : ''}`;
+        return `Giros semanales limpios contra-tendencia (pre-2017) a 60 pips o menos ahora mismo: ${desc}.`;
       }
 
       return null;
@@ -1303,10 +1335,7 @@
     }
 
     function updateAgentTelemetryAndGreeting(key) {
-      const broken = getBrokenTheses();
-      const aligned = getAlignedAssets();
-      const swings = getSwingAssets();
-      const weeklyCount = getWeeklyPivotsList().length;
+      const fp = getFocusPick();
       const nearest = getNearestAsset();
       const homer = getHomerMetrics();
 
@@ -1317,43 +1346,47 @@
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
         document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
         renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
-        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo en Laticce es "${COURSE_LESSONS[nextIdx].title}", o puede preguntarme sobre la mesa Economía vs Gráfico.`);
+        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo en Laticce es "${COURSE_LESSONS[nextIdx].title}".`);
         return;
       }
       renderDefaultQuickReplies();
 
       if (key === 'jarvis') {
-        const newsPairsCount = data ? data.assets.filter(a => a.news_warning && a.news_warning.active).length : 0;
-        document.getElementById('agent-hero-metric').textContent = `${swings.length} SWING · ${weeklyCount} 1S`;
-        document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${newsPairsCount} NOTICIAS · ${broken.length} ALERTAS`;
-        typeAgentDialogue(`A sus órdenes, señor. Red Laticce activa: tenemos ${swings.length} pares con Potencial Swing intradía y ${weeklyCount} niveles de Giros Semanales Limpios pre-2017 (<= 60 pips) listos en su pestaña 1S HISTÓRICO. ¿Desea el reporte?`);
+        if (fp) {
+          document.getElementById('agent-hero-metric').textContent = `🎯 ${fp.symbol} (${fp.probability}%)`;
+          document.getElementById('agent-hero-sub').textContent = `${fp.dir_label} · ${fp.signal_tag} · A ${fp.dist_units} ${fp.unit_label}`;
+          typeAgentDialogue(`A sus órdenes, señor. He filtrado los 22 activos y el único foco con máxima probabilidad hoy es ${fp.symbol} en ${fp.dir_label} (${fp.probability}% de probabilidad, ${fp.signal_tag}). Entrada en ${fp.entry}, Stop estructural en ${fp.sl} y TP1 en ${fp.tp1}. ¿Desea el análisis completo?`);
+        } else {
+          document.getElementById('agent-hero-metric').textContent = `MODO ESPERA`;
+          document.getElementById('agent-hero-sub').textContent = `SIN BLOQUE OB/FVG ALINEADO AHORA`;
+          typeAgentDialogue(`A sus órdenes, señor. Ningún activo cumple simultáneamente con bloque OB/FVG limpio y alineación macro en este instante. Recomiendo proteger capital y esperar la próxima estructura.`);
+        }
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & CESTAS';
-        typeAgentDialogue(`Los flujos de capital revelan una verdad sencilla: las divisas fuertes arrastran a toda su cesta correlacionada en bloque. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he agrupado los pares sincronizados. ¿Analizamos las cestas?`);
+        typeAgentDialogue(`Los flujos de capital revelan qué divisa lidera el mercado hoy. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he vinculado las cestas macroeconómicas al Radar de Foco Principal. ¿Analizamos las cestas?`);
       } else if (key === 'ultron') {
-        const target = nearest || (data && data.assets[0]);
+        const target = (fp && data && data.assets.find(x => x.symbol === fp.symbol)) || nearest || (data && data.assets[0]);
         document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
-        document.getElementById('agent-hero-sub').textContent = target ? `SESGO ${target.chart_bias} · LIQUIDEZ BSL/SSL` : 'ESTRUCTURA';
-        typeAgentDialogue(`Los humanos ven esperanza en las velas; yo solo veo liquidez BSL y SSL esperando ser barrida. En el gráfico marco los cambios de carácter CHoCH, rupturas BOS y el ATR diario. ¿Qué gráfico auditamos?`);
+        document.getElementById('agent-hero-sub').textContent = target ? `${target.setup.signal_tag}` : 'ESTRUCTURA';
+        typeAgentDialogue(`Solo marco bloques reales: OB más FVG, OB estructurales y FVG de retroceso con Stop Loss dictado por el extremo de la vela institucional. Nuestro objetivo #1 en el radar es ${target ? target.symbol : '--'}. ¿Lo auditamos?`);
       } else if (key === 'edith') {
-        if (nearest) {
-          const d = getAssetUnitsDist(nearest);
-          document.getElementById('agent-hero-metric').textContent = `${d.units} ${d.label}`;
-          document.getElementById('agent-hero-sub').textContent = `${nearest.symbol} · BE EN ${nearest.setup.be_trigger || nearest.setup.entry}`;
+        if (fp) {
+          document.getElementById('agent-hero-metric').textContent = `${fp.symbol} (${fp.dist_units} ${fp.unit_label})`;
+          document.getElementById('agent-hero-sub').textContent = `BE EN ${fp.be_trigger} · SL ${fp.sl}`;
         } else {
           document.getElementById('agent-hero-metric').textContent = '--';
-          document.getElementById('agent-hero-sub').textContent = 'CALCULANDO COORDENADAS';
+          document.getElementById('agent-hero-sub').textContent = 'ESPERANDO SETUP';
         }
-        typeAgentDialogue(`Sistemas ópticos de Laticce calibrados. He fijado los niveles exactos de entrada, Stop inicial, gatillo Break Even (+1R) y zonas de re-entrada en pirámide. ¿Le entrego las coordenadas?`);
+        typeAgentDialogue(`Sistemas ópticos de Laticce calibrados. He fijado las coordenadas exactas de nuestro Foco Principal${fp ? ` (${fp.symbol})` : ''} con Stop Loss estructural y gatillo Break Even (+1R). ¿Le entrego el plan?`);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES SINCRONIZADAS`;
-        typeAgentDialogue(`Hola, me alegra verlo operando con disciplina. Recuerde: nunca añada una segunda orden en pirámide hasta que la primera tenga el Stop Loss asegurado en Break Even. Tiene ${trades.length} operaciones registradas.`);
+        typeAgentDialogue(`Hola, me alegra verlo operando con disciplina. Concéntrese únicamente en el activo #1 del Radar de Foco Principal y nunca añada una segunda orden hasta asegurar la primera en Break Even.`);
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Los números nunca mienten: operar solo cuando Economía y Gráfico van juntos multiplica tu ventaja estadística sin aumentar el riesgo. Tienes ${homer.winRate}% de acierto y ${homer.pnlR}.`);
+        typeAgentDialogue(`Los números nunca mienten: concentrar tu cuenta en un solo activo con OB más FVG y alineación total multiplica tu rentabilidad sin sobreexponer tu capital. Tienes ${homer.winRate}% de acierto y ${homer.pnlR}.`);
       }
     }
 
@@ -1361,23 +1394,32 @@
       if (choice === 'NO') { typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa.'); return; }
       if (!data) { typeAgentDialogue('Sincronizando datos del mercado, señor.'); return; }
       if (currentAgent === 'jarvis') {
-        const swings = getSwingAssets().map(x => `${x.symbol} (BE ${x.setup.be_trigger || x.setup.entry} → Swing ${x.swing_potential.target})`);
-        const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status}: ${b.pairs.join(', ')}`);
-        typeAgentDialogue(`Reporte táctico, señor: Pares con Potencial Swing para gestionar por parciales y pirámide: ${swings.length ? swings.slice(0, 4).join('; ') : 'ninguno por ahora'}. ${baskets.length ? `Cestas correlacionadas en bloque: ${baskets.join(' | ')}.` : ''}`);
+        const fp = getFocusPick();
+        if (!fp) {
+          typeAgentDialogue('Ningún activo tiene OB/FVG limpio alineado con macro en este momento, señor.');
+          return;
+        }
+        const backup = data.focus_pick && data.focus_pick.backup;
+        const bTxt = backup ? ` Respaldo independiente: ${backup.symbol} (${backup.dir_label}, ${backup.probability}% prob, entrada ${backup.entry}).` : '';
+        typeAgentDialogue(`Foco Principal #1: ${fp.symbol} en ${fp.dir_label} (${fp.probability}% de probabilidad). Motivos: ${fp.reasons.join(', ')}. Entrada en ${fp.entry} (a ${fp.dist_units} ${fp.unit_label}), Stop estructural en ${fp.sl}, Break Even en ${fp.be_trigger} y TP1 en ${fp.tp1}.${bTxt}`);
       } else if (currentAgent === 'vision') {
         const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status} (${b.pairs.join(', ')})`).join('; ');
         typeAgentDialogue(`${data.brief.headline}. ${baskets ? `Cestas sincronizadas hoy: ${baskets}.` : data.brief.summary}`);
       } else if (currentAgent === 'ultron') {
-        const n = getNearestAsset();
+        const fp = getFocusPick();
+        const n = (fp && data.assets.find(x => x.symbol === fp.symbol)) || getNearestAsset();
         const d = getAssetUnitsDist(n);
         const p = getSetupPips(n);
-        const liq = n.liquidity || {};
-        typeAgentDialogue(`Objetivo prioritario: ${n.symbol} (${n.price}), a ${d.units} ${d.label} del bloque ${n.setup.entry}. Liquidez BSL en ${liq.bsl || '--'} y SSL en ${liq.ssl || '--'}. Stop inicial en ${n.setup.sl} (${p.sl} ${p.unitLabel}).`);
+        typeAgentDialogue(`Estructura #1: ${n.symbol} (${n.price}), ${n.setup.signal_tag} en ${n.setup.entry} (a ${d.units} ${d.label}). Stop Loss estructural en ${n.setup.sl} (${p.sl} ${p.unitLabel}), TP1 en ${n.setup.tp1}.`);
       } else if (currentAgent === 'edith') {
-        const top3 = [...data.assets].sort((a, b) => getAssetUnitsDist(a).diff / a.price - getAssetUnitsDist(b).diff / b.price).slice(0, 3);
-        typeAgentDialogue(`Coordenadas más cercanas: ` + top3.map(x => `${x.symbol} entrada ${x.setup.entry}, SL ${x.setup.sl}, subir SL a BE en ${x.setup.be_trigger || x.setup.entry}`).join('; ') + `.`);
+        const fp = getFocusPick();
+        if (fp) {
+          typeAgentDialogue(`Plan de ejecución #1 en ${fp.symbol} (${fp.dir_label}): Entrada en ${fp.entry}, Stop estructural en ${fp.sl}, subir SL a Break Even en ${fp.be_trigger}, cobrar parciales en TP1 (${fp.tp1}) y objetivo extendido en ${fp.tp2}.`);
+        } else {
+          typeAgentDialogue('Sin setup estructural activo en este momento, señor.');
+        }
       } else if (currentAgent === 'karen') {
-        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía. Abra el panel y pulse Vincular Nube para sincronizar PC y celular.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
+        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
       } else if (currentAgent === 'homer') {
         const h = getHomerMetrics();
         typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre ${h.total} operaciones.`);
@@ -1456,10 +1498,16 @@
         document.getElementById('last-updated').textContent = `ESTRUCTURA: ${data.last_updated}`;
         updateTickerBar();
 
-        if (!data.assets.some(a => a.symbol === selectedSymbol)) selectedSymbol = data.assets[0].symbol;
+        if (data.focus_pick && data.focus_pick.primary) {
+          selectedSymbol = data.focus_pick.primary.symbol;
+        } else if (!data.assets.some(a => a.symbol === selectedSymbol)) {
+          selectedSymbol = data.assets[0].symbol;
+        }
+
         const jPair = document.getElementById('j-pair');
         if (jPair) {
           jPair.innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
+          jPair.value = selectedSymbol;
         }
 
         await refreshLivePrices();
@@ -1507,7 +1555,7 @@
       }
 
       if (!list.length) {
-        grid.innerHTML = `<div class="col-span-full bg-[#050811] border border-slate-800 rounded-xl p-6 text-center text-xs text-slate-400">No hay giros semanales limpios pre-2017 en el rango de ${weeklyRangeMode === '40_60' ? '40 a 60 pips' : '0 a 60 pips'} en este momento.</div>`;
+        grid.innerHTML = `<div class="col-span-full bg-[#050811] border border-slate-800 rounded-xl p-6 text-center text-xs text-slate-400">No hay giros semanales limpios contra-tendencia pre-2017 en el rango de ${weeklyRangeMode === '40_60' ? '40 a 60 pips' : '0 a 60 pips'} en este momento.</div>`;
         return;
       }
 
@@ -1573,7 +1621,7 @@
               <p class="text-[11px] text-slate-200">${b.pairs.join(' · ')}</p>
             </div>
           `).join('')
-        : `<div class="col-span-full text-slate-500 text-xs">Sin cestas dominantes en este momento; operar pares individuales con mayor puntaje.</div>`;
+        : `<div class="col-span-full text-slate-500 text-xs">Sin cestas dominantes en este momento; concentrarse en el Foco Principal #1.</div>`;
 
       const banksList = data.banks || [
         { bank: "FED (EE.UU.)", currency: "USD", stance: "RESTRICTIVA (HAWKISH)", bias: "BULLISH", detail: `DXY en ${data.brief.dxy} · Bonos US10Y en ${data.brief.us10y}%.` }
@@ -1612,25 +1660,59 @@
     function renderPanelJarvis() {
       if (!data) return;
 
+      const focusCard = document.getElementById('pj-focus-card');
+      const fp = getFocusPick();
+      const backup = data.focus_pick && data.focus_pick.backup;
+      if (focusCard) {
+        if (fp) {
+          focusCard.classList.remove('hidden');
+          const isBuy = fp.direction === 'BUY';
+          focusCard.innerHTML = `
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-amber-400 text-black font-hud font-black text-[10px]">🎯 FOCO PRINCIPAL #1 HOY</span>
+                <span class="font-hud font-black text-white text-base">${fp.symbol}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isBuy ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400' : 'bg-red-500/20 text-red-300 border border-red-400'}">${fp.dir_label} (${fp.signal_tag})</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/60 text-[10px] font-bold">${fp.probability}% PROBABILIDAD</span>
+              </div>
+              <button onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs">ABRIR GRÁFICO #1 →</button>
+            </div>
+            <div class="text-[11px] text-slate-200">
+              <strong class="text-amber-300">Por qué concentrarse aquí:</strong> ${fp.reasons.join(' · ')}.
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-[#04060c]/90 border border-slate-800 rounded-lg p-2 text-center text-[11px]">
+              <div><div class="text-[9px] text-sky-400">ENTRADA FIJA</div><div class="font-bold text-white">${fp.entry}</div><div class="text-[9px] text-slate-400">a ${fp.dist_units} ${fp.unit_label}</div></div>
+              <div><div class="text-[9px] text-red-400">STOP ESTRUCTURAL</div><div class="font-bold text-red-400">${fp.sl}</div><div class="text-[9px] text-slate-400">Extremo OB/FVG</div></div>
+              <div><div class="text-[9px] text-indigo-300">GATILLO BE (+1R)</div><div class="font-bold text-indigo-300">${fp.be_trigger}</div><div class="text-[9px] text-slate-400">Proteger orden</div></div>
+              <div><div class="text-[9px] text-emerald-400">TP1 PARCIAL</div><div class="font-bold text-emerald-400">${fp.tp1}</div><div class="text-[9px] text-slate-400">Cobrar parcial</div></div>
+              <div><div class="text-[9px] text-emerald-400">${fp.is_swing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${fp.tp2}</div><div class="text-[9px] text-slate-400">${fp.is_swing ? 'Correr remanente' : 'Objetivo 1:3'}</div></div>
+            </div>
+            ${backup ? `<div class="text-[10px] text-slate-400">🛡️ <strong class="text-slate-300">Plan B (divisa independiente):</strong> ${backup.symbol} (${backup.dir_label} · ${backup.probability}% prob · Entrada ${backup.entry} a ${backup.dist_units} ${backup.unit_label})</div>` : ''}
+          `;
+        } else {
+          focusCard.classList.remove('hidden');
+          focusCard.innerHTML = `<div class="text-xs text-amber-200">🎯 <strong>RADAR DE FOCO PRINCIPAL:</strong> Ningún par cumple simultáneamente con bloque OB/FVG estructural limpio y alineación macro en este momento. Conserve su capital y espere la próxima sesión.</div>`;
+        }
+      }
+
       const basketsBar = document.getElementById('pj-baskets-bar');
       if (basketsBar) {
         const baskets = data.correlated_baskets || [];
         if (baskets.length) {
           basketsBar.classList.remove('hidden');
-          basketsBar.innerHTML = `<div class="font-bold text-indigo-300">🔗 CESTAS MACROECONÓMICAS CORRELACIONADAS HOY (ENTRADA EN BLOQUE):</div>` +
+          basketsBar.innerHTML = `<div class="font-bold text-indigo-300">🔗 CESTAS MACROECONÓMICAS ACTIVAS (Elija solo el Foco #1 para no duplicar riesgo):</div>` +
             baskets.map(b => `<div class="text-slate-200">• <strong>${b.currency} ${b.status}:</strong> ${b.pairs.join('  |  ')}</div>`).join('');
         } else {
           basketsBar.classList.add('hidden');
         }
       }
 
-      let list = [...data.assets].sort((a, b) => b.confluence.score - a.confluence.score);
+      let list = [...data.assets].sort((a, b) => (b.has_valid_ob ? 100 : 0) + b.confluence.score - ((a.has_valid_ob ? 100 : 0) + a.confluence.score));
+      if (panelFilter === 'VALID_OB') list = list.filter(a => a.has_valid_ob);
       if (panelFilter === 'SWING') list = list.filter(a => a.swing_potential && a.swing_potential.active);
       if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
       if (panelFilter === 'NEWS') list = list.filter(a => a.news_warning && a.news_warning.active);
       if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence.alignment === 'OPPOSED');
-      if (panelFilter === 'TP1') list = list.filter(a => getAssetBadgeState(a).code === 'TP1');
-      if (panelFilter === 'REENTRY') list = list.filter(a => getAssetBadgeState(a).code === 'REENTRY');
       if (panelFilter === 'AUD') list = list.filter(a => a.symbol.includes('AUD'));
       if (panelFilter === 'XAU') list = list.filter(a => a.symbol === 'XAUUSD');
 
@@ -1658,6 +1740,7 @@
         const hasNews = a.news_warning && a.news_warning.active;
         const hasSwing = a.swing_potential && a.swing_potential.active;
         const bePrice = a.setup.be_trigger || a.setup.entry;
+        const isTopFocus = fp && fp.symbol === a.symbol;
 
         const mDir = a.macro_dir || (a.confluence.alignment === 'ALIGNED' ? a.chart_bias : 'NEUTRAL');
         const econColor = mDir === 'SUBE' ? 'text-emerald-300 border-emerald-500/40 bg-emerald-500/10' : (mDir === 'BAJA' ? 'text-red-300 border-red-500/40 bg-red-500/10' : 'text-slate-300 border-slate-700 bg-slate-800/40');
@@ -1667,11 +1750,12 @@
         const chartLabel = a.chart_bias === 'SUBE' ? 'ALCISTA (SUBE ▲)' : 'BAJISTA (BAJA ▼)';
 
         return `
-          <div class="hud-panel rounded-xl p-4 space-y-3 border ${hasSwing ? 'border-indigo-400/70' : (hasNews ? 'border-orange-400/70' : (st.code === 'TP1' ? 'border-emerald-400' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800'))))}">
+          <div class="hud-panel rounded-xl p-4 space-y-3 border ${isTopFocus ? 'border-amber-400' : (hasSwing ? 'border-indigo-400/70' : (hasNews ? 'border-orange-400/70' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800'))))}">
             <div class="flex items-center justify-between gap-2">
               <div class="flex flex-wrap items-center gap-1.5">
                 <span class="font-hud font-bold text-white text-sm">${st.dot} ${a.symbol}</span>
                 <span class="text-xs text-cyan-300 font-bold">${a.price}</span>
+                ${isTopFocus ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-400 text-black font-black">🎯 FOCO #1</span>` : ''}
                 ${hasSwing ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400 font-bold">🌊 POTENCIAL SWING</span>` : ''}
                 ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
                 ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA ${a.news_warning.currencies}</span>` : ''}
@@ -1715,33 +1799,40 @@
             <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
               <div><strong class="text-sky-400">VISIÓN (Macro):</strong> ${a.macro_reason}</div>
               <div><strong class="text-red-400">ULTRÓN (Liquidez & Estructura):</strong> BSL en ${(a.liquidity && a.liquidity.bsl) || '--'} · SSL en ${(a.liquidity && a.liquidity.ssl) || '--'}. ATR diario: ${(a.volatility && a.volatility.atr_units) || '--'} ${p.unitLabel}.</div>
-              <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> Entrada base ${a.setup.entry} (a ${d.units} ${d.label}), SL ${a.setup.sl}, subir SL a BE en ${bePrice}, parciales TP1 ${a.setup.tp1}${hasSwing ? `, Swing TP ${a.swing_potential.target}` : ''}.</div>
+              <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> ${a.has_valid_ob ? `Entrada fija ${a.setup.entry} (a ${d.units} ${d.label}), SL estructural ${a.setup.sl}, BE en ${bePrice}, TP1 ${a.setup.tp1}.` : 'Sin bloque OB ni FVG limpio; esperar nueva formación.'}</div>
             </div>
-            <div class="grid grid-cols-5 gap-1 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[10px]">
-              <div><div class="text-[8px] text-sky-400 truncate">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[8px] text-slate-400">a ${d.units} ${d.label}</div></div>
-              <div><div class="text-[8px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[8px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
-              <div><div class="text-[8px] text-indigo-300">GATILLO BE</div><div class="font-bold text-indigo-300">${bePrice}</div><div class="text-[8px] text-slate-400">+1R Proteger</div></div>
-              <div><div class="text-[8px] text-emerald-400">TP1 PARCIAL</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[8px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
-              <div><div class="text-[8px] text-emerald-400">${hasSwing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${hasSwing ? a.swing_potential.target : a.setup.tp2}</div><div class="text-[8px] text-emerald-300">${hasSwing ? 'Extendido' : `+${p.tp2} ${p.unitLabel}`}</div></div>
-            </div>
+            ${a.has_valid_ob ? `
+              <div class="grid grid-cols-5 gap-1 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[10px]">
+                <div><div class="text-[8px] text-sky-400 truncate">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[8px] text-slate-400">a ${d.units} ${d.label}</div></div>
+                <div><div class="text-[8px] text-red-400">STOP OB/FVG</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[8px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
+                <div><div class="text-[8px] text-indigo-300">GATILLO BE</div><div class="font-bold text-indigo-300">${bePrice}</div><div class="text-[8px] text-slate-400">+1R Proteger</div></div>
+                <div><div class="text-[8px] text-emerald-400">TP1 PARCIAL</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[8px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
+                <div><div class="text-[8px] text-emerald-400">${hasSwing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${hasSwing ? a.swing_potential.target : a.setup.tp2}</div><div class="text-[8px] text-emerald-300">${hasSwing ? 'Extendido' : `+${p.tp2} ${p.unitLabel}`}</div></div>
+              </div>
+            ` : `
+              <div class="bg-[#050811] border border-slate-800/80 rounded-lg p-2.5 text-center text-[10px] text-slate-400">
+                ⚪ Sin Order Block ni FVG estructural vigente en 1H — No abrir operaciones en este par.
+              </div>
+            `}
           </div>`;
       }).join('');
     }
 
     function renderPanelUltron() {
       if (!data) return;
+      const fp = getFocusPick();
       document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => {
         const st = getAssetBadgeState(a);
         const d = getAssetUnitsDist(a);
-        const hasNews = a.news_warning && a.news_warning.active;
+        const isTopFocus = fp && fp.symbol === a.symbol;
         const hasSwing = a.swing_potential && a.swing_potential.active;
         return `
-          <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : (hasSwing ? 'bg-[#050811] border-indigo-500/50 text-slate-200' : (hasNews ? 'bg-[#050811] border-orange-500/50 text-slate-200' : 'bg-[#050811] border-slate-800 text-slate-300'))}">
+          <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : (isTopFocus ? 'bg-amber-500/10 border-amber-400 text-white' : (hasSwing ? 'bg-[#050811] border-indigo-500/50 text-slate-200' : 'bg-[#050811] border-slate-800 text-slate-300'))}">
             <div class="flex items-center justify-between text-[11px] font-bold">
               <span>${a.symbol}</span>
-              <span>${hasSwing ? '🌊' : (hasNews ? '⚠️' : st.dot)}</span>
+              <span>${isTopFocus ? '🎯' : (hasSwing ? '🌊' : st.dot)}</span>
             </div>
-            <div class="text-[9px] text-slate-400 mt-0.5">${st.text || `a ${d.units} ${d.label}`}</div>
+            <div class="text-[9px] text-slate-400 mt-0.5">${a.has_valid_ob ? `a ${d.units} ${d.label}` : 'Sin OB/FVG'}</div>
           </button>`;
       }).join('');
 
@@ -1782,17 +1873,17 @@
 
       document.getElementById('pu-sym').textContent = `${st.dot} ${a.symbol}`;
       document.getElementById('pu-price').textContent = `${a.price}`;
-      document.getElementById('pu-status').textContent = `${st.text || a.setup.signal_tag} · a ${d.units} ${d.label}`;
-      document.getElementById('pu-entry').textContent = a.setup.entry;
-      document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
-      document.getElementById('pu-sl').textContent = a.setup.sl;
-      document.getElementById('pu-sl-pips').textContent = `-${p.sl} ${p.unitLabel}`;
-      document.getElementById('pu-be').textContent = bePrice;
-      document.getElementById('pu-tp1').textContent = a.setup.tp1;
-      document.getElementById('pu-tp1-pips').textContent = `+${p.tp1} ${p.unitLabel}`;
+      document.getElementById('pu-status').textContent = a.has_valid_ob ? `${a.setup.signal_tag} · a ${d.units} ${d.label}` : 'SIN OB NI FVG LIMPIO';
+      document.getElementById('pu-entry').textContent = a.has_valid_ob ? a.setup.entry : '--';
+      document.getElementById('pu-dist').textContent = a.has_valid_ob ? `A ${d.units} ${d.label}` : 'Esperar bloque';
+      document.getElementById('pu-sl').textContent = a.has_valid_ob ? a.setup.sl : '--';
+      document.getElementById('pu-sl-pips').textContent = a.has_valid_ob ? `-${p.sl} ${p.unitLabel}` : '--';
+      document.getElementById('pu-be').textContent = a.has_valid_ob ? bePrice : '--';
+      document.getElementById('pu-tp1').textContent = a.has_valid_ob ? a.setup.tp1 : '--';
+      document.getElementById('pu-tp1-pips').textContent = a.has_valid_ob ? `+${p.tp1} ${p.unitLabel}` : '--';
       document.getElementById('pu-tp2-lbl').textContent = hasSwing ? 'SWING TP' : 'TP2 (1:3)';
-      document.getElementById('pu-tp2').textContent = hasSwing ? a.swing_potential.target : a.setup.tp2;
-      document.getElementById('pu-tp2-pips').textContent = hasSwing ? 'Objetivo Multi-día' : `+${p.tp2} ${p.unitLabel}`;
+      document.getElementById('pu-tp2').textContent = a.has_valid_ob ? (hasSwing ? a.swing_potential.target : a.setup.tp2) : '--';
+      document.getElementById('pu-tp2-pips').textContent = a.has_valid_ob ? (hasSwing ? 'Objetivo Multi-día' : `+${p.tp2} ${p.unitLabel}`) : '--';
       drawUltronChart();
     }
 
@@ -1827,8 +1918,8 @@
 
       const hasSwing = a.swing_potential && a.swing_potential.active;
       const targetTop = hasSwing ? a.swing_potential.target : a.setup.tp2;
-      const highs = [...candles.map(c => c.h), a.setup.sl, targetTop, a.price, bslVal];
-      const lows = [...candles.map(c => c.l), a.setup.sl, targetTop, a.price, sslVal];
+      const highs = a.has_valid_ob ? [...candles.map(c => c.h), a.setup.sl, targetTop, a.price, bslVal] : [...candles.map(c => c.h), a.price, bslVal];
+      const lows = a.has_valid_ob ? [...candles.map(c => c.l), a.setup.sl, targetTop, a.price, sslVal] : [...candles.map(c => c.l), a.price, sslVal];
       const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
       const yOf = p => padT + ((maxP - p) / span) * plotH;
 
@@ -1850,9 +1941,11 @@
       ctx.setLineDash([]); ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono';
       ctx.fillText('EQ 50%', W - padR - 42, yEq - 4);
 
-      const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
-      ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
-      ctx.fillRect(padL + plotW * 0.4, yObT, plotW * 0.6, Math.max(5, yObB - yObT));
+      if (a.has_valid_ob) {
+        const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
+        ctx.fillStyle = a.zone_kind === 'FVG' ? 'rgba(56,189,248,0.22)' : (a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.22)' : 'rgba(239,68,68,0.22)');
+        ctx.fillRect(padL + plotW * 0.4, yObT, plotW * 0.6, Math.max(5, yObB - yObT));
+      }
 
       const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
       candles.forEach((c, i) => {
@@ -1875,20 +1968,22 @@
         ctx.fillText(structLabel, Math.max(padL + 3, lastX - 61), Math.max(27, lastY - 11));
       }
 
-      const drawLvl = (val, lbl, col) => {
-        const y = yOf(val);
-        ctx.strokeStyle = col; ctx.setLineDash([3, 3]);
-        ctx.beginPath(); ctx.moveTo(padL + plotW * 0.35, y); ctx.lineTo(W - padR, y); ctx.stroke();
-        ctx.setLineDash([]); ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
-        ctx.fillStyle = '#fff'; ctx.font = 'bold 9px JetBrains Mono';
-        ctx.fillText(val.toFixed(a.decimals), W - padR + 5, y + 3);
-        ctx.fillText(lbl, padL + plotW * 0.36, y - 4);
-      };
-      drawLvl(a.setup.entry, a.setup.signal_tag, '#0284c7');
-      if (a.setup.be_trigger) drawLvl(a.setup.be_trigger, 'GATILLO BE (+1R)', '#6366f1');
-      drawLvl(a.setup.sl, 'STOP', '#dc2626');
-      drawLvl(a.setup.tp1, 'TP1 PARCIAL', '#059669');
-      drawLvl(targetTop, hasSwing ? 'SWING TP' : 'TP2', '#10b981');
+      if (a.has_valid_ob) {
+        const drawLvl = (val, lbl, col) => {
+          const y = yOf(val);
+          ctx.strokeStyle = col; ctx.setLineDash([3, 3]);
+          ctx.beginPath(); ctx.moveTo(padL + plotW * 0.35, y); ctx.lineTo(W - padR, y); ctx.stroke();
+          ctx.setLineDash([]); ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
+          ctx.fillStyle = '#fff'; ctx.font = 'bold 9px JetBrains Mono';
+          ctx.fillText(val.toFixed(a.decimals), W - padR + 5, y + 3);
+          ctx.fillText(lbl, padL + plotW * 0.36, y - 4);
+        };
+        drawLvl(a.setup.entry, a.setup.signal_tag, '#0284c7');
+        if (a.setup.be_trigger) drawLvl(a.setup.be_trigger, 'GATILLO BE (+1R)', '#6366f1');
+        drawLvl(a.setup.sl, 'STOP ESTRUCTURAL', '#dc2626');
+        drawLvl(a.setup.tp1, 'TP1 PARCIAL', '#059669');
+        drawLvl(targetTop, hasSwing ? 'SWING TP' : 'TP2', '#10b981');
+      }
 
       const yLive = yOf(a.price);
       ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
