@@ -7,6 +7,7 @@ import yfinance as yf
 
 NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "").strip()
 ALERTS_STATE_FILE = "alerts_sent.json"
+ACTIVE_SETUPS_FILE = "active_setups.json"
 HISTORICAL_CUTOFF_TS = int(datetime(2017, 1, 1, tzinfo=timezone.utc).timestamp())
 
 ASSETS_CONFIG = [
@@ -34,17 +35,17 @@ ASSETS_CONFIG = [
     {"symbol": "US500",  "yf": "^GSPC",      "type": "index",  "pip": 1.0,    "decimals": 2, "base": "USD", "quote": "USD"},
 ]
 
-def load_sent_alerts():
-    if os.path.exists(ALERTS_STATE_FILE):
+def load_json_state(filepath):
+    if os.path.exists(filepath):
         try:
-            with open(ALERTS_STATE_FILE, "r", encoding="utf-8") as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception:
             return {}
     return {}
 
-def save_sent_alerts(state):
-    with open(ALERTS_STATE_FILE, "w", encoding="utf-8") as f:
+def save_json_state(filepath, state):
+    with open(filepath, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=2)
 
 def send_mobile_push(title, body, priority="high", tags="dart,bell"):
@@ -439,8 +440,7 @@ def get_central_banks(dxy_val, us10y_val, ccy_labels):
         {"bank": "RBA (Australia)", "currency": "AUD", "stance": f"AUD {ccy_labels.get('AUD', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("AUD") == "FUERTE" else ("BEARISH" if ccy_labels.get("AUD") == "DEBIL" else "NEUTRAL"), "detail": "Cesta hibrida AUDUSD + AUDJPY + AUDNZD + riesgo US500 (4H/1D)."},
         {"bank": "BCE (Eurozona)", "currency": "EUR", "stance": f"EUR {ccy_labels.get('EUR', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("EUR") == "FUERTE" else ("BEARISH" if ccy_labels.get("EUR") == "DEBIL" else "NEUTRAL"), "detail": "Cesta hibrida EURUSD + EURJPY + EURAUD (60% 4H + 40% 1D)."},
         {"bank": "BoJ (Japon)", "currency": "JPY", "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DEBIL" else "NEUTRAL"), "detail": "Flujo inverso en cruces JPY (60% 4H + 40% 1D)."}
-    ]
-def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_ccy, now_ts):
+    ]def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_ccy, now_ts, active_setups):
     try:
         sym = cfg["symbol"]
         dec = cfg["decimals"]
@@ -528,45 +528,123 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         intraday_low = min(x["l"] for x in recent)
 
         exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
+        direction = "BUY" if chart_bias == "SUBE" else "SELL"
 
-        if chart_bias == "SUBE":
-            direction = "BUY"
-            risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
-            ob_low = round(min(x["l"] for x in recent[-12:]), dec)
-            ob_high = round(ob_low + (12 * pip), dec)
-            entry = round((ob_low + ob_high) / 2.0, dec)
-            if price < entry:
-                entry = round(price - (6 * pip), dec)
-                ob_low = round(entry - (5 * pip), dec)
-                ob_high = round(entry + (5 * pip), dec)
-            sl = round(entry - risk, dec)
+        # Revisar si existe un setup congelado válido para este par en la misma dirección
+        saved = active_setups.get(sym)
+        use_frozen = False
+        if saved and saved.get("direction") == direction:
+            s_sl = saved["sl"]
+            s_tp1 = saved["tp1"]
+            if direction == "BUY":
+                still_alive = (price > s_sl) and (price < s_tp1)
+            else:
+                still_alive = (price < s_sl) and (price > s_tp1)
+            if still_alive:
+                use_frozen = True
+
+        if use_frozen:
+            entry = saved["entry"]
+            sl = saved["sl"]
+            tp1 = saved["tp1"]
+            tp2 = saved["tp2"]
+            be_trigger = saved["be_trigger"]
+            ob_high = saved["ob_high"]
+            ob_low = saved["ob_low"]
             actual_r = max(10 * pip, abs(entry - sl))
-            tp1 = round(entry + (actual_r * 2.0), dec)
-            tp2 = round(entry + (actual_r * 3.0), dec)
-            be_trigger = round(entry + actual_r, dec)
+            is_reentry_active = saved.get("is_reentry", False)
+            hit_tp1_real = False
+            created_ts = saved.get("created_at", now_ts)
+        else:
+            created_ts = now_ts
+            if direction == "BUY":
+                risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
+                ob_low = round(min(x["l"] for x in recent[-12:]), dec)
+                ob_high = round(ob_low + (12 * pip), dec)
+                entry = round((ob_low + ob_high) / 2.0, dec)
+                if price < entry:
+                    entry = round(price - (6 * pip), dec)
+                    ob_low = round(entry - (5 * pip), dec)
+                    ob_high = round(entry + (5 * pip), dec)
+                sl = round(entry - risk, dec)
+                actual_r = max(10 * pip, abs(entry - sl))
+                tp1 = round(entry + (actual_r * 2.0), dec)
+                tp2 = round(entry + (actual_r * 3.0), dec)
+                be_trigger = round(entry + actual_r, dec)
 
-            touched_orig = any(x["l"] <= ob_high for x in c_1h[-6:])
-            hit_tp1_real = touched_orig and price >= tp1
-            is_reentry_active = False
+                touched_orig = any(x["l"] <= ob_high for x in c_1h[-6:])
+                hit_tp1_real = touched_orig and price >= tp1
+                is_reentry_active = False
 
-            if hit_tp1_real:
-                for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
-                    c_ob = c_1h[idx]
-                    c_imp = c_1h[idx + 1]
-                    body_ob = max(pip, abs(c_ob["c"] - c_ob["o"]))
-                    body_imp = abs(c_imp["c"] - c_imp["o"])
-                    if c_ob["c"] < c_ob["o"] and c_imp["c"] > c_ob["h"] and body_imp >= body_ob * 1.3 and c_ob["h"] < price:
-                        ob_low = round(c_ob["l"], dec)
-                        ob_high = round(max(c_ob["h"], ob_low + 8 * pip), dec)
-                        entry = round((ob_low + ob_high) / 2.0, dec)
-                        sl = round(min(ob_low - (6 * pip), entry - risk), dec)
-                        actual_r = abs(entry - sl)
-                        be_trigger = round(entry + actual_r, dec)
-                        tp1 = round(max(entry + (actual_r * 2.0), price + (12 * pip)), dec)
-                        tp2 = round(max(entry + (actual_r * 3.0), tp1 + actual_r), dec)
-                        is_reentry_active = True
-                        break
+                if hit_tp1_real:
+                    for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
+                        c_ob = c_1h[idx]
+                        c_imp = c_1h[idx + 1]
+                        body_ob = max(pip, abs(c_ob["c"] - c_ob["o"]))
+                        body_imp = abs(c_imp["c"] - c_imp["o"])
+                        if c_ob["c"] < c_ob["o"] and c_imp["c"] > c_ob["h"] and body_imp >= body_ob * 1.3 and c_ob["h"] < price:
+                            ob_low = round(c_ob["l"], dec)
+                            ob_high = round(max(c_ob["h"], ob_low + 8 * pip), dec)
+                            entry = round((ob_low + ob_high) / 2.0, dec)
+                            sl = round(min(ob_low - (6 * pip), entry - risk), dec)
+                            actual_r = abs(entry - sl)
+                            be_trigger = round(entry + actual_r, dec)
+                            tp1 = round(max(entry + (actual_r * 2.0), price + (12 * pip)), dec)
+                            tp2 = round(max(entry + (actual_r * 3.0), tp1 + actual_r), dec)
+                            is_reentry_active = True
+                            break
+            else:
+                risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
+                ob_high = round(max(x["h"] for x in recent[-12:]), dec)
+                ob_low = round(ob_high - (12 * pip), dec)
+                entry = round((ob_low + ob_high) / 2.0, dec)
+                if price > entry:
+                    entry = round(price + (6 * pip), dec)
+                    ob_high = round(entry + (5 * pip), dec)
+                    ob_low = round(entry - (5 * pip), dec)
+                sl = round(entry + risk, dec)
+                actual_r = max(10 * pip, abs(sl - entry))
+                tp1 = round(entry - (actual_r * 2.0), dec)
+                tp2 = round(entry - (actual_r * 3.0), dec)
+                be_trigger = round(entry - actual_r, dec)
 
+                touched_orig = any(x["h"] >= ob_low for x in c_1h[-6:])
+                hit_tp1_real = touched_orig and price <= tp1
+                is_reentry_active = False
+
+                if hit_tp1_real:
+                    for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
+                        c_ob = c_1h[idx]
+                        c_imp = c_1h[idx + 1]
+                        body_ob = max(pip, abs(c_ob["c"] - c_ob["o"]))
+                        body_imp = abs(c_imp["c"] - c_imp["o"])
+                        if c_ob["c"] > c_ob["o"] and c_imp["c"] < c_ob["l"] and body_imp >= body_ob * 1.3 and c_ob["l"] > price:
+                            ob_high = round(c_ob["h"], dec)
+                            ob_low = round(min(c_ob["l"], ob_high - 8 * pip), dec)
+                            entry = round((ob_low + ob_high) / 2.0, dec)
+                            sl = round(max(ob_high + (6 * pip), entry + risk), dec)
+                            actual_r = abs(sl - entry)
+                            be_trigger = round(entry - actual_r, dec)
+                            tp1 = round(min(entry - (actual_r * 2.0), price - (12 * pip)), dec)
+                            tp2 = round(min(entry - (actual_r * 3.0), tp1 - actual_r), dec)
+                            is_reentry_active = True
+                            break
+
+            # Congelar este setup activo en memoria
+            active_setups[sym] = {
+                "direction": direction,
+                "entry": entry,
+                "sl": sl,
+                "tp1": tp1,
+                "tp2": tp2,
+                "be_trigger": be_trigger,
+                "ob_high": ob_high,
+                "ob_low": ob_low,
+                "is_reentry": is_reentry_active,
+                "created_at": created_ts
+            }
+
+        if direction == "BUY":
             if exhaustion["active"]:
                 signal_tag = "RIESGO GIRO - PROTEGER"
             elif is_reentry_active:
@@ -580,45 +658,8 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             elif rev["choch"] == "BULLISH_CHOCH":
                 signal_tag = "CHoCH ALCISTA - OB"
             else:
-                signal_tag = "COMPRA OB"
+                signal_tag = "COMPRA OB (FIJO)" if use_frozen else "COMPRA OB"
         else:
-            direction = "SELL"
-            risk = max(12 * pip, round((intraday_high - intraday_low) * 0.22, dec))
-            ob_high = round(max(x["h"] for x in recent[-12:]), dec)
-            ob_low = round(ob_high - (12 * pip), dec)
-            entry = round((ob_low + ob_high) / 2.0, dec)
-            if price > entry:
-                entry = round(price + (6 * pip), dec)
-                ob_high = round(entry + (5 * pip), dec)
-                ob_low = round(entry - (5 * pip), dec)
-            sl = round(entry + risk, dec)
-            actual_r = max(10 * pip, abs(sl - entry))
-            tp1 = round(entry - (actual_r * 2.0), dec)
-            tp2 = round(entry - (actual_r * 3.0), dec)
-            be_trigger = round(entry - actual_r, dec)
-
-            touched_orig = any(x["h"] >= ob_low for x in c_1h[-6:])
-            hit_tp1_real = touched_orig and price <= tp1
-            is_reentry_active = False
-
-            if hit_tp1_real:
-                for idx in range(len(c_1h) - 2, max(1, len(c_1h) - 6), -1):
-                    c_ob = c_1h[idx]
-                    c_imp = c_1h[idx + 1]
-                    body_ob = max(pip, abs(c_ob["c"] - c_ob["o"]))
-                    body_imp = abs(c_imp["c"] - c_imp["o"])
-                    if c_ob["c"] > c_ob["o"] and c_imp["c"] < c_ob["l"] and body_imp >= body_ob * 1.3 and c_ob["l"] > price:
-                        ob_high = round(c_ob["h"], dec)
-                        ob_low = round(min(c_ob["l"], ob_high - 8 * pip), dec)
-                        entry = round((ob_low + ob_high) / 2.0, dec)
-                        sl = round(max(ob_high + (6 * pip), entry + risk), dec)
-                        actual_r = abs(sl - entry)
-                        be_trigger = round(entry - actual_r, dec)
-                        tp1 = round(min(entry - (actual_r * 2.0), price - (12 * pip)), dec)
-                        tp2 = round(min(entry - (actual_r * 3.0), tp1 - actual_r), dec)
-                        is_reentry_active = True
-                        break
-
             if exhaustion["active"]:
                 signal_tag = "RIESGO GIRO - PROTEGER"
             elif is_reentry_active:
@@ -632,13 +673,22 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             elif rev["choch"] == "BEARISH_CHOCH":
                 signal_tag = "CHoCH BAJISTA - OB"
             else:
-                signal_tag = "VENTA OB"
+                signal_tag = "VENTA OB (FIJO)" if use_frozen else "VENTA OB"
 
+        # Solo giros semanales limpios pre-2017 cercanos (<= 60 pips en divisas / <= 100 pips en XAUUSD)
         nearby_weekly_pivots = []
         for p in (hist_buys + hist_sells):
+            dist_u = round((abs(price - p["entry"]) / pip) * 10) / 10 if pip else abs(price - p["entry"])
             pct_d = abs(price - p["entry"]) / max(1e-9, price)
-            if pct_d <= 0.035:
-                dist_u = round((abs(price - p["entry"]) / pip) * 10) / 10 if pip else abs(price - p["entry"])
+
+            if cfg["type"] == "forex":
+                within_range = (dist_u <= 60.0)
+            elif sym == "XAUUSD" or cfg["type"] == "metal":
+                within_range = (dist_u <= 100.0)
+            else:
+                within_range = (pct_d <= 0.004)
+
+            if within_range:
                 macro_ok = (p["direction"] == "BUY" and macro_dir == "SUBE") or (p["direction"] == "SELL" and macro_dir == "BAJA")
                 nearby_weekly_pivots.append({
                     "symbol": sym,
@@ -741,9 +791,10 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "events": pair_news_titles[:3]
             }
 
+        frozen_note = " Bloque de entrada congelado hasta TP1 o SL." if use_frozen else ""
         swing_note = f" Potencial Swing activo (BE en {be_trigger}, Swing TP {swing_tp})." if is_swing_potential else ""
         extra_note = f" {exhaustion['reason']}" if exhaustion["active"] else (f" Pullback fuerte confirmado ({rev['choch']} con desplazamiento) respaldado por macro." if is_strong_pullback else "")
-        macro_reason = f"{macro_detail} Jerarquia (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{extra_note}{swing_note}"
+        macro_reason = f"{macro_detail} Jerarquia (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{frozen_note}{extra_note}{swing_note}"
 
         return {
             "symbol": sym,
@@ -775,7 +826,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             "macro_reason": macro_reason,
             "news_warning": news_warning,
             "swing_potential": swing_info,
-            "created_at": now_ts,
+            "created_at": created_ts,
             "confluence": {
                 "score": conf_score,
                 "alignment": alignment,
@@ -829,7 +880,7 @@ def build_correlated_baskets(assets, ccy_labels):
 def dispatch_push_notifications(assets, now_ts):
     if not NTFY_TOPIC:
         return
-    sent_state = load_sent_alerts()
+    sent_state = load_json_state(ALERTS_STATE_FILE)
     updated = False
 
     for a in assets:
@@ -909,11 +960,13 @@ def dispatch_push_notifications(assets, now_ts):
         if len(sent_state) > 180:
             sorted_items = sorted(sent_state.items(), key=lambda x: x[1])[-180:]
             sent_state = dict(sorted_items)
-        save_sent_alerts(sent_state)
+        save_json_state(ALERTS_STATE_FILE, sent_state)
 
 def main():
     now_utc = datetime.now(timezone.utc)
     now_ts = int(now_utc.timestamp())
+    active_setups = load_json_state(ACTIVE_SETUPS_FILE)
+
     dxy_1d = get_candles("DX-Y.NYB", "3mo", "1d", 2, 45)
     dxy_4h = group_4h(get_candles("DX-Y.NYB", "1mo", "1h", 2, 180))
     us10y_1d = get_candles("^TNX", "3mo", "1d", 2, 45)
@@ -942,7 +995,9 @@ def main():
     raw_strength, ccy_labels, spx_chg = compute_currency_strength_matrix(
         c4_map, c1d_map, dxy_4h, dxy_1d, us10y_4h, us10y_1d, c4_map.get("US500", []), c1d_map.get("US500", [])
     )
-    assets = [item for cfg in ASSETS_CONFIG if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels, high_impact_by_ccy, now_ts))]
+    assets = [item for cfg in ASSETS_CONFIG if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels, high_impact_by_ccy, now_ts, active_setups))]
+    save_json_state(ACTIVE_SETUPS_FILE, active_setups)
+
     banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
     baskets = build_correlated_baskets(assets, ccy_labels)
     news = fetch_live_news()
@@ -963,7 +1018,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} - US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"LATICCE v9.1 - Pestana 1S Historico Pre-2017 ({len(all_weekly_pivots)} niveles cercanos) + Alarmas TradingView sobre {len(assets)} activos."
+            "summary": f"LATICCE v9.2 - Giros 1S Pre-2017 (<=60 pips) + Setups Congelados + Alarmas TradingView sobre {len(assets)} activos."
         },
         "weekly_pivots": all_weekly_pivots,
         "correlated_baskets": baskets,
@@ -976,7 +1031,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos y {len(all_weekly_pivots)} giros semanales limpios actualizados (LATICCE v9.1).")
+    print(f"OK: {len(assets)} activos y {len(all_weekly_pivots)} giros semanales limpios (<=60 pips) actualizados (LATICCE v9.2).")
 
 if __name__ == "__main__":
     main()
