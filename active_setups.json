@@ -204,5 +204,20 @@
     "ob_high": 1.64466,
     "ob_low": 1.64436,
     "locked_at": 1795464491
+  },
+  "GBPNZD": {
+    "valid_ob": true,
+    "kind": "FVG",
+    "fvg_range": "2.39117 - 2.39248",
+    "direction": "SELL",
+    "signal_tag": "VENTA FVG RETROCESO",
+    "entry": 2.39182,
+    "be_trigger": 2.38929,
+    "sl": 2.39435,
+    "tp1": 2.38676,
+    "tp2": 2.38423,
+    "ob_high": 2.39248,
+    "ob_low": 2.39117,
+    "locked_at": 1795473936
   }
 }
