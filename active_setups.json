@@ -29,21 +29,6 @@
     "ob_low": 159.123,
     "locked_at": 1795444212
   },
-  "GBPUSD": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "1.30832 - 1.30965",
-    "direction": "SELL",
-    "signal_tag": "VENTA FVG RETROCESO",
-    "entry": 1.30898,
-    "be_trigger": 1.30692,
-    "sl": 1.31104,
-    "tp1": 1.30486,
-    "tp2": 1.3028,
-    "ob_high": 1.30965,
-    "ob_low": 1.30832,
-    "locked_at": 1795444212
-  },
   "GBPAUD": {
     "valid_ob": true,
     "direction": "BUY",
@@ -100,19 +85,6 @@
     "ob_low": 0.55427,
     "locked_at": 1795444212
   },
-  "NZDUSD": {
-    "valid_ob": true,
-    "direction": "SELL",
-    "signal_tag": "VENTA OB REAL",
-    "entry": 0.54778,
-    "be_trigger": 0.54657,
-    "sl": 0.54899,
-    "tp1": 0.54536,
-    "tp2": 0.54415,
-    "ob_high": 0.54819,
-    "ob_low": 0.54738,
-    "locked_at": 1795442063
-  },
   "US30": {
     "valid_ob": true,
     "direction": "SELL",
@@ -155,5 +127,20 @@
     "ob_high": 0.84092,
     "ob_low": 0.8398,
     "locked_at": 1795444212
+  },
+  "GBPCAD": {
+    "valid_ob": true,
+    "kind": "FVG",
+    "fvg_range": "1.8742 - 1.87456",
+    "direction": "SELL",
+    "signal_tag": "VENTA FVG RETROCESO",
+    "entry": 1.87438,
+    "be_trigger": 1.87018,
+    "sl": 1.87858,
+    "tp1": 1.86598,
+    "tp2": 1.86178,
+    "ob_high": 1.87456,
+    "ob_low": 1.8742,
+    "locked_at": 1795449574
   }
 }
