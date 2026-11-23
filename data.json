@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-11-23 20:08 UTC",
+  "last_updated": "2026-11-23 21:00 UTC",
   "brief": {
-    "dxy": 104.33,
+    "dxy": 104.35,
     "us10y": 4.92,
-    "headline": "USD DEBIL (DXY 104.33 - US10Y 4.92%) | GBP DEBIL | AUD DEBIL",
+    "headline": "USD DEBIL (DXY 104.35 - US10Y 4.92%) | GBP DEBIL | AUD DEBIL",
     "summary": "LATICCE v9.8 - Cascada OB + FVG / OB Estructural / FVG Retroceso + Giros 1S (1 niveles) sobre 22 activos."
   },
   "weekly_pivots": [
@@ -12,12 +12,12 @@
       "type": "forex",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.21639,
+      "price": 1.21628,
       "direction": "BUY",
       "entry": 1.2161,
       "extreme": 1.215,
       "date": "2013-02-18",
-      "dist_units": 2.9,
+      "dist_units": 1.8,
       "unit_label": "pips",
       "macro_aligned": false,
       "economy_short": "AUD DEBIL / NZD DEBIL"
@@ -74,7 +74,7 @@
       "currency": "USD",
       "stance": "USD DEBIL",
       "bias": "BEARISH",
-      "detail": "DXY (104.33) + Bonos US10Y (4.92%) en cesta hibrida 4H/1D."
+      "detail": "DXY (104.35) + Bonos US10Y (4.92%) en cesta hibrida 4H/1D."
     },
     {
       "bank": "BoE (Reino Unido)",
@@ -132,6 +132,12 @@
     },
     {
       "source": "Forex & Divisas",
+      "title": "Dollar jumps on hawkish Fed bets, AI rally",
+      "link": "https://www.investing.com/news/economy-news/dollar-edges-off-19month-high-after-market-rout-yen-softens-5044182",
+      "time": "2026-11-23 20:30:42"
+    },
+    {
+      "source": "Forex & Divisas",
       "title": "US files action to recover over $1 billion in cryptocurrency stolen in Binance hack",
       "link": "https://www.investing.com/news/economy-news/us-files-action-to-recover-over-1-billion-in-cryptocurrency-stolen-in-binance-hack-5046276",
       "time": "2026-11-23 19:37:12"
@@ -147,12 +153,6 @@
       "title": "Bond market flattening and Wednesday’s PCE test for rate-hike pricing",
       "link": "https://www.investing.com/news/economy-news/bond-market-flattening-and-wednesdays-pce-test-for-ratehike-pricing-93CH-5046275",
       "time": "2026-11-23 19:33:37"
-    },
-    {
-      "source": "Forex & Divisas",
-      "title": "Brazil cuts 2027 GDP forecast, raises inflation outlook but remains more upbeat than market",
-      "link": "https://www.investing.com/news/economy-news/brazil-cuts-2027-gdp-forecast-raises-inflation-outlook-but-remains-more-upbeat-than-market-5046207",
-      "time": "2026-11-23 18:12:26"
     }
   ],
   "calendar": [
@@ -221,8 +221,8 @@
       "type": "metal",
       "pip": 0.1,
       "decimals": 2,
-      "price": 3641.8,
-      "chg_day": 3.6,
+      "price": 3636.3,
+      "chg_day": 3.44,
       "chart_bias": "BAJA",
       "macro_dir": "SUBE",
       "economy_short": "XAU FUERTE / USD DEBIL",
@@ -239,7 +239,7 @@
       },
       "liquidity": {
         "bsl": 3691.0,
-        "ssl": 3567.8,
+        "ssl": 3570.0,
         "choch": "NONE",
         "bos": "NONE",
         "sweep": "NONE"
@@ -257,7 +257,7 @@
       "macro_reason": "XAU (FUERTE) vs USD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795464491,
+      "created_at": 1795467604,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -267,11 +267,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 3641.8,
-        "be_trigger": 3641.8,
+        "entry": 3636.3,
+        "be_trigger": 3636.3,
         "sl": 3691.0,
-        "tp1": 3641.8,
-        "tp2": 3641.8
+        "tp1": 3636.3,
+        "tp2": 3636.3
       },
       "candles": {
         "1d": [
@@ -588,334 +588,327 @@
             "o": 3570.5,
             "h": 3691.0,
             "l": 3552.3,
-            "c": 3641.8
+            "c": 3636.3
           }
         ],
         "4h": [
           {
-            "t": 1794448800,
-            "o": 3990.9,
-            "h": 3995.3,
-            "l": 3974.6,
-            "c": 3985.1
+            "t": 1794452400,
+            "o": 3986.0,
+            "h": 3990.5,
+            "l": 3967.7,
+            "c": 3971.1
           },
           {
-            "t": 1794463200,
-            "o": 3984.7,
-            "h": 3986.3,
+            "t": 1794466800,
+            "o": 3970.9,
+            "h": 3978.0,
             "l": 3929.5,
-            "c": 3948.9
+            "c": 3959.2
           },
           {
-            "t": 1794477600,
-            "o": 3948.8,
+            "t": 1794481200,
+            "o": 3959.4,
             "h": 3961.1,
-            "l": 3889.7,
-            "c": 3894.9
+            "l": 3870.7,
+            "c": 3874.3
           },
           {
-            "t": 1794492000,
-            "o": 3894.8,
-            "h": 3913.9,
+            "t": 1794495600,
+            "o": 3873.4,
+            "h": 3892.7,
             "l": 3856.7,
+            "c": 3887.3
+          },
+          {
+            "t": 1794510000,
+            "o": 3887.5,
+            "h": 3891.1,
+            "l": 3876.9,
+            "c": 3884.7
+          },
+          {
+            "t": 1794528000,
+            "o": 3884.6,
+            "h": 3927.2,
+            "l": 3883.0,
+            "c": 3924.5
+          },
+          {
+            "t": 1794542400,
+            "o": 3924.4,
+            "h": 3925.8,
+            "l": 3891.8,
+            "c": 3902.0
+          },
+          {
+            "t": 1794556800,
+            "o": 3901.4,
+            "h": 3909.4,
+            "l": 3890.5,
+            "c": 3897.2
+          },
+          {
+            "t": 1794571200,
+            "o": 3897.7,
+            "h": 3909.9,
+            "l": 3875.4,
+            "c": 3876.9
+          },
+          {
+            "t": 1794585600,
+            "o": 3877.2,
+            "h": 3894.6,
+            "l": 3871.1,
             "c": 3878.5
           },
           {
-            "t": 1794506400,
-            "o": 3878.6,
-            "h": 3892.7,
-            "l": 3876.9,
-            "c": 3881.7
-          },
-          {
-            "t": 1794524400,
-            "o": 3882.5,
-            "h": 3920.4,
-            "l": 3879.1,
-            "c": 3919.8
-          },
-          {
-            "t": 1794538800,
-            "o": 3919.6,
-            "h": 3927.2,
-            "l": 3891.8,
-            "c": 3905.0
-          },
-          {
-            "t": 1794553200,
-            "o": 3904.9,
-            "h": 3910.2,
-            "l": 3893.3,
-            "c": 3895.7
-          },
-          {
-            "t": 1794567600,
-            "o": 3896.0,
-            "h": 3909.9,
-            "l": 3876.1,
-            "c": 3898.2
-          },
-          {
-            "t": 1794582000,
-            "o": 3898.2,
-            "h": 3898.6,
-            "l": 3871.1,
-            "c": 3884.3
-          },
-          {
-            "t": 1794596400,
-            "o": 3883.8,
+            "t": 1794600000,
+            "o": 3878.3,
             "h": 3904.3,
             "l": 3872.9,
-            "c": 3903.4
+            "c": 3893.2
           },
           {
-            "t": 1794787200,
-            "o": 3903.0,
-            "h": 3903.5,
+            "t": 1794790800,
+            "o": 3892.5,
+            "h": 3892.6,
             "l": 3862.5,
-            "c": 3876.8
+            "c": 3870.1
           },
           {
-            "t": 1794801600,
-            "o": 3876.4,
+            "t": 1794805200,
+            "o": 3870.0,
             "h": 3881.2,
             "l": 3835.2,
-            "c": 3859.7
+            "c": 3863.4
           },
           {
-            "t": 1794816000,
-            "o": 3859.2,
+            "t": 1794819600,
+            "o": 3863.0,
             "h": 3880.5,
             "l": 3854.2,
-            "c": 3877.1
+            "c": 3873.0
           },
           {
-            "t": 1794830400,
-            "o": 3877.3,
+            "t": 1794834000,
+            "o": 3873.0,
             "h": 3892.6,
-            "l": 3861.0,
-            "c": 3862.0
+            "l": 3859.1,
+            "c": 3867.1
           },
           {
-            "t": 1794844800,
-            "o": 3862.1,
+            "t": 1794848400,
+            "o": 3866.9,
             "h": 3874.4,
             "l": 3843.7,
-            "c": 3866.9
+            "c": 3854.5
           },
           {
-            "t": 1794859200,
-            "o": 3866.7,
-            "h": 3867.8,
-            "l": 3851.3,
-            "c": 3855.3
-          },
-          {
-            "t": 1794877200,
-            "o": 3855.0,
-            "h": 3882.4,
-            "l": 3845.9,
-            "c": 3877.2
-          },
-          {
-            "t": 1794891600,
-            "o": 3877.6,
-            "h": 3889.6,
-            "l": 3864.5,
-            "c": 3872.2
-          },
-          {
-            "t": 1794906000,
-            "o": 3872.4,
-            "h": 3873.5,
-            "l": 3855.6,
-            "c": 3863.9
-          },
-          {
-            "t": 1794920400,
-            "o": 3863.8,
-            "h": 3894.0,
-            "l": 3839.2,
-            "c": 3868.9
-          },
-          {
-            "t": 1794934800,
-            "o": 3869.0,
+            "t": 1794862800,
+            "o": 3854.6,
             "h": 3875.0,
+            "l": 3845.9,
+            "c": 3869.0
+          },
+          {
+            "t": 1794880800,
+            "o": 3868.9,
+            "h": 3889.6,
+            "l": 3864.3,
+            "c": 3883.6
+          },
+          {
+            "t": 1794895200,
+            "o": 3883.5,
+            "h": 3884.0,
+            "l": 3862.5,
+            "c": 3869.0
+          },
+          {
+            "t": 1794909600,
+            "o": 3868.3,
+            "h": 3873.5,
+            "l": 3839.2,
+            "c": 3853.6
+          },
+          {
+            "t": 1794924000,
+            "o": 3853.4,
+            "h": 3894.0,
+            "l": 3853.3,
+            "c": 3866.4
+          },
+          {
+            "t": 1794938400,
+            "o": 3865.9,
+            "h": 3866.9,
             "l": 3843.8,
-            "c": 3850.2
+            "c": 3851.9
           },
           {
-            "t": 1794949200,
-            "o": 3850.0,
-            "h": 3860.5,
-            "l": 3807.2,
-            "c": 3811.5
+            "t": 1794956400,
+            "o": 3855.2,
+            "h": 3859.3,
+            "l": 3793.0,
+            "c": 3799.5
           },
           {
-            "t": 1794967200,
-            "o": 3811.1,
-            "h": 3811.9,
-            "l": 3781.7,
-            "c": 3790.4
+            "t": 1794970800,
+            "o": 3798.9,
+            "h": 3806.5,
+            "l": 3777.5,
+            "c": 3779.2
           },
           {
-            "t": 1794981600,
-            "o": 3790.3,
-            "h": 3790.9,
+            "t": 1794985200,
+            "o": 3779.3,
+            "h": 3788.6,
             "l": 3759.5,
-            "c": 3781.2
+            "c": 3775.2
           },
           {
-            "t": 1794996000,
-            "o": 3780.9,
+            "t": 1794999600,
+            "o": 3774.9,
             "h": 3792.9,
             "l": 3744.6,
-            "c": 3784.5
+            "c": 3769.6
           },
           {
-            "t": 1795010400,
-            "o": 3784.5,
-            "h": 3789.9,
+            "t": 1795014000,
+            "o": 3769.9,
+            "h": 3772.8,
             "l": 3731.1,
-            "c": 3738.6
+            "c": 3740.4
           },
           {
-            "t": 1795024800,
-            "o": 3738.4,
-            "h": 3746.4,
+            "t": 1795028400,
+            "o": 3740.3,
+            "h": 3746.3,
             "l": 3721.8,
-            "c": 3727.8
+            "c": 3741.3
           },
           {
-            "t": 1795042800,
-            "o": 3730.2,
+            "t": 1795046400,
+            "o": 3741.2,
             "h": 3759.5,
-            "l": 3705.4,
-            "c": 3710.2
-          },
-          {
-            "t": 1795057200,
-            "o": 3710.0,
-            "h": 3745.6,
             "l": 3694.5,
-            "c": 3734.2
+            "c": 3721.3
           },
           {
-            "t": 1795071600,
-            "o": 3733.9,
+            "t": 1795060800,
+            "o": 3721.2,
+            "h": 3745.6,
+            "l": 3720.9,
+            "c": 3738.4
+          },
+          {
+            "t": 1795075200,
+            "o": 3737.7,
             "h": 3743.8,
-            "l": 3726.3,
-            "c": 3736.7
+            "l": 3719.9,
+            "c": 3720.1
           },
           {
-            "t": 1795086000,
-            "o": 3737.0,
-            "h": 3738.1,
-            "l": 3704.2,
-            "c": 3709.8
+            "t": 1795089600,
+            "o": 3720.0,
+            "h": 3728.9,
+            "l": 3672.6,
+            "c": 3674.3
           },
           {
-            "t": 1795100400,
-            "o": 3709.4,
-            "h": 3714.9,
-            "l": 3668.4,
-            "c": 3682.4
+            "t": 1795104000,
+            "o": 3674.3,
+            "h": 3693.8,
+            "l": 3667.1,
+            "c": 3669.1
           },
           {
-            "t": 1795114800,
-            "o": 3682.5,
-            "h": 3682.5,
-            "l": 3620.6,
-            "c": 3627.9
+            "t": 1795118400,
+            "o": 3669.2,
+            "h": 3674.6,
+            "l": 3591.6,
+            "c": 3608.7
           },
           {
-            "t": 1795129200,
-            "o": 3633.0,
-            "h": 3638.1,
-            "l": 3526.8,
-            "c": 3548.6
+            "t": 1795132800,
+            "o": 3607.9,
+            "h": 3628.0,
+            "l": 3518.5,
+            "c": 3551.0
           },
           {
-            "t": 1795143600,
-            "o": 3549.3,
-            "h": 3567.3,
+            "t": 1795147200,
+            "o": 3550.8,
+            "h": 3576.5,
             "l": 3514.9,
-            "c": 3561.2
+            "c": 3569.4
           },
           {
-            "t": 1795158000,
-            "o": 3560.7,
+            "t": 1795161600,
+            "o": 3569.7,
             "h": 3596.7,
-            "l": 3542.2,
-            "c": 3588.4
+            "l": 3567.7,
+            "c": 3575.7
           },
           {
-            "t": 1795172400,
-            "o": 3588.6,
-            "h": 3593.6,
-            "l": 3553.5,
-            "c": 3578.9
-          },
-          {
-            "t": 1795186800,
-            "o": 3579.3,
+            "t": 1795176000,
+            "o": 3575.7,
             "h": 3587.0,
-            "l": 3502.9,
-            "c": 3535.6
+            "l": 3527.7,
+            "c": 3551.9
           },
           {
-            "t": 1795201200,
-            "o": 3535.4,
+            "t": 1795190400,
+            "o": 3551.7,
+            "h": 3558.8,
+            "l": 3502.9,
+            "c": 3524.7
+          },
+          {
+            "t": 1795204800,
+            "o": 3524.6,
             "h": 3588.0,
             "l": 3503.8,
-            "c": 3584.4
+            "c": 3572.9
           },
           {
-            "t": 1795392000,
-            "o": 3583.9,
+            "t": 1795395600,
+            "o": 3572.7,
             "h": 3629.6,
-            "l": 3567.8,
-            "c": 3607.8
+            "l": 3570.0,
+            "c": 3607.9
           },
           {
-            "t": 1795406400,
-            "o": 3608.1,
+            "t": 1795410000,
+            "o": 3607.0,
             "h": 3636.4,
-            "l": 3602.9,
-            "c": 3617.3
-          },
-          {
-            "t": 1795420800,
-            "o": 3617.6,
-            "h": 3627.3,
             "l": 3599.9,
-            "c": 3619.4
+            "c": 3613.9
           },
           {
-            "t": 1795435200,
-            "o": 3619.4,
+            "t": 1795424400,
+            "o": 3614.1,
+            "h": 3627.3,
+            "l": 3611.0,
+            "c": 3617.8
+          },
+          {
+            "t": 1795438800,
+            "o": 3618.0,
             "h": 3691.0,
             "l": 3611.8,
-            "c": 3669.9
+            "c": 3672.6
           },
           {
-            "t": 1795449600,
-            "o": 3669.5,
-            "h": 3676.2,
-            "l": 3638.5,
-            "c": 3641.8
+            "t": 1795453200,
+            "o": 3672.6,
+            "h": 3675.7,
+            "l": 3634.9,
+            "c": 3636.3
           }
         ],
         "1h": [
-          {
-            "t": 1795125600,
-            "o": 3627.9,
-            "h": 3627.9,
-            "l": 3627.9,
-            "c": 3627.9
-          },
           {
             "t": 1795129200,
             "o": 3633.0,
@@ -1222,7 +1215,14 @@
             "o": 3649.1,
             "h": 3659.4,
             "l": 3638.5,
-            "c": 3641.8
+            "c": 3643.0
+          },
+          {
+            "t": 1795464000,
+            "o": 3642.3,
+            "h": 3646.8,
+            "l": 3634.9,
+            "c": 3636.3
           }
         ]
       }
@@ -1234,8 +1234,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.09063,
-      "chg_day": -0.58,
+      "price": 1.09027,
+      "chg_day": -0.61,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "EUR DEBIL / USD DEBIL",
@@ -1248,7 +1248,7 @@
         "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "BAJA",
-        "h1": "SUBE"
+        "h1": "NEUTRAL"
       },
       "liquidity": {
         "bsl": 1.10084,
@@ -1267,7 +1267,7 @@
       "intraday_low": 1.08849,
       "ob_high": 1.09302,
       "ob_low": 1.09039,
-      "macro_reason": "EUR (DEBIL) vs USD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:SUBE). FVG aislado en retroceso (1.09039 - 1.09302) con SL estructural en 1.09513 congelado hasta TP1/SL.",
+      "macro_reason": "EUR (DEBIL) vs USD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:NEUTRAL). FVG aislado en retroceso (1.09039 - 1.09302) con SL estructural en 1.09513 congelado hasta TP1/SL.",
       "news_warning": null,
       "swing_potential": null,
       "created_at": 1795453395,
@@ -1601,7 +1601,7 @@
             "o": 1.09649,
             "h": 1.10084,
             "l": 1.08849,
-            "c": 1.09063
+            "c": 1.09027
           }
         ],
         "4h": [
@@ -1918,7 +1918,7 @@
             "o": 1.08956,
             "h": 1.09075,
             "l": 1.08849,
-            "c": 1.09063
+            "c": 1.09027
           }
         ],
         "1h": [
@@ -2233,9 +2233,9 @@
           {
             "t": 1795464000,
             "o": 1.09063,
-            "h": 1.09063,
-            "l": 1.09039,
-            "c": 1.09063
+            "h": 1.09075,
+            "l": 1.09016,
+            "c": 1.09027
           }
         ]
       }
@@ -2247,8 +2247,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 158.885,
-      "chg_day": -0.51,
+      "price": 158.934,
+      "chg_day": -0.48,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "USD DEBIL / JPY FUERTE",
@@ -2614,7 +2614,7 @@
             "o": 158.601,
             "h": 159.503,
             "l": 158.474,
-            "c": 158.885
+            "c": 158.934
           }
         ],
         "4h": [
@@ -2930,8 +2930,8 @@
             "t": 1795453200,
             "o": 159.282,
             "h": 159.322,
-            "l": 158.884,
-            "c": 158.885
+            "l": 158.865,
+            "c": 158.934
           }
         ],
         "1h": [
@@ -3247,8 +3247,8 @@
             "t": 1795464000,
             "o": 158.943,
             "h": 158.976,
-            "l": 158.884,
-            "c": 158.885
+            "l": 158.865,
+            "c": 158.934
           }
         ]
       }
@@ -3260,8 +3260,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.30353,
-      "chg_day": -0.39,
+      "price": 1.30331,
+      "chg_day": -0.41,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "GBP DEBIL / USD DEBIL",
@@ -3627,7 +3627,7 @@
             "o": 1.30863,
             "h": 1.31442,
             "l": 1.30115,
-            "c": 1.30353
+            "c": 1.30331
           }
         ],
         "4h": [
@@ -3944,7 +3944,7 @@
             "o": 1.30229,
             "h": 1.30366,
             "l": 1.30115,
-            "c": 1.30353
+            "c": 1.30331
           }
         ],
         "1h": [
@@ -4260,8 +4260,8 @@
             "t": 1795464000,
             "o": 1.30359,
             "h": 1.30366,
-            "l": 1.30337,
-            "c": 1.30353
+            "l": 1.30312,
+            "c": 1.30331
           }
         ]
       }
@@ -4273,8 +4273,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 207.12,
-      "chg_day": -0.9,
+      "price": 207.152,
+      "chg_day": -0.88,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "GBP DEBIL / JPY FUERTE",
@@ -4303,7 +4303,7 @@
         "range20_units": 675.2
       },
       "intraday_high": 209.176,
-      "intraday_low": 207.092,
+      "intraday_low": 207.083,
       "ob_high": 207.795,
       "ob_low": 207.739,
       "macro_reason": "GBP (DEBIL) vs JPY (FUERTE) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). FVG aislado en retroceso (207.739 - 207.795) con SL estructural en 208.486 congelado hasta TP1/SL. Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorcion/macro en contra). Proteger ventas.",
@@ -4640,7 +4640,7 @@
             "o": 207.11,
             "h": 209.176,
             "l": 207.0,
-            "c": 207.122
+            "c": 207.152
           }
         ],
         "4h": [
@@ -4956,8 +4956,8 @@
             "t": 1795453200,
             "o": 207.412,
             "h": 207.491,
-            "l": 207.092,
-            "c": 207.12
+            "l": 207.083,
+            "c": 207.152
           }
         ],
         "1h": [
@@ -5273,8 +5273,8 @@
             "t": 1795464000,
             "o": 207.183,
             "h": 207.206,
-            "l": 207.11,
-            "c": 207.12
+            "l": 207.083,
+            "c": 207.152
           }
         ]
       }
@@ -5286,8 +5286,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.96785,
-      "chg_day": 0.1,
+      "price": 1.96776,
+      "chg_day": 0.09,
       "chart_bias": "SUBE",
       "macro_dir": "SUBE",
       "economy_short": "GBP DEBIL / AUD DEBIL",
@@ -5653,7 +5653,7 @@
             "o": 1.97705,
             "h": 1.9787,
             "l": 1.96359,
-            "c": 1.96785
+            "c": 1.96776
           }
         ],
         "4h": [
@@ -5968,9 +5968,9 @@
           {
             "t": 1795453200,
             "o": 1.96686,
-            "h": 1.96789,
+            "h": 1.96802,
             "l": 1.96427,
-            "c": 1.96785
+            "c": 1.96776
           }
         ],
         "1h": [
@@ -6285,9 +6285,9 @@
           {
             "t": 1795464000,
             "o": 1.96693,
-            "h": 1.96789,
+            "h": 1.96802,
             "l": 1.96649,
-            "c": 1.96785
+            "c": 1.96776
           }
         ]
       }
@@ -6299,8 +6299,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 2.39388,
-      "chg_day": 0.27,
+      "price": 2.39352,
+      "chg_day": 0.26,
       "chart_bias": "SUBE",
       "macro_dir": "BAJA",
       "economy_short": "GBP DEBIL / NZD DEBIL",
@@ -6335,7 +6335,7 @@
       "macro_reason": "GBP (DEBIL) vs NZD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:SUBE, 4H:SUBE, 1H:NEUTRAL). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795464491,
+      "created_at": 1795467604,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -6345,11 +6345,11 @@
       "setup": {
         "direction": "BUY",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 2.39388,
-        "be_trigger": 2.39388,
+        "entry": 2.39352,
+        "be_trigger": 2.39352,
         "sl": 2.38904,
-        "tp1": 2.39388,
-        "tp2": 2.39388
+        "tp1": 2.39352,
+        "tp2": 2.39352
       },
       "candles": {
         "1d": [
@@ -6666,7 +6666,7 @@
             "o": 2.39162,
             "h": 2.40088,
             "l": 2.38925,
-            "c": 2.39388
+            "c": 2.39352
           }
         ],
         "4h": [
@@ -6983,7 +6983,7 @@
             "o": 2.39415,
             "h": 2.39505,
             "l": 2.3912,
-            "c": 2.39388
+            "c": 2.39352
           }
         ],
         "1h": [
@@ -7298,9 +7298,9 @@
           {
             "t": 1795464000,
             "o": 2.39289,
-            "h": 2.39399,
+            "h": 2.39415,
             "l": 2.39248,
-            "c": 2.39388
+            "c": 2.39352
           }
         ]
       }
@@ -7312,8 +7312,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.87339,
-      "chg_day": -0.18,
+      "price": 1.8732,
+      "chg_day": -0.19,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "GBP DEBIL / CAD NEUTRAL",
@@ -7679,7 +7679,7 @@
             "o": 1.87611,
             "h": 1.88155,
             "l": 1.86894,
-            "c": 1.87339
+            "c": 1.8732
           }
         ],
         "4h": [
@@ -7994,9 +7994,9 @@
           {
             "t": 1795453200,
             "o": 1.8707,
-            "h": 1.87339,
+            "h": 1.8735,
             "l": 1.87043,
-            "c": 1.87339
+            "c": 1.8732
           }
         ],
         "1h": [
@@ -8311,9 +8311,9 @@
           {
             "t": 1795464000,
             "o": 1.87303,
-            "h": 1.87339,
+            "h": 1.8735,
             "l": 1.87264,
-            "c": 1.87339
+            "c": 1.8732
           }
         ]
       }
@@ -8325,8 +8325,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.6626,
-      "chg_day": -0.45,
+      "price": 0.66256,
+      "chg_day": -0.46,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "AUD DEBIL / USD DEBIL",
@@ -8692,7 +8692,7 @@
             "o": 0.6619,
             "h": 0.66587,
             "l": 0.66011,
-            "c": 0.6626
+            "c": 0.66256
           }
         ],
         "4h": [
@@ -9009,7 +9009,7 @@
             "o": 0.66208,
             "h": 0.66322,
             "l": 0.66173,
-            "c": 0.6626
+            "c": 0.66256
           }
         ],
         "1h": [
@@ -9325,8 +9325,8 @@
             "t": 1795464000,
             "o": 0.66287,
             "h": 0.66287,
-            "l": 0.6626,
-            "c": 0.6626
+            "l": 0.66243,
+            "c": 0.66256
           }
         ]
       }
@@ -9338,8 +9338,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 105.245,
-      "chg_day": -0.99,
+      "price": 105.265,
+      "chg_day": -0.97,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "AUD DEBIL / JPY FUERTE",
@@ -9374,7 +9374,7 @@
       "macro_reason": "AUD (DEBIL) vs JPY (FUERTE) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795464491,
+      "created_at": 1795467604,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -9384,11 +9384,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 105.245,
-        "be_trigger": 105.245,
+        "entry": 105.265,
+        "be_trigger": 105.265,
         "sl": 106.128,
-        "tp1": 105.245,
-        "tp2": 105.245
+        "tp1": 105.265,
+        "tp2": 105.265
       },
       "candles": {
         "1d": [
@@ -9705,7 +9705,7 @@
             "o": 104.476,
             "h": 106.128,
             "l": 104.476,
-            "c": 105.245
+            "c": 105.265
           }
         ],
         "4h": [
@@ -10021,8 +10021,8 @@
             "t": 1795453200,
             "o": 105.452,
             "h": 105.55,
-            "l": 105.245,
-            "c": 105.245
+            "l": 105.224,
+            "c": 105.265
           }
         ],
         "1h": [
@@ -10338,8 +10338,8 @@
             "t": 1795464000,
             "o": 105.326,
             "h": 105.353,
-            "l": 105.245,
-            "c": 105.245
+            "l": 105.224,
+            "c": 105.265
           }
         ]
       }
@@ -10387,7 +10387,7 @@
       "macro_reason": "AUD (DEBIL) vs CAD (NEUTRAL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:NEUTRAL). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795464491,
+      "created_at": 1795467604,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -11350,8 +11350,8 @@
           {
             "t": 1795464000,
             "o": 0.95221,
-            "h": 0.95232,
-            "l": 0.95107,
+            "h": 0.95238,
+            "l": 0.95088,
             "c": 0.9519
           }
         ]
@@ -11364,8 +11364,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.21639,
-      "chg_day": 0.17,
+      "price": 1.21628,
+      "chg_day": 0.16,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "AUD DEBIL / NZD DEBIL",
@@ -11379,12 +11379,12 @@
           "type": "forex",
           "decimals": 5,
           "pip": 0.0001,
-          "price": 1.21639,
+          "price": 1.21628,
           "direction": "BUY",
           "entry": 1.2161,
           "extreme": 1.215,
           "date": "2013-02-18",
-          "dist_units": 2.9,
+          "dist_units": 1.8,
           "unit_label": "pips",
           "macro_aligned": false,
           "economy_short": "AUD DEBIL / NZD DEBIL"
@@ -11416,7 +11416,7 @@
       "macro_reason": "AUD (DEBIL) vs NZD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795464491,
+      "created_at": 1795467604,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -11426,11 +11426,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 1.21639,
-        "be_trigger": 1.21639,
+        "entry": 1.21628,
+        "be_trigger": 1.21628,
         "sl": 1.21921,
-        "tp1": 1.21639,
-        "tp2": 1.21639
+        "tp1": 1.21628,
+        "tp2": 1.21628
       },
       "candles": {
         "1d": [
@@ -11747,7 +11747,7 @@
             "o": 1.20941,
             "h": 1.21921,
             "l": 1.20659,
-            "c": 1.21639
+            "c": 1.21628
           }
         ],
         "4h": [
@@ -12063,8 +12063,8 @@
             "t": 1795453200,
             "o": 1.21722,
             "h": 1.21797,
-            "l": 1.21609,
-            "c": 1.21639
+            "l": 1.21591,
+            "c": 1.21628
           }
         ],
         "1h": [
@@ -12380,8 +12380,8 @@
             "t": 1795464000,
             "o": 1.21641,
             "h": 1.21668,
-            "l": 1.2161,
-            "c": 1.21639
+            "l": 1.21591,
+            "c": 1.21628
           }
         ]
       }
@@ -12393,8 +12393,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.64597,
-      "chg_day": -0.1,
+      "price": 1.64579,
+      "chg_day": -0.12,
       "chart_bias": "SUBE",
       "macro_dir": "SUBE",
       "economy_short": "EUR DEBIL / AUD DEBIL",
@@ -12760,7 +12760,7 @@
             "o": 1.6569,
             "h": 1.65929,
             "l": 1.64222,
-            "c": 1.64597
+            "c": 1.64579
           }
         ],
         "4h": [
@@ -13075,9 +13075,9 @@
           {
             "t": 1795453200,
             "o": 1.64526,
-            "h": 1.64604,
+            "h": 1.64616,
             "l": 1.64222,
-            "c": 1.64597
+            "c": 1.64579
           }
         ],
         "1h": [
@@ -13392,9 +13392,9 @@
           {
             "t": 1795464000,
             "o": 1.64541,
-            "h": 1.64604,
+            "h": 1.64616,
             "l": 1.64466,
-            "c": 1.64597
+            "c": 1.64579
           }
         ]
       }
@@ -13406,8 +13406,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.55734,
-      "chg_day": -0.81,
+      "price": 0.55727,
+      "chg_day": -0.82,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "AUD DEBIL / CHF FUERTE",
@@ -13442,7 +13442,7 @@
       "macro_reason": "AUD (DEBIL) vs CHF (FUERTE) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795464491,
+      "created_at": 1795467604,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -13452,11 +13452,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 0.55734,
-        "be_trigger": 0.55734,
+        "entry": 0.55727,
+        "be_trigger": 0.55727,
         "sl": 0.5602,
-        "tp1": 0.55734,
-        "tp2": 0.55734
+        "tp1": 0.55727,
+        "tp2": 0.55727
       },
       "candles": {
         "1d": [
@@ -13773,7 +13773,7 @@
             "o": 0.5557,
             "h": 0.5602,
             "l": 0.55236,
-            "c": 0.55734
+            "c": 0.55727
           }
         ],
         "4h": [
@@ -14089,8 +14089,8 @@
             "t": 1795453200,
             "o": 0.55785,
             "h": 0.55879,
-            "l": 0.55677,
-            "c": 0.55734
+            "l": 0.55661,
+            "c": 0.55727
           }
         ],
         "1h": [
@@ -14406,8 +14406,8 @@
             "t": 1795464000,
             "o": 0.55763,
             "h": 0.5578,
-            "l": 0.55677,
-            "c": 0.55734
+            "l": 0.55661,
+            "c": 0.55727
           }
         ]
       }
@@ -14419,8 +14419,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.54463,
-      "chg_day": -0.64,
+      "price": 0.54466,
+      "chg_day": -0.63,
       "chart_bias": "BAJA",
       "macro_dir": "NEUTRAL",
       "economy_short": "NZD DEBIL / USD DEBIL",
@@ -14786,7 +14786,7 @@
             "o": 0.54705,
             "h": 0.54837,
             "l": 0.5436,
-            "c": 0.54463
+            "c": 0.54466
           }
         ],
         "4h": [
@@ -15103,7 +15103,7 @@
             "o": 0.54392,
             "h": 0.54502,
             "l": 0.5436,
-            "c": 0.54463
+            "c": 0.54466
           }
         ],
         "1h": [
@@ -15419,8 +15419,8 @@
             "t": 1795464000,
             "o": 0.54475,
             "h": 0.54475,
-            "l": 0.54463,
-            "c": 0.54463
+            "l": 0.54451,
+            "c": 0.54466
           }
         ]
       }
@@ -15432,8 +15432,8 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.43721,
-      "chg_day": 0.2,
+      "price": 1.43735,
+      "chg_day": 0.21,
       "chart_bias": "SUBE",
       "macro_dir": "BAJA",
       "economy_short": "USD DEBIL / CAD NEUTRAL",
@@ -15799,7 +15799,7 @@
             "o": 1.434,
             "h": 1.43845,
             "l": 1.4307,
-            "c": 1.4372
+            "c": 1.43735
           }
         ],
         "4h": [
@@ -16116,7 +16116,7 @@
             "o": 1.43668,
             "h": 1.43845,
             "l": 1.4361,
-            "c": 1.43721
+            "c": 1.43735
           }
         ],
         "1h": [
@@ -16431,9 +16431,9 @@
           {
             "t": 1795464000,
             "o": 1.43704,
-            "h": 1.43732,
+            "h": 1.43752,
             "l": 1.4364,
-            "c": 1.43721
+            "c": 1.43735
           }
         ]
       }
@@ -16445,7 +16445,7 @@
       "type": "forex",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.84144,
+      "price": 0.84143,
       "chg_day": -0.32,
       "chart_bias": "SUBE",
       "macro_dir": "BAJA",
@@ -16812,7 +16812,7 @@
             "o": 0.83937,
             "h": 0.84407,
             "l": 0.83663,
-            "c": 0.84145
+            "c": 0.84143
           }
         ],
         "4h": [
@@ -17128,8 +17128,8 @@
             "t": 1795453200,
             "o": 0.84262,
             "h": 0.8436,
-            "l": 0.84144,
-            "c": 0.84144
+            "l": 0.8413,
+            "c": 0.84143
           }
         ],
         "1h": [
@@ -17445,8 +17445,8 @@
             "t": 1795464000,
             "o": 0.84155,
             "h": 0.84177,
-            "l": 0.84144,
-            "c": 0.84144
+            "l": 0.8413,
+            "c": 0.84143
           }
         ]
       }
@@ -17458,8 +17458,8 @@
       "type": "forex",
       "pip": 0.01,
       "decimals": 3,
-      "price": 173.234,
-      "chg_day": -1.1,
+      "price": 173.256,
+      "chg_day": -1.09,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "EUR DEBIL / JPY FUERTE",
@@ -17478,7 +17478,7 @@
         "bsl": 175.046,
         "ssl": 173.242,
         "choch": "NONE",
-        "bos": "BEARISH_BOS",
+        "bos": "NONE",
         "sweep": "SSL_SWEEP_BUY"
       },
       "volatility": {
@@ -17491,21 +17491,15 @@
       "intraday_low": 173.202,
       "ob_high": 173.571,
       "ob_low": 173.505,
-      "macro_reason": "EUR (DEBIL) vs JPY (FUERTE) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). FVG aislado en retroceso (173.505 - 173.571) con SL estructural en 174.134 congelado hasta TP1/SL. Potencial Swing activo (BE en 172.942, Swing TP 171.035).",
+      "macro_reason": "EUR (DEBIL) vs JPY (FUERTE) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). FVG aislado en retroceso (173.505 - 173.571) con SL estructural en 174.134 congelado hasta TP1/SL. Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorcion/macro en contra). Proteger ventas.",
       "news_warning": null,
-      "swing_potential": {
-        "active": true,
-        "label": "POTENCIAL SWING - PROTOCOLO PIRAMIDE",
-        "target": 171.035,
-        "be_trigger": 172.942,
-        "plan": "1) Entrada base fija en 173.538 con SL estructural en 174.134. 2) Al tocar 172.942 (+1R) o TP1 (172.346), cobra parciales y sube el SL a 173.538 (Break Even). 3) Solo con la orden base ya protegida, anade 2da entrada en retroceso hacia Swing TP 171.035."
-      },
+      "swing_potential": null,
       "created_at": 1795453395,
       "confluence": {
-        "score": 90,
+        "score": 58,
         "alignment": "ALIGNED",
-        "verdict_title": "FVG RETROCESO (VENTA)",
-        "verdict_sub": "Vacio de liquidez (173.505 - 173.571) con SL estructural (174.134) + Macro (BAJA)"
+        "verdict_title": "AGOTAMIENTO - RIESGO DE GIRO",
+        "verdict_sub": "Momentum en extremo se frena - Asegurar parciales / BE"
       },
       "setup": {
         "direction": "SELL",
@@ -17831,7 +17825,7 @@
             "o": 173.577,
             "h": 175.046,
             "l": 173.202,
-            "c": 173.234
+            "c": 173.256
           }
         ],
         "4h": [
@@ -18148,7 +18142,7 @@
             "o": 173.5,
             "h": 173.505,
             "l": 173.202,
-            "c": 173.234
+            "c": 173.256
           }
         ],
         "1h": [
@@ -18463,9 +18457,9 @@
           {
             "t": 1795464000,
             "o": 173.31,
-            "h": 173.316,
-            "l": 173.234,
-            "c": 173.234
+            "h": 173.32,
+            "l": 173.214,
+            "c": 173.256
           }
         ]
       }
@@ -18477,8 +18471,8 @@
       "type": "crypto",
       "pip": 1.0,
       "decimals": 2,
-      "price": 61083.26,
-      "chg_day": -0.13,
+      "price": 61164.13,
+      "chg_day": 0.0,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "BTC DEBIL / USD DEBIL",
@@ -18490,7 +18484,7 @@
       "tf_bias": {
         "weekly": "BAJA",
         "daily": "BAJA",
-        "h4": "BAJA",
+        "h4": "SUBE",
         "h1": "BAJA"
       },
       "liquidity": {
@@ -18510,15 +18504,15 @@
       "intraday_low": 60296.53,
       "ob_high": 61769.81,
       "ob_low": 61692.74,
-      "macro_reason": "BTC (DEBIL) vs USD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). FVG aislado en retroceso (61692.74 - 61769.81) con SL estructural en 62857.29 congelado hasta TP1/SL. Agotamiento bajista en piso de rango (3 velas perdiendo cuerpo + absorcion/macro en contra). Proteger ventas.",
+      "macro_reason": "BTC (DEBIL) vs USD (DEBIL) en cesta hibrida 4H/1D. Jerarquia (1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:BAJA). FVG aislado en retroceso (61692.74 - 61769.81) con SL estructural en 62857.29 congelado hasta TP1/SL.",
       "news_warning": null,
       "swing_potential": null,
       "created_at": 1795456989,
       "confluence": {
-        "score": 58,
+        "score": 84,
         "alignment": "ALIGNED",
-        "verdict_title": "AGOTAMIENTO - RIESGO DE GIRO",
-        "verdict_sub": "Momentum en extremo se frena - Asegurar parciales / BE"
+        "verdict_title": "FVG RETROCESO (VENTA)",
+        "verdict_sub": "Vacio de liquidez (61692.74 - 61769.81) con SL estructural (62857.29) + Macro (BAJA)"
       },
       "setup": {
         "direction": "SELL",
@@ -18844,334 +18838,327 @@
             "o": 61162.2,
             "h": 64217.27,
             "l": 60367.81,
-            "c": 61083.26
+            "c": 61164.13
           }
         ],
         "4h": [
           {
-            "t": 1794819600,
-            "o": 64402.52,
+            "t": 1794823200,
+            "o": 64282.48,
             "h": 64731.01,
             "l": 63835.65,
-            "c": 64093.09
+            "c": 64112.35
           },
           {
-            "t": 1794834000,
-            "o": 64084.58,
+            "t": 1794837600,
+            "o": 64106.53,
             "h": 65602.21,
             "l": 63937.83,
-            "c": 64861.77
+            "c": 64836.64
           },
           {
-            "t": 1794848400,
-            "o": 64830.28,
-            "h": 65157.78,
+            "t": 1794852000,
+            "o": 64829.5,
+            "h": 65359.11,
             "l": 64661.83,
-            "c": 65014.06
+            "c": 65241.03
           },
           {
-            "t": 1794862800,
-            "o": 64975.38,
+            "t": 1794866400,
+            "o": 65237.73,
             "h": 65467.29,
             "l": 64380.41,
-            "c": 64566.4
+            "c": 64684.8
           },
           {
-            "t": 1794877200,
-            "o": 64568.23,
+            "t": 1794880800,
+            "o": 64679.06,
             "h": 65119.28,
             "l": 64315.75,
-            "c": 64981.57
+            "c": 64773.32
           },
           {
-            "t": 1794891600,
-            "o": 64975.3,
-            "h": 64985.44,
-            "l": 64238.34,
-            "c": 64269.03
+            "t": 1794895200,
+            "o": 64741.88,
+            "h": 64766.56,
+            "l": 64110.25,
+            "c": 64301.2
           },
           {
-            "t": 1794906000,
-            "o": 64272.82,
-            "h": 65065.1,
+            "t": 1794909600,
+            "o": 64297.42,
+            "h": 65100.0,
             "l": 64004.94,
-            "c": 65000.81
+            "c": 65091.26
           },
           {
-            "t": 1794920400,
-            "o": 64998.83,
+            "t": 1794924000,
+            "o": 65073.67,
             "h": 65356.56,
             "l": 63278.41,
-            "c": 63672.4
+            "c": 63756.61
           },
           {
-            "t": 1794934800,
-            "o": 63650.32,
-            "h": 64020.9,
-            "l": 63454.22,
-            "c": 63914.75
+            "t": 1794938400,
+            "o": 63722.53,
+            "h": 64593.22,
+            "l": 63575.67,
+            "c": 64289.27
           },
           {
-            "t": 1794949200,
-            "o": 63879.12,
+            "t": 1794952800,
+            "o": 64269.27,
             "h": 65189.22,
-            "l": 63879.12,
-            "c": 64722.82
+            "l": 64105.52,
+            "c": 64234.55
           },
           {
-            "t": 1794963600,
-            "o": 64713.07,
-            "h": 64714.76,
+            "t": 1794967200,
+            "o": 64252.25,
+            "h": 64771.88,
             "l": 64062.48,
-            "c": 64356.23
+            "c": 64600.5
           },
           {
-            "t": 1794978000,
-            "o": 64338.35,
+            "t": 1794981600,
+            "o": 64600.17,
             "h": 64889.54,
-            "l": 64267.72,
-            "c": 64610.79
+            "l": 64404.23,
+            "c": 64550.11
           },
           {
-            "t": 1794992400,
-            "o": 64612.64,
-            "h": 64700.75,
-            "l": 63897.16,
-            "c": 64017.07
+            "t": 1794996000,
+            "o": 64565.53,
+            "h": 64573.2,
+            "l": 63848.66,
+            "c": 63865.27
           },
           {
-            "t": 1795006800,
-            "o": 64007.87,
-            "h": 64116.84,
+            "t": 1795010400,
+            "o": 63860.89,
+            "h": 64000.67,
             "l": 62220.07,
-            "c": 62689.67
+            "c": 63037.3
           },
           {
-            "t": 1795021200,
-            "o": 62661.12,
-            "h": 63447.87,
-            "l": 62370.99,
-            "c": 62529.76
+            "t": 1795024800,
+            "o": 63026.97,
+            "h": 63207.46,
+            "l": 62210.06,
+            "c": 62257.1
           },
           {
-            "t": 1795035600,
-            "o": 62535.85,
+            "t": 1795039200,
+            "o": 62257.62,
             "h": 63226.12,
             "l": 62012.27,
-            "c": 63109.03
+            "c": 62787.2
           },
           {
-            "t": 1795050000,
-            "o": 63112.75,
+            "t": 1795053600,
+            "o": 62775.33,
             "h": 63678.13,
             "l": 62330.89,
-            "c": 63513.0
+            "c": 63288.5
           },
           {
-            "t": 1795064400,
-            "o": 63512.44,
-            "h": 63804.24,
-            "l": 63225.5,
-            "c": 63664.2
+            "t": 1795068000,
+            "o": 63280.69,
+            "h": 63864.1,
+            "l": 63279.86,
+            "c": 63785.27
           },
           {
-            "t": 1795078800,
-            "o": 63671.69,
-            "h": 64006.71,
-            "l": 63509.1,
-            "c": 63814.37
-          },
-          {
-            "t": 1795093200,
-            "o": 63812.64,
+            "t": 1795082400,
+            "o": 63794.2,
             "h": 64011.1,
-            "l": 62571.36,
-            "c": 62716.22
+            "l": 63509.1,
+            "c": 63968.95
           },
           {
-            "t": 1795107600,
-            "o": 62679.19,
-            "h": 63308.51,
-            "l": 61687.16,
-            "c": 62048.94
+            "t": 1795096800,
+            "o": 63975.87,
+            "h": 63984.14,
+            "l": 62176.2,
+            "c": 62670.31
           },
           {
-            "t": 1795122000,
-            "o": 62020.59,
-            "h": 62273.41,
+            "t": 1795111200,
+            "o": 62656.59,
+            "h": 63226.52,
             "l": 61370.38,
-            "c": 62064.59
+            "c": 61466.91
           },
           {
-            "t": 1795136400,
-            "o": 62093.83,
+            "t": 1795125600,
+            "o": 61472.08,
             "h": 62541.98,
+            "l": 61230.53,
+            "c": 61501.34
+          },
+          {
+            "t": 1795140000,
+            "o": 61495.75,
+            "h": 62324.6,
             "l": 61230.42,
-            "c": 61452.67
+            "c": 61853.08
           },
           {
-            "t": 1795150800,
-            "o": 61440.36,
+            "t": 1795154400,
+            "o": 61842.94,
             "h": 62004.01,
-            "l": 61367.09,
-            "c": 61760.18
+            "l": 61416.91,
+            "c": 61583.63
           },
           {
-            "t": 1795165200,
-            "o": 61768.21,
+            "t": 1795168800,
+            "o": 61579.21,
             "h": 62261.77,
             "l": 61171.46,
-            "c": 61500.0
+            "c": 61812.17
           },
           {
-            "t": 1795179600,
-            "o": 61498.92,
+            "t": 1795183200,
+            "o": 61815.6,
             "h": 62106.69,
             "l": 58742.55,
-            "c": 59474.4
+            "c": 59094.05
           },
           {
-            "t": 1795194000,
-            "o": 59404.77,
-            "h": 59504.24,
-            "l": 57680.1,
-            "c": 58308.27
-          },
-          {
-            "t": 1795208400,
-            "o": 58351.04,
+            "t": 1795197600,
+            "o": 59061.69,
             "h": 59278.93,
-            "l": 58075.34,
-            "c": 58900.0
+            "l": 57680.1,
+            "c": 58884.09
           },
           {
-            "t": 1795222800,
-            "o": 58900.0,
-            "h": 59108.28,
+            "t": 1795212000,
+            "o": 58889.34,
+            "h": 59178.06,
+            "l": 58725.31,
+            "c": 58909.62
+          },
+          {
+            "t": 1795226400,
+            "o": 58907.25,
+            "h": 58969.64,
             "l": 55518.44,
-            "c": 56215.28
+            "c": 55699.18
           },
           {
-            "t": 1795237200,
-            "o": 56231.29,
+            "t": 1795240800,
+            "o": 55721.21,
             "h": 58533.61,
             "l": 55180.67,
-            "c": 57692.84
+            "c": 57912.13
           },
           {
-            "t": 1795251600,
-            "o": 57719.32,
-            "h": 59043.6,
-            "l": 57657.03,
-            "c": 58764.69
+            "t": 1795255200,
+            "o": 57893.54,
+            "h": 60783.18,
+            "l": 57729.29,
+            "c": 60465.55
           },
           {
-            "t": 1795266000,
-            "o": 58758.95,
+            "t": 1795269600,
+            "o": 60456.41,
             "h": 60861.99,
-            "l": 58707.49,
-            "c": 59942.5
+            "l": 59603.97,
+            "c": 59967.34
           },
           {
-            "t": 1795280400,
-            "o": 59948.2,
-            "h": 60358.06,
-            "l": 59854.88,
-            "c": 60319.73
-          },
-          {
-            "t": 1795294800,
-            "o": 60331.66,
+            "t": 1795284000,
+            "o": 59968.39,
             "h": 60393.25,
+            "l": 59959.82,
+            "c": 60347.97
+          },
+          {
+            "t": 1795298400,
+            "o": 60336.78,
+            "h": 60339.07,
             "l": 59859.27,
-            "c": 60075.31
+            "c": 59980.35
           },
           {
-            "t": 1795309200,
-            "o": 60068.36,
-            "h": 60115.29,
-            "l": 58996.94,
-            "c": 59184.07
-          },
-          {
-            "t": 1795323600,
-            "o": 59185.15,
-            "h": 60297.36,
+            "t": 1795312800,
+            "o": 59987.86,
+            "h": 60053.11,
             "l": 58656.26,
-            "c": 59695.85
+            "c": 58783.48
           },
           {
-            "t": 1795338000,
-            "o": 59692.34,
+            "t": 1795327200,
+            "o": 58791.52,
+            "h": 61211.37,
+            "l": 58791.52,
+            "c": 61010.0
+          },
+          {
+            "t": 1795341600,
+            "o": 61057.31,
             "h": 61545.78,
-            "l": 59558.46,
-            "c": 60751.84
+            "l": 60379.93,
+            "c": 60646.75
           },
           {
-            "t": 1795352400,
-            "o": 60746.75,
+            "t": 1795356000,
+            "o": 60646.69,
             "h": 61303.86,
-            "l": 60442.74,
-            "c": 61167.67
+            "l": 60529.35,
+            "c": 60740.3
           },
           {
-            "t": 1795366800,
-            "o": 61167.68,
-            "h": 61180.88,
+            "t": 1795370400,
+            "o": 60740.08,
+            "h": 61014.07,
             "l": 60485.55,
-            "c": 60822.3
+            "c": 60845.98
           },
           {
-            "t": 1795381200,
-            "o": 60822.31,
+            "t": 1795384800,
+            "o": 60840.47,
             "h": 61333.64,
             "l": 60654.37,
-            "c": 61249.06
+            "c": 60758.33
           },
           {
-            "t": 1795395600,
-            "o": 61232.05,
+            "t": 1795399200,
+            "o": 60771.74,
             "h": 61778.05,
             "l": 60296.53,
-            "c": 61154.56
+            "c": 61596.5
           },
           {
-            "t": 1795410000,
-            "o": 61135.04,
-            "h": 61726.68,
-            "l": 61023.61,
-            "c": 61429.48
-          },
-          {
-            "t": 1795424400,
-            "o": 61435.89,
+            "t": 1795413600,
+            "o": 61604.04,
             "h": 61811.76,
+            "l": 61051.82,
+            "c": 61361.27
+          },
+          {
+            "t": 1795428000,
+            "o": 61361.27,
+            "h": 63802.52,
             "l": 61005.45,
-            "c": 61253.44
+            "c": 63784.45
           },
           {
-            "t": 1795438800,
-            "o": 61247.15,
+            "t": 1795442400,
+            "o": 63748.57,
             "h": 64469.84,
-            "l": 61007.3,
-            "c": 62183.55
+            "l": 61217.01,
+            "c": 61607.01
           },
           {
-            "t": 1795453200,
-            "o": 62179.46,
-            "h": 62179.46,
+            "t": 1795456800,
+            "o": 61628.07,
+            "h": 61702.52,
             "l": 60710.34,
-            "c": 61083.26
+            "c": 61164.13
           }
         ],
         "1h": [
-          {
-            "t": 1795305600,
-            "o": 60086.0,
-            "h": 60217.01,
-            "l": 60023.05,
-            "c": 60075.31
-          },
           {
             "t": 1795309200,
             "o": 60068.36,
@@ -19476,9 +19463,16 @@
           {
             "t": 1795464000,
             "o": 61228.38,
-            "h": 61305.36,
-            "l": 61061.01,
-            "c": 61083.26
+            "h": 61383.95,
+            "l": 60983.94,
+            "c": 61146.54
+          },
+          {
+            "t": 1795467600,
+            "o": 61164.13,
+            "h": 61164.13,
+            "l": 61164.13,
+            "c": 61164.13
           }
         ]
       }
@@ -19490,8 +19484,8 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 49596.25,
-      "chg_day": 3.01,
+      "price": 49646.56,
+      "chg_day": 3.11,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "DEBIL (BAJISTA)",
@@ -19507,7 +19501,7 @@
         "h1": "BAJA"
       },
       "liquidity": {
-        "bsl": 50454.81,
+        "bsl": 49899.85,
         "ssl": 47998.86,
         "choch": "NONE",
         "bos": "NONE",
@@ -19519,7 +19513,7 @@
         "range20": 5711.75,
         "range20_units": 5711.8
       },
-      "intraday_high": 50462.4,
+      "intraday_high": 50454.81,
       "intraday_low": 47998.86,
       "ob_high": 49594.9,
       "ob_low": 49025.79,
@@ -19863,278 +19857,271 @@
             "o": 49239.91,
             "h": 49810.26,
             "l": 49033.31,
-            "c": 49596.25
+            "c": 49618.88
           }
         ],
         "4h": [
           {
-            "t": 1792780200,
-            "o": 52299.82,
+            "t": 1793021400,
+            "o": 52320.45,
             "h": 52620.19,
-            "l": 52200.84,
-            "c": 52384.43
+            "l": 52278.57,
+            "c": 52351.38
           },
           {
-            "t": 1793028600,
-            "o": 52383.95,
-            "h": 52416.56,
-            "l": 52263.25,
-            "c": 52324.24
-          },
-          {
-            "t": 1793043000,
-            "o": 52324.42,
+            "t": 1793035800,
+            "o": 52351.38,
             "h": 52477.91,
             "l": 52231.84,
-            "c": 52377.21
+            "c": 52263.42
           },
           {
-            "t": 1793118600,
-            "o": 52376.54,
-            "h": 52451.21,
-            "l": 52307.21,
-            "c": 52387.18
+            "t": 1793111400,
+            "o": 52262.59,
+            "h": 52477.61,
+            "l": 52242.03,
+            "c": 52376.52
           },
           {
-            "t": 1793194200,
-            "o": 52335.43,
-            "h": 52634.32,
+            "t": 1793125800,
+            "o": 52375.79,
+            "h": 52546.59,
             "l": 52335.43,
-            "c": 52516.43
+            "c": 52503.03
           },
           {
-            "t": 1793208600,
-            "o": 52516.45,
-            "h": 52605.17,
+            "t": 1793201400,
+            "o": 52502.65,
+            "h": 52634.32,
+            "l": 52348.18,
+            "c": 52448.72
+          },
+          {
+            "t": 1793215800,
+            "o": 52448.72,
+            "h": 52542.77,
             "l": 52086.13,
-            "c": 52329.22
+            "c": 52298.04
           },
           {
-            "t": 1793284200,
-            "o": 52328.93,
-            "h": 52394.26,
+            "t": 1793291400,
+            "o": 52298.04,
+            "h": 52343.34,
             "l": 52141.63,
-            "c": 52196.11
+            "c": 52343.34
           },
           {
-            "t": 1793298600,
-            "o": 52196.27,
+            "t": 1793367000,
+            "o": 52383.9,
             "h": 52383.9,
-            "l": 51919.56,
-            "c": 52035.51
+            "l": 51820.62,
+            "c": 51847.97
           },
           {
-            "t": 1793374200,
-            "o": 52034.25,
-            "h": 52034.25,
-            "l": 51563.76,
-            "c": 51669.33
-          },
-          {
-            "t": 1793388600,
-            "o": 51669.92,
+            "t": 1793381400,
+            "o": 51848.35,
             "h": 52424.91,
-            "l": 51646.56,
-            "c": 52302.72
+            "l": 51563.76,
+            "c": 52380.13
           },
           {
-            "t": 1793640600,
-            "o": 52302.59,
-            "h": 52336.51,
-            "l": 51981.66,
-            "c": 51987.71
+            "t": 1793633400,
+            "o": 52380.88,
+            "h": 52387.57,
+            "l": 52079.74,
+            "c": 52142.03
           },
           {
-            "t": 1793716200,
-            "o": 51932.63,
-            "h": 51932.63,
+            "t": 1793647800,
+            "o": 52145.69,
+            "h": 52205.03,
             "l": 51593.16,
-            "c": 51874.6
+            "c": 51875.7
           },
           {
-            "t": 1793730600,
-            "o": 51874.59,
-            "h": 53032.55,
+            "t": 1793723400,
+            "o": 51876.71,
+            "h": 51899.79,
+            "l": 51707.4,
+            "c": 51755.33
+          },
+          {
+            "t": 1793737800,
+            "o": 51754.71,
+            "h": 53337.27,
             "l": 51690.06,
-            "c": 52841.31
+            "c": 53276.77
           },
           {
-            "t": 1793806200,
-            "o": 52843.68,
-            "h": 53369.12,
-            "l": 52826.83,
-            "c": 53338.56
+            "t": 1793813400,
+            "o": 53276.39,
+            "h": 53492.4,
+            "l": 53248.96,
+            "c": 53357.03
           },
           {
-            "t": 1793820600,
-            "o": 53338.85,
+            "t": 1793889000,
+            "o": 53679.01,
             "h": 53702.99,
-            "l": 51980.37,
-            "c": 52262.69
+            "l": 51593.58,
+            "c": 51774.5
           },
           {
-            "t": 1793896200,
-            "o": 52267.4,
-            "h": 52330.01,
-            "l": 51567.02,
-            "c": 51588.75
-          },
-          {
-            "t": 1793910600,
-            "o": 51591.46,
-            "h": 51676.47,
+            "t": 1793903400,
+            "o": 51773.34,
+            "h": 51900.77,
             "l": 50992.61,
-            "c": 51558.34
+            "c": 51507.95
           },
           {
-            "t": 1793986200,
-            "o": 51558.13,
-            "h": 51559.48,
+            "t": 1793979000,
+            "o": 51506.07,
+            "h": 51662.26,
+            "l": 51361.71,
+            "c": 51445.27
+          },
+          {
+            "t": 1793993400,
+            "o": 51444.97,
+            "h": 52213.91,
             "l": 51271.58,
-            "c": 51271.58
+            "c": 52184.48
           },
           {
-            "t": 1794234600,
-            "o": 51643.01,
-            "h": 52417.11,
-            "l": 51285.73,
-            "c": 52403.94
-          },
-          {
-            "t": 1794249000,
-            "o": 52404.2,
+            "t": 1794241800,
+            "o": 52184.28,
             "h": 52574.34,
-            "l": 52010.35,
-            "c": 52139.49
+            "l": 52173.33,
+            "c": 52503.97
           },
           {
-            "t": 1794324600,
-            "o": 52139.5,
-            "h": 52216.45,
+            "t": 1794256200,
+            "o": 52501.92,
+            "h": 52506.88,
             "l": 51977.08,
-            "c": 52205.49
+            "c": 52099.15
           },
           {
-            "t": 1794339000,
-            "o": 52206.02,
-            "h": 52338.1,
+            "t": 1794331800,
+            "o": 52098.57,
+            "h": 52316.89,
+            "l": 52031.65,
+            "c": 52233.73
+          },
+          {
+            "t": 1794407400,
+            "o": 52196.35,
+            "h": 52491.43,
             "l": 52055.14,
-            "c": 52253.66
+            "c": 52487.75
           },
           {
-            "t": 1794414600,
-            "o": 52253.78,
-            "h": 52512.72,
-            "l": 52235.54,
-            "c": 52491.66
-          },
-          {
-            "t": 1794429000,
-            "o": 52493.06,
-            "h": 52751.22,
+            "t": 1794421800,
+            "o": 52487.42,
+            "h": 52617.07,
             "l": 52363.55,
-            "c": 52698.86
+            "c": 52443.0
           },
           {
-            "t": 1794504600,
-            "o": 52699.25,
-            "h": 52714.47,
-            "l": 52271.16,
-            "c": 52294.12
+            "t": 1794497400,
+            "o": 52444.67,
+            "h": 52751.22,
+            "l": 52424.79,
+            "c": 52464.43
           },
           {
-            "t": 1794580200,
-            "o": 52490.68,
+            "t": 1794511800,
+            "o": 52464.14,
             "h": 52521.48,
             "l": 52017.86,
-            "c": 52270.94
+            "c": 52228.04
           },
           {
-            "t": 1794594600,
-            "o": 52270.76,
+            "t": 1794587400,
+            "o": 52227.46,
+            "h": 52345.82,
+            "l": 52096.0,
+            "c": 52300.79
+          },
+          {
+            "t": 1794601800,
+            "o": 52301.38,
             "h": 52358.73,
-            "l": 51942.98,
-            "c": 52003.95
+            "l": 51895.19,
+            "c": 51917.89
           },
           {
-            "t": 1794843000,
-            "o": 52006.34,
-            "h": 52126.06,
-            "l": 51599.01,
-            "c": 51617.2
+            "t": 1794850200,
+            "o": 51918.32,
+            "h": 51918.32,
+            "l": 51511.56,
+            "c": 51629.27
           },
           {
-            "t": 1794857400,
-            "o": 51616.05,
-            "h": 51652.5,
+            "t": 1794925800,
+            "o": 51386.98,
+            "h": 51463.53,
             "l": 50685.51,
-            "c": 50838.18
+            "c": 50964.56
           },
           {
-            "t": 1794933000,
-            "o": 50836.76,
-            "h": 51024.56,
-            "l": 50566.98,
-            "c": 50679.85
+            "t": 1794940200,
+            "o": 50963.88,
+            "h": 50973.52,
+            "l": 50210.49,
+            "c": 50311.51
           },
           {
-            "t": 1794947400,
-            "o": 50681.39,
-            "h": 50779.22,
-            "l": 50029.35,
-            "c": 50401.32
-          },
-          {
-            "t": 1795023000,
-            "o": 50402.89,
+            "t": 1795015800,
+            "o": 50311.53,
             "h": 50462.4,
-            "l": 50121.8,
-            "c": 50193.03
+            "l": 50029.35,
+            "c": 50171.87
           },
           {
-            "t": 1795098600,
-            "o": 50432.32,
+            "t": 1795030200,
+            "o": 50175.05,
             "h": 50454.81,
+            "l": 49633.26,
+            "c": 49701.43
+          },
+          {
+            "t": 1795105800,
+            "o": 49703.54,
+            "h": 49836.85,
             "l": 49091.92,
-            "c": 49411.9
+            "c": 49172.2
           },
           {
-            "t": 1795113000,
-            "o": 49412.3,
+            "t": 1795120200,
+            "o": 49170.73,
             "h": 49594.9,
-            "l": 49025.79,
-            "c": 49271.52
+            "l": 48744.96,
+            "c": 48787.39
           },
           {
-            "t": 1795188600,
-            "o": 49270.59,
-            "h": 49281.68,
-            "l": 48454.7,
-            "c": 48454.7
-          },
-          {
-            "t": 1795203000,
-            "o": 48451.61,
-            "h": 49810.26,
+            "t": 1795195800,
+            "o": 48787.54,
+            "h": 48956.58,
             "l": 47998.86,
-            "c": 49700.65
+            "c": 48184.69
           },
           {
-            "t": 1795451400,
-            "o": 49700.06,
-            "h": 49786.02,
-            "l": 49423.91,
-            "c": 49596.25
+            "t": 1795444200,
+            "o": 49239.91,
+            "h": 49810.26,
+            "l": 49033.31,
+            "c": 49708.94
+          },
+          {
+            "t": 1795458600,
+            "o": 49710.2,
+            "h": 49771.69,
+            "l": 49550.83,
+            "c": 49646.56
           }
         ],
         "1h": [
-          {
-            "t": 1794591000,
-            "o": 52229.17,
-            "h": 52278.31,
-            "l": 52183.55,
-            "c": 52270.94
-          },
           {
             "t": 1794594600,
             "o": 52270.76,
@@ -20439,9 +20426,16 @@
           {
             "t": 1795462200,
             "o": 49717.8,
-            "h": 49726.54,
+            "h": 49759.59,
             "l": 49550.83,
-            "c": 49596.25
+            "c": 49753.29
+          },
+          {
+            "t": 1795465800,
+            "o": 49752.83,
+            "h": 49764.23,
+            "l": 49566.47,
+            "c": 49646.56
           }
         ]
       }
@@ -20453,8 +20447,8 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 24039.83,
-      "chg_day": 6.29,
+      "price": 24099.32,
+      "chg_day": 6.55,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "DEBIL (BAJISTA)",
@@ -20470,7 +20464,7 @@
         "h1": "BAJA"
       },
       "liquidity": {
-        "bsl": 24936.06,
+        "bsl": 24612.11,
         "ssl": 22513.01,
         "choch": "NONE",
         "bos": "NONE",
@@ -20489,7 +20483,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DEBIL). Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795464491,
+      "created_at": 1795467604,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -20499,11 +20493,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 24039.83,
-        "be_trigger": 24039.83,
+        "entry": 24099.32,
+        "be_trigger": 24099.32,
         "sl": 24936.06,
-        "tp1": 24039.83,
-        "tp2": 24039.83
+        "tp1": 24099.32,
+        "tp2": 24099.32
       },
       "candles": {
         "1d": [
@@ -20820,278 +20814,271 @@
             "o": 24269.75,
             "h": 24353.65,
             "l": 23794.96,
-            "c": 24039.83
+            "c": 24084.52
           }
         ],
         "4h": [
           {
-            "t": 1792780200,
-            "o": 26001.21,
+            "t": 1793021400,
+            "o": 26024.11,
             "h": 26305.51,
-            "l": 25947.24,
-            "c": 26277.96
+            "l": 25986.56,
+            "c": 26227.51
           },
           {
-            "t": 1793028600,
-            "o": 26279.13,
-            "h": 26288.66,
-            "l": 26150.59,
-            "c": 26190.82
+            "t": 1793035800,
+            "o": 26225.53,
+            "h": 26371.07,
+            "l": 26154.16,
+            "c": 26307.33
           },
           {
-            "t": 1793043000,
-            "o": 26189.83,
+            "t": 1793111400,
+            "o": 26312.1,
             "h": 26528.94,
-            "l": 26162.97,
-            "c": 26510.68
+            "l": 26309.47,
+            "c": 26453.21
           },
           {
-            "t": 1793118600,
-            "o": 26514.29,
-            "h": 26540.81,
-            "l": 26449.92,
-            "c": 26474.9
-          },
-          {
-            "t": 1793194200,
-            "o": 26535.62,
+            "t": 1793125800,
+            "o": 26453.11,
             "h": 26580.2,
             "l": 26428.51,
-            "c": 26455.9
+            "c": 26463.74
           },
           {
-            "t": 1793208600,
-            "o": 26455.82,
+            "t": 1793201400,
+            "o": 26465.86,
             "h": 26587.34,
+            "l": 26415.54,
+            "c": 26472.62
+          },
+          {
+            "t": 1793215800,
+            "o": 26471.63,
+            "h": 26561.67,
             "l": 26053.16,
-            "c": 26206.18
+            "c": 26206.42
           },
           {
-            "t": 1793284200,
-            "o": 26204.86,
-            "h": 26284.83,
-            "l": 26099.13,
-            "c": 26118.64
+            "t": 1793291400,
+            "o": 26193.99,
+            "h": 26221.55,
+            "l": 26085.3,
+            "c": 26188.0
           },
           {
-            "t": 1793298600,
-            "o": 26119.24,
-            "h": 26188.0,
-            "l": 25478.0,
-            "c": 25571.62
+            "t": 1793367000,
+            "o": 25604.3,
+            "h": 25669.5,
+            "l": 25373.38,
+            "c": 25391.63
           },
           {
-            "t": 1793374200,
-            "o": 25564.36,
-            "h": 25574.76,
-            "l": 25177.49,
-            "c": 25317.52
-          },
-          {
-            "t": 1793388600,
-            "o": 25319.01,
+            "t": 1793381400,
+            "o": 25391.55,
             "h": 25799.43,
-            "l": 25294.42,
-            "c": 25543.6
+            "l": 25177.49,
+            "c": 25796.98
           },
           {
-            "t": 1793640600,
-            "o": 25541.9,
-            "h": 25558.39,
+            "t": 1793633400,
+            "o": 25796.96,
+            "h": 25796.96,
+            "l": 25292.48,
+            "c": 25352.73
+          },
+          {
+            "t": 1793647800,
+            "o": 25356.64,
+            "h": 25441.92,
             "l": 25146.41,
-            "c": 25170.95
+            "c": 25393.53
           },
           {
-            "t": 1793716200,
-            "o": 25261.08,
+            "t": 1793723400,
+            "o": 25398.22,
             "h": 25474.46,
-            "l": 25261.08,
-            "c": 25436.56
-          },
-          {
-            "t": 1793730600,
-            "o": 25436.37,
-            "h": 26048.83,
             "l": 25319.47,
-            "c": 25924.55
+            "c": 25381.84
           },
           {
-            "t": 1793806200,
-            "o": 25920.03,
-            "h": 25952.64,
-            "l": 25658.68,
-            "c": 25844.61
+            "t": 1793737800,
+            "o": 25377.71,
+            "h": 26048.83,
+            "l": 25352.97,
+            "c": 25903.93
           },
           {
-            "t": 1793820600,
-            "o": 25846.44,
-            "h": 25846.44,
+            "t": 1793813400,
+            "o": 25905.52,
+            "h": 25929.07,
+            "l": 25713.08,
+            "c": 25739.71
+          },
+          {
+            "t": 1793889000,
+            "o": 25550.67,
+            "h": 25550.67,
             "l": 24269.81,
-            "c": 24747.13
+            "c": 24411.31
           },
           {
-            "t": 1793896200,
-            "o": 24747.28,
-            "h": 24782.29,
-            "l": 24328.04,
-            "c": 24411.21
-          },
-          {
-            "t": 1793910600,
-            "o": 24410.64,
+            "t": 1793903400,
+            "o": 24406.21,
             "h": 24823.77,
             "l": 24298.96,
-            "c": 24701.97
+            "c": 24658.47
           },
           {
-            "t": 1793986200,
-            "o": 24700.28,
-            "h": 24715.47,
+            "t": 1793979000,
+            "o": 24658.12,
+            "h": 24773.22,
             "l": 24507.63,
-            "c": 24573.21
+            "c": 24654.76
           },
           {
-            "t": 1794234600,
-            "o": 24783.31,
+            "t": 1793993400,
+            "o": 24650.89,
             "h": 25271.38,
-            "l": 24769.19,
-            "c": 25180.45
+            "l": 24564.79,
+            "c": 25118.19
           },
           {
-            "t": 1794249000,
-            "o": 25181.65,
+            "t": 1794241800,
+            "o": 25121.68,
             "h": 25354.3,
-            "l": 24960.43,
-            "c": 25147.04
+            "l": 25100.71,
+            "c": 25345.89
           },
           {
-            "t": 1794324600,
-            "o": 25146.76,
-            "h": 25195.35,
+            "t": 1794256200,
+            "o": 25343.35,
+            "h": 25343.79,
+            "l": 24901.77,
+            "c": 24922.69
+          },
+          {
+            "t": 1794331800,
+            "o": 24919.07,
+            "h": 25120.43,
             "l": 24816.69,
-            "c": 24986.86
+            "c": 25069.79
           },
           {
-            "t": 1794339000,
-            "o": 24988.9,
-            "h": 25554.01,
-            "l": 24952.9,
-            "c": 25554.01
+            "t": 1794407400,
+            "o": 25452.79,
+            "h": 25642.75,
+            "l": 25327.23,
+            "c": 25637.26
           },
           {
-            "t": 1794414600,
-            "o": 25553.67,
+            "t": 1794421800,
+            "o": 25635.42,
             "h": 25649.47,
-            "l": 25485.12,
-            "c": 25496.49
-          },
-          {
-            "t": 1794429000,
-            "o": 25494.48,
-            "h": 25596.06,
             "l": 25076.25,
-            "c": 25461.79
+            "c": 25338.62
           },
           {
-            "t": 1794504600,
-            "o": 25461.7,
-            "h": 25525.83,
-            "l": 25302.11,
-            "c": 25363.75
+            "t": 1794497400,
+            "o": 25330.22,
+            "h": 25596.06,
+            "l": 25282.76,
+            "c": 25395.28
           },
           {
-            "t": 1794580200,
-            "o": 25408.29,
+            "t": 1794511800,
+            "o": 25395.31,
             "h": 25420.62,
             "l": 24873.26,
-            "c": 25084.59
+            "c": 25000.43
           },
           {
-            "t": 1794594600,
-            "o": 25079.63,
+            "t": 1794587400,
+            "o": 24989.58,
+            "h": 25154.76,
+            "l": 24932.18,
+            "c": 25106.94
+          },
+          {
+            "t": 1794601800,
+            "o": 25104.65,
             "h": 25193.78,
             "l": 24575.47,
-            "c": 24605.29
+            "c": 24622.05
           },
           {
-            "t": 1794843000,
-            "o": 24602.76,
-            "h": 24798.75,
+            "t": 1794850200,
+            "o": 24619.87,
+            "h": 24648.35,
             "l": 24460.28,
-            "c": 24554.31
+            "c": 24516.85
           },
           {
-            "t": 1794857400,
-            "o": 24552.82,
-            "h": 24582.12,
+            "t": 1794925800,
+            "o": 24512.37,
+            "h": 24545.95,
             "l": 23992.76,
-            "c": 24226.12
+            "c": 24325.82
           },
           {
-            "t": 1794933000,
-            "o": 24218.74,
-            "h": 24354.02,
-            "l": 24100.89,
-            "c": 24220.94
-          },
-          {
-            "t": 1794947400,
-            "o": 24222.2,
+            "t": 1794940200,
+            "o": 24319.37,
             "h": 24535.32,
-            "l": 24194.15,
-            "c": 24494.99
+            "l": 24143.53,
+            "c": 24436.85
           },
           {
-            "t": 1795023000,
-            "o": 24497.31,
+            "t": 1795015800,
+            "o": 24441.28,
             "h": 24538.06,
-            "l": 24365.04,
-            "c": 24426.67
+            "l": 24225.42,
+            "c": 24457.86
           },
           {
-            "t": 1795098600,
-            "o": 24801.17,
+            "t": 1795030200,
+            "o": 24457.69,
             "h": 24936.06,
-            "l": 24006.1,
-            "c": 24128.31
+            "l": 24337.84,
+            "c": 24527.73
           },
           {
-            "t": 1795113000,
-            "o": 24123.98,
-            "h": 24171.82,
-            "l": 23363.63,
-            "c": 23436.19
+            "t": 1795105800,
+            "o": 24532.8,
+            "h": 24612.11,
+            "l": 23874.43,
+            "c": 23914.69
           },
           {
-            "t": 1795188600,
-            "o": 23441.22,
-            "h": 23441.22,
-            "l": 22817.44,
-            "c": 22821.59
+            "t": 1795120200,
+            "o": 23905.2,
+            "h": 23962.6,
+            "l": 22998.15,
+            "c": 23032.45
           },
           {
-            "t": 1795203000,
-            "o": 22809.46,
-            "h": 24351.59,
+            "t": 1795195800,
+            "o": 23020.67,
+            "h": 23175.59,
             "l": 22513.01,
-            "c": 24173.26
+            "c": 22651.52
           },
           {
-            "t": 1795451400,
-            "o": 24172.44,
-            "h": 24216.88,
-            "l": 23972.71,
-            "c": 24039.83
+            "t": 1795444200,
+            "o": 24242.1,
+            "h": 24351.59,
+            "l": 23794.96,
+            "c": 24161.99
+          },
+          {
+            "t": 1795458600,
+            "o": 24165.24,
+            "h": 24210.37,
+            "l": 24018.07,
+            "c": 24099.32
           }
         ],
         "1h": [
-          {
-            "t": 1794591000,
-            "o": 25057.65,
-            "h": 25092.94,
-            "l": 25015.01,
-            "c": 25084.59
-          },
           {
             "t": 1794594600,
             "o": 25079.63,
@@ -21396,9 +21383,16 @@
           {
             "t": 1795462200,
             "o": 24134.63,
-            "h": 24140.98,
+            "h": 24190.72,
             "l": 24018.07,
-            "c": 24039.83
+            "c": 24179.21
+          },
+          {
+            "t": 1795465800,
+            "o": 24173.48,
+            "h": 24210.37,
+            "l": 24042.82,
+            "c": 24099.32
           }
         ]
       }
@@ -21410,8 +21404,8 @@
       "type": "index",
       "pip": 1.0,
       "decimals": 2,
-      "price": 7230.58,
-      "chg_day": 4.63,
+      "price": 7243.57,
+      "chg_day": 4.82,
       "chart_bias": "BAJA",
       "macro_dir": "BAJA",
       "economy_short": "DEBIL (BAJISTA)",
@@ -21427,7 +21421,7 @@
         "h1": "BAJA"
       },
       "liquidity": {
-        "bsl": 7415.64,
+        "bsl": 7334.54,
         "ssl": 6882.66,
         "choch": "NONE",
         "bos": "NONE",
@@ -21446,7 +21440,7 @@
       "macro_reason": "Apetito al riesgo US500 y rendimiento USD (DEBIL). Jerarquia (1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA). Sin Order Block ni FVG limpio en este grafico (no operar).",
       "news_warning": null,
       "swing_potential": null,
-      "created_at": 1795464491,
+      "created_at": 1795467604,
       "confluence": {
         "score": 45,
         "alignment": "NEUTRAL",
@@ -21456,11 +21450,11 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN OB NI FVG - ESPERAR",
-        "entry": 7230.58,
-        "be_trigger": 7230.58,
+        "entry": 7243.57,
+        "be_trigger": 7243.57,
         "sl": 7415.64,
-        "tp1": 7230.58,
-        "tp2": 7230.58
+        "tp1": 7243.57,
+        "tp2": 7243.57
       },
       "candles": {
         "1d": [
@@ -21777,278 +21771,271 @@
             "o": 7227.41,
             "h": 7295.6,
             "l": 7152.66,
-            "c": 7230.58
+            "c": 7237.71
           }
         ],
         "4h": [
           {
-            "t": 1792780200,
-            "o": 7634.17,
+            "t": 1793021400,
+            "o": 7639.7,
             "h": 7702.13,
-            "l": 7621.95,
-            "c": 7694.2
+            "l": 7639.7,
+            "c": 7683.88
           },
           {
-            "t": 1793028600,
-            "o": 7694.11,
-            "h": 7696.35,
-            "l": 7666.74,
-            "c": 7678.65
+            "t": 1793035800,
+            "o": 7683.89,
+            "h": 7708.85,
+            "l": 7669.31,
+            "c": 7690.7
           },
           {
-            "t": 1793043000,
-            "o": 7678.66,
+            "t": 1793111400,
+            "o": 7690.63,
             "h": 7736.06,
-            "l": 7674.47,
-            "c": 7726.94
+            "l": 7690.63,
+            "c": 7716.98
           },
           {
-            "t": 1793118600,
-            "o": 7726.87,
-            "h": 7736.24,
-            "l": 7715.22,
-            "c": 7722.98
+            "t": 1793125800,
+            "o": 7716.85,
+            "h": 7742.75,
+            "l": 7715.76,
+            "c": 7735.24
           },
           {
-            "t": 1793194200,
-            "o": 7735.56,
-            "h": 7751.06,
-            "l": 7718.37,
-            "c": 7734.13
-          },
-          {
-            "t": 1793208600,
-            "o": 7733.98,
+            "t": 1793201400,
+            "o": 7735.09,
             "h": 7758.43,
+            "l": 7722.37,
+            "c": 7733.79
+          },
+          {
+            "t": 1793215800,
+            "o": 7733.76,
+            "h": 7749.3,
             "l": 7695.75,
-            "c": 7718.28
+            "c": 7718.29
           },
           {
-            "t": 1793284200,
-            "o": 7718.29,
-            "h": 7732.21,
-            "l": 7690.94,
-            "c": 7698.4
-          },
-          {
-            "t": 1793298600,
-            "o": 7698.52,
+            "t": 1793291400,
+            "o": 7718.19,
             "h": 7721.02,
-            "l": 7596.62,
-            "c": 7608.77
+            "l": 7690.94,
+            "c": 7721.02
           },
           {
-            "t": 1793374200,
-            "o": 7608.47,
-            "h": 7608.67,
-            "l": 7527.56,
-            "c": 7551.96
+            "t": 1793367000,
+            "o": 7631.07,
+            "h": 7637.48,
+            "l": 7574.19,
+            "c": 7579.2
           },
           {
-            "t": 1793388600,
-            "o": 7552.04,
+            "t": 1793381400,
+            "o": 7579.3,
             "h": 7662.23,
-            "l": 7547.23,
-            "c": 7613.81
+            "l": 7527.56,
+            "c": 7659.78
           },
           {
-            "t": 1793640600,
-            "o": 7613.69,
-            "h": 7616.66,
+            "t": 1793633400,
+            "o": 7659.87,
+            "h": 7660.01,
+            "l": 7563.71,
+            "c": 7576.85
+          },
+          {
+            "t": 1793647800,
+            "o": 7577.29,
+            "h": 7588.7,
             "l": 7539.38,
-            "c": 7542.33
+            "c": 7581.41
           },
           {
-            "t": 1793716200,
-            "o": 7552.92,
-            "h": 7592.27,
-            "l": 7545.39,
-            "c": 7587.4
-          },
-          {
-            "t": 1793730600,
-            "o": 7587.45,
-            "h": 7709.87,
+            "t": 1793723400,
+            "o": 7581.57,
+            "h": 7594.61,
             "l": 7559.36,
-            "c": 7687.69
+            "c": 7569.24
           },
           {
-            "t": 1793806200,
-            "o": 7688.01,
+            "t": 1793737800,
+            "o": 7568.99,
+            "h": 7713.95,
+            "l": 7560.41,
+            "c": 7707.95
+          },
+          {
+            "t": 1793813400,
+            "o": 7707.85,
             "h": 7715.57,
-            "l": 7657.38,
-            "c": 7703.41
+            "l": 7682.56,
+            "c": 7688.73
           },
           {
-            "t": 1793820600,
-            "o": 7703.38,
-            "h": 7710.35,
-            "l": 7394.02,
-            "c": 7480.39
+            "t": 1793889000,
+            "o": 7678.72,
+            "h": 7680.69,
+            "l": 7365.84,
+            "c": 7389.67
           },
           {
-            "t": 1793896200,
-            "o": 7480.84,
-            "h": 7486.37,
-            "l": 7362.77,
-            "c": 7374.71
-          },
-          {
-            "t": 1793910600,
-            "o": 7374.74,
+            "t": 1793903400,
+            "o": 7389.61,
             "h": 7444.2,
             "l": 7350.35,
-            "c": 7418.31
+            "c": 7411.37
           },
           {
-            "t": 1793986200,
-            "o": 7418.14,
-            "h": 7419.03,
+            "t": 1793979000,
+            "o": 7411.75,
+            "h": 7437.96,
+            "l": 7374.07,
+            "c": 7402.03
+          },
+          {
+            "t": 1793993400,
+            "o": 7401.76,
+            "h": 7541.22,
             "l": 7373.48,
-            "c": 7374.85
+            "c": 7518.94
           },
           {
-            "t": 1794234600,
-            "o": 7422.24,
-            "h": 7552.46,
-            "l": 7376.86,
-            "c": 7545.13
-          },
-          {
-            "t": 1794249000,
-            "o": 7545.25,
+            "t": 1794241800,
+            "o": 7518.96,
             "h": 7577.39,
-            "l": 7490.65,
-            "c": 7517.28
+            "l": 7515.36,
+            "c": 7575.31
           },
           {
-            "t": 1794324600,
-            "o": 7517.23,
-            "h": 7527.39,
+            "t": 1794256200,
+            "o": 7575.05,
+            "h": 7575.05,
+            "l": 7480.55,
+            "c": 7490.29
+          },
+          {
+            "t": 1794331800,
+            "o": 7490.19,
+            "h": 7536.02,
             "l": 7470.43,
-            "c": 7507.13
+            "c": 7522.27
           },
           {
-            "t": 1794339000,
-            "o": 7507.28,
-            "h": 7615.99,
-            "l": 7501.96,
-            "c": 7615.67
+            "t": 1794407400,
+            "o": 7586.65,
+            "h": 7644.78,
+            "l": 7571.88,
+            "c": 7643.67
           },
           {
-            "t": 1794414600,
-            "o": 7615.52,
+            "t": 1794421800,
+            "o": 7643.61,
             "h": 7647.2,
-            "l": 7609.28,
-            "c": 7624.14
-          },
-          {
-            "t": 1794429000,
-            "o": 7624.18,
-            "h": 7652.76,
             "l": 7550.84,
-            "c": 7631.0
+            "c": 7596.53
           },
           {
-            "t": 1794504600,
-            "o": 7630.99,
-            "h": 7640.86,
-            "l": 7584.7,
-            "c": 7591.86
+            "t": 1794497400,
+            "o": 7596.76,
+            "h": 7652.76,
+            "l": 7589.04,
+            "c": 7608.85
           },
           {
-            "t": 1794580200,
-            "o": 7616.85,
+            "t": 1794511800,
+            "o": 7608.84,
             "h": 7621.78,
             "l": 7499.4,
-            "c": 7544.08
+            "c": 7529.52
           },
           {
-            "t": 1794594600,
-            "o": 7544.03,
+            "t": 1794587400,
+            "o": 7529.32,
+            "h": 7559.26,
+            "l": 7511.41,
+            "c": 7550.02
+          },
+          {
+            "t": 1794601800,
+            "o": 7550.02,
             "h": 7568.33,
-            "l": 7451.8,
-            "c": 7458.98
+            "l": 7450.72,
+            "c": 7453.96
           },
           {
-            "t": 1794843000,
-            "o": 7459.34,
-            "h": 7492.53,
-            "l": 7406.87,
-            "c": 7421.59
+            "t": 1794850200,
+            "o": 7454.01,
+            "h": 7457.17,
+            "l": 7400.15,
+            "c": 7420.19
           },
           {
-            "t": 1794857400,
-            "o": 7421.32,
-            "h": 7427.41,
+            "t": 1794925800,
+            "o": 7411.02,
+            "h": 7415.37,
             "l": 7288.34,
-            "c": 7333.64
+            "c": 7352.14
           },
           {
-            "t": 1794933000,
-            "o": 7333.39,
-            "h": 7363.09,
-            "l": 7297.93,
-            "c": 7319.31
-          },
-          {
-            "t": 1794947400,
-            "o": 7319.55,
+            "t": 1794940200,
+            "o": 7352.17,
             "h": 7367.68,
-            "l": 7285.76,
-            "c": 7349.45
+            "l": 7297.93,
+            "c": 7335.67
           },
           {
-            "t": 1795023000,
-            "o": 7349.38,
+            "t": 1795015800,
+            "o": 7336.17,
             "h": 7357.6,
-            "l": 7313.49,
-            "c": 7322.28
+            "l": 7285.76,
+            "c": 7326.91
           },
           {
-            "t": 1795098600,
-            "o": 7389.26,
+            "t": 1795030200,
+            "o": 7327.18,
             "h": 7415.64,
-            "l": 7193.83,
-            "c": 7233.48
+            "l": 7274.42,
+            "c": 7311.36
           },
           {
-            "t": 1795113000,
-            "o": 7233.67,
-            "h": 7248.01,
-            "l": 7103.8,
-            "c": 7120.57
+            "t": 1795105800,
+            "o": 7311.98,
+            "h": 7334.54,
+            "l": 7173.63,
+            "c": 7184.66
           },
           {
-            "t": 1795188600,
-            "o": 7120.87,
-            "h": 7120.87,
-            "l": 6963.72,
-            "c": 6963.72
+            "t": 1795120200,
+            "o": 7184.48,
+            "h": 7198.67,
+            "l": 7016.0,
+            "c": 7023.49
           },
           {
-            "t": 1795203000,
-            "o": 6963.01,
-            "h": 7295.6,
+            "t": 1795195800,
+            "o": 7023.63,
+            "h": 7054.77,
             "l": 6882.66,
-            "c": 7257.93
+            "c": 6918.45
           },
           {
-            "t": 1795451400,
-            "o": 7258.18,
-            "h": 7266.15,
-            "l": 7207.82,
-            "c": 7230.58
+            "t": 1795444200,
+            "o": 7227.41,
+            "h": 7295.6,
+            "l": 7152.66,
+            "c": 7253.19
+          },
+          {
+            "t": 1795458600,
+            "o": 7253.16,
+            "h": 7267.97,
+            "l": 7223.37,
+            "c": 7243.57
           }
         ],
         "1h": [
-          {
-            "t": 1794591000,
-            "o": 7537.9,
-            "h": 7545.24,
-            "l": 7528.49,
-            "c": 7544.08
-          },
           {
             "t": 1794594600,
             "o": 7544.03,
@@ -22353,9 +22340,16 @@
           {
             "t": 1795462200,
             "o": 7252.57,
-            "h": 7253.92,
+            "h": 7265.1,
             "l": 7223.37,
-            "c": 7230.58
+            "c": 7262.46
+          },
+          {
+            "t": 1795465800,
+            "o": 7262.36,
+            "h": 7267.97,
+            "l": 7230.63,
+            "c": 7243.57
           }
         ]
       }
