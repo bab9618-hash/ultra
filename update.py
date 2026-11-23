@@ -120,7 +120,6 @@ def find_clean_weekly_pivots_pre2017(c_1w_all, dec, pip):
 
         date_str = datetime.fromtimestamp(c2["t"], tz=timezone.utc).strftime("%Y-%m-%d")
 
-        # VENTA LIMPIA 1S: 1 vela alcista (verde) + 1 sola vela de rechazo bajista (roja) sin acumulacion
         if c1["c"] > c1["o"] and c2["c"] < c2["o"]:
             came_up_clean = (prev_slice[0]["o"] < c1["o"]) and (max(x["h"] for x in prev_slice) <= c1["h"])
             drops_clean = (c2["c"] <= c1["o"] + b1 * 0.35) and (min(x["l"] for x in next_slice) < c2["l"])
@@ -135,7 +134,6 @@ def find_clean_weekly_pivots_pre2017(c_1w_all, dec, pip):
                     "date": date_str
                 })
 
-        # COMPRA LIMPIA 1S: 1 vela bajista (roja) + 1 sola vela de rechazo alcista (verde) sin acumulacion
         if c1["c"] < c1["o"] and c2["c"] > c2["o"]:
             came_down_clean = (prev_slice[0]["o"] > c1["o"]) and (min(x["l"] for x in prev_slice) >= c1["l"])
             rises_clean = (c2["c"] >= c1["o"] - b1 * 0.35) and (max(x["h"] for x in next_slice) > c2["h"])
@@ -152,16 +150,12 @@ def find_clean_weekly_pivots_pre2017(c_1w_all, dec, pip):
 
     return buy_pivots, sell_pivots
 
-def find_verified_intraday_ob(c_1h, direction, price, dec, pip):
+def find_verified_intraday_zone(c_1h, direction, price, dec, pip):
     """
-    Busca exclusivamente un Order Block institucional REAL y limpio en 1H:
-    - Para BUY: ultima vela bajista (roja) seguida de 1 o 2 velas alcistas con desplazamiento fuerte
-      (cuerpo >= 1.5x promedio) que superen el maximo de la vela OB, quedando el OB por debajo del precio actual
-      y sin haber sido invalidado despues.
-    - Para SELL: ultima vela alcista (verde) seguida de 1 o 2 velas bajistas con desplazamiento fuerte
-      que rompan el minimo de la vela OB, quedando el OB por encima del precio actual
-      y sin haber sido invalidado despues.
-    Devuelve None si NO hay un OB real (evitando entradas inventadas al azar).
+    Escaner institucional en cascada de 3 niveles (Stop Loss 100% estructural, cero pips fijos):
+      Nivel 1 (OB + FVG): Order Block con desplazamiento + Fair Value Gap (imbalance) confirmado.
+      Nivel 2 (OB):       Order Block estructural limpio con ruptura y desplazamiento.
+      Nivel 3 (FVG):      Fair Value Gap (imbalance de 3 velas) aislado tras impulso fuerte como zona de retroceso.
     """
     if not c_1h or len(c_1h) < 15:
         return None
@@ -170,48 +164,141 @@ def find_verified_intraday_ob(c_1h, direction, price, dec, pip):
     if avg_body <= 0:
         return None
 
-    for i in range(len(c_1h) - 3, max(2, len(c_1h) - 34), -1):
-        ob = c_1h[i]
-        imp1 = c_1h[i + 1]
-        imp2 = c_1h[i + 2]
+    spread_buffer = 2 * pip
+    ob_with_fvg_candidates = []
+    ob_only_candidates = []
+    fvg_only_candidates = []
+
+    for i in range(len(c_1h) - 3, max(3, len(c_1h) - 24), -1):
+        c0 = c_1h[i]       # Vela base (OB o vela 1 del FVG)
+        prev_c = c_1h[i - 1]
+        c1 = c_1h[i + 1]   # Vela de impulso / desplazamiento
+        c2 = c_1h[i + 2]   # Vela 3 (confirma FVG si no solapa con c0)
         after_candles = c_1h[i + 2:]
 
-        ob_body = abs(ob["c"] - ob["o"])
-        imp1_body = abs(imp1["c"] - imp1["o"])
-        imp2_body = abs(imp2["c"] - imp2["o"])
+        c0_body = abs(c0["c"] - c0["o"])
+        c0_range = c0["h"] - c0["l"]
+        c1_body = abs(c1["c"] - c1["o"])
+        c2_body = abs(c2["c"] - c2["o"])
+
+        has_clean_ob_shape = (c0_range > 0 and c0_body >= c0_range * 0.35 and c0_body >= avg_body * 0.4)
 
         if direction == "BUY":
-            is_ob_bear = ob["c"] < ob["o"]
+            # --- 1) Evaluar Order Block Alcista (vela roja + desplazamiento verde) ---
+            is_ob_bear = c0["c"] < c0["o"]
             has_strong_disp = (
-                (imp1["c"] > imp1["o"] and imp1["c"] > ob["h"] and imp1_body >= avg_body * 1.45)
-                or (imp2["c"] > imp2["o"] and imp2["c"] > ob["h"] and imp2_body >= avg_body * 1.45)
+                (c1["c"] > c1["o"] and c1["c"] > c0["h"] and c1_body >= avg_body * 1.45)
+                or (c2["c"] > c2["o"] and c2["c"] > c0["h"] and c2_body >= avg_body * 1.45)
             )
-            if is_ob_bear and has_strong_disp and ob_body >= pip:
-                ob_high = round(ob["h"], dec)
-                ob_low = round(ob["l"], dec)
-                entry = round((ob_high + ob_low) / 2.0, dec)
-                # El precio actual debe estar arriba del OB (esperando retroceso) y sin haber roto el minimo del OB
-                never_broken = all(x["l"] > ob_low for x in after_candles)
-                if price > entry and never_broken:
-                    sl = round(ob_low - max(8 * pip, (ob_high - ob_low) * 0.45), dec)
-                    return {"valid": True, "entry": entry, "ob_high": ob_high, "ob_low": ob_low, "sl": sl}
+            # FVG Alcista: hueco entre el maximo de c0 y el minimo de c2
+            has_bull_fvg = (c2["l"] > c0["h"]) and (c1["c"] > c1["o"]) and (c1_body >= avg_body * 1.35)
+
+            if has_clean_ob_shape and is_ob_bear and has_strong_disp:
+                structural_low = min(c0["l"], prev_c["l"]) if prev_c["l"] >= c0["l"] - c0_range * 0.35 else c0["l"]
+                ob_low = round(structural_low, dec)
+                if has_bull_fvg:
+                    # Confluencia OB + FVG: entrada afinada en el borde superior del OB / inicio del FVG
+                    zone_high = round(c2["l"], dec)
+                    entry = round(c0["h"], dec)
+                    sl = round(ob_low - spread_buffer, dec)
+                    block_risk = max(pip, abs(entry - sl))
+                    tp1_check = round(entry + (block_risk * 2.0), dec)
+                    if (price > entry) and ((price - entry) <= block_risk * 2.2) and all(x["l"] > sl for x in after_candles) and all(x["h"] < tp1_check for x in after_candles):
+                        ob_with_fvg_candidates.append({
+                            "valid": True, "kind": "OB_FVG", "entry": entry,
+                            "ob_high": zone_high, "ob_low": ob_low, "sl": sl,
+                            "fvg_range": f"{round(c0['h'], dec)} - {zone_high}"
+                        })
+                else:
+                    ob_high = round(c0["h"], dec)
+                    entry = round((ob_high + ob_low) / 2.0, dec)
+                    sl = round(ob_low - spread_buffer, dec)
+                    block_risk = max(pip, abs(entry - sl))
+                    tp1_check = round(entry + (block_risk * 2.0), dec)
+                    if (price > entry) and ((price - entry) <= block_risk * 2.2) and all(x["l"] > sl for x in after_candles) and all(x["h"] < tp1_check for x in after_candles):
+                        ob_only_candidates.append({
+                            "valid": True, "kind": "OB", "entry": entry,
+                            "ob_high": ob_high, "ob_low": ob_low, "sl": sl,
+                            "fvg_range": None
+                        })
+
+            # --- 2) Evaluar FVG Alcista Aislado (imbalance fuerte como zona de retroceso) ---
+            if has_bull_fvg and (c2["l"] - c0["h"]) >= (2 * pip):
+                fvg_top = round(c2["l"], dec)
+                fvg_bot = round(c0["h"], dec)
+                # Entrada en el 50% (CE) del FVG y SL debajo del minimo de la vela de impulso c1
+                entry = round((fvg_top + fvg_bot) / 2.0, dec)
+                sl = round(min(c1["l"], c0["l"]) - spread_buffer, dec)
+                block_risk = max(pip, abs(entry - sl))
+                tp1_check = round(entry + (block_risk * 2.0), dec)
+                if (price > entry) and ((price - entry) <= block_risk * 2.0) and all(x["l"] > sl for x in after_candles) and all(x["h"] < tp1_check for x in after_candles):
+                    fvg_only_candidates.append({
+                        "valid": True, "kind": "FVG", "entry": entry,
+                        "ob_high": fvg_top, "ob_low": fvg_bot, "sl": sl,
+                        "fvg_range": f"{fvg_bot} - {fvg_top}"
+                    })
 
         elif direction == "SELL":
-            is_ob_bull = ob["c"] > ob["o"]
+            # --- 1) Evaluar Order Block Bajista (vela verde + desplazamiento rojo) ---
+            is_ob_bull = c0["c"] > c0["o"]
             has_strong_disp = (
-                (imp1["c"] < imp1["o"] and imp1["c"] < ob["l"] and imp1_body >= avg_body * 1.45)
-                or (imp2["c"] < imp2["o"] and imp2["c"] < ob["l"] and imp2_body >= avg_body * 1.45)
+                (c1["c"] < c1["o"] and c1["c"] < c0["l"] and c1_body >= avg_body * 1.45)
+                or (c2["c"] < c2["o"] and c2["c"] < c0["l"] and c2_body >= avg_body * 1.45)
             )
-            if is_ob_bull and has_strong_disp and ob_body >= pip:
-                ob_high = round(ob["h"], dec)
-                ob_low = round(ob["l"], dec)
-                entry = round((ob_high + ob_low) / 2.0, dec)
-                # El precio actual debe estar debajo del OB (esperando retroceso) y sin haber roto el maximo del OB
-                never_broken = all(x["h"] < ob_high for x in after_candles)
-                if price < entry and never_broken:
-                    sl = round(ob_high + max(8 * pip, (ob_high - ob_low) * 0.45), dec)
-                    return {"valid": True, "entry": entry, "ob_high": ob_high, "ob_low": ob_low, "sl": sl}
+            # FVG Bajista: hueco entre el minimo de c0 y el maximo de c2
+            has_bear_fvg = (c2["h"] < c0["l"]) and (c1["c"] < c1["o"]) and (c1_body >= avg_body * 1.35)
 
+            if has_clean_ob_shape and is_ob_bull and has_strong_disp:
+                structural_high = max(c0["h"], prev_c["h"]) if prev_c["h"] <= c0["h"] + c0_range * 0.35 else c0["h"]
+                ob_high = round(structural_high, dec)
+                if has_bear_fvg:
+                    # Confluencia OB + FVG: entrada afinada en el borde inferior del OB / inicio del FVG
+                    zone_low = round(c2["h"], dec)
+                    entry = round(c0["l"], dec)
+                    sl = round(ob_high + spread_buffer, dec)
+                    block_risk = max(pip, abs(sl - entry))
+                    tp1_check = round(entry - (block_risk * 2.0), dec)
+                    if (price < entry) and ((entry - price) <= block_risk * 2.2) and all(x["h"] < sl for x in after_candles) and all(x["l"] > tp1_check for x in after_candles):
+                        ob_with_fvg_candidates.append({
+                            "valid": True, "kind": "OB_FVG", "entry": entry,
+                            "ob_high": ob_high, "ob_low": zone_low, "sl": sl,
+                            "fvg_range": f"{zone_low} - {round(c0['l'], dec)}"
+                        })
+                else:
+                    ob_low = round(c0["l"], dec)
+                    entry = round((ob_high + ob_low) / 2.0, dec)
+                    sl = round(ob_high + spread_buffer, dec)
+                    block_risk = max(pip, abs(sl - entry))
+                    tp1_check = round(entry - (block_risk * 2.0), dec)
+                    if (price < entry) and ((entry - price) <= block_risk * 2.2) and all(x["h"] < sl for x in after_candles) and all(x["l"] > tp1_check for x in after_candles):
+                        ob_only_candidates.append({
+                            "valid": True, "kind": "OB", "entry": entry,
+                            "ob_high": ob_high, "ob_low": ob_low, "sl": sl,
+                            "fvg_range": None
+                        })
+
+            # --- 2) Evaluar FVG Bajista Aislado (imbalance fuerte como zona de retroceso) ---
+            if has_bear_fvg and (c0["l"] - c2["h"]) >= (2 * pip):
+                fvg_top = round(c0["l"], dec)
+                fvg_bot = round(c2["h"], dec)
+                # Entrada en el 50% (CE) del FVG y SL encima del maximo de la vela de impulso c1
+                entry = round((fvg_top + fvg_bot) / 2.0, dec)
+                sl = round(max(c1["h"], c0["h"]) + spread_buffer, dec)
+                block_risk = max(pip, abs(sl - entry))
+                tp1_check = round(entry - (block_risk * 2.0), dec)
+                if (price < entry) and ((entry - price) <= block_risk * 2.0) and all(x["h"] < sl for x in after_candles) and all(x["l"] > tp1_check for x in after_candles):
+                    fvg_only_candidates.append({
+                        "valid": True, "kind": "FVG", "entry": entry,
+                        "ob_high": fvg_top, "ob_low": fvg_bot, "sl": sl,
+                        "fvg_range": f"{fvg_bot} - {fvg_top}"
+                    })
+
+    if ob_with_fvg_candidates:
+        return ob_with_fvg_candidates[0]
+    if ob_only_candidates:
+        return ob_only_candidates[0]
+    if fvg_only_candidates:
+        return fvg_only_candidates[0]
     return None
 
 def group_4h(c_1h_long):
@@ -596,37 +683,49 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         exhaustion = detect_exhaustion_warning(c_1h, chart_bias, macro_dir, intraday_high, intraday_low)
         direction = "BUY" if chart_bias == "SUBE" else "SELL"
 
-        # 1) Verificar si ya existe un setup congelado vigente (hasta tocar TP1, SL o cambiar direccion)
+        # 1) Verificar setup congelado vigente (OB+FVG, OB o FVG aislado)
         prev_setup = active_setups.get(sym)
         use_frozen = False
         has_valid_ob = False
+        zone_kind = "NONE"
+        fvg_info = None
 
         if prev_setup and prev_setup.get("direction") == direction and prev_setup.get("valid_ob"):
+            f_entry = prev_setup["entry"]
             f_sl = prev_setup["sl"]
             f_tp1 = prev_setup["tp1"]
+            f_risk = max(pip, abs(f_entry - f_sl))
+            in_structural_range = abs(price - f_entry) <= (f_risk * 2.2)
             still_alive = (price > f_sl and price < f_tp1) if direction == "BUY" else (price < f_sl and price > f_tp1)
-            if still_alive:
+
+            if still_alive and in_structural_range:
                 use_frozen = True
                 has_valid_ob = True
-                entry = prev_setup["entry"]
-                sl = prev_setup["sl"]
+                zone_kind = prev_setup.get("kind", "OB")
+                fvg_info = prev_setup.get("fvg_range")
+                entry = f_entry
+                sl = f_sl
                 be_trigger = prev_setup["be_trigger"]
-                tp1 = prev_setup["tp1"]
+                tp1 = f_tp1
                 tp2 = prev_setup["tp2"]
                 ob_high = prev_setup["ob_high"]
                 ob_low = prev_setup["ob_low"]
                 signal_tag = prev_setup["signal_tag"]
 
-        # 2) Si no hay setup congelado vigente, buscar SOLO un Order Block real verificado con desplazamiento
+        # 2) Si no hay setup congelado vigente, escanear cascada: OB+FVG -> OB -> FVG aislado
         if not use_frozen:
-            verified_ob = find_verified_intraday_ob(c_1h, direction, price, dec, pip)
-            if verified_ob:
+            verified_zone = find_verified_intraday_zone(c_1h, direction, price, dec, pip)
+            if verified_zone:
                 has_valid_ob = True
-                entry = verified_ob["entry"]
-                ob_high = verified_ob["ob_high"]
-                ob_low = verified_ob["ob_low"]
-                sl = verified_ob["sl"]
-                actual_r = max(10 * pip, abs(entry - sl))
+                zone_kind = verified_zone.get("kind", "OB")
+                fvg_info = verified_zone.get("fvg_range")
+                entry = verified_zone["entry"]
+                ob_high = verified_zone["ob_high"]
+                ob_low = verified_zone["ob_low"]
+                sl = verified_zone["sl"]
+                actual_r = max(pip, abs(entry - sl))
+
+                kind_label = "OB + FVG" if zone_kind == "OB_FVG" else ("FVG RETROCESO" if zone_kind == "FVG" else "OB REAL")
 
                 if direction == "BUY":
                     tp1 = round(entry + (actual_r * 2.0), dec)
@@ -635,11 +734,11 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                     if exhaustion["active"]:
                         signal_tag = "RIESGO GIRO - PROTEGER"
                     elif is_strong_pullback and is_counter_daily:
-                        signal_tag = "PULLBACK FUERTE - OB REAL"
+                        signal_tag = f"PULLBACK - {kind_label}"
                     elif is_strong_pullback:
-                        signal_tag = "GIRO MACRO - OB REAL"
+                        signal_tag = f"GIRO MACRO - {kind_label}"
                     else:
-                        signal_tag = "COMPRA OB REAL"
+                        signal_tag = f"COMPRA {kind_label}"
                 else:
                     tp1 = round(entry - (actual_r * 2.0), dec)
                     tp2 = round(entry - (actual_r * 3.0), dec)
@@ -647,14 +746,16 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                     if exhaustion["active"]:
                         signal_tag = "RIESGO GIRO - PROTEGER"
                     elif is_strong_pullback and is_counter_daily:
-                        signal_tag = "PULLBACK FUERTE - OB REAL"
+                        signal_tag = f"PULLBACK - {kind_label}"
                     elif is_strong_pullback:
-                        signal_tag = "GIRO MACRO - OB REAL"
+                        signal_tag = f"GIRO MACRO - {kind_label}"
                     else:
-                        signal_tag = "VENTA OB REAL"
+                        signal_tag = f"VENTA {kind_label}"
 
                 active_setups[sym] = {
                     "valid_ob": True,
+                    "kind": zone_kind,
+                    "fvg_range": fvg_info,
                     "direction": direction,
                     "signal_tag": signal_tag,
                     "entry": entry,
@@ -667,7 +768,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                     "locked_at": now_ts
                 }
             else:
-                # Sin OB limpio: NO inventar entrada al azar
                 if sym in active_setups:
                     del active_setups[sym]
                 ob_high = round(intraday_high, dec)
@@ -677,14 +777,11 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 be_trigger = entry
                 tp1 = entry
                 tp2 = entry
-                signal_tag = "SIN OB LIMPIO - ESPERAR"
+                signal_tag = "SIN OB NI FVG - ESPERAR"
 
-        actual_r = max(10 * pip, abs(entry - sl))
+        actual_r = max(pip, abs(entry - sl))
 
         # Filtro estricto 1S Historico:
-        # 1) Solo CONTRA-TENDENCIA respecto a la tendencia actual (SUBE -> solo SELL arriba; BAJA -> solo BUY abajo)
-        # 2) Lado correcto de llegada (para SELL: price < entry; para BUY: price > entry)
-        # 3) Distancia maxima <= 60 pips en divisas / <= 100 pips en metales
         nearby_weekly_pivots = []
         current_trend = b_d if b_d in ("SUBE", "BAJA") else chart_bias
 
@@ -728,11 +825,13 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 })
 
         dominant_w = max(w_up, w_dn)
+        fvg_bonus = 5 if zone_kind == "OB_FVG" else (2 if zone_kind == "FVG" else 0)
+
         if not has_valid_ob:
             alignment = "NEUTRAL"
             conf_score = 45
-            verdict_title = "SIN BLOQUE OB LIMPIO · NO ENTRAR"
-            verdict_sub = "No hay Order Block con desplazamiento confirmado en 1H"
+            verdict_title = "SIN OB NI FVG LIMPIO · NO ENTRAR"
+            verdict_sub = "Este grafico no presenta Order Block ni imbalance FVG vigente en 1H"
         elif exhaustion["active"]:
             alignment = "OPPOSED" if macro_dir != chart_bias else "ALIGNED"
             conf_score = 44 if macro_dir != chart_bias else 58
@@ -740,19 +839,19 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             verdict_sub = "Momentum en extremo se frena - Asegurar parciales / BE"
         elif macro_dir == chart_bias:
             alignment = "ALIGNED"
-            conf_score = min(96, 70 + (dominant_w * 3) + (4 if is_strong_pullback else 0))
-            if is_strong_pullback and is_counter_daily:
-                verdict_title = "PULLBACK FUERTE + OB REAL CONGELADO"
-                verdict_sub = f"Bloque verificado en 1H + Macro ({macro_dir}) - Cobrar en TP1"
-            elif is_strong_pullback:
-                verdict_title = "GIRO CONFIRMADO - OB REAL + MACRO"
-                verdict_sub = f"Economia ({macro_dir}) y Grafico ({chart_bias}) empujan juntos"
+            conf_score = min(98, 70 + (dominant_w * 3) + fvg_bonus + (4 if is_strong_pullback else 0))
+            if zone_kind == "OB_FVG":
+                verdict_title = f"CONFLUENCIA OB + FVG ({'COMPRA' if direction == 'BUY' else 'VENTA'})"
+                verdict_sub = f"Bloque institucional + Imbalance ({fvg_info}) + Macro ({macro_dir})"
+            elif zone_kind == "FVG":
+                verdict_title = f"FVG RETROCESO ({'COMPRA' if direction == 'BUY' else 'VENTA'})"
+                verdict_sub = f"Vacio de liquidez ({fvg_info}) con SL estructural ({sl}) + Macro ({macro_dir})"
             else:
-                verdict_title = f"VAN JUNTOS - {'COMPRA' if direction == 'BUY' else 'VENTA'} OB REAL"
-                verdict_sub = f"Bloque institucional fijo hasta TP1/SL + Macro ({macro_dir})"
+                verdict_title = f"VAN JUNTOS - {'COMPRA' if direction == 'BUY' else 'VENTA'} OB ESTRUCTURAL"
+                verdict_sub = f"SL en extremo real del OB ({sl}) hasta TP1/SL + Macro ({macro_dir})"
         elif macro_dir == "NEUTRAL":
             alignment = "NEUTRAL"
-            conf_score = min(74, 52 + (dominant_w * 3))
+            conf_score = min(76, 52 + (dominant_w * 3) + fvg_bonus)
             verdict_title = "SIN DIRECCION CLARA - ECONOMIA NEUTRAL"
             verdict_sub = f"Economia plana - Grafico marca {chart_bias} (esperar confluencia)"
         else:
@@ -792,7 +891,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "target": swing_tp,
                 "be_trigger": be_trigger,
                 "plan": (
-                    f"1) Entrada base fija en {entry} (SL {sl}). "
+                    f"1) Entrada base fija en {entry} con SL estructural en {sl}. "
                     f"2) Al tocar {be_trigger} (+1R) o TP1 ({tp1}), cobra parciales y sube el SL a {entry} (Break Even). "
                     f"3) Solo con la orden base ya protegida, anade 2da entrada en retroceso hacia Swing TP {swing_tp}."
                 )
@@ -819,7 +918,16 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             }
 
         swing_note = f" Potencial Swing activo (BE en {be_trigger}, Swing TP {swing_tp})." if is_swing_potential else ""
-        ob_note = " Bloque OB real congelado hasta TP1/SL." if has_valid_ob else " Sin Order Block con desplazamiento limpio en 1H (no operar)."
+        if has_valid_ob:
+            if zone_kind == "OB_FVG":
+                ob_note = f" Confluencia OB + FVG ({fvg_info}) con SL estructural en {sl} congelado hasta TP1/SL."
+            elif zone_kind == "FVG":
+                ob_note = f" FVG aislado en retroceso ({fvg_info}) con SL estructural en {sl} congelado hasta TP1/SL."
+            else:
+                ob_note = f" OB estructural ({ob_low}-{ob_high}) con SL real en {sl} congelado hasta TP1/SL."
+        else:
+            ob_note = " Sin Order Block ni FVG limpio en este grafico (no operar)."
+
         extra_note = f" {exhaustion['reason']}" if exhaustion["active"] else (f" Pullback fuerte confirmado ({rev['choch']} con desplazamiento) respaldado por macro." if is_strong_pullback else "")
         macro_reason = f"{macro_detail} Jerarquia (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}).{ob_note}{extra_note}{swing_note}"
 
@@ -836,6 +944,8 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             "macro_dir": macro_dir,
             "economy_short": economy_short,
             "has_valid_ob": has_valid_ob,
+            "zone_kind": zone_kind,
+            "fvg_range": fvg_info,
             "is_strong_pullback": is_strong_pullback and is_counter_daily,
             "weekly_pivots": nearby_weekly_pivots,
             "tf_bias": {"weekly": b_w, "daily": b_d, "h4": b_4h, "h1": b_1h},
@@ -919,6 +1029,7 @@ def dispatch_push_notifications(assets, now_ts):
         is_aligned = (a.get("confluence", {}).get("alignment") == "ALIGNED")
         has_valid_ob = bool(a.get("has_valid_ob"))
         is_pullback = bool(a.get("is_strong_pullback"))
+        z_kind = a.get("zone_kind", "OB")
 
         price = a["price"]
         entry = a["setup"]["entry"]
@@ -946,11 +1057,12 @@ def dispatch_push_notifications(assets, now_ts):
                 be_p = a["setup"].get("be_trigger", entry)
                 is_swing = bool(a.get("swing_potential") and a["swing_potential"].get("active"))
                 swing_line = f" | Swing TP: {a['swing_potential']['target']}" if is_swing else ""
-                header_tag = "PULLBACK FUERTE" if is_pullback else "OB REAL"
+                kind_tag = "OB + FVG" if z_kind == "OB_FVG" else ("FVG" if z_kind == "FVG" else "OB ESTRUCTURAL")
+                header_tag = "PULLBACK FUERTE" if is_pullback else kind_tag
                 extra_warn = "\n(Giro CHoCH con desplazamiento contra 1D: asegurar en TP1)" if is_pullback else ""
                 body = (
-                    f"{sym} ({d_txt}) a {units} {u_lbl} del OB real fijo ({entry}).\n"
-                    f"Precio actual: {price} | SL: {sl}\n"
+                    f"{sym} ({d_txt}) a {units} {u_lbl} de {kind_tag} fijo ({entry}).\n"
+                    f"Precio actual: {price} | SL estructural: {sl}\n"
                     f"BE (+1R): {be_p} | TP1: {tp1}{swing_line}{extra_warn}"
                 )
                 send_mobile_push(
@@ -1045,7 +1157,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} - US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"LATICCE v9.5 - OB Reales Congelados + Giros 1S Contra-Tendencia (<=60 pips: {len(all_weekly_pivots)} niveles) sobre {len(assets)} activos."
+            "summary": f"LATICCE v9.8 - Cascada OB + FVG / OB Estructural / FVG Retroceso + Giros 1S ({len(all_weekly_pivots)} niveles) sobre {len(assets)} activos."
         },
         "weekly_pivots": all_weekly_pivots,
         "correlated_baskets": baskets,
@@ -1058,7 +1170,7 @@ def main():
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos y {len(all_weekly_pivots)} giros semanales limpios contra-tendencia actualizados (LATICCE v9.5).")
+    print(f"OK: {len(assets)} activos y {len(all_weekly_pivots)} giros semanales limpios actualizados (LATICCE v9.8).")
 
 if __name__ == "__main__":
     main()
