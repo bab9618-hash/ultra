@@ -635,7 +635,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             else:
                 signal_tag = "VENTA OB"
 
-        # Filtro estricto: solo guardar giros semanales limpios pre-2017 a <= 60 pips en divisas (<= 100 pips en XAUUSD)
+        # Solo giros semanales limpios pre-2017 cercanos (<= 60 pips forex / <= 100 pips XAUUSD)
         nearby_weekly_pivots = []
         for p in (hist_buys + hist_sells):
             dist_u = round((abs(price - p["entry"]) / pip) * 10) / 10 if pip else abs(price - p["entry"])
