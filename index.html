@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Cabina Neuronal v9.1</title>
+  <title>LATICCE · Cabina Neuronal v9.2</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -244,14 +244,14 @@
       <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
     </section>
 
-    <!-- NUEVA PESTAÑA SEPARADA: GIROS SEMANALES LIMPIOS PRE-2017 -->
+    <!-- NUEVA PESTAÑA SEPARADA: GIROS SEMANALES LIMPIOS PRE-2017 (<= 60 PIPS) -->
     <section id="ptab-weekly1s" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
         <div>
           <h3 class="font-hud text-sm font-bold text-cyan-300">🏛️ GIROS SEMANALES LIMPIOS HISTÓRICOS (PRE-2017)</h3>
-          <p class="text-[11px] text-slate-400 mt-0.5">Escaneo en 1S (1 vela + 1 vela única de rechazo sin acumulación) separados del gráfico intradía.</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Solo entradas cercanas (<= 60 pips) con 1 vela + 1 vela única de rechazo sin acumulación previa.</p>
         </div>
-        <span id="weekly1s-count-badge" class="text-xs px-2.5 py-1 rounded bg-cyan-500/15 border border-cyan-400/50 text-cyan-300 font-bold">0 NIVELES CERCANOS</span>
+        <span id="weekly1s-count-badge" class="text-xs px-2.5 py-1 rounded bg-cyan-500/15 border border-cyan-400/50 text-cyan-300 font-bold">0 ACTIVOS</span>
       </div>
       <div id="panel-weekly1s-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
@@ -333,7 +333,7 @@
           <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div id="pu-tp2-lbl" class="text-[10px] text-emerald-400">TP2 / SWING TP</div>
+          <div class="text-[10px] text-emerald-400" id="pu-tp2-lbl">TP2 / SWING TP</div>
           <div id="pu-tp2" class="font-bold text-emerald-400 text-sm">--</div>
           <div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
@@ -433,6 +433,7 @@
       <button onclick="selectAgent('homer')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="homer"><span class="text-sm">📊</span><span class="text-[10px] font-bold">H.O.M.E.R.</span></button>
     </div>
   </nav>
+
   <script>
     (function initLatticeBootCanvas() {
       const c = document.getElementById('lattice-boot-canvas');
@@ -556,6 +557,7 @@
     let currentAgent = 'jarvis';
     let isPanelMode = false;
     let panelFilter = 'ALL';
+    let weeklyRangeMode = 'ALL60';
     let pairSearchTerm = '';
     let selectedSymbol = 'XAUUSD';
     let selectedTF = '1d';
@@ -1084,10 +1086,12 @@
     function getSwingAssets() { return (data && data.assets) ? data.assets.filter(a => a.swing_potential && a.swing_potential.active) : []; }
     function getWeeklyPivotsList() {
       if (!data) return [];
-      if (Array.isArray(data.weekly_pivots)) return data.weekly_pivots;
-      const out = [];
-      (data.assets || []).forEach(a => { if (Array.isArray(a.weekly_pivots)) out.push(...a.weekly_pivots); });
-      return out.sort((a, b) => a.dist_units - b.dist_units);
+      const raw = Array.isArray(data.weekly_pivots) ? data.weekly_pivots : [];
+      return raw.filter(w => {
+        const isMetalOrIdx = (w.symbol === 'XAUUSD' || w.type === 'metal' || w.type === 'index' || w.type === 'crypto');
+        if (isMetalOrIdx) return (Math.abs(w.price - w.entry) / Math.max(1e-9, w.price)) <= 0.004;
+        return w.dist_units <= 60;
+      }).sort((a, b) => a.dist_units - b.dist_units);
     }
     function getNearestAsset() {
       if (!data || !data.assets || !data.assets.length) return null;
@@ -1181,9 +1185,9 @@
 
       if (q.includes('SEMANAL') || q.includes('1S') || q.includes('HISTORICO') || q.includes('HISTÓRICO') || q.includes('2017')) {
         const wList = getWeeklyPivotsList().slice(0, 4);
-        if (!wList.length) return 'No hay giros semanales limpios pre-2017 a menos de 3.5% del precio actual en este momento, señor.';
+        if (!wList.length) return 'No hay giros semanales limpios pre-2017 a 60 pips o menos en este momento, señor.';
         const desc = wList.map(w => `${w.symbol} (${w.direction === 'BUY' ? 'Compra' : 'Venta'} en ${w.entry}, fecha ${w.date}, a ${w.dist_units} ${w.unit_label})`).join('; ');
-        return `Giros semanales limpios históricos (pre-2017) más cercanos ahora mismo: ${desc}. Puede revisarlos todos en la pestaña 1S HISTÓRICO del panel.`;
+        return `Giros semanales limpios históricos (pre-2017) a 60 pips o menos ahora mismo: ${desc}. Puede revisarlos todos en la pestaña 1S HISTÓRICO del panel.`;
       }
 
       if (q.includes('RECOMIENDA') || q.includes('PARE') || q.includes('MEJOR') || q.includes('OPERAR') || q.includes('OPORTUNIDAD') || q.includes('SWING') || q.includes('CESTA')) {
@@ -1305,7 +1309,6 @@
       const weeklyCount = getWeeklyPivotsList().length;
       const nearest = getNearestAsset();
       const homer = getHomerMetrics();
-      const totalCount = data ? data.assets.length : 22;
 
       if (key === 'friday') {
         const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
@@ -1323,7 +1326,7 @@
         const newsPairsCount = data ? data.assets.filter(a => a.news_warning && a.news_warning.active).length : 0;
         document.getElementById('agent-hero-metric').textContent = `${swings.length} SWING · ${weeklyCount} 1S`;
         document.getElementById('agent-hero-sub').textContent = `${aligned.length} ALINEADOS · ${newsPairsCount} NOTICIAS · ${broken.length} ALERTAS`;
-        typeAgentDialogue(`A sus órdenes, señor. Red Laticce activa: tenemos ${swings.length} pares con Potencial Swing intradía y ${weeklyCount} niveles de Giros Semanales Limpios pre-2017 listos en su pestaña 1S HISTÓRICO. ¿Desea el reporte?`);
+        typeAgentDialogue(`A sus órdenes, señor. Red Laticce activa: tenemos ${swings.length} pares con Potencial Swing intradía y ${weeklyCount} niveles de Giros Semanales Limpios pre-2017 (<= 60 pips) listos en su pestaña 1S HISTÓRICO. ¿Desea el reporte?`);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
         document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & CESTAS';
@@ -1428,6 +1431,11 @@
       renderPanelJarvis();
     }
 
+    function setWeeklyRangeMode(mode) {
+      weeklyRangeMode = mode;
+      renderPanelWeekly1S();
+    }
+
     function updateClock() {
       const now = new Date();
       const h = now.getUTCHours();
@@ -1479,11 +1487,27 @@
       const grid = document.getElementById('panel-weekly1s-grid');
       const badge = document.getElementById('weekly1s-count-badge');
       if (!grid) return;
-      const list = getWeeklyPivotsList();
-      if (badge) badge.textContent = `${list.length} NIVELES CERCANOS`;
+
+      const rawList = getWeeklyPivotsList();
+      const list = rawList.filter(w => {
+        const isMetalOrIdx = (w.symbol === 'XAUUSD' || w.type === 'metal' || w.type === 'index' || w.type === 'crypto');
+        if (isMetalOrIdx) return (Math.abs(w.price - w.entry) / Math.max(1e-9, w.price)) <= 0.004;
+        if (weeklyRangeMode === '40_60') return w.dist_units >= 40 && w.dist_units <= 60;
+        return w.dist_units <= 60;
+      });
+
+      if (badge) {
+        badge.innerHTML = `
+          <span class="inline-flex items-center gap-1.5">
+            <button onclick="setWeeklyRangeMode('ALL60')" class="px-2 py-0.5 rounded text-[10px] font-bold ${weeklyRangeMode === 'ALL60' ? 'bg-cyan-400 text-black' : 'bg-slate-800 text-slate-300'}">0–60 PIPS</button>
+            <button onclick="setWeeklyRangeMode('40_60')" class="px-2 py-0.5 rounded text-[10px] font-bold ${weeklyRangeMode === '40_60' ? 'bg-cyan-400 text-black' : 'bg-slate-800 text-slate-300'}">40–60 PIPS</button>
+            <span class="ml-1">${list.length} ACTIVOS</span>
+          </span>
+        `;
+      }
 
       if (!list.length) {
-        grid.innerHTML = `<div class="col-span-full bg-[#050811] border border-slate-800 rounded-xl p-6 text-center text-xs text-slate-400">Ningún par se encuentra actualmente dentro del rango cercano (<= 3.5%) de un giro semanal limpio pre-2017. Cuando uno se aproxime, aparecerá aquí y sonará tu alarma.</div>`;
+        grid.innerHTML = `<div class="col-span-full bg-[#050811] border border-slate-800 rounded-xl p-6 text-center text-xs text-slate-400">No hay giros semanales limpios pre-2017 en el rango de ${weeklyRangeMode === '40_60' ? '40 a 60 pips' : '0 a 60 pips'} en este momento.</div>`;
         return;
       }
 
