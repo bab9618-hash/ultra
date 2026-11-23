@@ -160,21 +160,6 @@
     "ob_low": 173.505,
     "locked_at": 1795453395
   },
-  "BTCUSD": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "61692.74 - 61769.81",
-    "direction": "SELL",
-    "signal_tag": "VENTA FVG RETROCESO",
-    "entry": 61731.27,
-    "be_trigger": 60605.25,
-    "sl": 62857.29,
-    "tp1": 59479.23,
-    "tp2": 58353.21,
-    "ob_high": 61769.81,
-    "ob_low": 61692.74,
-    "locked_at": 1795456989
-  },
   "USDJPY": {
     "valid_ob": true,
     "kind": "FVG",
