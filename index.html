@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Cabina Neuronal v9.9</title>
+  <title>LATICCE · Cabina Neuronal v10.0</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -617,28 +617,63 @@
       'US30': '^DJI', 'USTEC': '^IXIC', 'US500': '^GSPC'
     };
 
+    async function fetchWithTimeout(url, ms = 4000) {
+      const ctrl = new AbortController();
+      const id = setTimeout(() => ctrl.abort(), ms);
+      try {
+        const res = await fetch(url, { signal: ctrl.signal });
+        clearTimeout(id);
+        return res;
+      } catch (e) {
+        clearTimeout(id);
+        return null;
+      }
+    }
+
     async function fetchLiveSymbol(sym) {
       if (sym === 'BTCUSD') {
-        const r = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
-        if (r.ok) { const j = await r.json(); return parseFloat(j.price); }
+        const r = await fetchWithTimeout('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT', 3500);
+        if (r && r.ok) { const j = await r.json(); return parseFloat(j.price); }
         return null;
       }
       const yf = YF_MAP[sym];
       if (!yf) return null;
-      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yf)}?interval=1m&range=1d`;
-      const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`);
-      if (!r.ok) return null;
-      const j = await r.json();
-      const meta = j?.chart?.result?.[0]?.meta;
-      return meta?.regularMarketPrice || null;
+      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yf)}?interval=1m&range=1d&_=${Date.now()}`;
+
+      // Via 1: corsproxy.io (rapido y sin cache)
+      const r1 = await fetchWithTimeout(`https://corsproxy.io/?${encodeURIComponent(target)}`, 4000);
+      if (r1 && r1.ok) {
+        try {
+          const j1 = await r1.json();
+          const p1 = j1?.chart?.result?.[0]?.meta?.regularMarketPrice;
+          if (p1 && p1 > 0) return p1;
+        } catch (e) {}
+      }
+
+      // Via 2: respaldo allorigins
+      const r2 = await fetchWithTimeout(`https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`, 4500);
+      if (r2 && r2.ok) {
+        try {
+          const j2 = await r2.json();
+          const p2 = j2?.chart?.result?.[0]?.meta?.regularMarketPrice;
+          if (p2 && p2 > 0) return p2;
+        } catch (e) {}
+      }
+      return null;
     }
 
+    let liveCycleIdx = 0;
     async function refreshLivePrices() {
       if (!data || !data.assets || !data.assets.length) return;
       let updatedAny = false;
 
-      const priority = [selectedSymbol, 'EURUSD', 'XAUUSD', 'BTCUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 'AUDJPY', 'GBPJPY'];
-      const uniqueSyms = [...new Set([...priority, ...data.assets.map(a => a.symbol)])];
+      // Actualiza prioritariamente el activo abierto + Foco #1 + lote rotativo de 5 pares
+      const fpSym = data.focus_pick && data.focus_pick.primary ? data.focus_pick.primary.symbol : null;
+      const allSyms = data.assets.map(a => a.symbol);
+      const batch = allSyms.slice(liveCycleIdx, liveCycleIdx + 5);
+      liveCycleIdx = (liveCycleIdx + 5) % allSyms.length;
+
+      const uniqueSyms = [...new Set([selectedSymbol, fpSym, ...batch].filter(Boolean))];
 
       await Promise.all(uniqueSyms.map(async (sym) => {
         const a = data.assets.find(x => x.symbol === sym);
@@ -1529,6 +1564,7 @@
       if (!isPanelMode) toggleViewMode();
       switchPanelTab('ultron');
       renderPanelUltron();
+      refreshLivePrices();
     }
 
     function renderPanelWeekly1S() {
@@ -1827,7 +1863,7 @@
         const isTopFocus = fp && fp.symbol === a.symbol;
         const hasSwing = a.swing_potential && a.swing_potential.active;
         return `
-          <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : (isTopFocus ? 'bg-amber-500/10 border-amber-400 text-white' : (hasSwing ? 'bg-[#050811] border-indigo-500/50 text-slate-200' : 'bg-[#050811] border-slate-800 text-slate-300'))}">
+          <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();refreshLivePrices();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : (isTopFocus ? 'bg-amber-500/10 border-amber-400 text-white' : (hasSwing ? 'bg-[#050811] border-indigo-500/50 text-slate-200' : 'bg-[#050811] border-slate-800 text-slate-300'))}">
             <div class="flex items-center justify-between text-[11px] font-bold">
               <span>${a.symbol}</span>
               <span>${isTopFocus ? '🎯' : (hasSwing ? '🌊' : st.dot)}</span>
@@ -2043,7 +2079,7 @@
     updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
     loadCloudJournal(false);
     loadData();
-    setInterval(refreshLivePrices, 10000);
+    setInterval(refreshLivePrices, 5000);
     setInterval(() => loadCloudJournal(false), 15000);
     setInterval(loadData, 120000);
   </script>
