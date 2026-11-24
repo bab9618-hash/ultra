@@ -25,21 +25,6 @@
     "ob_low": 49025.79,
     "locked_at": 1795442063
   },
-  "USDCAD": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "1.43442 - 1.4348",
-    "direction": "BUY",
-    "signal_tag": "COMPRA FVG RETROCESO",
-    "entry": 1.43461,
-    "be_trigger": 1.43642,
-    "sl": 1.4328,
-    "tp1": 1.43823,
-    "tp2": 1.44004,
-    "ob_high": 1.4348,
-    "ob_low": 1.43442,
-    "locked_at": 1795444212
-  },
   "USDCHF": {
     "valid_ob": true,
     "kind": "FVG",
@@ -85,21 +70,6 @@
     "ob_low": 1.30538,
     "locked_at": 1795516767
   },
-  "GBPJPY": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "208.006 - 208.31",
-    "direction": "BUY",
-    "signal_tag": "COMPRA FVG RETROCESO",
-    "entry": 208.158,
-    "be_trigger": 208.722,
-    "sl": 207.594,
-    "tp1": 209.286,
-    "tp2": 209.85,
-    "ob_high": 208.31,
-    "ob_low": 208.006,
-    "locked_at": 1795516767
-  },
   "AUDUSD": {
     "valid_ob": true,
     "kind": "OB_FVG",
@@ -114,21 +84,6 @@
     "ob_high": 0.66397,
     "ob_low": 0.66247,
     "locked_at": 1795524366
-  },
-  "EURJPY": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "173.964 - 174.298",
-    "direction": "BUY",
-    "signal_tag": "COMPRA FVG RETROCESO",
-    "entry": 174.131,
-    "be_trigger": 174.55,
-    "sl": 173.712,
-    "tp1": 174.969,
-    "tp2": 175.388,
-    "ob_high": 174.298,
-    "ob_low": 173.964,
-    "locked_at": 1795516767
   },
   "USDJPY": {
     "valid_ob": true,
