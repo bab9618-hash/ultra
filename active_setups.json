@@ -235,21 +235,6 @@
     "ob_low": 3641.6,
     "locked_at": 1795492043
   },
-  "AUDNZD": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "1.21411 - 1.21559",
-    "direction": "BUY",
-    "signal_tag": "COMPRA FVG RETROCESO",
-    "entry": 1.21485,
-    "be_trigger": 1.21731,
-    "sl": 1.21239,
-    "tp1": 1.21977,
-    "tp2": 1.22223,
-    "ob_high": 1.21559,
-    "ob_low": 1.21411,
-    "locked_at": 1795503241
-  },
   "AUDCHF": {
     "valid_ob": true,
     "kind": "OB_FVG",
