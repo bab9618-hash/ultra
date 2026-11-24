@@ -59,21 +59,6 @@
     "ob_low": 0.66383,
     "locked_at": 1795537409
   },
-  "USDJPY": {
-    "valid_ob": true,
-    "kind": "OB",
-    "fvg_range": null,
-    "direction": "SELL",
-    "signal_tag": "VENTA OB REAL",
-    "entry": 159.428,
-    "be_trigger": 159.256,
-    "sl": 159.6,
-    "tp1": 159.084,
-    "tp2": 158.912,
-    "ob_high": 159.58,
-    "ob_low": 159.277,
-    "locked_at": 1795520338
-  },
   "EURAUD": {
     "valid_ob": true,
     "kind": "OB_FVG",
@@ -238,5 +223,20 @@
     "ob_high": 0.55491,
     "ob_low": 0.55457,
     "locked_at": 1795537409
+  },
+  "US30": {
+    "valid_ob": true,
+    "kind": "FVG",
+    "fvg_range": "48392.03 - 49545.59",
+    "direction": "BUY",
+    "signal_tag": "COMPRA FVG RETROCESO",
+    "entry": 48968.81,
+    "be_trigger": 49940.76,
+    "sl": 47996.86,
+    "tp1": 50912.71,
+    "tp2": 51884.66,
+    "ob_high": 49545.59,
+    "ob_low": 48392.03,
+    "locked_at": 1795541160
   }
 }
