@@ -14,21 +14,6 @@
     "ob_low": 1.96941,
     "locked_at": 1795537409
   },
-  "EURUSD": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "1.09397 - 1.09457",
-    "direction": "BUY",
-    "signal_tag": "COMPRA FVG RETROCESO",
-    "entry": 1.09427,
-    "be_trigger": 1.09704,
-    "sl": 1.0915,
-    "tp1": 1.09981,
-    "tp2": 1.10258,
-    "ob_high": 1.09457,
-    "ob_low": 1.09397,
-    "locked_at": 1795520338
-  },
   "GBPUSD": {
     "valid_ob": true,
     "kind": "FVG",
@@ -47,17 +32,17 @@
   "AUDUSD": {
     "valid_ob": true,
     "kind": "OB_FVG",
-    "fvg_range": "0.66383 - 0.66423",
-    "direction": "SELL",
-    "signal_tag": "VENTA OB + FVG",
-    "entry": 0.66423,
-    "be_trigger": 0.66244,
-    "sl": 0.66602,
-    "tp1": 0.66065,
-    "tp2": 0.65886,
-    "ob_high": 0.66582,
-    "ob_low": 0.66383,
-    "locked_at": 1795537409
+    "fvg_range": "0.66383 - 0.66467",
+    "direction": "BUY",
+    "signal_tag": "COMPRA OB + FVG",
+    "entry": 0.66383,
+    "be_trigger": 0.66491,
+    "sl": 0.66275,
+    "tp1": 0.66599,
+    "tp2": 0.66707,
+    "ob_high": 0.66467,
+    "ob_low": 0.66295,
+    "locked_at": 1795544351
   },
   "EURAUD": {
     "valid_ob": true,
@@ -151,18 +136,18 @@
   },
   "AUDJPY": {
     "valid_ob": true,
-    "kind": "OB_FVG",
-    "fvg_range": "105.589 - 105.592",
-    "direction": "SELL",
-    "signal_tag": "VENTA OB + FVG",
-    "entry": 105.592,
-    "be_trigger": 105.184,
-    "sl": 106.0,
-    "tp1": 104.776,
-    "tp2": 104.368,
-    "ob_high": 105.98,
-    "ob_low": 105.589,
-    "locked_at": 1795537409
+    "kind": "FVG",
+    "fvg_range": "105.632 - 105.752",
+    "direction": "BUY",
+    "signal_tag": "COMPRA FVG RETROCESO",
+    "entry": 105.692,
+    "be_trigger": 105.98,
+    "sl": 105.404,
+    "tp1": 106.268,
+    "tp2": 106.556,
+    "ob_high": 105.752,
+    "ob_low": 105.632,
+    "locked_at": 1795544351
   },
   "USDCAD": {
     "valid_ob": true,
@@ -238,5 +223,20 @@
     "ob_high": 49545.59,
     "ob_low": 48392.03,
     "locked_at": 1795541160
+  },
+  "GBPCAD": {
+    "valid_ob": true,
+    "kind": "OB",
+    "fvg_range": null,
+    "direction": "SELL",
+    "signal_tag": "VENTA OB REAL",
+    "entry": 1.87539,
+    "be_trigger": 1.87315,
+    "sl": 1.87763,
+    "tp1": 1.87091,
+    "tp2": 1.86867,
+    "ob_high": 1.87743,
+    "ob_low": 1.87336,
+    "locked_at": 1795544351
   }
 }
