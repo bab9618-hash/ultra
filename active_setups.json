@@ -178,5 +178,20 @@
     "ob_high": 7241.69,
     "ob_low": 6955.41,
     "locked_at": 1795551874
+  },
+  "AUDUSD": {
+    "valid_ob": true,
+    "kind": "OB_FVG",
+    "fvg_range": "0.66383 - 0.66423",
+    "direction": "SELL",
+    "signal_tag": "VENTA OB + FVG",
+    "entry": 0.66423,
+    "be_trigger": 0.66244,
+    "sl": 0.66602,
+    "tp1": 0.66065,
+    "tp2": 0.65886,
+    "ob_high": 0.66582,
+    "ob_low": 0.66383,
+    "locked_at": 1795562682
   }
 }
