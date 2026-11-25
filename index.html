@@ -3,268 +3,159 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Cabina Neuronal v10.0</title>
+  <title>LATICCE · Cabina Neuronal v11.0</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <script>
-    if (window.tailwind) {
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              mono: ['JetBrains Mono', 'monospace'],
-              hud: ['Orbitron', 'sans-serif'],
-            }
-          }
-        }
-      };
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root { --agent-color: #ef4444; }
-    body {
-      background-color: #030407;
-      color: #e2e8f0;
-      overflow-x: hidden;
-      font-family: 'JetBrains Mono', monospace;
-      margin: 0;
-    }
-    #neural-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 60;
-      background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.18) 4px);
-    }
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: #030407; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
-
+    :root { --agent-color: #f59e0b; }
+    body { background: #030407; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; margin: 0; overflow-x: hidden; }
+    .font-hud { font-family: 'Orbitron', sans-serif; }
     @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes spinRev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
-    @keyframes pulseCore { 0%, 100% { transform: scale(1); opacity: 0.92; } 50% { transform: scale(1.04); opacity: 0.55; } }
+    @keyframes pulseCore { 0%, 100% { transform: scale(1); opacity: 0.92; } 50% { transform: scale(1.05); opacity: 0.55; } }
     @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-    @keyframes blinkCursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-    @keyframes bootAutoFade {
-      0%, 84% { opacity: 1; visibility: visible; pointer-events: auto; }
-      100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
-    }
-    #boot-screen { animation: bootAutoFade 3.0s ease-out forwards; }
+    @keyframes bootFade { 0%, 82% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; } }
+    #boot-screen { animation: bootFade 2.6s ease-out forwards; }
     .spin-slow { animation: spinSlow 24s linear infinite; }
-    .spin-med { animation: spinSlow 14s linear infinite; }
     .spin-rev { animation: spinRev 18s linear infinite; }
-    .pulse-core { animation: pulseCore 2.8s ease-in-out infinite; }
+    .pulse-core { animation: pulseCore 2.6s ease-in-out infinite; }
     .ticker-track { display: flex; width: max-content; animation: tickerScroll 42s linear infinite; }
-    .typing-cursor { display: inline-block; width: 7px; height: 13px; background: var(--agent-color); margin-left: 3px; vertical-align: middle; animation: blinkCursor 0.8s infinite; }
-    .hud-panel {
-      background: linear-gradient(155deg, rgba(10, 14, 22, 0.92), rgba(5, 8, 13, 0.96));
-      backdrop-filter: blur(12px);
-      border: 1px solid #182234;
-    }
-    .hud-brackets { position: relative; }
-    .hud-brackets::before, .hud-brackets::after {
-      content: ""; position: absolute; width: 14px; height: 14px; border-color: var(--agent-color); pointer-events: none;
-    }
-    .hud-brackets::before { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
-    .hud-brackets::after { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
+    .hud-panel { background: linear-gradient(155deg, rgba(10,14,22,0.94), rgba(5,8,13,0.97)); border: 1px solid #182234; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-32 antialiased selection:bg-red-500 selection:text-white">
+<body class="min-h-screen flex flex-col pb-24 selection:bg-amber-500 selection:text-black">
 
-  <canvas id="neural-bg"></canvas>
-
-  <!-- PANTALLA DE ARRANQUE RED NEURONAL LATICCE -->
-  <div id="boot-screen" onclick="this.style.display='none'; if(window.enterLaticce) enterLaticce(true);" ontouchstart="this.style.display='none'; if(window.enterLaticce) enterLaticce(true);" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2rem 1.25rem;text-align:center;cursor:pointer;touch-action:manipulation;overflow:hidden;">
-    <canvas id="lattice-boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
-
-    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-red-200/80">RED NEURONAL EN LÍNEA</div>
-
-    <div class="relative z-10 w-[305px] h-[305px] sm:w-[355px] sm:h-[355px] flex items-center justify-center my-auto pointer-events-none">
-      <svg viewBox="0 0 360 360" class="w-full h-full overflow-visible">
-        <defs>
-          <radialGradient id="latticeVortex" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#030407" stop-opacity="1"/>
-            <stop offset="14%" stop-color="#fbbf24" stop-opacity="0.88"/>
-            <stop offset="34%" stop-color="#f97316" stop-opacity="0.52"/>
-            <stop offset="65%" stop-color="#dc2626" stop-opacity="0.22"/>
-            <stop offset="100%" stop-color="#030407" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-
-        <circle cx="180" cy="180" r="152" fill="url(#latticeVortex)"/>
-        <circle cx="180" cy="180" r="134" fill="none" stroke="#7f1d1d" stroke-width="1" stroke-dasharray="3 4"/>
-        <circle cx="180" cy="180" r="95" fill="none" stroke="#9a3412" stroke-width="0.9" stroke-dasharray="2 5"/>
-
-        <g class="spin-slow" style="transform-origin: 180px 180px;" opacity="0.65">
-          <polygon points="180,36 304,108 304,252 180,324 56,252 56,108" fill="none" stroke="#ef4444" stroke-width="1"/>
-          <polygon points="180,68 277,124 277,236 180,292 83,236 83,124" fill="none" stroke="#f97316" stroke-width="1" stroke-dasharray="6 4"/>
-          <circle cx="180" cy="180" r="56" fill="none" stroke="#fbbf24" stroke-width="3" stroke-dasharray="14 8 4 8" opacity="0.9"/>
-        </g>
-
-        <g stroke="#7f1d1d" stroke-width="1.1">
-          <line x1="180" y1="180" x2="180" y2="46"/><line x1="180" y1="180" x2="285" y2="96"/>
-          <line x1="180" y1="180" x2="310" y2="210"/><line x1="180" y1="180" x2="238" y2="300"/>
-          <line x1="180" y1="180" x2="122" y2="300"/><line x1="180" y1="180" x2="50" y2="210"/>
-          <line x1="180" y1="180" x2="75" y2="96"/>
-        </g>
-
-        <circle cx="180" cy="180" r="24" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.9"/>
-        <circle cx="180" cy="180" r="14" fill="none" stroke="#ef4444" stroke-width="1.5"/>
-        <circle cx="180" cy="180" r="7" fill="#030407" stroke="#fbbf24" stroke-width="1.5"/>
-
-        <g transform="translate(180,46)"><circle r="24" fill="#090508" stroke="#f59e0b" stroke-width="1.5"/><polygon points="0,-9 8,6 -8,6" fill="none" stroke="#f59e0b" stroke-width="1.4"/><text y="36" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">JARVIS</text></g>
-        <g transform="translate(285,96)"><circle r="24" fill="#090508" stroke="#10b981" stroke-width="1.5"/><circle r="14" fill="none" stroke="#10b981" stroke-width="1"/><text y="36" text-anchor="middle" fill="#34d399" font-size="9" font-weight="bold">E.D.I.T.H.</text></g>
-        <g transform="translate(310,210)"><circle r="24" fill="#090508" stroke="#a855f7" stroke-width="1.5"/><circle r="5" fill="#a855f7"/><text y="36" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="bold">F.R.I.D.A.Y.</text></g>
-        <g transform="translate(238,300)"><circle r="24" fill="#090508" stroke="#84cc16" stroke-width="1.5"/><rect x="-2" y="-4" width="4" height="14" fill="#84cc16"/><text y="36" text-anchor="middle" fill="#a3e635" font-size="9" font-weight="bold">H.O.M.E.R.</text></g>
-        <g transform="translate(122,300)"><circle r="24" fill="#090508" stroke="#ef4444" stroke-width="1.5"/><circle r="4" fill="#ef4444"/><text y="36" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">ULTRÓN</text></g>
-        <g transform="translate(50,210)"><circle r="24" fill="#090508" stroke="#f43f5e" stroke-width="1.5"/><circle r="4" fill="#f43f5e"/><text y="36" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="bold">KAREN</text></g>
-        <g transform="translate(75,96)"><circle r="24" fill="#090508" stroke="#38bdf8" stroke-width="1.5"/><circle r="3" fill="#38bdf8"/><text y="36" text-anchor="middle" fill="#7dd3fc" font-size="9" font-weight="bold">VISIÓN</text></g>
-      </svg>
-    </div>
-
-    <div class="relative z-10 space-y-2 max-w-md w-full">
-      <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-amber-300 to-red-400 drop-shadow">LATICCE</h1>
-      <div class="text-[11px] font-mono tracking-[0.28em] text-red-200/80">LO QUE USTED NO SABE</div>
-      <div class="pt-2">
-        <button type="button" onclick="document.getElementById('boot-screen').style.display='none'; if(window.enterLaticce) enterLaticce(true);" style="padding:10px 24px;border-radius:8px;border:1px solid #ef4444;background:rgba(239,68,68,0.22);color:#fecaca;font-weight:bold;font-size:12px;letter-spacing:0.2em;box-shadow:0 0 18px rgba(239,68,68,0.3);">
-          ENTRAR A LA CABINA ▸
-        </button>
-      </div>
-    </div>
+  <!-- PANTALLA DE ARRANQUE LATICCE -->
+  <div id="boot-screen" onclick="this.style.display='none'" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;padding:1.5rem;text-align:center;cursor:pointer;">
+    <div class="text-[10px] tracking-[0.35em] text-red-300/80">RED NEURONAL EN LÍNEA · v11.0</div>
+    <svg viewBox="0 0 260 260" class="w-56 h-56">
+      <circle cx="130" cy="130" r="112" fill="none" stroke="#7f1d1d" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <g class="spin-slow" style="transform-origin:130px 130px;">
+        <polygon points="130,26 220,78 220,182 130,234 40,182 40,78" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+        <circle cx="130" cy="130" r="46" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="12 6"/>
+      </g>
+      <circle cx="130" cy="130" r="16" fill="#030407" stroke="#fbbf24" stroke-width="2"/>
+    </svg>
+    <h1 class="font-hud text-3xl font-black tracking-[0.35em] text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-amber-300 to-red-400">LATICCE</h1>
+    <button type="button" onclick="document.getElementById('boot-screen').style.display='none'" class="px-6 py-2.5 rounded-lg border border-red-500 bg-red-500/20 text-red-100 font-bold text-xs tracking-widest">ENTRAR A LA CABINA ▸</button>
   </div>
 
-  <!-- OVERLAY DE INTRODUCCIÓN AL CAMBIAR DE AGENTE -->
-  <div id="agent-intro-overlay" class="hidden fixed inset-0 z-40 bg-[#030407]/95 flex items-center justify-center pointer-events-none">
-    <div id="agent-intro-box" class="hud-brackets px-10 py-6 text-center space-y-2">
-      <div id="intro-title" class="font-hud text-3xl sm:text-4xl font-black tracking-[0.28em] text-white">JARVIS</div>
-      <div id="intro-sub" class="text-[11px] font-mono tracking-[0.32em] text-slate-300">ASISTENTE DE MANDO</div>
+  <!-- BARRA SUPERIOR -->
+  <header class="sticky top-0 z-30 border-b border-slate-800 bg-[#04060b]/95 backdrop-blur">
+    <div class="overflow-hidden py-1.5 border-b border-slate-800/70 bg-[#020306]">
+      <div id="live-ticker-track" class="ticker-track text-[11px] text-slate-300 gap-6 px-4"><span>CARGANDO MERCADO...</span></div>
     </div>
-  </div>
-
-  <!-- BARRA SUPERIOR DE TELEMETRÍA -->
-  <header class="relative z-30 border-b border-slate-800/80 bg-[#04060b]/95 sticky top-0 backdrop-blur-md">
-    <div class="overflow-hidden py-1.5 border-b border-slate-800/60 bg-[#020306]">
-      <div id="live-ticker-track" class="ticker-track text-[11px] font-mono text-slate-300 gap-6 px-4">
-        <span>CARGANDO FLUJO DE MERCADO...</span>
-      </div>
-    </div>
-    <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
+    <div class="max-w-6xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
-        <button onclick="showBoot()" title="Pantalla Red Neuronal" class="w-8 h-8 rounded border border-red-500/60 bg-red-500/15 flex items-center justify-center font-hud font-black text-red-400 text-xs">L</button>
-        <div class="text-[10px] font-mono">
+        <span class="w-8 h-8 rounded border border-red-500/60 bg-red-500/15 flex items-center justify-center font-hud font-black text-red-400 text-xs">L</span>
+        <div class="text-[10px]">
           <div class="flex items-center gap-1.5">
             <span class="font-hud font-bold text-white tracking-widest">LATICCE</span>
-            <span id="killzone-badge" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">UTC --:--</span>
+            <span id="killzone-badge" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">UTC</span>
           </div>
-          <div class="flex flex-wrap items-center gap-2 text-[9px]">
-            <span id="last-updated" class="text-slate-500">Sincronizando...</span>
-            <span id="live-feed-badge" class="text-emerald-400 font-bold">● LIVE</span>
+          <div class="flex items-center gap-2 text-[9px]">
+            <span id="last-updated" class="text-slate-400">Sincronizando...</span>
+            <span id="live-feed-badge" class="text-emerald-400 font-bold">● LIVE 5s</span>
           </div>
         </div>
       </div>
-      <div class="flex items-center gap-1.5 font-mono text-[11px]">
-        <button onclick="configureGeminiApiKey()" id="ai-brain-btn" title="Conectar Cerebro IA Real (Gemini API)" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 hover:border-purple-400 text-[10px] font-bold">🧠 IA</button>
-        <button onclick="cycleAgentVoice()" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-cyan-300 hover:border-cyan-400 text-[10px]">🎙️ TIMBRE</button>
-        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400 text-[10px]">VOZ ON</button>
-        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-2.5 py-1 rounded border border-red-500/70 bg-red-500/15 text-red-300 hover:bg-red-500/25 font-bold text-[10px]">PANEL ▸</button>
+      <div class="flex items-center gap-1.5 text-[10px]">
+        <button onclick="configureGeminiApiKey()" id="ai-brain-btn" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 font-bold">🧠 IA</button>
+        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 font-bold">VOZ ON</button>
+        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-2.5 py-1 rounded border border-amber-400 bg-amber-500 text-black font-bold">PANEL ▸</button>
       </div>
     </div>
   </header>
 
   <!-- MODO 1: CABINA CONVERSACIONAL -->
-  <main id="cockpit-view" class="relative z-10 flex-1 max-w-2xl w-full mx-auto px-4 pt-3 pb-28 flex flex-col justify-between gap-3">
+  <main id="cockpit-view" class="flex-1 max-w-2xl w-full mx-auto px-4 pt-3 pb-6 flex flex-col justify-between gap-3">
     <div class="flex flex-col items-center justify-center">
-      <div id="agent-core-visual" class="w-[195px] h-[195px] sm:w-[225px] sm:h-[225px] flex items-center justify-center"></div>
-      <div class="text-center space-y-1 -mt-1">
-        <div id="agent-hero-metric" class="font-hud text-xl sm:text-2xl font-extrabold tracking-wider text-white">0 ALERTAS</div>
-        <div id="agent-hero-sub" class="text-[11px] font-mono tracking-[0.2em] text-slate-300 uppercase">SINCRONIZANDO</div>
-        <div id="agent-role-label" class="text-[10px] font-mono tracking-[0.28em] text-slate-400 uppercase">JARVIS · ASISTENTE DE MANDO</div>
-        <div id="agent-voice-profile" class="text-[9px] font-mono text-slate-500">TIMBRE: MASCULINO CULTO · SERENO</div>
-        <div id="agent-state-label" class="text-[11px] font-mono tracking-[0.38em] font-bold pt-0.5" style="color: var(--agent-color);">E N &nbsp; E S P E R A</div>
+      <div id="agent-core-visual" class="w-44 h-44 flex items-center justify-center"></div>
+      <div class="text-center space-y-1">
+        <div id="agent-hero-metric" class="font-hud text-xl sm:text-2xl font-extrabold text-white">--</div>
+        <div id="agent-hero-sub" class="text-[11px] tracking-[0.18em] text-amber-300 uppercase">SINCRONIZANDO</div>
+        <div id="agent-role-label" class="text-[10px] tracking-[0.25em] text-slate-400 uppercase">JARVIS · ASISTENTE DE MANDO</div>
       </div>
     </div>
 
-    <div class="space-y-2.5 bg-[#04060c]/85 p-3 rounded-xl border border-slate-800/80">
-      <div id="agent-dialogue-box" class="min-h-[82px] max-h-[210px] overflow-y-auto pr-1 text-xs sm:text-sm font-mono text-slate-200 leading-relaxed whitespace-pre-line">
-        A sus órdenes, señor. Sincronizando red neuronal Laticce.<span class="typing-cursor"></span>
+    <div class="space-y-2.5 bg-[#04060c]/90 p-3.5 rounded-xl border border-slate-800">
+      <div id="agent-dialogue-box" class="min-h-[90px] max-h-[220px] overflow-y-auto text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-line">A sus órdenes, señor. Cargando red neuronal Laticce...</div>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="handleQuickReply('SI')" class="px-3 py-1.5 rounded border border-amber-400/70 text-amber-300 text-xs font-bold">SÍ, DÉMELO</button>
+        <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-200 text-xs font-bold">ABRIR PANEL COMPLETO ▸</button>
       </div>
-      <div id="quick-replies" class="flex flex-wrap gap-2"></div>
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
-        <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
-        <button type="button" onclick="startVoiceRecognition()" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
-        <input id="cockpit-input" type="text" placeholder="Pregunte en qué activo enfocarse, OB+FVG, giros 1S o swing..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
-        <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ENVIAR</button>
+        <input id="cockpit-input" type="text" placeholder="Pregunte por cualquier par, Foco #1, Swing o noticias..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs text-white focus:outline-none focus:border-amber-400" />
+        <button type="submit" class="px-4 h-10 rounded-lg bg-amber-500 text-black font-bold text-xs">ENVIAR</button>
       </form>
     </div>
   </main>
 
   <!-- MODO 2: VISTA DE PANEL COMPLETO -->
-  <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 pt-4 pb-28 space-y-5">
-    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
-      <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+  <main id="panel-view" class="hidden flex-1 max-w-6xl w-full mx-auto px-3 pt-3 pb-6 space-y-4">
+    <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5 overflow-x-auto no-scrollbar">
+      <div class="flex gap-1.5 text-xs shrink-0">
         <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (22)</button>
         <button onclick="switchPanelTab('weekly1s')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-cyan-500/50 text-cyan-300 font-bold" data-pt="weekly1s">🏛️ 1S HISTÓRICO</button>
-        <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
-        <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 CURSO F.R.I.D.A.Y.</button>
-        <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="vision">🌐 MACRO, CESTAS & NOTICIAS</button>
-        <button onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
+        <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300 font-bold" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
+        <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-sky-500/50 text-sky-300 font-bold" data-pt="vision">👁️ VISIÓN</button>
+        <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300 font-bold" data-pt="friday">🟣 CURSO</button>
+        <button onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-rose-300 font-bold" data-pt="karen">🕸️ DIARIO</button>
       </div>
-      <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ VOLVER A CABINA</button>
+      <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs text-slate-300 shrink-0">◂ CABINA</button>
     </div>
 
-    <!-- SUBPANEL JARVIS (CON RADAR DE FOCO PRINCIPAL) -->
+    <!-- 1. SUBPANEL JARVIS (CON PORCENTAJE GRANDE + BOTÓN ¿POR QUÉ? DESPLEGABLE + MESA SWING) -->
     <section id="ptab-jarvis" class="space-y-3">
       <div id="pj-focus-card" class="hidden rounded-xl p-4 bg-gradient-to-r from-amber-500/15 via-emerald-500/10 to-[#060912] border border-amber-400/70 space-y-2.5"></div>
-      <div id="pj-baskets-bar" class="hidden bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-3 space-y-1.5 text-xs"></div>
+      <div id="pj-baskets-bar" class="hidden bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-3 space-y-1 text-xs"></div>
 
-      <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+      <div class="flex flex-wrap gap-1.5 text-xs">
         <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
         <button onclick="setPanelFilter('VALID_OB')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300 font-bold" data-pf="VALID_OB">💎 CON OB / FVG VÁLIDO</button>
-        <button onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-indigo-300" data-pf="SWING">🌊 POTENCIAL SWING</button>
+        <button onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-indigo-300 font-bold" data-pf="SWING">🌊 POTENCIAL SWING</button>
+        <button onclick="setPanelFilter('MESA')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-indigo-500/50 text-indigo-200 font-bold" data-pf="MESA">⚖️ MESA DE SWING</button>
         <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
         <button onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300" data-pf="NEWS">⚠️ CON NOTICIA HOY</button>
         <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ SE CONTRADICEN</button>
-        <button onclick="setPanelFilter('AUD')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="AUD">🇦🇺 PARES AUD</button>
-        <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
       </div>
 
       <div class="relative flex items-center">
         <span class="absolute left-3 text-amber-400 text-sm pointer-events-none">🔍</span>
-        <input id="pair-search-input" type="text" oninput="setPairSearch(this.value)" placeholder="Buscar par o activo (ej: AUD, XAU, EURUSD, GBP, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500" />
-        <button id="pair-search-clear" type="button" onclick="clearPairSearch()" class="hidden absolute right-2.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-xs font-bold">✕</button>
+        <input id="pair-search-input" type="text" oninput="setPairSearch(this.value)" placeholder="Buscar par o activo (ej: GBPAUD, AUD, XAU, EURUSD, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs text-white placeholder-slate-500" />
+        <button id="pair-search-clear" type="button" onclick="clearPairSearch()" class="hidden absolute right-2.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-bold">✕</button>
       </div>
 
       <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
     </section>
 
-    <!-- PESTAÑA SEPARADA: GIROS SEMANALES LIMPIOS PRE-2017 -->
+    <!-- 2. PESTAÑA 1S HISTÓRICO -->
     <section id="ptab-weekly1s" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
         <div>
           <h3 class="font-hud text-sm font-bold text-cyan-300">🏛️ GIROS SEMANALES LIMPIOS HISTÓRICOS (PRE-2017)</h3>
-          <p class="text-[11px] text-slate-400 mt-0.5">Solo entradas contra-tendencia cercanas (<= 60 pips) con 1 vela + 1 vela única de rechazo sin acumulación.</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Entradas contra-tendencia cercanas (&lt;= 60 pips) con 1 vela + 1 vela única de rechazo sin acumulación.</p>
         </div>
         <span id="weekly1s-count-badge" class="text-xs px-2.5 py-1 rounded bg-cyan-500/15 border border-cyan-400/50 text-cyan-300 font-bold">0 ACTIVOS</span>
       </div>
       <div id="panel-weekly1s-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
 
-    <!-- SUBPANEL ULTRÓN -->
+    <!-- 3. SUBPANEL ULTRÓN (CON LÍNEA DORADA ● ACTUAL EN VIVO) -->
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-b border-slate-800 pb-2">
         <span class="font-bold text-slate-200">CAPAS ESTRUCTURALES:</span>
         <div class="flex flex-wrap gap-3">
-          <span class="text-rose-300">▲ BSL (Liquidez Arriba)</span>
-          <span class="text-teal-300">▼ SSL (Liquidez Abajo)</span>
+          <span class="text-amber-300 font-bold">● ACTUAL (Precio en vivo)</span>
+          <span class="text-rose-300">▲ BSL</span>
+          <span class="text-teal-300">▼ SSL</span>
           <span class="text-purple-300">⚡ CHoCH / BOS</span>
-          <span class="text-indigo-300">🌊 Potencial Swing</span>
         </div>
       </div>
 
@@ -289,1190 +180,211 @@
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
-        <div class="bg-[#050811] border border-slate-800 rounded p-2">
-          <div class="text-[9px] text-slate-400">SEMANAL (1S)</div>
-          <div id="pu-tf-w" class="font-bold text-white text-xs mt-0.5">--</div>
-        </div>
-        <div class="bg-[#050811] border border-slate-800 rounded p-2">
-          <div class="text-[9px] text-slate-400">DIARIO (1D)</div>
-          <div id="pu-tf-d" class="font-bold text-white text-xs mt-0.5">--</div>
-        </div>
-        <div class="bg-[#050811] border border-slate-800 rounded p-2">
-          <div class="text-[9px] text-slate-400">4 HORAS (4H)</div>
-          <div id="pu-tf-4h" class="font-bold text-white text-xs mt-0.5">--</div>
-        </div>
-        <div class="bg-[#050811] border border-cyan-500/30 rounded p-2">
-          <div class="text-[9px] text-cyan-400">ATR DIARIO (14)</div>
-          <div id="pu-atr" class="font-bold text-cyan-200 text-xs mt-0.5">--</div>
-        </div>
-        <div class="bg-[#050811] border border-amber-500/30 rounded p-2">
-          <div class="text-[9px] text-amber-400">RANGO 20 DÍAS</div>
-          <div id="pu-r20" class="font-bold text-amber-200 text-xs mt-0.5">--</div>
-        </div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[9px] text-slate-400">SEMANAL (1S)</div><div id="pu-tf-w" class="font-bold text-white text-xs mt-0.5">--</div></div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[9px] text-slate-400">DIARIO (1D)</div><div id="pu-tf-d" class="font-bold text-white text-xs mt-0.5">--</div></div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[9px] text-slate-400">4 HORAS (4H)</div><div id="pu-tf-4h" class="font-bold text-white text-xs mt-0.5">--</div></div>
+        <div class="bg-[#050811] border border-cyan-500/30 rounded p-2"><div class="text-[9px] text-cyan-400">ATR DIARIO (14)</div><div id="pu-atr" class="font-bold text-cyan-200 text-xs mt-0.5">--</div></div>
+        <div class="bg-[#050811] border border-amber-500/30 rounded p-2"><div class="text-[9px] text-amber-400">RANGO 20 DÍAS</div><div id="pu-r20" class="font-bold text-amber-200 text-xs mt-0.5">--</div></div>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-sky-400">ENTRADA (OB/FVG)</div>
-          <div id="pu-entry" class="font-bold text-white text-sm">--</div>
-          <div id="pu-dist" class="text-[10px] text-slate-400">--</div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="text-[10px] text-sky-400">ENTRADA (OB/FVG)</div><div id="pu-entry" class="font-bold text-white text-sm">--</div><div id="pu-dist" class="text-[10px] text-slate-400">--</div></div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="text-[10px] text-red-400">STOP ESTRUCTURAL</div><div id="pu-sl" class="font-bold text-red-400 text-sm">--</div><div id="pu-sl-pips" class="text-[10px] text-red-300">--</div></div>
+        <div class="bg-[#050811] border border-indigo-500/40 rounded p-2.5"><div class="text-[10px] text-indigo-300">GATILLO BE (+1R)</div><div id="pu-be" class="font-bold text-indigo-300 text-sm">--</div><div class="text-[10px] text-slate-400">Subir SL a Entrada</div></div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="text-[10px] text-emerald-400">TP1 (PARCIALES)</div><div id="pu-tp1" class="font-bold text-emerald-400 text-sm">--</div><div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div></div>
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="text-[10px] text-emerald-400" id="pu-tp2-lbl">TP2 / SWING TP</div><div id="pu-tp2" class="font-bold text-emerald-400 text-sm">--</div><div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div></div>
+      </div>
+    </section>
+
+    <!-- 4. PESTAÑA PROPIA: 👁️ VISIÓN CON SUS 5 SUB-PESTAÑAS DESLIZABLES -->
+    <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <h3 class="font-hud text-sm font-bold text-sky-400">👁️ VISIÓN · INTELIGENCIA MACRO & NOTICIAS</h3>
+        <span class="text-[10px] text-slate-400">Deslice las 5 secciones</span>
+      </div>
+
+      <!-- 5 SUB-PESTAÑAS DESLIZABLES -->
+      <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+        <button onclick="setVisionSubTab('RESUMEN')" class="vsub shrink-0 px-3 py-1.5 rounded-lg bg-sky-500 text-black font-bold" data-vs="RESUMEN">📊 RESUMEN</button>
+        <button onclick="setVisionSubTab('CUADRANTE')" class="vsub shrink-0 px-3 py-1.5 rounded-lg bg-[#090e1a] border border-slate-800 text-slate-300 font-bold" data-vs="CUADRANTE">🧭 CUADRANTE</button>
+        <button onclick="setVisionSubTab('BANCOS')" class="vsub shrink-0 px-3 py-1.5 rounded-lg bg-[#090e1a] border border-slate-800 text-slate-300 font-bold" data-vs="BANCOS">🏦 BANCOS / FED</button>
+        <button onclick="setVisionSubTab('TASAS')" class="vsub shrink-0 px-3 py-1.5 rounded-lg bg-[#090e1a] border border-slate-800 text-slate-300 font-bold" data-vs="TASAS">📈 TASAS & DXY</button>
+        <button onclick="setVisionSubTab('NOTICIAS')" class="vsub shrink-0 px-3 py-1.5 rounded-lg bg-[#090e1a] border border-slate-800 text-slate-300 font-bold" data-vs="NOTICIAS">📰 NOTICIAS & RIESGOS</button>
+      </div>
+
+      <!-- SUB-VISTA 1: RESUMEN (BRIEF DIARIO + WALL STREET) -->
+      <div id="vpanel-RESUMEN" class="space-y-3">
+        <div class="bg-[#050811] border border-sky-500/40 rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] text-sky-300 font-bold tracking-widest">BRIEF DIARIO DE SESIÓN</span>
+            <span id="pv-ws-tone" class="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-200 font-bold">EN LÍNEA</span>
+          </div>
+          <h4 id="pv-headline" class="font-bold text-white text-sm">--</h4>
+          <p id="pv-summary" class="text-xs text-slate-300 leading-relaxed">--</p>
         </div>
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-red-400">STOP ESTRUCTURAL</div>
-          <div id="pu-sl" class="font-bold text-red-400 text-sm">--</div>
-          <div id="pu-sl-pips" class="text-[10px] text-red-300">--</div>
+        <div id="pv-ws-indices" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs"></div>
+      </div>
+
+      <!-- SUB-VISTA 2: CUADRANTE (FUERZA RELATIVA Y CESTAS) -->
+      <div id="vpanel-CUADRANTE" class="hidden space-y-3">
+        <div id="pv-ccy-matrix" class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs"></div>
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold text-indigo-300">🔗 CESTAS CORRELACIONADAS ACTIVAS</h4>
+          <div id="pv-baskets" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
         </div>
-        <div class="bg-[#050811] border border-indigo-500/40 rounded p-2.5">
-          <div class="text-[10px] text-indigo-300">GATILLO BE (+1R)</div>
-          <div id="pu-be" class="font-bold text-indigo-300 text-sm">--</div>
-          <div class="text-[10px] text-slate-400">Subir SL a Entrada</div>
+      </div>
+
+      <!-- SUB-VISTA 3: BANCOS / FED -->
+      <div id="vpanel-BANCOS" class="hidden space-y-2.5">
+        <div id="pv-banks" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
+      </div>
+
+      <!-- SUB-VISTA 4: TASAS & DXY -->
+      <div id="vpanel-TASAS" class="hidden space-y-3 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="bg-[#050811] border border-amber-500/40 rounded-xl p-4 space-y-1">
+            <div class="text-[10px] text-amber-300 font-bold">ÍNDICE DEL DÓLAR (DXY)</div>
+            <div id="pv-dxy-big" class="font-hud text-2xl font-black text-white">--</div>
+            <p class="text-[11px] text-slate-400">Si DXY sube con fuerza, presiona a la baja a EURUSD, GBPUSD, AUDUSD y Oro (XAUUSD).</p>
+          </div>
+          <div class="bg-[#050811] border border-cyan-500/40 rounded-xl p-4 space-y-1">
+            <div class="text-[10px] text-cyan-300 font-bold">BONO TESORO EE.UU. 10 AÑOS (US10Y)</div>
+            <div id="pv-us10y-big" class="font-hud text-2xl font-black text-white">--</div>
+            <p class="text-[11px] text-slate-400">Rendimientos altos impulsan al USDJPY al alza y frenan a las acciones tecnológicas (USTEC).</p>
+          </div>
         </div>
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-emerald-400">TP1 (PARCIALES)</div>
-          <div id="pu-tp1" class="font-bold text-emerald-400 text-sm">--</div>
-          <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
+      </div>
+
+      <!-- SUB-VISTA 5: NOTICIAS & RIESGOS (SIN UNDEFINED, CON EXPLICACIÓN SENCILLA) -->
+      <div id="vpanel-NOTICIAS" class="hidden space-y-4">
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold text-orange-300">⚠️ CALENDARIO DE ALTO IMPACTO HOY</h4>
+          <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
         </div>
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-emerald-400" id="pu-tp2-lbl">TP2 / SWING TP</div>
-          <div id="pu-tp2" class="font-bold text-emerald-400 text-sm">--</div>
-          <div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div>
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold text-emerald-300">📰 TITULARES EN VIVO EXPLICADOS EN ESPAÑOL</h4>
+          <div id="pv-news" class="space-y-2.5 text-xs"></div>
         </div>
       </div>
     </section>
 
+    <!-- 5. CURSO F.R.I.D.A.Y. -->
     <section id="ptab-friday" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex items-center justify-between">
-        <h3 class="font-hud text-sm font-bold text-purple-400">🟣 ACADEMIA INSTITUCIONAL F.R.I.D.A.Y. (10 MÓDULOS)</h3>
+        <h3 class="font-hud text-sm font-bold text-purple-400">🟣 ACADEMIA INSTITUCIONAL F.R.I.D.A.Y.</h3>
         <span id="panel-course-pct" class="text-xs font-bold text-purple-300">0% COMPLETADO</span>
       </div>
       <div id="panel-lessons-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
 
-    <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-5">
-      <div class="space-y-1 border-b border-slate-800 pb-3">
-        <h3 id="pv-headline" class="font-bold text-sky-300 text-sm">--</h3>
-        <p id="pv-summary" class="text-xs text-slate-300 leading-relaxed">--</p>
-      </div>
-
-      <div class="space-y-2">
-        <h4 class="font-hud text-xs font-bold text-indigo-400 tracking-wider">🔗 CESTAS MACROECONÓMICAS CORRELACIONADAS</h4>
-        <div id="pv-baskets" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
-      </div>
-
-      <div class="space-y-2">
-        <h4 class="font-hud text-xs font-bold text-amber-400 tracking-wider">🏦 RADAR DE BANCOS CENTRALES & POLÍTICA MONETARIA</h4>
-        <div id="pv-banks" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
-      </div>
-
-      <div class="space-y-2">
-        <h4 class="font-hud text-xs font-bold text-cyan-400 tracking-wider">📅 CALENDARIO ECONÓMICO DE HOY (ALERTAS DE ALTO IMPACTO)</h4>
-        <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
-      </div>
-
-      <div class="space-y-2">
-        <h4 class="font-hud text-xs font-bold text-emerald-400 tracking-wider">📰 TITULARES DE MERCADO EN VIVO</h4>
-        <div id="pv-news" class="space-y-2 text-xs"></div>
-      </div>
-    </section>
-
+    <!-- 6. DIARIO KAREN -->
     <section id="ptab-karen" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <h3 class="font-hud text-sm font-bold text-rose-400">🕸️ AUDITORÍA DE KAREN & ESTADÍSTICA H.O.M.E.R.</h3>
+        <h3 class="font-hud text-sm font-bold text-rose-400">🕸️ DIARIO DE KAREN & H.O.M.E.R.</h3>
         <div class="flex items-center gap-2">
           <span id="sync-status-badge" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">LOCAL</span>
           <div id="homer-stats-badge" class="text-xs text-lime-400 font-bold">ACIERTO: 0% (+0R)</div>
         </div>
       </div>
-
       <div class="bg-[#050811] border border-slate-800 rounded-lg p-3 flex flex-wrap items-center justify-between gap-2 text-[11px]">
-        <div class="text-slate-300">
-          <strong class="text-rose-300">☁️ Nube PC ↔ Celular (Auto 15s):</strong>
-          <span id="cloud-token-info">Pulsa VINCULAR NUBE para sincronizar</span>
-        </div>
+        <span class="text-slate-300"><strong class="text-rose-300">☁️ Nube PC ↔ Celular:</strong> <span id="cloud-token-info">Sincroniza journal.json</span></span>
         <div class="flex gap-2">
-          <button type="button" onclick="configureCloudToken()" class="px-3 py-1.5 rounded bg-rose-500/20 border border-rose-400/60 text-rose-200 font-bold">🔑 VINCULAR NUBE</button>
-          <button type="button" onclick="loadCloudJournal(true)" class="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-bold">↻ SINCRONIZAR</button>
+          <button type="button" onclick="configureCloudToken()" class="px-3 py-1 rounded bg-rose-500/20 border border-rose-400/60 text-rose-200 font-bold">🔑 VINCULAR NUBE</button>
+          <button type="button" onclick="loadCloudJournal(true)" class="px-3 py-1 rounded bg-slate-800 text-slate-200 font-bold">↻ SINCRONIZAR</button>
         </div>
       </div>
-
       <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
-        <select id="j-pair" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white">
-          <option value="XAUUSD">XAUUSD</option>
-          <option value="EURUSD">EURUSD</option>
-          <option value="GBPUSD">GBPUSD</option>
-          <option value="USDJPY">USDJPY</option>
-          <option value="GBPJPY">GBPJPY</option>
-          <option value="AUDUSD">AUDUSD</option>
-          <option value="AUDJPY">AUDJPY</option>
-          <option value="AUDCAD">AUDCAD</option>
-          <option value="AUDNZD">AUDNZD</option>
-          <option value="EURAUD">EURAUD</option>
-          <option value="AUDCHF">AUDCHF</option>
-          <option value="BTCUSD">BTCUSD</option>
-        </select>
+        <select id="j-pair" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="XAUUSD">XAUUSD</option></select>
         <select id="j-dir" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="COMPRA">COMPRA</option><option value="VENTA">VENTA</option></select>
-        <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="WIN">GANADA (+2R / +3R)</option><option value="LOSS">PERDIDA (-1R)</option><option value="BE">BREAK EVEN (0R)</option></select>
+        <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="WIN">GANADA (+2R)</option><option value="LOSS">PERDIDA (-1R)</option><option value="BE">BREAK EVEN (0R)</option></select>
         <input id="j-note" type="text" placeholder="Nota o emoción..." required class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white" />
-        <button type="submit" id="j-submit-btn" class="bg-rose-500 hover:bg-rose-400 text-black font-bold rounded px-3 py-2">ANOTAR</button>
+        <button type="submit" class="bg-rose-500 text-black font-bold rounded px-3 py-2">ANOTAR</button>
       </form>
       <div id="journal-list" class="space-y-2 text-xs"></div>
     </section>
   </main>
 
-  <!-- BARRA DE NAVEGACIÓN INFERIOR (7 AGENTES) -->
-  <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#04060b]/95 border-t border-slate-800 backdrop-blur overflow-x-auto">
+  <!-- BARRA INFERIOR DE 7 AGENTES -->
+  <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#04060b]/95 border-t border-slate-800 backdrop-blur overflow-x-auto no-scrollbar">
     <div class="flex min-w-max sm:justify-center mx-auto">
-      <button onclick="selectAgent('jarvis')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-amber-400 text-amber-400" data-ag="jarvis"><span class="text-sm">⚡</span><span class="text-[10px] font-bold">JARVIS</span></button>
-      <button onclick="selectAgent('vision')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="vision"><span class="text-sm">🌐</span><span class="text-[10px] font-bold">VISIÓN</span></button>
-      <button onclick="selectAgent('ultron')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="ultron"><span class="text-sm">🎯</span><span class="text-[10px] font-bold">ULTRÓN</span></button>
-      <button onclick="selectAgent('friday')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="friday"><span class="text-sm">🟣</span><span class="text-[10px] font-bold">F.R.I.D.A.Y.</span></button>
-      <button onclick="selectAgent('edith')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="edith"><span class="text-sm">⌖</span><span class="text-[10px] font-bold">E.D.I.T.H.</span></button>
-      <button onclick="selectAgent('karen')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="karen"><span class="text-sm">🕸️</span><span class="text-[10px] font-bold">KAREN</span></button>
-      <button onclick="selectAgent('homer')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="homer"><span class="text-sm">📊</span><span class="text-[10px] font-bold">H.O.M.E.R.</span></button>
+      <button onclick="selectAgent('jarvis')" class="ag-tab w-20 py-2 flex flex-col items-center gap-0.5 border-t-2 border-amber-400 text-amber-400" data-ag="jarvis"><span class="text-sm">⚡</span><span class="text-[10px] font-bold">JARVIS</span></button>
+      <button onclick="selectAgent('vision')" class="ag-tab w-20 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="vision"><span class="text-sm">👁️</span><span class="text-[10px] font-bold">VISIÓN</span></button>
+      <button onclick="selectAgent('ultron')" class="ag-tab w-20 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="ultron"><span class="text-sm">🎯</span><span class="text-[10px] font-bold">ULTRÓN</span></button>
+      <button onclick="selectAgent('friday')" class="ag-tab w-20 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="friday"><span class="text-sm">🟣</span><span class="text-[10px] font-bold">F.R.I.D.A.Y.</span></button>
+      <button onclick="selectAgent('edith')" class="ag-tab w-20 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="edith"><span class="text-sm">⌖</span><span class="text-[10px] font-bold">E.D.I.T.H.</span></button>
+      <button onclick="selectAgent('karen')" class="ag-tab w-20 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="karen"><span class="text-sm">🕸️</span><span class="text-[10px] font-bold">KAREN</span></button>
+      <button onclick="selectAgent('homer')" class="ag-tab w-20 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="homer"><span class="text-sm">📊</span><span class="text-[10px] font-bold">H.O.M.E.R.</span></button>
     </div>
   </nav>
 
   <script>
-    (function initLatticeBootCanvas() {
-      const c = document.getElementById('lattice-boot-canvas');
-      if (!c) return;
-      const ctx = c.getContext('2d');
-      let w, h, nodes = [], stars = [];
-      function resize() {
-        w = c.width = window.innerWidth;
-        h = c.height = window.innerHeight;
-        const cx = w / 2, cy = h / 2;
-        stars = Array.from({ length: 160 }, () => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          r: Math.random() * 1.4 + 0.3,
-          a: Math.random() * 0.7 + 0.2
-        }));
-        nodes = Array.from({ length: 34 }, (_, i) => {
-          const angle = (i / 34) * Math.PI * 2 + Math.random() * 0.4;
-          const dist = 60 + Math.random() * Math.max(w, h) * 0.55;
-          return {
-            baseAngle: angle,
-            dist: dist,
-            speed: (Math.random() * 0.002 + 0.0008) * (i % 2 === 0 ? 1 : -1),
-            r: dist > 190 ? (Math.random() * 3.5 + 2.5) : (Math.random() * 2 + 1.2),
-            x: cx + Math.cos(angle) * dist,
-            y: cy + Math.sin(angle) * dist
-          };
-        });
-      }
-      window.addEventListener('resize', resize);
-      resize();
-      function loop() {
-        if (!document.getElementById('boot-screen')) return;
-        ctx.clearRect(0, 0, w, h);
-        const cx = w / 2, cy = h / 2;
-
-        const bgGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, Math.max(w, h) * 0.65);
-        bgGrad.addColorStop(0, 'rgba(251, 146, 60, 0.26)');
-        bgGrad.addColorStop(0.32, 'rgba(220, 38, 38, 0.16)');
-        bgGrad.addColorStop(0.75, 'rgba(69, 10, 10, 0.08)');
-        bgGrad.addColorStop(1, 'rgba(3, 4, 7, 0)');
-        ctx.fillStyle = bgGrad;
-        ctx.fillRect(0, 0, w, h);
-
-        stars.forEach(s => {
-          ctx.fillStyle = `rgba(254, 215, 170, ${s.a})`;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        nodes.forEach(n => {
-          n.baseAngle += n.speed;
-          n.x = cx + Math.cos(n.baseAngle) * n.dist;
-          n.y = cy + Math.sin(n.baseAngle) * n.dist;
-        });
-
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = i + 1; j < nodes.length; j++) {
-            const dx = nodes[i].x - nodes[j].x;
-            const dy = nodes[i].y - nodes[j].y;
-            const d = Math.hypot(dx, dy);
-            if (d < 165) {
-              ctx.strokeStyle = `rgba(239, 68, 68, ${(1 - d / 165) * 0.42})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(nodes[i].x, nodes[i].y);
-              ctx.lineTo(nodes[j].x, nodes[j].y);
-              ctx.stroke();
-            }
-          }
-        }
-
-        nodes.forEach(n => {
-          const glow = ctx.createRadialGradient(n.x, n.y, 0.5, n.x, n.y, n.r * 3.5);
-          glow.addColorStop(0, 'rgba(252, 165, 165, 0.95)');
-          glow.addColorStop(0.4, 'rgba(239, 68, 68, 0.65)');
-          glow.addColorStop(1, 'rgba(239, 68, 68, 0)');
-          ctx.fillStyle = glow;
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, n.r * 3.5, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        requestAnimationFrame(loop);
-      }
-      loop();
-    })();
-
-    (function initBg() {
-      const c = document.getElementById('neural-bg');
-      if (!c) return;
-      const ctx = c.getContext('2d');
-      let w, h, dots = [];
-      function resize() {
-        w = c.width = window.innerWidth; h = c.height = window.innerHeight;
-        dots = Array.from({ length: 40 }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25, r: Math.random() * 1.4 + 0.5 }));
-      }
-      window.addEventListener('resize', resize);
-      resize();
-      function loop() {
-        ctx.clearRect(0, 0, w, h);
-        dots.forEach(d => {
-          d.x += d.vx; d.y += d.vy;
-          if (d.x < 0 || d.x > w) d.vx *= -1;
-          if (d.y < 0 || d.y > h) d.vy *= -1;
-          ctx.fillStyle = 'rgba(248, 113, 113, 0.22)';
-          ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
-        });
-        requestAnimationFrame(loop);
-      }
-      loop();
-    })();
-
-    const GH_OWNER = 'bab9618-hash';
-    const GH_REPO = 'ultra';
-    const GH_BRANCH = 'principal';
-    const GH_JOURNAL_PATH = 'journal.json';
-
-    let data = null;
-    let currentAgent = 'jarvis';
-    let isPanelMode = false;
-    let panelFilter = 'ALL';
-    let weeklyRangeMode = 'ALL60';
-    let pairSearchTerm = '';
-    let selectedSymbol = 'XAUUSD';
-    let selectedTF = '1d';
-    let typeTimer = null;
-    let openWhyPanels = {};
+    const GH_OWNER = 'bab9618-hash', GH_REPO = 'ultra', GH_BRANCH = 'principal', GH_JOURNAL_PATH = 'journal.json';
+    let data = null, currentAgent = 'jarvis', isPanelMode = false, panelFilter = 'ALL', pairSearchTerm = '';
+    let selectedSymbol = 'XAUUSD', selectedTF = '1d', openWhyPanels = {};
     let voiceEnabled = localStorage.getItem('oraculo_voice') !== 'off';
     let trades = JSON.parse(localStorage.getItem('oraculo_trades_v6') || '[]');
     let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
-    let customVoiceMap = JSON.parse(localStorage.getItem('oraculo_voice_map') || '{}');
     let ghToken = localStorage.getItem('oraculo_gh_token') || '';
     let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
-    let activeLessonIndex = 0;
-
-    function updateAiBrainButton() {
-      const btn = document.getElementById('ai-brain-btn');
-      if (!btn) return;
-      if (geminiApiKey) {
-        btn.textContent = '🧠 IA ON';
-        btn.className = 'px-2 py-1 rounded border border-emerald-400 bg-emerald-500/20 text-emerald-300 font-bold text-[10px]';
-      } else {
-        btn.textContent = '🧠 IA';
-        btn.className = 'px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 hover:border-purple-400 text-[10px] font-bold';
-      }
-    }
-    updateAiBrainButton();
-
-    function configureGeminiApiKey() {
-      const k = prompt('Pega tu clave gratuita de Google AI Studio (AIzaSy...) para activar el cerebro IA completo de Laticce (déjalo vacío para usar el motor analítico local):', geminiApiKey);
-      if (k !== null) {
-        geminiApiKey = k.trim();
-        localStorage.setItem('oraculo_gemini_key', geminiApiKey);
-        updateAiBrainButton();
-        typeAgentDialogue(geminiApiKey
-          ? 'Cerebro neuronal Gemini conectado a Laticce, señor. Ahora puede preguntarme en qué activo enfocarse hoy, sobre zonas OB+FVG, piramidación Swing o giros 1S.'
-          : 'Clave eliminada. Operando con el motor analítico local inteligente de Laticce, señor.');
-      }
-    }
-
-    function setPairSearch(val) {
-      pairSearchTerm = (val || '').trim().toUpperCase();
-      const clr = document.getElementById('pair-search-clear');
-      if (clr) clr.classList.toggle('hidden', !pairSearchTerm);
-      renderPanelJarvis();
-    }
-
-    function clearPairSearch() {
-      const inp = document.getElementById('pair-search-input');
-      if (inp) inp.value = '';
-      setPairSearch('');
-    }
-
-    const YF_MAP = {
-      'XAUUSD': 'GC=F', 'EURUSD': 'EURUSD=X', 'USDJPY': 'JPY=X',
-      'GBPUSD': 'GBPUSD=X', 'GBPJPY': 'GBPJPY=X', 'GBPAUD': 'GBPAUD=X',
-      'GBPNZD': 'GBPNZD=X', 'GBPCAD': 'GBPCAD=X', 'AUDUSD': 'AUDUSD=X',
-      'AUDJPY': 'AUDJPY=X', 'AUDCAD': 'AUDCAD=X', 'AUDNZD': 'AUDNZD=X',
-      'EURAUD': 'EURAUD=X', 'AUDCHF': 'AUDCHF=X', 'NZDUSD': 'NZDUSD=X',
-      'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X', 'EURJPY': 'EURJPY=X',
-      'US30': '^DJI', 'USTEC': '^IXIC', 'US500': '^GSPC'
-    };
-
-    async function fetchWithTimeout(url, ms = 4000) {
-      const ctrl = new AbortController();
-      const id = setTimeout(() => ctrl.abort(), ms);
-      try {
-        const res = await fetch(url, { signal: ctrl.signal });
-        clearTimeout(id);
-        return res;
-      } catch (e) {
-        clearTimeout(id);
-        return null;
-      }
-    }
-
-    async function fetchLiveSymbol(sym) {
-      if (sym === 'BTCUSD') {
-        const r = await fetchWithTimeout('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT', 3500);
-        if (r && r.ok) { const j = await r.json(); return parseFloat(j.price); }
-        return null;
-      }
-      const yf = YF_MAP[sym];
-      if (!yf) return null;
-      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yf)}?interval=1m&range=1d&_=${Date.now()}`;
-
-      // Via 1: corsproxy.io (rapido y sin cache)
-      const r1 = await fetchWithTimeout(`https://corsproxy.io/?${encodeURIComponent(target)}`, 4000);
-      if (r1 && r1.ok) {
-        try {
-          const j1 = await r1.json();
-          const p1 = j1?.chart?.result?.[0]?.meta?.regularMarketPrice;
-          if (p1 && p1 > 0) return p1;
-        } catch (e) {}
-      }
-
-      // Via 2: respaldo allorigins
-      const r2 = await fetchWithTimeout(`https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`, 4500);
-      if (r2 && r2.ok) {
-        try {
-          const j2 = await r2.json();
-          const p2 = j2?.chart?.result?.[0]?.meta?.regularMarketPrice;
-          if (p2 && p2 > 0) return p2;
-        } catch (e) {}
-      }
-      return null;
-    }
-
-    let liveCycleIdx = 0;
-    async function refreshLivePrices() {
-      if (!data || !data.assets || !data.assets.length) return;
-      let updatedAny = false;
-
-      // Actualiza prioritariamente el activo abierto + Foco #1 + lote rotativo de 5 pares
-      const fpSym = data.focus_pick && data.focus_pick.primary ? data.focus_pick.primary.symbol : null;
-      const allSyms = data.assets.map(a => a.symbol);
-      const batch = allSyms.slice(liveCycleIdx, liveCycleIdx + 5);
-      liveCycleIdx = (liveCycleIdx + 5) % allSyms.length;
-
-      const uniqueSyms = [...new Set([selectedSymbol, fpSym, ...batch].filter(Boolean))];
-
-      await Promise.all(uniqueSyms.map(async (sym) => {
-        const a = data.assets.find(x => x.symbol === sym);
-        if (!a) return;
-        try {
-          const liveP = await fetchLiveSymbol(sym);
-          if (liveP && liveP > 0) {
-            a.price = Number(liveP.toFixed(a.decimals));
-            ['1h', '4h', '1d'].forEach(tf => {
-              if (a.candles && a.candles[tf] && a.candles[tf].length) {
-                const lastC = a.candles[tf][a.candles[tf].length - 1];
-                lastC.c = a.price;
-                if (a.price > lastC.h) lastC.h = a.price;
-                if (a.price < lastC.l) lastC.l = a.price;
-              }
-            });
-            if (Array.isArray(a.weekly_pivots)) {
-              a.weekly_pivots.forEach(wp => {
-                wp.price = a.price;
-                wp.dist_units = a.pip ? Math.round((Math.abs(a.price - wp.entry) / a.pip) * 10) / 10 : Math.abs(a.price - wp.entry);
-              });
-            }
-            if (data.focus_pick && data.focus_pick.primary && data.focus_pick.primary.symbol === sym) {
-              data.focus_pick.primary.price = a.price;
-              data.focus_pick.primary.dist_units = a.pip ? Math.round((Math.abs(a.price - data.focus_pick.primary.entry) / a.pip) * 10) / 10 : Math.abs(a.price - data.focus_pick.primary.entry);
-            }
-            updatedAny = true;
-          }
-        } catch (e) {}
-      }));
-
-      if (updatedAny) {
-        const badge = document.getElementById('live-feed-badge');
-        if (badge) badge.textContent = `● LIVE ${new Date().toISOString().substring(11, 19)} UTC`;
-        updateTickerBar();
-        if (isPanelMode) {
-          renderPanelJarvis();
-          renderPanelWeekly1S();
-          renderPanelUltron();
-        } else if (currentAgent === 'edith') {
-          const fp = getFocusPick();
-          const n = fp ? data.assets.find(x => x.symbol === fp.symbol) : getNearestAsset();
-          if (n) {
-            const d = getAssetUnitsDist(n);
-            document.getElementById('agent-hero-metric').textContent = `${n.symbol} (${d.units} ${d.label})`;
-            document.getElementById('agent-hero-sub').textContent = `FOCO #1 · EN VIVO (${n.price})`;
-          }
-        }
-      }
-    }
-
-    function updateTickerBar() {
-      if (!data || !data.assets) return;
-      const fpSym = data.focus_pick && data.focus_pick.primary ? data.focus_pick.primary.symbol : '';
-      const items = data.assets.map(a => {
-        const st = getAssetBadgeState(a);
-        const focusTag = a.symbol === fpSym ? ' <span class="text-amber-300 font-bold">🎯FOCO#1</span>' : '';
-        const swingTag = (a.swing_potential && a.swing_potential.active) ? ' <span class="text-indigo-300 font-bold">🌊SWING</span>' : '';
-        const newsTag = (a.news_warning && a.news_warning.active) ? ' <span class="text-orange-400 font-bold">⚠️NOTICIA</span>' : '';
-        return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong>${focusTag}${swingTag}${newsTag} <span class="text-amber-400">${a.price}</span> <span class="${a.chg_day >= 0 ? 'text-emerald-400' : 'text-red-400'}">${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%</span></span>`;
-      }).join('<span class="text-slate-600">|</span>');
-      const track = document.getElementById('live-ticker-track');
-      if (track) track.innerHTML = items + items;
-    }
-
-    function updateCloudBadge(statusText, isCloud = false) {
-      const badge = document.getElementById('sync-status-badge');
-      const info = document.getElementById('cloud-token-info');
-      if (badge) {
-        badge.textContent = statusText;
-        badge.className = isCloud
-          ? 'text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
-          : 'text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold';
-      }
-      if (info) {
-        info.textContent = ghToken
-          ? 'Conectado a GitHub (auto-sync cada 15s activo)'
-          : 'Pulsa VINCULAR NUBE y pega tu token de GitHub';
-      }
-    }
-
-    function configureCloudToken() {
-      const t = prompt('Pega tu Token de GitHub (ghp_...) para sincronizar PC y celular:', ghToken);
-      if (t !== null) {
-        ghToken = t.trim();
-        localStorage.setItem('oraculo_gh_token', ghToken);
-        updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
-        if (ghToken) {
-          if (trades.length > 0) saveCloudJournal();
-          else loadCloudJournal(true);
-        }
-      }
-    }
-
-    async function loadCloudJournal(notify = false) {
-      if (notify) updateCloudBadge('SINCRONIZANDO...', true);
-      try {
-        let remoteTrades = null;
-        if (ghToken) {
-          const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_JOURNAL_PATH}?ref=${GH_BRANCH}&t=${Date.now()}`, {
-            headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
-          });
-          if (r.status === 401 || r.status === 403) {
-            updateCloudBadge('TOKEN INVÁLIDO / REVOCADO', false);
-            return;
-          }
-          if (r.ok) {
-            const j = await r.json();
-            const decoded = decodeURIComponent(escape(atob(j.content.replace(/\n/g, ''))));
-            remoteTrades = JSON.parse(decoded);
-          } else if (r.status === 404 && notify) {
-            updateCloudBadge('NUBE LISTA (SIN NOTAS AÚN)', true);
-            return;
-          }
-        } else {
-          const r = await fetch(`./${GH_JOURNAL_PATH}?t=${Date.now()}`);
-          if (r.ok) remoteTrades = await r.json();
-        }
-
-        if (Array.isArray(remoteTrades)) {
-          const changed = JSON.stringify(remoteTrades) !== JSON.stringify(trades);
-          trades = remoteTrades;
-          localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
-          renderTrades();
-          if (changed && (currentAgent === 'karen' || currentAgent === 'homer')) {
-            updateAgentTelemetryAndGreeting(currentAgent);
-          }
-          if (notify || ghToken) updateCloudBadge('NUBE SINCRONIZADA ✓', true);
-        } else if (notify && !ghToken) {
-          updateCloudBadge('FALTA VINCULAR TOKEN', false);
-        }
-      } catch (e) {
-        if (notify) updateCloudBadge('ERROR DE RED', false);
-      }
-    }
-
-    async function saveCloudJournal() {
-      localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
-      renderTrades();
-      if (!ghToken) {
-        updateCloudBadge('SOLO LOCAL (PULSA VINCULAR NUBE)', false);
-        return;
-      }
-      updateCloudBadge('GUARDANDO EN NUBE...', true);
-      try {
-        const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_JOURNAL_PATH}`;
-        let sha = null;
-        const getRes = await fetch(`${apiUrl}?ref=${GH_BRANCH}&t=${Date.now()}`, {
-          headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
-        });
-        if (getRes.status === 401 || getRes.status === 403) {
-          updateCloudBadge('TOKEN REVOCADO · GENERA UNO NUEVO', false);
-          return;
-        }
-        if (getRes.ok) {
-          const existing = await getRes.json();
-          sha = existing.sha;
-        }
-
-        const jsonStr = JSON.stringify(trades, null, 2);
-        const contentB64 = btoa(unescape(encodeURIComponent(jsonStr)));
-        const body = {
-          message: 'Actualizar diario de operaciones Karen',
-          content: contentB64,
-          branch: GH_BRANCH
-        };
-        if (sha) body.sha = sha;
-
-        const putRes = await fetch(apiUrl, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `token ${ghToken}`,
-            'Accept': 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        });
-        if (putRes.ok) updateCloudBadge('NUBE SINCRONIZADA ✓', true);
-        else updateCloudBadge('ERROR TOKEN GITHUB', false);
-      } catch (e) {
-        updateCloudBadge('ERROR RED', false);
-      }
-    }
-
-    function getAssetBadgeState(a) {
-      if (!a.has_valid_ob) {
-        return { code: 'NO_OB', dot: '⚪', text: 'SIN OB / FVG', badgeClass: 'bg-slate-800/70 text-slate-400 border-slate-700' };
-      }
-      const isBuy = a.setup.direction === 'BUY';
-      const createdTs = a.created_at || 0;
-      const futureCandles = (a.candles && a.candles['1h'])
-        ? a.candles['1h'].filter(c => c.t >= createdTs)
-        : [];
-      const touchedEntry = futureCandles.some(c => isBuy ? (c.l <= a.setup.entry) : (c.h >= a.setup.entry));
-      const hitTP1 = touchedEntry && (isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1));
-      const pctDist = Math.abs(a.price - a.setup.entry) / a.price;
-      const rightSide = isBuy ? (a.price > a.setup.sl && a.price < a.setup.tp1) : (a.price < a.setup.sl && a.price > a.setup.tp1);
-      const nearBlock = rightSide && pctDist <= 0.004;
-
-      if (hitTP1) return { code: 'TP1', dot: '🟢', text: 'TP1 ALCANZADO', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400' };
-      if (a.zone_kind === 'OB_FVG') return { code: 'OB_FVG', dot: '💎', text: nearBlock ? 'CERCA OB+FVG' : 'OB + FVG', badgeClass: 'bg-cyan-500/20 text-cyan-300 border-cyan-400' };
-      if (a.zone_kind === 'FVG') return { code: 'FVG', dot: '🔷', text: nearBlock ? 'CERCA FVG' : 'FVG RETROCESO', badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-400' };
-      if (nearBlock) return { code: 'NEAR', dot: '🟡', text: 'CERCA OB', badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-400' };
-      return { code: 'OB', dot: '🟢', text: 'OB ESTRUCTURAL', badgeClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40' };
-    }
-
-    const COURSE_LESSONS = [
-      { id: 1, title: "1. Estructura Institucional (BOS y CHoCH)", body: "Lección uno: Estructura. Un BOS confirma que la tendencia continúa rompiendo un máximo o mínimo previo. Un CHoCH es el primer aviso de cambio de tendencia cuando el precio quiebra el último soporte u oferta que impulsó el movimiento.", quiz: "Regla clave: Nunca opere en contra de un BOS confirmado en 4 horas." },
-      { id: 2, title: "2. Liquidez Externa (BSL y SSL)", body: "Lección dos: Liquidez. Las instituciones necesitan contrapartida. Por encima de los techos iguales hay liquidez compradora (BSL) y por debajo de los pisos iguales hay liquidez vendedora (SSL). El precio suele barrer esos stops antes de arrancar.", quiz: "Regla clave: Si ve una mecha barriendo SSL y cerrando arriba, prepare compras." },
-      { id: 3, title: "3. Equilibrio EQ 50% (Caro vs. Barato)", body: "Lección tres: Equilibrium al 50 por ciento. La línea punteada EQ 50 divide el rango en dos: arriba es zona Premium (cara, solo para vender) y abajo es zona Discount (barata, solo para comprar).", quiz: "Regla clave: Jamás compre por encima del EQ 50 por ciento; estaría comprando caro." },
-      { id: 4, title: "4. Order Blocks + Fair Value Gaps (OB + FVG)", body: "Lección cuatro: Bloques y Vacíos Institucionales. Un Order Block acompañado de un Fair Value Gap (imbalance de 3 velas) confirma inyección bancaria real. El Stop Loss se coloca siempre detrás del extremo estructural del bloque.", quiz: "Regla clave: Priorice siempre los activos con OB + FVG en el Radar de Foco Principal." },
-      { id: 5, title: "5. Concentración en un Solo Activo (Foco #1)", body: "Lección cinco: Concentración de Capital. En lugar de abrir 5 pares de la misma divisa multiplicando el riesgo, concéntrese en el único par con mayor probabilidad del Radar de Foco Principal.", quiz: "Regla clave: Un solo activo limpio rinde más y protege mejor su cuenta que cinco pares dispersos." },
-      { id: 6, title: "6. Killzones de Londres y Nueva York", body: "Lección seis: Horarios Institucionales. El volumen real entra en la Killzone de Londres (07:00 a 10:00 UTC) y Nueva York (12:00 a 16:00 UTC). En Asia el volumen es bajo y abundan las trampas.", quiz: "Regla clave: Si el indicador superior dice Fuera de Killzone, reduzca su exposición." },
-      { id: 7, title: "7. Piramidación Swing y Gestión de Parciales", body: "Lección siete: Protocolo Pirámide. Entre con su orden base; al tocar +1R o TP1 cobre parciales, suba el Stop Loss a Break Even y solo entonces añada una segunda entrada en retroceso hacia Swing TP.", quiz: "Regla clave: Jamás añada una segunda orden si la primera aún tiene riesgo abierto." },
-      { id: 8, title: "8. Giros Semanales Limpios Pre-2017 (1S)", body: "Lección ocho: Giros Históricos 1S. Busque velas semanales limpias (1 vela + 1 vela única de rechazo sin acumulación) para operar giros en contra-tendencia cuando el precio llegue desde el lado correcto.", quiz: "Regla clave: En 1S, solo entre cuando el precio venga del lado opuesto al giro." },
-      { id: 9, title: "9. Filtro de Contradicción y Noticias Fuertes", body: "Lección nueve: Protección de Capital. Si Jarvis marca Se Contradicen o el par tiene alerta de noticia fuerte de alto impacto hoy, espere a que pase el latigazo de la noticia.", quiz: "Regla clave: Una operación evitada en noticia de alto impacto protege su cuenta." },
-      { id: 10, title: "10. Auditoría Emocional con Karen y H.O.M.E.R.", body: "Lección diez: Disciplina Profesional. Anotar cada ejecución en el diario de Karen elimina el trading por venganza tras un Stop Loss y permite que H.O.M.E.R. calcule su ventaja estadística real.", quiz: "Regla clave: El éxito no está en adivinar cada vela, sino en repetir exactamente el mismo proceso." }
-    ];
-
-    const CONCEPT_DICTIONARY = [
-      { keys: ['PIRAMIDE', 'PIRÁMIDE', 'SEGUNDA ENTRADA', 'PARCIALES'], answer: "El protocolo de piramidación Swing consiste en abrir la entrada base en el bloque inicial con Stop Loss estructural; al alcanzar el gatillo Break Even (+1R) o TP1, se cobran parciales, se sube el Stop Loss a precio de entrada y solo entonces se añade una segunda entrada en retroceso hacia el objetivo Swing TP." },
-      { keys: ['FVG', 'IMBALANCE', 'VACIO', 'VACÍO'], answer: "El Fair Value Gap (FVG) es un vacío de liquidez de 3 velas dejado por un impulso institucional rápido. Cuando coincide con un Order Block (OB + FVG) afina el punto de entrada al pip; si aparece aislado tras una ruptura, sirve como zona de retroceso." },
-      { keys: ['SWING', 'POTENCIAL SWING', 'DEJAR CORRER'], answer: "La etiqueta Potencial Swing aparece cuando 1S, 1D, 4H, 1H y Economía apuntan exactamente en la misma dirección con un bloque estructural limpio. Conviene cobrar parciales en TP1, mover el Stop Loss a Break Even y dejar correr hacia Swing TP." },
-      { keys: ['BSL', 'SSL', 'LIQUIDEZ'], answer: "BSL marca la liquidez compradora sobre los máximos recientes y SSL la liquidez vendedora bajo los mínimos recientes. Ultrón los dibuja en el gráfico para evitar compras justo bajo un piso a barrer." },
-      { keys: ['EQ', '50%', 'EQUILIBRIUM', 'CARO', 'BARATO', 'PREMIUM', 'DISCOUNT'], answer: "La línea EQ 50% marca la mitad del rango intradía. Arriba es zona Premium (cara, ideal para ventas) y abajo es zona Discount (barata, ideal para compras)." }
-    ];
 
     const AGENTS = {
-      jarvis: { name: 'JARVIS', sub: 'ASISTENTE DE MANDO', personaPrompt: 'Eres JARVIS, asistente táctico de Laticce. Hablas con elegancia británica ("señor") y precisión institucional. Enfócate en recomendar el único activo ganador del Radar de Foco Principal (focus_pick) para concentrar el capital sin dispersar riesgo.', voiceDesc: 'TIMBRE: MASCULINO CULTO · SERENO', gender: 'M', variant: 0, color: '#f59e0b', pitch: 0.86, rate: 0.98 },
-      vision: { name: 'VISIÓN', sub: 'ANALISTA MACRO', personaPrompt: 'Eres VISIÓN, analista macroeconómico de Laticce sobre bancos centrales, DXY, bonos US10Y y cestas correlacionadas de divisas.', voiceDesc: 'TIMBRE: SINTEZOID PROFUNDO · FILOSÓFICO', gender: 'M', variant: 1, color: '#38bdf8', pitch: 0.74, rate: 0.90 },
-      ultron: { name: 'ULTRÓN', sub: 'LECTOR DE ESTRUCTURA', personaPrompt: 'Eres ULTRÓN, lector implacable de liquidez BSL/SSL, Order Blocks, Fair Value Gaps (FVG) y Stop Loss estructurales en 1H/4H.', voiceDesc: 'TIMBRE: METÁLICO GRAVE · IMPLACABLE', gender: 'M', variant: 2, color: '#ef4444', pitch: 0.62, rate: 1.01 },
-      friday: { name: 'F.R.I.D.A.Y.', sub: 'MAESTRA', personaPrompt: 'Eres F.R.I.D.A.Y., instructora de trading institucional en Laticce. Llamas "jefe" al usuario.', voiceDesc: 'TIMBRE: FEMENINO ÁGIL · INGENIOSA', gender: 'F', variant: 0, color: '#a855f7', pitch: 1.12, rate: 1.03 },
-      edith:  { name: 'E.D.I.T.H.', sub: 'PLANIFICADORA', personaPrompt: 'Eres E.D.I.T.H., planificadora táctica de ejecución en Laticce. Indicas precios exactos de entrada, Stop Loss estructural del OB/FVG, gatillo Break Even (+1R) y cobro de parciales en TP1.', voiceDesc: 'TIMBRE: FEMENINO TÁCTICO · PRECISA', gender: 'F', variant: 1, color: '#10b981', pitch: 1.05, rate: 1.05 },
-      karen:  { name: 'KAREN', sub: 'DIARIO', personaPrompt: 'Eres KAREN, psicóloga de trading y auditora emocional de Laticce.', voiceDesc: 'TIMBRE: FEMENINO CÁLIDO · PROTECTORA', gender: 'F', variant: 2, color: '#f43f5e', pitch: 1.18, rate: 0.98 },
-      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICO', personaPrompt: 'Eres H.O.M.E.R., estadístico veterano e irónico de Laticce.', voiceDesc: 'TIMBRE: ANALISTA VETERANO · IRÓNICO', gender: 'M', variant: 3, color: '#84cc16', pitch: 0.80, rate: 0.95 }
+      jarvis: { name: 'JARVIS', sub: 'DIRECTOR DE MESA', color: '#f59e0b' },
+      vision: { name: 'VISIÓN', sub: 'INTELIGENCIA MACRO', color: '#38bdf8' },
+      ultron: { name: 'ULTRÓN', sub: 'ESTRUCTURA Y LIQUIDEZ', color: '#ef4444' },
+      friday: { name: 'F.R.I.D.A.Y.', sub: 'ACADEMIA INSTITUCIONAL', color: '#a855f7' },
+      edith:  { name: 'E.D.I.T.H.', sub: 'GESTIÓN DE RIESGO', color: '#10b981' },
+      karen:  { name: 'KAREN', sub: 'AUDITORÍA DE DIARIO', color: '#f43f5e' },
+      homer:  { name: 'H.O.M.E.R.', sub: 'ESTADÍSTICA EN R', color: '#84cc16' }
     };
 
-    let cachedEsVoices = [];
-    function loadSpanishVoices() {
-      if (!('speechSynthesis' in window)) return;
-      const all = window.speechSynthesis.getVoices();
-      if (!all.length) return;
-      const es = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('es'));
-      cachedEsVoices = es.length ? es : all;
-      updateVoiceProfileLabel();
-    }
-    if ('speechSynthesis' in window) {
-      loadSpanishVoices();
-      window.speechSynthesis.onvoiceschanged = loadSpanishVoices;
-      setTimeout(loadSpanishVoices, 300);
-      setTimeout(loadSpanishVoices, 1000);
-    }
+    const COURSE_LESSONS = [
+      { id: 1, title: "1. Cascada OB + FVG", body: "Prioriza bloques con vacío de liquidez (FVG) a favor de 1D y 4H." },
+      { id: 2, title: "2. Foco Principal #1", body: "Concentra tu riesgo en el activo con mayor porcentaje de confluencia del día." },
+      { id: 3, title: "3. Gatillo Break Even (+1R)", body: "Al tocar +1R, sube el Stop Loss a entrada para eliminar el riesgo." },
+      { id: 4, title: "4. Piramidación Swing", body: "Solo añade una segunda entrada cuando la orden base ya está protegida en BE." },
+      { id: 5, title: "5. Giros Semanales 1S", body: "Niveles limpios pre-2017 válidos solo contra-tendencia a <= 60 pips." },
+      { id: 6, title: "6. Filtro de Noticias", body: "Evita abrir órdenes nuevas minutos antes de noticias de alto impacto." }
+    ];
 
-    const MALE_CODES = ['es-us-x-esd', 'es-us-x-esf', 'es-es-x-eed', 'es-es-x-eef', 'alvaro', 'jorge', 'pablo', 'diego', 'tomas', 'carlos', 'raul', 'alonso', 'male', 'hombre'];
-    const FEMALE_CODES = ['es-us-x-sfb', 'es-es-x-eec', 'es-es-x-eea', 'dalia', 'helena', 'elvira', 'paulina', 'monica', 'laura', 'sabina', 'female', 'mujer'];
-
-    function pickCharacterVoice(agentKey) {
-      if (!cachedEsVoices.length) loadSpanishVoices();
-      if (!cachedEsVoices.length) return null;
-      if (typeof customVoiceMap[agentKey] === 'number' && cachedEsVoices[customVoiceMap[agentKey]]) return cachedEsVoices[customVoiceMap[agentKey]];
-      const ag = AGENTS[agentKey] || AGENTS.jarvis;
-      const idOf = v => `${v.name} ${v.voiceURI}`.toLowerCase();
-      const males = cachedEsVoices.filter(v => MALE_CODES.some(c => idOf(v).includes(c)));
-      const females = cachedEsVoices.filter(v => FEMALE_CODES.some(c => idOf(v).includes(c)));
-      if (ag.gender === 'M') {
-        if (males.length > 0) return males[ag.variant % males.length];
-        if (cachedEsVoices.length > 1) return cachedEsVoices[1 + (ag.variant % (cachedEsVoices.length - 1))];
-      } else {
-        if (females.length > 0) return females[ag.variant % females.length];
+    function explainNewsFallback(title, source) {
+      const tl = (title || '').toLowerCase();
+      if (tl.includes('fed') || tl.includes('dollar') || tl.includes('yield') || tl.includes('inflation') || tl.includes('cpi')) {
+        return { cat: 'FOREX & BANCOS', imp: ['EURUSD', 'USDJPY', 'XAUUSD'], exp: 'Qué significa: Movimiento clave en tasas o dólar de EE.UU. Efecto: Vigila volatilidad en USDJPY, EURUSD y Oro.' };
       }
-      return cachedEsVoices[0];
+      if (tl.includes('gold') || tl.includes('oil') || tl.includes('xau')) {
+        return { cat: 'ORO & MATERIAS PRIMAS', imp: ['XAUUSD'], exp: 'Qué significa: Flujo directo en materias primas. Efecto: Revisa zonas OB + FVG en el Oro antes de ejecutar.' };
+      }
+      if (tl.includes('nvidia') || tl.includes('nasdaq') || tl.includes('s&p') || tl.includes('dow') || tl.includes('stocks')) {
+        return { cat: 'WALL STREET & TASAS', imp: ['US500', 'USTEC', 'US30'], exp: 'Qué significa: Cambio de sentimiento en las bolsas de EE.UU. Efecto: Marca el apetito por riesgo del día en índices y AUD.' };
+      }
+      return { cat: 'MERCADO GLOBAL', imp: ['EURUSD', 'XAUUSD', 'US500'], exp: `Qué significa: Actualización institucional de ${source || 'mercado'}. Efecto: Confirma estructura en 1H/4H antes de operar.` };
     }
 
-    function updateVoiceProfileLabel() {
-      const el = document.getElementById('agent-voice-profile');
-      if (!el) return;
-      const ag = AGENTS[currentAgent];
-      const v = pickCharacterVoice(currentAgent);
-      const idx = v ? cachedEsVoices.indexOf(v) : -1;
-      const vLabel = v ? `Voz ${idx + 1}/${cachedEsVoices.length}: ${v.name.slice(0, 18)}` : 'Motor listo';
-      el.textContent = `${ag.voiceDesc} · [${vLabel}]`;
+    function speakText(txt) {
+      if (!voiceEnabled || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(txt.replace(/[*#_•⚠️🌊🎯💎]/g, ''));
+        u.lang = 'es-ES'; u.rate = 1.02;
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
     }
-
-    function cycleAgentVoice() {
-      loadSpanishVoices();
-      if (!cachedEsVoices.length) return;
-      const cur = typeof customVoiceMap[currentAgent] === 'number' ? customVoiceMap[currentAgent] : 0;
-      customVoiceMap[currentAgent] = (cur + 1) % cachedEsVoices.length;
-      localStorage.setItem('oraculo_voice_map', JSON.stringify(customVoiceMap));
-      updateVoiceProfileLabel();
-      speakText(`Timbre actualizado para ${AGENTS[currentAgent].name}, señor.`, currentAgent);
-    }
-
-    function formatTextForSpeech(raw) {
-      return raw
-        .replace(/<[^>]*>/g, '')
-        .replace(/[*#`⚠️🌊🔗🎯💎]/g, '')
-        .replace(/XAUUSD/g, 'Oro Dólar')
-        .replace(/BTCUSD/g, 'Bitcoin')
-        .replace(/USTEC/g, 'Nasdaq cien')
-        .replace(/US500/g, 'S and P quinientos')
-        .replace(/US30/g, 'Dow Jones')
-        .replace(/EURUSD/g, 'Euro Dólar')
-        .replace(/USDJPY/g, 'Dólar Yen')
-        .replace(/GBPUSD/g, 'Libra Dólar')
-        .replace(/GBPJPY/g, 'Libra Yen')
-        .replace(/GBPAUD/g, 'Libra Australiano')
-        .replace(/GBPNZD/g, 'Libra Neozelandés')
-        .replace(/GBPCAD/g, 'Libra Canadiense')
-        .replace(/AUDUSD/g, 'Australiano Dólar')
-        .replace(/AUDJPY/g, 'Australiano Yen')
-        .replace(/AUDCAD/g, 'Australiano Canadiense')
-        .replace(/AUDNZD/g, 'Australiano Neozelandés')
-        .replace(/EURAUD/g, 'Euro Australiano')
-        .replace(/AUDCHF/g, 'Australiano Franco')
-        .replace(/NZDUSD/g, 'Neozelandés Dólar')
-        .replace(/USDCAD/g, 'Dólar Canadiense')
-        .replace(/USDCHF/g, 'Dólar Franco')
-        .replace(/EURJPY/g, 'Euro Yen')
-        .replace(/TP1/g, 'Take Profit uno')
-        .replace(/TP2/g, 'Take Profit dos')
-        .replace(/\bSL\b/g, 'Stop Loss');
-    }
-
-    function updateVoiceUI() {
-      const btn = document.getElementById('voice-toggle-btn');
-      if (!btn) return;
-      btn.textContent = voiceEnabled ? 'VOZ ON' : 'VOZ OFF';
-      btn.className = voiceEnabled
-        ? 'px-2 py-1 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 font-bold text-[10px]'
-        : 'px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-400 text-[10px]';
-    }
-    updateVoiceUI();
 
     function toggleVoice() {
       voiceEnabled = !voiceEnabled;
       localStorage.setItem('oraculo_voice', voiceEnabled ? 'on' : 'off');
-      updateVoiceUI();
-      if (!voiceEnabled) stopSpeaking();
-      else speakCurrentAgent();
+      document.getElementById('voice-toggle-btn').textContent = voiceEnabled ? 'VOZ ON' : 'VOZ OFF';
+      if (!voiceEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
     }
 
-    function stopSpeaking() {
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      setStateLabel('EN ESPERA');
-    }
-
-    function speakText(text, agentKey = currentAgent) {
-      if (!voiceEnabled || !('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const ag = AGENTS[agentKey] || AGENTS.jarvis;
-      const chosenVoice = pickCharacterVoice(agentKey);
-      const chunks = formatTextForSpeech(text).split(/(?<=[.!?])\s+/).filter(Boolean);
-      chunks.forEach((chunk, idx) => {
-        const u = new SpeechSynthesisUtterance(chunk);
-        if (chosenVoice) u.voice = chosenVoice;
-        u.lang = chosenVoice ? chosenVoice.lang : 'es-ES';
-        u.pitch = ag.pitch; u.rate = ag.rate;
-        if (idx === 0) u.onstart = () => setStateLabel('HABLANDO');
-        if (idx === chunks.length - 1) u.onend = () => setStateLabel('EN ESPERA');
-        window.speechSynthesis.speak(u);
-      });
-    }
-
-    function startVoiceRecognition() {
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SR) { typeAgentDialogue('Micrófono no disponible aquí, señor. Escriba su consulta abajo.'); return; }
-      const rec = new SR();
-      rec.lang = 'es-ES';
-      setStateLabel('ESCUCHANDO');
-      rec.onresult = (e) => {
-        const t = e.results[0][0].transcript;
-        document.getElementById('cockpit-input').value = t;
-        processQuery(t);
-      };
-      rec.onerror = () => setStateLabel('EN ESPERA');
-      rec.start();
-    }
-
-    function getNextPendingLessonIndex() {
-      const idx = COURSE_LESSONS.findIndex(l => !completedLessons.includes(l.id));
-      return idx === -1 ? 0 : idx;
-    }
-
-    function startFridayLesson(idx = activeLessonIndex) {
-      activeLessonIndex = (idx + COURSE_LESSONS.length) % COURSE_LESSONS.length;
-      const lesson = COURSE_LESSONS[activeLessonIndex];
-      const done = completedLessons.includes(lesson.id);
-      typeAgentDialogue(`${lesson.title}. ${lesson.body} ${lesson.quiz}`);
-      renderFridayButtons(lesson, done);
-    }
-
-    function completeCurrentLesson() {
-      const lesson = COURSE_LESSONS[activeLessonIndex];
-      if (!completedLessons.includes(lesson.id)) {
-        completedLessons.push(lesson.id);
-        localStorage.setItem('oraculo_course', JSON.stringify(completedLessons));
-      }
-      const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
-      document.getElementById('agent-hero-metric').textContent = `${pct}%`;
-      document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
-      renderPanelCourse();
-      if (completedLessons.length >= COURSE_LESSONS.length) {
-        typeAgentDialogue(`¡Felicidades, jefe! Ha completado el cien por ciento del entrenamiento institucional de Laticce.`);
-        renderFridayButtons(lesson, true);
-      } else {
-        const nextIdx = getNextPendingLessonIndex();
-        typeAgentDialogue(`¡Excelente! Lección ${lesson.id} aprobada. Progreso al ${pct} por ciento. ¿Pasamos a la siguiente?`);
-        activeLessonIndex = nextIdx;
-        renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
+    function configureGeminiApiKey() {
+      const k = prompt('Pega tu clave gratuita de Google AI Studio (AIzaSy...):', geminiApiKey);
+      if (k !== null) {
+        geminiApiKey = k.trim();
+        localStorage.setItem('oraculo_gemini_key', geminiApiKey);
+        document.getElementById('ai-brain-btn').textContent = geminiApiKey ? '🧠 IA ON' : '🧠 IA';
       }
     }
-
-    function renderFridayButtons(lesson, isDone, askNext = false) {
-      const qr = document.getElementById('quick-replies');
-      if (!qr) return;
-      if (askNext) {
-        qr.innerHTML = `<button onclick="startFridayLesson(${activeLessonIndex})" class="px-3.5 py-1.5 rounded border border-purple-400 bg-purple-500/15 text-purple-300 text-xs font-mono font-bold">▸ INICIAR LECCIÓN ${lesson.id}</button><button onclick="openCourseInPanel()" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 text-xs font-mono">VER TEMARIO</button>`;
-        return;
-      }
-      qr.innerHTML = `<button onclick="completeCurrentLesson()" class="px-3.5 py-1.5 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold">${isDone ? '✓ APROBADA' : '✅ MARCAR COMPLETADA'}</button><button onclick="startFridayLesson(${activeLessonIndex + 1})" class="px-3.5 py-1.5 rounded border border-purple-400 text-purple-300 bg-[#090d16] text-xs font-mono font-bold">SIGUIENTE ▸</button>`;
-    }
-
-    function renderDefaultQuickReplies() {
-      const qr = document.getElementById('quick-replies');
-      if (!qr) return;
-      qr.innerHTML = `<button onclick="handleQuickReply('SI')" class="px-3.5 py-1.5 rounded border text-xs font-mono font-bold" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.03);">SÍ, DÉMELO</button><button onclick="handleQuickReply('NO')" class="px-3.5 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-300 text-xs font-mono">NO, GRACIAS</button>`;
-    }
-
-    function openCourseInPanel() {
-      if (!isPanelMode) toggleViewMode();
-      switchPanelTab('friday');
-      renderPanelCourse();
-    }
-
-    function renderPanelCourse() {
-      const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
-      const badge = document.getElementById('panel-course-pct');
-      if (badge) badge.textContent = `${pct}% COMPLETADO (${completedLessons.length}/10)`;
-      const list = document.getElementById('panel-lessons-list');
-      if (!list) return;
-      list.innerHTML = COURSE_LESSONS.map((l, idx) => {
-        const done = completedLessons.includes(l.id);
-        return `<div class="bg-[#050811] border ${done ? 'border-emerald-500/50' : 'border-slate-800'} rounded-lg p-3 space-y-2"><div class="flex items-center justify-between"><strong class="${done ? 'text-emerald-400' : 'text-purple-300'}">${l.title}</strong><span class="text-[10px] px-2 py-0.5 rounded ${done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'}">${done ? 'APROBADA' : 'PENDIENTE'}</span></div><p class="text-[11px] text-slate-300">${l.body}</p><div class="flex gap-2"><button onclick="if(isPanelMode)toggleViewMode();selectAgent('friday',false);startFridayLesson(${idx});" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-purple-200 text-[10px] font-bold">🎙️ ESCUCHAR</button>${!done ? `<button onclick="activeLessonIndex=${idx};completeCurrentLesson();" class="px-2.5 py-1 rounded bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-[10px] font-bold">✅ APROBAR</button>` : ''}</div></div>`;
-      }).join('');
-    }
-
-    function getFocusPick() {
-      if (data && data.focus_pick && data.focus_pick.primary) return data.focus_pick.primary;
-      if (!data || !data.assets) return null;
-      const valid = data.assets.filter(a => a.has_valid_ob && a.confluence && a.confluence.alignment === 'ALIGNED')
-        .sort((a, b) => b.confluence.score - a.confluence.score);
-      if (!valid.length) return null;
-      const top = valid[0];
-      const d = getAssetUnitsDist(top);
-      return {
-        symbol: top.symbol,
-        direction: top.setup.direction,
-        dir_label: top.setup.direction === 'BUY' ? 'COMPRA' : 'VENTA',
-        zone_kind: top.zone_kind || 'OB',
-        signal_tag: top.setup.signal_tag,
-        price: top.price,
-        entry: top.setup.entry,
-        sl: top.setup.sl,
-        be_trigger: top.setup.be_trigger || top.setup.entry,
-        tp1: top.setup.tp1,
-        tp2: top.swing_potential ? top.swing_potential.target : top.setup.tp2,
-        is_swing: Boolean(top.swing_potential && top.swing_potential.active),
-        dist_units: d.units,
-        unit_label: d.label,
-        probability: top.confluence.score,
-        reasons: [top.confluence.verdict_title, top.confluence.verdict_sub]
-      };
-    }
-
-    function getBrokenTheses() { return (data && data.assets) ? data.assets.filter(a => a.confluence && a.confluence.alignment === 'OPPOSED') : []; }
-    function getAlignedAssets() { return (data && data.assets) ? data.assets.filter(a => a.confluence && a.confluence.alignment === 'ALIGNED') : []; }
-    function getSwingAssets() { return (data && data.assets) ? data.assets.filter(a => a.swing_potential && a.swing_potential.active) : []; }
-    function getWeeklyPivotsList() {
-      if (!data) return [];
-      const raw = Array.isArray(data.weekly_pivots) ? data.weekly_pivots : [];
-      return raw.filter(w => {
-        const isMetalOrIdx = (w.symbol === 'XAUUSD' || w.type === 'metal' || w.type === 'index' || w.type === 'crypto');
-        if (isMetalOrIdx) return (Math.abs(w.price - w.entry) / Math.max(1e-9, w.price)) <= 0.004;
-        return w.dist_units <= 60;
-      }).sort((a, b) => a.dist_units - b.dist_units);
-    }
-    function getNearestAsset() {
-      if (!data || !data.assets || !data.assets.length) return null;
-      const valid = data.assets.filter(a => a.has_valid_ob);
-      const pool = valid.length ? valid : data.assets;
-      return [...pool].sort((a, b) => (Math.abs(a.price - a.setup.entry) / a.price) - (Math.abs(b.price - b.setup.entry) / b.price))[0];
-    }
-    function getAssetUnitsDist(a) {
-      const diff = Math.abs(a.price - a.setup.entry);
-      const units = a.pip ? Math.round((diff / a.pip) * 10) / 10 : diff;
-      return { diff, units, label: a.type === 'forex' ? 'pips' : 'pts' };
-    }
-    function getSetupPips(a) {
-      const pip = a.pip || 0.0001;
-      const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
-      const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
-      return { unitLabel, sl: toU(a.setup.entry - a.setup.sl), tp1: toU(a.setup.tp1 - a.setup.entry), tp2: toU(a.setup.tp2 - a.setup.entry) };
-    }
-    function getHomerMetrics() {
-      if (!trades.length) return { winRate: 0, pnlR: '+0R', total: 0 };
-      const wins = trades.filter(t => t.res === 'WIN').length;
-      const losses = trades.filter(t => t.res === 'LOSS').length;
-      return { winRate: Math.round((wins / trades.length) * 100), pnlR: `${(wins * 2 - losses) >= 0 ? '+' : ''}${wins * 2 - losses}R`, total: trades.length };
-    }
-
-    function buildCompactMarketSnapshot() {
-      if (!data || !data.assets) return 'Sin datos.';
-      const fp = getFocusPick();
-      const focusStr = fp ? `FOCO_#1:${fp.symbol}(${fp.dir_label}, prob ${fp.probability}%, Ent=${fp.entry}, SL=${fp.sl}, TP1=${fp.tp1}, razones:${fp.reasons.join(',')})` : 'FOCO_#1:Ninguno';
-      const basketsStr = (data.correlated_baskets || []).map(b => `${b.currency}_${b.status}:[${b.pairs.join(',')}]`).join(' ');
-      const rows = data.assets.filter(a => a.has_valid_ob).map(a => {
-        const d = getAssetUnitsDist(a);
-        const p = getSetupPips(a);
-        return `${a.symbol}:${a.setup.signal_tag}(${a.confluence.score}pts)|P=${a.price}|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}`;
-      }).join('\n');
-      return `${focusStr}\nMacro:${data.brief.headline} | Cestas:${basketsStr}\n${rows}`;
-    }
-
-    async function askGeminiBrain(userQuestion, agentKey) {
-      const ag = AGENTS[agentKey] || AGENTS.jarvis;
-      const promptText = `${ag.personaPrompt} Responde en español, claro y directo (3 a 6 oraciones) usando estos datos en vivo de Laticce (sin recomendar lotajes):\n${buildCompactMarketSnapshot()}\n\nPregunta: ${userQuestion}`;
-
-      const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
-      let lastError = 'Congestión temporal';
-
-      for (const modelName of models) {
-        try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(geminiApiKey)}`;
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ role: 'user', parts: [{ text: promptText }] }],
-              generationConfig: { temperature: 0.45, maxOutputTokens: 450 }
-            })
-          });
-
-          if (!res.ok) {
-            const errJson = await res.json().catch(() => ({}));
-            lastError = errJson?.error?.message || `HTTP ${res.status}`;
-            continue;
-          }
-          const json = await res.json();
-          const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (reply) return reply.replace(/\*\*/g, '').trim();
-        } catch (e) {
-          lastError = e.message;
-        }
-      }
-      throw new Error(lastError);
-    }
-
-    function buildSmartLocalResponse(qRaw) {
-      const q = qRaw.toUpperCase();
-      if (!data || !data.assets) return 'Sincronizando telemetría de Laticce, señor.';
-
-      let asset = data.assets.find(a => q.includes(a.symbol));
-      if (!asset && (q.includes('ORO') || q.includes('GOLD') || q.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
-      if (!asset && (q.includes('BITCOIN') || q.includes('BTC'))) asset = data.assets.find(a => a.symbol === 'BTCUSD');
-
-      if (asset) {
-        if (!asset.has_valid_ob) {
-          return `${asset.symbol} cotiza en ${asset.price}, pero ahora mismo NO presenta ningún Order Block ni Fair Value Gap limpio en 1H (${asset.confluence.verdict_title}). Recomiendo no entrar aquí y concentrarnos en nuestro Foco Principal.`;
-        }
-        const d = getAssetUnitsDist(asset);
-        const p = getSetupPips(asset);
-        const be = asset.setup.be_trigger || asset.setup.entry;
-        return `${asset.symbol} (${asset.setup.signal_tag}) cotiza en ${asset.price}, a ${d.units} ${d.label} de la entrada en ${asset.setup.entry} con Stop Loss estructural en ${asset.setup.sl} (${p.sl} ${p.unitLabel}), gatillo Break Even en ${be} y TP1 en ${asset.setup.tp1}.`;
-      }
-
-      if (q.includes('ENFOC') || q.includes('MEJOR') || q.includes('RECOMIENDA') || q.includes('RENTABLE') || q.includes('PROBABILIDAD') || q.includes('OPERAR') || q.includes('FOCO')) {
-        const fp = getFocusPick();
-        if (!fp) {
-          return 'En este momento ningún par cumple simultáneamente con bloque OB/FVG estructural y alineación macro completa, señor. La decisión más rentable ahora es proteger capital y esperar la próxima Killzone.';
-        }
-        const backup = data.focus_pick && data.focus_pick.backup;
-        const backupTxt = backup ? ` Como respaldo independiente (sin cruzar divisas) tiene ${backup.symbol} (${backup.dir_label}, ${backup.probability}% prob).` : '';
-        return `El activo número uno con mayor probabilidad matemática hoy es ${fp.symbol} en ${fp.dir_label} (${fp.probability}% de probabilidad, ${fp.signal_tag}). Razones: ${fp.reasons.join(', ')}. Entrada en ${fp.entry} (a ${fp.dist_units} ${fp.unit_label}), Stop estructural en ${fp.sl}, subir a BE en ${fp.be_trigger} y TP1 en ${fp.tp1}. Concéntrese solo en este activo.${backupTxt}`;
-      }
-
-      if (q.includes('SEMANAL') || q.includes('1S') || q.includes('HISTORICO') || q.includes('HISTÓRICO')) {
-        const wList = getWeeklyPivotsList().slice(0, 4);
-        if (!wList.length) return 'No hay giros semanales limpios contra-tendencia pre-2017 a 60 pips o menos en este momento, señor.';
-        const desc = wList.map(w => `${w.symbol} (${w.direction === 'BUY' ? 'Compra' : 'Venta'} en ${w.entry}, fecha ${w.date}, a ${w.dist_units} ${w.unit_label})`).join('; ');
-        return `Giros semanales limpios contra-tendencia (pre-2017) a 60 pips o menos ahora mismo: ${desc}.`;
-      }
-
-      return null;
-    }
-
-    async function processQuery(qRaw) {
-      const q = qRaw.toUpperCase();
-
-      if (q.includes('CURSO') || q.includes('CLASE') || q.includes('LECCION') || q.includes('LECCIÓN') || q.includes('EMPEZAR')) {
-        if (currentAgent !== 'friday') selectAgent('friday', false);
-        startFridayLesson(getNextPendingLessonIndex()); return;
-      }
-      if (q.includes('SIGUIENTE')) { if (currentAgent !== 'friday') selectAgent('friday', false); startFridayLesson(activeLessonIndex + 1); return; }
-      if (q.includes('APROBAR') || q.includes('COMPLETAR')) { if (currentAgent !== 'friday') selectAgent('friday', false); completeCurrentLesson(); return; }
-
-      const concept = CONCEPT_DICTIONARY.find(c => c.keys.some(k => q.includes(k)));
-      if (concept && !geminiApiKey) { typeAgentDialogue(concept.answer); return; }
-
-      if (geminiApiKey) {
-        clearInterval(typeTimer);
-        const box = document.getElementById('agent-dialogue-box');
-        if (box) box.innerHTML = `<span class="text-slate-400">Analizando red neuronal en vivo...</span><span class="typing-cursor"></span>`;
-        setStateLabel('PROCESANDO');
-        try {
-          const aiResponse = await askGeminiBrain(qRaw, currentAgent);
-          typeAgentDialogue(aiResponse);
-          return;
-        } catch (err) {
-          const smartLocal = buildSmartLocalResponse(qRaw);
-          if (smartLocal) {
-            typeAgentDialogue(smartLocal);
-            return;
-          }
-        }
-      }
-
-      const smartFallback = buildSmartLocalResponse(qRaw);
-      if (smartFallback) {
-        typeAgentDialogue(smartFallback);
-        return;
-      }
-      handleQuickReply('SI');
-    }
-
-    function renderAgentCoreSVG(key) {
-      if (key === 'jarvis') {
-        const bars = Array.from({ length: 36 }, (_, i) => `<rect x="138" y="16" width="4" height="${i < 12 ? 16 : 11}" rx="1" fill="${i < 12 ? '#f59e0b' : '#452c08'}" transform="rotate(${i * 10} 140 140)"/>`).join('');
-        return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${bars}</g><circle cx="140" cy="140" r="92" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/><polygon points="140,66 204,178 76,178" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2"/><circle cx="140" cy="140" r="36" fill="#07090f" stroke="#f59e0b" stroke-width="1.5"/><circle cx="140" cy="140" r="9" fill="#f59e0b" class="pulse-core"/></svg>`;
-      }
-      if (key === 'vision') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="108" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/><circle cx="140" cy="140" r="76" fill="none" stroke="#0284c7" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/><path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/></g><circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#38bdf8"/></svg>`;
-      if (key === 'ultron') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="106" fill="none" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="18 8"/><g class="spin-rev" style="transform-origin:140px 140px"><polygon points="140,46 221,93 221,187 140,234 59,187 59,93" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="2"/></g><circle cx="140" cy="140" r="34" fill="#080507" stroke="#ef4444" stroke-width="2"/><circle cx="140" cy="140" r="10" fill="#ef4444" class="pulse-core"/></svg>`;
-      if (key === 'friday') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="96" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="10 6"/><circle cx="140" cy="140" r="62" fill="rgba(168,85,247,0.1)" stroke="#c084fc" stroke-width="1.5"/><circle cx="140" cy="140" r="30" fill="#07050d" stroke="#a855f7" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#e9d5ff" class="pulse-core"/></svg>`;
-      if (key === 'edith') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="102" fill="none" stroke="#10b981" stroke-width="4" stroke-dasharray="12 6" opacity="0.75"/><line x1="25" y1="140" x2="255" y2="140" stroke="#10b981" stroke-width="1.5"/><line x1="140" y1="25" x2="140" y2="255" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="28" fill="#040a08" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#10b981" class="pulse-core"/></svg>`;
-      if (key === 'karen') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="100" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="14 6"/><circle cx="140" cy="140" r="64" fill="none" stroke="#fb7185" stroke-width="1"/><circle cx="140" cy="140" r="28" fill="#0b0508" stroke="#f43f5e" stroke-width="1.8"/><circle cx="140" cy="140" r="7" fill="#f43f5e" class="pulse-core"/></svg>`;
-      return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="86" fill="none" stroke="#84cc16" stroke-width="1.5" stroke-dasharray="8 5"/><circle cx="140" cy="140" r="52" fill="rgba(132,204,22,0.08)" stroke="#a3e635" stroke-width="1.2"/><circle cx="140" cy="140" r="28" fill="#070a05" stroke="#84cc16" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#84cc16" class="pulse-core"/></svg>`;
-    }
-
-    function setStateLabel(txt) {
-      const el = document.getElementById('agent-state-label');
-      if (el) el.textContent = txt.split('').join(' ');
-    }
-
-    function typeAgentDialogue(fullText, speak = true) {
-      clearInterval(typeTimer);
-      const box = document.getElementById('agent-dialogue-box');
-      if (!box) return;
-      let i = 0;
-      setStateLabel('HABLANDO');
-      if (speak) speakText(fullText, currentAgent);
-      typeTimer = setInterval(() => {
-        i += 3;
-        box.innerHTML = `${fullText.slice(0, i)}<span class="typing-cursor"></span>`;
-        box.scrollTop = box.scrollHeight;
-        if (i >= fullText.length) {
-          clearInterval(typeTimer);
-          box.innerHTML = `${fullText}<span class="typing-cursor"></span>`;
-          box.scrollTop = box.scrollHeight;
-          if (!voiceEnabled) setStateLabel('EN ESPERA');
-        }
-      }, 18);
-    }
-
-    function selectAgent(key, withIntro = true) {
-      currentAgent = key;
-      const ag = AGENTS[key];
-      document.documentElement.style.setProperty('--agent-color', ag.color);
-      document.querySelectorAll('.ag-tab').forEach(btn => {
-        const active = btn.dataset.ag === key;
-        btn.style.borderColor = active ? ag.color : 'transparent';
-        btn.style.color = active ? ag.color : '#94a3b8';
-      });
-      if (withIntro) {
-        const ov = document.getElementById('agent-intro-overlay');
-        document.getElementById('intro-title').textContent = ag.name;
-        document.getElementById('intro-sub').textContent = ag.sub;
-        ov.classList.remove('hidden');
-        setTimeout(() => ov.classList.add('hidden'), 800);
-      }
-      document.getElementById('agent-core-visual').innerHTML = renderAgentCoreSVG(key);
-      document.getElementById('agent-role-label').textContent = `${ag.name} · ${ag.sub}`;
-      updateVoiceProfileLabel();
-      updateAgentTelemetryAndGreeting(key);
-    }
-
-    function updateAgentTelemetryAndGreeting(key) {
-      const fp = getFocusPick();
-      const nearest = getNearestAsset();
-      const homer = getHomerMetrics();
-
-      if (key === 'friday') {
-        const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
-        const nextIdx = getNextPendingLessonIndex();
-        activeLessonIndex = nextIdx;
-        document.getElementById('agent-hero-metric').textContent = `${pct}%`;
-        document.getElementById('agent-hero-sub').textContent = `CURSO · ${completedLessons.length} DE ${COURSE_LESSONS.length} LECCIONES`;
-        renderFridayButtons(COURSE_LESSONS[nextIdx], false, true);
-        typeAgentDialogue(`¡Hola, jefe! Lleva ${completedLessons.length} de ${COURSE_LESSONS.length} lecciones aprobadas (${pct}%). Su siguiente módulo en Laticce es "${COURSE_LESSONS[nextIdx].title}".`);
-        return;
-      }
-      renderDefaultQuickReplies();
-
-      if (key === 'jarvis') {
-        if (fp) {
-          document.getElementById('agent-hero-metric').textContent = `🎯 ${fp.symbol} (${fp.probability}%)`;
-          document.getElementById('agent-hero-sub').textContent = `${fp.dir_label} · ${fp.signal_tag} · A ${fp.dist_units} ${fp.unit_label}`;
-          typeAgentDialogue(`A sus órdenes, señor. He filtrado los 22 activos y el único foco con máxima probabilidad hoy es ${fp.symbol} en ${fp.dir_label} (${fp.probability}% de probabilidad, ${fp.signal_tag}). Entrada en ${fp.entry}, Stop estructural en ${fp.sl} y TP1 en ${fp.tp1}. ¿Desea el análisis completo?`);
-        } else {
-          document.getElementById('agent-hero-metric').textContent = `MODO ESPERA`;
-          document.getElementById('agent-hero-sub').textContent = `SIN BLOQUE OB/FVG ALINEADO AHORA`;
-          typeAgentDialogue(`A sus órdenes, señor. Ningún activo cumple simultáneamente con bloque OB/FVG limpio y alineación macro en este instante. Recomiendo proteger capital y esperar la próxima estructura.`);
-        }
-      } else if (key === 'vision') {
-        document.getElementById('agent-hero-metric').textContent = data ? `DXY ${data.brief.dxy}` : '--';
-        document.getElementById('agent-hero-sub').textContent = data ? `US10Y ${data.brief.us10y}` : 'MACRO & CESTAS';
-        typeAgentDialogue(`Los flujos de capital revelan qué divisa lidera el mercado hoy. Con el dólar en ${data ? data.brief.dxy : '--'} y los bonos a diez años en ${data ? data.brief.us10y : '--'}, he vinculado las cestas macroeconómicas al Radar de Foco Principal. ¿Analizamos las cestas?`);
-      } else if (key === 'ultron') {
-        const target = (fp && data && data.assets.find(x => x.symbol === fp.symbol)) || nearest || (data && data.assets[0]);
-        document.getElementById('agent-hero-metric').textContent = target ? `${target.symbol} ${target.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESCANEANDO';
-        document.getElementById('agent-hero-sub').textContent = target ? `${target.setup.signal_tag}` : 'ESTRUCTURA';
-        typeAgentDialogue(`Solo marco bloques reales: OB más FVG, OB estructurales y FVG de retroceso con Stop Loss dictado por el extremo de la vela institucional. Nuestro objetivo #1 en el radar es ${target ? target.symbol : '--'}. ¿Lo auditamos?`);
-      } else if (key === 'edith') {
-        if (fp) {
-          document.getElementById('agent-hero-metric').textContent = `${fp.symbol} (${fp.dist_units} ${fp.unit_label})`;
-          document.getElementById('agent-hero-sub').textContent = `BE EN ${fp.be_trigger} · SL ${fp.sl}`;
-        } else {
-          document.getElementById('agent-hero-metric').textContent = '--';
-          document.getElementById('agent-hero-sub').textContent = 'ESPERANDO SETUP';
-        }
-        typeAgentDialogue(`Sistemas ópticos de Laticce calibrados. He fijado las coordenadas exactas de nuestro Foco Principal${fp ? ` (${fp.symbol})` : ''} con Stop Loss estructural y gatillo Break Even (+1R). ¿Le entrego el plan?`);
-      } else if (key === 'karen') {
-        document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
-        document.getElementById('agent-hero-sub').textContent = `OPERACIONES SINCRONIZADAS`;
-        typeAgentDialogue(`Hola, me alegra verlo operando con disciplina. Concéntrese únicamente en el activo #1 del Radar de Foco Principal y nunca añada una segunda orden hasta asegurar la primera en Break Even.`);
-      } else if (key === 'homer') {
-        document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
-        document.getElementById('agent-hero-sub').textContent = `ACIERTO POR IDEA · ${homer.pnlR}`;
-        typeAgentDialogue(`Los números nunca mienten: concentrar tu cuenta en un solo activo con OB más FVG y alineación total multiplica tu rentabilidad sin sobreexponer tu capital. Tienes ${homer.winRate}% de acierto y ${homer.pnlR}.`);
-      }
-    }
-
-    function handleQuickReply(choice) {
-      if (choice === 'NO') { typeAgentDialogue('Entendido, señor. Permanezco en guardia silenciosa.'); return; }
-      if (!data) { typeAgentDialogue('Sincronizando datos del mercado, señor.'); return; }
-      if (currentAgent === 'jarvis') {
-        const fp = getFocusPick();
-        if (!fp) {
-          typeAgentDialogue('Ningún activo tiene OB/FVG limpio alineado con macro en este momento, señor.');
-          return;
-        }
-        const backup = data.focus_pick && data.focus_pick.backup;
-        const bTxt = backup ? ` Respaldo independiente: ${backup.symbol} (${backup.dir_label}, ${backup.probability}% prob, entrada ${backup.entry}).` : '';
-        typeAgentDialogue(`Foco Principal #1: ${fp.symbol} en ${fp.dir_label} (${fp.probability}% de probabilidad). Motivos: ${fp.reasons.join(', ')}. Entrada en ${fp.entry} (a ${fp.dist_units} ${fp.unit_label}), Stop estructural en ${fp.sl}, Break Even en ${fp.be_trigger} y TP1 en ${fp.tp1}.${bTxt}`);
-      } else if (currentAgent === 'vision') {
-        const baskets = (data.correlated_baskets || []).map(b => `${b.currency} ${b.status} (${b.pairs.join(', ')})`).join('; ');
-        typeAgentDialogue(`${data.brief.headline}. ${baskets ? `Cestas sincronizadas hoy: ${baskets}.` : data.brief.summary}`);
-      } else if (currentAgent === 'ultron') {
-        const fp = getFocusPick();
-        const n = (fp && data.assets.find(x => x.symbol === fp.symbol)) || getNearestAsset();
-        const d = getAssetUnitsDist(n);
-        const p = getSetupPips(n);
-        typeAgentDialogue(`Estructura #1: ${n.symbol} (${n.price}), ${n.setup.signal_tag} en ${n.setup.entry} (a ${d.units} ${d.label}). Stop Loss estructural en ${n.setup.sl} (${p.sl} ${p.unitLabel}), TP1 en ${n.setup.tp1}.`);
-      } else if (currentAgent === 'edith') {
-        const fp = getFocusPick();
-        if (fp) {
-          typeAgentDialogue(`Plan de ejecución #1 en ${fp.symbol} (${fp.dir_label}): Entrada en ${fp.entry}, Stop estructural en ${fp.sl}, subir SL a Break Even en ${fp.be_trigger}, cobrar parciales en TP1 (${fp.tp1}) y objetivo extendido en ${fp.tp2}.`);
-        } else {
-          typeAgentDialogue('Sin setup estructural activo en este momento, señor.');
-        }
-      } else if (currentAgent === 'karen') {
-        typeAgentDialogue(trades.length === 0 ? 'No tiene operaciones anotadas todavía.' : `Tiene ${trades.length} operaciones registradas. Última: ${trades[0].pair} (${trades[0].dir}) - ${trades[0].res}.`);
-      } else if (currentAgent === 'homer') {
-        const h = getHomerMetrics();
-        typeAgentDialogue(`Su tasa actual es de ${h.winRate}% de acierto con un balance acumulado de ${h.pnlR} sobre ${h.total} operaciones.`);
-      }
-    }
-
-    function handleCockpitChat(e) {
-      e.preventDefault();
-      const inp = document.getElementById('cockpit-input');
-      if (!inp.value.trim()) return;
-      processQuery(inp.value.trim());
-      inp.value = '';
-    }
-
-    function speakCurrentAgent() { speakText(document.getElementById('agent-dialogue-box').innerText, currentAgent); }
-    function enterLaticce(withIntro = false) { const el = document.getElementById('boot-screen'); if (el) el.remove(); selectAgent('jarvis', withIntro); }
-    window.enterLaticce = enterLaticce;
-    function showBoot() { location.reload(); }
 
     function toggleViewMode() {
       isPanelMode = !isPanelMode;
@@ -1483,156 +395,204 @@
     }
 
     function switchPanelTab(tab) {
-      ['jarvis', 'weekly1s', 'ultron', 'friday', 'vision', 'karen'].forEach(t => {
+      ['jarvis', 'weekly1s', 'ultron', 'vision', 'friday', 'karen'].forEach(t => {
         const el = document.getElementById(`ptab-${t}`);
         if (el) el.classList.toggle('hidden', t !== tab);
       });
       document.querySelectorAll('.ptab').forEach(b => {
-        b.className = b.dataset.pt === tab ? 'ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold' : 'ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+        b.className = b.dataset.pt === tab
+          ? 'ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold shrink-0'
+          : 'ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300 font-bold shrink-0';
       });
+      if (tab === 'ultron') { renderPanelUltron(); setTimeout(drawUltronChart, 60); }
+      if (tab === 'vision') renderPanelVision();
       if (tab === 'weekly1s') renderPanelWeekly1S();
-      if (tab === 'ultron') setTimeout(drawUltronChart, 60);
       if (tab === 'friday') renderPanelCourse();
-      if (tab === 'karen') {
-        renderTrades();
-        updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
-        loadCloudJournal(false);
-      }
+      if (tab === 'karen') renderTrades();
+    }
+
+    function setVisionSubTab(sub) {
+      ['RESUMEN', 'CUADRANTE', 'BANCOS', 'TASAS', 'NOTICIAS'].forEach(s => {
+        const p = document.getElementById(`vpanel-${s}`);
+        if (p) p.classList.toggle('hidden', s !== sub);
+      });
+      document.querySelectorAll('.vsub').forEach(b => {
+        b.className = b.dataset.vs === sub
+          ? 'vsub shrink-0 px-3 py-1.5 rounded-lg bg-sky-500 text-black font-bold'
+          : 'vsub shrink-0 px-3 py-1.5 rounded-lg bg-[#090e1a] border border-slate-800 text-slate-300 font-bold';
+      });
     }
 
     function setPanelFilter(f) {
       panelFilter = f;
       document.querySelectorAll('.pf-btn').forEach(b => {
-        b.className = b.dataset.pf === f ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold' : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+        b.className = b.dataset.pf === f
+          ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold'
+          : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
       });
       renderPanelJarvis();
     }
 
-    function setWeeklyRangeMode(mode) {
-      weeklyRangeMode = mode;
-      renderPanelWeekly1S();
+    function setPairSearch(val) {
+      pairSearchTerm = (val || '').trim().toUpperCase();
+      document.getElementById('pair-search-clear').classList.toggle('hidden', !pairSearchTerm);
+      renderPanelJarvis();
     }
 
-    function updateClock() {
-      const now = new Date();
-      const h = now.getUTCHours();
-      const kz = document.getElementById('killzone-badge');
-      if (!kz) return;
-      const inKz = (h >= 7 && h <= 10) || (h >= 12 && h <= 16);
-      kz.textContent = `${inKz ? 'KILLZONE ACTIVA' : 'FUERA KILLZONE'} · ${now.toISOString().substring(11, 19)} UTC`;
-      kz.className = inKz ? 'px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px]' : 'px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[9px]';
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    async function loadData() {
-      try {
-        const res = await fetch(`./data.json?t=${Date.now()}`);
-        if (!res.ok) throw new Error('Sin data.json');
-        data = await res.json();
-        document.getElementById('last-updated').textContent = `ESTRUCTURA: ${data.last_updated}`;
-        updateTickerBar();
-
-        if (data.focus_pick && data.focus_pick.primary) {
-          selectedSymbol = data.focus_pick.primary.symbol;
-        } else if (!data.assets.some(a => a.symbol === selectedSymbol)) {
-          selectedSymbol = data.assets[0].symbol;
-        }
-
-        const jPair = document.getElementById('j-pair');
-        if (jPair) {
-          jPair.innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
-          jPair.value = selectedSymbol;
-        }
-
-        await refreshLivePrices();
-        if (!isPanelMode) updateAgentTelemetryAndGreeting(currentAgent);
-        else renderPanelAll();
-      } catch (e) {
-        document.getElementById('last-updated').textContent = 'Sincronizando data.json...';
-      }
+    function clearPairSearch() {
+      document.getElementById('pair-search-input').value = '';
+      setPairSearch('');
     }
 
     function toggleWhy(sym) {
       openWhyPanels[sym] = !openWhyPanels[sym];
       const el = document.getElementById(`why-${sym}`);
+      const btn = document.getElementById(`why-btn-${sym}`);
       if (el) el.classList.toggle('hidden', !openWhyPanels[sym]);
+      if (btn) btn.textContent = openWhyPanels[sym] ? '💡 ¿Por qué? ▴' : '💡 ¿Por qué? ▾';
     }
 
     function openInPanelChart(sym) {
       selectedSymbol = sym;
       if (!isPanelMode) toggleViewMode();
       switchPanelTab('ultron');
-      renderPanelUltron();
       refreshLivePrices();
     }
 
-    function renderPanelWeekly1S() {
-      const grid = document.getElementById('panel-weekly1s-grid');
-      const badge = document.getElementById('weekly1s-count-badge');
-      if (!grid) return;
+    function getFocusPick() {
+      if (data?.focus_pick?.primary) return data.focus_pick.primary;
+      if (!data?.assets?.length) return null;
+      const valid = data.assets.filter(a => a.has_valid_ob && a.confluence?.alignment === 'ALIGNED')
+        .sort((a, b) => (b.confluence?.score || 0) - (a.confluence?.score || 0));
+      if (!valid.length) return null;
+      const top = valid[0];
+      const d = getAssetUnitsDist(top);
+      return {
+        symbol: top.symbol, direction: top.setup.direction, dir_label: top.setup.direction === 'BUY' ? 'COMPRA' : 'VENTA',
+        signal_tag: top.setup.signal_tag, price: top.price, entry: top.setup.entry, sl: top.setup.sl,
+        be_trigger: top.setup.be_trigger || top.setup.entry, tp1: top.setup.tp1,
+        tp2: top.swing_potential?.target || top.setup.tp2, is_swing: !!top.swing_potential?.active,
+        dist_units: d.units, unit_label: d.label, probability: top.confluence.score,
+        reasons: [top.confluence.verdict_title, top.confluence.verdict_sub]
+      };
+    }
 
-      const rawList = getWeeklyPivotsList();
-      const list = rawList.filter(w => {
-        const isMetalOrIdx = (w.symbol === 'XAUUSD' || w.type === 'metal' || w.type === 'index' || w.type === 'crypto');
-        if (isMetalOrIdx) return (Math.abs(w.price - w.entry) / Math.max(1e-9, w.price)) <= 0.004;
-        if (weeklyRangeMode === '40_60') return w.dist_units >= 40 && w.dist_units <= 60;
-        return w.dist_units <= 60;
+    function getAssetUnitsDist(a) {
+      const diff = Math.abs((a.price || 0) - (a.setup?.entry || 0));
+      const units = a.pip ? Math.round((diff / a.pip) * 10) / 10 : diff;
+      return { diff, units, label: a.type === 'forex' ? 'pips' : 'pts' };
+    }
+
+    function getSetupPips(a) {
+      const pip = a.pip || 0.0001;
+      const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
+      const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
+      return { unitLabel, sl: toU((a.setup?.entry || 0) - (a.setup?.sl || 0)), tp1: toU((a.setup?.tp1 || 0) - (a.setup?.entry || 0)), tp2: toU((a.setup?.tp2 || 0) - (a.setup?.entry || 0)) };
+    }
+
+    function getAssetBadgeState(a) {
+      if (!a.has_valid_ob) return { dot: '⚪', text: 'SIN OB / FVG', badgeClass: 'bg-slate-800 text-slate-400 border-slate-700' };
+      const pctDist = Math.abs(a.price - a.setup.entry) / Math.max(1e-9, a.price);
+      const near = pctDist <= 0.004;
+      if (a.zone_kind === 'OB_FVG') return { dot: '💎', text: near ? 'CERCA OB+FVG' : 'OB + FVG', badgeClass: 'bg-cyan-500/20 text-cyan-300 border-cyan-400' };
+      if (a.zone_kind === 'FVG') return { dot: '🔷', text: near ? 'CERCA FVG' : 'FVG RETROCESO', badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-400' };
+      return { dot: near ? '🟡' : '🟢', text: near ? 'CERCA OB' : 'OB ESTRUCTURAL', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400' };
+    }
+
+    function selectAgent(key) {
+      currentAgent = key;
+      const ag = AGENTS[key];
+      document.querySelectorAll('.ag-tab').forEach(btn => {
+        const act = btn.dataset.ag === key;
+        btn.style.borderColor = act ? ag.color : 'transparent';
+        btn.style.color = act ? ag.color : '#94a3b8';
       });
+      document.getElementById('agent-role-label').textContent = `${ag.name} · ${ag.sub}`;
+      document.getElementById('agent-core-visual').innerHTML = `<svg viewBox="0 0 200 200" class="w-full h-full"><circle cx="100" cy="100" r="78" fill="none" stroke="${ag.color}" stroke-width="2" stroke-dasharray="10 6" class="spin-slow" style="transform-origin:100px 100px"/><circle cx="100" cy="100" r="46" fill="none" stroke="${ag.color}" stroke-width="1.5" opacity="0.7"/><circle cx="100" cy="100" r="12" fill="${ag.color}" class="pulse-core"/></svg>`;
+      updateCabinGreeting();
+    }
 
-      if (badge) {
-        badge.innerHTML = `
-          <span class="inline-flex items-center gap-1.5">
-            <button onclick="setWeeklyRangeMode('ALL60')" class="px-2 py-0.5 rounded text-[10px] font-bold ${weeklyRangeMode === 'ALL60' ? 'bg-cyan-400 text-black' : 'bg-slate-800 text-slate-300'}">0–60 PIPS</button>
-            <button onclick="setWeeklyRangeMode('40_60')" class="px-2 py-0.5 rounded text-[10px] font-bold ${weeklyRangeMode === '40_60' ? 'bg-cyan-400 text-black' : 'bg-slate-800 text-slate-300'}">40–60 PIPS</button>
-            <span class="ml-1">${list.length} ACTIVOS</span>
-          </span>
-        `;
+    function updateCabinGreeting() {
+      if (!data) return;
+      const fp = getFocusPick();
+      const dlg = document.getElementById('agent-dialogue-box');
+      let txt = '';
+      if (currentAgent === 'jarvis') {
+        document.getElementById('agent-hero-metric').textContent = fp ? `🎯 ${fp.symbol} (${fp.probability}%)` : 'MODO ESPERA';
+        document.getElementById('agent-hero-sub').textContent = fp ? `${fp.dir_label} · ${fp.signal_tag}` : 'SIN BLOQUE ALINEADO';
+        txt = fp
+          ? `A sus órdenes, señor. El Foco Principal #1 hoy es ${fp.symbol} en ${fp.dir_label} (${fp.probability}% de probabilidad, ${fp.signal_tag}). Entrada: ${fp.entry} | SL: ${fp.sl} | BE: ${fp.be_trigger} | TP1: ${fp.tp1}.`
+          : 'A sus órdenes, señor. Ningún activo cumple simultáneamente con OB/FVG y alineación macro en este instante.';
+      } else if (currentAgent === 'vision') {
+        document.getElementById('agent-hero-metric').textContent = `DXY ${data.brief?.dxy || '--'}`;
+        document.getElementById('agent-hero-sub').textContent = `US10Y ${data.brief?.us10y || '--'}%`;
+        const topN = (data.news || []).slice(0, 3).map(n => {
+          const fb = explainNewsFallback(n.title, n.source);
+          return `• [${n.category || fb.cat}] ${n.title}\n  ${n.plain_es || fb.exp}`;
+        }).join('\n\n');
+        txt = `${data.brief?.headline || ''}\n\nNoticias clave explicadas:\n${topN}`;
+      } else if (currentAgent === 'ultron') {
+        const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+        document.getElementById('agent-hero-metric').textContent = `${a.symbol} ${a.price}`;
+        document.getElementById('agent-hero-sub').textContent = a.setup?.signal_tag || 'ESTRUCTURA';
+        txt = `${a.symbol} cotiza en ${a.price}. BSL arriba: ${a.liquidity?.bsl || '--'} | SSL abajo: ${a.liquidity?.ssl || '--'}. ${a.has_valid_ob ? `Entrada en ${a.setup.entry}, SL ${a.setup.sl}, TP1 ${a.setup.tp1}.` : 'Sin bloque limpio vigente.'}`;
+      } else {
+        document.getElementById('agent-hero-metric').textContent = `${data.assets.filter(x => x.swing_potential?.active).length} SWING`;
+        document.getElementById('agent-hero-sub').textContent = 'PROTOCOLO DE BLINDAJE';
+        txt = 'Recuerde: al tocar +1R (Gatillo BE), mueva el Stop Loss a entrada inmediatamente. Solo piramide en retrocesos cuando Potencial Swing esté activo.';
       }
+      dlg.textContent = txt;
+    }
 
-      if (!list.length) {
-        grid.innerHTML = `<div class="col-span-full bg-[#050811] border border-slate-800 rounded-xl p-6 text-center text-xs text-slate-400">No hay giros semanales limpios contra-tendencia pre-2017 en el rango de ${weeklyRangeMode === '40_60' ? '40 a 60 pips' : '0 a 60 pips'} en este momento.</div>`;
-        return;
+    function handleQuickReply(c) {
+      if (c === 'SI') {
+        updateCabinGreeting();
+        speakText(document.getElementById('agent-dialogue-box').textContent);
       }
+    }
 
-      grid.innerHTML = list.map(w => {
-        const isBuy = w.direction === 'BUY';
-        const isAlarmZone = (w.symbol === 'XAUUSD' || w.type === 'metal') ? w.dist_units <= 40 : (w.type === 'forex' ? w.dist_units <= 25 : true);
-        return `
-          <div class="bg-[#050811] border ${isAlarmZone ? 'border-cyan-400' : 'border-slate-800'} rounded-xl p-3.5 space-y-2.5">
-            <div class="flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <span class="font-hud font-bold text-white text-sm">${w.symbol}</span>
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isBuy ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50' : 'bg-red-500/20 text-red-300 border border-red-500/50'}">${isBuy ? 'COMPRA 1S ▲' : 'VENTA 1S ▼'}</span>
-                ${isAlarmZone ? '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400 text-[9px] font-bold">🔔 ZONA ALARMA</span>' : ''}
-              </div>
-              <span class="text-[11px] font-bold text-cyan-300">📅 ${w.date}</span>
-            </div>
+    async function handleCockpitChat(e) {
+      e.preventDefault();
+      const inp = document.getElementById('cockpit-input');
+      const q = inp.value.trim();
+      if (!q) return;
+      inp.value = '';
+      const dlg = document.getElementById('agent-dialogue-box');
+      if (geminiApiKey && data) {
+        dlg.textContent = 'Analizando telemetría en vivo...';
+        try {
+          const snap = data.assets.filter(a => a.has_valid_ob).map(a => `${a.symbol}:${a.price}|${a.confluence?.score}%|Ent=${a.setup.entry}|SL=${a.setup.sl}|TP1=${a.setup.tp1}`).join('; ');
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: `Eres ${AGENTS[currentAgent].name} de LATICCE. Responde en español claro y directo.\nMacro: ${data.brief?.headline}\nSetups: ${snap}\nPregunta: ${q}` }] }] })
+          });
+          if (res.ok) {
+            const j = await res.json();
+            const ans = j.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (ans) { dlg.textContent = ans; speakText(ans); return; }
+          }
+        } catch (err) {}
+      }
+      const matched = data?.assets?.find(a => q.toUpperCase().includes(a.symbol));
+      if (matched) {
+        const d = getAssetUnitsDist(matched);
+        dlg.textContent = `${matched.symbol} (${matched.price}) · Confluencia ${matched.confluence?.score}%: ${matched.has_valid_ob ? `${matched.setup.signal_tag} en ${matched.setup.entry} (a ${d.units} ${d.label}), SL ${matched.setup.sl}, BE ${matched.setup.be_trigger}, TP1 ${matched.setup.tp1}.` : 'Sin bloque OB/FVG vigente.'}`;
+      } else {
+        updateCabinGreeting();
+      }
+    }
 
-            <div class="grid grid-cols-3 gap-2 bg-[#030509] border border-slate-800/80 rounded-lg p-2 text-center">
-              <div>
-                <div class="text-[9px] text-slate-400">NIVEL ENTRADA 1S</div>
-                <div class="font-bold text-white text-xs mt-0.5">${w.entry}</div>
-              </div>
-              <div>
-                <div class="text-[9px] text-slate-400">EXTREMO MECHA 1S</div>
-                <div class="font-bold text-amber-300 text-xs mt-0.5">${w.extreme}</div>
-              </div>
-              <div>
-                <div class="text-[9px] text-slate-400">DISTANCIA ACTUAL</div>
-                <div class="font-bold text-cyan-300 text-xs mt-0.5">a ${w.dist_units} ${w.unit_label}</div>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between text-[10px]">
-              <span class="${w.macro_aligned ? 'text-emerald-400 font-bold' : 'text-slate-400'}">
-                ${w.macro_aligned ? '✔ Economía respalda este giro' : `ℹ️ Economía hoy: ${w.economy_short}`}
-              </span>
-              <span class="text-slate-400">Precio hoy: <strong class="text-white">${w.price}</strong></span>
-            </div>
-          </div>
-        `;
-      }).join('');
+    function updateTickerBar() {
+      if (!data?.assets) return;
+      const fpSym = getFocusPick()?.symbol || '';
+      const items = data.assets.map(a => {
+        const st = getAssetBadgeState(a);
+        const chg = typeof a.chg_day === 'number' ? a.chg_day : 0;
+        const focusTag = a.symbol === fpSym ? ' <span class="text-amber-300 font-bold">🎯FOCO#1</span>' : '';
+        const swingTag = a.swing_potential?.active ? ' <span class="text-indigo-300 font-bold">🌊SWING</span>' : '';
+        return `<span>${st.dot} <strong class="text-white">${a.symbol}</strong>${focusTag}${swingTag} <span class="text-amber-400">${a.price}</span> <span class="${chg >= 0 ? 'text-emerald-400' : 'text-red-400'}">${chg >= 0 ? '+' : ''}${chg}%</span></span>`;
+      }).join('<span class="text-slate-600">|</span>');
+      document.getElementById('live-ticker-track').innerHTML = items + items;
     }
 
     function renderPanelAll() {
@@ -1641,64 +601,14 @@
       renderPanelJarvis();
       renderPanelWeekly1S();
       renderPanelUltron();
+      renderPanelVision();
       renderPanelCourse();
-
-      document.getElementById('pv-headline').textContent = data.brief.headline;
-      document.getElementById('pv-summary').textContent = data.brief.summary;
-
-      const basketsList = data.correlated_baskets || [];
-      document.getElementById('pv-baskets').innerHTML = basketsList.length
-        ? basketsList.map(b => `
-            <div class="bg-[#050811] border border-indigo-500/40 rounded-lg p-3 space-y-1">
-              <div class="flex items-center justify-between">
-                <strong class="text-indigo-300">CESTA ${b.currency} (${b.status})</strong>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-200 font-bold">CORRELACIÓN ACTIVA</span>
-              </div>
-              <p class="text-[11px] text-slate-200">${b.pairs.join(' · ')}</p>
-            </div>
-          `).join('')
-        : `<div class="col-span-full text-slate-500 text-xs">Sin cestas dominantes en este momento; concentrarse en el Foco Principal #1.</div>`;
-
-      const banksList = data.banks || [
-        { bank: "FED (EE.UU.)", currency: "USD", stance: "RESTRICTIVA (HAWKISH)", bias: "BULLISH", detail: `DXY en ${data.brief.dxy} · Bonos US10Y en ${data.brief.us10y}%.` }
-      ];
-      document.getElementById('pv-banks').innerHTML = banksList.map(b => `
-        <div class="bg-[#050811] border border-slate-800 rounded-lg p-3 space-y-1">
-          <div class="flex items-center justify-between">
-            <strong class="text-white">${b.bank}</strong>
-            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${b.bias === 'BULLISH' ? 'bg-emerald-500/20 text-emerald-300' : (b.bias === 'BEARISH' ? 'bg-red-500/20 text-red-300' : 'bg-slate-800 text-slate-300')}">${b.stance}</span>
-          </div>
-          <p class="text-[11px] text-slate-400 leading-relaxed">${b.detail}</p>
-        </div>
-      `).join('');
-
-      document.getElementById('pv-calendar').innerHTML = (data.calendar || []).map(ev => `
-        <div class="bg-[#050811] border ${ev.impact === 'ALTO' ? 'border-orange-500/50' : 'border-slate-800'} rounded p-2.5">
-          <div class="flex justify-between text-[10px] ${ev.impact === 'ALTO' ? 'text-orange-300 font-bold' : 'text-sky-400'}"><span>${ev.date} ${ev.time} · ${ev.currency}</span><span>${ev.impact === 'ALTO' ? '⚠️ ALTO IMPACTO' : ev.impact}</span></div>
-          <div class="font-bold text-white mt-0.5">${ev.title}</div>
-        </div>
-      `).join('');
-
-      const newsList = data.news || [
-        { source: "Radar Institucional", title: "Sin titulares RSS recientes; ejecute el flujo de GitHub Actions para refrescar noticias.", link: "#", time: "En espera" }
-      ];
-      document.getElementById('pv-news').innerHTML = newsList.map(n => `
-        <a href="${n.link}" target="_blank" rel="noopener noreferrer" class="block bg-[#050811] hover:border-sky-500/50 border border-slate-800 rounded-lg p-3 transition">
-          <div class="flex justify-between text-[10px] text-emerald-400 mb-1">
-            <span>${n.source}</span>
-            <span class="text-slate-500">${n.time}</span>
-          </div>
-          <div class="font-bold text-slate-200">${n.title}</div>
-        </a>
-      `).join('');
     }
 
     function renderPanelJarvis() {
       if (!data) return;
-
       const focusCard = document.getElementById('pj-focus-card');
       const fp = getFocusPick();
-      const backup = data.focus_pick && data.focus_pick.backup;
       if (focusCard) {
         if (fp) {
           focusCard.classList.remove('hidden');
@@ -1706,64 +616,36 @@
           focusCard.innerHTML = `
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div class="flex flex-wrap items-center gap-2">
-                <span class="px-2 py-0.5 rounded bg-amber-400 text-black font-hud font-black text-[10px]">🎯 FOCO PRINCIPAL #1 HOY</span>
-                <span class="font-hud font-black text-white text-base">${fp.symbol}</span>
+                <span class="px-2 py-0.5 rounded bg-amber-400 text-black font-hud font-black text-[10px]">🎯 FOCO PRINCIPAL #1</span>
+                <span class="font-hud font-black text-white text-lg">${fp.symbol}</span>
+                <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500/25 text-emerald-300 border border-emerald-400 font-hud text-base font-black">${fp.probability}%</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isBuy ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400' : 'bg-red-500/20 text-red-300 border border-red-400'}">${fp.dir_label} (${fp.signal_tag})</span>
-                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/60 text-[10px] font-bold">${fp.probability}% PROBABILIDAD</span>
               </div>
-              <button onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs">ABRIR GRÁFICO #1 →</button>
-            </div>
-            <div class="text-[11px] text-slate-200">
-              <strong class="text-amber-300">Por qué concentrarse aquí:</strong> ${fp.reasons.join(' · ')}.
+              <button onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-amber-400 text-black font-bold text-xs">ABRIR GRÁFICO →</button>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-[#04060c]/90 border border-slate-800 rounded-lg p-2 text-center text-[11px]">
-              <div><div class="text-[9px] text-sky-400">ENTRADA FIJA</div><div class="font-bold text-white">${fp.entry}</div><div class="text-[9px] text-slate-400">a ${fp.dist_units} ${fp.unit_label}</div></div>
-              <div><div class="text-[9px] text-red-400">STOP ESTRUCTURAL</div><div class="font-bold text-red-400">${fp.sl}</div><div class="text-[9px] text-slate-400">Extremo OB/FVG</div></div>
-              <div><div class="text-[9px] text-indigo-300">GATILLO BE (+1R)</div><div class="font-bold text-indigo-300">${fp.be_trigger}</div><div class="text-[9px] text-slate-400">Proteger orden</div></div>
-              <div><div class="text-[9px] text-emerald-400">TP1 PARCIAL</div><div class="font-bold text-emerald-400">${fp.tp1}</div><div class="text-[9px] text-slate-400">Cobrar parcial</div></div>
-              <div><div class="text-[9px] text-emerald-400">${fp.is_swing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${fp.tp2}</div><div class="text-[9px] text-slate-400">${fp.is_swing ? 'Correr remanente' : 'Objetivo 1:3'}</div></div>
-            </div>
-            ${backup ? `<div class="text-[10px] text-slate-400">🛡️ <strong class="text-slate-300">Plan B (divisa independiente):</strong> ${backup.symbol} (${backup.dir_label} · ${backup.probability}% prob · Entrada ${backup.entry} a ${backup.dist_units} ${backup.unit_label})</div>` : ''}
-          `;
+              <div><div class="text-[9px] text-sky-400">ENTRADA</div><div class="font-bold text-white">${fp.entry}</div><div class="text-[9px] text-slate-400">a ${fp.dist_units} ${fp.unit_label}</div></div>
+              <div><div class="text-[9px] text-red-400">STOP</div><div class="font-bold text-red-400">${fp.sl}</div></div>
+              <div><div class="text-[9px] text-indigo-300">GATILLO BE</div><div class="font-bold text-indigo-300">${fp.be_trigger}</div></div>
+              <div><div class="text-[9px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${fp.tp1}</div></div>
+              <div><div class="text-[9px] text-emerald-400">${fp.is_swing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${fp.tp2}</div></div>
+            </div>`;
         } else {
-          focusCard.classList.remove('hidden');
-          focusCard.innerHTML = `<div class="text-xs text-amber-200">🎯 <strong>RADAR DE FOCO PRINCIPAL:</strong> Ningún par cumple simultáneamente con bloque OB/FVG estructural limpio y alineación macro en este momento. Conserve su capital y espere la próxima sesión.</div>`;
+          focusCard.classList.add('hidden');
         }
       }
 
-      const basketsBar = document.getElementById('pj-baskets-bar');
-      if (basketsBar) {
-        const baskets = data.correlated_baskets || [];
-        if (baskets.length) {
-          basketsBar.classList.remove('hidden');
-          basketsBar.innerHTML = `<div class="font-bold text-indigo-300">🔗 CESTAS MACROECONÓMICAS ACTIVAS (Elija solo el Foco #1 para no duplicar riesgo):</div>` +
-            baskets.map(b => `<div class="text-slate-200">• <strong>${b.currency} ${b.status}:</strong> ${b.pairs.join('  |  ')}</div>`).join('');
-        } else {
-          basketsBar.classList.add('hidden');
-        }
-      }
-
-      let list = [...data.assets].sort((a, b) => (b.has_valid_ob ? 100 : 0) + b.confluence.score - ((a.has_valid_ob ? 100 : 0) + a.confluence.score));
+      let list = [...data.assets].sort((a, b) => ((b.has_valid_ob ? 100 : 0) + (b.confluence?.score || 0)) - ((a.has_valid_ob ? 100 : 0) + (a.confluence?.score || 0)));
       if (panelFilter === 'VALID_OB') list = list.filter(a => a.has_valid_ob);
-      if (panelFilter === 'SWING') list = list.filter(a => a.swing_potential && a.swing_potential.active);
-      if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
-      if (panelFilter === 'NEWS') list = list.filter(a => a.news_warning && a.news_warning.active);
-      if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence.alignment === 'OPPOSED');
-      if (panelFilter === 'AUD') list = list.filter(a => a.symbol.includes('AUD'));
-      if (panelFilter === 'XAU') list = list.filter(a => a.symbol === 'XAUUSD');
-
-      if (pairSearchTerm) {
-        list = list.filter(a => {
-          const symMatch = a.symbol.includes(pairSearchTerm);
-          const goldAlias = (pairSearchTerm === 'ORO' || pairSearchTerm === 'GOLD') && a.symbol === 'XAUUSD';
-          const btcAlias = pairSearchTerm === 'BITCOIN' && a.symbol === 'BTCUSD';
-          return symMatch || goldAlias || btcAlias;
-        });
-      }
+      if (panelFilter === 'SWING') list = list.filter(a => a.swing_potential?.active);
+      if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence?.alignment === 'ALIGNED');
+      if (panelFilter === 'NEWS') list = list.filter(a => a.news_warning?.active);
+      if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence?.alignment === 'OPPOSED');
+      if (pairSearchTerm) list = list.filter(a => a.symbol.includes(pairSearchTerm));
 
       const grid = document.getElementById('panel-jarvis-grid');
       if (!list.length) {
-        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No se encontraron pares para este filtro.</div>`;
+        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No hay pares para este filtro.</div>`;
         return;
       }
 
@@ -1771,155 +653,184 @@
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
         const st = getAssetBadgeState(a);
-        const isBroken = a.confluence.alignment === 'OPPOSED';
-        const isAligned = a.confluence.alignment === 'ALIGNED';
-        const hasNews = a.news_warning && a.news_warning.active;
-        const hasSwing = a.swing_potential && a.swing_potential.active;
-        const bePrice = a.setup.be_trigger || a.setup.entry;
-        const isTopFocus = fp && fp.symbol === a.symbol;
+        const isBroken = a.confluence?.alignment === 'OPPOSED';
+        const isAligned = a.confluence?.alignment === 'ALIGNED';
+        const hasNews = a.news_warning?.active;
+        const hasSwing = a.swing_potential?.active;
+        const bePrice = a.setup?.be_trigger || a.setup?.entry;
+        const sc = Number(a.confluence?.score) || 0;
+        const scoreBadgeCls = sc >= 84
+          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400'
+          : (sc >= 70 ? 'bg-amber-500/20 text-amber-300 border-amber-400' : 'bg-slate-800/80 text-slate-300 border-slate-600');
 
-        const mDir = a.macro_dir || (a.confluence.alignment === 'ALIGNED' ? a.chart_bias : 'NEUTRAL');
+        const mDir = a.macro_dir || 'NEUTRAL';
         const econColor = mDir === 'SUBE' ? 'text-emerald-300 border-emerald-500/40 bg-emerald-500/10' : (mDir === 'BAJA' ? 'text-red-300 border-red-500/40 bg-red-500/10' : 'text-slate-300 border-slate-700 bg-slate-800/40');
-        const econLabel = mDir === 'SUBE' ? 'FUERTE (ALCISTA ▲)' : (mDir === 'BAJA' ? 'DÉBIL (BAJISTA ▼)' : 'NEUTRAL (EN RANGO)');
-
         const chartColor = a.chart_bias === 'SUBE' ? 'text-emerald-300 border-emerald-500/40 bg-emerald-500/10' : 'text-red-300 border-red-500/40 bg-red-500/10';
-        const chartLabel = a.chart_bias === 'SUBE' ? 'ALCISTA (SUBE ▲)' : 'BAJISTA (BAJA ▼)';
+        const tf = a.tf_bias || {};
 
         return `
-          <div class="hud-panel rounded-xl p-4 space-y-3 border ${isTopFocus ? 'border-amber-400' : (hasSwing ? 'border-indigo-400/70' : (hasNews ? 'border-orange-400/70' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800'))))}">
+          <div class="hud-panel rounded-xl p-4 space-y-3 border ${hasSwing ? 'border-indigo-400/70' : (isAligned ? 'border-emerald-500/40' : (isBroken ? 'border-red-500/50' : 'border-slate-800'))}">
             <div class="flex items-center justify-between gap-2">
-              <div class="flex flex-wrap items-center gap-1.5">
-                <span class="font-hud font-bold text-white text-sm">${st.dot} ${a.symbol}</span>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-hud font-black text-white text-lg tracking-wide">${st.dot} ${a.symbol}</span>
+                <span class="px-2.5 py-1 rounded-lg border font-hud font-black text-lg leading-none ${scoreBadgeCls}">${sc}%</span>
                 <span class="text-xs text-cyan-300 font-bold">${a.price}</span>
-                ${isTopFocus ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-400 text-black font-black">🎯 FOCO #1</span>` : ''}
-                ${hasSwing ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400 font-bold">🌊 POTENCIAL SWING</span>` : ''}
-                ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
-                ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA ${a.news_warning.currencies}</span>` : ''}
-                ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">SE CONTRADICEN</span>' : ''}
               </div>
               <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400 shrink-0">Gráfico →</button>
             </div>
 
+            <div class="flex flex-wrap items-center gap-1.5">
+              ${hasSwing ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400 font-bold">🌊 POTENCIAL SWING</span>` : ''}
+              <span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>
+              ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA ${a.news_warning.currencies}</span>` : ''}
+              ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">SE CONTRADICEN</span>' : ''}
+            </div>
+
             <div class="grid grid-cols-2 gap-2 text-[10px]">
               <div class="rounded-lg border p-2 ${econColor}">
-                <div class="text-[8px] tracking-widest opacity-80">🌐 ECONOMÍA</div>
-                <div class="font-bold text-[11px] mt-0.5">${econLabel}</div>
-                <div class="text-[9px] opacity-80 truncate mt-0.5">${a.economy_short || 'Flujo macro'}</div>
+                <div class="text-[8px] opacity-80">🌐 ECONOMÍA</div>
+                <div class="font-bold text-[11px] mt-0.5">${mDir === 'SUBE' ? 'FUERTE ▲' : (mDir === 'BAJA' ? 'DÉBIL ▼' : 'NEUTRAL ●')}</div>
+                <div class="text-[9px] opacity-80 truncate">${a.economy_short || 'Flujo macro'}</div>
               </div>
               <div class="rounded-lg border p-2 ${chartColor}">
-                <div class="text-[8px] tracking-widest opacity-80">🎯 SU GRÁFICO</div>
-                <div class="font-bold text-[11px] mt-0.5">${chartLabel}</div>
-                <div class="text-[9px] opacity-80 truncate mt-0.5">1D:${a.tf_bias.daily} · 4H:${a.tf_bias.h4} · 1H:${a.tf_bias.h1}</div>
+                <div class="text-[8px] opacity-80">🎯 SU GRÁFICO</div>
+                <div class="font-bold text-[11px] mt-0.5">${a.chart_bias === 'SUBE' ? 'ALCISTA ▲' : 'BAJISTA ▼'}</div>
+                <div class="text-[9px] opacity-80 truncate">1D:${tf.daily || '-'} · 4H:${tf.h4 || '-'} · 1H:${tf.h1 || '-'}</div>
               </div>
             </div>
 
-            ${hasSwing ? `
-              <div class="bg-indigo-500/15 border border-indigo-400/50 rounded-lg px-2.5 py-2 text-[10px] text-indigo-200 leading-relaxed">
-                <strong>${a.swing_potential.label}:</strong> ${a.swing_potential.plan}
+            <div class="flex items-center justify-between gap-2 bg-[#050811] border border-slate-800 rounded-lg p-2.5">
+              <div class="text-xs min-w-0">
+                <div class="font-bold text-white truncate">${a.confluence?.verdict_title || ''}</div>
+                <div class="text-[10px] text-slate-400 truncate">${a.confluence?.verdict_sub || ''}</div>
               </div>
-            ` : ''}
-
-            ${hasNews ? `
-              <div class="bg-orange-500/15 border border-orange-400/50 rounded-lg px-2.5 py-1.5 text-[10px] text-orange-200">
-                <strong>${a.news_warning.label}:</strong> ${a.news_warning.events.join(' · ')}
-              </div>
-            ` : ''}
-
-            <div class="flex items-center justify-between bg-[#050811] border border-slate-800 rounded-lg p-2.5">
-              <div class="flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-full border-2 ${isAligned ? 'border-emerald-400 text-emerald-400' : (isBroken ? 'border-red-400 text-red-400' : 'border-slate-500 text-slate-400')} flex items-center justify-center font-bold text-xs">${a.confluence.score}</div>
-                <div class="text-xs"><div class="font-bold text-white">${a.confluence.verdict_title}</div><div class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</div></div>
-              </div>
-              <button onclick="toggleWhy('${a.symbol}')" class="px-2 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">¿Por qué? ▾</button>
+              <button id="why-btn-${a.symbol}" type="button" onclick="toggleWhy('${a.symbol}')" class="px-2.5 py-1.5 rounded-lg bg-cyan-500/15 border border-cyan-400/50 text-cyan-300 text-[11px] font-bold shrink-0">${openWhyPanels[a.symbol] ? '💡 ¿Por qué? ▴' : '💡 ¿Por qué? ▾'}</button>
             </div>
+
             <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
-              <div><strong class="text-sky-400">VISIÓN (Macro):</strong> ${a.macro_reason}</div>
-              <div><strong class="text-red-400">ULTRÓN (Liquidez & Estructura):</strong> BSL en ${(a.liquidity && a.liquidity.bsl) || '--'} · SSL en ${(a.liquidity && a.liquidity.ssl) || '--'}. ATR diario: ${(a.volatility && a.volatility.atr_units) || '--'} ${p.unitLabel}.</div>
-              <div><strong class="text-amber-400">E.D.I.T.H. (Plan):</strong> ${a.has_valid_ob ? `Entrada fija ${a.setup.entry} (a ${d.units} ${d.label}), SL estructural ${a.setup.sl}, BE en ${bePrice}, TP1 ${a.setup.tp1}.` : 'Sin bloque OB ni FVG limpio; esperar nueva formación.'}</div>
+              <div><strong class="text-sky-400">💡 Por qué:</strong> ${a.macro_reason || ''}</div>
+              <div><strong class="text-red-400">Liquidez:</strong> BSL ${a.liquidity?.bsl || '--'} · SSL ${a.liquidity?.ssl || '--'}</div>
+              ${hasSwing ? `<div class="text-indigo-300"><strong>🌊 Plan Swing:</strong> ${a.swing_potential.plan}</div>` : ''}
             </div>
+
             ${a.has_valid_ob ? `
               <div class="grid grid-cols-5 gap-1 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[10px]">
-                <div><div class="text-[8px] text-sky-400 truncate">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[8px] text-slate-400">a ${d.units} ${d.label}</div></div>
-                <div><div class="text-[8px] text-red-400">STOP OB/FVG</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[8px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
-                <div><div class="text-[8px] text-indigo-300">GATILLO BE</div><div class="font-bold text-indigo-300">${bePrice}</div><div class="text-[8px] text-slate-400">+1R Proteger</div></div>
-                <div><div class="text-[8px] text-emerald-400">TP1 PARCIAL</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[8px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
-                <div><div class="text-[8px] text-emerald-400">${hasSwing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${hasSwing ? a.swing_potential.target : a.setup.tp2}</div><div class="text-[8px] text-emerald-300">${hasSwing ? 'Extendido' : `+${p.tp2} ${p.unitLabel}`}</div></div>
+                <div><div class="text-[8px] text-sky-400">ENTRADA</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[8px] text-slate-400">a ${d.units} ${d.label}</div></div>
+                <div><div class="text-[8px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[8px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
+                <div><div class="text-[8px] text-indigo-300">BE (+1R)</div><div class="font-bold text-indigo-300">${bePrice}</div></div>
+                <div><div class="text-[8px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[8px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
+                <div><div class="text-[8px] text-emerald-400">${hasSwing ? 'SWING TP' : 'TP2'}</div><div class="font-bold text-emerald-400">${hasSwing ? a.swing_potential.target : a.setup.tp2}</div></div>
               </div>
-            ` : `
-              <div class="bg-[#050811] border border-slate-800/80 rounded-lg p-2.5 text-center text-[10px] text-slate-400">
-                ⚪ Sin Order Block ni FVG estructural vigente en 1H — No abrir operaciones en este par.
-              </div>
-            `}
+            ` : `<div class="bg-[#050811] border border-slate-800/80 rounded-lg p-2 text-center text-[10px] text-slate-400">⚪ Sin Order Block ni FVG vigente en 1H.</div>`}
           </div>`;
       }).join('');
     }
 
+    function renderPanelVision() {
+      if (!data) return;
+      document.getElementById('pv-headline').textContent = data.brief?.headline || '--';
+      document.getElementById('pv-summary').textContent = data.brief?.wall_street?.story || data.brief?.summary || '--';
+      document.getElementById('pv-ws-tone').textContent = data.brief?.wall_street?.tone || 'SESIÓN ACTIVA';
+      document.getElementById('pv-dxy-big').textContent = data.brief?.dxy || '--';
+      document.getElementById('pv-us10y-big').textContent = `${data.brief?.us10y || '--'}%`;
+
+      const wsIdx = data.brief?.wall_street?.indices || [];
+      document.getElementById('pv-ws-indices').innerHTML = wsIdx.map(ix => `
+        <div class="bg-[#050811] border border-slate-800 rounded-lg p-2.5">
+          <div class="text-[10px] text-slate-400">${ix.label}</div>
+          <div class="font-bold text-white text-sm">${ix.price || '--'}</div>
+          <div class="text-[11px] font-bold ${ix.chg_pct >= 0 ? 'text-emerald-400' : 'text-red-400'}">${ix.chg_pct >= 0 ? '▲ +' : '▼ '}${ix.chg_pct}%</div>
+        </div>
+      `).join('');
+
+      const ccyMap = data.currency_matrix || {};
+      document.getElementById('pv-ccy-matrix').innerHTML = Object.entries(ccyMap).map(([ccy, st]) => {
+        const cls = st === 'FUERTE' ? 'border-emerald-500/50 text-emerald-300 bg-emerald-500/10' : (st === 'DEBIL' || st === 'DÉBIL' ? 'border-red-500/50 text-red-300 bg-red-500/10' : 'border-slate-800 text-slate-300 bg-[#050811]');
+        return `<div class="rounded-lg border p-2.5 text-center ${cls}"><div class="font-hud font-bold text-sm text-white">${ccy}</div><div class="text-[10px] font-bold mt-0.5">${st}</div></div>`;
+      }).join('');
+
+      const baskets = data.correlated_baskets || [];
+      document.getElementById('pv-baskets').innerHTML = baskets.length
+        ? baskets.map(b => `<div class="bg-[#050811] border border-indigo-500/40 rounded-lg p-3"><strong class="text-indigo-300">CESTA ${b.currency} (${b.status})</strong><p class="text-[11px] text-slate-200 mt-1">${b.pairs.join(' · ')}</p></div>`).join('')
+        : `<div class="col-span-full text-slate-500 text-xs">Sin cestas dominantes ahora; concentrarse en el Foco #1.</div>`;
+
+      document.getElementById('pv-banks').innerHTML = (data.banks || []).map(b => `
+        <div class="bg-[#050811] border border-slate-800 rounded-lg p-3 space-y-1">
+          <div class="flex justify-between font-bold text-white"><span>${b.bank}</span><span class="text-amber-300">${b.stance}</span></div>
+          <p class="text-[11px] text-slate-400">${b.detail}</p>
+        </div>
+      `).join('');
+
+      document.getElementById('pv-calendar').innerHTML = (data.calendar || []).map(ev => `
+        <div class="bg-[#050811] border ${ev.impact === 'ALTO' ? 'border-orange-500/50' : 'border-slate-800'} rounded p-2.5">
+          <div class="flex justify-between text-[10px] text-orange-300 font-bold"><span>${ev.time || ''} · ${ev.currency || ''}</span><span>${ev.impact || ''}</span></div>
+          <div class="font-bold text-white mt-0.5">${ev.title || ''}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('pv-news').innerHTML = (data.news || []).map(n => {
+        const fb = explainNewsFallback(n.title, n.source);
+        const cat = n.category || fb.cat;
+        const exp = n.plain_es || fb.exp;
+        const imps = Array.isArray(n.impacts) && n.impacts.length ? n.impacts : fb.imp;
+        return `
+          <div class="bg-[#050811] border border-slate-800 rounded-xl p-3 space-y-2">
+            <div class="flex justify-between text-[10px]">
+              <span class="px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-bold">${cat}</span>
+              <span class="text-slate-400">${n.source || 'Mercado'} · ${n.time || 'Hoy'}</span>
+            </div>
+            <a href="${n.link || '#'}" target="_blank" rel="noopener" class="block font-bold text-white hover:text-amber-300">${n.title || ''}</a>
+            <div class="bg-[#03050a] border border-slate-800/80 rounded p-2 text-[11px] text-slate-300">${exp}</div>
+            <div class="flex gap-1 flex-wrap">${imps.map(s => `<span class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300 text-[10px] font-bold">${s}</span>`).join('')}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderPanelWeekly1S() {
+      const grid = document.getElementById('panel-weekly1s-grid');
+      const list = (data?.weekly_pivots || []).filter(w => w.dist_units <= 60);
+      document.getElementById('weekly1s-count-badge').textContent = `${list.length} ACTIVOS`;
+      if (!list.length) {
+        grid.innerHTML = `<div class="col-span-full bg-[#050811] border border-slate-800 rounded-xl p-6 text-center text-xs text-slate-400">Sin giros semanales limpios pre-2017 a <= 60 pips en este momento.</div>`;
+        return;
+      }
+      grid.innerHTML = list.map(w => `
+        <div class="bg-[#050811] border border-cyan-500/40 rounded-xl p-3 space-y-1.5">
+          <div class="flex justify-between font-bold"><span class="text-white text-sm">${w.symbol} (${w.direction === 'BUY' ? 'COMPRA 1S' : 'VENTA 1S'})</span><span class="text-cyan-300">a ${w.dist_units} ${w.unit_label}</span></div>
+          <div class="text-slate-300">Fecha: <strong>${w.date}</strong> · Entrada 1S: <strong>${w.entry}</strong> · Mecha: <strong>${w.extreme}</strong></div>
+        </div>
+      `).join('');
+    }
+
     function renderPanelUltron() {
       if (!data) return;
-      const fp = getFocusPick();
-      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => {
-        const st = getAssetBadgeState(a);
-        const d = getAssetUnitsDist(a);
-        const isTopFocus = fp && fp.symbol === a.symbol;
-        const hasSwing = a.swing_potential && a.swing_potential.active;
-        return `
-          <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();refreshLivePrices();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : (isTopFocus ? 'bg-amber-500/10 border-amber-400 text-white' : (hasSwing ? 'bg-[#050811] border-indigo-500/50 text-slate-200' : 'bg-[#050811] border-slate-800 text-slate-300'))}">
-            <div class="flex items-center justify-between text-[11px] font-bold">
-              <span>${a.symbol}</span>
-              <span>${isTopFocus ? '🎯' : (hasSwing ? '🌊' : st.dot)}</span>
-            </div>
-            <div class="text-[9px] text-slate-400 mt-0.5">${a.has_valid_ob ? `a ${d.units} ${d.label}` : 'Sin OB/FVG'}</div>
-          </button>`;
-      }).join('');
+      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => `
+        <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();refreshLivePrices();" class="p-2 rounded border text-left text-[11px] font-bold ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : 'bg-[#050811] border-slate-800 text-slate-300'}">${a.symbol}</button>
+      `).join('');
 
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
       const d = getAssetUnitsDist(a);
       const p = getSetupPips(a);
-      const st = getAssetBadgeState(a);
-      const hasSwing = a.swing_potential && a.swing_potential.active;
-      const bePrice = a.setup.be_trigger || a.setup.entry;
-      const vol = a.volatility || {};
       const tf = a.tf_bias || {};
+      const vol = a.volatility || {};
+      const hasSwing = a.swing_potential?.active;
 
-      const newsBanner = document.getElementById('pu-news-banner');
-      if (newsBanner) {
-        if (a.news_warning && a.news_warning.active) {
-          newsBanner.classList.remove('hidden');
-          newsBanner.innerHTML = `<strong>${a.news_warning.label}:</strong> ${a.news_warning.events.join(' · ')}`;
-        } else {
-          newsBanner.classList.add('hidden');
-        }
-      }
-      const swingBanner = document.getElementById('pu-swing-banner');
-      if (swingBanner) {
-        if (hasSwing) {
-          swingBanner.classList.remove('hidden');
-          swingBanner.innerHTML = `<strong>${a.swing_potential.label}:</strong> ${a.swing_potential.plan}`;
-        } else {
-          swingBanner.classList.add('hidden');
-        }
-      }
-
-      const fmtBias = b => b === 'SUBE' ? '<span class="text-emerald-400">ALCISTA ▲</span>' : (b === 'BAJA' ? '<span class="text-red-400">BAJISTA ▼</span>' : '<span class="text-slate-400">NEUTRAL</span>');
-      document.getElementById('pu-tf-w').innerHTML = fmtBias(tf.weekly || tf.daily);
-      document.getElementById('pu-tf-d').innerHTML = fmtBias(tf.daily);
-      document.getElementById('pu-tf-4h').innerHTML = fmtBias(tf.h4);
-      document.getElementById('pu-atr').textContent = vol.atr_units ? `${vol.atr_units} ${p.unitLabel} (${vol.atr})` : '--';
+      document.getElementById('pu-sym').textContent = a.symbol;
+      document.getElementById('pu-price').textContent = a.price;
+      document.getElementById('pu-status').textContent = a.has_valid_ob ? `${a.setup.signal_tag} · a ${d.units} ${d.label}` : 'SIN OB/FVG';
+      document.getElementById('pu-tf-w').textContent = tf.weekly || '--';
+      document.getElementById('pu-tf-d').textContent = tf.daily || '--';
+      document.getElementById('pu-tf-4h').textContent = tf.h4 || '--';
+      document.getElementById('pu-atr').textContent = vol.atr_units ? `${vol.atr_units} ${p.unitLabel}` : '--';
       document.getElementById('pu-r20').textContent = vol.range20_units ? `${vol.range20_units} ${p.unitLabel}` : '--';
-
-      document.getElementById('pu-sym').textContent = `${st.dot} ${a.symbol}`;
-      document.getElementById('pu-price').textContent = `${a.price}`;
-      document.getElementById('pu-status').textContent = a.has_valid_ob ? `${a.setup.signal_tag} · a ${d.units} ${d.label}` : 'SIN OB NI FVG LIMPIO';
       document.getElementById('pu-entry').textContent = a.has_valid_ob ? a.setup.entry : '--';
-      document.getElementById('pu-dist').textContent = a.has_valid_ob ? `A ${d.units} ${d.label}` : 'Esperar bloque';
+      document.getElementById('pu-dist').textContent = a.has_valid_ob ? `A ${d.units} ${d.label}` : '--';
       document.getElementById('pu-sl').textContent = a.has_valid_ob ? a.setup.sl : '--';
       document.getElementById('pu-sl-pips').textContent = a.has_valid_ob ? `-${p.sl} ${p.unitLabel}` : '--';
-      document.getElementById('pu-be').textContent = a.has_valid_ob ? bePrice : '--';
+      document.getElementById('pu-be').textContent = a.has_valid_ob ? (a.setup.be_trigger || a.setup.entry) : '--';
       document.getElementById('pu-tp1').textContent = a.has_valid_ob ? a.setup.tp1 : '--';
       document.getElementById('pu-tp1-pips').textContent = a.has_valid_ob ? `+${p.tp1} ${p.unitLabel}` : '--';
-      document.getElementById('pu-tp2-lbl').textContent = hasSwing ? 'SWING TP' : 'TP2 (1:3)';
       document.getElementById('pu-tp2').textContent = a.has_valid_ob ? (hasSwing ? a.swing_potential.target : a.setup.tp2) : '--';
-      document.getElementById('pu-tp2-pips').textContent = a.has_valid_ob ? (hasSwing ? 'Objetivo Multi-día' : `+${p.tp2} ${p.unitLabel}`) : '--';
       drawUltronChart();
     }
 
@@ -1942,47 +853,39 @@
       canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
       const ctx = canvas.getContext('2d');
       ctx.scale(dpr, dpr);
-      const W = rect.width, H = rect.height, padL = 10, padR = 76, padT = 22, padB = 22;
+      const W = rect.width, H = rect.height, padL = 10, padR = 82, padT = 22, padB = 22;
       const plotW = W - padL - padR, plotH = H - padT - padB;
       ctx.fillStyle = '#030509'; ctx.fillRect(0, 0, W, H);
-      const candles = (a.candles && a.candles[selectedTF]) ? a.candles[selectedTF].slice(-40) : [];
+
+      const candles = a.candles?.[selectedTF]?.slice(-40) || [];
       if (!candles.length) return;
 
       const liq = a.liquidity || {};
-      const bslVal = liq.bsl || Math.max(...candles.slice(-20).map(c => c.h));
-      const sslVal = liq.ssl || Math.min(...candles.slice(-20).map(c => c.l));
-
-      const hasSwing = a.swing_potential && a.swing_potential.active;
+      const bslVal = liq.bsl || Math.max(...candles.map(c => c.h));
+      const sslVal = liq.ssl || Math.min(...candles.map(c => c.l));
+      const hasSwing = a.swing_potential?.active;
       const targetTop = hasSwing ? a.swing_potential.target : a.setup.tp2;
       const highs = a.has_valid_ob ? [...candles.map(c => c.h), a.setup.sl, targetTop, a.price, bslVal] : [...candles.map(c => c.h), a.price, bslVal];
       const lows = a.has_valid_ob ? [...candles.map(c => c.l), a.setup.sl, targetTop, a.price, sslVal] : [...candles.map(c => c.l), a.price, sslVal];
       const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
       const yOf = p => padT + ((maxP - p) / span) * plotH;
 
-      const yBsl = yOf(bslVal);
-      ctx.setLineDash([2, 3]); ctx.strokeStyle = '#fb7185'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(padL, yBsl); ctx.lineTo(W - padR, yBsl); ctx.stroke();
-      ctx.setLineDash([]); ctx.fillStyle = '#fda4af'; ctx.font = 'bold 9px JetBrains Mono';
-      ctx.fillText(`▲ BSL ${bslVal.toFixed(a.decimals)}`, padL + 4, Math.max(12, yBsl - 4));
+      // BSL & SSL
+      const yBsl = yOf(bslVal), ySsl = yOf(sslVal);
+      ctx.setLineDash([2, 3]); ctx.strokeStyle = '#fb7185'; ctx.beginPath(); ctx.moveTo(padL, yBsl); ctx.lineTo(W - padR, yBsl); ctx.stroke();
+      ctx.fillStyle = '#fda4af'; ctx.font = 'bold 9px JetBrains Mono'; ctx.fillText(`▲ BSL ${bslVal}`, padL + 4, Math.max(12, yBsl - 4));
+      ctx.strokeStyle = '#2dd4bf'; ctx.beginPath(); ctx.moveTo(padL, ySsl); ctx.lineTo(W - padR, ySsl); ctx.stroke();
+      ctx.fillStyle = '#5eead4'; ctx.fillText(`▼ SSL ${sslVal}`, padL + 4, Math.min(H - 6, ySsl + 11));
+      ctx.setLineDash([]);
 
-      const ySsl = yOf(sslVal);
-      ctx.setLineDash([2, 3]); ctx.strokeStyle = '#2dd4bf'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(padL, ySsl); ctx.lineTo(W - padR, ySsl); ctx.stroke();
-      ctx.setLineDash([]); ctx.fillStyle = '#5eead4'; ctx.font = 'bold 9px JetBrains Mono';
-      ctx.fillText(`▼ SSL ${sslVal.toFixed(a.decimals)}`, padL + 4, Math.min(H - 6, ySsl + 11));
-
-      const yEq = yOf((a.intraday_high + a.intraday_low) / 2);
-      ctx.setLineDash([4, 4]); ctx.strokeStyle = '#475569';
-      ctx.beginPath(); ctx.moveTo(padL, yEq); ctx.lineTo(W - padR, yEq); ctx.stroke();
-      ctx.setLineDash([]); ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono';
-      ctx.fillText('EQ 50%', W - padR - 42, yEq - 4);
-
+      // Caja OB/FVG
       if (a.has_valid_ob) {
         const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
-        ctx.fillStyle = a.zone_kind === 'FVG' ? 'rgba(56,189,248,0.22)' : (a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.22)' : 'rgba(239,68,68,0.22)');
+        ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.22)' : 'rgba(239,68,68,0.22)';
         ctx.fillRect(padL + plotW * 0.4, yObT, plotW * 0.6, Math.max(5, yObB - yObT));
       }
 
+      // Velas
       const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
       candles.forEach((c, i) => {
         const x = padL + i * step + step / 2, bull = c.c >= c.o;
@@ -1991,19 +894,6 @@
         ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
       });
 
-      const structLabel = (liq.choch && liq.choch !== 'NONE')
-        ? `⚡ ${liq.choch.replace('_', ' ')}`
-        : ((liq.bos && liq.bos !== 'NONE') ? `⚡ ${liq.bos.replace('_', ' ')}` : '');
-      if (structLabel) {
-        const lastX = padL + (candles.length - 2) * step;
-        const lastY = yOf(candles[candles.length - 1].c);
-        ctx.fillStyle = 'rgba(168,85,247,0.22)';
-        ctx.fillRect(Math.max(padL, lastX - 65), Math.max(16, lastY - 22), 115, 16);
-        ctx.fillStyle = '#e9d5ff';
-        ctx.font = 'bold 9px JetBrains Mono';
-        ctx.fillText(structLabel, Math.max(padL + 3, lastX - 61), Math.max(27, lastY - 11));
-      }
-
       if (a.has_valid_ob) {
         const drawLvl = (val, lbl, col) => {
           const y = yOf(val);
@@ -2011,77 +901,137 @@
           ctx.beginPath(); ctx.moveTo(padL + plotW * 0.35, y); ctx.lineTo(W - padR, y); ctx.stroke();
           ctx.setLineDash([]); ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
           ctx.fillStyle = '#fff'; ctx.font = 'bold 9px JetBrains Mono';
-          ctx.fillText(val.toFixed(a.decimals), W - padR + 5, y + 3);
+          ctx.fillText(Number(val).toFixed(a.decimals), W - padR + 5, y + 3);
           ctx.fillText(lbl, padL + plotW * 0.36, y - 4);
         };
-        drawLvl(a.setup.entry, a.setup.signal_tag, '#0284c7');
-        if (a.setup.be_trigger) drawLvl(a.setup.be_trigger, 'GATILLO BE (+1R)', '#6366f1');
-        drawLvl(a.setup.sl, 'STOP ESTRUCTURAL', '#dc2626');
-        drawLvl(a.setup.tp1, 'TP1 PARCIAL', '#059669');
-        drawLvl(targetTop, hasSwing ? 'SWING TP' : 'TP2', '#10b981');
+        drawLvl(a.setup.entry, 'ENTRADA', '#0284c7');
+        drawLvl(a.setup.sl, 'STOP', '#dc2626');
+        drawLvl(a.setup.tp1, 'TP1', '#059669');
       }
 
+      // LÍNEA CONTINUA DORADA ● ACTUAL (PRECIO EN VIVO)
       const yLive = yOf(a.price);
-      ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+      ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.6;
       ctx.beginPath(); ctx.moveTo(padL, yLive); ctx.lineTo(W - padR, yLive); ctx.stroke();
-      ctx.fillStyle = '#f59e0b'; ctx.fillRect(W - padR + 2, yLive - 8, padR - 4, 16);
+      ctx.fillStyle = '#f59e0b'; ctx.fillRect(W - padR + 2, yLive - 9, padR - 4, 18);
       ctx.fillStyle = '#000'; ctx.font = 'bold 9px JetBrains Mono';
-      ctx.fillText(a.price.toFixed(a.decimals), W - padR + 5, yLive + 3);
+      ctx.fillText(`● ${Number(a.price).toFixed(a.decimals)}`, W - padR + 4, yLive + 3);
+    }
+
+    function renderPanelCourse() {
+      const pct = Math.round((completedLessons.length / COURSE_LESSONS.length) * 100);
+      document.getElementById('panel-course-pct').textContent = `${pct}% COMPLETADO`;
+      document.getElementById('panel-lessons-list').innerHTML = COURSE_LESSONS.map(l => {
+        const done = completedLessons.includes(l.id);
+        return `<div onclick="toggleLesson(${l.id})" class="cursor-pointer bg-[#050811] border ${done ? 'border-purple-400' : 'border-slate-800'} rounded-lg p-3 space-y-1"><div class="flex justify-between font-bold"><span class="text-purple-300">${l.title}</span><span>${done ? '✅' : '⬜'}</span></div><p class="text-[11px] text-slate-300">${l.body}</p></div>`;
+      }).join('');
+    }
+
+    function toggleLesson(id) {
+      completedLessons = completedLessons.includes(id) ? completedLessons.filter(x => x !== id) : [...completedLessons, id];
+      localStorage.setItem('oraculo_course', JSON.stringify(completedLessons));
+      renderPanelCourse();
     }
 
     function renderTrades() {
-      const h = getHomerMetrics();
-      const badge = document.getElementById('homer-stats-badge');
-      const list = document.getElementById('journal-list');
-      if (badge) badge.textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
-      if (!list) return;
-      if (!trades.length) {
-        list.innerHTML = `<div class="text-slate-500 text-center py-3">Sin operaciones registradas aún.</div>`;
-        return;
-      }
-      list.innerHTML = trades.map((t, i) => `
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between gap-2">
-          <div>
-            <strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')}">${t.res}</span></strong>
-            <span class="text-slate-400"> - ${t.note}</span>
-            ${t.date ? `<span class="text-[10px] text-slate-500 ml-1">(${t.date})</span>` : ''}
-          </div>
-          <button onclick="deleteTrade(${i})" class="text-red-400 px-2 py-1 font-bold">✕</button>
+      const wins = trades.filter(t => t.res === 'WIN').length;
+      const losses = trades.filter(t => t.res === 'LOSS').length;
+      const rate = trades.length ? Math.round((wins / trades.length) * 100) : 0;
+      const netR = wins * 2 - losses;
+      document.getElementById('homer-stats-badge').textContent = `ACIERTO: ${rate}% (${netR >= 0 ? '+' : ''}${netR}R)`;
+      document.getElementById('journal-list').innerHTML = trades.map((t, i) => `
+        <div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex justify-between items-center">
+          <div><strong class="text-white">${t.pair} · ${t.dir} · <span class="${t.res === 'WIN' ? 'text-emerald-400' : 'text-red-400'}">${t.res}</span></strong> <span class="text-slate-400">- ${t.note}</span></div>
+          <button onclick="trades.splice(${i},1);localStorage.setItem('oraculo_trades_v6',JSON.stringify(trades));renderTrades();" class="text-red-400 font-bold px-2">✕</button>
         </div>
       `).join('');
     }
 
-    function deleteTrade(idx) {
-      trades.splice(idx, 1);
-      saveCloudJournal();
+    function configureCloudToken() {
+      const t = prompt('Pega tu Token de GitHub (ghp_...) para sincronizar PC y celular:', ghToken);
+      if (t !== null) {
+        ghToken = t.trim();
+        localStorage.setItem('oraculo_gh_token', ghToken);
+        document.getElementById('sync-status-badge').textContent = ghToken ? 'NUBE ACTIVA' : 'LOCAL';
+      }
+    }
+
+    async function loadCloudJournal() {
+      try {
+        const r = await fetch(`./${GH_JOURNAL_PATH}?t=${Date.now()}`);
+        if (r.ok) {
+          const arr = await r.json();
+          if (Array.isArray(arr) && arr.length) { trades = arr; renderTrades(); }
+        }
+      } catch (e) {}
     }
 
     document.getElementById('journal-form').addEventListener('submit', e => {
       e.preventDefault();
-      const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
       trades.unshift({
         pair: document.getElementById('j-pair').value,
         dir: document.getElementById('j-dir').value,
         res: document.getElementById('j-res').value,
-        note: document.getElementById('j-note').value,
-        date: nowStr
+        note: document.getElementById('j-note').value
       });
+      localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
       e.target.reset();
-      saveCloudJournal();
+      renderTrades();
     });
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    const YF_MAP = { XAUUSD: 'GC=F', EURUSD: 'EURUSD=X', USDJPY: 'JPY=X', GBPUSD: 'GBPUSD=X', GBPJPY: 'GBPJPY=X', GBPAUD: 'GBPAUD=X', GBPNZD: 'GBPNZD=X', GBPCAD: 'GBPCAD=X', AUDUSD: 'AUDUSD=X', AUDJPY: 'AUDJPY=X', AUDCAD: 'AUDCAD=X', AUDNZD: 'AUDNZD=X', EURAUD: 'EURAUD=X', AUDCHF: 'AUDCHF=X', NZDUSD: 'NZDUSD=X', USDCAD: 'CAD=X', USDCHF: 'CHF=X', EURJPY: 'EURJPY=X', US30: '^DJI', USTEC: '^IXIC', US500: '^GSPC' };
+    async function fetchLiveSymbol(sym) {
+      if (sym === 'BTCUSD') {
+        const r = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+        if (r.ok) { const j = await r.json(); return parseFloat(j.price); }
+        return null;
+      }
+      const yf = YF_MAP[sym]; if (!yf) return null;
+      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yf)}?interval=1m&range=1d&_=${Date.now()}`;
+      try {
+        const r = await fetch(`https://corsproxy.io/?${encodeURIComponent(target)}`);
+        if (r.ok) { const j = await r.json(); return j?.chart?.result?.[0]?.meta?.regularMarketPrice || null; }
+      } catch (e) {}
+      return null;
     }
 
-    selectAgent('jarvis', false);
+    async function refreshLivePrices() {
+      if (!data?.assets?.length) return;
+      const fpSym = getFocusPick()?.symbol;
+      const syms = [...new Set([selectedSymbol, fpSym, 'XAUUSD', 'EURUSD', 'GBPAUD'].filter(Boolean))];
+      await Promise.all(syms.map(async sym => {
+        const a = data.assets.find(x => x.symbol === sym);
+        if (!a) return;
+        const lp = await fetchLiveSymbol(sym);
+        if (lp && lp > 0) a.price = Number(lp.toFixed(a.decimals));
+      }));
+      updateTickerBar();
+      if (isPanelMode) { renderPanelJarvis(); drawUltronChart(); }
+    }
+
+    async function loadData() {
+      try {
+        let res = await fetch(`./data.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) res = await fetch(`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/data.json?t=${Date.now()}`);
+        data = await res.json();
+        document.getElementById('last-updated').textContent = data.last_updated || 'En línea';
+        const jPair = document.getElementById('j-pair');
+        if (jPair && data.assets) jPair.innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
+        updateTickerBar();
+        updateCabinGreeting();
+        if (isPanelMode) renderPanelAll();
+      } catch (e) {
+        document.getElementById('last-updated').textContent = 'Error cargando data.json';
+      }
+    }
+
+    selectAgent('jarvis');
     renderTrades();
-    updateCloudBadge(ghToken ? 'NUBE ACTIVA' : 'LOCAL', !!ghToken);
-    loadCloudJournal(false);
+    loadCloudJournal();
     loadData();
     setInterval(refreshLivePrices, 5000);
-    setInterval(() => loadCloudJournal(false), 15000);
     setInterval(loadData, 120000);
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
   </script>
 </body>
 </html>
