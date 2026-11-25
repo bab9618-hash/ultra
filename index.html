@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Red Neuronal v11.1</title>
+  <title>LATICCE · Red Neuronal v11.2</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -73,14 +73,13 @@
 </head>
 <body class="min-h-screen flex flex-col pb-32 antialiased selection:bg-amber-400 selection:text-black">
 
-  <!-- FONDO DE RED NEURONAL DINÁMICA EN TODOS LOS MÓDULOS -->
   <canvas id="neural-bg"></canvas>
 
-  <!-- PANTALLA DE ARRANQUE CON RED NEURONAL ACTIVA -->
+  <!-- PANTALLA DE ARRANQUE -->
   <div id="boot-screen" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2.5rem 1.25rem;text-align:center;">
     <canvas id="boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
-    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.1</div>
+    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.2</div>
 
     <div class="relative z-10 w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 320 320" class="w-full h-full overflow-visible">
@@ -132,7 +131,7 @@
     </div>
     <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
-        <button onclick="showBoot()" title="Pantalla Red Neuronal" class="w-8 h-8 rounded border border-red-500/50 bg-red-500/10 flex items-center justify-center font-hud font-black text-amber-400 text-xs">L</button>
+        <button type="button" onclick="showBoot()" title="Pantalla Red Neuronal" class="w-8 h-8 rounded border border-red-500/50 bg-red-500/10 flex items-center justify-center font-hud font-black text-amber-400 text-xs">L</button>
         <div class="text-[10px] font-mono">
           <div class="flex items-center gap-1.5">
             <span class="font-hud font-bold text-white tracking-widest">LATICCE</span>
@@ -145,10 +144,10 @@
         </div>
       </div>
       <div class="flex items-center gap-1.5 font-mono text-[11px]">
-        <button onclick="configureGeminiApiKey()" id="ai-brain-btn" title="Configurar Clave Gemini IA" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 hover:border-purple-400 text-[10px] font-bold">🧠 IA</button>
-        <button onclick="cycleAgentVoice()" title="Cambiar timbre de voz del personaje" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-cyan-300 hover:border-cyan-400 text-[10px]">🎙️ TIMBRE</button>
-        <button onclick="toggleVoice()" id="voice-toggle-btn" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400 text-[10px]">VOZ ON</button>
-        <button onclick="toggleViewMode()" id="view-mode-btn" class="px-2.5 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold text-[10px]">PANEL ▸</button>
+        <button type="button" onclick="configureGeminiApiKey()" id="ai-brain-btn" title="Configurar Clave Gemini IA" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 hover:border-purple-400 text-[10px] font-bold">🧠 IA</button>
+        <button type="button" onclick="cycleAgentVoice()" title="Cambiar timbre de voz del personaje" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-cyan-300 hover:border-cyan-400 text-[10px]">🎙️ TIMBRE</button>
+        <button type="button" onclick="toggleVoice()" id="voice-toggle-btn" class="px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-300 hover:border-amber-400 text-[10px]">VOZ ON</button>
+        <button type="button" onclick="toggleViewMode()" id="view-mode-btn" class="px-2.5 py-1 rounded border border-amber-500/70 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 font-bold text-[10px]">PANEL ▸</button>
       </div>
     </div>
   </header>
@@ -184,31 +183,46 @@
   <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 pt-4 pb-28 space-y-5">
     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
-        <button onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (22)</button>
-        <button onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pt="vision">👁️ VISIÓN</button>
-        <button onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
-        <button onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 F.R.I.D.A.Y.</button>
-        <button onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
+        <button type="button" onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (22)</button>
+        <button type="button" onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pt="vision">👁️ VISIÓN</button>
+        <button type="button" onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
+        <button type="button" onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 F.R.I.D.A.Y.</button>
+        <button type="button" onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
       </div>
-      <button onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ CABINA</button>
+      <button type="button" onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ CABINA</button>
     </div>
 
     <!-- SUBPANEL JARVIS -->
     <section id="ptab-jarvis" class="space-y-3">
       <div id="focus-pick-banner" class="hidden rounded-xl p-3.5 border border-amber-400/70 bg-gradient-to-r from-amber-500/15 via-[#0a0f1a]/90 to-emerald-500/10 flex flex-wrap items-center justify-between gap-3"></div>
 
+      <!-- LEYENDA DE COLORES DE ESTADO -->
+      <div class="flex flex-wrap gap-2 text-[10px] font-mono text-slate-300 bg-[#050811]/90 border border-slate-800 rounded-lg px-3 py-2">
+        <span class="text-amber-300 font-bold">🎯 FOCO #1</span>
+        <span>·</span>
+        <span class="text-emerald-400 font-bold">🟢 EN TP1</span>
+        <span>·</span>
+        <span class="text-yellow-300 font-bold">🟡 CERCA ENTRADA</span>
+        <span>·</span>
+        <span class="text-indigo-300 font-bold">🌊 SWING</span>
+        <span>·</span>
+        <span class="text-cyan-300 font-bold">💎 OB/FVG</span>
+        <span>·</span>
+        <span class="text-slate-400">⚪ ESPERAR</span>
+      </div>
+
       <div class="flex gap-2 border-b border-slate-800 pb-2 text-xs font-mono">
-        <button onclick="setJarvisSubView('ALL')" id="jsub-all" class="px-3 py-1.5 rounded bg-amber-500 text-black font-bold">📋 TODOS LOS ACTIVOS</button>
-        <button onclick="setJarvisSubView('SWING_DESK')" id="jsub-swing" class="px-3 py-1.5 rounded bg-[#0a0f1a] border border-indigo-500/50 text-indigo-300 font-bold">⚖️ MESA DE SWING</button>
+        <button type="button" onclick="setJarvisSubView('ALL')" id="jsub-all" class="px-3 py-1.5 rounded bg-amber-500 text-black font-bold">📋 TODOS LOS ACTIVOS</button>
+        <button type="button" onclick="setJarvisSubView('SWING_DESK')" id="jsub-swing" class="px-3 py-1.5 rounded bg-[#0a0f1a] border border-indigo-500/50 text-indigo-300 font-bold">⚖️ MESA DE SWING</button>
       </div>
 
       <div id="jarvis-filter-bar" class="flex flex-wrap gap-1.5 text-xs font-mono">
-        <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
-        <button onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-indigo-300" data-pf="SWING">🌊 POTENCIAL SWING</button>
-        <button onclick="setPanelFilter('OBFVG')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="OBFVG">💎 OB + FVG</button>
-        <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
-        <button onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300" data-pf="NEWS">⚠️ NOTICIA HOY</button>
-        <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ TESIS ROTA</button>
+        <button type="button" onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
+        <button type="button" onclick="setPanelFilter('NEAR')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-yellow-500/40 text-yellow-300" data-pf="NEAR">🟡 CERCA ENTRADA</button>
+        <button type="button" onclick="setPanelFilter('TP1')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-emerald-500/40 text-emerald-300" data-pf="TP1">🟢 EN TP1</button>
+        <button type="button" onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-indigo-500/40 text-indigo-300" data-pf="SWING">🌊 POTENCIAL SWING</button>
+        <button type="button" onclick="setPanelFilter('OBFVG')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-cyan-500/40 text-cyan-300" data-pf="OBFVG">💎 OB / FVG</button>
+        <button type="button" onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
       </div>
 
       <div class="relative flex items-center">
@@ -227,19 +241,25 @@
         <span id="vision-dxy-badge" class="text-[10px] font-mono text-amber-300 font-bold">DXY -- · US10Y --</span>
       </div>
       <div class="flex gap-1.5 overflow-x-auto pb-1 text-xs font-mono">
-        <button onclick="setVisionSubTab('resumen')" class="vsub px-3 py-1.5 rounded bg-sky-500 text-black font-bold shrink-0" data-vs="resumen">📊 RESUMEN</button>
-        <button onclick="setVisionSubTab('cuadrante')" class="vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0" data-vs="cuadrante">🧭 CUADRANTE</button>
-        <button onclick="setVisionSubTab('bancos')" class="vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0" data-vs="bancos">🏦 BANCOS / FED</button>
-        <button onclick="setVisionSubTab('tasas')" class="vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0" data-vs="tasas">📈 TASAS & DXY</button>
-        <button onclick="setVisionSubTab('noticias')" class="vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0" data-vs="noticias">📰 NOTICIAS & RIESGOS</button>
+        <button type="button" onclick="setVisionSubTab('resumen')" class="vsub px-3 py-1.5 rounded bg-sky-500 text-black font-bold shrink-0" data-vs="resumen">📊 RESUMEN</button>
+        <button type="button" onclick="setVisionSubTab('cuadrante')" class="vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0" data-vs="cuadrante">🧭 CUADRANTE</button>
+        <button type="button" onclick="setVisionSubTab('bancos')" class="vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0" data-vs="bancos">🏦 BANCOS / FED</button>
+        <button type="button" onclick="setVisionSubTab('tasas')" class="vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0" data-vs="tasas">📈 TASAS & DXY</button>
+        <button type="button" onclick="setVisionSubTab('noticias')" class="vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0" data-vs="noticias">📰 NOTICIAS & RIESGOS</button>
       </div>
       <div id="vision-sub-content" class="space-y-3 text-xs"></div>
     </section>
 
     <!-- SUBPANEL ULTRÓN -->
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
-      <div id="pu-news-banner" class="hidden bg-orange-500/15 border border-orange-400/60 rounded-lg p-2.5 text-xs text-orange-200"></div>
-      <div id="pu-swing-banner" class="hidden bg-indigo-500/15 border border-indigo-400/60 rounded-lg p-2.5 text-xs text-indigo-200"></div>
+      <div class="flex flex-wrap gap-2 text-[10px] font-mono text-slate-300 bg-[#050811] border border-slate-800 rounded-lg px-3 py-2">
+        <span class="text-amber-300 font-bold">🎯 FOCO #1</span><span>·</span>
+        <span class="text-emerald-400 font-bold">🟢 EN TP1</span><span>·</span>
+        <span class="text-yellow-300 font-bold">🟡 CERCA OB</span><span>·</span>
+        <span class="text-indigo-300 font-bold">🌊 SWING</span><span>·</span>
+        <span class="text-cyan-300 font-bold">💎 OB/FVG</span><span>·</span>
+        <span class="text-slate-400">⚪ SIN BLOQUE</span>
+      </div>
 
       <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5" id="panel-ultron-selector"></div>
       <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
@@ -249,10 +269,10 @@
           <span id="pu-status" class="ml-2 text-emerald-400">--</span>
         </div>
         <div class="flex gap-1">
-          <button onclick="setChartTF('1w')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="1w">1S</button>
-          <button onclick="setChartTF('1d')" class="ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold" data-tf="1d">1D</button>
-          <button onclick="setChartTF('4h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="4h">4H</button>
-          <button onclick="setChartTF('1h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="1h">1H</button>
+          <button type="button" onclick="setChartTF('1w')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="1w">1S</button>
+          <button type="button" onclick="setChartTF('1d')" class="ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold" data-tf="1d">1D</button>
+          <button type="button" onclick="setChartTF('4h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="4h">4H</button>
+          <button type="button" onclick="setChartTF('1h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="1h">1H</button>
         </div>
       </div>
       <div class="w-full bg-[#030509] border border-slate-800 rounded-lg overflow-hidden">
@@ -343,13 +363,13 @@
   <!-- BARRA DE NAVEGACIÓN INFERIOR (7 AGENTES) -->
   <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#04060b]/95 border-t border-slate-800 backdrop-blur overflow-x-auto">
     <div class="flex min-w-max sm:justify-center mx-auto">
-      <button onclick="selectAgent('jarvis')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-amber-400 text-amber-400" data-ag="jarvis"><span class="text-sm">⚡</span><span class="text-[10px] font-bold">JARVIS</span></button>
-      <button onclick="selectAgent('vision')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="vision"><span class="text-sm">👁️</span><span class="text-[10px] font-bold">VISIÓN</span></button>
-      <button onclick="selectAgent('ultron')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="ultron"><span class="text-sm">🎯</span><span class="text-[10px] font-bold">ULTRÓN</span></button>
-      <button onclick="selectAgent('friday')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="friday"><span class="text-sm">🟣</span><span class="text-[10px] font-bold">F.R.I.D.A.Y.</span></button>
-      <button onclick="selectAgent('edith')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="edith"><span class="text-sm">⌖</span><span class="text-[10px] font-bold">E.D.I.T.H.</span></button>
-      <button onclick="selectAgent('karen')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="karen"><span class="text-sm">🕸️</span><span class="text-[10px] font-bold">KAREN</span></button>
-      <button onclick="selectAgent('homer')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="homer"><span class="text-sm">📊</span><span class="text-[10px] font-bold">H.O.M.E.R.</span></button>
+      <button type="button" onclick="selectAgent('jarvis')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-amber-400 text-amber-400" data-ag="jarvis"><span class="text-sm">⚡</span><span class="text-[10px] font-bold">JARVIS</span></button>
+      <button type="button" onclick="selectAgent('vision')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="vision"><span class="text-sm">👁️</span><span class="text-[10px] font-bold">VISIÓN</span></button>
+      <button type="button" onclick="selectAgent('ultron')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="ultron"><span class="text-sm">🎯</span><span class="text-[10px] font-bold">ULTRÓN</span></button>
+      <button type="button" onclick="selectAgent('friday')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="friday"><span class="text-sm">🟣</span><span class="text-[10px] font-bold">F.R.I.D.A.Y.</span></button>
+      <button type="button" onclick="selectAgent('edith')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="edith"><span class="text-sm">⌖</span><span class="text-[10px] font-bold">E.D.I.T.H.</span></button>
+      <button type="button" onclick="selectAgent('karen')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="karen"><span class="text-sm">🕸️</span><span class="text-[10px] font-bold">KAREN</span></button>
+      <button type="button" onclick="selectAgent('homer')" class="ag-tab w-24 py-2 flex flex-col items-center gap-0.5 border-t-2 border-transparent text-slate-400" data-ag="homer"><span class="text-sm">📊</span><span class="text-[10px] font-bold">H.O.M.E.R.</span></button>
     </div>
   </nav>
 
@@ -393,7 +413,6 @@
         const cx = w / 2, cy = h / 2;
         const maxLink = 135;
 
-        // Nodos y sinapsis entre ellos + conexiones hacia el núcleo central
         for (let i = 0; i < nodes.length; i++) {
           const a = nodes[i];
           a.x += a.vx; a.y += a.vy;
@@ -423,7 +442,6 @@
           ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2); ctx.fill();
         }
 
-        // Pulsos de datos viajando hacia el núcleo LATICCE
         pulses.forEach(p => {
           p.dist -= p.speed;
           if (p.dist < 28) {
@@ -516,7 +534,102 @@
     let ghToken = localStorage.getItem('oraculo_gh_token') || '';
     let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
     let agentHistories = { jarvis: [], vision: [], ultron: [], friday: [], edith: [], karen: [], homer: [] };
-    let activeLessonIndex = 0;
+
+    // NORMALIZADOR DE FOCO PRINCIPAL (EVITA UNDEFINED)
+    function getFocusPrimary() {
+      if (!data) return null;
+      const raw = data.focus_pick?.primary || data.focus_pick;
+      if (raw && raw.symbol) {
+        const assetMatch = (data.assets || []).find(a => a.symbol === raw.symbol);
+        return {
+          symbol: raw.symbol,
+          direction: raw.dir_label || (raw.direction === 'BUY' ? 'COMPRA' : (raw.direction === 'SELL' ? 'VENTA' : (raw.direction || 'ESPERAR'))),
+          win_prob: raw.probability ?? raw.win_prob ?? assetMatch?.win_prob ?? assetMatch?.confluence?.score ?? 0,
+          signal_tag: raw.signal_tag || assetMatch?.setup?.signal_tag || '',
+          entry: raw.entry ?? assetMatch?.setup?.entry ?? '--',
+          sl: raw.sl ?? assetMatch?.setup?.sl ?? '--',
+          tp1: raw.tp1 ?? assetMatch?.setup?.tp1 ?? '--'
+        };
+      }
+      // Respaldo automático si data.json no trae focus_pick poblado
+      const best = [...(data.assets || [])]
+        .filter(a => a.has_valid_ob !== false && !(a.setup?.signal_tag || '').includes('SIN OB'))
+        .sort((a, b) => (b.win_prob || b.confluence?.score || 0) - (a.win_prob || a.confluence?.score || 0))[0];
+      if (!best) return null;
+      return {
+        symbol: best.symbol,
+        direction: best.setup.direction === 'BUY' ? 'COMPRA' : 'VENTA',
+        win_prob: best.win_prob || best.confluence?.score || 0,
+        signal_tag: best.setup.signal_tag,
+        entry: best.setup.entry,
+        sl: best.setup.sl,
+        tp1: best.setup.tp1
+      };
+    }
+
+    // CLASIFICADOR DE COLORES POR ESTADO DE CADA PAR
+    function getAssetColorState(a) {
+      const fp = getFocusPrimary();
+      const isFocus = fp && fp.symbol === a.symbol;
+      const isBuy = a.setup?.direction === 'BUY';
+      const tag = (a.setup?.signal_tag || '').toUpperCase();
+      const hasZone = a.has_valid_ob !== false && !tag.includes('SIN OB');
+      const createdTs = a.created_at || 0;
+      const futureCandles = (a.candles && a.candles['1h']) ? a.candles['1h'].filter(c => c.t >= createdTs) : [];
+      const touchedEntry = futureCandles.some(c => isBuy ? (c.l <= a.setup.entry) : (c.h >= a.setup.entry));
+      const hitTP1 = hasZone && touchedEntry && (isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1));
+      const pctDist = a.price ? Math.abs(a.price - a.setup.entry) / a.price : 1;
+      const rightSide = isBuy ? (a.price >= a.setup.sl && a.price < a.setup.tp1) : (a.price <= a.setup.sl && a.price > a.setup.tp1);
+      const nearEntry = hasZone && rightSide && pctDist <= 0.0045;
+      const isSwing = Boolean(a.swing_potential && a.swing_potential.active);
+
+      if (isFocus) {
+        return {
+          code: 'FOCUS', icon: '🎯', label: 'FOCO #1',
+          cardBorder: 'border-amber-400 shadow-md shadow-amber-500/15',
+          selBox: 'bg-amber-500/15 border-amber-400 text-amber-200',
+          badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-400'
+        };
+      }
+      if (hitTP1) {
+        return {
+          code: 'TP1', icon: '🟢', label: 'EN TP1',
+          cardBorder: 'border-emerald-400/80 shadow-md shadow-emerald-500/10',
+          selBox: 'bg-emerald-500/15 border-emerald-400 text-emerald-200',
+          badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400'
+        };
+      }
+      if (nearEntry) {
+        return {
+          code: 'NEAR', icon: '🟡', label: 'CERCA ENTRADA',
+          cardBorder: 'border-yellow-400/80 shadow-md shadow-yellow-500/10',
+          selBox: 'bg-yellow-500/15 border-yellow-400 text-yellow-200',
+          badgeClass: 'bg-yellow-500/20 text-yellow-300 border-yellow-400'
+        };
+      }
+      if (isSwing) {
+        return {
+          code: 'SWING', icon: '🌊', label: 'SWING',
+          cardBorder: 'border-indigo-400/80',
+          selBox: 'bg-indigo-500/15 border-indigo-400 text-indigo-200',
+          badgeClass: 'bg-indigo-500/20 text-indigo-300 border-indigo-400'
+        };
+      }
+      if (hasZone) {
+        return {
+          code: 'ZONE', icon: '💎', label: 'OB / FVG',
+          cardBorder: 'border-cyan-500/50',
+          selBox: 'bg-cyan-500/10 border-cyan-500/60 text-cyan-200',
+          badgeClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/50'
+        };
+      }
+      return {
+        code: 'WAIT', icon: '⚪', label: 'ESPERAR',
+        cardBorder: 'border-slate-800/80 opacity-85',
+        selBox: 'bg-[#050811] border-slate-800 text-slate-400',
+        badgeClass: 'bg-slate-800/60 text-slate-400 border-slate-700'
+      };
+    }
 
     function updateAiBrainButton() {
       const btn = document.getElementById('ai-brain-btn');
@@ -543,7 +656,6 @@
       }
     }
 
-    // 3. PERSONALIDADES Y PERFILES VOCALES DISTINTOS (ESTILO VISIONQUEST / MCU)
     const AGENTS = {
       jarvis: {
         name: 'JARVIS', sub: 'DIRECTOR DE MESA', color: '#f59e0b', rgb: '245, 158, 11',
@@ -652,7 +764,7 @@
     function formatTextForSpeech(raw) {
       return raw
         .replace(/<[^>]*>/g, '')
-        .replace(/[*#`⚠️🌊💎💡]/g, '')
+        .replace(/[*#`⚠️🌊💎💡🎯🟢🟡⚪]/g, '')
         .replace(/XAUUSD/g, 'Oro Dólar')
         .replace(/BTCUSD/g, 'Bitcoin')
         .replace(/USTEC/g, 'Nasdaq cien')
@@ -738,17 +850,30 @@
       rec.start();
     }
 
-    // 4. CONEXIÓN REAL A GEMINI IA POR PERSONAJE (SIN RESPUESTAS REPETIDAS)
+    // MANEJADOR DEL FORMULARIO DE CHAT (EVITA QUE SE RECARGUE LA PÁGINA AL INICIO)
+    function handleCockpitChat(e) {
+      if (e) e.preventDefault();
+      const inp = document.getElementById('cockpit-input');
+      if (!inp) return false;
+      const val = inp.value.trim();
+      if (!val) return false;
+      inp.value = '';
+      processQuery(val);
+      return false;
+    }
+    window.handleCockpitChat = handleCockpitChat;
+
+    // 4. CONEXIÓN REAL A GEMINI IA POR PERSONAJE
     function buildCompactMarketContext() {
       if (!data || !data.assets) return 'Telemetría aún sincronizando.';
-      const focus = data.focus_pick ? `Foco Principal #1: ${data.focus_pick.symbol} (${data.focus_pick.direction}, prob ${data.focus_pick.win_prob}%, entrada ${data.focus_pick.entry}, SL ${data.focus_pick.sl}, TP1 ${data.focus_pick.tp1}).` : '';
+      const fp = getFocusPrimary();
+      const focus = fp ? `Foco Principal #1: ${fp.symbol} (${fp.direction}, prob ${fp.win_prob}%, entrada ${fp.entry}, SL ${fp.sl}, TP1 ${fp.tp1}).` : '';
       const macro = `DXY=${data.brief?.dxy || '--'}, US10Y=${data.brief?.us10y || '--'}. ${data.brief?.headline || ''}`;
       const rows = data.assets.map(a => {
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
-        const sw = a.swing_potential?.active ? 'SWING' : '';
-        const nw = a.news_warning?.active ? `NOTICIA(${a.news_warning.currencies})` : '';
-        return `${a.symbol}:P=${a.price}|Dir=${a.setup.signal_tag}|Prob=${a.win_prob || a.confluence.score}%|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|Macro:${a.macro_reason} ${sw} ${nw}`;
+        const st = getAssetColorState(a);
+        return `${a.symbol}[${st.label}]:P=${a.price}|Dir=${a.setup.signal_tag}|Prob=${a.win_prob || a.confluence.score}%|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|Macro:${a.macro_reason}`;
       }).join('\n');
       const jText = trades.length ? `Bitácora (${trades.length}): ` + trades.slice(0, 4).map(t => `${t.pair} ${t.dir} ${t.res}`).join(', ') : 'Bitácora vacía.';
       return `${macro}\n${focus}\n${jText}\nACTIVOS:\n${rows}`;
@@ -826,14 +951,13 @@ ${buildCompactMarketContext()}`;
         }
       }
 
-      // Si no hay clave IA configurada, avisar claramente y responder sobre el par mencionado
       if (!data) { typeAgentDialogue('Sincronizando datos del mercado, señor.'); return; }
       let asset = data.assets.find(a => qUp.includes(a.symbol));
       if (!asset && (qUp.includes('ORO') || qUp.includes('GOLD') || qUp.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
       if (asset) {
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
-        typeAgentDialogue(`${asset.symbol} está en ${asset.price} (${asset.setup.signal_tag}, probabilidad ${asset.win_prob || asset.confluence.score}%). Entrada en ${asset.setup.entry} (a ${d.units} ${d.label}), SL ${asset.setup.sl} (${p.sl} ${p.unitLabel}), TP1 ${asset.setup.tp1}. ${asset.macro_reason} (Nota: active su clave en 🧠 IA arriba para conversación libre completa).`);
+        typeAgentDialogue(`${asset.symbol} está en ${asset.price} (${asset.setup.signal_tag}, probabilidad ${asset.win_prob || asset.confluence.score}%). Entrada en ${asset.setup.entry} (a ${d.units} ${d.label}), SL ${asset.setup.sl} (${p.sl} ${p.unitLabel}), TP1 ${asset.setup.tp1}. ${asset.macro_reason}`);
         return;
       }
       typeAgentDialogue(`Señor, para que ${AGENTS[currentAgent].name} responda abiertamente a "${q}" con su propia personalidad, pulse el botón 🧠 IA arriba y pegue su clave gratuita de Google AI Studio.`);
@@ -868,7 +992,8 @@ ${buildCompactMarketContext()}`;
     async function refreshLivePrices() {
       if (!data || !data.assets || !data.assets.length) return;
       let updatedAny = false;
-      const priority = [selectedSymbol, data.focus_pick?.symbol, 'EURUSD', 'XAUUSD', 'BTCUSD', 'GBPUSD', 'USDJPY'].filter(Boolean);
+      const fp = getFocusPrimary();
+      const priority = [selectedSymbol, fp?.symbol, 'EURUSD', 'XAUUSD', 'BTCUSD', 'GBPUSD', 'USDJPY'].filter(Boolean);
       const uniqueSyms = [...new Set([...priority, ...data.assets.map(a => a.symbol)])];
 
       await Promise.all(uniqueSyms.map(async (sym) => {
@@ -905,9 +1030,10 @@ ${buildCompactMarketContext()}`;
     function updateTickerBar() {
       if (!data || !data.assets) return;
       const items = data.assets.map(a => {
+        const st = getAssetColorState(a);
         const prob = a.win_prob || a.confluence?.score || 50;
         const chg = typeof a.chg_day === 'number' ? `${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%` : '';
-        return `<span><strong class="text-white">${a.symbol}</strong> <span class="text-amber-400">${a.price}</span> <span class="text-emerald-400">(${prob}%)</span> <span class="text-slate-400">${chg}</span></span>`;
+        return `<span>${st.icon} <strong class="text-white">${a.symbol}</strong> <span class="text-amber-400">${a.price}</span> <span class="text-emerald-400">(${prob}%)</span> <span class="text-slate-400">${chg}</span></span>`;
       }).join('<span class="text-slate-700">|</span>');
       const track = document.getElementById('live-ticker-track');
       if (track) track.innerHTML = items + items;
@@ -922,7 +1048,7 @@ ${buildCompactMarketContext()}`;
       const pip = a.pip || 0.0001;
       const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
       const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
-      const be = a.setup.be || (a.setup.direction === 'BUY' ? Number((a.setup.entry + Math.abs(a.setup.entry - a.setup.sl)).toFixed(a.decimals)) : Number((a.setup.entry - Math.abs(a.setup.entry - a.setup.sl)).toFixed(a.decimals)));
+      const be = a.setup.be || a.setup.be_trigger || (a.setup.direction === 'BUY' ? Number((a.setup.entry + Math.abs(a.setup.entry - a.setup.sl)).toFixed(a.decimals)) : Number((a.setup.entry - Math.abs(a.setup.entry - a.setup.sl)).toFixed(a.decimals)));
       return { unitLabel, sl: toU(a.setup.entry - a.setup.sl), tp1: toU(a.setup.tp1 - a.setup.entry), tp2: toU(a.setup.tp2 - a.setup.entry), be };
     }
     function getNearestAsset() {
@@ -1041,7 +1167,7 @@ ${buildCompactMarketContext()}`;
       renderQuickRepliesForAgent(key);
       const nearest = getNearestAsset();
       const homer = getHomerMetrics();
-      const fp = data?.focus_pick;
+      const fp = getFocusPrimary();
 
       if (key === 'jarvis') {
         document.getElementById('agent-hero-metric').textContent = fp ? `🎯 ${fp.symbol} (${fp.win_prob}%)` : 'ESCANEANDO';
@@ -1171,8 +1297,8 @@ ${buildCompactMarketContext()}`;
     function renderPanelJarvis() {
       if (!data) return;
       const fpBanner = document.getElementById('focus-pick-banner');
-      if (fpBanner && data.focus_pick) {
-        const fp = data.focus_pick;
+      const fp = getFocusPrimary();
+      if (fpBanner && fp) {
         fpBanner.classList.remove('hidden');
         fpBanner.innerHTML = `
           <div class="space-y-0.5">
@@ -1180,7 +1306,7 @@ ${buildCompactMarketContext()}`;
             <div class="font-hud text-sm font-black text-white">${fp.symbol} · <span class="${fp.direction === 'COMPRA' ? 'text-emerald-400' : 'text-red-400'}">${fp.direction}</span> · <span class="text-amber-300">${fp.win_prob}%</span></div>
             <div class="text-[11px] text-slate-300">${fp.signal_tag} · Entrada: <strong>${fp.entry}</strong> · SL: ${fp.sl} · TP1: ${fp.tp1}</div>
           </div>
-          <button onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-amber-500 text-black font-bold text-xs">VER GRÁFICO →</button>
+          <button type="button" onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-amber-500 text-black font-bold text-xs">VER GRÁFICO →</button>
         `;
       }
 
@@ -1188,11 +1314,11 @@ ${buildCompactMarketContext()}`;
       if (jarvisSubView === 'SWING_DESK') {
         list = list.filter(a => a.swing_potential && a.swing_potential.active);
       } else {
+        if (panelFilter === 'NEAR') list = list.filter(a => getAssetColorState(a).code === 'NEAR' || getAssetColorState(a).code === 'FOCUS');
+        if (panelFilter === 'TP1') list = list.filter(a => getAssetColorState(a).code === 'TP1');
         if (panelFilter === 'SWING') list = list.filter(a => a.swing_potential && a.swing_potential.active);
-        if (panelFilter === 'OBFVG') list = list.filter(a => (a.setup.signal_tag || '').includes('OB + FVG'));
+        if (panelFilter === 'OBFVG') list = list.filter(a => a.has_valid_ob !== false && !(a.setup.signal_tag || '').includes('SIN OB'));
         if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
-        if (panelFilter === 'NEWS') list = list.filter(a => a.news_warning && a.news_warning.active);
-        if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence.alignment === 'OPPOSED');
       }
 
       if (pairSearchTerm) {
@@ -1208,22 +1334,22 @@ ${buildCompactMarketContext()}`;
       grid.innerHTML = list.map(a => {
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
+        const st = getAssetColorState(a);
         const prob = a.win_prob || a.confluence.score;
         const probCol = prob >= 80 ? 'text-emerald-400' : (prob >= 65 ? 'text-amber-300' : 'text-slate-300');
-        const isBroken = a.confluence.alignment === 'OPPOSED';
         const hasSwing = a.swing_potential && a.swing_potential.active;
         const hasNews = a.news_warning && a.news_warning.active;
 
         return `
-          <div class="hud-panel rounded-xl p-4 space-y-3 border ${hasSwing ? 'border-indigo-400/70' : (isBroken ? 'border-red-500/60' : 'border-slate-800')}">
+          <div class="hud-panel rounded-xl p-4 space-y-3 border ${st.cardBorder}">
             <div class="flex items-center justify-between gap-2">
               <div class="flex flex-wrap items-center gap-2">
-                <span class="font-hud font-black text-white text-base">${a.symbol} <span class="${probCol}">${prob}%</span></span>
+                <span class="font-hud font-black text-white text-base">${st.icon} ${a.symbol} <span class="${probCol}">${prob}%</span></span>
                 <span class="text-xs text-cyan-300 font-bold">${a.price}</span>
-                ${hasSwing ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400 font-bold">🌊 SWING</span>` : ''}
+                <span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.label}</span>
                 ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA</span>` : ''}
               </div>
-              <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400">Gráfico →</button>
+              <button type="button" onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400">Gráfico →</button>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-[11px]">
@@ -1239,7 +1365,7 @@ ${buildCompactMarketContext()}`;
 
             <div class="flex items-center justify-between">
               <span class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</span>
-              <button onclick="toggleWhy('${a.symbol}')" class="px-2.5 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">💡 ¿Por qué? ▾</button>
+              <button type="button" onclick="toggleWhy('${a.symbol}')" class="px-2.5 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">💡 ¿Por qué? ▾</button>
             </div>
 
             <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
@@ -1308,11 +1434,20 @@ ${buildCompactMarketContext()}`;
 
     function renderPanelUltron() {
       if (!data) return;
-      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => `
-        <button onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${a.symbol === selectedSymbol ? 'bg-red-500/20 border-red-500 text-white' : 'bg-[#050811] border-slate-800 text-slate-300'}">
-          <div class="text-[11px] font-bold">${a.symbol}</div>
-          <div class="text-[9px] text-slate-400">${a.win_prob || a.confluence.score}% · ${a.chart_bias}</div>
-        </button>`).join('');
+      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => {
+        const st = getAssetColorState(a);
+        const isSelected = a.symbol === selectedSymbol;
+        const boxStyle = isSelected
+          ? 'bg-red-500/25 border-2 border-red-500 text-white shadow-md shadow-red-500/20'
+          : st.selBox;
+        return `
+          <button type="button" onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${boxStyle}">
+            <div class="text-[11px] font-bold flex items-center justify-between">
+              <span>${st.icon} ${a.symbol}</span>
+            </div>
+            <div class="text-[9px] opacity-85">${a.win_prob || a.confluence.score}% · ${a.chart_bias}</div>
+          </button>`;
+      }).join('');
 
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
       const d = getAssetUnitsDist(a);
@@ -1323,8 +1458,8 @@ ${buildCompactMarketContext()}`;
       document.getElementById('pu-bias-w').textContent = a.tf_bias?.weekly || a.chart_bias;
       document.getElementById('pu-bias-d').textContent = a.tf_bias?.daily || a.chart_bias;
       document.getElementById('pu-bias-4h').textContent = a.tf_bias?.h4 || a.chart_bias;
-      document.getElementById('pu-atr').textContent = a.atr_pips ? `${a.atr_pips} ${p.unitLabel}` : '--';
-      document.getElementById('pu-r20').textContent = a.range20_pips ? `${a.range20_pips} ${p.unitLabel}` : '--';
+      document.getElementById('pu-atr').textContent = a.volatility?.atr_units ? `${a.volatility.atr_units} ${p.unitLabel}` : (a.atr_pips ? `${a.atr_pips} ${p.unitLabel}` : '--');
+      document.getElementById('pu-r20').textContent = a.volatility?.range20_units ? `${a.volatility.range20_units} ${p.unitLabel}` : (a.range20_pips ? `${a.range20_pips} ${p.unitLabel}` : '--');
       document.getElementById('pu-entry').textContent = a.setup.entry;
       document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
       document.getElementById('pu-sl').textContent = a.setup.sl;
@@ -1390,7 +1525,6 @@ ${buildCompactMarketContext()}`;
       drawLvl(a.setup.sl, 'STOP', '#dc2626');
       drawLvl(a.setup.tp1, 'TP1', '#059669');
 
-      // Línea dorada del precio actual en vivo
       const yLive = yOf(a.price);
       ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(padL, yLive); ctx.lineTo(W - padR, yLive); ctx.stroke();
@@ -1414,7 +1548,7 @@ ${buildCompactMarketContext()}`;
       ];
       list.innerHTML = titles.map((t, i) => {
         const done = completedLessons.includes(i + 1);
-        return `<div class="bg-[#050811] border ${done ? 'border-emerald-500/50' : 'border-slate-800'} rounded-lg p-3 flex items-center justify-between"><span class="${done ? 'text-emerald-300' : 'text-purple-200'} font-bold">${t}</span><button onclick="if(!completedLessons.includes(${i+1})){completedLessons.push(${i+1});localStorage.setItem('oraculo_course',JSON.stringify(completedLessons));renderPanelCourse();}" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-[10px] font-bold">${done ? '✓ HECHO' : 'APROBAR'}</button></div>`;
+        return `<div class="bg-[#050811] border ${done ? 'border-emerald-500/50' : 'border-slate-800'} rounded-lg p-3 flex items-center justify-between"><span class="${done ? 'text-emerald-300' : 'text-purple-200'} font-bold">${t}</span><button type="button" onclick="if(!completedLessons.includes(${i+1})){completedLessons.push(${i+1});localStorage.setItem('oraculo_course',JSON.stringify(completedLessons));renderPanelCourse();}" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-[10px] font-bold">${done ? '✓ HECHO' : 'APROBAR'}</button></div>`;
       }).join('');
     }
 
@@ -1451,7 +1585,7 @@ ${buildCompactMarketContext()}`;
       if (badge) badge.textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
       if (!list) return;
       list.innerHTML = trades.length
-        ? trades.map((t, i) => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex justify-between"><span><strong>${t.pair} · ${t.dir} · ${t.res}</strong> - ${t.note}</span><button onclick="trades.splice(${i},1);localStorage.setItem('oraculo_trades_v6',JSON.stringify(trades));renderTrades();" class="text-red-400 font-bold">✕</button></div>`).join('')
+        ? trades.map((t, i) => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex justify-between"><span><strong>${t.pair} · ${t.dir} · ${t.res}</strong> - ${t.note}</span><button type="button" onclick="trades.splice(${i},1);localStorage.setItem('oraculo_trades_v6',JSON.stringify(trades));renderTrades();" class="text-red-400 font-bold">✕</button></div>`).join('')
         : `<div class="text-slate-500 text-center py-3">Sin operaciones registradas aún.</div>`;
     }
 
