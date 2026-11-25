@@ -223,5 +223,20 @@
     "ob_high": 0.83156,
     "ob_low": 0.8309,
     "locked_at": 1795615577
+  },
+  "XAUUSD": {
+    "valid_ob": true,
+    "kind": "OB_FVG",
+    "fvg_range": "3517.1 - 3517.3",
+    "direction": "SELL",
+    "signal_tag": "VENTA OB + FVG",
+    "entry": 3517.3,
+    "be_trigger": 3474.4,
+    "sl": 3560.2,
+    "tp1": 3431.5,
+    "tp2": 3388.6,
+    "ob_high": 3560.0,
+    "ob_low": 3517.1,
+    "locked_at": 1795616444
   }
 }
