@@ -40,9 +40,11 @@ def load_json_state(path):
     if os.path.exists(path):
         try:
             with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
         except Exception:
-            return {}
+            pass
     return {}
 
 
@@ -50,64 +52,79 @@ def save_json_state(path, state):
     try:
         with open(path, "w", encoding="utf-8") as f:
             json.dump(state, f, ensure_ascii=False, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"Aviso guardando {path}: {e}")
 
 
-def send_ntfy_alert(title, message, priority="default", tags="chart_with_upwards_trend"):
+def send_mobile_push(title, body, priority="high", tags="chart_with_upwards_trend"):
     if not NTFY_TOPIC:
-        return False
+        return
     try:
         url = f"https://ntfy.sh/{NTFY_TOPIC}"
-        clean_title = title.encode("ascii", "ignore").decode("ascii").strip() or "LATICCE ALERTA"
         req = urllib.request.Request(
             url,
-            data=message.encode("utf-8"),
+            data=body.encode("utf-8"),
             headers={
-                "Title": clean_title,
+                "Title": title.encode("latin-1", "ignore").decode("latin-1"),
                 "Priority": priority,
                 "Tags": tags,
-                "Content-Type": "text/plain; charset=utf-8"
+                "Content-Type": "text/plain; charset=utf-8",
             },
-            method="POST"
+            method="POST",
         )
         with urllib.request.urlopen(req, timeout=8) as resp:
-            return 200 <= resp.status < 300
-    except Exception:
-        return False
+            resp.read()
+    except Exception as e:
+        print(f"Aviso envio ntfy: {e}")
 
 
-def get_candles(ticker, period, interval, decimals, max_bars=60):
+def get_candles(ticker, period, interval, decimals, max_bars=45):
     try:
-        df = yf.download(ticker, period=period, interval=interval, progress=False, auto_adjust=False)
+        df = yf.download(
+            ticker,
+            period=period,
+            interval=interval,
+            progress=False,
+            auto_adjust=False,
+            threads=False,
+        )
         if df is None or df.empty:
             return []
-        if hasattr(df.columns, "levels") and len(df.columns.levels) > 1:
+        if hasattr(df.columns, "nlevels") and df.columns.nlevels > 1:
             df.columns = df.columns.get_level_values(0)
-        df = df.dropna(subset=["Open", "High", "Low", "Close"])
-        out = []
+        candles = []
         for idx, row in df.iterrows():
-            ts = int(idx.timestamp()) if hasattr(idx, "timestamp") else 0
-            out.append({
-                "t": ts,
-                "o": round(float(row["Open"]), decimals),
-                "h": round(float(row["High"]), decimals),
-                "l": round(float(row["Low"]), decimals),
-                "c": round(float(row["Close"]), decimals),
-            })
-        return out[-max_bars:] if max_bars else out
-    except Exception:
+            try:
+                o = float(row["Open"])
+                h = float(row["High"])
+                l = float(row["Low"])
+                c = float(row["Close"])
+                if any(v != v for v in (o, h, l, c)):
+                    continue
+                ts = int(idx.timestamp()) if hasattr(idx, "timestamp") else 0
+                candles.append({
+                    "t": ts,
+                    "o": round(o, decimals),
+                    "h": round(h, decimals),
+                    "l": round(l, decimals),
+                    "c": round(c, decimals),
+                })
+            except Exception:
+                continue
+        if max_bars is None:
+            return candles
+        return candles[-max_bars:]
+    except Exception as e:
+        print(f"Aviso descarga {ticker} ({interval}): {e}")
         return []
 
 
-def group_4h(candles_1h):
-    if not candles_1h:
+def group_4h(c_1h_long):
+    if not c_1h_long:
         return []
     grouped = []
-    for i in range(0, len(candles_1h), 4):
-        chunk = candles_1h[i:i + 4]
-        if not chunk:
-            continue
+    for i in range(0, len(c_1h_long), 4):
+        chunk = c_1h_long[i:i + 4]
         grouped.append({
             "t": chunk[0]["t"],
             "o": chunk[0]["o"],
@@ -118,348 +135,567 @@ def group_4h(candles_1h):
     return grouped[-45:]
 
 
-def calc_ema(values, period):
-    if not values:
+def calc_bias(candles, lookback=6, threshold=0.0006):
+    if not candles or len(candles) < lookback:
+        return "NEUTRAL"
+    first = candles[-lookback]["c"]
+    last = candles[-1]["c"]
+    if last > first * (1.0 + threshold):
+        return "SUBE"
+    if last < first * (1.0 - threshold):
+        return "BAJA"
+    return "NEUTRAL"
+
+
+def pct_change_lookback(candles, lookback=6):
+    if not candles or len(candles) < lookback:
         return 0.0
-    k = 2.0 / (period + 1)
-    ema = values[0]
-    for v in values[1:]:
-        ema = v * k + ema * (1.0 - k)
-    return ema
+    first = candles[-lookback]["c"]
+    last = candles[-1]["c"]
+    return ((last - first) / first) * 100.0 if first else 0.0
 
 
-def calc_atr(candles, period=14):
-    if not candles or len(candles) < 2:
+def calc_atr_14(c_1d, dec):
+    if not c_1d or len(c_1d) < 3:
         return 0.0
     trs = []
-    for i in range(1, len(candles)):
-        h = candles[i]["h"]
-        l = candles[i]["l"]
-        pc = candles[i - 1]["c"]
+    for i in range(1, len(c_1d)):
+        h = c_1d[i]["h"]
+        l = c_1d[i]["l"]
+        pc = c_1d[i - 1]["c"]
         trs.append(max(h - l, abs(h - pc), abs(l - pc)))
-    if not trs:
-        return 0.0
-    recent = trs[-period:]
-    return sum(recent) / len(recent)
+    recent = trs[-14:]
+    return round(sum(recent) / len(recent), dec) if recent else 0.0
 
 
-def analyze_tf_bias(candles):
-    if not candles or len(candles) < 8:
-        return "NEUTRAL", 0.0
-    closes = [x["c"] for x in candles]
-    last = closes[-1]
-    ema_fast = calc_ema(closes[-18:], 8)
-    ema_slow = calc_ema(closes[-30:], 21)
-    prev_ref = closes[-6]
-    pct = ((last - prev_ref) / prev_ref) * 100.0 if prev_ref else 0.0
-
-    if last > ema_fast and ema_fast >= ema_slow and pct > 0.03:
-        return "SUBE", round(pct, 2)
-    if last < ema_fast and ema_fast <= ema_slow and pct < -0.03:
-        return "BAJA", round(pct, 2)
-    return "NEUTRAL", round(pct, 2)
+def calc_range_20d(c_1d, price, dec):
+    if not c_1d:
+        return {"high": price, "low": price, "pos_pct": 50}
+    sub = c_1d[-20:]
+    hi = round(max(x["h"] for x in sub), dec)
+    lo = round(min(x["l"] for x in sub), dec)
+    span = max(1e-9, hi - lo)
+    pos = int(round(max(0.0, min(100.0, ((price - lo) / span) * 100.0))))
+    return {"high": hi, "low": lo, "pos_pct": pos}
 
 
-def detect_exhaustion(candles, bias):
-    if not candles or len(candles) < 8 or bias not in ("SUBE", "BAJA"):
-        return False, ""
-    recent = candles[-8:]
-    c_last = recent[-1]
-    c_prev = recent[-2]
-    body_last = abs(c_last["c"] - c_last["o"])
-    upper_wick = c_last["h"] - max(c_last["o"], c_last["c"])
-    lower_wick = min(c_last["o"], c_last["c"]) - c_last["l"]
+def detect_weekly_clean_pivots(c_1w_all, price, pip, dec, a_type, sym, macro_dir):
+    if not c_1w_all or len(c_1w_all) < 10:
+        return []
+    max_units = 60.0 if (a_type in ("forex", "metal") or sym == "XAUUSD") else 999999.0
+    max_pct = 0.015 if a_type not in ("forex", "metal") else 0.05
+    pivots = []
 
-    if bias == "SUBE":
-        hi_8 = max(x["h"] for x in recent[:-1])
-        if c_last["h"] >= hi_8 * 0.9995 and (upper_wick > body_last * 1.4 or c_last["c"] < c_prev["c"]):
-            return True, "Mecha de rechazo en techo reciente (posible toma de ganancias)."
-    else:
-        lo_8 = min(x["l"] for x in recent[:-1])
-        if c_last["l"] <= lo_8 * 1.0005 and (lower_wick > body_last * 1.4 or c_last["c"] > c_prev["c"]):
-            return True, "Mecha de rechazo en piso reciente (posible rebote tecnico)."
-    return False, ""
-
-
-def detect_liquidity_and_structure(candles, dec):
-    if not candles or len(candles) < 10:
-        return {
-            "bsl": 0.0, "ssl": 0.0, "event_type": None, "event_dir": None,
-            "event_price": 0.0, "event_desc": ""
-        }
-    window = candles[-25:-1] if len(candles) > 25 else candles[:-1]
-    bsl = round(max(x["h"] for x in window), dec)
-    ssl = round(min(x["l"] for x in window), dec)
-    last = candles[-1]
-    prev = candles[-2]
-
-    event_type = None
-    event_dir = None
-    event_price = 0.0
-    event_desc = ""
-
-    if last["h"] > bsl and last["c"] < bsl:
-        event_type = "BARRIDO BSL"
-        event_dir = "BAJA"
-        event_price = bsl
-        event_desc = f"Barrido de liquidez sobre {bsl} con cierre debajo (posible giro bajista)."
-    elif last["l"] < ssl and last["c"] > ssl:
-        event_type = "BARRIDO SSL"
-        event_dir = "SUBE"
-        event_price = ssl
-        event_desc = f"Barrido de liquidez bajo {ssl} con absorcion alcista (posible giro alcista)."
-    elif last["c"] > bsl and prev["c"] <= bsl:
-        event_type = "BOS / CHoCH ALCISTA"
-        event_dir = "SUBE"
-        event_price = bsl
-        event_desc = f"Quiebre con cuerpo sobre {bsl}."
-    elif last["c"] < ssl and prev["c"] >= ssl:
-        event_type = "BOS / CHoCH BAJISTA"
-        event_dir = "BAJA"
-        event_price = ssl
-        event_desc = f"Quiebre con cuerpo bajo {ssl}."
-
-    return {
-        "bsl": bsl,
-        "ssl": ssl,
-        "event_type": event_type,
-        "event_dir": event_dir,
-        "event_price": event_price,
-        "event_desc": event_desc,
-    }
-
-
-def scan_institutional_zone(candles, direction, price, atr, pip, dec):
-    if not candles or len(candles) < 12 or direction not in ("SUBE", "BAJA"):
-        return None
-
-    recent = candles[-24:]
-    min_imp = max(atr * 0.45, pip * 6)
-    candidates = []
-
-    for i in range(len(recent) - 3, 1, -1):
-        c0 = recent[i - 1]
-        c1 = recent[i]
-        c2 = recent[i + 1]
-        c3 = recent[i + 2]
-
-        if direction == "SUBE":
-            is_bear_ob = c1["c"] < c1["o"]
-            imp_size = c2["c"] - c1["l"]
-            has_fvg = c3["l"] > c1["h"]
-            if is_bear_ob and imp_size >= min_imp:
-                zone_hi = round(max(c1["o"], c1["h"]), dec)
-                zone_lo = round(min(c1["l"], c0["l"]), dec)
-                entry = zone_hi
-                sl = round(zone_lo - max(pip * 3, atr * 0.12), dec)
-                if price >= sl and entry < price * 1.015:
-                    tier = 1 if has_fvg else 2
-                    tag = "COMPRA OB + FVG" if has_fvg else "COMPRA OB ESTRUCTURAL"
-                    candidates.append((tier, i, tag, entry, sl, zone_hi, zone_lo))
-            elif has_fvg and (c2["c"] - c2["o"]) >= min_imp * 0.8:
-                zone_hi = round(c3["l"], dec)
-                zone_lo = round(c1["h"], dec)
-                entry = zone_hi
-                sl = round(c1["l"] - max(pip * 3, atr * 0.12), dec)
-                if price >= sl and entry < price * 1.015:
-                    candidates.append((3, i, "COMPRA FVG RETROCESO", entry, sl, zone_hi, zone_lo))
-        else:
-            is_bull_ob = c1["c"] > c1["o"]
-            imp_size = c1["h"] - c2["c"]
-            has_fvg = c3["h"] < c1["l"]
-            if is_bull_ob and imp_size >= min_imp:
-                zone_lo = round(min(c1["o"], c1["l"]), dec)
-                zone_hi = round(max(c1["h"], c0["h"]), dec)
-                entry = zone_lo
-                sl = round(zone_hi + max(pip * 3, atr * 0.12), dec)
-                if price <= sl and entry > price * 0.985:
-                    tier = 1 if has_fvg else 2
-                    tag = "VENTA OB + FVG" if has_fvg else "VENTA OB ESTRUCTURAL"
-                    candidates.append((tier, i, tag, entry, sl, zone_hi, zone_lo))
-            elif has_fvg and (c2["o"] - c2["c"]) >= min_imp * 0.8:
-                zone_lo = round(c3["h"], dec)
-                zone_hi = round(c1["l"], dec)
-                entry = zone_lo
-                sl = round(c1["h"] + max(pip * 3, atr * 0.12), dec)
-                if price <= sl and entry > price * 0.985:
-                    candidates.append((3, i, "VENTA FVG RETROCESO", entry, sl, zone_hi, zone_lo))
-
-    if not candidates:
-        return None
-
-    candidates.sort(key=lambda x: (x[0], -x[1]))
-    tier, _, tag, entry, sl, z_hi, z_lo = candidates[0]
-    risk = abs(entry - sl)
-    if risk <= 0:
-        return None
-
-    if direction == "SUBE":
-        be_trigger = round(entry + risk * 1.0, dec)
-        tp1 = round(entry + risk * 2.0, dec)
-        tp2 = round(entry + risk * 3.0, dec)
-        swing_tp = round(entry + risk * 4.2, dec)
-        side = "BUY"
-    else:
-        be_trigger = round(entry - risk * 1.0, dec)
-        tp1 = round(entry - risk * 2.0, dec)
-        tp2 = round(entry - risk * 3.0, dec)
-        swing_tp = round(entry - risk * 4.2, dec)
-        side = "SELL"
-
-    return {
-        "tier": tier,
-        "direction": side,
-        "signal_tag": tag,
-        "entry": entry,
-        "sl": sl,
-        "be_trigger": be_trigger,
-        "tp1": tp1,
-        "tp2": tp2,
-        "swing_tp": swing_tp,
-        "ob_high": z_hi,
-        "ob_low": z_lo,
-    }
-
-
-def find_clean_weekly_pivots_pre2017(candles_1w, dec):
-    buys, sells = [], []
-    if not candles_1w or len(candles_1w) < 6:
-        return buys, sells
-
-    for i in range(3, len(candles_1w) - 2):
-        c = candles_1w[i]
-        if c["t"] >= HISTORICAL_CUTOFF_TS:
+    for i in range(4, len(c_1w_all) - 4):
+        c_curr = c_1w_all[i]
+        ts = c_curr.get("t", 0)
+        if ts <= 0 or ts >= HISTORICAL_CUTOFF_TS:
             continue
-        prev1 = candles_1w[i - 1]
-        prev2 = candles_1w[i - 2]
-        nxt = candles_1w[i + 1]
 
-        rng = max(1e-9, c["h"] - c["l"])
-        body = abs(c["c"] - c["o"])
-        date_str = datetime.fromtimestamp(c["t"], tz=timezone.utc).strftime("%Y-%m-%d")
+        prev4 = c_1w_all[i - 4:i]
+        next4 = c_1w_all[i + 1:i + 5]
+        c_prev1 = c_1w_all[i - 1]
+        c_next1 = c_1w_all[i + 1]
 
-        if prev1["c"] < prev1["o"] and c["l"] < prev1["l"] and c["l"] < prev2["l"] and nxt["c"] > c["h"]:
-            if body / rng >= 0.35 or (min(c["o"], c["c"]) - c["l"]) >= rng * 0.45:
-                buys.append({
-                    "direction": "BUY",
-                    "entry": round(max(c["o"], c["c"]), dec),
-                    "extreme": round(c["l"], dec),
-                    "date": date_str
+        prev_high = max(x["h"] for x in prev4)
+        next_high = max(x["h"] for x in next4)
+        prev_low = min(x["l"] for x in prev4)
+        next_low = min(x["l"] for x in next4)
+
+        rng = max(1e-9, c_curr["h"] - c_curr["l"])
+        body_top = max(c_curr["o"], c_curr["c"])
+        body_bot = min(c_curr["o"], c_curr["c"])
+        upper_wick = c_curr["h"] - body_top
+        lower_wick = body_bot - c_curr["l"]
+
+        dt_str = datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d")
+
+        # Giro bajista limpio (1 vela sube + 1 vela unica rechaza arriba)
+        if (
+            c_curr["h"] > prev_high
+            and c_curr["h"] > next_high
+            and c_prev1["c"] > c_prev1["o"]
+            and c_next1["c"] < c_next1["o"]
+            and upper_wick >= rng * 0.30
+        ):
+            entry_lvl = round(body_top, dec)
+            ext_lvl = round(c_curr["h"], dec)
+            if price < entry_lvl:
+                dist_u = round((entry_lvl - price) / max(1e-9, pip), 1)
+                pct_d = (entry_lvl - price) / max(1e-9, price)
+                if (a_type in ("forex", "metal") and dist_u <= max_units) or (
+                    a_type not in ("forex", "metal") and pct_d <= max_pct
+                ):
+                    pivots.append({
+                        "symbol": sym,
+                        "type": a_type,
+                        "decimals": dec,
+                        "pip": pip,
+                        "price": price,
+                        "direction": "SELL",
+                        "entry": entry_lvl,
+                        "extreme": ext_lvl,
+                        "date": dt_str,
+                        "dist_units": dist_u,
+                        "unit_label": "pips" if a_type in ("forex", "metal") else "pts",
+                        "macro_aligned": (macro_dir == "BAJA"),
+                    })
+
+        # Giro alcista limpio (1 vela cae + 1 vela unica rechaza abajo)
+        if (
+            c_curr["l"] < prev_low
+            and c_curr["l"] < next_low
+            and c_prev1["c"] < c_prev1["o"]
+            and c_next1["c"] > c_next1["o"]
+            and lower_wick >= rng * 0.30
+        ):
+            entry_lvl = round(body_bot, dec)
+            ext_lvl = round(c_curr["l"], dec)
+            if price > entry_lvl:
+                dist_u = round((price - entry_lvl) / max(1e-9, pip), 1)
+                pct_d = (price - entry_lvl) / max(1e-9, price)
+                if (a_type in ("forex", "metal") and dist_u <= max_units) or (
+                    a_type not in ("forex", "metal") and pct_d <= max_pct
+                ):
+                    pivots.append({
+                        "symbol": sym,
+                        "type": a_type,
+                        "decimals": dec,
+                        "pip": pip,
+                        "price": price,
+                        "direction": "BUY",
+                        "entry": entry_lvl,
+                        "extreme": ext_lvl,
+                        "date": dt_str,
+                        "dist_units": dist_u,
+                        "unit_label": "pips" if a_type in ("forex", "metal") else "pts",
+                        "macro_aligned": (macro_dir == "SUBE"),
+                    })
+
+    pivots.sort(key=lambda x: x["dist_units"])
+    return pivots[:2]
+
+
+def detect_reversal_and_structure(c_1h, dec):
+    if len(c_1h) < 18:
+        swing_h = round(max((x["h"] for x in c_1h), default=0), dec)
+        swing_l = round(min((x["l"] for x in c_1h), default=0), dec)
+        return {
+            "choch": "NONE",
+            "sweep": "NONE",
+            "bos": "NONE",
+            "reversal_dir": "NONE",
+            "strong_pullback": False,
+            "bsl": swing_h,
+            "ssl": swing_l,
+        }
+
+    recent = c_1h[-24:]
+    prior = recent[:-4]
+    last4 = recent[-4:]
+    swing_h = round(max(x["h"] for x in prior), dec)
+    swing_l = round(min(x["l"] for x in prior), dec)
+    last_c = last4[-1]["c"]
+
+    bull_sweep = any(x["l"] < swing_l and x["c"] > swing_l for x in last4)
+    bear_sweep = any(x["h"] > swing_h and x["c"] < swing_h for x in last4)
+    bull_bos = last_c > swing_h
+    bear_bos = last_c < swing_l
+
+    choch = "NONE"
+    rev_dir = "NONE"
+    if bull_sweep or bull_bos:
+        choch = "ALCISTA"
+        rev_dir = "SUBE"
+    elif bear_sweep or bear_bos:
+        choch = "BAJISTA"
+        rev_dir = "BAJA"
+
+    bodies = [abs(x["c"] - x["o"]) for x in last4]
+    avg_prior = sum(abs(x["c"] - x["o"]) for x in prior[-10:]) / max(1, len(prior[-10:]))
+    strong_pullback = (choch != "NONE") and (max(bodies) >= avg_prior * 1.35)
+
+    return {
+        "choch": choch,
+        "sweep": "SSL BARRIDA" if bull_sweep else ("BSL BARRIDA" if bear_sweep else "NONE"),
+        "bos": "BOS ALCISTA" if bull_bos else ("BOS BAJISTA" if bear_bos else "NONE"),
+        "reversal_dir": rev_dir,
+        "strong_pullback": strong_pullback,
+        "bsl": swing_h,
+        "ssl": swing_l,
+    }
+
+
+def detect_cascade_zone(c_1h, direction, price, pip, dec, a_type):
+    """
+    Escáner institucional en cascada de 3 niveles:
+    1) OB + FVG (máxima confluencia)
+    2) OB Estructural limpio
+    3) FVG aislado de retroceso
+    """
+    if not c_1h or len(c_1h) < 12:
+        return None
+
+    spread_buf = pip * (18.0 if a_type == "metal" else (8.0 if a_type == "forex" else 15.0))
+    bars = c_1h[-32:]
+    n = len(bars)
+
+    ob_fvg_candidates = []
+    ob_only_candidates = []
+    fvg_only_candidates = []
+
+    for i in range(2, n - 2):
+        c0 = bars[i - 1]
+        c1 = bars[i]
+        c2 = bars[i + 1]
+        c3 = bars[i + 2]
+
+        body1 = abs(c1["c"] - c1["o"])
+        body2 = abs(c2["c"] - c2["o"])
+        if body2 <= 0:
+            continue
+
+        if direction == "BUY":
+            # FVG alcista: hueco entre máximo de c1 y mínimo de c3
+            has_fvg = (c3["l"] > c1["h"]) and ((c3["l"] - c1["h"]) >= pip * 2.0)
+            # OB alcista: última vela bajista (c1) antes de impulso alcista fuerte (c2)
+            is_ob = (c1["c"] < c1["o"]) and (c2["c"] > c2["o"]) and (body2 > body1 * 1.15) and (c2["c"] > c1["h"])
+
+            if is_ob:
+                z_top = round(max(c1["o"], c1["c"]), dec)
+                z_bot = round(c1["l"], dec)
+                entry_p = round((z_top + z_bot) / 2.0, dec) if has_fvg else z_top
+                sl_p = round(z_bot - spread_buf, dec)
+                if price >= sl_p and entry_p > sl_p:
+                    item = {
+                        "zone_kind": "OB_FVG" if has_fvg else "OB",
+                        "top": z_top,
+                        "bottom": z_bot,
+                        "entry": entry_p,
+                        "sl": sl_p,
+                        "idx": i,
+                    }
+                    if has_fvg:
+                        ob_fvg_candidates.append(item)
+                    else:
+                        ob_only_candidates.append(item)
+            elif has_fvg:
+                z_top = round(c3["l"], dec)
+                z_bot = round(c1["h"], dec)
+                entry_p = round((z_top + z_bot) / 2.0, dec)
+                sl_p = round(min(c1["l"], c2["l"]) - spread_buf, dec)
+                if price >= sl_p and entry_p > sl_p:
+                    fvg_only_candidates.append({
+                        "zone_kind": "FVG",
+                        "top": z_top,
+                        "bottom": z_bot,
+                        "entry": entry_p,
+                        "sl": sl_p,
+                        "idx": i,
+                    })
+
+        else:  # SELL
+            has_fvg = (c1["l"] > c3["h"]) and ((c1["l"] - c3["h"]) >= pip * 2.0)
+            is_ob = (c1["c"] > c1["o"]) and (c2["c"] < c2["o"]) and (body2 > body1 * 1.15) and (c2["c"] < c1["l"])
+
+            if is_ob:
+                z_top = round(c1["h"], dec)
+                z_bot = round(min(c1["o"], c1["c"]), dec)
+                entry_p = round((z_top + z_bot) / 2.0, dec) if has_fvg else z_bot
+                sl_p = round(z_top + spread_buf, dec)
+                if price <= sl_p and entry_p < sl_p:
+                    item = {
+                        "zone_kind": "OB_FVG" if has_fvg else "OB",
+                        "top": z_top,
+                        "bottom": z_bot,
+                        "entry": entry_p,
+                        "sl": sl_p,
+                        "idx": i,
+                    }
+                    if has_fvg:
+                        ob_fvg_candidates.append(item)
+                    else:
+                        ob_only_candidates.append(item)
+            elif has_fvg:
+                z_top = round(c1["l"], dec)
+                z_bot = round(c3["h"], dec)
+                entry_p = round((z_top + z_bot) / 2.0, dec)
+                sl_p = round(max(c1["h"], c2["h"]) + spread_buf, dec)
+                if price <= sl_p and entry_p < sl_p:
+                    fvg_only_candidates.append({
+                        "zone_kind": "FVG",
+                        "top": z_top,
+                        "bottom": z_bot,
+                        "entry": entry_p,
+                        "sl": sl_p,
+                        "idx": i,
+                    })
+
+    if ob_fvg_candidates:
+        return ob_fvg_candidates[-1]
+    if ob_only_candidates:
+        return ob_only_candidates[-1]
+    if fvg_only_candidates:
+        return fvg_only_candidates[-1]
+    return None
+
+
+def detect_exhaustion(c_1h, direction, r20_pos):
+    if not c_1h or len(c_1h) < 4:
+        return {"active": False, "reason": ""}
+    last3 = c_1h[-3:]
+    bodies = [abs(x["c"] - x["o"]) for x in last3]
+    shrinking = bodies[2] < bodies[1] < bodies[0]
+    if direction == "BUY" and (r20_pos >= 82 or shrinking):
+        return {"active": True, "reason": f"Precio en techo del rango ({r20_pos}%) o velas perdiendo cuerpo."}
+    if direction == "SELL" and (r20_pos <= 18 or shrinking):
+        return {"active": True, "reason": f"Precio en suelo del rango ({r20_pos}%) o velas perdiendo cuerpo."}
+    return {"active": False, "reason": ""}
+
+
+def fetch_high_impact_calendar(now_utc):
+    today_ff = now_utc.strftime("%m-%d-%Y")
+    today_iso = now_utc.strftime("%Y-%m-%d")
+    events_today = []
+    high_impact_by_ccy = {}
+
+    try:
+        url = "https://nfs.faireconomy.media/ff_calendar_thisweek.xml"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            xml_data = resp.read()
+        root = ET.fromstring(xml_data)
+        for ev in root.findall(".//event"):
+            date_el = ev.find("date")
+            time_el = ev.find("time")
+            ccy_el = ev.find("country")
+            imp_el = ev.find("impact")
+            title_el = ev.find("title")
+            if date_el is None or ccy_el is None or imp_el is None or title_el is None:
+                continue
+            ev_date = (date_el.text or "").strip()
+            if ev_date != today_ff:
+                continue
+            ccy = (ccy_el.text or "").strip().upper()
+            imp = (imp_el.text or "").strip()
+            title = (title_el.text or "").strip()
+            ev_time = (time_el.text or "").strip() if time_el is not None else ""
+
+            if imp.lower() == "high":
+                high_impact_by_ccy.setdefault(ccy, []).append(f"{title} ({ev_time})")
+                events_today.append({
+                    "date": today_iso,
+                    "time": ev_time or "Hoy",
+                    "currency": ccy,
+                    "impact": "ALTO",
+                    "title": title,
                 })
-
-        if prev1["c"] > prev1["o"] and c["h"] > prev1["h"] and c["h"] > prev2["h"] and nxt["c"] < c["l"]:
-            if body / rng >= 0.35 or (c["h"] - max(c["o"], c["c"])) >= rng * 0.45:
-                sells.append({
-                    "direction": "SELL",
-                    "entry": round(min(c["o"], c["c"]), dec),
-                    "extreme": round(c["h"], dec),
-                    "date": date_str
+            elif imp.lower() == "medium" and len(events_today) < 10:
+                events_today.append({
+                    "date": today_iso,
+                    "time": ev_time or "Hoy",
+                    "currency": ccy,
+                    "impact": "MEDIO",
+                    "title": title,
                 })
+    except Exception as e:
+        print(f"Aviso calendario economico: {e}")
 
-    return buys[-40:], sells[-40:]
+    if not events_today:
+        events_today = [
+            {"date": today_iso, "time": "07:00 UTC", "currency": "EUR/GBP", "impact": "ALTO", "title": "Apertura Killzone Londres - Barrido de Liquidez Asiatica"},
+            {"date": today_iso, "time": "12:30 UTC", "currency": "USD", "impact": "ALTO", "title": "Apertura Killzone Nueva York - Flujo Institucional"},
+            {"date": today_iso, "time": "23:50 UTC", "currency": "AUD/JPY", "impact": "MEDIO", "title": "Apertura Sesion Tokio y Sidney - Flujo Asia-Pacifico"},
+        ]
 
-
-def pct_change_4h(candles, bars=6):
-    if not candles or len(candles) <= bars:
-        return 0.0
-    p0 = candles[-1 - bars]["c"]
-    p1 = candles[-1]["c"]
-    return ((p1 - p0) / p0) * 100.0 if p0 else 0.0
+    return events_today[:12], high_impact_by_ccy
 
 
 def compute_currency_strength_matrix(c4_map, c1d_map, dxy_4h, dxy_1d, us10y_4h, us10y_1d, spx_4h, spx_1d):
     def blend_chg(c4, c1d):
-        return (pct_change_4h(c4, 6) * 0.60) + (pct_change_4h(c1d, 5) * 0.40)
+        return (pct_change_lookback(c4, 6) * 0.60) + (pct_change_lookback(c1d, 5) * 0.40)
 
     dxy_chg = blend_chg(dxy_4h, dxy_1d)
     us10y_chg = blend_chg(us10y_4h, us10y_1d)
     spx_chg = blend_chg(spx_4h, spx_1d)
 
     usd_score = (dxy_chg * 1.4) + (us10y_chg * 0.35)
-    gbp_score = (blend_chg(c4_map.get("GBPUSD"), c1d_map.get("GBPUSD")) +
-                 blend_chg(c4_map.get("GBPJPY"), c1d_map.get("GBPJPY")) +
-                 blend_chg(c4_map.get("GBPAUD"), c1d_map.get("GBPAUD"))) / 3.0
-    aud_score = ((blend_chg(c4_map.get("AUDUSD"), c1d_map.get("AUDUSD")) +
-                  blend_chg(c4_map.get("AUDJPY"), c1d_map.get("AUDJPY")) +
-                  blend_chg(c4_map.get("AUDNZD"), c1d_map.get("AUDNZD"))) / 3.0) + (spx_chg * 0.25)
-    eur_score = (blend_chg(c4_map.get("EURUSD"), c1d_map.get("EURUSD")) +
-                 blend_chg(c4_map.get("EURJPY"), c1d_map.get("EURJPY")) +
-                 blend_chg(c4_map.get("EURAUD"), c1d_map.get("EURAUD"))) / 3.0
-    jpy_score = -((blend_chg(c4_map.get("USDJPY"), c1d_map.get("USDJPY")) +
-                   blend_chg(c4_map.get("GBPJPY"), c1d_map.get("GBPJPY")) +
-                   blend_chg(c4_map.get("EURJPY"), c1d_map.get("EURJPY")) +
-                   blend_chg(c4_map.get("AUDJPY"), c1d_map.get("AUDJPY"))) / 4.0)
-    nzd_score = (blend_chg(c4_map.get("NZDUSD"), c1d_map.get("NZDUSD")) -
-                 blend_chg(c4_map.get("AUDNZD"), c1d_map.get("AUDNZD"))) / 2.0
-    cad_score = (-blend_chg(c4_map.get("USDCAD"), c1d_map.get("USDCAD")) -
-                 blend_chg(c4_map.get("AUDCAD"), c1d_map.get("AUDCAD"))) / 2.0
-    chf_score = (-blend_chg(c4_map.get("USDCHF"), c1d_map.get("USDCHF")) -
-                 blend_chg(c4_map.get("AUDCHF"), c1d_map.get("AUDCHF"))) / 2.0
+    gbp_score = (
+        blend_chg(c4_map.get("GBPUSD"), c1d_map.get("GBPUSD"))
+        + blend_chg(c4_map.get("GBPJPY"), c1d_map.get("GBPJPY"))
+        + blend_chg(c4_map.get("GBPAUD"), c1d_map.get("GBPAUD"))
+    ) / 3.0
+    aud_score = (
+        (
+            blend_chg(c4_map.get("AUDUSD"), c1d_map.get("AUDUSD"))
+            + blend_chg(c4_map.get("AUDJPY"), c1d_map.get("AUDJPY"))
+            + blend_chg(c4_map.get("AUDNZD"), c1d_map.get("AUDNZD"))
+        )
+        / 3.0
+    ) + (spx_chg * 0.25)
+    eur_score = (
+        blend_chg(c4_map.get("EURUSD"), c1d_map.get("EURUSD"))
+        + blend_chg(c4_map.get("EURJPY"), c1d_map.get("EURJPY"))
+        + blend_chg(c4_map.get("EURAUD"), c1d_map.get("EURAUD"))
+    ) / 3.0
+    jpy_score = -(
+        (
+            blend_chg(c4_map.get("USDJPY"), c1d_map.get("USDJPY"))
+            + blend_chg(c4_map.get("GBPJPY"), c1d_map.get("GBPJPY"))
+            + blend_chg(c4_map.get("EURJPY"), c1d_map.get("EURJPY"))
+            + blend_chg(c4_map.get("AUDJPY"), c1d_map.get("AUDJPY"))
+        )
+        / 4.0
+    )
+    nzd_score = (
+        blend_chg(c4_map.get("NZDUSD"), c1d_map.get("NZDUSD"))
+        - blend_chg(c4_map.get("AUDNZD"), c1d_map.get("AUDNZD"))
+    ) / 2.0
+    cad_score = (
+        -blend_chg(c4_map.get("USDCAD"), c1d_map.get("USDCAD"))
+        - blend_chg(c4_map.get("AUDCAD"), c1d_map.get("AUDCAD"))
+    ) / 2.0
+    chf_score = (
+        -blend_chg(c4_map.get("USDCHF"), c1d_map.get("USDCHF"))
+        - blend_chg(c4_map.get("AUDCHF"), c1d_map.get("AUDCHF"))
+    ) / 2.0
     xau_score = -usd_score * 0.9
 
     raw = {
-        "USD": usd_score, "GBP": gbp_score, "AUD": aud_score,
-        "EUR": eur_score, "JPY": jpy_score, "NZD": nzd_score,
-        "CAD": cad_score, "CHF": chf_score, "XAU": xau_score,
-        "BTC": spx_chg * 0.8 - usd_score * 0.5,
+        "USD": round(usd_score, 3),
+        "GBP": round(gbp_score, 3),
+        "AUD": round(aud_score, 3),
+        "EUR": round(eur_score, 3),
+        "JPY": round(jpy_score, 3),
+        "NZD": round(nzd_score, 3),
+        "CAD": round(cad_score, 3),
+        "CHF": round(chf_score, 3),
+        "XAU": round(xau_score, 3),
+        "BTC": round(spx_chg * 0.8 - usd_score * 0.5, 3),
     }
     labels = {k: ("FUERTE" if v > 0.14 else ("DEBIL" if v < -0.14 else "NEUTRAL")) for k, v in raw.items()}
     return raw, labels, round(spx_chg, 2)
 
 
-def fetch_high_impact_calendar(now_utc):
-    events = []
-    high_by_ccy = {}
-    today_str = now_utc.strftime("%Y-%m-%d")
-    try:
-        url = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=8) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-        for ev in data:
-            if ev.get("impact") != "High":
-                continue
-            ev_date = str(ev.get("date", ""))[:10]
-            if ev_date != today_str:
-                continue
-            ccy = str(ev.get("country", "")).upper()
-            title = str(ev.get("title", "Evento Alto Impacto"))
-            t_str = str(ev.get("date", ""))[11:16] or "Hoy"
-            events.append({
-                "time": f"{t_str} UTC",
-                "currency": ccy,
-                "impact": "ALTO",
-                "title": title,
-                "forecast": ev.get("forecast", "-"),
-                "previous": ev.get("previous", "-"),
-            })
-            high_by_ccy.setdefault(ccy, []).append(title)
-    except Exception:
-        pass
+def get_central_banks(dxy_val, us10y_val, ccy_labels):
+    return [
+        {
+            "bank": "FED (EE.UU.)",
+            "currency": "USD",
+            "stance": f"USD {ccy_labels.get('USD', 'NEUTRAL')}",
+            "bias": "BULLISH" if ccy_labels.get("USD") == "FUERTE" else ("BEARISH" if ccy_labels.get("USD") == "DEBIL" else "NEUTRAL"),
+            "detail": f"DXY ({dxy_val}) + Bonos US10Y ({us10y_val}%) en cesta hibrida 4H/1D.",
+        },
+        {
+            "bank": "BCE (Eurozona)",
+            "currency": "EUR",
+            "stance": f"EUR {ccy_labels.get('EUR', 'NEUTRAL')}",
+            "bias": "BULLISH" if ccy_labels.get("EUR") == "FUERTE" else ("BEARISH" if ccy_labels.get("EUR") == "DEBIL" else "NEUTRAL"),
+            "detail": "Flujo en EURUSD + EURJPY + EURAUD (60% 4H + 40% 1D).",
+        },
+        {
+            "bank": "BoE (Reino Unido)",
+            "currency": "GBP",
+            "stance": f"GBP {ccy_labels.get('GBP', 'NEUTRAL')}",
+            "bias": "BULLISH" if ccy_labels.get("GBP") == "FUERTE" else ("BEARISH" if ccy_labels.get("GBP") == "DEBIL" else "NEUTRAL"),
+            "detail": "Flujo en GBPUSD + GBPJPY + GBPAUD (60% 4H + 40% 1D).",
+        },
+        {
+            "bank": "BoJ (Japon)",
+            "currency": "JPY",
+            "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')}",
+            "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DEBIL" else "NEUTRAL"),
+            "detail": "Sensible al diferencial de bonos US10Y y cruces JPY.",
+        },
+        {
+            "bank": "RBA (Australia)",
+            "currency": "AUD",
+            "stance": f"AUD {ccy_labels.get('AUD', 'NEUTRAL')}",
+            "bias": "BULLISH" if ccy_labels.get("AUD") == "FUERTE" else ("BEARISH" if ccy_labels.get("AUD") == "DEBIL" else "NEUTRAL"),
+            "detail": "Correlacionado con apetito de riesgo (US500) y cesta AUD.",
+        },
+        {
+            "bank": "RBNZ (Nueva Zelanda)",
+            "currency": "NZD",
+            "stance": f"NZD {ccy_labels.get('NZD', 'NEUTRAL')}",
+            "bias": "BULLISH" if ccy_labels.get("NZD") == "FUERTE" else ("BEARISH" if ccy_labels.get("NZD") == "DEBIL" else "NEUTRAL"),
+            "detail": "Cesta NZDUSD y diferencial frente a AUDNZD.",
+        },
+        {
+            "bank": "BoC (Canada)",
+            "currency": "CAD",
+            "stance": f"CAD {ccy_labels.get('CAD', 'NEUTRAL')}",
+            "bias": "BULLISH" if ccy_labels.get("CAD") == "FUERTE" else ("BEARISH" if ccy_labels.get("CAD") == "DEBIL" else "NEUTRAL"),
+            "detail": "Flujo frente a USD (USDCAD) y cruces de materias primas.",
+        },
+        {
+            "bank": "SNB (Suiza)",
+            "currency": "CHF",
+            "stance": f"CHF {ccy_labels.get('CHF', 'NEUTRAL')}",
+            "bias": "BULLISH" if ccy_labels.get("CHF") == "FUERTE" else ("BEARISH" if ccy_labels.get("CHF") == "DEBIL" else "NEUTRAL"),
+            "detail": "Divisa refugio medida contra USDCHF y AUDCHF.",
+        },
+    ]
 
-    if not events:
-        events = [
-            {"time": "13:30 UTC", "currency": "USD", "impact": "MEDIO", "title": "Apertura Sesion Nueva York / Flujo Institucional", "forecast": "-", "previous": "-"},
-            {"time": "15:00 UTC", "currency": "USD", "impact": "MEDIO", "title": "Fijacion de Liquidez Londres / NY", "forecast": "-", "previous": "-"},
-        ]
-    return events[:12], high_by_ccy
+
+def explain_news_for_trader(title, category):
+    t = title.lower()
+    if any(k in t for k in ["fed", "powell", "fomc", "rate", "yield", "treasury", "cpi", "ppi", "inflation", "nfp", "payroll"]):
+        return (
+            "USD · US10Y · XAUUSD · USTEC",
+            "Impacta directamente las expectativas de tasas de interes en EE.UU. Si suben los rendimientos (US10Y), el Dolar se fortalece y presiona a la baja al Oro y Nasdaq.",
+        )
+    if any(k in t for k in ["gold", "bullion", "silver", "metal", "oil", "crude"]):
+        return (
+            "XAUUSD · USDCAD · AUDUSD",
+            "Movimiento en materias primas y activos refugio. Afecta de forma directa la liquidez del Oro (XAUUSD) y divisas ligadas a commodities como CAD y AUD.",
+        )
+    if any(k in t for k in ["yen", "boj", "ueda", "japan", "intervention"]):
+        return (
+            "USDJPY · GBPJPY · EURJPY · AUDJPY",
+            "Catalizador directo sobre el Yen japones. Aumenta la volatilidad en todos los cruces JPY; vigila posibles barridos de liquidez en sesion asiatica.",
+        )
+    if any(k in t for k in ["ecb", "lagarde", "euro", "germany", "eurozone"]):
+        return (
+            "EURUSD · EURJPY · EURAUD",
+            "Define la fuerza institucional del Euro frente al Dolar y al Yen. Util para confirmar continuacion o giro en sesiones de Londres.",
+        )
+    if any(k in t for k in ["boe", "bailey", "pound", "sterling", "uk", "britain"]):
+        return (
+            "GBPUSD · GBPJPY · GBPAUD · GBPCAD",
+            "Genera flujo institucional en la Libra Esterlina durante la Killzone de Londres.",
+        )
+    if any(k in t for k in ["nasdaq", "s&p", "dow", "nvidia", "tech", "wall st", "stocks", "equities"]):
+        return (
+            "USTEC · US500 · US30 · AUDJPY",
+            "Marca el sentimiento de apetito o aversion al riesgo en Wall Street. Si suben los indices, suelen acompañarlo al alza AUD y NZD.",
+        )
+    if any(k in t for k in ["bitcoin", "crypto", "btc", "sec", "etf"]):
+        return (
+            "BTCUSD · USTEC",
+            "Afecta la liquidez del mercado cripto y suele correlacionarse con el impulso tecnologico del Nasdaq.",
+        )
+    return (
+        "MERCADO GENERAL",
+        f"Titular relevante del bloque {category} que puede generar picos de volatilidad puntual en apertura de sesion.",
+    )
 
 
 def fetch_live_news():
     feeds = [
-        ("Yahoo Finance", "https://finance.yahoo.com/news/rssindex"),
-        ("FXStreet / Macro", "https://www.investing.com/rss/news_1.rss"),
-        ("Forex & Divisas", "https://www.investing.com/rss/news_14.rss"),
+        ("WALL STREET & TASAS", "https://finance.yahoo.com/news/rssindex"),
+        ("FOREX & BANCOS", "https://www.investing.com/rss/news_1.rss"),
+        ("ORO & MACRO", "https://www.investing.com/rss/news_14.rss"),
     ]
     news_items = []
     seen = set()
-    for source_name, url in feeds:
+    for category, url in feeds:
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
             with urllib.request.urlopen(req, timeout=8) as resp:
                 xml_data = resp.read()
             root = ET.fromstring(xml_data)
-            for item in root.findall(".//item")[:4]:
+            for item in root.findall(".//item")[:6]:
                 title_el = item.find("title")
                 link_el = item.find("link")
                 pub_el = item.find("pubDate")
@@ -468,18 +704,32 @@ def fetch_live_news():
                     if title in seen:
                         continue
                     seen.add(title)
+                    pairs_affected, plain_es = explain_news_for_trader(title, category)
                     news_items.append({
-                        "source": source_name,
+                        "category": category,
+                        "source": category,
                         "title": title,
+                        "pairs": pairs_affected,
+                        "plain_es": plain_es,
                         "link": link_el.text.strip() if (link_el is not None and link_el.text) else "#",
-                        "time": (pub_el.text.strip()[:22] if (pub_el is not None and pub_el.text) else "Hoy")
+                        "time": (pub_el.text.strip()[:22] if (pub_el is not None and pub_el.text) else "Hoy"),
                     })
         except Exception:
             pass
 
     if not news_items:
-        news_items = [{"source": "Radar Institucional", "title": "Flujos de liquidez activos en sesiones principales.", "link": "#", "time": "En linea"}]
-    return news_items[:8]
+        news_items = [
+            {
+                "category": "WALL STREET & TASAS",
+                "source": "Radar Institucional",
+                "title": "Flujos de liquidez activos en sesiones de Londres y Nueva York.",
+                "pairs": "EURUSD · GBPUSD · XAUUSD · USTEC",
+                "plain_es": "Sin noticias extraordinarias fuera de calendario; operar respetando zonas limpias de OB + FVG.",
+                "link": "#",
+                "time": "En linea",
+            }
+        ]
+    return news_items[:18]
 
 
 def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_ccy, now_ts, active_setups):
@@ -487,266 +737,381 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         sym = cfg["symbol"]
         dec = cfg["decimals"]
         pip = cfg["pip"]
+        a_type = cfg["type"]
+        base_ccy = cfg["base"]
+        quote_ccy = cfg["quote"]
+
         c_1d = candles_bundle.get("1d", [])
         c_4h = candles_bundle.get("4h", [])
         c_1h = candles_bundle.get("1h", [])
-        c_1w = candles_bundle.get("1w_all", [])
+        c_1w_all = candles_bundle.get("1w_all", [])
+        c_1w = c_1w_all[-45:] if c_1w_all else []
 
-        if not c_1h or not c_4h or not c_1d:
+        if not c_1h or len(c_1h) < 10:
             return None
 
         price = c_1h[-1]["c"]
-        b_w, _ = analyze_tf_bias(c_1w[-35:] if len(c_1w) >= 35 else c_1w)
-        b_d, _ = analyze_tf_bias(c_1d)
-        b_4h, _ = analyze_tf_bias(c_4h)
-        b_1h, _ = analyze_tf_bias(c_1h)
+        prev_close = c_1d[-2]["c"] if len(c_1d) >= 2 else c_1h[0]["o"]
+        change_pct = round(((price - prev_close) / max(1e-9, prev_close)) * 100.0, 2)
 
-        score_tech = 0
-        for b, w in [(b_d, 3), (b_4h, 2), (b_1h, 1)]:
-            if b == "SUBE":
-                score_tech += w
-            elif b == "BAJA":
-                score_tech -= w
+        b_w = calc_bias(c_1w, 6, 0.0012)
+        b_d = calc_bias(c_1d, 6, 0.0008)
+        b_4h = calc_bias(c_4h, 6, 0.0006)
+        b_1h = calc_bias(c_1h, 6, 0.0004)
 
-        chart_bias = "SUBE" if score_tech >= 2 else ("BAJA" if score_tech <= -2 else "NEUTRAL")
-
-        base_c = cfg["base"]
-        quote_c = cfg["quote"]
-        if cfg["type"] in ("index", "crypto"):
-            m_diff = raw_strength.get("BTC", 0.0)
-        elif cfg["type"] == "metal":
-            m_diff = raw_strength.get("XAU", 0.0)
+        # Dirección macro según cesta de divisas o riesgo
+        if a_type == "forex":
+            diff = raw_strength.get(base_ccy, 0.0) - raw_strength.get(quote_ccy, 0.0)
+            macro_dir = "SUBE" if diff > 0.12 else ("BAJA" if diff < -0.12 else "NEUTRAL")
+        elif sym == "XAUUSD":
+            s_xau = raw_strength.get("XAU", 0.0)
+            macro_dir = "SUBE" if s_xau > 0.12 else ("BAJA" if s_xau < -0.12 else "NEUTRAL")
+        elif sym == "BTCUSD":
+            s_btc = raw_strength.get("BTC", 0.0)
+            macro_dir = "SUBE" if s_btc > 0.12 else ("BAJA" if s_btc < -0.12 else "NEUTRAL")
         else:
-            m_diff = raw_strength.get(base_c, 0.0) - raw_strength.get(quote_c, 0.0)
+            s_idx = raw_strength.get("BTC", 0.0)
+            macro_dir = "SUBE" if s_idx > 0.10 else ("BAJA" if s_idx < -0.10 else "NEUTRAL")
 
-        macro_dir = "SUBE" if m_diff > 0.16 else ("BAJA" if m_diff < -0.16 else "NEUTRAL")
+        struct = detect_reversal_and_structure(c_1h, dec)
+        atr_14 = calc_atr_14(c_1d, dec)
+        r20 = calc_range_20d(c_1d, price, dec)
 
-        atr_val = round(calc_atr(c_1d, 14), dec)
-        atr_units = round(atr_val / pip, 1) if pip else 0.0
-        r20_hi = max(x["h"] for x in c_1d[-20:])
-        r20_lo = min(x["l"] for x in c_1d[-20:])
-        r20_val = round(r20_hi - r20_lo, dec)
-        r20_units = round(r20_val / pip, 1) if pip else 0.0
+        # Sesgo técnico del gráfico
+        votes_up = sum(1 for v in (b_d, b_4h, b_1h) if v == "SUBE")
+        votes_dn = sum(1 for v in (b_d, b_4h, b_1h) if v == "BAJA")
+        if votes_up >= 2:
+            chart_bias = "SUBE"
+        elif votes_dn >= 2:
+            chart_bias = "BAJA"
+        elif struct["reversal_dir"] in ("SUBE", "BAJA"):
+            chart_bias = struct["reversal_dir"]
+        else:
+            chart_bias = b_4h if b_4h != "NEUTRAL" else b_1h
 
-        exhausted, ex_reason = detect_exhaustion(c_4h, chart_bias)
-        liq = detect_liquidity_and_structure(c_4h, dec)
+        direction = "BUY" if chart_bias == "SUBE" else "SELL"
+        is_counter_daily = (b_d in ("SUBE", "BAJA")) and (b_d != chart_bias)
 
-        scan_dir = chart_bias if chart_bias in ("SUBE", "BAJA") else (macro_dir if macro_dir in ("SUBE", "BAJA") else "NEUTRAL")
-        setup = scan_institutional_zone(c_1h if len(c_1h) >= 16 else c_4h, scan_dir, price, atr_val, pip, dec)
+        # Escáner en cascada de 3 niveles (OB+FVG -> OB -> FVG)
+        zone = detect_cascade_zone(c_1h, direction, price, pip, dec, a_type)
+        has_valid_ob = zone is not None
 
+        if zone:
+            entry = zone["entry"]
+            sl = zone["sl"]
+            zone_kind = zone["zone_kind"]
+            zone_top = zone["top"]
+            zone_bot = zone["bottom"]
+        else:
+            # Referencia estructural de respaldo si aún no hay bloque limpio
+            entry = round(price, dec)
+            sl_dist = max(pip * 15, atr_14 * 0.45 if atr_14 else pip * 25)
+            sl = round(entry - sl_dist, dec) if direction == "BUY" else round(entry + sl_dist, dec)
+            zone_kind = "NONE"
+            zone_top = entry
+            zone_bot = entry
+
+        risk_dist = max(pip, abs(entry - sl))
+        if direction == "BUY":
+            be_trigger = round(entry + risk_dist * 1.0, dec)
+            tp1 = round(entry + risk_dist * 2.0, dec)
+            tp2 = round(entry + risk_dist * 3.0, dec)
+            swing_tp = round(entry + risk_dist * 4.2, dec)
+        else:
+            be_trigger = round(entry - risk_dist * 1.0, dec)
+            tp1 = round(entry - risk_dist * 2.0, dec)
+            tp2 = round(entry - risk_dist * 3.0, dec)
+            swing_tp = round(entry - risk_dist * 4.2, dec)
+
+        # Confluencia Economía vs Gráfico
         if macro_dir == "NEUTRAL" or chart_bias == "NEUTRAL":
             alignment = "NEUTRAL"
-            score = 52 if setup else 42
-            verdict_title = "SIN DIRECCION CLARA - UNO ESTA NEUTRAL"
-            verdict_sub = "Esperar a que Economia y Grafico definan tendencia."
         elif macro_dir == chart_bias:
             alignment = "ALIGNED"
-            base_s = 78 + (6 if b_d == chart_bias else 0) + (4 if b_4h == chart_bias else 0) + (4 if setup and setup["tier"] == 1 else 0)
-            score = min(96, base_s - (14 if exhausted else 0))
-            if exhausted:
-                verdict_title = "AGOTAMIENTO - RIESGO DE GIRO"
-                verdict_sub = ex_reason
-            elif setup:
-                verdict_title = f"VAN JUNTOS - BUSCAR {'COMPRAS' if chart_bias == 'SUBE' else 'VENTAS'}"
-                verdict_sub = f"{setup['signal_tag']} respaldado por flujo macro."
-            else:
-                verdict_title = "VAN JUNTOS - SIN OB/FVG LIMPIO AUN"
-                verdict_sub = "Direccion confirmada; esperar bloque institucional."
         else:
             alignment = "BROKEN"
-            score = 35
-            verdict_title = "SE CONTRADICEN - ESPERAR"
-            verdict_sub = f"Economia apunta {macro_dir} pero grafico muestra {chart_bias}."
 
-        swing_potential = None
-        if (
-            setup
-            and alignment == "ALIGNED"
+        # Cálculo de puntaje de confluencia (0 - 100)
+        score = 50
+        if alignment == "ALIGNED":
+            score += 22
+        elif alignment == "BROKEN":
+            score -= 18
+        if zone_kind == "OB_FVG":
+            score += 16
+        elif zone_kind == "OB":
+            score += 11
+        elif zone_kind == "FVG":
+            score += 7
+        if b_d == chart_bias:
+            score += 6
+        if b_4h == chart_bias:
+            score += 5
+        if b_1h == chart_bias:
+            score += 4
+        if struct["choch"] != "NONE":
+            score += 4
+        conf_score = max(15, min(98, score))
+
+        exhaustion = detect_exhaustion(c_1h, direction, r20["pos_pct"])
+
+        # Filtro estricto de 8 candados para POTENCIAL SWING
+        dist_ratio = abs(price - entry) / max(1e-9, price)
+        max_swing_dist = 0.025 if a_type == "crypto" else 0.012
+        ccy_swing_ok = True
+        if a_type == "forex":
+            if direction == "BUY" and ccy_labels.get(base_ccy) == "DEBIL":
+                ccy_swing_ok = False
+            elif direction == "SELL" and ccy_labels.get(base_ccy) == "FUERTE":
+                ccy_swing_ok = False
+
+        is_swing_potential = (
+            has_valid_ob
+            and not is_counter_daily
+            and not exhaustion["active"]
+            and ccy_swing_ok
             and b_d == chart_bias
             and b_4h == chart_bias
             and b_1h == chart_bias
-            and score >= 84
-            and not exhausted
-        ):
-            swing_potential = {
-                "active": True,
-                "swing_tp": setup["swing_tp"],
-                "be_trigger": setup["be_trigger"],
-                "plan": "1) Proteger en BE al tocar +1R. 2) Cobrar parcial en TP1. 3) Piramidar en retrocesos hacia Swing TP."
-            }
+            and macro_dir == chart_bias
+            and conf_score >= 84
+            and dist_ratio <= max_swing_dist
+        )
 
-        affected_news = []
-        for ccy in {base_c, quote_c}:
-            if ccy in high_impact_by_ccy:
-                affected_news.extend([f"{ccy}: {t}" for t in high_impact_by_ccy[ccy]])
-        news_warning = " | ".join(affected_news[:2]) if affected_news else None
+        # Noticias de alto impacto hoy para este activo
+        ccys_to_check = [base_ccy, quote_ccy] if a_type == "forex" else ["USD"]
+        news_list = []
+        for c in ccys_to_check:
+            news_list.extend(high_impact_by_ccy.get(c, []))
+        has_news = len(news_list) > 0
 
-        hist_buys, hist_sells = find_clean_weekly_pivots_pre2017(c_1w, dec)
-        nearby_weekly_pivots = []
-        current_trend = b_d if b_d in ("SUBE", "BAJA") else chart_bias
-        for p in (hist_buys + hist_sells):
-            if current_trend == "SUBE" and p["direction"] != "SELL":
-                continue
-            if current_trend == "BAJA" and p["direction"] != "BUY":
-                continue
-            if p["direction"] == "SELL" and price >= p["entry"]:
-                continue
-            if p["direction"] == "BUY" and price <= p["entry"]:
-                continue
+        weekly_pivots = detect_weekly_clean_pivots(c_1w_all, price, pip, dec, a_type, sym, macro_dir)
 
-            dist_u = round((abs(price - p["entry"]) / pip) * 10) / 10 if pip else abs(price - p["entry"])
-            pct_d = abs(price - p["entry"]) / max(1e-9, price)
-            within_range = (dist_u <= 60.0) if cfg["type"] == "forex" else ((dist_u <= 100.0) if cfg["type"] == "metal" else (pct_d <= 0.004))
-            if within_range:
-                macro_ok = (p["direction"] == "BUY" and macro_dir == "SUBE") or (p["direction"] == "SELL" and macro_dir == "BAJA")
-                nearby_weekly_pivots.append({
-                    "symbol": sym,
-                    "type": cfg["type"],
-                    "decimals": dec,
-                    "pip": pip,
-                    "price": price,
-                    "direction": p["direction"],
-                    "entry": p["entry"],
-                    "extreme": p["extreme"],
-                    "date": p["date"],
-                    "dist_units": dist_u,
-                    "unit_label": "pips" if cfg["type"] in ("forex", "metal") else "pts",
-                    "macro_aligned": macro_ok,
-                })
-
-        setup_sig = f"{setup['direction']}_{setup['entry']}" if setup else "NONE"
-        prev_state = active_setups.get(sym, {})
-        if setup and prev_state.get("sig") == setup_sig:
-            created_at = prev_state.get("created_at", now_ts)
-        else:
-            created_at = now_ts
-            active_setups[sym] = {"sig": setup_sig, "created_at": created_at}
+        dir_es = "COMPRA" if direction == "BUY" else "VENTA"
+        z_es = "OB + FVG" if zone_kind == "OB_FVG" else ("OB Estructural" if zone_kind == "OB" else ("FVG Retroceso" if zone_kind == "FVG" else "Sin bloque limpio"))
 
         return {
             "symbol": sym,
-            "type": cfg["type"],
+            "type": a_type,
+            "base": base_ccy,
+            "quote": quote_ccy,
             "pip": pip,
             "decimals": dec,
             "price": price,
-            "chart_bias": chart_bias,
-            "macro_dir": macro_dir,
-            "tf_biases": {"1w": b_w, "1d": b_d, "4h": b_4h, "1h": b_1h},
-            "volatility": {
-                "atr": atr_val,
-                "atr_units": atr_units,
-                "range20": r20_val,
-                "range20_units": r20_units,
+            "change_pct": change_pct,
+            "has_valid_ob": has_valid_ob,
+            "zone_kind": zone_kind,
+            "is_counter_daily": is_counter_daily,
+            "is_strong_pullback": bool(is_counter_daily and struct["strong_pullback"]),
+            "has_news_today": has_news,
+            "news_today": news_list[:3],
+            "timeframes": {
+                "1w": b_w,
+                "1d": b_d,
+                "4h": b_4h,
+                "1h": b_1h,
+                "macro": macro_dir,
             },
-            "liquidity": liq,
-            "intraday_high": round(max(x["h"] for x in c_1h[-12:]), dec),
-            "intraday_low": round(min(x["l"] for x in c_1h[-12:]), dec),
-            "ob_high": setup["ob_high"] if setup else round(max(x["h"] for x in c_1h[-12:]), dec),
-            "ob_low": setup["ob_low"] if setup else round(min(x["l"] for x in c_1h[-12:]), dec),
-            "macro_reason": f"Jerarquia (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}). {verdict_sub}",
-            "news_warning": news_warning,
-            "swing_potential": swing_potential,
-            "weekly_pivots": nearby_weekly_pivots,
-            "created_at": created_at,
+            "metrics": {
+                "atr_14": atr_14,
+                "range_20d": r20,
+            },
+            "structure": struct,
             "confluence": {
-                "score": score,
                 "alignment": alignment,
-                "verdict_title": verdict_title,
-                "verdict_sub": verdict_sub,
+                "score": conf_score,
+                "macro_dir": macro_dir,
+                "chart_bias": chart_bias,
             },
-            "setup": setup,
+            "exhaustion": exhaustion,
+            "swing_potential": {
+                "active": is_swing_potential,
+                "target": swing_tp,
+                "note": "Protocolo Piramide activo: asegurar BE (+1R) antes de añadir retroceso." if is_swing_potential else "",
+            },
+            "setup": {
+                "direction": direction,
+                "dir_label": dir_es,
+                "signal_tag": f"{dir_es} · {z_es}",
+                "entry": entry,
+                "zone_top": zone_top,
+                "zone_bottom": zone_bot,
+                "sl": sl,
+                "be_trigger": be_trigger,
+                "tp1": tp1,
+                "tp2": tp2,
+                "simple_reason": f"{z_es} en 1H con estructura 1D {b_d} / 4H {b_4h} y flujo macro {macro_dir}.",
+                "risk_note": f"Noticia fuerte hoy: {', '.join(news_list)}" if has_news else "Respetar Stop estructural y proteger en +1R.",
+            },
+            "weekly_pivots": weekly_pivots,
             "candles": {
                 "1d": c_1d[-35:],
                 "4h": c_4h[-35:],
                 "1h": c_1h[-35:],
             },
         }
-    except Exception:
+    except Exception as e:
+        print(f"Error procesando {cfg.get('symbol')}: {e}")
         return None
-
-
-def get_central_banks(dxy_val, us10y_val, ccy_labels):
-    return [
-        {"bank": "FED (EE.UU.)", "currency": "USD", "stance": f"USD {ccy_labels.get('USD', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("USD") == "FUERTE" else ("BEARISH" if ccy_labels.get("USD") == "DEBIL" else "NEUTRAL"), "detail": f"DXY ({dxy_val}) + Bonos US10Y ({us10y_val}%) en cesta hibrida 4H/1D."},
-        {"bank": "BoE (Reino Unido)", "currency": "GBP", "stance": f"GBP {ccy_labels.get('GBP', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("GBP") == "FUERTE" else ("BEARISH" if ccy_labels.get("GBP") == "DEBIL" else "NEUTRAL"), "detail": "Cesta hibrida GBPUSD + GBPJPY + GBPAUD (60% 4H + 40% 1D)."},
-        {"bank": "RBA (Australia)", "currency": "AUD", "stance": f"AUD {ccy_labels.get('AUD', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("AUD") == "FUERTE" else ("BEARISH" if ccy_labels.get("AUD") == "DEBIL" else "NEUTRAL"), "detail": "Cesta hibrida AUDUSD + AUDJPY + AUDNZD + riesgo US500 (4H/1D)."},
-        {"bank": "BCE (Eurozona)", "currency": "EUR", "stance": f"EUR {ccy_labels.get('EUR', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("EUR") == "FUERTE" else ("BEARISH" if ccy_labels.get("EUR") == "DEBIL" else "NEUTRAL"), "detail": "Cesta hibrida EURUSD + EURJPY + EURAUD (60% 4H + 40% 1D)."},
-        {"bank": "BoJ (Japon)", "currency": "JPY", "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DEBIL" else "NEUTRAL"), "detail": "Flujo inverso en cruces JPY (60% 4H + 40% 1D)."}
-    ]
 
 
 def build_correlated_baskets(assets, ccy_labels):
     baskets = []
-    for ccy in ["USD", "GBP", "AUD", "EUR", "JPY"]:
+    for ccy in ["USD", "GBP", "AUD", "EUR", "JPY", "CAD", "NZD", "CHF"]:
         st = ccy_labels.get(ccy, "NEUTRAL")
         if st == "NEUTRAL":
             continue
-        members = []
+        matched_pairs = []
         for a in assets:
-            sym = a["symbol"]
-            if ccy not in sym or a["type"] != "forex":
+            if not a.get("has_valid_ob") or a["confluence"]["alignment"] != "ALIGNED":
                 continue
-            is_base = sym.startswith(ccy)
-            suggested = ("COMPRA" if is_base else "VENTA") if st == "FUERTE" else ("VENTA" if is_base else "COMPRA")
-            members.append(f"{sym} ({suggested})")
-        if members:
-            baskets.append({"currency": ccy, "status": st, "pairs": members[:4]})
+            d = a["setup"]["direction"]
+            if st == "FUERTE":
+                if (a["base"] == ccy and d == "BUY") or (a["quote"] == ccy and d == "SELL"):
+                    matched_pairs.append(f"{a['symbol']} ({'COMPRA' if d == 'BUY' else 'VENTA'})")
+            elif st == "DEBIL":
+                if (a["base"] == ccy and d == "SELL") or (a["quote"] == ccy and d == "BUY"):
+                    matched_pairs.append(f"{a['symbol']} ({'COMPRA' if d == 'BUY' else 'VENTA'})")
+        if len(matched_pairs) >= 2:
+            baskets.append({
+                "currency": ccy,
+                "status": st,
+                "pairs": matched_pairs[:5],
+            })
     return baskets
 
 
-def compute_best_focus_pick(assets):
-    ranked = []
+def compute_best_focus_pick(assets, baskets):
+    basket_ccys = {b["currency"] for b in baskets}
+    candidates = []
     for a in assets:
-        if not a.get("setup") or a["confluence"]["alignment"] != "ALIGNED":
+        if not a.get("has_valid_ob"):
             continue
         prob = a["confluence"]["score"]
-        if a.get("swing_potential"):
-            prob = min(98, prob + 5)
-        if a["setup"]["tier"] == 1:
-            prob = min(98, prob + 3)
-        if a.get("news_warning"):
-            prob -= 6
-        ranked.append((prob, a))
+        if a["confluence"]["alignment"] == "ALIGNED":
+            prob += 10
+        if a["zone_kind"] == "OB_FVG":
+            prob += 8
+        if a["swing_potential"]["active"]:
+            prob += 8
+        if a["base"] in basket_ccys or a["quote"] in basket_ccys:
+            prob += 4
+        if a["has_news_today"]:
+            prob -= 25
+        if a["is_counter_daily"]:
+            prob -= 10
+        prob = max(20, min(95, prob))
 
-    ranked.sort(key=lambda x: x[0], reverse=True)
-    if not ranked:
-        return None
+        dist_u = round(abs(a["price"] - a["setup"]["entry"]) / max(1e-9, a["pip"]), 1)
+        u_lbl = "pips" if a["type"] in ("forex", "metal") else "pts"
+        candidates.append((
+            prob,
+            -dist_u,
+            {
+                "symbol": a["symbol"],
+                "base": a["base"],
+                "quote": a["quote"],
+                "probability": prob,
+                "direction": a["setup"]["direction"],
+                "dir_label": a["setup"]["dir_label"],
+                "zone_kind": a["zone_kind"],
+                "signal_tag": f"{a['setup']['dir_label']} {a['zone_kind'].replace('_', ' + ')}",
+                "price": a["price"],
+                "entry": a["setup"]["entry"],
+                "sl": a["setup"]["sl"],
+                "be_trigger": a["setup"]["be_trigger"],
+                "tp1": a["setup"]["tp1"],
+                "tp2": a["setup"]["tp2"],
+                "dist_units": dist_u,
+                "unit_label": u_lbl,
+                "swing_potential": a["swing_potential"]["active"],
+                "reason": a["setup"]["simple_reason"],
+            },
+        ))
 
-    best_prob, best = ranked[0]
-    s = best["setup"]
-    return {
-        "primary": {
-            "symbol": best["symbol"],
-            "probability": best_prob,
-            "direction": s["direction"],
-            "signal_tag": s["signal_tag"],
-            "entry": s["entry"],
-            "sl": s["sl"],
-            "tp1": s["tp1"],
-            "swing_potential": bool(best.get("swing_potential")),
-            "reason": best["confluence"]["verdict_sub"],
-        }
-    }
+    if not candidates:
+        return {"primary": None, "secondary": None}
+
+    candidates.sort(key=lambda x: (x[0], x[1]), reverse=True)
+    primary = candidates[0][2]
+    secondary = None
+    for _, _, cand in candidates[1:]:
+        if cand["base"] not in (primary["base"], primary["quote"]) and cand["quote"] not in (primary["base"], primary["quote"]):
+            secondary = cand
+            break
+    return {"primary": primary, "secondary": secondary}
 
 
 def dispatch_push_notifications(assets, now_ts):
     if not NTFY_TOPIC:
         return
     sent_state = load_json_state(ALERTS_STATE_FILE)
-    cooldown = 6 * 3600
+    updated = False
 
     for a in assets:
         sym = a["symbol"]
-        s = a.get("setup")
-        if not s:
-            continue
-        if a.get("swing_potential"):
-            key = f"SWING_{sym}_{s['direction']}"
-            if now_ts - sent_state.get(key, 0) > cooldown:
-                msg = f"{sym} ({s['direction']}) | Entrada: {s['entry']} | SL: {s['sl']} | BE: {s['be_trigger']} | Swing TP: {s['swing_tp']}"
-                if send_ntfy_alert(f"LATICCE SWING: {sym}", msg, priority="high", tags="rocket"):
-                    sent_state[key] = now_ts
+        a_type = a.get("type", "forex")
+        direction = a["setup"]["direction"]
+        d_txt = "COMPRA" if direction == "BUY" else "VENTA"
+        is_aligned = (a.get("confluence", {}).get("alignment") == "ALIGNED")
+        has_valid_ob = bool(a.get("has_valid_ob"))
+        z_kind = a.get("zone_kind", "OB")
 
-    save_json_state(ALERTS_STATE_FILE, sent_state)
+        price = a["price"]
+        entry = a["setup"]["entry"]
+        sl = a["setup"]["sl"]
+        tp1 = a["setup"]["tp1"]
+        pip = a.get("pip", 0.0001)
+
+        units = round((abs(price - entry) / pip) * 10) / 10 if pip else abs(price - entry)
+        pct_dist = abs(price - entry) / max(1e-9, price)
+        right_side = (price > sl and price < tp1) if direction == "BUY" else (price < sl and price > tp1)
+
+        if sym == "XAUUSD" or a_type == "metal":
+            in_trigger_zone = (units <= 40.0)
+            u_lbl = "pips"
+        elif a_type == "forex":
+            in_trigger_zone = (units <= 25.0)
+            u_lbl = "pips"
+        else:
+            in_trigger_zone = (pct_dist <= 0.0015)
+            u_lbl = "pts"
+
+        if has_valid_ob and is_aligned and right_side and in_trigger_zone:
+            entry_key = f"ALARM_{sym}_{direction}_{entry}"
+            if entry_key not in sent_state:
+                be_p = a["setup"].get("be_trigger", entry)
+                is_swing = bool(a.get("swing_potential") and a["swing_potential"].get("active"))
+                swing_line = f" | Swing TP: {a['swing_potential']['target']}" if is_swing else ""
+                kind_tag = "OB + FVG" if z_kind == "OB_FVG" else ("FVG" if z_kind == "FVG" else "OB ESTRUCTURAL")
+                body = (
+                    f"{sym} ({d_txt}) a {units} {u_lbl} de {kind_tag} ({entry}).\n"
+                    f"Precio: {price} | SL: {sl} | BE (+1R): {be_p} | TP1: {tp1}{swing_line}"
+                )
+                send_mobile_push(f"LATICCE {kind_tag}: {sym} ({d_txt}) a {units} {u_lbl}", body, "high", "dart,bell")
+                sent_state[entry_key] = now_ts
+                updated = True
+
+        for wp in a.get("weekly_pivots", []):
+            w_units = wp["dist_units"]
+            w_in_zone = (w_units <= 40.0) if (sym == "XAUUSD" or a_type == "metal") else ((w_units <= 25.0) if a_type == "forex" else (abs(price - wp["entry"]) / max(1e-9, price) <= 0.0015))
+            if w_in_zone:
+                w_key = f"WEEKLY1S_{sym}_{wp['direction']}_{wp['entry']}_{wp['date']}"
+                if w_key not in sent_state:
+                    w_dir_txt = "COMPRA" if wp["direction"] == "BUY" else "VENTA"
+                    w_body = (
+                        f"Giro semanal limpio ({wp['date']}) en {sym} ({w_dir_txt}).\n"
+                        f"Entrada 1S: {wp['entry']} (Extremo: {wp['extreme']}) | Actual: {price} ({w_units} {wp['unit_label']})."
+                    )
+                    send_mobile_push(f"LATICCE GIRO 1S ({wp['date']}): {sym} ({w_dir_txt})", w_body, "high", "dart,bell")
+                    sent_state[w_key] = now_ts
+                    updated = True
+
+    if updated:
+        if len(sent_state) > 180:
+            sorted_items = sorted(sent_state.items(), key=lambda x: x[1])[-180:]
+            sent_state = dict(sorted_items)
+        save_json_state(ALERTS_STATE_FILE, sent_state)
 
 
 def main():
@@ -760,6 +1125,10 @@ def main():
 
     dxy_val = dxy_4h[-1]["c"] if dxy_4h else 104.20
     us10y_val = us10y_4h[-1]["c"] if us10y_4h else 4.25
+    dxy_prev = dxy_1d[-2]["c"] if len(dxy_1d) >= 2 else dxy_val
+    us10y_prev = us10y_1d[-2]["c"] if len(us10y_1d) >= 2 else us10y_val
+    dxy_chg_pct = round(((dxy_val - dxy_prev) / max(1e-9, dxy_prev)) * 100.0, 2)
+    us10y_chg_pct = round(((us10y_val - us10y_prev) / max(1e-9, us10y_prev)) * 100.0, 2)
 
     calendar_events, high_impact_by_ccy = fetch_high_impact_calendar(now_utc)
 
@@ -778,21 +1147,36 @@ def main():
         c4_map[sym] = c_4h
         c1d_map[sym] = c_1d
 
-    raw_strength, ccy_labels, _ = compute_currency_strength_matrix(
+    raw_strength, ccy_labels, spx_chg = compute_currency_strength_matrix(
         c4_map, c1d_map, dxy_4h, dxy_1d, us10y_4h, us10y_1d, c4_map.get("US500", []), c1d_map.get("US500", [])
     )
 
     active_setups = load_json_state(SETUPS_STATE_FILE)
     assets = [
-        item for cfg in ASSETS_CONFIG
+        item
+        for cfg in ASSETS_CONFIG
         if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels, high_impact_by_ccy, now_ts, active_setups))
     ]
     save_json_state(SETUPS_STATE_FILE, active_setups)
 
     banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
     baskets = build_correlated_baskets(assets, ccy_labels)
-    focus_pick = compute_best_focus_pick(assets)
+    focus_pick = compute_best_focus_pick(assets, baskets)
     news = fetch_live_news()
+
+    # Resumen de Wall Street para el Brief Diario de VISIÓN
+    idx_map = {a["symbol"]: a for a in assets if a["symbol"] in ("US500", "USTEC", "US30")}
+    wall_street = []
+    for sym_i, name_i in [("US500", "S&P 500"), ("USTEC", "Nasdaq 100"), ("US30", "Dow Jones 30")]:
+        it = idx_map.get(sym_i)
+        if it:
+            wall_street.append({
+                "symbol": sym_i,
+                "name": name_i,
+                "price": it["price"],
+                "change_pct": it["change_pct"],
+                "bias": it["confluence"]["chart_bias"],
+            })
 
     all_weekly_pivots = []
     for a in assets:
@@ -802,30 +1186,47 @@ def main():
     dispatch_push_notifications(assets, now_ts)
 
     alert_ccys = sorted(high_impact_by_ccy.keys())
-    news_alert_str = f" - Noticias fuertes hoy en: {', '.join(alert_ccys)}" if alert_ccys else ""
+    news_alert_str = f" · Noticias fuertes hoy: {', '.join(alert_ccys)}" if alert_ccys else ""
     focus_str = f" | Foco #1: {focus_pick['primary']['symbol']} ({focus_pick['primary']['probability']}% prob)" if (focus_pick and focus_pick.get("primary")) else ""
+
+    strong_list = [k for k, v in ccy_labels.items() if v == "FUERTE" and len(k) == 3]
+    weak_list = [k for k, v in ccy_labels.items() if v == "DEBIL" and len(k) == 3]
+    brief_narrative = (
+        f"DXY en {dxy_val} ({dxy_chg_pct:+.2f}%) y Bonos US10Y en {us10y_val}% ({us10y_chg_pct:+.2f}%). "
+        f"Divisas liderando fuerza: {', '.join(strong_list) if strong_list else 'Sin liderazgo extremo'}. "
+        f"Divisas bajo presion: {', '.join(weak_list) if weak_list else 'Equilibrio general'}{news_alert_str}."
+    )
 
     payload = {
         "last_updated": now_utc.strftime("%Y-%m-%d %H:%M UTC"),
         "brief": {
             "dxy": dxy_val,
+            "dxy_chg": dxy_chg_pct,
             "us10y": us10y_val,
-            "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} - US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"LATICCE v10.0 - Radar Foco Principal + Mesa de Swing + Cascada OB/FVG ({len(all_weekly_pivots)} niveles 1S){focus_str}."
+            "us10y_chg": us10y_chg_pct,
+            "spx_chg": spx_chg,
+            "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}",
+            "summary": f"LATICCE v10.2 · Radar Foco Principal + VISIÓN 5 Módulos + Giros 1S ({len(all_weekly_pivots)} niveles){focus_str}.",
+            "narrative": brief_narrative,
         },
+        "currency_strength": {
+            "raw": raw_strength,
+            "labels": ccy_labels,
+        },
+        "wall_street": wall_street,
         "focus_pick": focus_pick,
         "weekly_pivots": all_weekly_pivots,
         "correlated_baskets": baskets,
         "banks": banks,
         "news": news,
         "calendar": calendar_events,
-        "assets": assets
+        "assets": assets,
     }
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados (LATICCE v10.0).")
+    print(f"OK: {len(assets)} activos actualizados (LATICCE v10.2).")
 
 
 if __name__ == "__main__":
