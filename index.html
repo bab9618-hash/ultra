@@ -1,1082 +1,1172 @@
-import json
-import os
-import re
-import urllib.request
-import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
-import yfinance as yf
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LATICCE · Cabina v10.1 MESA DE SWING + VISIÓN EXPLICADA</title>
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#030407" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --agent-color: #f59e0b; --agent-glow: rgba(245,158,11,0.28); }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0; background: #030407; color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace; overflow-x: hidden;
+    }
+    .font-hud { font-family: 'Orbitron', sans-serif; }
+    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes spinRev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+    @keyframes pulseCore { 0%, 100% { transform: scale(1); opacity: 0.92; } 50% { transform: scale(1.04); opacity: 0.55; } }
+    @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes blinkCursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes bootAutoFade {
+      0%, 84% { opacity: 1; visibility: visible; pointer-events: auto; }
+      100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
+    }
+    #boot-screen { animation: bootAutoFade 3.0s ease-out forwards; }
+    .spin-slow { animation: spinSlow 24s linear infinite; }
+    .spin-med { animation: spinSlow 14s linear infinite; }
+    .spin-rev { animation: spinRev 18s linear infinite; }
+    .pulse-core { animation: pulseCore 2.8s ease-in-out infinite; }
+    .ticker-track { display: flex; width: max-content; animation: tickerScroll 44s linear infinite; }
+    .typing-cursor { display: inline-block; width: 7px; height: 13px; background: var(--agent-color); margin-left: 3px; vertical-align: middle; animation: blinkCursor 0.8s infinite; }
+    .hud-panel {
+      background: linear-gradient(155deg, rgba(10, 14, 22, 0.92), rgba(5, 8, 13, 0.96));
+      backdrop-filter: blur(12px);
+      border: 1px solid #182234;
+    }
+    .hud-brackets { position: relative; }
+    .hud-brackets::before, .hud-brackets::after {
+      content: ""; position: absolute; width: 14px; height: 14px; border-color: var(--agent-color); pointer-events: none;
+    }
+    .hud-brackets::before { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
+    .hud-brackets::after { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
 
-NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "").strip()
-ALERTS_STATE_FILE = "alerts_sent.json"
-SETUPS_STATE_FILE = "active_setups.json"
-HISTORICAL_CUTOFF_TS = int(datetime(2017, 1, 1, tzinfo=timezone.utc).timestamp())
+<canvas id="neural-bg" class="fixed inset-0 pointer-events-none z-0 opacity-60"></canvas>
 
-ASSETS_CONFIG = [
-    {"symbol": "XAUUSD", "yf": "GC=F",       "type": "metal",  "pip": 0.1,    "decimals": 2, "base": "XAU", "quote": "USD"},
-    {"symbol": "EURUSD", "yf": "EURUSD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "EUR", "quote": "USD"},
-    {"symbol": "USDJPY", "yf": "JPY=X",      "type": "forex",  "pip": 0.01,   "decimals": 3, "base": "USD", "quote": "JPY"},
-    {"symbol": "GBPUSD", "yf": "GBPUSD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "GBP", "quote": "USD"},
-    {"symbol": "GBPJPY", "yf": "GBPJPY=X",   "type": "forex",  "pip": 0.01,   "decimals": 3, "base": "GBP", "quote": "JPY"},
-    {"symbol": "GBPAUD", "yf": "GBPAUD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "GBP", "quote": "AUD"},
-    {"symbol": "GBPNZD", "yf": "GBPNZD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "GBP", "quote": "NZD"},
-    {"symbol": "GBPCAD", "yf": "GBPCAD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "GBP", "quote": "CAD"},
-    {"symbol": "AUDUSD", "yf": "AUDUSD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "AUD", "quote": "USD"},
-    {"symbol": "AUDJPY", "yf": "AUDJPY=X",   "type": "forex",  "pip": 0.01,   "decimals": 3, "base": "AUD", "quote": "JPY"},
-    {"symbol": "AUDCAD", "yf": "AUDCAD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "AUD", "quote": "CAD"},
-    {"symbol": "AUDNZD", "yf": "AUDNZD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "AUD", "quote": "NZD"},
-    {"symbol": "EURAUD", "yf": "EURAUD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "EUR", "quote": "AUD"},
-    {"symbol": "AUDCHF", "yf": "AUDCHF=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "AUD", "quote": "CHF"},
-    {"symbol": "NZDUSD", "yf": "NZDUSD=X",   "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "NZD", "quote": "USD"},
-    {"symbol": "USDCAD", "yf": "CAD=X",      "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "USD", "quote": "CAD"},
-    {"symbol": "USDCHF", "yf": "CHF=X",      "type": "forex",  "pip": 0.0001, "decimals": 5, "base": "USD", "quote": "CHF"},
-    {"symbol": "EURJPY", "yf": "EURJPY=X",   "type": "forex",  "pip": 0.01,   "decimals": 3, "base": "EUR", "quote": "JPY"},
-    {"symbol": "BTCUSD", "yf": "BTC-USD",    "type": "crypto", "pip": 1.0,    "decimals": 2, "base": "BTC", "quote": "USD"},
-    {"symbol": "US30",   "yf": "^DJI",       "type": "index",  "pip": 1.0,    "decimals": 2, "base": "USD", "quote": "USD"},
-    {"symbol": "USTEC",  "yf": "^IXIC",      "type": "index",  "pip": 1.0,    "decimals": 2, "base": "USD", "quote": "USD"},
-    {"symbol": "US500",  "yf": "^GSPC",      "type": "index",  "pip": 1.0,    "decimals": 2, "base": "USD", "quote": "USD"},
-]
+<!-- PANTALLA DE ARRANQUE NEURONAL -->
+<div id="boot-screen" class="fixed inset-0 z-[100] bg-[#030407] flex flex-col items-center justify-between py-10 px-4 text-center">
+  <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-red-200/80">RED NEURONAL EN LÍNEA · v10.1</div>
+  <div class="relative z-10 w-[290px] h-[290px] sm:w-[340px] sm:h-[340px] flex items-center justify-center my-auto pointer-events-none">
+    <svg viewBox="0 0 360 360" class="w-full h-full overflow-visible">
+      <defs>
+        <radialGradient id="latticeVortex" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#030407" stop-opacity="1"/>
+          <stop offset="14%" stop-color="#fbbf24" stop-opacity="0.88"/>
+          <stop offset="34%" stop-color="#f97316" stop-opacity="0.52"/>
+          <stop offset="65%" stop-color="#dc2626" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#030407" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="180" cy="180" r="152" fill="url(#latticeVortex)"/>
+      <circle cx="180" cy="180" r="134" fill="none" stroke="#7f1d1d" stroke-width="1" stroke-dasharray="3 4"/>
+      <g class="spin-slow" style="transform-origin: 180px 180px;" opacity="0.65">
+        <polygon points="180,36 304,108 304,252 180,324 56,252 56,108" fill="none" stroke="#ef4444" stroke-width="1"/>
+        <circle cx="180" cy="180" r="56" fill="none" stroke="#fbbf24" stroke-width="3" stroke-dasharray="14 8 4 8" opacity="0.9"/>
+      </g>
+      <g transform="translate(180,46)"><circle r="24" fill="#090508" stroke="#f59e0b" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">JARVIS</text></g>
+      <g transform="translate(285,96)"><circle r="24" fill="#090508" stroke="#10b981" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#34d399" font-size="8" font-weight="bold">E.D.I.T.H.</text></g>
+      <g transform="translate(310,210)"><circle r="24" fill="#090508" stroke="#a855f7" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="bold">F.R.I.D.A.Y.</text></g>
+      <g transform="translate(238,300)"><circle r="24" fill="#090508" stroke="#84cc16" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#a3e635" font-size="8" font-weight="bold">H.O.M.E.R.</text></g>
+      <g transform="translate(122,300)"><circle r="24" fill="#090508" stroke="#ef4444" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#f87171" font-size="8" font-weight="bold">ULTRÓN</text></g>
+      <g transform="translate(50,210)"><circle r="24" fill="#090508" stroke="#f43f5e" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#fb7185" font-size="8" font-weight="bold">KAREN</text></g>
+      <g transform="translate(75,96)"><circle r="24" fill="#090508" stroke="#38bdf8" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#7dd3fc" font-size="8" font-weight="bold">VISIÓN</text></g>
+    </svg>
+  </div>
+  <div class="relative z-10 space-y-2 max-w-md w-full">
+    <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-amber-300 to-red-400">LATICCE</h1>
+    <div class="text-[11px] font-mono tracking-[0.25em] text-red-200/80">MESA DE SWING · VISIÓN EXPLICADA</div>
+    <div class="pt-2">
+      <button type="button" onclick="document.getElementById('boot-screen').style.display='none';" class="px-6 py-2.5 rounded-lg border border-red-500 bg-red-500/20 text-red-100 font-bold text-xs tracking-widest">
+        ENTRAR A LA CABINA ▸
+      </button>
+    </div>
+  </div>
+</div>
 
+<!-- BARRA SUPERIOR HUD -->
+<header class="relative z-20 border-b border-slate-800/90 bg-[#04070e]/95 backdrop-blur sticky top-0">
+  <div class="max-w-6xl mx-auto px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+    <div class="flex items-center gap-2.5">
+      <span class="font-hud font-black tracking-widest text-amber-400 text-sm">LATICCE</span>
+      <span id="hud-updated" class="text-[10px] text-slate-400">Cargando mercado...</span>
+      <span id="live-feed-badge" class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-bold">● LIVE 5s</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button onclick="configureGeminiKey()" id="ai-key-btn" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 text-[10px] font-bold text-slate-300">🧠 IA</button>
+      <button onclick="toggleVoice()" id="voice-btn" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 text-[10px] font-bold text-amber-300">🔊 VOZ ON</button>
+      <button onclick="toggleViewMode()" id="view-mode-btn" class="px-2.5 py-1 rounded bg-amber-500 text-black font-bold text-[10px]">VER PANEL ▸</button>
+    </div>
+  </div>
+  <!-- TICKER EN VIVO -->
+  <div class="border-t border-slate-800/70 bg-[#020409] py-1 overflow-hidden text-[11px]">
+    <div id="live-ticker" class="ticker-track gap-6 px-4 text-slate-300"></div>
+  </div>
+</header>
 
-def load_json_state(path):
-    if os.path.exists(path):
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            return {}
-    return {}
+<!-- VISTA CABINA NEURONAL -->
+<main id="cabin-view" class="relative z-10 max-w-4xl mx-auto w-full px-3 py-4 flex-1 flex flex-col justify-between gap-4">
+  <div class="hud-panel hud-brackets rounded-2xl p-4 sm:p-5 space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div>
+        <div id="agent-title" class="font-hud font-black text-base tracking-wider text-amber-400">JARVIS · DIRECTOR DE MESA</div>
+        <div id="agent-subtitle" class="text-[11px] text-slate-400">Confluencia Institucional · Foco Principal #1</div>
+      </div>
+      <div class="w-12 h-12 rounded-full border-2 border-amber-400/60 flex items-center justify-center relative">
+        <div class="w-8 h-8 rounded-full border border-dashed border-amber-300 spin-slow"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-amber-400 pulse-core absolute"></div>
+      </div>
+    </div>
 
+    <div id="agent-dialogue" class="min-h-[120px] max-h-[290px] overflow-y-auto text-xs sm:text-sm leading-relaxed text-slate-200 whitespace-pre-line pr-1">
+      Iniciando telemetría institucional de los 22 activos...
+    </div>
 
-def save_json_state(path, state):
-    try:
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(state, f, ensure_ascii=False, indent=2)
-    except Exception:
-        pass
+    <div id="agent-quick-actions" class="flex flex-wrap gap-1.5 pt-1"></div>
 
+    <form id="cabin-chat-form" class="flex gap-2 pt-2 border-t border-slate-800/80">
+      <input id="cabin-input" type="text" placeholder="Pregunta a Jarvis, Visión o Ultrón sobre cualquier par o noticia..." class="flex-1 bg-[#04070f] border border-slate-700 focus:border-amber-400 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none" />
+      <button type="submit" class="px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs">ENVIAR</button>
+    </form>
+  </div>
 
-def send_ntfy_alert(title, message, priority="default", tags="chart_with_upwards_trend"):
-    if not NTFY_TOPIC:
-        return False
-    try:
-        url = f"https://ntfy.sh/{NTFY_TOPIC}"
-        clean_title = title.encode("ascii", "ignore").decode("ascii").strip() or "LATICCE ALERTA"
-        req = urllib.request.Request(
-            url,
-            data=message.encode("utf-8"),
-            headers={
-                "Title": clean_title,
-                "Priority": priority,
-                "Tags": tags,
-                "Content-Type": "text/plain; charset=utf-8"
-            },
-            method="POST"
-        )
-        with urllib.request.urlopen(req, timeout=8) as resp:
-            return 200 <= resp.status < 300
-    except Exception as e:
-        print(f"Aviso ntfy: {e}")
-        return False
+  <!-- SELECTOR DE 7 AGENTES -->
+  <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5 text-[10px] font-bold">
+    <button onclick="selectAgent('jarvis')" class="ag-btn p-2 rounded-lg border border-amber-400 bg-amber-500/15 text-amber-300" data-ag="jarvis">⚡ JARVIS</button>
+    <button onclick="selectAgent('vision')" class="ag-btn p-2 rounded-lg border border-slate-800 bg-[#070b14] text-sky-300" data-ag="vision">🌐 VISIÓN</button>
+    <button onclick="selectAgent('ultron')" class="ag-btn p-2 rounded-lg border border-slate-800 bg-[#070b14] text-red-400" data-ag="ultron">🎯 ULTRÓN</button>
+    <button onclick="selectAgent('edith')" class="ag-btn p-2 rounded-lg border border-slate-800 bg-[#070b14] text-emerald-300" data-ag="edith">🛡️ E.D.I.T.H.</button>
+    <button onclick="selectAgent('friday')" class="ag-btn p-2 rounded-lg border border-slate-800 bg-[#070b14] text-purple-300" data-ag="friday">🟣 F.R.I.D.A.Y.</button>
+    <button onclick="selectAgent('karen')" class="ag-btn p-2 rounded-lg border border-slate-800 bg-[#070b14] text-rose-300" data-ag="karen">🕸️ KAREN</button>
+    <button onclick="selectAgent('homer')" class="ag-btn p-2 rounded-lg border border-slate-800 bg-[#070b14] text-lime-300" data-ag="homer">📊 H.O.M.E.R.</button>
+  </div>
+</main>
 
+<!-- VISTA PANEL TRADING DESK -->
+<section id="panel-view" class="hidden relative z-10 max-w-6xl mx-auto w-full px-3 py-4 flex-1 space-y-4">
+  <!-- NAVEGACIÓN PRINCIPAL DEL PANEL -->
+  <div class="flex flex-wrap gap-1.5 text-xs font-bold border-b border-slate-800 pb-2.5">
+    <button onclick="setPanelTab('jarvis')" class="ptab-btn px-3 py-2 rounded-lg bg-amber-500 text-black" data-ptab="jarvis">⚡ JARVIS & SWING</button>
+    <button onclick="setPanelTab('vision')" class="ptab-btn px-3 py-2 rounded-lg bg-[#090e1a] border border-slate-800 text-sky-300" data-ptab="vision">🌐 VISIÓN & NOTICIAS</button>
+    <button onclick="setPanelTab('ultron')" class="ptab-btn px-3 py-2 rounded-lg bg-[#090e1a] border border-slate-800 text-red-400" data-ptab="ultron">🎯 GRÁFICO ULTRÓN</button>
+    <button onclick="setPanelTab('weekly1s')" class="ptab-btn px-3 py-2 rounded-lg bg-[#090e1a] border border-slate-800 text-cyan-300" data-ptab="weekly1s">🏛️ 1S HISTÓRICO</button>
+    <button onclick="setPanelTab('friday')" class="ptab-btn px-3 py-2 rounded-lg bg-[#090e1a] border border-slate-800 text-purple-300" data-ptab="friday">🟣 ACADEMIA</button>
+    <button onclick="setPanelTab('karen')" class="ptab-btn px-3 py-2 rounded-lg bg-[#090e1a] border border-slate-800 text-rose-300" data-ptab="karen">🕸️ DIARIO</button>
+  </div>
 
-def get_candles(ticker, period, interval, decimals, max_bars=60):
-    try:
-        df = yf.download(ticker, period=period, interval=interval, progress=False, auto_adjust=False)
-        if df is None or df.empty:
-            return []
-        if hasattr(df.columns, "levels") and len(df.columns.levels) > 1:
-            df.columns = df.columns.get_level_values(0)
-        df = df.dropna(subset=["Open", "High", "Low", "Close"])
-        out = []
-        for idx, row in df.iterrows():
-            ts = int(idx.timestamp()) if hasattr(idx, "timestamp") else 0
-            out.append({
-                "t": ts,
-                "o": round(float(row["Open"]), decimals),
-                "h": round(float(row["High"]), decimals),
-                "l": round(float(row["Low"]), decimals),
-                "c": round(float(row["Close"]), decimals),
-            })
-        return out[-max_bars:] if max_bars else out
-    except Exception as e:
-        print(f"Error {ticker} ({interval}): {e}")
-        return []
+  <!-- SUBPANEL JARVIS (CON MESA DE SWING + POTENCIAL SWING) -->
+  <section id="ptab-jarvis" class="space-y-3">
+    <!-- SUB-MODO DE JARVIS: RADAR OPERATIVO VS MESA DE SWING -->
+    <div class="flex flex-wrap items-center justify-between gap-2 bg-[#070b14] border border-slate-800 rounded-xl p-2.5">
+      <div class="flex gap-1.5 text-xs font-bold">
+        <button onclick="setJarvisSubMode('RADAR')" id="jsub-radar" class="px-3 py-1.5 rounded-lg bg-amber-500 text-black">⚡ RADAR DE ENTRADAS</button>
+        <button onclick="setJarvisSubMode('MESA')" id="jsub-mesa" class="px-3 py-1.5 rounded-lg bg-[#0c1322] border border-indigo-500/40 text-indigo-300">⚖️ MESA DE SWING (ECONOMÍA vs GRÁFICO)</button>
+      </div>
+      <span class="text-[10px] text-slate-400">Filtro en Mesa de Swing → Disparo en 🌊 Potencial Swing</span>
+    </div>
 
+    <!-- VISTA 1: RADAR DE ENTRADAS (ORIGINAL + POTENCIAL SWING) -->
+    <div id="jarvis-radar-wrap" class="space-y-3">
+      <div id="pj-focus-card" class="hidden rounded-xl p-4 bg-gradient-to-r from-amber-500/15 via-emerald-500/10 to-[#060912] border border-amber-400/70 space-y-2"></div>
+      <div id="pj-baskets-bar" class="hidden bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-3 space-y-1.5 text-xs"></div>
 
-def group_4h(candles_1h):
-    if not candles_1h:
-        return []
-    grouped = []
-    for i in range(0, len(candles_1h), 4):
-        chunk = candles_1h[i:i + 4]
-        if not chunk:
-            continue
-        grouped.append({
-            "t": chunk[0]["t"],
-            "o": chunk[0]["o"],
-            "h": max(x["h"] for x in chunk),
-            "l": min(x["l"] for x in chunk),
-            "c": chunk[-1]["c"],
-        })
-    return grouped[-45:]
+      <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+        <button onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
+        <button onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-indigo-500/50 text-indigo-300 font-bold" data-pf="SWING">🌊 POTENCIAL SWING</button>
+        <button onclick="setPanelFilter('VALID_OB')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300 font-bold" data-pf="VALID_OB">💎 CON OB / FVG VÁLIDO</button>
+        <button onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
+        <button onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300" data-pf="NEWS">⚠️ CON NOTICIA HOY</button>
+        <button onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ SE CONTRADICEN</button>
+        <button onclick="setPanelFilter('AUD')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="AUD">🇦🇺 PARES AUD</button>
+        <button onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
+      </div>
 
+      <div class="relative flex items-center">
+        <span class="absolute left-3 text-amber-400 text-sm pointer-events-none">🔍</span>
+        <input id="pair-search-input" type="text" oninput="setPairSearch(this.value)" placeholder="Buscar par o activo (ej: AUD, XAU, EURUSD, GBP, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500" />
+        <button id="pair-search-clear" type="button" onclick="clearPairSearch()" class="hidden absolute right-2.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-xs font-bold">✕</button>
+      </div>
 
-def calc_ema(values, period):
-    if not values:
-        return 0.0
-    k = 2.0 / (period + 1)
-    ema = values[0]
-    for v in values[1:]:
-        ema = v * k + ema * (1.0 - k)
-    return ema
+      <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
+    </div>
 
+    <!-- VISTA 2: MESA DE SWING (COMPARADOR ECONOMÍA VS GRÁFICO) -->
+    <div id="jarvis-mesa-wrap" class="hidden space-y-3">
+      <div class="hud-panel rounded-xl p-4 border-indigo-500/40 space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-hud text-sm font-bold text-indigo-300">⚖️ MESA DE SWING · PROTOCOLO DE DESCARTE</h3>
+          <span id="mesa-swing-summary-badge" class="text-[11px] px-2.5 py-0.5 rounded bg-indigo-500/20 border border-indigo-400/50 text-indigo-200 font-bold">0 LISTOS</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-300 bg-[#050811] p-3 rounded-lg border border-slate-800">
+          <div><strong class="text-sky-300">1. VISIÓN (Economía):</strong> Muestra hacia dónde empujan las tasas y divisas.</div>
+          <div><strong class="text-red-300">2. ULTRÓN (Gráfico):</strong> Muestra hacia dónde apunta la estructura técnica.</div>
+          <div><strong class="text-emerald-300">3. REGLA DE ORO:</strong> Si uno está <span class="text-slate-400 font-bold">NEUTRAL</span> o van en contra, no se abre Swing.</div>
+        </div>
+        <div id="mesa-top-chips" class="flex flex-wrap items-center gap-1.5 text-[11px]"></div>
+      </div>
 
-def calc_atr(candles, period=14):
-    if not candles or len(candles) < 2:
-        return 0.0
-    trs = []
-    for i in range(1, len(candles)):
-        h = candles[i]["h"]
-        l = candles[i]["l"]
-        pc = candles[i - 1]["c"]
-        trs.append(max(h - l, abs(h - pc), abs(l - pc)))
-    if not trs:
-        return 0.0
-    recent = trs[-period:]
-    return sum(recent) / len(recent)
+      <div id="mesa-swing-list" class="space-y-2.5"></div>
+    </div>
+  </section>
 
+  <!-- SUBPANEL VISIÓN & NOTICIAS EXPLICADAS -->
+  <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-5">
+    <!-- BRIEF DIARIO + WALL STREET -->
+    <div class="rounded-xl p-4 bg-gradient-to-br from-sky-950/50 via-[#070d19] to-[#050811] border border-sky-500/40 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="text-[10px] font-bold tracking-widest text-sky-300 uppercase">🌐 BRIEF DIARIO DE SESIÓN & WALL STREET</span>
+        <span id="pv-ws-tone" class="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 border border-sky-400/40 text-sky-200 font-bold">--</span>
+      </div>
+      <h3 id="pv-headline" class="font-bold text-white text-sm sm:text-base">--</h3>
+      <p id="pv-ws-story" class="text-xs text-slate-200 leading-relaxed bg-[#04070f]/80 p-3 rounded-lg border border-slate-800">--</p>
+      <div id="pv-ws-indices" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs"></div>
+    </div>
 
-def analyze_tf_bias(candles):
-    if not candles or len(candles) < 8:
-        return "NEUTRAL", 0.0
-    closes = [x["c"] for x in candles]
-    last = closes[-1]
-    ema_fast = calc_ema(closes[-18:], 8)
-    ema_slow = calc_ema(closes[-30:], 21)
-    prev_ref = closes[-6]
-    pct = ((last - prev_ref) / prev_ref) * 100.0 if prev_ref else 0.0
+    <!-- NOTICIAS EN VIVO TRADUCIDAS Y EXPLICADAS EN ESPAÑOL SENCILLO -->
+    <div class="space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h4 class="font-hud text-xs font-bold text-emerald-400 tracking-wider">📰 RADAR DE NOTICIAS EXPLICADAS EN ESPAÑOL</h4>
+          <p class="text-[11px] text-slate-400">Cada titular incluye qué significa en palabras sencillas y qué pares mueve hoy.</p>
+        </div>
+        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
+          <button onclick="setNewsFilter('ALL')" class="nf-btn px-2.5 py-1 rounded bg-emerald-500 text-black" data-nf="ALL">TODAS</button>
+          <button onclick="setNewsFilter('WALL')" class="nf-btn px-2.5 py-1 rounded bg-[#080d18] border border-slate-700 text-sky-300" data-nf="WALL">🇺🇸 WALL ST & TASAS</button>
+          <button onclick="setNewsFilter('FOREX')" class="nf-btn px-2.5 py-1 rounded bg-[#080d18] border border-slate-700 text-amber-300" data-nf="FOREX">💱 FOREX & BANCOS</button>
+          <button onclick="setNewsFilter('GOLD')" class="nf-btn px-2.5 py-1 rounded bg-[#080d18] border border-slate-700 text-yellow-300" data-nf="GOLD">🥇 ORO</button>
+        </div>
+      </div>
+      <div id="pv-news" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+    </div>
 
-    if last > ema_fast and ema_fast >= ema_slow and pct > 0.03:
-        return "SUBE", round(pct, 2)
-    if last < ema_fast and ema_fast <= ema_slow and pct < -0.03:
-        return "BAJA", round(pct, 2)
-    return "NEUTRAL", round(pct, 2)
+    <!-- RADAR DE BANCOS CENTRALES -->
+    <div class="space-y-2">
+      <h4 class="font-hud text-xs font-bold text-amber-400 tracking-wider">🏦 RADAR DE BANCOS CENTRALES & FUERZA DE DIVISAS</h4>
+      <div id="pv-banks" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs"></div>
+    </div>
 
+    <!-- CALENDARIO ECONÓMICO DE HOY -->
+    <div class="space-y-2">
+      <h4 class="font-hud text-xs font-bold text-cyan-400 tracking-wider">📅 CALENDARIO ECONÓMICO DE HOY (ALTO IMPACTO)</h4>
+      <div id="pv-calendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
+    </div>
 
-def detect_exhaustion(candles, bias):
-    if not candles or len(candles) < 8 or bias not in ("SUBE", "BAJA"):
-        return False, ""
-    recent = candles[-8:]
-    c_last = recent[-1]
-    c_prev = recent[-2]
-    rng_last = max(1e-9, c_last["h"] - c_last["l"])
-    body_last = abs(c_last["c"] - c_last["o"])
-    upper_wick = c_last["h"] - max(c_last["o"], c_last["c"])
-    lower_wick = min(c_last["o"], c_last["c"]) - c_last["l"]
+    <!-- CESTAS CORRELACIONADAS -->
+    <div class="space-y-2">
+      <h4 class="font-hud text-xs font-bold text-indigo-400 tracking-wider">🔗 CESTAS MACROECONÓMICAS CORRELACIONADAS</h4>
+      <div id="pv-baskets" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
+    </div>
+  </section>
 
-    if bias == "SUBE":
-        hi_8 = max(x["h"] for x in recent[:-1])
-        if c_last["h"] >= hi_8 * 0.9995 and (upper_wick > body_last * 1.4 or c_last["c"] < c_prev["c"]):
-            return True, "Mecha de rechazo en techo reciente (posible toma de ganancias)."
-    else:
-        lo_8 = min(x["l"] for x in recent[:-1])
-        if c_last["l"] <= lo_8 * 1.0005 and (lower_wick > body_last * 1.4 or c_last["c"] > c_prev["c"]):
-            return True, "Mecha de rechazo en piso reciente (posible rebote técnico)."
-    return False, ""
+  <!-- PESTAÑA SEPARADA: GIROS SEMANALES LIMPIOS PRE-2017 -->
+  <section id="ptab-weekly1s" class="hidden hud-panel rounded-xl p-4 space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+      <div>
+        <h3 class="font-hud text-sm font-bold text-cyan-300">🏛️ GIROS SEMANALES LIMPIOS HISTÓRICOS (PRE-2017)</h3>
+        <p class="text-[11px] text-slate-400 mt-0.5">Solo entradas contra-tendencia cercanas (<= 60 pips) con 1 vela + 1 vela única de rechazo sin acumulación.</p>
+      </div>
+      <span id="weekly1s-count-badge" class="text-xs px-2.5 py-1 rounded bg-cyan-500/15 border border-cyan-400/50 text-cyan-300 font-bold">0 ACTIVOS</span>
+    </div>
+    <div id="panel-weekly1s-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+  </section>
 
+  <!-- SUBPANEL ULTRÓN -->
+  <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-b border-slate-800 pb-2">
+      <span class="font-bold text-slate-200">CAPAS ESTRUCTURALES:</span>
+      <div class="flex flex-wrap gap-3">
+        <span class="text-rose-300">▲ BSL (Liquidez Arriba)</span>
+        <span class="text-teal-300">▼ SSL (Liquidez Abajo)</span>
+        <span class="text-purple-300">⚡ CHoCH / BOS</span>
+        <span class="text-indigo-300">🌊 Potencial Swing</span>
+      </div>
+    </div>
 
-def detect_liquidity_and_structure(candles, dec):
-    if not candles or len(candles) < 10:
-        return {
-            "bsl": 0.0, "ssl": 0.0, "event_type": None, "event_dir": None,
-            "event_price": 0.0, "event_desc": ""
+    <div id="pu-news-banner" class="hidden bg-orange-500/15 border border-orange-400/60 rounded-lg p-2.5 text-xs text-orange-200"></div>
+    <div id="pu-swing-banner" class="hidden bg-indigo-500/15 border border-indigo-400/60 rounded-lg p-2.5 text-xs text-indigo-200"></div>
+
+    <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5" id="panel-ultron-selector"></div>
+    <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div>
+        <span id="pu-sym" class="font-hud font-bold text-red-400 text-base">XAUUSD</span>
+        <span id="pu-price" class="ml-2 font-bold text-amber-300">--</span>
+        <span id="pu-status" class="ml-2 text-emerald-400">--</span>
+      </div>
+      <div class="flex gap-1">
+        <button onclick="setChartTF('1d')" class="ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold" data-tf="1d">1D</button>
+        <button onclick="setChartTF('4h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="4h">4H</button>
+        <button onclick="setChartTF('1h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="1h">1H</button>
+      </div>
+    </div>
+    <div class="w-full bg-[#030509] border border-slate-800 rounded-lg overflow-hidden">
+      <canvas id="ultron-canvas" class="w-full h-[360px] block"></canvas>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+      <div class="bg-[#050811] border border-slate-800 rounded p-2">
+        <div class="text-[9px] text-slate-400">SEMANAL (1S)</div>
+        <div id="pu-tf-w" class="font-bold text-white text-xs mt-0.5">--</div>
+      </div>
+      <div class="bg-[#050811] border border-slate-800 rounded p-2">
+        <div class="text-[9px] text-slate-400">DIARIO (1D)</div>
+        <div id="pu-tf-d" class="font-bold text-white text-xs mt-0.5">--</div>
+      </div>
+      <div class="bg-[#050811] border border-slate-800 rounded p-2">
+        <div class="text-[9px] text-slate-400">4 HORAS (4H)</div>
+        <div id="pu-tf-4h" class="font-bold text-white text-xs mt-0.5">--</div>
+      </div>
+      <div class="bg-[#050811] border border-cyan-500/30 rounded p-2">
+        <div class="text-[9px] text-cyan-400">ATR DIARIO (14)</div>
+        <div id="pu-atr" class="font-bold text-cyan-200 text-xs mt-0.5">--</div>
+      </div>
+      <div class="bg-[#050811] border border-amber-500/30 rounded p-2">
+        <div class="text-[9px] text-amber-400">RANGO 20 DÍAS</div>
+        <div id="pu-r20" class="font-bold text-amber-200 text-xs mt-0.5">--</div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+      <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+        <div class="text-[10px] text-sky-400">ENTRADA (OB/FVG)</div>
+        <div id="pu-entry" class="font-bold text-white text-sm">--</div>
+        <div id="pu-dist" class="text-[10px] text-slate-400">--</div>
+      </div>
+      <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+        <div class="text-[10px] text-red-400">STOP ESTRUCTURAL</div>
+        <div id="pu-sl" class="font-bold text-red-400 text-sm">--</div>
+        <div id="pu-sl-pips" class="text-[10px] text-red-300">--</div>
+      </div>
+      <div class="bg-[#050811] border border-indigo-500/40 rounded p-2.5">
+        <div class="text-[10px] text-indigo-300">GATILLO BE (+1R)</div>
+        <div id="pu-be" class="font-bold text-indigo-300 text-sm">--</div>
+        <div class="text-[10px] text-slate-400">Subir SL a Entrada</div>
+      </div>
+      <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+        <div class="text-[10px] text-emerald-400">TP1 (PARCIALES)</div>
+        <div id="pu-tp1" class="font-bold text-emerald-400 text-sm">--</div>
+        <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
+      </div>
+      <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+        <div class="text-[10px] text-emerald-400" id="pu-tp2-lbl">TP2 / SWING TP</div>
+        <div id="pu-tp2" class="font-bold text-emerald-400 text-sm">--</div>
+        <div id="pu-tp2-pips" class="text-[10px] text-emerald-300">--</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACADEMIA F.R.I.D.A.Y. -->
+  <section id="ptab-friday" class="hidden hud-panel rounded-xl p-4 space-y-4">
+    <div class="flex items-center justify-between">
+      <h3 class="font-hud text-sm font-bold text-purple-400">🟣 ACADEMIA INSTITUCIONAL F.R.I.D.A.Y. (8 MÓDULOS)</h3>
+      <span id="panel-course-pct" class="text-xs font-bold text-purple-300">0% COMPLETADO</span>
+    </div>
+    <div id="panel-lessons-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+  </section>
+
+  <!-- DIARIO KAREN & H.O.M.E.R. -->
+  <section id="ptab-karen" class="hidden hud-panel rounded-xl p-4 space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h3 class="font-hud text-sm font-bold text-rose-400">🕸️ AUDITORÍA DE KAREN & ESTADÍSTICA H.O.M.E.R.</h3>
+      <div class="flex items-center gap-2">
+        <span id="sync-status-badge" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">LOCAL</span>
+        <div id="homer-stats-badge" class="text-xs text-lime-400 font-bold">ACIERTO: 0% (+0R)</div>
+      </div>
+    </div>
+    <div class="bg-[#050811] border border-slate-800 rounded-lg p-3 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+      <div class="text-slate-300">
+        <strong class="text-rose-300">☁️ Nube PC ↔ Celular (Auto 15s):</strong>
+        <span id="cloud-token-info">Pulsa VINCULAR NUBE para sincronizar</span>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" onclick="configureCloudToken()" class="px-3 py-1.5 rounded bg-rose-500/20 border border-rose-400/60 text-rose-200 font-bold">🔑 VINCULAR NUBE</button>
+        <button type="button" onclick="loadCloudJournal(true)" class="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-bold">↻ SINCRONIZAR</button>
+      </div>
+    </div>
+    <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
+      <select id="j-pair" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white">
+        <option value="XAUUSD">XAUUSD</option><option value="EURUSD">EURUSD</option><option value="GBPUSD">GBPUSD</option>
+        <option value="USDJPY">USDJPY</option><option value="GBPJPY">GBPJPY</option><option value="AUDUSD">AUDUSD</option>
+        <option value="AUDJPY">AUDJPY</option><option value="AUDCAD">AUDCAD</option><option value="AUDNZD">AUDNZD</option>
+        <option value="EURAUD">EURAUD</option><option value="AUDCHF">AUDCHF</option><option value="BTCUSD">BTCUSD</option>
+      </select>
+      <select id="j-dir" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="COMPRA">COMPRA</option><option value="VENTA">VENTA</option></select>
+      <select id="j-res" class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white"><option value="WIN">GANADA (+2R / +3R)</option><option value="LOSS">PERDIDA (-1R)</option><option value="BE">BREAK EVEN (0R)</option></select>
+      <input id="j-note" type="text" placeholder="Nota o emoción..." required class="bg-[#050811] border border-slate-800 rounded px-2.5 py-2 text-white" />
+      <button type="submit" id="j-submit-btn" class="bg-rose-500 hover:bg-rose-400 text-black font-bold rounded px-3 py-2">ANOTAR</button>
+    </form>
+    <div id="journal-list" class="space-y-2 text-xs"></div>
+  </section>
+</section>
+
+<script>
+let DATA = null;
+let currentAgent = "jarvis";
+let voiceEnabled = true;
+let isPanelMode = false;
+let panelFilter = "ALL";
+let jarvisSubMode = "RADAR";
+let newsFilter = "ALL";
+let pairSearchQuery = "";
+let selectedSym = "XAUUSD";
+let chartTF = "1d";
+let journalEntries = JSON.parse(localStorage.getItem("laticce_journal") || "[]");
+let completedLessons = JSON.parse(localStorage.getItem("laticce_lessons") || "[]");
+
+const LESSONS = [
+  { id: 1, title: "01. Cascada OB + FVG Estructural", desc: "Prioriza bloques con ineficiencia (FVG) a favor de 1D y 4H; nunca entres en medio del rango." },
+  { id: 2, title: "02. Mesa de Swing vs Potencial Swing", desc: "Usa la Mesa de Swing para descartar activos en Neutral y Potencial Swing (8 filtros) para disparar." },
+  { id: 3, title: "03. Gatillo Break Even (+1R)", desc: "Al tocar +1R, el riesgo pasa a 0.00%. Protege capital antes de buscar recorridos largos." },
+  { id: 4, title: "04. Piramidación Institucional", desc: "Solo añade una segunda entrada en retroceso cuando la orden base ya está protegida en BE." },
+  { id: 5, title: "05. Fuerza Relativa de Divisas", desc: "Cruza siempre una divisa FUERTE contra una DÉBIL; evita recorrer rangos en cruces Neutrales." },
+  { id: 6, title: "06. Barridos de Liquidez BSL / SSL", desc: "Observa mechas de absorción sobre máximos/mínimos previos antes de confirmar quiebre CHoCH." },
+  { id: 7, title: "07. Giros Semanales Históricos (1S)", desc: "Niveles limpios pre-2017 válidos solo en contra-tendencia a <= 60 pips de distancia." },
+  { id: 8, title: "08. Filtro de Noticias de Alto Impacto", desc: "Reduce exposición o protege en BE antes de comunicados de FED, CPI, NFP o BCE." },
+];
+
+const AGENT_META = {
+  jarvis: { title: "JARVIS · DIRECTOR DE MESA", sub: "Confluencia Institucional · Foco Principal #1", color: "#f59e0b" },
+  vision: { title: "VISIÓN · INTELIGENCIA MACRO", sub: "Wall Street, Bancos Centrales y Noticias Explicadas", color: "#38bdf8" },
+  ultron: { title: "ULTRÓN · ESTRUCTURA Y LIQUIDEZ", sub: "Order Blocks, FVG, BSL/SSL y Temporalidades", color: "#ef4444" },
+  edith:  { title: "E.D.I.T.H. · GESTIÓN DE RIESGO", sub: "Stop Estructural, Break Even (+1R) y Piramidación", color: "#10b981" },
+  friday: { title: "F.R.I.D.A.Y. · MENTORA INSTITUCIONAL", sub: "Metodología Smart Money & Disciplina", color: "#a855f7" },
+  karen:  { title: "KAREN · AUDITORÍA PSICOLÓGICA", sub: "Bitácora de Ejecución y Control Emocional", color: "#f43f5e" },
+  homer:  { title: "H.O.M.E.R. · ESTADÍSTICA CUANTITATIVA", sub: "Esperanza Matemática y Rendimiento en R", color: "#84cc16" },
+};
+
+function speakText(txt) {
+  if (!voiceEnabled || !("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt.replace(/[*#_•]/g, ""));
+    u.lang = "es-ES";
+    u.rate = 1.03;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  const btn = document.getElementById("voice-btn");
+  btn.textContent = voiceEnabled ? "🔊 VOZ ON" : "🔇 VOZ OFF";
+  if (!voiceEnabled && "speechSynthesis" in window) window.speechSynthesis.cancel();
+}
+
+function toggleViewMode() {
+  isPanelMode = !isPanelMode;
+  document.getElementById("cabin-view").classList.toggle("hidden", isPanelMode);
+  document.getElementById("panel-view").classList.toggle("hidden", !isPanelMode);
+  document.getElementById("view-mode-btn").textContent = isPanelMode ? "◂ VOLVER A CABINA" : "VER PANEL ▸";
+  if (isPanelMode) renderAllPanels();
+}
+
+function setPanelTab(tab) {
+  ["jarvis", "vision", "ultron", "weekly1s", "friday", "karen"].forEach(t => {
+    document.getElementById("ptab-" + t).classList.toggle("hidden", t !== tab);
+  });
+  document.querySelectorAll(".ptab-btn").forEach(b => {
+    const active = b.dataset.ptab === tab;
+    b.className = active
+      ? "ptab-btn px-3 py-2 rounded-lg bg-amber-500 text-black font-bold"
+      : "ptab-btn px-3 py-2 rounded-lg bg-[#090e1a] border border-slate-800 text-slate-300 font-bold";
+  });
+  if (tab === "ultron") renderUltronPanel();
+  if (tab === "vision") renderPanelVision();
+  if (tab === "weekly1s") renderPanelWeekly1S();
+  if (tab === "friday") renderPanelFriday();
+  if (tab === "karen") renderJournal();
+}
+
+function setJarvisSubMode(mode) {
+  jarvisSubMode = mode;
+  document.getElementById("jarvis-radar-wrap").classList.toggle("hidden", mode !== "RADAR");
+  document.getElementById("jarvis-mesa-wrap").classList.toggle("hidden", mode !== "MESA");
+  document.getElementById("jsub-radar").className = mode === "RADAR"
+    ? "px-3 py-1.5 rounded-lg bg-amber-500 text-black font-bold"
+    : "px-3 py-1.5 rounded-lg bg-[#0c1322] border border-slate-700 text-slate-300 font-bold";
+  document.getElementById("jsub-mesa").className = mode === "MESA"
+    ? "px-3 py-1.5 rounded-lg bg-indigo-500 text-white font-bold"
+    : "px-3 py-1.5 rounded-lg bg-[#0c1322] border border-indigo-500/40 text-indigo-300 font-bold";
+  if (mode === "MESA") renderMesaDeSwing();
+}
+
+function setPanelFilter(f) {
+  panelFilter = f;
+  document.querySelectorAll(".pf-btn").forEach(b => {
+    const active = b.dataset.pf === f;
+    b.className = active
+      ? "pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold"
+      : "pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300";
+  });
+  renderPanelJarvis();
+}
+
+function setNewsFilter(nf) {
+  newsFilter = nf;
+  document.querySelectorAll(".nf-btn").forEach(b => {
+    const active = b.dataset.nf === nf;
+    b.className = active
+      ? "nf-btn px-2.5 py-1 rounded bg-emerald-500 text-black font-bold"
+      : "nf-btn px-2.5 py-1 rounded bg-[#080d18] border border-slate-700 text-slate-300 font-bold";
+  });
+  renderPanelVision();
+}
+
+function setPairSearch(val) {
+  pairSearchQuery = (val || "").trim().toUpperCase();
+  document.getElementById("pair-search-clear").classList.toggle("hidden", !pairSearchQuery);
+  renderPanelJarvis();
+}
+
+function clearPairSearch() {
+  document.getElementById("pair-search-input").value = "";
+  setPairSearch("");
+}
+
+function configureGeminiKey() {
+  const cur = localStorage.getItem("laticce_gemini_key") || "";
+  const val = prompt("Pega tu clave gratuita de Google AI Studio (AIzaSy...) para activar el cerebro IA completo:", cur);
+  if (val !== null) {
+    localStorage.setItem("laticce_gemini_key", val.trim());
+    updateAiBadge();
+  }
+}
+
+function updateAiBadge() {
+  const has = !!(localStorage.getItem("laticce_gemini_key") || "").trim();
+  const btn = document.getElementById("ai-key-btn");
+  btn.textContent = has ? "🧠 IA ON" : "🧠 IA";
+  btn.className = has
+    ? "px-2.5 py-1 rounded bg-emerald-500/20 border border-emerald-400 text-[10px] font-bold text-emerald-300"
+    : "px-2.5 py-1 rounded bg-slate-900 border border-slate-700 text-[10px] font-bold text-slate-300";
+}
+
+function selectAgent(ag) {
+  currentAgent = ag;
+  const meta = AGENT_META[ag];
+  document.documentElement.style.setProperty("--agent-color", meta.color);
+  document.getElementById("agent-title").textContent = meta.title;
+  document.getElementById("agent-title").style.color = meta.color;
+  document.getElementById("agent-subtitle").textContent = meta.sub;
+
+  document.querySelectorAll(".ag-btn").forEach(b => {
+    const active = b.dataset.ag === ag;
+    b.style.borderColor = active ? meta.color : "#1e293b";
+    b.style.background = active ? "rgba(255,255,255,0.06)" : "#070b14";
+  });
+
+  renderAgentBriefing(ag);
+}
+
+function renderAgentBriefing(ag) {
+  if (!DATA) return;
+  const fp = DATA.focus_pick?.primary;
+  const swings = DATA.assets.filter(a => a.swing_potential);
+  const ws = DATA.brief?.wall_street;
+  let msg = "";
+
+  if (ag === "jarvis") {
+    msg = fp
+      ? `Señor, el Radar de Foco Principal #1 señala a ${fp.symbol} (${fp.probability}% probabilidad) en ${fp.direction} mediante ${fp.signal_tag}.\n\nEntrada: ${fp.entry} | SL: ${fp.sl} | TP1: ${fp.tp1}.\n${fp.swing_potential ? "🌊 Tiene protocolo POTENCIAL SWING activo." : "Operativa intradía estructural."} Actualmente hay ${swings.length} activo(s) con Potencial Swing completo.`
+      : "Señor, hoy el mercado presenta cruces neutrales o sin OB/FVG limpio alineado. Recomiendo revisar la Mesa de Swing y esperar confirmación.";
+  } else if (ag === "vision") {
+    const topNews = (DATA.news || []).slice(0, 3).map(n => `• ${n.category}: ${n.title}\n  ${n.plain_es}`).join("\n\n");
+    msg = `${ws ? ws.story : DATA.brief.headline}\n\nResumen claro de noticias clave:\n${topNews}`;
+  } else if (ag === "ultron") {
+    const a = DATA.assets.find(x => x.symbol === selectedSym) || DATA.assets[0];
+    msg = `Estructura de ${a.symbol} (${a.price}): Semanal ${a.tf_biases["1w"]} | Diario ${a.tf_biases["1d"]} | 4H ${a.tf_biases["4h"]} | 1H ${a.tf_biases["1h"]}.\nBSL arriba: ${a.liquidity?.bsl} | SSL abajo: ${a.liquidity?.ssl}.\n${a.setup ? `Bloque activo: ${a.setup.signal_tag} en ${a.setup.entry} (SL ${a.setup.sl}).` : "Sin bloque limpio vigente en este marco."}`;
+  } else if (ag === "edith") {
+    msg = "Protocolo de Blindaje activo:\n1) Nunca entres si Economía o Gráfico están Neutrales en la Mesa de Swing.\n2) Al tocar +1R (Gatillo BE), sube el Stop Loss a entrada inmediatamente.\n3) Solo piramida en retrocesos cuando 🌊 POTENCIAL SWING esté activo y la orden base ya esté sin riesgo.";
+  } else if (ag === "friday") {
+    msg = `Academia Institucional al ${Math.round((completedLessons.length / LESSONS.length) * 100)}%. Hoy enfócate en distinguir entre la Mesa de Swing (filtro visual Economía vs Gráfico) y Potencial Swing (disparo con 8 candados institucionales).`;
+  } else if (ag === "karen") {
+    msg = `Bitácora con ${journalEntries.length} operaciones registradas. Recuerda anotar si respetaste el filtro de no operar pares en Neutral.`;
+  } else if (ag === "homer") {
+    const wins = journalEntries.filter(x => x.res === "WIN").length;
+    const rate = journalEntries.length ? Math.round((wins / journalEntries.length) * 100) : 0;
+    msg = `Estadística acumulada: ${rate}% de acierto sobre ${journalEntries.length} trades registrados. Priorizar setups Tier 1 (OB + FVG) maximiza la esperanza matemática.`;
+  }
+
+  document.getElementById("agent-dialogue").textContent = msg;
+  speakText(msg);
+}
+
+async function askAgentAI(question) {
+  const dlg = document.getElementById("agent-dialogue");
+  dlg.textContent = "Analizando telemetría en vivo...";
+  const key = (localStorage.getItem("laticce_gemini_key") || "").trim();
+
+  if (key && DATA) {
+    try {
+      const compactAssets = DATA.assets.map(a =>
+        `${a.symbol}:${a.price}|Eco:${a.macro_dir}|Graf:${a.chart_bias}|1D:${a.tf_biases["1d"]}|4H:${a.tf_biases["4h"]}|Swing:${a.swing_potential ? "SI" : "NO"}|Setup:${a.setup ? a.setup.signal_tag + "@" + a.setup.entry : "NONE"}`
+      ).join("; ");
+      const compactNews = (DATA.news || []).slice(0, 6).map(n => `${n.title} -> ${n.plain_es}`).join(" | ");
+      const promptTxt = `Eres ${AGENT_META[currentAgent].title} de la plataforma LATICCE. Responde en español claro, directo y sin relleno.\nDatos en vivo: ${DATA.brief.headline}\nWall Street: ${DATA.brief.wall_street?.story || ""}\nNoticias: ${compactNews}\nActivos: ${compactAssets}\nPregunta del usuario: ${question}`;
+
+      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(key)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents: [{ parts: [{ text: promptTxt }] }] })
+      });
+      if (resp.ok) {
+        const j = await resp.json();
+        const ans = j.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (ans) {
+          dlg.textContent = ans;
+          speakText(ans);
+          return;
         }
-    window = candles[-25:-1] if len(candles) > 25 else candles[:-1]
-    bsl = round(max(x["h"] for x in window), dec)
-    ssl = round(min(x["l"] for x in window), dec)
-    last = candles[-1]
-    prev = candles[-2]
+      }
+    } catch (e) {}
+  }
 
-    event_type = None
-    event_dir = None
-    event_price = 0.0
-    event_desc = ""
+  // Respaldo analítico local instantáneo si no hay clave o cuota
+  const qUp = question.toUpperCase();
+  const matched = DATA?.assets.find(a => qUp.includes(a.symbol));
+  if (matched) {
+    const s = matched.setup;
+    const localAns = `${matched.symbol} (${matched.price}):\n• Economía (VISIÓN): ${matched.macro_dir}\n• Gráfico (ULTRÓN): ${matched.chart_bias} (1D: ${matched.tf_biases["1d"]}, 4H: ${matched.tf_biases["4h"]}, 1H: ${matched.tf_biases["1h"]})\n• Veredicto Mesa de Swing: ${matched.confluence.verdict_title}\n• ${s ? `Entrada ${s.signal_tag} en ${s.entry} | SL ${s.sl} | BE ${s.be_trigger} | TP1 ${s.tp1}` : "Sin bloque OB/FVG vigente; esperar formación limpia."}`;
+    dlg.textContent = localAns;
+    speakText(localAns);
+  } else {
+    renderAgentBriefing(currentAgent);
+  }
+}
 
-    if last["h"] > bsl and last["c"] < bsl:
-        event_type = "BARRIDO BSL"
-        event_dir = "BAJA"
-        event_price = bsl
-        event_desc = f"Barrido de liquidez sobre {bsl} con cierre debajo (posible giro bajista)."
-    elif last["l"] < ssl and last["c"] > ssl:
-        event_type = "BARRIDO SSL"
-        event_dir = "SUBE"
-        event_price = ssl
-        event_desc = f"Barrido de liquidez bajo {ssl} con absorción alcista (posible giro alcista)."
-    elif last["c"] > bsl and prev["c"] <= bsl:
-        event_type = "BOS / CHoCH ALCISTA"
-        event_dir = "SUBE"
-        event_price = bsl
-        event_desc = f"Quiebre con cuerpo sobre {bsl}."
-    elif last["c"] < ssl and prev["c"] >= ssl:
-        event_type = "BOS / CHoCH BAJISTA"
-        event_dir = "BAJA"
-        event_price = ssl
-        event_desc = f"Quiebre con cuerpo bajo {ssl}."
+function explainNewsWithAI(idx) {
+  const n = DATA?.news?.[idx];
+  if (!n) return;
+  if (isPanelMode) toggleViewMode();
+  selectAgent("vision");
+  askAgentAI(`Explícame con palabras muy sencillas qué significa esta noticia, por qué ocurre y cómo afecta exactamente a mis operaciones hoy: "${n.title}" (${n.plain_es})`);
+}
 
-    return {
-        "bsl": bsl,
-        "ssl": ssl,
-        "event_type": event_type,
-        "event_dir": event_dir,
-        "event_price": event_price,
-        "event_desc": event_desc,
+function renderAllPanels() {
+  if (!DATA) return;
+  renderPanelJarvis();
+  renderMesaDeSwing();
+  renderPanelVision();
+  renderUltronPanel();
+  renderPanelWeekly1S();
+  renderPanelFriday();
+  renderJournal();
+}
+
+function renderPanelJarvis() {
+  if (!DATA) return;
+  const fp = DATA.focus_pick?.primary;
+  const focusEl = document.getElementById("pj-focus-card");
+  if (fp) {
+    focusEl.classList.remove("hidden");
+    focusEl.innerHTML = `
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="text-[11px] font-hud font-bold text-amber-300">🎯 RADAR DE FOCO PRINCIPAL #1 · ${fp.symbol} (${fp.probability}% PROB.)</span>
+        <button onclick="openAssetInUltron('${fp.symbol}')" class="px-2.5 py-1 rounded bg-amber-500 text-black font-bold text-[11px]">VER EN GRÁFICO ▸</button>
+      </div>
+      <div class="text-xs text-slate-200">
+        <strong>${fp.direction === "BUY" ? "COMPRA" : "VENTA"} (${fp.signal_tag})</strong> · Entrada: <span class="text-white font-bold">${fp.entry}</span> | SL: <span class="text-red-400 font-bold">${fp.sl}</span> | TP1: <span class="text-emerald-400 font-bold">${fp.tp1}</span>
+        ${fp.swing_potential ? `<span class="ml-2 px-2 py-0.5 rounded bg-indigo-500/30 border border-indigo-400 text-indigo-200 text-[10px] font-bold">🌊 POTENCIAL SWING</span>` : ""}
+      </div>
+      <div class="text-[11px] text-slate-400">${fp.reason}</div>
+    `;
+  } else {
+    focusEl.classList.add("hidden");
+  }
+
+  const list = DATA.assets.filter(a => {
+    if (pairSearchQuery && !a.symbol.includes(pairSearchQuery)) return false;
+    if (panelFilter === "SWING") return !!a.swing_potential;
+    if (panelFilter === "VALID_OB") return !!a.setup;
+    if (panelFilter === "ALIGNED") return a.confluence.alignment === "ALIGNED";
+    if (panelFilter === "NEWS") return !!a.news_warning;
+    if (panelFilter === "BROKEN") return a.confluence.alignment === "BROKEN";
+    if (panelFilter === "AUD") return a.symbol.includes("AUD");
+    if (panelFilter === "XAU") return a.symbol === "XAUUSD";
+    return true;
+  });
+
+  const grid = document.getElementById("panel-jarvis-grid");
+  if (!list.length) {
+    grid.innerHTML = `<div class="col-span-full text-center text-xs text-slate-400 py-8">No hay activos que coincidan con este filtro en este momento.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(a => {
+    const s = a.setup;
+    const al = a.confluence.alignment;
+    const borderCls = a.swing_potential ? "border-indigo-400/70" : (al === "ALIGNED" ? "border-emerald-500/40" : (al === "BROKEN" ? "border-red-500/40" : "border-slate-800"));
+    return `
+      <div class="hud-panel rounded-xl p-3.5 border ${borderCls} space-y-2.5 text-xs">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <span class="font-hud font-bold text-sm text-white">${a.symbol}</span>
+            <span class="ml-2 text-amber-300 font-bold">${a.price}</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${a.swing_potential ? `<span class="px-2 py-0.5 rounded bg-indigo-500/25 border border-indigo-400 text-indigo-200 text-[10px] font-bold">🌊 POTENCIAL SWING</span>` : ""}
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-200 text-[10px] font-bold">${a.confluence.score}%</span>
+          </div>
+        </div>
+
+        ${a.news_warning ? `<div class="px-2.5 py-1 rounded bg-orange-500/15 border border-orange-400/50 text-orange-200 text-[10px]">⚠️ NOTICIA HOY: ${a.news_warning}</div>` : ""}
+
+        <div class="grid grid-cols-2 gap-2 text-[11px] bg-[#04070e] p-2 rounded-lg border border-slate-800/80">
+          <div>ECONOMÍA: <strong class="${a.macro_dir === 'SUBE' ? 'text-emerald-400' : (a.macro_dir === 'BAJA' ? 'text-red-400' : 'text-slate-400')}">${a.macro_dir}</strong></div>
+          <div>GRÁFICO: <strong class="${a.chart_bias === 'SUBE' ? 'text-emerald-400' : (a.chart_bias === 'BAJA' ? 'text-red-400' : 'text-slate-400')}">${a.chart_bias}</strong></div>
+        </div>
+
+        <div class="text-[11px] text-slate-300">${a.confluence.verdict_title}</div>
+
+        ${s ? `
+          <div class="grid grid-cols-4 gap-1.5 text-[10px] bg-[#050913] p-2 rounded-lg border border-slate-800">
+            <div><span class="text-slate-400 block">ENTRADA</span><strong class="text-white">${s.entry}</strong></div>
+            <div><span class="text-slate-400 block">SL</span><strong class="text-red-400">${s.sl}</strong></div>
+            <div><span class="text-slate-400 block">BE (+1R)</span><strong class="text-indigo-300">${s.be_trigger}</strong></div>
+            <div><span class="text-slate-400 block">TP1</span><strong class="text-emerald-400">${s.tp1}</strong></div>
+          </div>
+        ` : `<div class="text-[10px] text-slate-500 italic">Sin Order Block ni FVG limpio vigente.</div>`}
+
+        <div class="flex justify-end">
+          <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 text-[10px] font-bold">ABRIR GRÁFICO ULTRÓN ▸</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderMesaDeSwing() {
+  if (!DATA) return;
+  const sorted = [...DATA.assets].sort((a, b) => b.confluence.score - a.confluence.score);
+  const ready = sorted.filter(a => a.confluence.alignment === "ALIGNED" && a.macro_dir !== "NEUTRAL" && a.chart_bias !== "NEUTRAL");
+
+  document.getElementById("mesa-swing-summary-badge").textContent = `${ready.length} VAN JUNTOS · ${sorted.filter(x => x.swing_potential).length} SWING`;
+
+  const chipsEl = document.getElementById("mesa-top-chips");
+  chipsEl.innerHTML = `<span class="text-slate-400 font-bold mr-1">MAYOR CONFLUENCIA:</span>` + sorted.slice(0, 5).map(a => {
+    const arrow = a.chart_bias === "SUBE" ? "▲" : (a.chart_bias === "BAJA" ? "▼" : "●");
+    const cls = a.confluence.alignment === "ALIGNED" ? "border-emerald-500/50 text-emerald-300 bg-emerald-500/10" : "border-slate-700 text-slate-300 bg-[#070b14]";
+    return `<button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded-full border ${cls} font-bold">${a.symbol} ${arrow} ${a.confluence.score}</button>`;
+  }).join("");
+
+  const listEl = document.getElementById("mesa-swing-list");
+  listEl.innerHTML = sorted.map(a => {
+    const ecoNeutral = a.macro_dir === "NEUTRAL";
+    const grfNeutral = a.chart_bias === "NEUTRAL";
+    const bothAligned = !ecoNeutral && !grfNeutral && a.macro_dir === a.chart_bias;
+    const isNeutral = ecoNeutral || grfNeutral;
+
+    let statusText = "";
+    let statusBadge = "";
+    let cardBorder = "border-slate-800";
+
+    if (isNeutral) {
+      statusText = "Sin dirección clara — Uno de los dos está neutral (No abrir Swing)";
+      statusBadge = `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px] font-bold">● NEUTRAL · ESPERAR</span>`;
+    } else if (bothAligned) {
+      statusText = `Van juntos: buscar ${a.chart_bias === "SUBE" ? "COMPRAS" : "VENTAS"}${a.swing_potential ? " · 🌊 APTO PARA POTENCIAL SWING" : " · Solo intradía hasta TP1"}`;
+      statusBadge = `<span class="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-[10px] font-bold">✔ VAN JUNTOS (${a.confluence.score})</span>`;
+      cardBorder = a.swing_potential ? "border-indigo-400/80" : "border-emerald-500/40";
+    } else {
+      statusText = "Se contradicen: Economía y Gráfico van en dirección opuesta (Esperar)";
+      statusBadge = `<span class="px-2 py-0.5 rounded bg-red-500/20 border border-red-400/50 text-red-300 text-[10px] font-bold">⛔ SE CONTRADICEN</span>`;
+      cardBorder = "border-red-500/30";
     }
 
+    const fmtDir = d => d === "SUBE"
+      ? `<span class="text-emerald-400 font-bold">▲ SUBE</span>`
+      : (d === "BAJA" ? `<span class="text-red-400 font-bold">▼ BAJA</span>` : `<span class="text-slate-400 font-bold">● NEUTRAL</span>`);
 
-def scan_institutional_zone(candles, direction, price, atr, pip, dec):
-    """
-    Escáner institucional en cascada de 3 niveles:
-    1. OB + FVG (máxima prioridad)
-    2. OB Estructural limpio
-    3. FVG aislado de retroceso
-    """
-    if not candles or len(candles) < 12 or direction not in ("SUBE", "BAJA"):
-        return None
+    return `
+      <div class="hud-panel rounded-xl p-3.5 border ${cardBorder} space-y-2.5 text-xs">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="font-hud font-bold text-sm text-white">${a.symbol}</span>
+            <span class="text-amber-300 font-bold">${a.price}</span>
+            ${a.swing_potential ? `<span class="px-2 py-0.5 rounded bg-indigo-500/25 border border-indigo-400 text-indigo-200 text-[10px] font-bold">🌊 POTENCIAL SWING</span>` : ""}
+          </div>
+          ${statusBadge}
+        </div>
 
-    recent = candles[-24:]
-    min_imp = max(atr * 0.45, pip * 6)
-    candidates = []
+        <div class="grid grid-cols-2 gap-2.5 bg-[#04070f] p-2.5 rounded-lg border border-slate-800">
+          <div class="border-r border-slate-800 pr-2">
+            <div class="text-[9px] text-sky-400 tracking-wider">ECONOMÍA (VISIÓN)</div>
+            <div class="text-xs mt-0.5">${fmtDir(a.macro_dir)}</div>
+          </div>
+          <div class="pl-1">
+            <div class="text-[9px] text-red-300 tracking-wider">SU GRÁFICO (ULTRÓN)</div>
+            <div class="text-xs mt-0.5">${fmtDir(a.chart_bias)} <span class="text-[10px] text-slate-400">(1D:${a.tf_biases["1d"]} · 4H:${a.tf_biases["4h"]})</span></div>
+          </div>
+        </div>
 
-    for i in range(len(recent) - 3, 1, -1):
-        c0 = recent[i - 1]
-        c1 = recent[i]
-        c2 = recent[i + 1]
-        c3 = recent[i + 2]
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-300">
+          <span>${statusText}</span>
+          <button onclick="openAssetInUltron('${a.symbol}')" class="px-2.5 py-1 rounded bg-slate-800 text-amber-300 text-[10px] font-bold">VER GRÁFICO ▸</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
 
-        if direction == "SUBE":
-            is_bear_ob = c1["c"] < c1["o"]
-            imp_size = c2["c"] - c1["l"]
-            has_fvg = c3["l"] > c1["h"]
-            if is_bear_ob and imp_size >= min_imp:
-                zone_hi = round(max(c1["o"], c1["h"]), dec)
-                zone_lo = round(min(c1["l"], c0["l"]), dec)
-                entry = zone_hi
-                sl = round(zone_lo - max(pip * 3, atr * 0.12), dec)
-                if price >= sl and entry < price * 1.015:
-                    tier = 1 if has_fvg else 2
-                    tag = "COMPRA OB + FVG" if has_fvg else "COMPRA OB ESTRUCTURAL"
-                    candidates.append((tier, i, tag, entry, sl, zone_hi, zone_lo))
-            elif has_fvg and (c2["c"] - c2["o"]) >= min_imp * 0.8:
-                zone_hi = round(c3["l"], dec)
-                zone_lo = round(c1["h"], dec)
-                entry = zone_hi
-                sl = round(c1["l"] - max(pip * 3, atr * 0.12), dec)
-                if price >= sl and entry < price * 1.015:
-                    candidates.append((3, i, "COMPRA FVG RETROCESO", entry, sl, zone_hi, zone_lo))
-        else:
-            is_bull_ob = c1["c"] > c1["o"]
-            imp_size = c1["h"] - c2["c"]
-            has_fvg = c3["h"] < c1["l"]
-            if is_bull_ob and imp_size >= min_imp:
-                zone_lo = round(min(c1["o"], c1["l"]), dec)
-                zone_hi = round(max(c1["h"], c0["h"]), dec)
-                entry = zone_lo
-                sl = round(zone_hi + max(pip * 3, atr * 0.12), dec)
-                if price <= sl and entry > price * 0.985:
-                    tier = 1 if has_fvg else 2
-                    tag = "VENTA OB + FVG" if has_fvg else "VENTA OB ESTRUCTURAL"
-                    candidates.append((tier, i, tag, entry, sl, zone_hi, zone_lo))
-            elif has_fvg and (c2["o"] - c2["c"]) >= min_imp * 0.8:
-                zone_lo = round(c3["h"], dec)
-                zone_hi = round(c1["l"], dec)
-                entry = zone_lo
-                sl = round(c1["h"] + max(pip * 3, atr * 0.12), dec)
-                if price <= sl and entry > price * 0.985:
-                    candidates.append((3, i, "VENTA FVG RETROCESO", entry, sl, zone_hi, zone_lo))
+function renderPanelVision() {
+  if (!DATA) return;
+  document.getElementById("pv-headline").textContent = DATA.brief?.headline || "--";
+  const ws = DATA.brief?.wall_street;
+  document.getElementById("pv-ws-tone").textContent = ws?.tone || "SESIÓN ACTIVA";
+  document.getElementById("pv-ws-story").textContent = ws?.story || DATA.brief?.summary || "--";
 
-    if not candidates:
-        return None
+  const wsIdxEl = document.getElementById("pv-ws-indices");
+  wsIdxEl.innerHTML = (ws?.indices || []).map(ix => {
+    const pos = ix.chg_pct >= 0;
+    return `
+      <div class="bg-[#04070f] border border-slate-800 rounded-lg p-2.5">
+        <div class="text-[10px] text-slate-400">${ix.label} (${ix.symbol})</div>
+        <div class="font-bold text-white text-sm mt-0.5">${ix.price || "--"}</div>
+        <div class="text-[11px] font-bold ${pos ? "text-emerald-400" : "text-red-400"}">${pos ? "▲" : "▼"} ${ix.chg_pct >= 0 ? "+" : ""}${ix.chg_pct}%</div>
+      </div>
+    `;
+  }).join("");
 
-    candidates.sort(key=lambda x: (x[0], -x[1]))
-    tier, _, tag, entry, sl, z_hi, z_lo = candidates[0]
-    risk = abs(entry - sl)
-    if risk <= 0:
-        return None
+  // Noticias filtradas y explicadas
+  const newsList = (DATA.news || []).map((n, idx) => ({ ...n, _idx: idx })).filter(n => {
+    if (newsFilter === "WALL") return (n.category || "").includes("WALL");
+    if (newsFilter === "FOREX") return (n.category || "").includes("FOREX");
+    if (newsFilter === "GOLD") return (n.category || "").includes("ORO");
+    return true;
+  });
 
-    if direction == "SUBE":
-        be_trigger = round(entry + risk * 1.0, dec)
-        tp1 = round(entry + risk * 2.0, dec)
-        tp2 = round(entry + risk * 3.0, dec)
-        swing_tp = round(entry + risk * 4.2, dec)
-        side = "BUY"
-    else:
-        be_trigger = round(entry - risk * 1.0, dec)
-        tp1 = round(entry - risk * 2.0, dec)
-        tp2 = round(entry - risk * 3.0, dec)
-        swing_tp = round(entry - risk * 4.2, dec)
-        side = "SELL"
+  document.getElementById("pv-news").innerHTML = newsList.map(n => `
+    <div class="bg-[#050913] border border-slate-800 hover:border-sky-500/40 rounded-xl p-3.5 space-y-2">
+      <div class="flex flex-wrap items-center justify-between gap-1.5 text-[10px]">
+        <span class="px-2 py-0.5 rounded bg-sky-500/15 border border-sky-400/40 text-sky-300 font-bold">${n.category || "MERCADO"}</span>
+        <span class="text-slate-400">${n.source} · ${n.time}</span>
+      </div>
+      <a href="${n.link}" target="_blank" rel="noopener" class="block font-bold text-white hover:text-amber-300 text-xs leading-snug">${n.title}</a>
+      <div class="bg-[#03060c] border border-slate-800/90 rounded-lg p-2.5 text-[11px] text-slate-200 leading-relaxed">
+        ${n.plain_es || "Flujo informativo de la sesión actual."}
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+        <div class="flex flex-wrap gap-1">
+          ${(n.impacts || []).map(sym => `<span class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300 text-[10px] font-bold">${sym}</span>`).join("")}
+        </div>
+        <button onclick="explainNewsWithAI(${n._idx})" class="px-2.5 py-1 rounded bg-sky-500/20 border border-sky-400/50 text-sky-200 text-[10px] font-bold">✨ EXPLICAR CON VISIÓN</button>
+      </div>
+    </div>
+  `).join("");
 
-    return {
-        "tier": tier,
-        "direction": side,
-        "signal_tag": tag,
-        "entry": entry,
-        "sl": sl,
-        "be_trigger": be_trigger,
-        "tp1": tp1,
-        "tp2": tp2,
-        "swing_tp": swing_tp,
-        "ob_high": z_hi,
-        "ob_low": z_lo,
+  // Bancos Centrales
+  document.getElementById("pv-banks").innerHTML = (DATA.banks || []).map(b => {
+    const cls = b.bias === "BULLISH" ? "text-emerald-400 border-emerald-500/40" : (b.bias === "BEARISH" ? "text-red-400 border-red-500/40" : "text-slate-300 border-slate-800");
+    return `
+      <div class="bg-[#050913] border ${cls} rounded-xl p-3 space-y-1">
+        <div class="flex items-center justify-between font-bold">
+          <span class="text-white">${b.bank}</span>
+          <span>${b.stance}</span>
+        </div>
+        <p class="text-[11px] text-slate-300 leading-relaxed">${b.detail}</p>
+      </div>
+    `;
+  }).join("");
+
+  // Calendario
+  document.getElementById("pv-calendar").innerHTML = (DATA.calendar || []).map(ev => `
+    <div class="bg-[#050913] border border-slate-800 rounded-lg p-2.5 flex items-center justify-between gap-2">
+      <div>
+        <span class="px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 font-bold text-[10px] mr-1.5">${ev.currency}</span>
+        <strong class="text-white">${ev.title}</strong>
+        <div class="text-[10px] text-slate-400 mt-0.5">Previo: ${ev.previous} · Pronóstico: ${ev.forecast}</div>
+      </div>
+      <span class="text-[10px] text-cyan-300 font-bold shrink-0">${ev.time}</span>
+    </div>
+  `).join("");
+
+  // Cestas
+  document.getElementById("pv-baskets").innerHTML = (DATA.correlated_baskets || []).map(bk => `
+    <div class="bg-[#050913] border border-indigo-500/30 rounded-lg p-3 space-y-1">
+      <div class="font-bold text-indigo-300">CESTA ${bk.currency} (${bk.status})</div>
+      <div class="text-white">${bk.pairs.join(" · ")}</div>
+      <div class="text-[10px] text-slate-400">${bk.rule}</div>
+    </div>
+  `).join("");
+}
+
+function openAssetInUltron(sym) {
+  selectedSym = sym;
+  if (!isPanelMode) toggleViewMode();
+  setPanelTab("ultron");
+}
+
+function setChartTF(tf) {
+  chartTF = tf;
+  document.querySelectorAll(".ctf").forEach(b => {
+    b.className = b.dataset.tf === tf
+      ? "ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold"
+      : "ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300";
+  });
+  renderUltronPanel();
+}
+
+function renderUltronPanel() {
+  if (!DATA) return;
+  const selEl = document.getElementById("panel-ultron-selector");
+  selEl.innerHTML = DATA.assets.map(a => `
+    <button onclick="selectedSym='${a.symbol}'; renderUltronPanel();" class="px-2 py-1.5 rounded text-[10px] font-bold border ${a.symbol === selectedSym ? 'bg-red-500 text-white border-red-400' : 'bg-[#060a12] border-slate-800 text-slate-300'}">${a.symbol}</button>
+  `).join("");
+
+  const a = DATA.assets.find(x => x.symbol === selectedSym) || DATA.assets[0];
+  document.getElementById("pu-sym").textContent = a.symbol;
+  document.getElementById("pu-price").textContent = a.price;
+  document.getElementById("pu-status").textContent = a.confluence.verdict_title;
+  document.getElementById("pu-tf-w").textContent = a.tf_biases["1w"];
+  document.getElementById("pu-tf-d").textContent = a.tf_biases["1d"];
+  document.getElementById("pu-tf-4h").textContent = a.tf_biases["4h"];
+  document.getElementById("pu-atr").textContent = `${a.volatility.atr_units} ${a.type === 'index' || a.type === 'crypto' ? 'pts' : 'pips'}`;
+  document.getElementById("pu-r20").textContent = `${a.volatility.range20_units} ${a.type === 'index' || a.type === 'crypto' ? 'pts' : 'pips'}`;
+
+  const nb = document.getElementById("pu-news-banner");
+  nb.classList.toggle("hidden", !a.news_warning);
+  if (a.news_warning) nb.textContent = `⚠️ NOTICIA FUERTE HOY: ${a.news_warning} — Operar con gestión estricta.`;
+
+  const sb = document.getElementById("pu-swing-banner");
+  sb.classList.toggle("hidden", !a.swing_potential);
+  if (a.swing_potential) sb.textContent = `🌊 POTENCIAL SWING ACTIVO · Swing TP: ${a.swing_potential.swing_tp} · ${a.swing_potential.plan}`;
+
+  const s = a.setup;
+  document.getElementById("pu-entry").textContent = s ? s.entry : "--";
+  document.getElementById("pu-dist").textContent = s ? s.signal_tag : "Sin bloque";
+  document.getElementById("pu-sl").textContent = s ? s.sl : "--";
+  document.getElementById("pu-sl-pips").textContent = s ? `${Math.round(Math.abs(s.entry - s.sl) / a.pip)} pips/pts` : "--";
+  document.getElementById("pu-be").textContent = s ? s.be_trigger : "--";
+  document.getElementById("pu-tp1").textContent = s ? s.tp1 : "--";
+  document.getElementById("pu-tp1-pips").textContent = s ? "Ratio 1:2" : "--";
+  document.getElementById("pu-tp2").textContent = a.swing_potential ? a.swing_potential.swing_tp : (s ? s.tp2 : "--");
+  document.getElementById("pu-tp2-pips").textContent = a.swing_potential ? "Swing TP (4.2R)" : (s ? "Ratio 1:3" : "--");
+
+  drawUltronCanvas(a);
+}
+
+function drawUltronCanvas(a) {
+  const canvas = document.getElementById("ultron-canvas");
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+
+  const w = rect.width;
+  const h = rect.height;
+  ctx.fillStyle = "#030509";
+  ctx.fillRect(0, 0, w, h);
+
+  const candles = a.candles?.[chartTF] || a.candles?.["1d"] || [];
+  if (!candles.length) return;
+
+  let hi = Math.max(...candles.map(c => c.h));
+  let lo = Math.min(...candles.map(c => c.l));
+  if (a.setup) {
+    hi = Math.max(hi, a.setup.sl, a.setup.tp1);
+    lo = Math.min(lo, a.setup.sl, a.setup.tp1);
+  }
+  const pad = (hi - lo) * 0.1 || 0.001;
+  hi += pad; lo -= pad;
+  const toY = p => h - ((p - lo) / (hi - lo)) * (h - 30) - 15;
+
+  // Caja OB/FVG
+  if (a.setup) {
+    const y1 = toY(a.ob_high);
+    const y2 = toY(a.ob_low);
+    ctx.fillStyle = a.setup.direction === "BUY" ? "rgba(16,185,129,0.14)" : "rgba(239,68,68,0.14)";
+    ctx.fillRect(10, Math.min(y1, y2), w - 20, Math.max(6, Math.abs(y2 - y1)));
+  }
+
+  // Velas
+  const step = (w - 30) / candles.length;
+  candles.forEach((c, idx) => {
+    const x = 15 + idx * step + step * 0.5;
+    const bull = c.c >= c.o;
+    ctx.strokeStyle = bull ? "#10b981" : "#ef4444";
+    ctx.fillStyle = bull ? "#10b981" : "#ef4444";
+    ctx.beginPath();
+    ctx.moveTo(x, toY(c.h));
+    ctx.lineTo(x, toY(c.l));
+    ctx.stroke();
+    const top = toY(Math.max(c.o, c.c));
+    const bot = toY(Math.min(c.o, c.c));
+    ctx.fillRect(x - step * 0.3, top, Math.max(2, step * 0.6), Math.max(1.5, bot - top));
+  });
+
+  // Niveles BSL/SSL y Setup
+  const drawLine = (price, color, label) => {
+    if (!price) return;
+    const y = toY(price);
+    ctx.strokeStyle = color;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(10, y);
+    ctx.lineTo(w - 10, y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = color;
+    ctx.font = "bold 10px JetBrains Mono";
+    ctx.fillText(`${label}: ${price}`, 14, y - 4);
+  };
+
+  if (a.liquidity) {
+    drawLine(a.liquidity.bsl, "#fb7185", "BSL");
+    drawLine(a.liquidity.ssl, "#2dd4bf", "SSL");
+  }
+  if (a.setup) {
+    drawLine(a.setup.entry, "#38bdf8", "ENTRADA");
+    drawLine(a.setup.sl, "#f87171", "SL");
+    drawLine(a.setup.tp1, "#34d399", "TP1");
+  }
+}
+
+function renderPanelWeekly1S() {
+  if (!DATA) return;
+  const list = DATA.weekly_pivots || [];
+  document.getElementById("weekly1s-count-badge").textContent = `${list.length} ACTIVOS`;
+  const grid = document.getElementById("panel-weekly1s-grid");
+  if (!list.length) {
+    grid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-8">Ningún activo se encuentra hoy a <= 60 pips de un giro semanal limpio pre-2017 en contra-tendencia.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(wp => `
+    <div class="bg-[#050913] border border-cyan-500/40 rounded-xl p-3 space-y-1.5">
+      <div class="flex items-center justify-between font-bold">
+        <span class="text-white text-sm">${wp.symbol} · ${wp.direction === "BUY" ? "COMPRA 1S" : "VENTA 1S"}</span>
+        <span class="text-cyan-300">A ${wp.dist_units} ${wp.unit_label}</span>
+      </div>
+      <div class="text-slate-300">Nivel Semanal (${wp.date}): <strong>${wp.entry}</strong> · Mecha extrema: <strong>${wp.extreme}</strong></div>
+      <div class="text-[10px] ${wp.macro_aligned ? 'text-emerald-400' : 'text-amber-300'}">${wp.macro_aligned ? "✔ Macro apoya el giro" : "⚠️ Giro técnico contra-tendencia (esperar rechazo)"}</div>
+    </div>
+  `).join("");
+}
+
+function renderPanelFriday() {
+  const pct = Math.round((completedLessons.length / LESSONS.length) * 100);
+  document.getElementById("panel-course-pct").textContent = `${pct}% COMPLETADO`;
+  document.getElementById("panel-lessons-list").innerHTML = LESSONS.map(l => {
+    const done = completedLessons.includes(l.id);
+    return `
+      <div onclick="toggleLesson(${l.id})" class="cursor-pointer bg-[#050913] border ${done ? 'border-purple-400' : 'border-slate-800'} rounded-xl p-3 space-y-1">
+        <div class="flex items-center justify-between font-bold">
+          <span class="text-purple-300">${l.title}</span>
+          <span>${done ? "✅" : "⬜"}</span>
+        </div>
+        <p class="text-[11px] text-slate-300">${l.desc}</p>
+      </div>
+    `;
+  }).join("");
+}
+
+function toggleLesson(id) {
+  if (completedLessons.includes(id)) completedLessons = completedLessons.filter(x => x !== id);
+  else completedLessons.push(id);
+  localStorage.setItem("laticce_lessons", JSON.stringify(completedLessons));
+  renderPanelFriday();
+}
+
+function renderJournal() {
+  const wins = journalEntries.filter(x => x.res === "WIN").length;
+  const losses = journalEntries.filter(x => x.res === "LOSS").length;
+  const netR = wins * 2 - losses;
+  const rate = journalEntries.length ? Math.round((wins / journalEntries.length) * 100) : 0;
+  document.getElementById("homer-stats-badge").textContent = `ACIERTO: ${rate}% (${netR >= 0 ? "+" : ""}${netR}R)`;
+
+  document.getElementById("journal-list").innerHTML = journalEntries.map((e, i) => `
+    <div class="bg-[#050913] border border-slate-800 rounded-lg p-2.5 flex items-center justify-between">
+      <div>
+        <strong class="text-white">${e.pair}</strong> · <span class="text-amber-300">${e.dir}</span> · <span class="${e.res === 'WIN' ? 'text-emerald-400' : (e.res === 'LOSS' ? 'text-red-400' : 'text-slate-300')} font-bold">${e.res}</span>
+        <div class="text-[11px] text-slate-400">${e.note} (${e.date})</div>
+      </div>
+      <button onclick="deleteJournal(${i})" class="text-slate-500 hover:text-red-400 font-bold px-2">✕</button>
+    </div>
+  `).join("");
+}
+
+function deleteJournal(i) {
+  journalEntries.splice(i, 1);
+  localStorage.setItem("laticce_journal", JSON.stringify(journalEntries));
+  renderJournal();
+}
+
+function configureCloudToken() {
+  const cur = localStorage.getItem("laticce_gh_token") || "";
+  const val = prompt("Pega tu Personal Access Token de GitHub (repo) para sincronizar journal.json:", cur);
+  if (val !== null) {
+    localStorage.setItem("laticce_gh_token", val.trim());
+    document.getElementById("sync-status-badge").textContent = val.trim() ? "NUBE ACTIVA" : "LOCAL";
+  }
+}
+
+async function loadCloudJournal() {
+  try {
+    const r = await fetch("./journal.json?t=" + Date.now());
+    if (r.ok) {
+      const arr = await r.json();
+      if (Array.isArray(arr) && arr.length) {
+        journalEntries = arr;
+        localStorage.setItem("laticce_journal", JSON.stringify(journalEntries));
+        renderJournal();
+      }
     }
-
-
-def find_clean_weekly_pivots_pre2017(candles_1w, dec):
-    """
-    Detecta giros semanales limpios históricos anteriores a 2017:
-    1 vela de impulso + 1 vela única de rechazo sin acumulación previa.
-    """
-    buys, sells = [], []
-    if not candles_1w or len(candles_1w) < 6:
-        return buys, sells
-
-    for i in range(3, len(candles_1w) - 2):
-        c = candles_1w[i]
-        if c["t"] >= HISTORICAL_CUTOFF_TS:
-            continue
-        prev1 = candles_1w[i - 1]
-        prev2 = candles_1w[i - 2]
-        nxt = candles_1w[i + 1]
-
-        rng = max(1e-9, c["h"] - c["l"])
-        body = abs(c["c"] - c["o"])
-        date_str = datetime.fromtimestamp(c["t"], tz=timezone.utc).strftime("%Y-%m-%d")
-
-        # Giro alcista limpio (mecha inferior o envolvente tras caída sin rango lateral)
-        if prev1["c"] < prev1["o"] and c["l"] < prev1["l"] and c["l"] < prev2["l"] and nxt["c"] > c["h"]:
-            if body / rng >= 0.35 or (min(c["o"], c["c"]) - c["l"]) >= rng * 0.45:
-                buys.append({
-                    "direction": "BUY",
-                    "entry": round(max(c["o"], c["c"]), dec),
-                    "extreme": round(c["l"], dec),
-                    "date": date_str
-                })
-
-        # Giro bajista limpio (mecha superior o envolvente tras subida sin rango lateral)
-        if prev1["c"] > prev1["o"] and c["h"] > prev1["h"] and c["h"] > prev2["h"] and nxt["c"] < c["l"]:
-            if body / rng >= 0.35 or (c["h"] - max(c["o"], c["c"])) >= rng * 0.45:
-                sells.append({
-                    "direction": "SELL",
-                    "entry": round(min(c["o"], c["c"]), dec),
-                    "extreme": round(c["h"], dec),
-                    "date": date_str
-                })
-
-    return buys[-40:], sells[-40:]
-
-
-def pct_change_4h(candles, bars=6):
-    if not candles or len(candles) <= bars:
-        return 0.0
-    p0 = candles[-1 - bars]["c"]
-    p1 = candles[-1]["c"]
-    return ((p1 - p0) / p0) * 100.0 if p0 else 0.0
-
-
-def compute_currency_strength_matrix(c4_map, c1d_map, dxy_4h, dxy_1d, us10y_4h, us10y_1d, spx_4h, spx_1d):
-    def blend_chg(c4, c1d):
-        return (pct_change_4h(c4, 6) * 0.60) + (pct_change_4h(c1d, 5) * 0.40)
-
-    dxy_chg = blend_chg(dxy_4h, dxy_1d)
-    us10y_chg = blend_chg(us10y_4h, us10y_1d)
-    spx_chg = blend_chg(spx_4h, spx_1d)
-
-    usd_score = (dxy_chg * 1.4) + (us10y_chg * 0.35)
-    gbp_score = (blend_chg(c4_map.get("GBPUSD"), c1d_map.get("GBPUSD")) +
-                 blend_chg(c4_map.get("GBPJPY"), c1d_map.get("GBPJPY")) +
-                 blend_chg(c4_map.get("GBPAUD"), c1d_map.get("GBPAUD"))) / 3.0
-    aud_score = ((blend_chg(c4_map.get("AUDUSD"), c1d_map.get("AUDUSD")) +
-                  blend_chg(c4_map.get("AUDJPY"), c1d_map.get("AUDJPY")) +
-                  blend_chg(c4_map.get("AUDNZD"), c1d_map.get("AUDNZD"))) / 3.0) + (spx_chg * 0.25)
-    eur_score = (blend_chg(c4_map.get("EURUSD"), c1d_map.get("EURUSD")) +
-                 blend_chg(c4_map.get("EURJPY"), c1d_map.get("EURJPY")) +
-                 blend_chg(c4_map.get("EURAUD"), c1d_map.get("EURAUD"))) / 3.0
-    jpy_score = -((blend_chg(c4_map.get("USDJPY"), c1d_map.get("USDJPY")) +
-                   blend_chg(c4_map.get("GBPJPY"), c1d_map.get("GBPJPY")) +
-                   blend_chg(c4_map.get("EURJPY"), c1d_map.get("EURJPY")) +
-                   blend_chg(c4_map.get("AUDJPY"), c1d_map.get("AUDJPY"))) / 4.0)
-    nzd_score = (blend_chg(c4_map.get("NZDUSD"), c1d_map.get("NZDUSD")) -
-                 blend_chg(c4_map.get("AUDNZD"), c1d_map.get("AUDNZD"))) / 2.0
-    cad_score = (-blend_chg(c4_map.get("USDCAD"), c1d_map.get("USDCAD")) -
-                 blend_chg(c4_map.get("AUDCAD"), c1d_map.get("AUDCAD"))) / 2.0
-    chf_score = (-blend_chg(c4_map.get("USDCHF"), c1d_map.get("USDCHF")) -
-                 blend_chg(c4_map.get("AUDCHF"), c1d_map.get("AUDCHF"))) / 2.0
-    xau_score = -usd_score * 0.9
-
-    raw = {
-        "USD": usd_score, "GBP": gbp_score, "AUD": aud_score,
-        "EUR": eur_score, "JPY": jpy_score, "NZD": nzd_score,
-        "CAD": cad_score, "CHF": chf_score, "XAU": xau_score,
-        "BTC": spx_chg * 0.8 - usd_score * 0.5,
-    }
-    labels = {k: ("FUERTE" if v > 0.14 else ("DÉBIL" if v < -0.14 else "NEUTRAL")) for k, v in raw.items()}
-    return raw, labels, round(spx_chg, 2)
-
-
-def fetch_high_impact_calendar(now_utc):
-    events = []
-    high_by_ccy = {}
-    today_str = now_utc.strftime("%Y-%m-%d")
-    try:
-        url = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=8) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-        for ev in data:
-            if ev.get("impact") != "High":
-                continue
-            ev_date = str(ev.get("date", ""))[:10]
-            if ev_date != today_str:
-                continue
-            ccy = str(ev.get("country", "")).upper()
-            title = str(ev.get("title", "Evento Alto Impacto"))
-            t_str = str(ev.get("date", ""))[11:16] or "Hoy"
-            events.append({
-                "time": f"{t_str} UTC",
-                "currency": ccy,
-                "impact": "ALTO",
-                "title": title,
-                "forecast": ev.get("forecast", "-"),
-                "previous": ev.get("previous", "-"),
-            })
-            high_by_ccy.setdefault(ccy, []).append(title)
-    except Exception:
-        pass
-
-    if not events:
-        events = [
-            {"time": "13:30 UTC", "currency": "USD", "impact": "MEDIO", "title": "Apertura Sesión Nueva York / Flujo Institucional", "forecast": "-", "previous": "-"},
-            {"time": "15:00 UTC", "currency": "USD", "impact": "MEDIO", "title": "Fijación de Liquidez Londres / NY", "forecast": "-", "previous": "-"},
-        ]
-    return events[:12], high_by_ccy
-
-
-def explain_news_in_plain_spanish(raw_title, source_name):
-    """
-    Traduce y explica de forma clara y pedagógica el titular financiero
-    para saber qué significa y qué activos mueve hoy.
-    """
-    t = raw_title.strip()
-    tl = t.lower()
-
-    # Clasificación temática
-    if any(k in tl for k in ["fed", "powell", "fomc", "ecb", "boe", "boj", "rba", "rate", "rates", "inflation", "cpi", "ppi", "payroll", "jobs", "unemployment", "central bank"]):
-        category = "💱 FOREX & BANCOS"
-    elif any(k in tl for k in ["gold", "xau", "silver", "oil", "crude", "opec", "commodity", "commodities"]):
-        category = "🥇 ORO & COMMODITIES"
-    elif any(k in tl for k in ["bitcoin", "btc", "crypto", "ethereum", "sec"]):
-        category = "₿ CRIPTO & RIESGO"
-    else:
-        category = "🇺🇸 WALL STREET & TASAS"
-
-    # Detección de activos afectados y explicación clara en español
-    impacts = []
-    if any(k in tl for k in ["fed", "powell", "fomc", "dollar", "dxy", "treasury", "yield", "10-year"]):
-        impacts.extend(["EURUSD", "GBPUSD", "USDJPY", "XAUUSD"])
-    if any(k in tl for k in ["ecb", "euro", "eurozone", "germany", "lagarde"]):
-        impacts.extend(["EURUSD", "EURJPY", "EURAUD"])
-    if any(k in tl for k in ["boe", "uk", "britain", "pound", "sterling", "bailey"]):
-        impacts.extend(["GBPUSD", "GBPJPY", "GBPAUD"])
-    if any(k in tl for k in ["boj", "yen", "japan", "ueda"]):
-        impacts.extend(["USDJPY", "GBPJPY", "EURJPY", "AUDJPY"])
-    if any(k in tl for k in ["rba", "australia", "aussie", "china"]):
-        impacts.extend(["AUDUSD", "AUDJPY", "EURAUD"])
-    if any(k in tl for k in ["gold", "xau", "bullion"]):
-        impacts.append("XAUUSD")
-    if any(k in tl for k in ["s&p", "nasdaq", "dow", "nvidia", "tech", "stocks", "wall street", "ai", "earnings"]):
-        impacts.extend(["US500", "USTEC", "US30"])
-    if any(k in tl for k in ["bitcoin", "btc", "crypto"]):
-        impacts.append("BTCUSD")
-    if not impacts:
-        impacts = ["US500", "EURUSD", "XAUUSD"]
-
-    # Deduplicar manteniendo orden
-    seen_imp = []
-    for sym in impacts:
-        if sym not in seen_imp:
-            seen_imp.append(sym)
-
-    # Reglas de interpretación pedagógica en español sencillo
-    if any(k in tl for k in ["inflation", "cpi", "ppi", "hotter", "higher rates", "hawkish", "yields rise", "yields climb"]):
-        plain_es = (
-            "Qué significa: Los precios o los intereses en EE.UU. presionan al alza. "
-            "Efecto en mercado: Suele fortalecer al Dólar (USD) y presionar a la baja al Oro (XAUUSD), EURUSD y a las acciones tecnológicas (USTEC)."
-        )
-        sentiment = "DÓLAR FUERTE / CAUTELA"
-    elif any(k in tl for k in ["rate cut", "dovish", "cooling", "slowdown", "recession", "unemployment rises", "yields fall", "yields drop"]):
-        plain_es = (
-            "Qué significa: Se enfría la economía o aumenta la probabilidad de recortes de tasas. "
-            "Efecto en mercado: Suele debilitar al Dólar (USD) e impulsar al alza al Oro (XAUUSD), EURUSD, GBPUSD e índices como US500."
-        )
-        sentiment = "DÓLAR DÉBIL / IMPULSO RIESGO"
-    elif any(k in tl for k in ["gold", "bullion", "safe haven", "geopolitical", "tariff", "war", "tension"]):
-        plain_es = (
-            "Qué significa: Hay búsqueda de refugio o tensión comercial/geopolítica en los mercados. "
-            "Efecto en mercado: Aumenta la volatilidad en el Oro (XAUUSD), el Yen (JPY) y el Franco Suizo (CHF); evita entrar sin confirmación."
-        )
-        sentiment = "REFUGIO / ALTA VOLATILIDAD"
-    elif any(k in tl for k in ["nvidia", "ai", "tech", "nasdaq", "s&p", "dow", "rally", "surge", "record high"]):
-        plain_es = (
-            "Qué significa: Movimiento fuerte en las grandes tecnológicas y bolsas de Wall Street. "
-            "Efecto en mercado: Marca el apetito por riesgo del día: si Wall Street sube con fuerza, suele apoyar también al AUD y presionar al Yen (JPY)."
-        )
-        sentiment = "APETITO POR RIESGO (WALL ST)"
-    elif any(k in tl for k in ["selloff", "slump", "plunge", "tumble", "drop", "falls", "losses"]):
-        plain_es = (
-            "Qué significa: Toma de ganancias o caída en los mercados financieros. "
-            "Efecto en mercado: Los inversores reducen riesgo; vigila posibles retrocesos en índices (US30, USTEC, US500) y cruces con AUD."
-        )
-        sentiment = "AVERSIÓN AL RIESGO"
-    elif any(k in tl for k in ["yen", "boj", "japan", "intervention"]):
-        plain_es = (
-            "Qué significa: Atención puesta en el Banco de Japón o posible defensa del Yen. "
-            "Efecto en mercado: Puede provocar giros bruscos en todos los pares con JPY (USDJPY, GBPJPY, EURJPY, AUDJPY). Protege posiciones en Break Even."
-        )
-        sentiment = "ALERTA VOLATILIDAD JPY"
-    else:
-        plain_es = (
-            f"Qué significa: Actualización relevante de {source_name} sobre el flujo institucional de la sesión. "
-            f"Efecto en mercado: Revisa si el precio de {', '.join(seen_imp[:3])} confirma estructura antes de ejecutar."
-        )
-        sentiment = "SEGUIMIENTO MACRO"
-
-    return {
-        "category": category,
-        "sentiment": sentiment,
-        "impacts": seen_imp[:4],
-        "plain_es": plain_es,
-    }
-
-
-def fetch_live_news():
-    feeds = [
-        ("Wall Street / Yahoo", "https://finance.yahoo.com/news/rssindex"),
-        ("Macro Global", "https://www.investing.com/rss/news_1.rss"),
-        ("Forex & Divisas", "https://www.investing.com/rss/news_14.rss"),
-        ("Commodities & Oro", "https://www.investing.com/rss/news_11.rss"),
-    ]
-    news_items = []
-    seen = set()
-    for source_name, url in feeds:
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=8) as resp:
-                xml_data = resp.read()
-            root = ET.fromstring(xml_data)
-            for item in root.findall(".//item")[:6]:
-                title_el = item.find("title")
-                link_el = item.find("link")
-                pub_el = item.find("pubDate")
-                if title_el is not None and title_el.text:
-                    title = re.sub(r"\s+", " ", title_el.text).strip()
-                    if title in seen:
-                        continue
-                    seen.add(title)
-                    meta = explain_news_in_plain_spanish(title, source_name)
-                    news_items.append({
-                        "source": source_name,
-                        "title": title,
-                        "link": link_el.text.strip() if (link_el is not None and link_el.text) else "#",
-                        "time": (pub_el.text.strip()[:22] if (pub_el is not None and pub_el.text) else "Hoy"),
-                        "category": meta["category"],
-                        "sentiment": meta["sentiment"],
-                        "impacts": meta["impacts"],
-                        "plain_es": meta["plain_es"],
-                    })
-        except Exception:
-            pass
-
-    if not news_items:
-        news_items = [{
-            "source": "Radar Institucional LATICCE",
-            "title": "Flujos de liquidez activos en sesiones principales de Londres y Nueva York.",
-            "link": "#",
-            "time": "En línea",
-            "category": "🇺🇸 WALL STREET & TASAS",
-            "sentiment": "SESIÓN ACTIVA",
-            "impacts": ["EURUSD", "XAUUSD", "US500"],
-            "plain_es": "Qué significa: Mercado operando con flujo normal entre sesiones. Efecto en mercado: Prioriza setups con OB + FVG a favor de la fuerza de divisas."
-        }]
-    return news_items[:18]
-
-
-def build_wall_street_snapshot(c1d_map, dxy_val, us10y_val, ccy_labels):
-    def idx_stat(sym, label):
-        c = c1d_map.get(sym, [])
-        if len(c) >= 2:
-            p0 = c[-2]["c"]
-            p1 = c[-1]["c"]
-            chg = round(((p1 - p0) / p0) * 100.0, 2) if p0 else 0.0
-            return {"symbol": sym, "label": label, "price": p1, "chg_pct": chg}
-        return {"symbol": sym, "label": label, "price": 0.0, "chg_pct": 0.0}
-
-    spx = idx_stat("US500", "S&P 500")
-    ndx = idx_stat("USTEC", "Nasdaq 100")
-    dji = idx_stat("US30", "Dow Jones")
-    xau = idx_stat("XAUUSD", "Oro Spot")
-
-    tone = "ALCISTA EN RIESGO" if spx["chg_pct"] > 0.25 else ("CAUTELA / TOMA DE GANANCIAS" if spx["chg_pct"] < -0.25 else "CONSOLIDACIÓN LATERAL")
-    session_story = (
-        f"Wall Street muestra tono {tone}: S&P 500 ({spx['chg_pct']:+.2f}%), Nasdaq ({ndx['chg_pct']:+.2f}%) y Dow ({dji['chg_pct']:+.2f}%). "
-        f"El índice del dólar (DXY) cotiza en {dxy_val} ({ccy_labels.get('USD', 'NEUTRAL')}) con el bono a 10 años en {us10y_val}%, "
-        f"mientras el Oro marca {xau['chg_pct']:+.2f}%."
-    )
-    return {
-        "tone": tone,
-        "story": session_story,
-        "indices": [spx, ndx, dji, xau],
-    }
-
-
-def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_ccy, now_ts, active_setups):
-    try:
-        sym = cfg["symbol"]
-        dec = cfg["decimals"]
-        pip = cfg["pip"]
-        c_1d = candles_bundle.get("1d", [])
-        c_4h = candles_bundle.get("4h", [])
-        c_1h = candles_bundle.get("1h", [])
-        c_1w = candles_bundle.get("1w_all", [])
-
-        if not c_1h or not c_4h or not c_1d:
-            return None
-
-        price = c_1h[-1]["c"]
-        b_w, _ = analyze_tf_bias(c_1w[-35:] if len(c_1w) >= 35 else c_1w)
-        b_d, _ = analyze_tf_bias(c_1d)
-        b_4h, _ = analyze_tf_bias(c_4h)
-        b_1h, _ = analyze_tf_bias(c_1h)
-
-        # Dirección técnica ponderada
-        score_tech = 0
-        for b, w in [(b_d, 3), (b_4h, 2), (b_1h, 1)]:
-            if b == "SUBE":
-                score_tech += w
-            elif b == "BAJA":
-                score_tech -= w
-
-        chart_bias = "SUBE" if score_tech >= 2 else ("BAJA" if score_tech <= -2 else "NEUTRAL")
-
-        # Dirección macroeconómica
-        base_c = cfg["base"]
-        quote_c = cfg["quote"]
-        if cfg["type"] == "index":
-            m_diff = raw_strength.get("BTC", 0.0)
-        elif cfg["type"] == "crypto":
-            m_diff = raw_strength.get("BTC", 0.0)
-        elif cfg["type"] == "metal":
-            m_diff = raw_strength.get("XAU", 0.0)
-        else:
-            m_diff = raw_strength.get(base_c, 0.0) - raw_strength.get(quote_c, 0.0)
-
-        macro_dir = "SUBE" if m_diff > 0.16 else ("BAJA" if m_diff < -0.16 else "NEUTRAL")
-
-        atr_val = round(calc_atr(c_1d, 14), dec)
-        atr_units = round(atr_val / pip, 1) if pip else 0.0
-        r20_hi = max(x["h"] for x in c_1d[-20:])
-        r20_lo = min(x["l"] for x in c_1d[-20:])
-        r20_val = round(r20_hi - r20_lo, dec)
-        r20_units = round(r20_val / pip, 1) if pip else 0.0
-
-        exhausted, ex_reason = detect_exhaustion(c_4h, chart_bias)
-        liq = detect_liquidity_and_structure(c_4h, dec)
-
-        # Escáner institucional en cascada (OB + FVG -> OB -> FVG)
-        scan_dir = chart_bias if chart_bias in ("SUBE", "BAJA") else (macro_dir if macro_dir in ("SUBE", "BAJA") else "NEUTRAL")
-        setup = scan_institutional_zone(c_1h if len(c_1h) >= 16 else c_4h, scan_dir, price, atr_val, pip, dec)
-
-        # Confluencia y veredicto Mesa de Swing
-        if macro_dir == "NEUTRAL" or chart_bias == "NEUTRAL":
-            alignment = "NEUTRAL"
-            score = 52 if setup else 42
-            verdict_title = "SIN DIRECCIÓN CLARA · UNO ESTÁ NEUTRAL"
-            verdict_sub = "Esperar a que Economía y Gráfico definan tendencia limpia."
-        elif macro_dir == chart_bias:
-            alignment = "ALIGNED"
-            base_s = 78 + (6 if b_d == chart_bias else 0) + (4 if b_4h == chart_bias else 0) + (4 if setup and setup["tier"] == 1 else 0)
-            score = min(96, base_s - (14 if exhausted else 0))
-            if exhausted:
-                verdict_title = "AGOTAMIENTO · RIESGO DE GIRO"
-                verdict_sub = ex_reason
-            elif setup:
-                verdict_title = f"VAN JUNTOS · BUSCAR {'COMPRAS' if chart_bias == 'SUBE' else 'VENTAS'}"
-                verdict_sub = f"{setup['signal_tag']} respaldado por flujo macro."
-            else:
-                verdict_title = "VAN JUNTOS · SIN OB/FVG LIMPIO AÚN"
-                verdict_sub = "Dirección confirmada; esperar formación de bloque institucional."
-        else:
-            alignment = "BROKEN"
-            score = 35
-            verdict_title = "SE CONTRADICEN · ESPERAR"
-            verdict_sub = f"Economía apunta {macro_dir} pero el gráfico muestra {chart_bias}."
-
-        # Protocolo Swing (8 filtros institucionales)
-        swing_potential = None
-        if (
-            setup
-            and alignment == "ALIGNED"
-            and b_d == chart_bias
-            and b_4h == chart_bias
-            and b_1h == chart_bias
-            and score >= 84
-            and not exhausted
-        ):
-            swing_potential = {
-                "active": True,
-                "swing_tp": setup["swing_tp"],
-                "be_trigger": setup["be_trigger"],
-                "plan": "1) Proteger en BE al tocar +1R. 2) Cobrar parcial en TP1. 3) Piramidar solo en retrocesos limpios hacia Swing TP."
-            }
-
-        # Alertas de noticia fuerte hoy por divisa del par
-        affected_news = []
-        for ccy in {base_c, quote_c}:
-            if ccy in high_impact_by_ccy:
-                affected_news.extend([f"{ccy}: {t}" for t in high_impact_by_ccy[ccy]])
-        news_warning = " | ".join(affected_news[:2]) if affected_news else None
-
-        # Giros semanales limpios pre-2017 (<= 60 pips contra-tendencia)
-        hist_buys, hist_sells = find_clean_weekly_pivots_pre2017(c_1w, dec)
-        nearby_weekly_pivots = []
-        current_trend = b_d if b_d in ("SUBE", "BAJA") else chart_bias
-        for p in (hist_buys + hist_sells):
-            if current_trend == "SUBE" and p["direction"] != "SELL":
-                continue
-            if current_trend == "BAJA" and p["direction"] != "BUY":
-                continue
-            if p["direction"] == "SELL" and price >= p["entry"]:
-                continue
-            if p["direction"] == "BUY" and price <= p["entry"]:
-                continue
-
-            dist_u = round((abs(price - p["entry"]) / pip) * 10) / 10 if pip else abs(price - p["entry"])
-            pct_d = abs(price - p["entry"]) / max(1e-9, price)
-            within_range = (dist_u <= 60.0) if cfg["type"] == "forex" else ((dist_u <= 100.0) if cfg["type"] == "metal" else (pct_d <= 0.004))
-            if within_range:
-                macro_ok = (p["direction"] == "BUY" and macro_dir == "SUBE") or (p["direction"] == "SELL" and macro_dir == "BAJA")
-                nearby_weekly_pivots.append({
-                    "symbol": sym,
-                    "type": cfg["type"],
-                    "decimals": dec,
-                    "pip": pip,
-                    "price": price,
-                    "direction": p["direction"],
-                    "entry": p["entry"],
-                    "extreme": p["extreme"],
-                    "date": p["date"],
-                    "dist_units": dist_u,
-                    "unit_label": "pips" if cfg["type"] in ("forex", "metal") else "pts",
-                    "macro_aligned": macro_ok,
-                })
-
-        # Sello cronológico estable del setup
-        setup_sig = f"{setup['direction']}_{setup['entry']}" if setup else "NONE"
-        prev_state = active_setups.get(sym, {})
-        if setup and prev_state.get("sig") == setup_sig:
-            created_at = prev_state.get("created_at", now_ts)
-        else:
-            created_at = now_ts
-            active_setups[sym] = {"sig": setup_sig, "created_at": created_at}
-
-        if cfg["type"] in ("index", "crypto"):
-            macro_pair_str = f"Wall St / Liquidez USD ({ccy_labels.get('USD', 'NEUTRAL')})"
-        else:
-            macro_pair_str = f"{base_c} ({ccy_labels.get(base_c, 'NEUTRAL')}) vs {quote_c} ({ccy_labels.get(quote_c, 'NEUTRAL')})"
-
-        return {
-            "symbol": sym,
-            "type": cfg["type"],
-            "pip": pip,
-            "decimals": dec,
-            "price": price,
-            "chart_bias": chart_bias,
-            "macro_dir": macro_dir,
-            "tf_biases": {"1w": b_w, "1d": b_d, "4h": b_4h, "1h": b_1h},
-            "volatility": {
-                "atr": atr_val,
-                "atr_units": atr_units,
-                "range20": r20_val,
-                "range20_units": r20_units,
-            },
-            "liquidity": liq,
-            "intraday_high": round(max(x["h"] for x in c_1h[-12:]), dec),
-            "intraday_low": round(min(x["l"] for x in c_1h[-12:]), dec),
-            "ob_high": setup["ob_high"] if setup else round(max(x["h"] for x in c_1h[-12:]), dec),
-            "ob_low": setup["ob_low"] if setup else round(min(x["l"] for x in c_1h[-12:]), dec),
-            "macro_reason": f"{macro_pair_str}. Jerarquía (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}). {verdict_sub}",
-            "news_warning": news_warning,
-            "swing_potential": swing_potential,
-            "weekly_pivots": nearby_weekly_pivots,
-            "created_at": created_at,
-            "confluence": {
-                "score": score,
-                "alignment": alignment,
-                "verdict_title": verdict_title,
-                "verdict_sub": verdict_sub,
-            },
-            "setup": setup,
-            "candles": {
-                "1d": c_1d[-35:],
-                "4h": c_4h[-35:],
-                "1h": c_1h[-35:],
-            },
-        }
-    except Exception as e:
-        print(f"Error construyendo {cfg.get('symbol')}: {e}")
-        return None
-
-
-def get_central_banks(dxy_val, us10y_val, ccy_labels):
-    return [
-        {
-            "bank": "FED (EE.UU.)",
-            "currency": "USD",
-            "stance": f"USD {ccy_labels.get('USD', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("USD") == "FUERTE" else ("BEARISH" if ccy_labels.get("USD") == "DÉBIL" else "NEUTRAL"),
-            "detail": f"Índice Dólar DXY en {dxy_val} y rendimiento Bono 10 años en {us10y_val}%. Manda sobre EURUSD, GBPUSD, USDJPY y Oro.",
-        },
-        {
-            "bank": "BoE (Reino Unido)",
-            "currency": "GBP",
-            "stance": f"GBP {ccy_labels.get('GBP', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("GBP") == "FUERTE" else ("BEARISH" if ccy_labels.get("GBP") == "DÉBIL" else "NEUTRAL"),
-            "detail": "Medido por cesta híbrida GBPUSD + GBPJPY + GBPAUD (60% flujo 4H + 40% estructura 1D).",
-        },
-        {
-            "bank": "RBA (Australia)",
-            "currency": "AUD",
-            "stance": f"AUD {ccy_labels.get('AUD', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("AUD") == "FUERTE" else ("BEARISH" if ccy_labels.get("AUD") == "DÉBIL" else "NEUTRAL"),
-            "detail": "Sensible al apetito por riesgo de Wall Street (S&P 500) y cesta AUDUSD + AUDJPY + AUDNZD.",
-        },
-        {
-            "bank": "BCE (Eurozona)",
-            "currency": "EUR",
-            "stance": f"EUR {ccy_labels.get('EUR', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("EUR") == "FUERTE" else ("BEARISH" if ccy_labels.get("EUR") == "DÉBIL" else "NEUTRAL"),
-            "detail": "Evaluado mediante flujo institucional en EURUSD, EURJPY y EURAUD.",
-        },
-        {
-            "bank": "BoJ (Japón)",
-            "currency": "JPY",
-            "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DÉBIL" else "NEUTRAL"),
-            "detail": "Moneda refugio: se fortalece cuando caen las bolsas o bajan los rendimientos de bonos.",
-        },
-        {
-            "bank": "BoC / SNB / RBNZ",
-            "currency": "CAD·CHF·NZD",
-            "stance": f"CAD {ccy_labels.get('CAD', 'NEUTRAL')} · CHF {ccy_labels.get('CHF', 'NEUTRAL')}",
-            "bias": "NEUTRAL",
-            "detail": f"Monitoreo de divisas secundarias: CAD ({ccy_labels.get('CAD')}), CHF ({ccy_labels.get('CHF')}) y NZD ({ccy_labels.get('NZD')}).",
-        },
-    ]
-
-
-def build_correlated_baskets(assets, ccy_labels):
-    baskets = []
-    for ccy in ["USD", "GBP", "AUD", "EUR", "JPY"]:
-        st = ccy_labels.get(ccy, "NEUTRAL")
-        if st == "NEUTRAL":
-            continue
-        members = []
-        for a in assets:
-            sym = a["symbol"]
-            if ccy not in sym or a["type"] != "forex":
-                continue
-            is_base = sym.startswith(ccy)
-            suggested = ("COMPRA" if is_base else "VENTA") if st == "FUERTE" else ("VENTA" if is_base else "COMPRA")
-            members.append(f"{sym} ({suggested})")
-        if members:
-            baskets.append({
-                "currency": ccy,
-                "status": st,
-                "pairs": members[:4],
-                "rule": "No duplicar lote completo en todos: concentrar riesgo en el Foco #1."
-            })
-    return baskets
-
-
-def compute_best_focus_pick(assets, baskets):
-    ranked = []
-    for a in assets:
-        if not a.get("setup"):
-            continue
-        if a["confluence"]["alignment"] != "ALIGNED":
-            continue
-        prob = a["confluence"]["score"]
-        if a.get("swing_potential"):
-            prob = min(98, prob + 5)
-        if a["setup"]["tier"] == 1:
-            prob = min(98, prob + 3)
-        if a.get("news_warning"):
-            prob -= 6
-        ranked.append((prob, a))
-
-    ranked.sort(key=lambda x: x[0], reverse=True)
-    if not ranked:
-        return None
-
-    best_prob, best = ranked[0]
-    s = best["setup"]
-    return {
-        "primary": {
-            "symbol": best["symbol"],
-            "probability": best_prob,
-            "direction": s["direction"],
-            "signal_tag": s["signal_tag"],
-            "entry": s["entry"],
-            "sl": s["sl"],
-            "tp1": s["tp1"],
-            "swing_potential": bool(best.get("swing_potential")),
-            "reason": best["confluence"]["verdict_sub"],
-        },
-        "alternatives": [
-            {"symbol": a["symbol"], "probability": p, "direction": a["setup"]["direction"]}
-            for p, a in ranked[1:4]
-        ]
-    }
-
-
-def dispatch_push_notifications(assets, now_ts):
-    if not NTFY_TOPIC:
-        return
-    sent_state = load_json_state(ALERTS_STATE_FILE)
-    cooldown = 6 * 3600
-
-    for a in assets:
-        sym = a["symbol"]
-        s = a.get("setup")
-        if not s:
-            continue
-
-        if a.get("swing_potential"):
-            key = f"SWING_{sym}_{s['direction']}"
-            if now_ts - sent_state.get(key, 0) > cooldown:
-                msg = (
-                    f"{sym} ({s['direction']} · {s['signal_tag']})\n"
-                    f"Entrada: {s['entry']} | SL: {s['sl']}\n"
-                    f"Gatillo BE: {s['be_trigger']} | Swing TP: {s['swing_tp']}"
-                )
-                if send_ntfy_alert(f"LATICCE SWING: {sym}", msg, priority="high", tags="rocket"):
-                    sent_state[key] = now_ts
-
-        dist_pct = abs(a["price"] - s["entry"]) / max(1e-9, a["price"])
-        if a["confluence"]["alignment"] == "ALIGNED" and dist_pct <= 0.0035:
-            key_ob = f"NEAR_{sym}_{s['direction']}"
-            if now_ts - sent_state.get(key_ob, 0) > cooldown:
-                msg = (
-                    f"{sym} cerca de zona {s['signal_tag']}\n"
-                    f"Precio: {a['price']} -> Entrada: {s['entry']} | SL: {s['sl']} | TP1: {s['tp1']}"
-                )
-                if send_ntfy_alert(f"LATICCE ZONA: {sym}", msg, priority="default", tags="dart"):
-                    sent_state[key_ob] = now_ts
-
-        for wp in a.get("weekly_pivots", []):
-            limit_u = 40.0 if a["type"] == "metal" else 25.0
-            if wp["dist_units"] <= limit_u:
-                key_1s = f"1S_{sym}_{wp['date']}_{wp['direction']}"
-                if now_ts - sent_state.get(key_1s, 0) > (24 * 3600):
-                    msg = (
-                        f"Giro Semanal Limpio ({wp['date']}) a {wp['dist_units']} {wp['unit_label']}\n"
-                        f"{wp['direction']} en {wp['entry']} (Mecha: {wp['extreme']})"
-                    )
-                    if send_ntfy_alert(f"LATICCE 1S: {sym}", msg, priority="high", tags="classical_building"):
-                        sent_state[key_1s] = now_ts
-
-    save_json_state(ALERTS_STATE_FILE, sent_state)
-
-
-def main():
-    now_utc = datetime.now(timezone.utc)
-    now_ts = int(now_utc.timestamp())
-
-    dxy_1d = get_candles("DX-Y.NYB", "3mo", "1d", 2, 45)
-    dxy_4h = group_4h(get_candles("DX-Y.NYB", "1mo", "1h", 2, 180))
-    us10y_1d = get_candles("^TNX", "3mo", "1d", 2, 45)
-    us10y_4h = group_4h(get_candles("^TNX", "1mo", "1h", 2, 180))
-
-    dxy_val = dxy_4h[-1]["c"] if dxy_4h else 104.20
-    us10y_val = us10y_4h[-1]["c"] if us10y_4h else 4.25
-
-    calendar_events, high_impact_by_ccy = fetch_high_impact_calendar(now_utc)
-
-    bundles = {}
-    c4_map = {}
-    c1d_map = {}
-    for cfg in ASSETS_CONFIG:
-        sym = cfg["symbol"]
-        dec = cfg["decimals"]
-        c_1d = get_candles(cfg["yf"], "3mo", "1d", dec, 45)
-        c_1h_long = get_candles(cfg["yf"], "1mo", "1h", dec, 180)
-        c_4h = group_4h(c_1h_long)
-        c_1h = c_1h_long[-45:] if c_1h_long else []
-        c_1w_all = get_candles(cfg["yf"], "max", "1wk", dec, None)
-        bundles[sym] = {"1d": c_1d, "4h": c_4h, "1h": c_1h, "1w_all": c_1w_all}
-        c4_map[sym] = c_4h
-        c1d_map[sym] = c_1d
-
-    raw_strength, ccy_labels, _ = compute_currency_strength_matrix(
-        c4_map, c1d_map, dxy_4h, dxy_1d, us10y_4h, us10y_1d, c4_map.get("US500", []), c1d_map.get("US500", [])
-    )
-
-    active_setups = load_json_state(SETUPS_STATE_FILE)
-    assets = [
-        item for cfg in ASSETS_CONFIG
-        if (item := build_asset(cfg, bundles.get(cfg["symbol"], {}), raw_strength, ccy_labels, high_impact_by_ccy, now_ts, active_setups))
-    ]
-    save_json_state(SETUPS_STATE_FILE, active_setups)
-
-    banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
-    baskets = build_correlated_baskets(assets, ccy_labels)
-    focus_pick = compute_best_focus_pick(assets, baskets)
-    news = fetch_live_news()
-    wall_street = build_wall_street_snapshot(c1d_map, dxy_val, us10y_val, ccy_labels)
-
-    all_weekly_pivots = []
-    for a in assets:
-        all_weekly_pivots.extend(a.get("weekly_pivots", []))
-    all_weekly_pivots.sort(key=lambda x: x["dist_units"])
-
-    dispatch_push_notifications(assets, now_ts)
-
-    alert_ccys = sorted(high_impact_by_ccy.keys())
-    news_alert_str = f" · Noticias fuertes hoy: {', '.join(alert_ccys)}" if alert_ccys else ""
-    focus_str = f" | Foco #1: {focus_pick['primary']['symbol']} ({focus_pick['primary']['probability']}% prob)" if (focus_pick and focus_pick.get("primary")) else ""
-
-    payload = {
-        "last_updated": now_utc.strftime("%Y-%m-%d %H:%M UTC"),
-        "brief": {
-            "dxy": dxy_val,
-            "us10y": us10y_val,
-            "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"LATICCE v10.1 · Mesa de Swing + Brief Wall Street & Noticias Explicadas + Cascada OB/FVG ({len(all_weekly_pivots)} niveles 1S){focus_str}.",
-            "wall_street": wall_street,
-        },
-        "focus_pick": focus_pick,
-        "weekly_pivots": all_weekly_pivots,
-        "correlated_baskets": baskets,
-        "banks": banks,
-        "news": news,
-        "calendar": calendar_events,
-        "assets": assets,
-    }
-
-    with open("data.json", "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
-
-    print(f"OK: {len(assets)} activos actualizados (LATICCE v10.1).")
-
-
-if __name__ == "__main__":
-    main()
+  } catch (e) {}
+}
+
+document.getElementById("journal-form").addEventListener("submit", e => {
+  e.preventDefault();
+  journalEntries.unshift({
+    pair: document.getElementById("j-pair").value,
+    dir: document.getElementById("j-dir").value,
+    res: document.getElementById("j-res").value,
+    note: document.getElementById("j-note").value.trim(),
+    date: new Date().toLocaleDateString("es-ES")
+  });
+  localStorage.setItem("laticce_journal", JSON.stringify(journalEntries));
+  document.getElementById("j-note").value = "";
+  renderJournal();
+});
+
+document.getElementById("cabin-chat-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const inp = document.getElementById("cabin-input");
+  const q = inp.value.trim();
+  if (!q) return;
+  inp.value = "";
+  askAgentAI(q);
+});
+
+async function loadMarketData() {
+  try {
+    const res = await fetch("./data.json?t=" + Date.now());
+    DATA = await res.json();
+    document.getElementById("hud-updated").textContent = DATA.last_updated || "Actualizado";
+    const tickerHTML = DATA.assets.map(a =>
+      `<span><strong class="text-white">${a.symbol}</strong> <span class="text-amber-300">${a.price}</span> ${a.swing_potential ? '<span class="text-indigo-300">🌊SWING</span>' : ''}</span>`
+    ).join("");
+    document.getElementById("live-ticker").innerHTML = tickerHTML + tickerHTML;
+    renderAgentBriefing(currentAgent);
+    if (isPanelMode) renderAllPanels();
+  } catch (e) {
+    document.getElementById("agent-dialogue").textContent = "Esperando generación de data.json en GitHub Actions...";
+  }
+}
+
+updateAiBadge();
+loadMarketData();
+loadCloudJournal();
+setInterval(loadMarketData, 30000);
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").catch(() => {});
+}
+</script>
+</body>
+</html>
