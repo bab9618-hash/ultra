@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>LATICCE · Cabina Neuronal v10.4</title>
+  <title>LATICCE · Cabina Neuronal v10.5</title>
   <link rel="manifest" href="./manifest.json" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -395,7 +395,7 @@
     </div>
   </main>
 
-  <!-- BARRA INFERIOR DE 7 AGENTES (Z-INDEX 50 PARA PRIORIDAD TOTAL DE TOQUE) -->
+  <!-- BARRA INFERIOR DE 7 AGENTES -->
   <nav class="fixed bottom-0 inset-x-0 z-50 bg-[#04060c]/95 backdrop-blur-md border-t border-slate-800/90 py-1.5 px-2">
     <div class="max-w-4xl mx-auto grid grid-cols-7 gap-1 text-center text-[9px] font-mono">
       <button type="button" data-ag="jarvis" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-amber-400 font-bold"><span>⚡</span><span>JARVIS</span></button>
@@ -463,6 +463,54 @@
         return JSON.parse(decodeURIComponent(escape(atob(clean))));
       }
 
+      function calcEntryDistance(a) {
+        const price = safeNum(a.price, 0);
+        const entry = safeNum(a.setup && a.setup.entry, price);
+        let pip = safeNum(a.pip, 0);
+        if (!pip) {
+          if (a.symbol === 'XAUUSD' || a.type === 'metal') pip = 0.1;
+          else if (a.symbol && a.symbol.indexOf('JPY') !== -1) pip = 0.01;
+          else if (a.type === 'forex') pip = 0.0001;
+          else pip = 1.0;
+        }
+        const units = Math.round((Math.abs(price - entry) / pip) * 10) / 10;
+        const unitLabel = (a.type === 'forex' || a.type === 'metal' || a.symbol === 'XAUUSD') ? 'pips' : 'pts';
+        return { units: units, unitLabel: unitLabel };
+      }
+
+      function buildEasyReason(a) {
+        const isBuy = (a.setup && a.setup.direction) === 'BUY';
+        const accion = isBuy ? 'COMPRA' : 'VENTA';
+        const zk = a.zone_kind || 'OB';
+        const zonaTxt = zk === 'OB_FVG'
+          ? 'un bloque institucional con vacío de liquidez (OB + FVG)'
+          : (zk === 'FVG' ? 'un vacío de precio (FVG) pendiente de rellenar' : 'un Order Block estructural limpio');
+
+        const tf1d = (a.timeframes && a.timeframes['1d']) || 'NEUTRAL';
+        const tf4h = (a.timeframes && a.timeframes['4h']) || 'NEUTRAL';
+        const align = (a.confluence && a.confluence.alignment) || 'NEUTRAL';
+
+        let fuerzaTxt = '';
+        if (a.type === 'forex' && appData && appData.currency_strength && appData.currency_strength.labels) {
+          const lbls = appData.currency_strength.labels;
+          const bSt = lbls[a.base] || 'NEUTRAL';
+          const qSt = lbls[a.quote] || 'NEUTRAL';
+          if (isBuy) {
+            fuerzaTxt = ' Además, el ' + a.base + ' está ' + bSt + ' frente al ' + a.quote + ' (' + qSt + ').';
+          } else {
+            fuerzaTxt = ' Además, el ' + a.base + ' está ' + bSt + ' y el ' + a.quote + ' está ' + qSt + ', empujando el par hacia abajo.';
+          }
+        } else if (align === 'ALIGNED') {
+          fuerzaTxt = ' La fuerza macroeconómica acompaña el movimiento.';
+        } else if (align === 'BROKEN') {
+          fuerzaTxt = ' Ojo: va en contra del flujo macro, cobrar rápido en TP1.';
+        }
+
+        const dirTend = isBuy ? 'alcista' : 'bajista';
+        const reboteTxt = isBuy ? 'rebotar al alza' : 'caer desde esa zona';
+        return 'Buscamos ' + accion + ' porque el precio dejó ' + zonaTxt + ' en 1H con estructura ' + dirTend + ' en 4H (' + tf4h + ') y 1D (' + tf1d + '), esperando que al tocar la entrada vuelva a ' + reboteTxt + '.' + fuerzaTxt;
+      }
+
       function hideBootScreen() {
         const bs = document.getElementById('boot-screen');
         if (bs) bs.style.display = 'none';
@@ -515,7 +563,7 @@
         const b = appData.brief || {};
         if (ag === 'jarvis') {
           return fp
-            ? 'Foco Principal #1 activo en ' + fp.symbol + ' (' + fp.signal_tag + ' · ' + fp.probability + '% prob). Entrada: ' + fp.entry + ' | SL: ' + fp.sl + ' | TP1: ' + fp.tp1 + '. ' + fp.reason
+            ? 'Foco Principal #1 activo en ' + fp.symbol + ' (' + fp.signal_tag + ' · ' + fp.probability + '% prob) a ' + fp.dist_units + ' ' + fp.unit_label + ' de entrada (' + fp.entry + '). ' + fp.reason
             : 'Escáner activo sobre ' + appData.assets.length + ' activos. Esperando bloque OB+FVG limpio para fijar Foco Principal.';
         }
         if (ag === 'vision') {
@@ -731,7 +779,7 @@
               '</div>' +
               '<button type="button" data-chart="' + fp.symbol + '" class="px-3 py-1.5 rounded-lg bg-amber-400 text-black font-bold text-xs">ABRIR GRÁFICO #1 ▸</button>' +
             '</div>' +
-            '<p class="text-xs text-slate-300">' + fp.reason + ' · A ' + fp.dist_units + ' ' + fp.unit_label + ' de entrada.</p>' +
+            '<p class="text-xs text-slate-300">' + fp.reason + ' · <strong>A ' + fp.dist_units + ' ' + fp.unit_label + ' de entrada.</strong></p>' +
             '<div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs pt-1">' +
               '<div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-sky-400">ENTRADA FIJA</div><div class="font-bold text-white">' + fp.entry + '</div></div>' +
               '<div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-red-400">STOP ESTRUCTURAL</div><div class="font-bold text-red-400">' + fp.sl + '</div></div>' +
@@ -771,6 +819,13 @@
         grid.innerHTML = list.map(function (a) {
           const isBuy = a.setup && a.setup.direction === 'BUY';
           const al = a.confluence && a.confluence.alignment;
+          const distInfo = calcEntryDistance(a);
+          const easyWhy = buildEasyReason(a);
+          const inZone = distInfo.units <= 5;
+          const distBadge = inZone
+            ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 font-bold">🎯 YA EN ZONA DE ENTRADA</span>'
+            : '<span class="px-2 py-0.5 rounded bg-sky-500/15 border border-sky-400/40 text-sky-300 font-bold">📍 A ' + distInfo.units + ' ' + distInfo.unitLabel + ' de entrada</span>';
+
           const badgeAl = al === 'ALIGNED'
             ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">✔ VAN JUNTOS</span>'
             : (al === 'BROKEN'
@@ -782,12 +837,16 @@
           const badgeOb = a.has_valid_ob
             ? '<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold">💎 ' + a.zone_kind.replace('_', '+') + '</span>'
             : '';
+          const badgeNews = a.has_news_today
+            ? '<span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 text-[10px] font-bold">⚠️ NOTICIA HOY</span>'
+            : '';
+
           return '<div class="hud-panel rounded-xl p-3.5 space-y-2.5 border ' + ((a.swing_potential && a.swing_potential.active) ? 'border-indigo-400/70' : 'border-slate-800') + '">' +
             '<div class="flex flex-wrap items-center justify-between gap-2">' +
               '<div class="flex flex-wrap items-center gap-1.5">' +
                 '<strong class="font-hud text-sm text-white">' + a.symbol + '</strong>' +
                 '<span class="text-xs font-bold text-amber-300">' + a.price + '</span>' +
-                badgeOb + badgeSw +
+                badgeOb + badgeSw + badgeNews +
               '</div>' +
               '<button type="button" data-chart="' + a.symbol + '" class="px-2.5 py-1 rounded bg-[#090d16] border border-slate-700 hover:border-amber-400 text-[11px] text-slate-200 font-bold">Gráfico ▸</button>' +
             '</div>' +
@@ -795,12 +854,14 @@
               '<span class="font-bold ' + (isBuy ? 'text-emerald-400' : 'text-red-400') + '">' + (a.setup && a.setup.signal_tag) + '</span>' +
               badgeAl +
             '</div>' +
+            '<div class="text-[11px]">' + distBadge + '</div>' +
             '<div class="grid grid-cols-4 gap-1.5 text-[10px] bg-[#050811] p-2 rounded-lg border border-slate-800/80">' +
               '<div><span class="text-slate-400">ENTRADA</span><div class="text-white font-bold">' + (a.setup && a.setup.entry) + '</div></div>' +
               '<div><span class="text-slate-400">STOP</span><div class="text-red-400 font-bold">' + (a.setup && a.setup.sl) + '</div></div>' +
               '<div><span class="text-slate-400">TP1</span><div class="text-emerald-400 font-bold">' + (a.setup && a.setup.tp1) + '</div></div>' +
               '<div><span class="text-slate-400">' + ((a.swing_potential && a.swing_potential.active) ? 'SWING TP' : 'TP2') + '</span><div class="text-indigo-300 font-bold">' + ((a.swing_potential && a.swing_potential.active) ? a.swing_potential.target : (a.setup && a.setup.tp2)) + '</div></div>' +
             '</div>' +
+            '<p class="text-[11px] text-slate-300 bg-[#050811]/90 border border-slate-800/70 rounded-lg p-2.5 leading-relaxed">💡 <strong class="text-amber-300">Por qué:</strong> ' + easyWhy + '</p>' +
             '<div class="text-[11px] text-slate-400 flex flex-wrap justify-between gap-1">' +
               '<span>1D: <strong class="text-slate-200">' + (a.timeframes && a.timeframes['1d']) + '</strong> · 4H: <strong class="text-slate-200">' + (a.timeframes && a.timeframes['4h']) + '</strong> · 1H: <strong class="text-slate-200">' + (a.timeframes && a.timeframes['1h']) + '</strong></span>' +
               '<span>Confluencia: <strong class="text-amber-300">' + (a.confluence && a.confluence.score) + '%</strong></span>' +
@@ -949,6 +1010,7 @@
         const a = appData.assets.find(function (x) { return x.symbol === selectedSymbol; }) || appData.assets[0];
         if (!a) return;
         selectedSymbol = a.symbol;
+        const distInfo = calcEntryDistance(a);
         document.getElementById('pu-sym').textContent = a.symbol;
         document.getElementById('pu-price').textContent = a.price;
         document.getElementById('pu-status').textContent = (a.setup && a.setup.signal_tag) || '';
@@ -958,6 +1020,8 @@
         document.getElementById('pu-atr').textContent = (a.metrics && a.metrics.atr_14) || '--';
         document.getElementById('pu-r20').textContent = (a.metrics && a.metrics.range_20d) ? (a.metrics.range_20d.pos_pct + '%') : '--';
         document.getElementById('pu-entry').textContent = (a.setup && a.setup.entry) || '--';
+        const distEl = document.getElementById('pu-dist');
+        if (distEl) distEl.textContent = 'A ' + distInfo.units + ' ' + distInfo.unitLabel;
         document.getElementById('pu-sl').textContent = (a.setup && a.setup.sl) || '--';
         document.getElementById('pu-be').textContent = (a.setup && a.setup.be_trigger) || '--';
         document.getElementById('pu-tp1').textContent = (a.setup && a.setup.tp1) || '--';
@@ -1129,7 +1193,6 @@
         } catch (e) {}
       }
 
-      // DELEGACIÓN GLOBAL DE CLICS (GARANTIZA RESPUESTA EN TODOS LOS BOTONES)
       document.addEventListener('click', function (ev) {
         const el = ev.target.closest('button, [data-lesson]');
         if (!el) return;
@@ -1257,7 +1320,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js?v=10.4').catch(function () {});
+        navigator.serviceWorker.register('./sw.js?v=10.5').catch(function () {});
       }
 
       selectAgent('jarvis', false);
