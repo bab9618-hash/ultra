@@ -9,7 +9,7 @@
   },
   "BTCUSD": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "XAUUSD": {
     "sig": "SELL_3612.0",
@@ -17,7 +17,7 @@
   },
   "GBPNZD": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "USDCAD": {
     "sig": "SELL_1.4305",
@@ -29,11 +29,11 @@
   },
   "AUDCHF": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "US30": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "GBPCAD": {
     "sig": "SELL_1.8733",
@@ -41,31 +41,31 @@
   },
   "AUDJPY": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "US500": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "AUDUSD": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "EURUSD": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "USDJPY": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "GBPUSD": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "GBPJPY": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "AUDCAD": {
     "sig": "SELL_0.94529",
@@ -73,18 +73,18 @@
   },
   "NZDUSD": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "USDCHF": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "EURJPY": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   },
   "USTEC": {
     "sig": "NONE",
-    "created_at": 1795574708
+    "created_at": 1795575561
   }
 }
