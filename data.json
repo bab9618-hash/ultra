@@ -1,27 +1,27 @@
 {
-  "last_updated": "2026-11-25 07:05 UTC",
+  "last_updated": "2026-11-25 07:43 UTC",
   "brief": {
-    "dxy": 104.06,
-    "dxy_chg": 0.24,
+    "dxy": 104.0,
+    "dxy_chg": 0.18,
     "us10y": 4.9,
     "us10y_chg": -0.41,
     "spx_chg": 0.86,
-    "headline": "USD DEBIL (DXY 104.06 · US10Y 4.9%) | GBP FUERTE | AUD DEBIL",
-    "summary": "LATICCE v10.2 · Radar Foco Principal + VISIÓN 5 Módulos + Giros 1S (3 niveles) | Foco #1: EURJPY (95% prob).",
-    "narrative": "DXY en 104.06 (+0.24%) y Bonos US10Y en 4.9% (-0.41%). Divisas liderando fuerza: GBP, EUR, JPY, NZD, CAD, CHF, XAU, BTC. Divisas bajo presion: USD, AUD · Noticias fuertes hoy: AUD, USD."
+    "headline": "USD DEBIL (DXY 104.0 · US10Y 4.9%) | GBP FUERTE | AUD DEBIL",
+    "summary": "LATICCE v10.2 · Radar Foco Principal + VISIÓN 5 Módulos + Giros 1S (2 niveles) | Foco #1: USDCHF (95% prob).",
+    "narrative": "DXY en 104.0 (+0.18%) y Bonos US10Y en 4.9% (-0.41%). Divisas liderando fuerza: GBP, EUR, JPY, NZD, CAD, CHF, XAU, BTC. Divisas bajo presion: USD, AUD · Noticias fuertes hoy: AUD, USD."
   },
   "currency_strength": {
     "raw": {
-      "USD": -0.595,
-      "GBP": 0.202,
-      "AUD": -1.017,
-      "EUR": 0.235,
-      "JPY": 0.46,
-      "NZD": 0.35,
-      "CAD": 0.953,
-      "CHF": 1.19,
-      "XAU": 0.536,
-      "BTC": 0.985
+      "USD": -0.587,
+      "GBP": 0.232,
+      "AUD": -1.2,
+      "EUR": 0.267,
+      "JPY": 0.614,
+      "NZD": 0.402,
+      "CAD": 1.024,
+      "CHF": 1.395,
+      "XAU": 0.529,
+      "BTC": 0.981
     },
     "labels": {
       "USD": "DEBIL",
@@ -61,6 +61,26 @@
   ],
   "focus_pick": {
     "primary": {
+      "symbol": "USDCHF",
+      "base": "USD",
+      "quote": "CHF",
+      "probability": 95,
+      "direction": "SELL",
+      "dir_label": "VENTA",
+      "zone_kind": "OB",
+      "signal_tag": "VENTA OB",
+      "price": 0.83517,
+      "entry": 0.83544,
+      "sl": 0.8365,
+      "be_trigger": 0.83438,
+      "tp1": 0.83332,
+      "tp2": 0.83226,
+      "dist_units": 2.7,
+      "unit_label": "pips",
+      "swing_potential": true,
+      "reason": "OB Estructural en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA."
+    },
+    "secondary": {
       "symbol": "EURJPY",
       "base": "EUR",
       "quote": "JPY",
@@ -69,78 +89,44 @@
       "dir_label": "VENTA",
       "zone_kind": "FVG",
       "signal_tag": "VENTA FVG",
-      "price": 174.199,
-      "entry": 174.293,
+      "price": 174.013,
+      "entry": 174.323,
       "sl": 174.689,
-      "be_trigger": 173.897,
-      "tp1": 173.501,
-      "tp2": 173.105,
-      "dist_units": 9.4,
+      "be_trigger": 173.957,
+      "tp1": 173.591,
+      "tp2": 173.225,
+      "dist_units": 31.0,
       "unit_label": "pips",
       "swing_potential": false,
       "reason": "FVG Retroceso en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA."
-    },
-    "secondary": {
-      "symbol": "USDCAD",
-      "base": "USD",
-      "quote": "CAD",
-      "probability": 95,
-      "direction": "SELL",
-      "dir_label": "VENTA",
-      "zone_kind": "OB_FVG",
-      "signal_tag": "VENTA OB + FVG",
-      "price": 1.42841,
-      "entry": 1.43181,
-      "sl": 1.43326,
-      "be_trigger": 1.43036,
-      "tp1": 1.42891,
-      "tp2": 1.42746,
-      "dist_units": 34.0,
-      "unit_label": "pips",
-      "swing_potential": false,
-      "reason": "OB + FVG en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA."
     }
   },
   "weekly_pivots": [
-    {
-      "symbol": "EURUSD",
-      "type": "forex",
-      "decimals": 5,
-      "pip": 0.0001,
-      "price": 1.09409,
-      "direction": "BUY",
-      "entry": 1.0926,
-      "extreme": 1.0826,
-      "date": "2016-02-29",
-      "dist_units": 14.9,
-      "unit_label": "pips",
-      "macro_aligned": true
-    },
     {
       "symbol": "EURAUD",
       "type": "forex",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.66241,
+      "price": 1.66519,
       "direction": "SELL",
       "entry": 1.6662,
       "extreme": 1.6906,
       "date": "2004-03-08",
-      "dist_units": 37.9,
+      "dist_units": 10.1,
       "unit_label": "pips",
       "macro_aligned": false
     },
     {
-      "symbol": "AUDJPY",
+      "symbol": "EURUSD",
       "type": "forex",
-      "decimals": 3,
-      "pip": 0.01,
-      "price": 104.783,
-      "direction": "SELL",
-      "entry": 105.26,
-      "extreme": 107.792,
-      "date": "2007-10-29",
-      "dist_units": 47.7,
+      "decimals": 5,
+      "pip": 0.0001,
+      "price": 1.09445,
+      "direction": "BUY",
+      "entry": 1.0926,
+      "extreme": 1.0826,
+      "date": "2016-02-29",
+      "dist_units": 18.5,
       "unit_label": "pips",
       "macro_aligned": true
     }
@@ -150,9 +136,9 @@
       "currency": "USD",
       "status": "DEBIL",
       "pairs": [
+        "USDJPY (VENTA)",
         "USDCAD (VENTA)",
         "USDCHF (VENTA)",
-        "BTCUSD (COMPRA)",
         "US30 (COMPRA)",
         "USTEC (COMPRA)"
       ]
@@ -172,6 +158,7 @@
       "currency": "JPY",
       "status": "FUERTE",
       "pairs": [
+        "USDJPY (VENTA)",
         "GBPJPY (VENTA)",
         "AUDJPY (VENTA)",
         "EURJPY (VENTA)"
@@ -201,7 +188,7 @@
       "currency": "USD",
       "stance": "USD DEBIL",
       "bias": "BEARISH",
-      "detail": "DXY (104.06) + Bonos US10Y (4.9%) en cesta hibrida 4H/1D."
+      "detail": "DXY (104.0) + Bonos US10Y (4.9%) en cesta hibrida 4H/1D."
     },
     {
       "bank": "BCE (Eurozona)",
@@ -311,6 +298,24 @@
     {
       "category": "ORO & MACRO",
       "source": "ORO & MACRO",
+      "title": "Spain’s election pits Madrid’s building push against Catalonia’s rent caps",
+      "pairs": "MERCADO GENERAL",
+      "plain_es": "Titular relevante del bloque ORO & MACRO que puede generar picos de volatilidad puntual en apertura de sesion.",
+      "link": "https://www.investing.com/news/economy-news/spains-election-pits-madrids-building-push-against-catalonias-rent-caps-5049858",
+      "time": "2026-11-25 07:18:28"
+    },
+    {
+      "category": "ORO & MACRO",
+      "source": "ORO & MACRO",
+      "title": "Dollar rallies before key inflation reading; Aussie and sterling slump",
+      "pairs": "USD · US10Y · XAUUSD · USTEC",
+      "plain_es": "Impacta directamente las expectativas de tasas de interes en EE.UU. Si suben los rendimientos (US10Y), el Dolar se fortalece y presiona a la baja al Oro y Nasdaq.",
+      "link": "https://www.investing.com/news/economy-news/dollar-takes-breather-ahead-of-us-data-on-fed-path-aussie-jumps-on-cpi-5049486",
+      "time": "2026-11-25 07:12:19"
+    },
+    {
+      "category": "ORO & MACRO",
+      "source": "ORO & MACRO",
       "title": "Japan’s key services inflation gauge hits 36-year high",
       "pairs": "USD · US10Y · XAUUSD · USTEC",
       "plain_es": "Impacta directamente las expectativas de tasas de interes en EE.UU. Si suben los rendimientos (US10Y), el Dolar se fortalece y presiona a la baja al Oro y Nasdaq.",
@@ -343,24 +348,6 @@
       "plain_es": "Titular relevante del bloque ORO & MACRO que puede generar picos de volatilidad puntual en apertura de sesion.",
       "link": "https://www.investing.com/news/economy-news/global-airports-court-private-capital-to-fund-upgrades-raising-cost-concerns-5049727",
       "time": "2026-11-25 06:00:38"
-    },
-    {
-      "category": "ORO & MACRO",
-      "source": "ORO & MACRO",
-      "title": "EU plans €50 bln tech fund to cut reliance on U.S., China - report",
-      "pairs": "USTEC · US500 · US30 · AUDJPY",
-      "plain_es": "Marca el sentimiento de apetito o aversion al riesgo en Wall Street. Si suben los indices, suelen acompañarlo al alza AUD y NZD.",
-      "link": "https://www.investing.com/news/economy-news/eu-plans-50-bln-tech-fund-to-cut-reliance-on-us-china--report-93CH-5049765",
-      "time": "2026-11-25 05:47:10"
-    },
-    {
-      "category": "ORO & MACRO",
-      "source": "ORO & MACRO",
-      "title": "Morning Bid: Who’s afraid of Jamieson Greer?",
-      "pairs": "MERCADO GENERAL",
-      "plain_es": "Titular relevante del bloque ORO & MACRO que puede generar picos de volatilidad puntual en apertura de sesion.",
-      "link": "https://www.investing.com/news/economy-news/morning-bid-whos-afraid-of-jamieson-greer-5049749",
-      "time": "2026-11-25 05:36:51"
     }
   ],
   "calendar": [
@@ -415,8 +402,8 @@
       "quote": "USD",
       "pip": 0.1,
       "decimals": 2,
-      "price": 3516.1,
-      "change_pct": -1.29,
+      "price": 3523.2,
+      "change_pct": -1.09,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -434,11 +421,11 @@
         "macro": "SUBE"
       },
       "metrics": {
-        "atr_14": 111.13,
+        "atr_14": 111.39,
         "range_20d": {
           "high": 4157.7,
           "low": 3502.9,
-          "pos_pct": 2
+          "pos_pct": 3
         }
       },
       "structure": {
@@ -458,7 +445,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (2%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (3%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -724,265 +711,258 @@
             "t": 1795564800,
             "o": 3559.3,
             "h": 3573.9,
-            "l": 3514.9,
-            "c": 3516.1
+            "l": 3511.3,
+            "c": 3523.2
           }
         ],
         "4h": [
           {
-            "t": 1794895200,
-            "o": 3883.5,
-            "h": 3884.0,
-            "l": 3862.5,
-            "c": 3869.0
+            "t": 1794898800,
+            "o": 3873.4,
+            "h": 3881.9,
+            "l": 3855.6,
+            "c": 3856.6
           },
           {
-            "t": 1794909600,
-            "o": 3868.3,
-            "h": 3873.5,
+            "t": 1794913200,
+            "o": 3856.5,
+            "h": 3880.5,
             "l": 3839.2,
-            "c": 3853.6
+            "c": 3861.8
           },
           {
-            "t": 1794924000,
-            "o": 3853.4,
+            "t": 1794927600,
+            "o": 3861.9,
             "h": 3894.0,
-            "l": 3853.3,
-            "c": 3866.4
+            "l": 3857.2,
+            "c": 3858.0
           },
           {
-            "t": 1794938400,
-            "o": 3865.9,
-            "h": 3866.9,
+            "t": 1794942000,
+            "o": 3857.9,
+            "h": 3861.5,
             "l": 3843.8,
-            "c": 3851.9
+            "c": 3851.0
           },
           {
-            "t": 1794956400,
-            "o": 3855.2,
-            "h": 3859.3,
-            "l": 3793.0,
-            "c": 3799.5
+            "t": 1794960000,
+            "o": 3851.1,
+            "h": 3851.4,
+            "l": 3786.7,
+            "c": 3790.0
           },
           {
-            "t": 1794970800,
-            "o": 3798.9,
-            "h": 3806.5,
-            "l": 3777.5,
-            "c": 3779.2
+            "t": 1794974400,
+            "o": 3789.7,
+            "h": 3799.8,
+            "l": 3766.5,
+            "c": 3776.1
           },
           {
-            "t": 1794985200,
-            "o": 3779.3,
+            "t": 1794988800,
+            "o": 3775.9,
             "h": 3788.6,
             "l": 3759.5,
-            "c": 3775.2
+            "c": 3766.5
           },
           {
-            "t": 1794999600,
-            "o": 3774.9,
+            "t": 1795003200,
+            "o": 3766.1,
             "h": 3792.9,
             "l": 3744.6,
-            "c": 3769.6
+            "c": 3756.5
           },
           {
-            "t": 1795014000,
-            "o": 3769.9,
-            "h": 3772.8,
-            "l": 3731.1,
-            "c": 3740.4
-          },
-          {
-            "t": 1795028400,
-            "o": 3740.3,
-            "h": 3746.3,
+            "t": 1795017600,
+            "o": 3756.7,
+            "h": 3758.2,
             "l": 3721.8,
-            "c": 3741.3
+            "c": 3724.7
           },
           {
-            "t": 1795046400,
-            "o": 3741.2,
+            "t": 1795032000,
+            "o": 3724.9,
+            "h": 3757.6,
+            "l": 3722.4,
+            "c": 3754.5
+          },
+          {
+            "t": 1795050000,
+            "o": 3754.3,
             "h": 3759.5,
             "l": 3694.5,
+            "c": 3724.2
+          },
+          {
+            "t": 1795064400,
+            "o": 3725.5,
+            "h": 3745.6,
+            "l": 3722.6,
+            "c": 3737.5
+          },
+          {
+            "t": 1795078800,
+            "o": 3737.5,
+            "h": 3742.4,
+            "l": 3711.7,
             "c": 3721.3
           },
           {
-            "t": 1795060800,
-            "o": 3721.2,
-            "h": 3745.6,
-            "l": 3720.9,
-            "c": 3738.4
-          },
-          {
-            "t": 1795075200,
-            "o": 3737.7,
-            "h": 3743.8,
-            "l": 3719.9,
-            "c": 3720.1
-          },
-          {
-            "t": 1795089600,
-            "o": 3720.0,
+            "t": 1795093200,
+            "o": 3721.4,
             "h": 3728.9,
-            "l": 3672.6,
-            "c": 3674.3
+            "l": 3671.0,
+            "c": 3685.2
           },
           {
-            "t": 1795104000,
-            "o": 3674.3,
+            "t": 1795107600,
+            "o": 3685.4,
             "h": 3693.8,
-            "l": 3667.1,
-            "c": 3669.1
+            "l": 3660.5,
+            "c": 3661.6
           },
           {
-            "t": 1795118400,
-            "o": 3669.2,
-            "h": 3674.6,
-            "l": 3591.6,
-            "c": 3608.7
+            "t": 1795122000,
+            "o": 3661.7,
+            "h": 3663.6,
+            "l": 3586.3,
+            "c": 3597.7
           },
           {
-            "t": 1795132800,
-            "o": 3607.9,
-            "h": 3628.0,
+            "t": 1795136400,
+            "o": 3597.7,
+            "h": 3610.4,
             "l": 3518.5,
-            "c": 3551.0
+            "c": 3533.0
           },
           {
-            "t": 1795147200,
-            "o": 3550.8,
-            "h": 3576.5,
+            "t": 1795150800,
+            "o": 3533.7,
+            "h": 3591.6,
             "l": 3514.9,
-            "c": 3569.4
+            "c": 3583.4
           },
           {
-            "t": 1795161600,
-            "o": 3569.7,
+            "t": 1795165200,
+            "o": 3582.8,
             "h": 3596.7,
-            "l": 3567.7,
-            "c": 3575.7
+            "l": 3566.7,
+            "c": 3574.3
           },
           {
-            "t": 1795176000,
-            "o": 3575.7,
+            "t": 1795179600,
+            "o": 3574.6,
             "h": 3587.0,
             "l": 3527.7,
-            "c": 3551.9
+            "c": 3547.5
           },
           {
-            "t": 1795190400,
-            "o": 3551.7,
-            "h": 3558.8,
+            "t": 1795194000,
+            "o": 3547.3,
+            "h": 3547.3,
             "l": 3502.9,
-            "c": 3524.7
+            "c": 3526.2
           },
           {
-            "t": 1795204800,
-            "o": 3524.6,
-            "h": 3588.0,
-            "l": 3503.8,
-            "c": 3572.9
-          },
-          {
-            "t": 1795395600,
-            "o": 3572.7,
+            "t": 1795208400,
+            "o": 3526.4,
             "h": 3629.6,
-            "l": 3570.0,
-            "c": 3607.9
+            "l": 3514.6,
+            "c": 3599.6
           },
           {
-            "t": 1795410000,
-            "o": 3607.0,
+            "t": 1795399200,
+            "o": 3599.2,
+            "h": 3626.2,
+            "l": 3574.2,
+            "c": 3616.1
+          },
+          {
+            "t": 1795413600,
+            "o": 3616.3,
             "h": 3636.4,
             "l": 3599.9,
-            "c": 3613.9
+            "c": 3614.8
           },
           {
-            "t": 1795424400,
-            "o": 3614.1,
-            "h": 3627.3,
-            "l": 3611.0,
-            "c": 3617.8
-          },
-          {
-            "t": 1795438800,
-            "o": 3618.0,
-            "h": 3691.0,
+            "t": 1795428000,
+            "o": 3614.2,
+            "h": 3660.7,
             "l": 3611.8,
-            "c": 3672.6
+            "c": 3655.4
           },
           {
-            "t": 1795453200,
-            "o": 3672.6,
-            "h": 3675.7,
-            "l": 3629.8,
-            "c": 3635.5
+            "t": 1795442400,
+            "o": 3655.7,
+            "h": 3691.0,
+            "l": 3646.9,
+            "c": 3653.6
           },
-          {
-            "t": 1795467600,
-            "o": 3635.5,
-            "h": 3676.7,
-            "l": 3618.5,
-            "c": 3654.5
-          },
-          {
-            "t": 1795485600,
-            "o": 3655.0,
-            "h": 3659.7,
-            "l": 3623.3,
-            "c": 3631.7
-          },
-          {
-            "t": 1795500000,
-            "o": 3632.4,
-            "h": 3632.6,
-            "l": 3606.4,
-            "c": 3621.1
-          },
-          {
-            "t": 1795514400,
-            "o": 3621.1,
-            "h": 3651.4,
-            "l": 3613.0,
-            "c": 3613.6
-          },
-          {
-            "t": 1795528800,
-            "o": 3613.3,
-            "h": 3631.3,
-            "l": 3557.4,
-            "c": 3566.4
-          },
-          {
-            "t": 1795543200,
-            "o": 3566.0,
-            "h": 3568.4,
-            "l": 3545.4,
-            "c": 3555.1
-          },
-          {
-            "t": 1795561200,
-            "o": 3557.8,
-            "h": 3573.9,
-            "l": 3532.4,
-            "c": 3550.3
-          },
-          {
-            "t": 1795575600,
-            "o": 3549.5,
-            "h": 3558.7,
-            "l": 3514.9,
-            "c": 3516.1
-          }
-        ],
-        "1h": [
           {
             "t": 1795456800,
             "o": 3653.0,
-            "h": 3658.7,
-            "l": 3646.6,
-            "c": 3649.2
+            "h": 3659.4,
+            "l": 3629.8,
+            "c": 3634.4
           },
+          {
+            "t": 1795474800,
+            "o": 3636.4,
+            "h": 3676.7,
+            "l": 3618.5,
+            "c": 3639.3
+          },
+          {
+            "t": 1795489200,
+            "o": 3639.5,
+            "h": 3641.6,
+            "l": 3612.6,
+            "c": 3622.7
+          },
+          {
+            "t": 1795503600,
+            "o": 3622.0,
+            "h": 3629.0,
+            "l": 3606.4,
+            "c": 3629.0
+          },
+          {
+            "t": 1795518000,
+            "o": 3628.6,
+            "h": 3651.4,
+            "l": 3612.0,
+            "c": 3621.3
+          },
+          {
+            "t": 1795532400,
+            "o": 3621.9,
+            "h": 3622.4,
+            "l": 3551.9,
+            "c": 3554.5
+          },
+          {
+            "t": 1795546800,
+            "o": 3554.1,
+            "h": 3566.8,
+            "l": 3545.4,
+            "c": 3548.9
+          },
+          {
+            "t": 1795564800,
+            "o": 3547.9,
+            "h": 3573.9,
+            "l": 3532.4,
+            "c": 3547.8
+          },
+          {
+            "t": 1795579200,
+            "o": 3547.3,
+            "h": 3556.6,
+            "l": 3511.3,
+            "c": 3523.2
+          }
+        ],
+        "1h": [
           {
             "t": 1795460400,
             "o": 3649.1,
@@ -1218,8 +1198,15 @@
             "t": 1795586400,
             "o": 3522.4,
             "h": 3528.1,
-            "l": 3514.9,
-            "c": 3516.1
+            "l": 3511.3,
+            "c": 3514.8
+          },
+          {
+            "t": 1795590000,
+            "o": 3514.0,
+            "h": 3524.6,
+            "l": 3513.0,
+            "c": 3523.2
           }
         ]
       }
@@ -1231,8 +1218,8 @@
       "quote": "USD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.09409,
-      "change_pct": 0.3,
+      "price": 1.09445,
+      "change_pct": 0.33,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "is_counter_daily": false,
@@ -1254,7 +1241,7 @@
         "range_20d": {
           "high": 1.12752,
           "low": 1.08844,
-          "pos_pct": 14
+          "pos_pct": 15
         }
       },
       "structure": {
@@ -1274,24 +1261,24 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (14%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (15%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
-        "target": 1.08763,
+        "target": 1.08888,
         "note": ""
       },
       "setup": {
         "direction": "SELL",
         "dir_label": "VENTA",
         "signal_tag": "VENTA · FVG Retroceso",
-        "entry": 1.09427,
-        "zone_top": 1.09445,
-        "zone_bottom": 1.09409,
+        "entry": 1.09451,
+        "zone_top": 1.09469,
+        "zone_bottom": 1.09433,
         "sl": 1.09585,
-        "be_trigger": 1.09269,
-        "tp1": 1.09111,
-        "tp2": 1.08953,
+        "be_trigger": 1.09317,
+        "tp1": 1.09183,
+        "tp2": 1.09049,
         "simple_reason": "FVG Retroceso en 1H con estructura 1D BAJA / 4H BAJA y flujo macro SUBE.",
         "risk_note": "Noticia fuerte hoy: Core PCE Price Index m/m (1:30pm), Prelim GDP q/q (1:30pm)"
       },
@@ -1301,12 +1288,12 @@
           "type": "forex",
           "decimals": 5,
           "pip": 0.0001,
-          "price": 1.09409,
+          "price": 1.09445,
           "direction": "BUY",
           "entry": 1.0926,
           "extreme": 1.0826,
           "date": "2016-02-29",
-          "dist_units": 14.9,
+          "dist_units": 18.5,
           "unit_label": "pips",
           "macro_aligned": true
         }
@@ -1556,7 +1543,7 @@
             "o": 1.09685,
             "h": 1.09697,
             "l": 1.09349,
-            "c": 1.09409
+            "c": 1.09445
           }
         ],
         "4h": [
@@ -1803,7 +1790,7 @@
             "o": 1.09481,
             "h": 1.09505,
             "l": 1.09349,
-            "c": 1.09409
+            "c": 1.09445
           }
         ],
         "1h": [
@@ -2048,9 +2035,9 @@
           {
             "t": 1795590000,
             "o": 1.09397,
-            "h": 1.09409,
+            "h": 1.09457,
             "l": 1.09373,
-            "c": 1.09409
+            "c": 1.09445
           }
         ]
       }
@@ -2062,11 +2049,11 @@
       "quote": "JPY",
       "pip": 0.01,
       "decimals": 3,
-      "price": 159.269,
-      "change_pct": 0.16,
+      "price": 159.061,
+      "change_pct": 0.03,
       "has_valid_ob": true,
-      "zone_kind": "OB",
-      "is_counter_daily": true,
+      "zone_kind": "OB_FVG",
+      "is_counter_daily": false,
       "is_strong_pullback": false,
       "has_news_today": true,
       "news_today": [
@@ -2076,16 +2063,16 @@
       "timeframes": {
         "1w": "SUBE",
         "1d": "BAJA",
-        "4h": "NEUTRAL",
-        "1h": "SUBE",
+        "4h": "BAJA",
+        "1h": "NEUTRAL",
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.911,
+        "atr_14": 0.913,
         "range_20d": {
           "high": 160.176,
           "low": 156.966,
-          "pos_pct": 72
+          "pos_pct": 65
         }
       },
       "structure": {
@@ -2098,10 +2085,10 @@
         "ssl": 158.987
       },
       "confluence": {
-        "alignment": "BROKEN",
-        "score": 47,
+        "alignment": "ALIGNED",
+        "score": 98,
         "macro_dir": "BAJA",
-        "chart_bias": "SUBE"
+        "chart_bias": "BAJA"
       },
       "exhaustion": {
         "active": false,
@@ -2109,21 +2096,21 @@
       },
       "swing_potential": {
         "active": false,
-        "target": 160.181,
+        "target": 158.843,
         "note": ""
       },
       "setup": {
-        "direction": "BUY",
-        "dir_label": "COMPRA",
-        "signal_tag": "COMPRA · OB Estructural",
-        "entry": 159.152,
-        "zone_top": 159.152,
-        "zone_bottom": 158.987,
-        "sl": 158.907,
-        "be_trigger": 159.397,
-        "tp1": 159.642,
-        "tp2": 159.887,
-        "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H NEUTRAL y flujo macro BAJA.",
+        "direction": "SELL",
+        "dir_label": "VENTA",
+        "signal_tag": "VENTA · OB + FVG",
+        "entry": 159.435,
+        "zone_top": 159.496,
+        "zone_bottom": 159.373,
+        "sl": 159.576,
+        "be_trigger": 159.294,
+        "tp1": 159.153,
+        "tp2": 159.012,
+        "simple_reason": "OB + FVG en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA.",
         "risk_note": "Noticia fuerte hoy: Core PCE Price Index m/m (1:30pm), Prelim GDP q/q (1:30pm)"
       },
       "weekly_pivots": [],
@@ -2371,8 +2358,8 @@
             "t": 1795564800,
             "o": 159.268,
             "h": 159.496,
-            "l": 159.099,
-            "c": 159.269
+            "l": 158.992,
+            "c": 159.061
           }
         ],
         "4h": [
@@ -2618,8 +2605,8 @@
             "t": 1795579200,
             "o": 159.287,
             "h": 159.496,
-            "l": 159.202,
-            "c": 159.269
+            "l": 158.992,
+            "c": 159.061
           }
         ],
         "1h": [
@@ -2864,9 +2851,9 @@
           {
             "t": 1795590000,
             "o": 159.269,
-            "h": 159.287,
-            "l": 159.202,
-            "c": 159.269
+            "h": 159.316,
+            "l": 158.992,
+            "c": 159.061
           }
         ]
       }
@@ -2878,8 +2865,8 @@
       "quote": "USD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.30794,
-      "change_pct": 0.34,
+      "price": 1.3083,
+      "change_pct": 0.37,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": false,
@@ -2892,7 +2879,7 @@
       "timeframes": {
         "1w": "BAJA",
         "1d": "BAJA",
-        "4h": "BAJA",
+        "4h": "NEUTRAL",
         "1h": "BAJA",
         "macro": "SUBE"
       },
@@ -2915,7 +2902,7 @@
       },
       "confluence": {
         "alignment": "BROKEN",
-        "score": 58,
+        "score": 53,
         "macro_dir": "SUBE",
         "chart_bias": "BAJA"
       },
@@ -2939,7 +2926,7 @@
         "be_trigger": 1.31058,
         "tp1": 1.30974,
         "tp2": 1.3089,
-        "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H BAJA y flujo macro SUBE.",
+        "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H NEUTRAL y flujo macro SUBE.",
         "risk_note": "Noticia fuerte hoy: Core PCE Price Index m/m (1:30pm), Prelim GDP q/q (1:30pm)"
       },
       "weekly_pivots": [],
@@ -3187,8 +3174,8 @@
             "t": 1795564800,
             "o": 1.31161,
             "h": 1.31168,
-            "l": 1.3076,
-            "c": 1.30794
+            "l": 1.30736,
+            "c": 1.3083
           }
         ],
         "4h": [
@@ -3434,8 +3421,8 @@
             "t": 1795579200,
             "o": 1.30914,
             "h": 1.30948,
-            "l": 1.3076,
-            "c": 1.30794
+            "l": 1.30736,
+            "c": 1.3083
           }
         ],
         "1h": [
@@ -3680,9 +3667,9 @@
           {
             "t": 1795590000,
             "o": 1.30791,
-            "h": 1.30794,
-            "l": 1.3076,
-            "c": 1.30794
+            "h": 1.30856,
+            "l": 1.30736,
+            "c": 1.3083
           }
         ]
       }
@@ -3694,8 +3681,8 @@
       "quote": "JPY",
       "pip": 0.01,
       "decimals": 3,
-      "price": 208.305,
-      "change_pct": 0.5,
+      "price": 208.075,
+      "change_pct": 0.39,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "is_counter_daily": false,
@@ -3705,7 +3692,7 @@
       "timeframes": {
         "1w": "BAJA",
         "1d": "BAJA",
-        "4h": "NEUTRAL",
+        "4h": "BAJA",
         "1h": "BAJA",
         "macro": "BAJA"
       },
@@ -3714,7 +3701,7 @@
         "range_20d": {
           "high": 213.752,
           "low": 207.081,
-          "pos_pct": 18
+          "pos_pct": 15
         }
       },
       "structure": {
@@ -3728,31 +3715,31 @@
       },
       "confluence": {
         "alignment": "ALIGNED",
-        "score": 89,
+        "score": 94,
         "macro_dir": "BAJA",
         "chart_bias": "BAJA"
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (18%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (15%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
-        "target": 206.63,
+        "target": 206.848,
         "note": ""
       },
       "setup": {
         "direction": "SELL",
         "dir_label": "VENTA",
         "signal_tag": "VENTA · FVG Retroceso",
-        "entry": 208.44,
+        "entry": 208.482,
         "zone_top": 208.535,
-        "zone_bottom": 208.345,
+        "zone_bottom": 208.429,
         "sl": 208.871,
-        "be_trigger": 208.009,
-        "tp1": 207.578,
-        "tp2": 207.147,
-        "simple_reason": "FVG Retroceso en 1H con estructura 1D BAJA / 4H NEUTRAL y flujo macro BAJA.",
+        "be_trigger": 208.093,
+        "tp1": 207.704,
+        "tp2": 207.315,
+        "simple_reason": "FVG Retroceso en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA.",
         "risk_note": "Respetar Stop estructural y proteger en +1R."
       },
       "weekly_pivots": [],
@@ -4000,8 +3987,8 @@
             "t": 1795564800,
             "o": 208.822,
             "h": 208.927,
-            "l": 208.165,
-            "c": 208.305
+            "l": 207.941,
+            "c": 208.087
           }
         ],
         "4h": [
@@ -4247,8 +4234,8 @@
             "t": 1795579200,
             "o": 208.519,
             "h": 208.791,
-            "l": 208.165,
-            "c": 208.305
+            "l": 207.941,
+            "c": 208.075
           }
         ],
         "1h": [
@@ -4493,9 +4480,9 @@
           {
             "t": 1795590000,
             "o": 208.324,
-            "h": 208.345,
-            "l": 208.165,
-            "c": 208.305
+            "h": 208.429,
+            "l": 207.941,
+            "c": 208.075
           }
         ]
       }
@@ -4507,8 +4494,8 @@
       "quote": "AUD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.98783,
-      "change_pct": 1.11,
+      "price": 1.99115,
+      "change_pct": 1.28,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -4527,11 +4514,11 @@
         "macro": "SUBE"
       },
       "metrics": {
-        "atr_14": 0.01393,
+        "atr_14": 0.01421,
         "range_20d": {
-          "high": 1.98914,
+          "high": 1.99312,
           "low": 1.88582,
-          "pos_pct": 99
+          "pos_pct": 98
         }
       },
       "structure": {
@@ -4551,7 +4538,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en techo del rango (99%) o velas perdiendo cuerpo."
+        "reason": "Precio en techo del rango (98%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -4816,9 +4803,9 @@
           {
             "t": 1795564800,
             "o": 1.97326,
-            "h": 1.98914,
+            "h": 1.99312,
             "l": 1.96609,
-            "c": 1.98783
+            "c": 1.99115
           }
         ],
         "4h": [
@@ -5063,9 +5050,9 @@
           {
             "t": 1795579200,
             "o": 1.98159,
-            "h": 1.98914,
+            "h": 1.99312,
             "l": 1.98061,
-            "c": 1.98783
+            "c": 1.99115
           }
         ],
         "1h": [
@@ -5310,9 +5297,9 @@
           {
             "t": 1795590000,
             "o": 1.98861,
-            "h": 1.98914,
-            "l": 1.98744,
-            "c": 1.98783
+            "h": 1.99312,
+            "l": 1.98727,
+            "c": 1.99115
           }
         ]
       }
@@ -5324,43 +5311,43 @@
       "quote": "NZD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 2.3965,
-      "change_pct": 0.21,
-      "has_valid_ob": false,
-      "zone_kind": "NONE",
-      "is_counter_daily": false,
-      "is_strong_pullback": false,
+      "price": 2.39729,
+      "change_pct": 0.24,
+      "has_valid_ob": true,
+      "zone_kind": "OB",
+      "is_counter_daily": true,
+      "is_strong_pullback": true,
       "has_news_today": false,
       "news_today": [],
       "timeframes": {
         "1w": "SUBE",
         "1d": "BAJA",
         "4h": "SUBE",
-        "1h": "NEUTRAL",
+        "1h": "SUBE",
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.0138,
+        "atr_14": 0.01388,
         "range_20d": {
           "high": 2.41777,
           "low": 2.3647,
-          "pos_pct": 60
+          "pos_pct": 61
         }
       },
       "structure": {
-        "choch": "BAJISTA",
-        "sweep": "BSL BARRIDA",
-        "bos": "NONE",
-        "reversal_dir": "BAJA",
+        "choch": "ALCISTA",
+        "sweep": "NONE",
+        "bos": "BOS ALCISTA",
+        "reversal_dir": "SUBE",
         "strong_pullback": true,
         "bsl": 2.3966,
         "ssl": 2.38794
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 82,
+        "alignment": "BROKEN",
+        "score": 56,
         "macro_dir": "BAJA",
-        "chart_bias": "BAJA"
+        "chart_bias": "SUBE"
       },
       "exhaustion": {
         "active": false,
@@ -5368,21 +5355,21 @@
       },
       "swing_potential": {
         "active": false,
-        "target": 2.37042,
+        "target": 2.39828,
         "note": ""
       },
       "setup": {
-        "direction": "SELL",
-        "dir_label": "VENTA",
-        "signal_tag": "VENTA · Sin bloque limpio",
-        "entry": 2.3965,
-        "zone_top": 2.3965,
-        "zone_bottom": 2.3965,
-        "sl": 2.40271,
-        "be_trigger": 2.39029,
-        "tp1": 2.38408,
-        "tp2": 2.37787,
-        "simple_reason": "Sin bloque limpio en 1H con estructura 1D BAJA / 4H SUBE y flujo macro BAJA.",
+        "direction": "BUY",
+        "dir_label": "COMPRA",
+        "signal_tag": "COMPRA · OB Estructural",
+        "entry": 2.39131,
+        "zone_top": 2.39131,
+        "zone_bottom": 2.39045,
+        "sl": 2.38965,
+        "be_trigger": 2.39297,
+        "tp1": 2.39463,
+        "tp2": 2.39629,
+        "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H SUBE y flujo macro BAJA.",
         "risk_note": "Respetar Stop estructural y proteger en +1R."
       },
       "weekly_pivots": [],
@@ -5629,9 +5616,9 @@
           {
             "t": 1795564800,
             "o": 2.39236,
-            "h": 2.39791,
+            "h": 2.39908,
             "l": 2.38948,
-            "c": 2.3965
+            "c": 2.39729
           }
         ],
         "4h": [
@@ -5876,9 +5863,9 @@
           {
             "t": 1795579200,
             "o": 2.39485,
-            "h": 2.39791,
+            "h": 2.39908,
             "l": 2.39137,
-            "c": 2.3965
+            "c": 2.39729
           }
         ],
         "1h": [
@@ -6123,9 +6110,9 @@
           {
             "t": 1795590000,
             "o": 2.39696,
-            "h": 2.39731,
-            "l": 2.39626,
-            "c": 2.3965
+            "h": 2.39908,
+            "l": 2.39457,
+            "c": 2.39729
           }
         ]
       }
@@ -6137,8 +6124,8 @@
       "quote": "CAD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.86832,
-      "change_pct": -0.21,
+      "price": 1.86855,
+      "change_pct": -0.19,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "is_counter_daily": false,
@@ -6157,14 +6144,14 @@
         "range_20d": {
           "high": 1.89942,
           "low": 1.86079,
-          "pos_pct": 19
+          "pos_pct": 20
         }
       },
       "structure": {
-        "choch": "BAJISTA",
-        "sweep": "NONE",
-        "bos": "BOS BAJISTA",
-        "reversal_dir": "BAJA",
+        "choch": "ALCISTA",
+        "sweep": "SSL BARRIDA",
+        "bos": "NONE",
+        "reversal_dir": "SUBE",
         "strong_pullback": false,
         "bsl": 1.87775,
         "ssl": 1.86839
@@ -6444,7 +6431,7 @@
             "o": 1.87019,
             "h": 1.87163,
             "l": 1.86739,
-            "c": 1.86832
+            "c": 1.86855
           }
         ],
         "4h": [
@@ -6689,9 +6676,9 @@
           {
             "t": 1795579200,
             "o": 1.8687,
-            "h": 1.86886,
+            "h": 1.86932,
             "l": 1.86739,
-            "c": 1.86832
+            "c": 1.86855
           }
         ],
         "1h": [
@@ -6936,9 +6923,9 @@
           {
             "t": 1795590000,
             "o": 1.86788,
-            "h": 1.86832,
+            "h": 1.86932,
             "l": 1.86758,
-            "c": 1.86832
+            "c": 1.86855
           }
         ]
       }
@@ -6950,8 +6937,8 @@
       "quote": "USD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.65824,
-      "change_pct": -0.71,
+      "price": 0.65725,
+      "change_pct": -0.86,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -6970,10 +6957,10 @@
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.00718,
+        "atr_14": 0.00726,
         "range_20d": {
           "high": 0.70678,
-          "low": 0.65768,
+          "low": 0.65656,
           "pos_pct": 1
         }
       },
@@ -7260,8 +7247,8 @@
             "t": 1795564800,
             "o": 0.66454,
             "h": 0.66627,
-            "l": 0.65768,
-            "c": 0.65824
+            "l": 0.65656,
+            "c": 0.65725
           }
         ],
         "4h": [
@@ -7507,8 +7494,8 @@
             "t": 1795579200,
             "o": 0.66072,
             "h": 0.66107,
-            "l": 0.65768,
-            "c": 0.65824
+            "l": 0.65656,
+            "c": 0.65725
           }
         ],
         "1h": [
@@ -7754,8 +7741,8 @@
             "t": 1795590000,
             "o": 0.65789,
             "h": 0.65824,
-            "l": 0.65768,
-            "c": 0.65824
+            "l": 0.65656,
+            "c": 0.65725
           }
         ]
       }
@@ -7767,8 +7754,8 @@
       "quote": "JPY",
       "pip": 0.01,
       "decimals": 3,
-      "price": 104.783,
-      "change_pct": -0.59,
+      "price": 104.495,
+      "change_pct": -0.87,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": false,
@@ -7787,10 +7774,10 @@
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 1.177,
+        "atr_14": 1.197,
         "range_20d": {
           "high": 111.551,
-          "low": 104.659,
+          "low": 104.375,
           "pos_pct": 2
         }
       },
@@ -7832,22 +7819,7 @@
         "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA.",
         "risk_note": "Noticia fuerte hoy: CPI m/m (12:30am), CPI y/y (12:30am), Trimmed Mean CPI m/m (12:30am)"
       },
-      "weekly_pivots": [
-        {
-          "symbol": "AUDJPY",
-          "type": "forex",
-          "decimals": 3,
-          "pip": 0.01,
-          "price": 104.783,
-          "direction": "SELL",
-          "entry": 105.26,
-          "extreme": 107.792,
-          "date": "2007-10-29",
-          "dist_units": 47.7,
-          "unit_label": "pips",
-          "macro_aligned": true
-        }
-      ],
+      "weekly_pivots": [],
       "candles": {
         "1d": [
           {
@@ -8092,8 +8064,8 @@
             "t": 1795564800,
             "o": 105.792,
             "h": 106.175,
-            "l": 104.659,
-            "c": 104.783
+            "l": 104.375,
+            "c": 104.495
           }
         ],
         "4h": [
@@ -8339,8 +8311,8 @@
             "t": 1795579200,
             "o": 105.222,
             "h": 105.289,
-            "l": 104.659,
-            "c": 104.783
+            "l": 104.375,
+            "c": 104.495
           }
         ],
         "1h": [
@@ -8585,9 +8557,9 @@
           {
             "t": 1795590000,
             "o": 104.75,
-            "h": 104.793,
-            "l": 104.659,
-            "c": 104.783
+            "h": 104.808,
+            "l": 104.375,
+            "c": 104.495
           }
         ]
       }
@@ -8599,8 +8571,8 @@
       "quote": "CAD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.93979,
-      "change_pct": -1.32,
+      "price": 0.93842,
+      "change_pct": -1.46,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "is_counter_daily": false,
@@ -8619,10 +8591,10 @@
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.00785,
+        "atr_14": 0.00794,
         "range_20d": {
           "high": 0.98734,
-          "low": 0.93817,
+          "low": 0.93684,
           "pos_pct": 3
         }
       },
@@ -8909,8 +8881,8 @@
             "t": 1795564800,
             "o": 0.94748,
             "h": 0.95078,
-            "l": 0.93817,
-            "c": 0.93979
+            "l": 0.93684,
+            "c": 0.93842
           }
         ],
         "4h": [
@@ -9156,8 +9128,8 @@
             "t": 1795579200,
             "o": 0.94299,
             "h": 0.94317,
-            "l": 0.93817,
-            "c": 0.93979
+            "l": 0.93684,
+            "c": 0.93842
           }
         ],
         "1h": [
@@ -9402,9 +9374,9 @@
           {
             "t": 1795590000,
             "o": 0.93929,
-            "h": 0.93982,
-            "l": 0.93817,
-            "c": 0.93979
+            "h": 0.93996,
+            "l": 0.93684,
+            "c": 0.93842
           }
         ]
       }
@@ -9416,8 +9388,8 @@
       "quote": "NZD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.20545,
-      "change_pct": -0.9,
+      "price": 1.2039,
+      "change_pct": -1.02,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": false,
@@ -9436,10 +9408,10 @@
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.00901,
+        "atr_14": 0.00914,
         "range_20d": {
           "high": 1.25542,
-          "low": 1.20459,
+          "low": 1.20275,
           "pos_pct": 2
         }
       },
@@ -9726,8 +9698,8 @@
             "t": 1795564800,
             "o": 1.21161,
             "h": 1.21737,
-            "l": 1.20459,
-            "c": 1.20545
+            "l": 1.20275,
+            "c": 1.2039
           }
         ],
         "4h": [
@@ -9973,8 +9945,8 @@
             "t": 1795579200,
             "o": 1.20856,
             "h": 1.20858,
-            "l": 1.20459,
-            "c": 1.20545
+            "l": 1.20275,
+            "c": 1.2039
           }
         ],
         "1h": [
@@ -10219,9 +10191,9 @@
           {
             "t": 1795590000,
             "o": 1.20527,
-            "h": 1.20571,
-            "l": 1.20459,
-            "c": 1.20545
+            "h": 1.2058,
+            "l": 1.20275,
+            "c": 1.2039
           }
         ]
       }
@@ -10233,8 +10205,8 @@
       "quote": "AUD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.66241,
-      "change_pct": 1.04,
+      "price": 1.66519,
+      "change_pct": 1.21,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -10253,11 +10225,11 @@
         "macro": "SUBE"
       },
       "metrics": {
-        "atr_14": 0.01253,
+        "atr_14": 0.01277,
         "range_20d": {
-          "high": 1.66345,
+          "high": 1.66682,
           "low": 1.57777,
-          "pos_pct": 99
+          "pos_pct": 98
         }
       },
       "structure": {
@@ -10277,7 +10249,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en techo del rango (99%) o velas perdiendo cuerpo."
+        "reason": "Precio en techo del rango (98%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -10304,12 +10276,12 @@
           "type": "forex",
           "decimals": 5,
           "pip": 0.0001,
-          "price": 1.66241,
+          "price": 1.66519,
           "direction": "SELL",
           "entry": 1.6662,
           "extreme": 1.6906,
           "date": "2004-03-08",
-          "dist_units": 37.9,
+          "dist_units": 10.1,
           "unit_label": "pips",
           "macro_aligned": false
         }
@@ -10557,9 +10529,9 @@
           {
             "t": 1795564800,
             "o": 1.65008,
-            "h": 1.66345,
+            "h": 1.66682,
             "l": 1.6442,
-            "c": 1.66234
+            "c": 1.66519
           }
         ],
         "4h": [
@@ -10804,9 +10776,9 @@
           {
             "t": 1795579200,
             "o": 1.65682,
-            "h": 1.66345,
+            "h": 1.66682,
             "l": 1.65583,
-            "c": 1.66241
+            "c": 1.66519
           }
         ],
         "1h": [
@@ -11051,9 +11023,9 @@
           {
             "t": 1795590000,
             "o": 1.66275,
-            "h": 1.66345,
-            "l": 1.66212,
-            "c": 1.66241
+            "h": 1.66682,
+            "l": 1.66176,
+            "c": 1.66519
           }
         ]
       }
@@ -11065,8 +11037,8 @@
       "quote": "CHF",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.55024,
-      "change_pct": -1.36,
+      "price": 0.54867,
+      "change_pct": -1.64,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -11085,11 +11057,11 @@
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.00579,
+        "atr_14": 0.00592,
         "range_20d": {
           "high": 0.58518,
-          "low": 0.54908,
-          "pos_pct": 3
+          "low": 0.54724,
+          "pos_pct": 4
         }
       },
       "structure": {
@@ -11109,7 +11081,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (3%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (4%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -11375,8 +11347,8 @@
             "t": 1795564800,
             "o": 0.55445,
             "h": 0.5572,
-            "l": 0.54908,
-            "c": 0.55024
+            "l": 0.54724,
+            "c": 0.54867
           }
         ],
         "4h": [
@@ -11622,8 +11594,8 @@
             "t": 1795579200,
             "o": 0.5526,
             "h": 0.55281,
-            "l": 0.54908,
-            "c": 0.55024
+            "l": 0.54724,
+            "c": 0.54867
           }
         ],
         "1h": [
@@ -11868,9 +11840,9 @@
           {
             "t": 1795590000,
             "o": 0.55007,
-            "h": 0.55028,
-            "l": 0.54908,
-            "c": 0.55024
+            "h": 0.55033,
+            "l": 0.54724,
+            "c": 0.54867
           }
         ]
       }
@@ -11882,8 +11854,8 @@
       "quote": "USD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.54591,
-      "change_pct": 0.16,
+      "price": 0.54579,
+      "change_pct": 0.14,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -11905,7 +11877,7 @@
         "range_20d": {
           "high": 0.56578,
           "low": 0.54346,
-          "pos_pct": 11
+          "pos_pct": 10
         }
       },
       "structure": {
@@ -11925,7 +11897,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (11%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (10%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -12191,8 +12163,8 @@
             "t": 1795564800,
             "o": 0.54804,
             "h": 0.54852,
-            "l": 0.54558,
-            "c": 0.54591
+            "l": 0.54532,
+            "c": 0.54579
           }
         ],
         "4h": [
@@ -12438,8 +12410,8 @@
             "t": 1795579200,
             "o": 0.54669,
             "h": 0.54756,
-            "l": 0.54558,
-            "c": 0.54591
+            "l": 0.54532,
+            "c": 0.54579
           }
         ],
         "1h": [
@@ -12684,9 +12656,9 @@
           {
             "t": 1795590000,
             "o": 0.5457,
-            "h": 0.54591,
-            "l": 0.54564,
-            "c": 0.54591
+            "h": 0.54597,
+            "l": 0.54532,
+            "c": 0.54579
           }
         ]
       }
@@ -12698,8 +12670,8 @@
       "quote": "CAD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.42841,
-      "change_pct": -0.57,
+      "price": 1.42843,
+      "change_pct": -0.56,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -13006,9 +12978,9 @@
           {
             "t": 1795564800,
             "o": 1.4264,
-            "h": 1.42857,
+            "h": 1.42903,
             "l": 1.4256,
-            "c": 1.42842
+            "c": 1.42843
           }
         ],
         "4h": [
@@ -13253,9 +13225,9 @@
           {
             "t": 1795579200,
             "o": 1.42753,
-            "h": 1.42857,
+            "h": 1.42903,
             "l": 1.4264,
-            "c": 1.42841
+            "c": 1.42843
           }
         ],
         "1h": [
@@ -13500,9 +13472,9 @@
           {
             "t": 1795590000,
             "o": 1.42809,
-            "h": 1.42857,
+            "h": 1.42903,
             "l": 1.42806,
-            "c": 1.42841
+            "c": 1.42843
           }
         ]
       }
@@ -13514,8 +13486,8 @@
       "quote": "CHF",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.83627,
-      "change_pct": -0.62,
+      "price": 0.83517,
+      "change_pct": -0.75,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": false,
@@ -13529,15 +13501,15 @@
         "1w": "SUBE",
         "1d": "BAJA",
         "4h": "BAJA",
-        "1h": "SUBE",
+        "1h": "BAJA",
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.00704,
+        "atr_14": 0.00705,
         "range_20d": {
           "high": 0.84428,
           "low": 0.81289,
-          "pos_pct": 74
+          "pos_pct": 71
         }
       },
       "structure": {
@@ -13551,7 +13523,7 @@
       },
       "confluence": {
         "alignment": "ALIGNED",
-        "score": 94,
+        "score": 98,
         "macro_dir": "BAJA",
         "chart_bias": "BAJA"
       },
@@ -13560,9 +13532,9 @@
         "reason": ""
       },
       "swing_potential": {
-        "active": false,
+        "active": true,
         "target": 0.83099,
-        "note": ""
+        "note": "Protocolo Piramide activo: asegurar BE (+1R) antes de añadir retroceso."
       },
       "setup": {
         "direction": "SELL",
@@ -13823,8 +13795,8 @@
             "t": 1795564800,
             "o": 0.83491,
             "h": 0.83712,
-            "l": 0.83467,
-            "c": 0.83627
+            "l": 0.8346,
+            "c": 0.83517
           }
         ],
         "4h": [
@@ -14070,8 +14042,8 @@
             "t": 1795579200,
             "o": 0.83657,
             "h": 0.83712,
-            "l": 0.83602,
-            "c": 0.83627
+            "l": 0.8346,
+            "c": 0.83517
           }
         ],
         "1h": [
@@ -14317,8 +14289,8 @@
             "t": 1795590000,
             "o": 0.83642,
             "h": 0.83649,
-            "l": 0.83613,
-            "c": 0.83627
+            "l": 0.8346,
+            "c": 0.83517
           }
         ]
       }
@@ -14330,8 +14302,8 @@
       "quote": "JPY",
       "pip": 0.01,
       "decimals": 3,
-      "price": 174.199,
-      "change_pct": 0.44,
+      "price": 174.013,
+      "change_pct": 0.33,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "is_counter_daily": false,
@@ -14350,7 +14322,7 @@
         "range_20d": {
           "high": 178.465,
           "low": 173.289,
-          "pos_pct": 18
+          "pos_pct": 14
         }
       },
       "structure": {
@@ -14370,24 +14342,24 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (18%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (14%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
-        "target": 172.63,
+        "target": 172.786,
         "note": ""
       },
       "setup": {
         "direction": "SELL",
         "dir_label": "VENTA",
         "signal_tag": "VENTA · FVG Retroceso",
-        "entry": 174.293,
+        "entry": 174.323,
         "zone_top": 174.38,
-        "zone_bottom": 174.206,
+        "zone_bottom": 174.266,
         "sl": 174.689,
-        "be_trigger": 173.897,
-        "tp1": 173.501,
-        "tp2": 173.105,
+        "be_trigger": 173.957,
+        "tp1": 173.591,
+        "tp2": 173.225,
         "simple_reason": "FVG Retroceso en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA.",
         "risk_note": "Respetar Stop estructural y proteger en +1R."
       },
@@ -14636,8 +14608,8 @@
             "t": 1795564800,
             "o": 174.628,
             "h": 174.676,
-            "l": 174.099,
-            "c": 174.199
+            "l": 173.904,
+            "c": 174.013
           }
         ],
         "4h": [
@@ -14883,8 +14855,8 @@
             "t": 1795579200,
             "o": 174.346,
             "h": 174.609,
-            "l": 174.099,
-            "c": 174.199
+            "l": 173.9,
+            "c": 174.013
           }
         ],
         "1h": [
@@ -15129,9 +15101,9 @@
           {
             "t": 1795590000,
             "o": 174.188,
-            "h": 174.206,
-            "l": 174.099,
-            "c": 174.199
+            "h": 174.266,
+            "l": 173.9,
+            "c": 174.013
           }
         ]
       }
@@ -15143,8 +15115,8 @@
       "quote": "USD",
       "pip": 1.0,
       "decimals": 2,
-      "price": 59308.6,
-      "change_pct": -0.74,
+      "price": 58712.61,
+      "change_pct": -1.73,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -15156,55 +15128,55 @@
       ],
       "timeframes": {
         "1w": "BAJA",
-        "1d": "SUBE",
+        "1d": "BAJA",
         "4h": "BAJA",
-        "1h": "SUBE",
+        "1h": "BAJA",
         "macro": "SUBE"
       },
       "metrics": {
-        "atr_14": 3293.73,
+        "atr_14": 3305.37,
         "range_20d": {
           "high": 76291.06,
           "low": 55149.57,
-          "pos_pct": 20
+          "pos_pct": 17
         }
       },
       "structure": {
-        "choch": "NONE",
+        "choch": "BAJISTA",
         "sweep": "NONE",
-        "bos": "NONE",
-        "reversal_dir": "NONE",
-        "strong_pullback": false,
+        "bos": "BOS BAJISTA",
+        "reversal_dir": "BAJA",
+        "strong_pullback": true,
         "bsl": 60612.66,
         "ssl": 58863.1
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 98,
+        "alignment": "BROKEN",
+        "score": 67,
         "macro_dir": "SUBE",
-        "chart_bias": "SUBE"
+        "chart_bias": "BAJA"
       },
       "exhaustion": {
-        "active": false,
-        "reason": ""
+        "active": true,
+        "reason": "Precio en suelo del rango (17%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
-        "target": 60247.77,
+        "target": 59447.89,
         "note": ""
       },
       "setup": {
-        "direction": "BUY",
-        "dir_label": "COMPRA",
-        "signal_tag": "COMPRA · OB + FVG",
-        "entry": 59445.19,
-        "zone_top": 59621.29,
-        "zone_bottom": 59269.1,
-        "sl": 59254.1,
-        "be_trigger": 59636.28,
-        "tp1": 59827.37,
-        "tp2": 60018.46,
-        "simple_reason": "OB + FVG en 1H con estructura 1D SUBE / 4H BAJA y flujo macro SUBE.",
+        "direction": "SELL",
+        "dir_label": "VENTA",
+        "signal_tag": "VENTA · OB + FVG",
+        "entry": 59910.6,
+        "zone_top": 60005.77,
+        "zone_bottom": 59815.43,
+        "sl": 60020.77,
+        "be_trigger": 59800.43,
+        "tp1": 59690.26,
+        "tp2": 59580.09,
+        "simple_reason": "OB + FVG en 1H con estructura 1D BAJA / 4H BAJA y flujo macro SUBE.",
         "risk_note": "Noticia fuerte hoy: Core PCE Price Index m/m (1:30pm), Prelim GDP q/q (1:30pm)"
       },
       "weekly_pivots": [],
@@ -15452,8 +15424,8 @@
             "t": 1795564800,
             "o": 59745.65,
             "h": 59745.65,
-            "l": 58902.68,
-            "c": 59308.6
+            "l": 58739.77,
+            "c": 58712.61
           }
         ],
         "4h": [
@@ -15698,9 +15670,9 @@
           {
             "t": 1795579200,
             "o": 59317.46,
-            "h": 59317.73,
-            "l": 58885.15,
-            "c": 59308.6
+            "h": 59331.84,
+            "l": 58552.28,
+            "c": 58712.61
           }
         ],
         "1h": [
@@ -15945,9 +15917,9 @@
           {
             "t": 1795590000,
             "o": 59146.51,
-            "h": 59308.6,
-            "l": 59092.36,
-            "c": 59308.6
+            "h": 59331.84,
+            "l": 58552.28,
+            "c": 58712.61
           }
         ]
       }
