@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>LATICCE · Cabina Neuronal v10.3</title>
+  <title>LATICCE · Cabina Neuronal v10.4</title>
   <link rel="manifest" href="./manifest.json" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -26,12 +26,15 @@
     @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     @keyframes blinkCursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
     @keyframes bootAutoFade {
-      0%, 84% { opacity: 1; visibility: visible; pointer-events: auto; }
-      100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
+      0%, 75% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; display: none; }
     }
-    #boot-screen { animation: bootAutoFade 2.6s ease-out forwards; }
+    #boot-screen {
+      animation: bootAutoFade 2.2s ease-out forwards;
+      pointer-events: none !important;
+    }
+    #boot-enter-btn { pointer-events: auto; }
     .spin-slow { animation: spinSlow 24s linear infinite; }
-    .spin-med { animation: spinSlow 14s linear infinite; }
     .spin-rev { animation: spinRev 18s linear infinite; }
     .pulse-core { animation: pulseCore 2.8s ease-in-out infinite; }
     .ticker-track { display: flex; width: max-content; animation: tickerScroll 42s linear infinite; }
@@ -49,14 +52,15 @@
     .hud-brackets::after { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    button { touch-action: manipulation; cursor: pointer; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
 
-  <!-- PANTALLA DE ARRANQUE (CABINA NEURONAL INTACTA) -->
-  <div id="boot-screen" class="fixed inset-0 z-50 bg-[#030407] flex flex-col items-center justify-between py-8 px-4 text-center">
+  <!-- PANTALLA DE ARRANQUE NO BLOQUEANTE -->
+  <div id="boot-screen" class="fixed inset-0 z-40 bg-[#030407] flex flex-col items-center justify-between py-8 px-4 text-center">
     <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-red-200/80">RED NEURONAL EN LÍNEA</div>
-    <div class="relative z-10 w-[305px] h-[305px] sm:w-[355px] sm:h-[355px] flex items-center justify-center my-auto pointer-events-none">
+    <div class="relative z-10 w-[305px] h-[305px] sm:w-[355px] sm:h-[355px] flex items-center justify-center my-auto">
       <svg viewBox="0 0 360 360" class="w-full h-full overflow-visible">
         <defs>
           <radialGradient id="latticeVortex" cx="50%" cy="50%" r="50%">
@@ -97,7 +101,7 @@
       <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-amber-300 to-red-400 drop-shadow">LATICCE</h1>
       <div class="text-[11px] font-mono tracking-[0.28em] text-red-200/80">LO QUE USTED NO SABE</div>
       <div class="pt-2">
-        <button type="button" onclick="document.getElementById('boot-screen').style.display='none'; if(window.enterLaticce) enterLaticce(true);" style="padding:10px 24px;border-radius:8px;border:1px solid #ef4444;background:rgba(239,68,68,0.22);color:#fecaca;font-weight:bold;font-size:12px;letter-spacing:0.2em;box-shadow:0 0 18px rgba(239,68,68,0.3);">
+        <button id="boot-enter-btn" type="button" data-action="enter-boot" style="padding:10px 24px;border-radius:8px;border:1px solid #ef4444;background:rgba(239,68,68,0.22);color:#fecaca;font-weight:bold;font-size:12px;letter-spacing:0.2em;box-shadow:0 0 18px rgba(239,68,68,0.3);">
           ENTRAR A LA CABINA ▸
         </button>
       </div>
@@ -112,7 +116,7 @@
   </div>
 
   <!-- CABECERA SUPERIOR -->
-  <header class="max-w-6xl w-full mx-auto px-3 sm:px-5 pt-3 pb-2 flex flex-wrap items-center justify-between gap-2">
+  <header class="relative z-20 max-w-6xl w-full mx-auto px-3 sm:px-5 pt-3 pb-2 flex flex-wrap items-center justify-between gap-2">
     <div class="flex items-center gap-2.5">
       <div class="w-8 h-8 rounded-lg bg-red-500/15 border border-red-500/60 flex items-center justify-center font-hud font-black text-amber-300 text-sm">L</div>
       <div>
@@ -128,15 +132,15 @@
     </div>
 
     <div class="flex items-center gap-1.5 text-[11px]">
-      <button type="button" id="ai-toggle-btn" onclick="configureGeminiKey()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/50 text-emerald-300 font-bold">🧠 IA ON</button>
-      <button type="button" id="bell-btn" onclick="toggleBell()" class="px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-slate-200 font-bold">🔔 TIMBRE</button>
-      <button type="button" id="voice-btn" onclick="toggleVoice()" class="px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-slate-300 font-bold">VOZ OFF</button>
-      <button type="button" id="mode-toggle-btn" onclick="togglePanelMode()" class="px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-400/70 text-red-200 font-bold">VER PANEL ▸</button>
+      <button type="button" id="ai-toggle-btn" data-action="config-gemini" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/50 text-emerald-300 font-bold">🧠 IA ON</button>
+      <button type="button" id="bell-btn" data-action="toggle-bell" class="px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-slate-200 font-bold">🔔 TIMBRE</button>
+      <button type="button" id="voice-btn" data-action="toggle-voice" class="px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-slate-300 font-bold">VOZ OFF</button>
+      <button type="button" id="mode-toggle-btn" data-action="toggle-panel" class="px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-400/70 text-red-200 font-bold">VER PANEL ▸</button>
     </div>
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
-  <main class="max-w-6xl w-full mx-auto px-3 sm:px-5 pb-24 flex-1 flex flex-col justify-center">
+  <main class="relative z-10 max-w-6xl w-full mx-auto px-3 sm:px-5 pb-24 flex-1 flex flex-col justify-center">
 
     <!-- VISTA 1: CABINA NEURONAL -->
     <div id="cockpit-view" class="space-y-4">
@@ -147,12 +151,12 @@
             <h2 id="agent-title" class="font-hud text-lg sm:text-xl font-black tracking-wider" style="color: var(--agent-color);">JARVIS · DIRECTOR DE OPERACIONES</h2>
           </div>
           <div class="flex items-center gap-2">
-            <button type="button" onclick="openAgentPanelDirect()" class="px-3 py-1.5 rounded-lg text-xs font-bold border" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ABRIR MÓDULO ▸</button>
+            <button type="button" data-action="open-module" class="px-3 py-1.5 rounded-lg text-xs font-bold border" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ABRIR MÓDULO ▸</button>
           </div>
         </div>
 
         <!-- NÚCLEO PIRAMIDAL GIRATORIO -->
-        <div class="relative w-full h-[210px] sm:h-[235px] flex items-center justify-center overflow-hidden rounded-xl bg-[#03050a] border border-slate-800/70">
+        <div class="relative w-full h-[210px] sm:h-[235px] flex items-center justify-center overflow-hidden rounded-xl bg-[#03050a] border border-slate-800/70 pointer-events-none">
           <svg viewBox="0 0 360 240" class="w-full h-full max-w-[380px]">
             <defs>
               <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
@@ -185,9 +189,9 @@
             A sus órdenes, señor. Sincronizando red neuronal Laticce.<span class="typing-cursor"></span>
           </div>
           <div id="quick-replies" class="flex flex-wrap gap-2"></div>
-          <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
-            <button type="button" onclick="stopSpeaking()" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
-            <button type="button" onclick="startVoiceRecognition()" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
+          <form id="cockpit-form" class="flex items-center gap-2 pt-1">
+            <button type="button" data-action="stop-voice" title="Detener voz" class="w-10 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-red-400 flex items-center justify-center text-slate-300 shrink-0">■</button>
+            <button type="button" data-action="start-mic" id="mic-btn" class="px-3 h-10 rounded-lg border border-slate-700 bg-[#090d16] hover:border-amber-400 text-xs font-mono font-bold text-slate-200 shrink-0">MIC</button>
             <input id="cockpit-input" type="text" placeholder="Pregunte en qué activo enfocarse, OB+FVG, giros 1S o swing..." class="flex-1 h-10 rounded-lg border border-slate-700 bg-[#090d16] px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-400" />
             <button type="submit" class="px-4 h-10 rounded-lg border font-mono font-bold text-xs shrink-0" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.04);">ENVIAR</button>
           </form>
@@ -198,13 +202,13 @@
     <!-- VISTA 2: PANEL COMPLETO DE TRADING -->
     <div id="panel-view" class="hidden space-y-4">
       <div class="flex flex-wrap items-center gap-1.5 text-xs font-mono">
-        <button type="button" onclick="switchPanelTab('jarvis')" class="ptab px-3 py-2 rounded-lg bg-amber-500 text-black font-bold" data-tab="jarvis">⚡ JARVIS (22)</button>
-        <button type="button" onclick="switchPanelTab('weekly1s')" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-cyan-300" data-tab="weekly1s">🏛️ 1S HISTÓRICO</button>
-        <button type="button" onclick="switchPanelTab('ultron')" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300" data-tab="ultron">🎯 GRÁFICO ULTRÓN</button>
-        <button type="button" onclick="switchPanelTab('friday')" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300" data-tab="friday">🟣 CURSO F.R.I.D.A.Y.</button>
-        <button type="button" onclick="switchPanelTab('vision')" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-sky-300 font-bold" data-tab="vision">👁️ VISIÓN</button>
-        <button type="button" onclick="switchPanelTab('karen')" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300" data-tab="karen">🕸️ DIARIO KAREN</button>
-        <button type="button" onclick="togglePanelMode()" class="px-3 py-2 rounded-lg bg-slate-800/80 text-slate-200">◂ VOLVER A CABINA</button>
+        <button type="button" data-tab="jarvis" class="ptab px-3 py-2 rounded-lg bg-amber-500 text-black font-bold">⚡ JARVIS (22)</button>
+        <button type="button" data-tab="weekly1s" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-cyan-300">🏛️ 1S HISTÓRICO</button>
+        <button type="button" data-tab="ultron" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300">🎯 GRÁFICO ULTRÓN</button>
+        <button type="button" data-tab="friday" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300">🟣 CURSO F.R.I.D.A.Y.</button>
+        <button type="button" data-tab="vision" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-sky-300 font-bold">👁️ VISIÓN</button>
+        <button type="button" data-tab="karen" class="ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300">🕸️ DIARIO KAREN</button>
+        <button type="button" data-action="toggle-panel" class="px-3 py-2 rounded-lg bg-slate-800/80 text-slate-200">◂ VOLVER A CABINA</button>
       </div>
 
       <!-- SUBPANEL JARVIS -->
@@ -213,20 +217,20 @@
         <div id="pj-baskets-bar" class="hidden bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-3 space-y-1.5 text-xs"></div>
 
         <div class="flex flex-wrap gap-1.5 text-xs font-mono">
-          <button type="button" onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
-          <button type="button" onclick="setPanelFilter('VALID_OB')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300 font-bold" data-pf="VALID_OB">💎 CON OB / FVG VÁLIDO</button>
-          <button type="button" onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-indigo-300" data-pf="SWING">🌊 POTENCIAL SWING</button>
-          <button type="button" onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
-          <button type="button" onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300" data-pf="NEWS">⚠️ CON NOTICIA HOY</button>
-          <button type="button" onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400" data-pf="BROKEN">⛔ SE CONTRADICEN</button>
-          <button type="button" onclick="setPanelFilter('AUD')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300" data-pf="AUD">🇦🇺 PARES AUD</button>
-          <button type="button" onclick="setPanelFilter('XAU')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300" data-pf="XAU">🥇 ORO (XAU)</button>
+          <button type="button" data-pf="ALL" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold">TODOS (22)</button>
+          <button type="button" data-pf="VALID_OB" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300 font-bold">💎 CON OB / FVG VÁLIDO</button>
+          <button type="button" data-pf="SWING" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-indigo-300">🌊 POTENCIAL SWING</button>
+          <button type="button" data-pf="ALIGNED" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-emerald-400">✔ VAN JUNTOS</button>
+          <button type="button" data-pf="NEWS" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-orange-300">⚠️ CON NOTICIA HOY</button>
+          <button type="button" data-pf="BROKEN" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-red-400">⛔ SE CONTRADICEN</button>
+          <button type="button" data-pf="AUD" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-cyan-300">🇦🇺 PARES AUD</button>
+          <button type="button" data-pf="XAU" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-amber-300">🥇 ORO (XAU)</button>
         </div>
 
         <div class="relative flex items-center">
           <span class="absolute left-3 text-amber-400 text-sm pointer-events-none">🔍</span>
-          <input id="pair-search-input" type="text" oninput="setPairSearch(this.value)" placeholder="Buscar par o activo (ej: AUD, XAU, EURUSD, GBP, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500" />
-          <button id="pair-search-clear" type="button" onclick="clearPairSearch()" class="hidden absolute right-2.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-xs font-bold">✕</button>
+          <input id="pair-search-input" type="text" placeholder="Buscar par o activo (ej: AUD, XAU, EURUSD, GBP, JPY, BTC...)" class="w-full h-10 pl-9 pr-9 rounded-lg bg-[#050811] border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500" />
+          <button id="pair-search-clear" type="button" data-action="clear-search" class="hidden absolute right-2.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-xs font-bold">✕</button>
         </div>
 
         <div id="panel-jarvis-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
@@ -265,9 +269,9 @@
             <span id="pu-status" class="ml-2 text-emerald-400">--</span>
           </div>
           <div class="flex gap-1">
-            <button type="button" onclick="setChartTF('1d')" class="ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold" data-tf="1d">1D</button>
-            <button type="button" onclick="setChartTF('4h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="4h">4H</button>
-            <button type="button" onclick="setChartTF('1h')" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300" data-tf="1h">1H</button>
+            <button type="button" data-tf="1d" class="ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold">1D</button>
+            <button type="button" data-tf="4h" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300">4H</button>
+            <button type="button" data-tf="1h" class="ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300">1H</button>
           </div>
         </div>
         <div class="w-full bg-[#030509] border border-slate-800 rounded-lg overflow-hidden">
@@ -301,14 +305,13 @@
       <!-- SUBPANEL VISIÓN (5 PESTAÑAS DESLIZABLES) -->
       <section id="ptab-vision" class="hidden hud-panel rounded-xl p-4 space-y-4">
         <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 border-b border-slate-800 text-xs font-mono">
-          <button type="button" onclick="setVisionSubTab('RESUMEN')" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-sky-500 text-black font-bold" data-vtab="RESUMEN">📋 RESUMEN</button>
-          <button type="button" onclick="setVisionSubTab('CUADRANTE')" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300" data-vtab="CUADRANTE">🧭 CUADRANTE</button>
-          <button type="button" onclick="setVisionSubTab('BANCOS')" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300" data-vtab="BANCOS">🏦 BANCOS / FED</button>
-          <button type="button" onclick="setVisionSubTab('TASAS')" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300" data-vtab="TASAS">📈 TASAS &amp; DXY</button>
-          <button type="button" onclick="setVisionSubTab('NOTICIAS')" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300" data-vtab="NOTICIAS">📰 NOTICIAS &amp; RIESGOS</button>
+          <button type="button" data-vtab="RESUMEN" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-sky-500 text-black font-bold">📋 RESUMEN</button>
+          <button type="button" data-vtab="CUADRANTE" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300">🧭 CUADRANTE</button>
+          <button type="button" data-vtab="BANCOS" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300">🏦 BANCOS / FED</button>
+          <button type="button" data-vtab="TASAS" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300">📈 TASAS &amp; DXY</button>
+          <button type="button" data-vtab="NOTICIAS" class="vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300">📰 NOTICIAS &amp; RIESGOS</button>
         </div>
 
-        <!-- 1. RESUMEN -->
         <div id="vsub-RESUMEN" class="space-y-4">
           <div class="bg-sky-950/30 border border-sky-500/40 rounded-xl p-3.5 space-y-1.5">
             <div class="text-[10px] font-hud tracking-widest text-sky-400">BRIEF DIARIO INSTITUCIONAL</div>
@@ -325,19 +328,16 @@
           </div>
         </div>
 
-        <!-- 2. CUADRANTE -->
         <div id="vsub-CUADRANTE" class="hidden space-y-3">
           <div class="text-xs text-slate-400">Fuerza relativa híbrida (60% 4H + 40% 1D). Priorice cruces <span class="text-emerald-400 font-bold">FUERTE</span> contra <span class="text-red-400 font-bold">DÉBIL</span>.</div>
           <div id="pv-quadrant" class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs"></div>
         </div>
 
-        <!-- 3. BANCOS / FED -->
         <div id="vsub-BANCOS" class="hidden space-y-3">
           <div class="text-xs text-slate-400">Postura actual de los 8 bancos centrales principales para direccionar la Mesa de Swing.</div>
           <div id="pv-banks" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
         </div>
 
-        <!-- 4. TASAS & DXY -->
         <div id="vsub-TASAS" class="hidden space-y-3">
           <div id="pv-rates" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs"></div>
           <div class="bg-[#050811] border border-slate-800 rounded-xl p-3.5 text-xs text-slate-300 space-y-1.5">
@@ -347,7 +347,6 @@
           </div>
         </div>
 
-        <!-- 5. NOTICIAS & RIESGOS -->
         <div id="vsub-NOTICIAS" class="hidden space-y-4">
           <div class="space-y-2">
             <h4 class="font-hud text-xs font-bold text-cyan-400 tracking-wider">📅 CALENDARIO ECONÓMICO DE HOY</h4>
@@ -375,8 +374,8 @@
             <span id="cloud-token-info">Pulsa VINCULAR NUBE para sincronizar</span>
           </div>
           <div class="flex gap-2">
-            <button type="button" onclick="configureCloudToken()" class="px-3 py-1.5 rounded bg-rose-500/20 border border-rose-400/60 text-rose-200 font-bold">🔑 VINCULAR NUBE</button>
-            <button type="button" onclick="loadCloudJournal(true)" class="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-bold">↻ SINCRONIZAR</button>
+            <button type="button" data-action="config-cloud" class="px-3 py-1.5 rounded bg-rose-500/20 border border-rose-400/60 text-rose-200 font-bold">🔑 VINCULAR NUBE</button>
+            <button type="button" data-action="sync-cloud" class="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-bold">↻ SINCRONIZAR</button>
           </div>
         </div>
         <form id="journal-form" class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
@@ -396,870 +395,882 @@
     </div>
   </main>
 
-  <!-- BARRA INFERIOR DE 7 AGENTES (INTACTA) -->
-  <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#04060c]/95 backdrop-blur-md border-t border-slate-800/90 py-1.5 px-2">
+  <!-- BARRA INFERIOR DE 7 AGENTES (Z-INDEX 50 PARA PRIORIDAD TOTAL DE TOQUE) -->
+  <nav class="fixed bottom-0 inset-x-0 z-50 bg-[#04060c]/95 backdrop-blur-md border-t border-slate-800/90 py-1.5 px-2">
     <div class="max-w-4xl mx-auto grid grid-cols-7 gap-1 text-center text-[9px] font-mono">
-      <button type="button" onclick="selectAgent('jarvis', true)" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-amber-400 font-bold" data-ag="jarvis"><span>⚡</span><span>JARVIS</span></button>
-      <button type="button" onclick="selectAgent('vision', true)" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400" data-ag="vision"><span>🌐</span><span>VISIÓN</span></button>
-      <button type="button" onclick="selectAgent('ultron', true)" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400" data-ag="ultron"><span>🎯</span><span>ULTRÓN</span></button>
-      <button type="button" onclick="selectAgent('friday', true)" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400" data-ag="friday"><span>🟣</span><span>F.R.I.D.A.Y.</span></button>
-      <button type="button" onclick="selectAgent('edith', true)" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400" data-ag="edith"><span>🛡️</span><span>E.D.I.T.H.</span></button>
-      <button type="button" onclick="selectAgent('karen', true)" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400" data-ag="karen"><span>🕸️</span><span>KAREN</span></button>
-      <button type="button" onclick="selectAgent('homer', true)" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400" data-ag="homer"><span>📊</span><span>H.O.M.E.R.</span></button>
+      <button type="button" data-ag="jarvis" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-amber-400 font-bold"><span>⚡</span><span>JARVIS</span></button>
+      <button type="button" data-ag="vision" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400"><span>🌐</span><span>VISIÓN</span></button>
+      <button type="button" data-ag="ultron" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400"><span>🎯</span><span>ULTRÓN</span></button>
+      <button type="button" data-ag="friday" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400"><span>🟣</span><span>F.R.I.D.A.Y.</span></button>
+      <button type="button" data-ag="edith" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400"><span>🛡️</span><span>E.D.I.T.H.</span></button>
+      <button type="button" data-ag="karen" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400"><span>🕸️</span><span>KAREN</span></button>
+      <button type="button" data-ag="homer" class="ag-btn py-1 rounded flex flex-col items-center gap-0.5 text-slate-400"><span>📊</span><span>H.O.M.E.R.</span></button>
     </div>
   </nav>
 
   <script>
-    const AGENTS = {
-      jarvis: { name: 'JARVIS · DIRECTOR DE OPERACIONES', color: '#f59e0b', tab: 'jarvis' },
-      vision: { name: 'VISIÓN · INTELIGENCIA MACROECONÓMICA', color: '#38bdf8', tab: 'vision' },
-      ultron: { name: 'ULTRÓN · ESCÁNER ESTRUCTURAL OB+FVG', color: '#ef4444', tab: 'ultron' },
-      friday: { name: 'F.R.I.D.A.Y. · ACADEMIA INSTITUCIONAL', color: '#a855f7', tab: 'friday' },
-      edith:  { name: 'E.D.I.T.H. · GESTIÓN DE RIESGO Y SWING', color: '#10b981', tab: 'jarvis' },
-      karen:  { name: 'KAREN · AUDITORÍA PSICOLÓGICA', color: '#f43f5e', tab: 'karen' },
-      homer:  { name: 'H.O.M.E.R. · ESTADÍSTICA Y RENDIMIENTO', color: '#84cc16', tab: 'karen' }
-    };
-
-    const LESSONS = [
-      { t: '1. Estructura Institucional (BOS y CHoCH)', d: 'Identifica quiebres reales de estructura con cuerpo de vela antes de buscar entradas.' },
-      { t: '2. Cascada OB + FVG (3 Niveles)', d: 'Prioriza siempre la confluencia de Order Block + Fair Value Gap sobre zonas aisladas.' },
-      { t: '3. Liquidez Externa (BSL / SSL)', d: 'El precio siempre busca barrer máximos y mínimos iguales antes de iniciar el impulso real.' },
-      { t: '4. Fuerza Relativa de Divisas', d: 'Opera únicamente divisas FUERTES contra DÉBILES; evita cruces neutros o agotados.' },
-      { t: '5. Foco Principal #1', d: 'Concentra el capital en el mejor setup del día para no duplicar riesgo en cestas correlacionadas.' },
-      { t: '6. Blindaje Break Even (+1R)', d: 'Al alcanzar +1R, sube el Stop Loss a entrada para eliminar el riesgo financiero.' },
-      { t: '7. Protocolo Potencial Swing (8 Filtros)', d: 'Solo deja correr multi-día cuando 1D, 4H, 1H y Macro estén alineados sin agotamiento.' },
-      { t: '8. Piramidación en Retrocesos', d: 'Añade una segunda entrada únicamente cuando la orden base ya está protegida en Break Even.' },
-      { t: '9. Giros Semanales Históricos 1S', d: 'Niveles limpios pre-2017 válidos solo si el precio llega a <= 60 pips sin acumulación.' },
-      { t: '10. Control Emocional y Diario', d: 'Registra cada operación con emoción y resultado en R para auditar tu disciplina.' }
-    ];
-
-    let appData = null;
-    let currentAgent = 'jarvis';
-    let isPanelMode = false;
-    let currentPanelTab = 'jarvis';
-    let currentFilter = 'ALL';
-    let pairSearch = '';
-    let selectedSymbol = 'XAUUSD';
-    let chartTF = '1h';
-    let voiceOn = false;
-    let bellOn = true;
-    let trades = JSON.parse(localStorage.getItem('laticce_trades') || '[]');
-    let completedLessons = JSON.parse(localStorage.getItem('laticce_lessons') || '[]');
-    let ghToken = localStorage.getItem('laticce_gh_token') || '';
-    let geminiKey = localStorage.getItem('laticce_gemini_key') || '';
-
-    function safeNum(v, fb = 0) {
-      const n = Number(v);
-      return Number.isFinite(n) ? n : fb;
-    }
-
-    function decodeBase64Utf8(b64) {
-      const clean = (b64 || '').split(String.fromCharCode(10)).join('').split(String.fromCharCode(13)).join('').trim();
-      return JSON.parse(decodeURIComponent(escape(atob(clean))));
-    }
-
-    function enterLaticce(fromBtn) {
-      const bs = document.getElementById('boot-screen');
-      if (bs) bs.style.display = 'none';
-      if (fromBtn && !appData) loadData();
-    }
-
-    function togglePanelMode() {
-      isPanelMode = !isPanelMode;
-      document.getElementById('cockpit-view').classList.toggle('hidden', isPanelMode);
-      document.getElementById('panel-view').classList.toggle('hidden', !isPanelMode);
-      document.getElementById('mode-toggle-btn').textContent = isPanelMode ? '◂ CABINA' : 'VER PANEL ▸';
-      if (isPanelMode && currentPanelTab === 'ultron') drawUltronChart();
-    }
-
-    function openAgentPanelDirect() {
-      if (!isPanelMode) togglePanelMode();
-      switchPanelTab(AGENTS[currentAgent]?.tab || 'jarvis');
-    }
-
-    function switchPanelTab(tab) {
-      currentPanelTab = tab;
-      ['jarvis', 'weekly1s', 'ultron', 'friday', 'vision', 'karen'].forEach(t => {
-        const el = document.getElementById('ptab-' + t);
-        if (el) el.classList.toggle('hidden', t !== tab);
-      });
-      document.querySelectorAll('.ptab').forEach(btn => {
-        const active = btn.dataset.tab === tab;
-        btn.className = active
-          ? 'ptab px-3 py-2 rounded-lg bg-amber-500 text-black font-bold'
-          : 'ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300';
-      });
-      if (tab === 'ultron') setTimeout(drawUltronChart, 40);
-    }
-
-    function setVisionSubTab(sub) {
-      ['RESUMEN', 'CUADRANTE', 'BANCOS', 'TASAS', 'NOTICIAS'].forEach(s => {
-        const el = document.getElementById('vsub-' + s);
-        if (el) el.classList.toggle('hidden', s !== sub);
-      });
-      document.querySelectorAll('.vtab').forEach(btn => {
-        const active = btn.dataset.vtab === sub;
-        btn.className = active
-          ? 'vtab shrink-0 px-3 py-1.5 rounded-lg bg-sky-500 text-black font-bold'
-          : 'vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300';
-      });
-    }
-
-    function selectAgent(ag, speakNow) {
-      currentAgent = ag;
-      const cfg = AGENTS[ag] || AGENTS.jarvis;
-      document.documentElement.style.setProperty('--agent-color', cfg.color);
-      document.getElementById('agent-title').textContent = cfg.name;
-      document.getElementById('agent-title').style.color = cfg.color;
-      document.querySelectorAll('.ag-btn').forEach(b => {
-        const on = b.dataset.ag === ag;
-        b.style.color = on ? cfg.color : '#94a3b8';
-        b.style.fontWeight = on ? '700' : '400';
-      });
-      const msg = buildAgentBrief(ag);
-      setDialogue(msg);
-      renderQuickReplies(ag);
-      if (speakNow && voiceOn) speakText(msg);
-    }
-
-    function buildAgentBrief(ag) {
-      if (!appData || !Array.isArray(appData.assets)) {
-        return 'Sincronizando telemetría de mercado con GitHub. Un momento, señor.';
-      }
-      const fp = appData.focus_pick && appData.focus_pick.primary;
-      const b = appData.brief || {};
-      if (ag === 'jarvis') {
-        return fp
-          ? `Foco Principal #1 activo en ${fp.symbol} (${fp.signal_tag} · ${fp.probability}% prob). Entrada: ${fp.entry} | SL: ${fp.sl} | TP1: ${fp.tp1}. ${fp.reason}`
-          : `Escáner activo sobre ${appData.assets.length} activos. Esperando bloque OB+FVG limpio para fijar Foco Principal.`;
-      }
-      if (ag === 'vision') {
-        return `${b.headline || ''} - ${b.narrative || 'Monitoreando DXY, bonos US10Y y noticias macroeconómicas.'}`;
-      }
-      if (ag === 'ultron') {
-        const a = appData.assets.find(x => x.symbol === selectedSymbol) || appData.assets[0];
-        return a
-          ? `Estructura ${a.symbol}: 1D ${a.timeframes?.1d} | 4H ${a.timeframes?.4h} | 1H ${a.timeframes?.1h}. Zona ${a.setup?.signal_tag} en ${a.setup?.entry}.`
-          : 'Gráfico estructural listo.';
-      }
-      if (ag === 'edith') {
-        const swings = appData.assets.filter(x => x.swing_potential?.active).map(x => x.symbol);
-        return swings.length
-          ? `Protocolo Swing activo en: ${swings.join(', ')}. Recuerde: proteja en Break Even (+1R) antes de piramidar.`
-          : 'Ningún activo cumple hoy los 8 filtros de Swing. Opere intradía cobrando parciales en TP1.';
-      }
-      if (ag === 'friday') {
-        return `Academia Institucional: ${completedLessons.length}/10 módulos completados. Abra el módulo para repasar reglas OB+FVG y liquidez.`;
-      }
-      if (ag === 'karen') {
-        return `Diario psicológico activo (${trades.length} operaciones registradas). No opere por impulso fuera de Killzone ni sin Stop estructural.`;
-      }
-      const h = getHomerMetrics();
-      return `Rendimiento acumulado: ${h.winRate}% de acierto con balance neto de ${h.pnlR} en ${trades.length} operaciones.`;
-    }
-
-    function setDialogue(text) {
-      const box = document.getElementById('agent-dialogue-box');
-      if (box) box.innerHTML = `${text}<span class="typing-cursor"></span>`;
-    }
-
-    function renderQuickReplies(ag) {
-      const qr = document.getElementById('quick-replies');
-      if (!qr) return;
-      const presets = {
-        jarvis: ['¿Cuál es el Foco #1 hoy?', 'Ver activos Potencial Swing', 'Abrir Panel Completo'],
-        vision: ['Resumen Macro y DXY', 'Ver noticias explicadas', '¿Qué divisas están fuertes?'],
-        ultron: ['Abrir Gráfico Ultrón', 'Revisar XAUUSD', 'Ver giros semanales 1S'],
-        edith: ['Reglas de Break Even', '¿Cuándo puedo piramidar?'],
-        friday: ['Abrir Academia 10 Módulos'],
-        karen: ['Abrir Diario de Operaciones'],
-        homer: ['Ver mi estadística en R']
+    (function () {
+      const AGENTS = {
+        jarvis: { name: 'JARVIS · DIRECTOR DE OPERACIONES', color: '#f59e0b', tab: 'jarvis' },
+        vision: { name: 'VISIÓN · INTELIGENCIA MACROECONÓMICA', color: '#38bdf8', tab: 'vision' },
+        ultron: { name: 'ULTRÓN · ESCÁNER ESTRUCTURAL OB+FVG', color: '#ef4444', tab: 'ultron' },
+        friday: { name: 'F.R.I.D.A.Y. · ACADEMIA INSTITUCIONAL', color: '#a855f7', tab: 'friday' },
+        edith:  { name: 'E.D.I.T.H. · GESTIÓN DE RIESGO Y SWING', color: '#10b981', tab: 'jarvis' },
+        karen:  { name: 'KAREN · AUDITORÍA PSICOLÓGICA', color: '#f43f5e', tab: 'karen' },
+        homer:  { name: 'H.O.M.E.R. · ESTADÍSTICA Y RENDIMIENTO', color: '#84cc16', tab: 'karen' }
       };
-      qr.innerHTML = (presets[ag] || presets.jarvis).map(q =>
-        `<button type="button" onclick="handleQuickChip('${q}')" class="px-2.5 py-1 rounded-lg bg-[#090d16] border border-slate-700 hover:border-amber-400 text-[11px] text-slate-200">${q}</button>`
-      ).join('');
-    }
 
-    function handleQuickChip(q) {
-      if (q.includes('Panel Completo')) { if (!isPanelMode) togglePanelMode(); return; }
-      if (q.includes('Gráfico Ultrón')) { if (!isPanelMode) togglePanelMode(); switchPanelTab('ultron'); return; }
-      if (q.includes('semanales 1S')) { if (!isPanelMode) togglePanelMode(); switchPanelTab('weekly1s'); return; }
-      if (q.includes('Academia')) { if (!isPanelMode) togglePanelMode(); switchPanelTab('friday'); return; }
-      if (q.includes('Diario')) { if (!isPanelMode) togglePanelMode(); switchPanelTab('karen'); return; }
-      if (q.includes('noticias explicadas')) { if (!isPanelMode) togglePanelMode(); switchPanelTab('vision'); setVisionSubTab('NOTICIAS'); return; }
-      document.getElementById('cockpit-input').value = q;
-      handleCockpitChat({ preventDefault: () => {} });
-    }
-
-    function handleCockpitChat(e) {
-      e.preventDefault();
-      const inp = document.getElementById('cockpit-input');
-      const txt = (inp.value || '').trim();
-      if (!txt) return;
-      inp.value = '';
-      const low = txt.toLowerCase();
-      if (low.includes('swing')) selectAgent('edith', true);
-      else if (low.includes('macro') || low.includes('dxy') || low.includes('noticia')) selectAgent('vision', true);
-      else if (low.includes('grafico') || low.includes('gráfico') || low.includes('xau')) {
-        if (low.includes('xau')) selectedSymbol = 'XAUUSD';
-        selectAgent('ultron', true);
-      } else {
-        selectAgent('jarvis', true);
-      }
-    }
-
-    function toggleVoice() {
-      voiceOn = !voiceOn;
-      document.getElementById('voice-btn').textContent = voiceOn ? 'VOZ ON' : 'VOZ OFF';
-      if (!voiceOn) stopSpeaking();
-    }
-    function toggleBell() {
-      bellOn = !bellOn;
-      document.getElementById('bell-btn').textContent = bellOn ? '🔔 TIMBRE' : '🔕 MUDO';
-    }
-    function speakText(t) {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(t);
-      u.lang = 'es-ES';
-      window.speechSynthesis.speak(u);
-    }
-    function stopSpeaking() {
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    }
-    function startVoiceRecognition() {
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SR) return;
-      const rec = new SR();
-      rec.lang = 'es-ES';
-      rec.onresult = ev => {
-        document.getElementById('cockpit-input').value = ev.results[0][0].transcript;
-        handleCockpitChat({ preventDefault: () => {} });
-      };
-      rec.start();
-    }
-
-    function updateClockAndKillzone() {
-      const now = new Date();
-      const h = now.getUTCHours();
-      const m = String(now.getUTCMinutes()).padStart(2, '0');
-      const s = String(now.getUTCSeconds()).padStart(2, '0');
-      const hh = String(h).padStart(2, '0');
-      const kz = document.getElementById('killzone-badge');
-      const live = document.getElementById('live-feed-badge');
-      if (live) live.textContent = `● LIVE ${hh}:${m}:${s} UTC`;
-      if (kz) {
-        if (h >= 7 && h < 11) {
-          kz.textContent = `KILLZONE LONDRES · ${hh}:${m}:${s} UTC`;
-          kz.className = 'text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/60 text-emerald-300 font-bold';
-        } else if (h >= 12 && h < 16) {
-          kz.textContent = `KILLZONE NY · ${hh}:${m}:${s} UTC`;
-          kz.className = 'text-[9px] px-2 py-0.5 rounded bg-amber-500/20 border border-amber-400/60 text-amber-300 font-bold';
-        } else {
-          kz.textContent = `FUERA KILLZONE · ${hh}:${m}:${s} UTC`;
-          kz.className = 'text-[9px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-bold';
-        }
-      }
-    }
-
-    function updateTicker() {
-      const el = document.getElementById('live-ticker');
-      if (!el || !appData || !Array.isArray(appData.assets)) return;
-      const items = appData.assets.map(a => {
-        const chg = safeNum(a.change_pct, 0);
-        const cls = chg >= 0 ? 'text-emerald-400' : 'text-red-400';
-        const sign = chg >= 0 ? '+' : '';
-        const sw = a.swing_potential?.active ? ' <span class="text-indigo-300 font-bold">🌊SWING</span>' : '';
-        return `<span class="inline-flex items-center gap-1.5">● <strong class="text-white">${a.symbol}</strong> <span class="text-amber-300">${a.price}</span> <span class="${cls}">${sign}${chg.toFixed(2)}%</span>${sw}</span>`;
-      }).join('<span class="text-slate-600">|</span>');
-      el.innerHTML = items + '<span class="text-slate-600">|</span>' + items;
-    }
-
-    async function loadData() {
-      const syncLbl = document.getElementById('sync-label');
-      const urls = [
-        `./data.json?t=${Date.now()}`,
-        `https://raw.githubusercontent.com/bab9618-hash/ultra/principal/data.json?t=${Date.now()}`
+      const LESSONS = [
+        { t: '1. Estructura Institucional (BOS y CHoCH)', d: 'Identifica quiebres reales de estructura con cuerpo de vela antes de buscar entradas.' },
+        { t: '2. Cascada OB + FVG (3 Niveles)', d: 'Prioriza siempre la confluencia de Order Block + Fair Value Gap sobre zonas aisladas.' },
+        { t: '3. Liquidez Externa (BSL / SSL)', d: 'El precio siempre busca barrer máximos y mínimos iguales antes de iniciar el impulso real.' },
+        { t: '4. Fuerza Relativa de Divisas', d: 'Opera únicamente divisas FUERTES contra DÉBILES; evita cruces neutros o agotados.' },
+        { t: '5. Foco Principal #1', d: 'Concentra el capital en el mejor setup del día para no duplicar riesgo en cestas correlacionadas.' },
+        { t: '6. Blindaje Break Even (+1R)', d: 'Al alcanzar +1R, sube el Stop Loss a entrada para eliminar el riesgo financiero.' },
+        { t: '7. Protocolo Potencial Swing (8 Filtros)', d: 'Solo deja correr multi-día cuando 1D, 4H, 1H y Macro estén alineados sin agotamiento.' },
+        { t: '8. Piramidación en Retrocesos', d: 'Añade una segunda entrada únicamente cuando la orden base ya está protegida en Break Even.' },
+        { t: '9. Giros Semanales Históricos 1S', d: 'Niveles limpios pre-2017 válidos solo si el precio llega a <= 60 pips sin acumulación.' },
+        { t: '10. Control Emocional y Diario', d: 'Registra cada operación con emoción y resultado en R para auditar tu disciplina.' }
       ];
-      for (const u of urls) {
-        try {
-          const res = await fetch(u, { cache: 'no-store' });
-          if (!res.ok) continue;
-          const json = await res.json();
-          if (json && Array.isArray(json.assets) && json.assets.length > 0) {
-            appData = json;
-            if (syncLbl) syncLbl.textContent = `ESTRUCTURA: ${json.last_updated || 'ACTUALIZADO'}`;
-            renderAll();
-            return;
-          }
-        } catch (err) {
-          console.warn('Reintentando fuente data.json:', u, err);
-        }
-      }
-      if (syncLbl) syncLbl.textContent = 'Sin conexión a data.json · Reintentando...';
-    }
 
-    async function refreshLivePrices() {
-      if (!appData || !Array.isArray(appData.assets)) return;
-      try {
-        const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
-        if (res.ok) {
-          const d = await res.json();
-          const btc = appData.assets.find(x => x.symbol === 'BTCUSD');
-          if (btc && d.price) {
-            btc.price = Number(parseFloat(d.price).toFixed(2));
-            updateTicker();
-          }
-        }
-      } catch (_) {}
-    }
+      let appData = null;
+      let currentAgent = 'jarvis';
+      let isPanelMode = false;
+      let currentPanelTab = 'jarvis';
+      let currentFilter = 'ALL';
+      let pairSearch = '';
+      let selectedSymbol = 'XAUUSD';
+      let chartTF = '1h';
+      let voiceOn = false;
+      let bellOn = true;
+      let trades = [];
+      let completedLessons = [];
+      let ghToken = '';
+      let geminiKey = '';
 
-    function renderAll() {
-      if (!appData) return;
-      updateTicker();
-      renderJarvisPanel();
-      renderWeekly1sPanel();
-      renderUltronSelector();
-      renderUltronMetrics();
-      renderFridayLessons();
-      renderVisionPanel();
+      try { trades = JSON.parse(localStorage.getItem('laticce_trades') || '[]'); } catch (e) { trades = []; }
+      try { completedLessons = JSON.parse(localStorage.getItem('laticce_lessons') || '[]'); } catch (e) { completedLessons = []; }
+      try { ghToken = localStorage.getItem('laticce_gh_token') || ''; } catch (e) {}
+      try { geminiKey = localStorage.getItem('laticce_gemini_key') || ''; } catch (e) {}
 
-      const fp = appData.focus_pick?.primary;
-      const b = appData.brief || {};
-      const cf = document.getElementById('core-focus-mini');
-      const cm = document.getElementById('core-macro-mini');
-      if (cf) cf.textContent = fp ? `FOCO #1: ${fp.symbol} (${fp.dir_label} · ${fp.probability}%)` : 'FOCO #1: ESCANEANDO ZONAS';
-      if (cm) cm.textContent = `DXY ${b.dxy ?? '--'} · US10Y ${b.us10y ?? '--'}%`;
-      selectAgent(currentAgent, false);
-    }
-
-    function setPanelFilter(f) {
-      currentFilter = f;
-      document.querySelectorAll('.pf-btn').forEach(b => {
-        const on = b.dataset.pf === f;
-        b.className = on
-          ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold'
-          : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
-      });
-      renderJarvisPanel();
-    }
-
-    function setPairSearch(val) {
-      pairSearch = (val || '').trim().toUpperCase();
-      document.getElementById('pair-search-clear').classList.toggle('hidden', !pairSearch);
-      renderJarvisPanel();
-    }
-
-    function clearPairSearch() {
-      document.getElementById('pair-search-input').value = '';
-      setPairSearch('');
-    }
-
-    function openChartFor(sym) {
-      selectedSymbol = sym;
-      if (!isPanelMode) togglePanelMode();
-      switchPanelTab('ultron');
-      renderUltronSelector();
-      renderUltronMetrics();
-      drawUltronChart();
-    }
-
-    function renderJarvisPanel() {
-      if (!appData) return;
-      const fpCard = document.getElementById('pj-focus-card');
-      const fp = appData.focus_pick?.primary;
-      const fp2 = appData.focus_pick?.secondary;
-      if (fp && fpCard) {
-        fpCard.classList.remove('hidden');
-        fpCard.innerHTML = `
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2 py-0.5 rounded bg-amber-400 text-black font-bold text-[11px]">🎯 FOCO PRINCIPAL #1 HOY</span>
-              <span class="font-hud font-black text-lg text-white">${fp.symbol}</span>
-              <span class="px-2 py-0.5 rounded ${fp.direction === 'BUY' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50' : 'bg-red-500/20 text-red-300 border border-red-500/50'} text-xs font-bold">${fp.signal_tag}</span>
-              <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold">${fp.probability}% PROBABILIDAD</span>
-            </div>
-            <button type="button" onclick="openChartFor('${fp.symbol}')" class="px-3 py-1.5 rounded-lg bg-amber-400 text-black font-bold text-xs">ABRIR GRÁFICO #1 ▸</button>
-          </div>
-          <p class="text-xs text-slate-300">${fp.reason} · A ${fp.dist_units} ${fp.unit_label} de entrada.</p>
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs pt-1">
-            <div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-sky-400">ENTRADA FIJA</div><div class="font-bold text-white">${fp.entry}</div></div>
-            <div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-red-400">STOP ESTRUCTURAL</div><div class="font-bold text-red-400">${fp.sl}</div></div>
-            <div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-indigo-300">GATILLO BE (+1R)</div><div class="font-bold text-indigo-300">${fp.be_trigger}</div></div>
-            <div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-emerald-400">TP1 PARCIAL</div><div class="font-bold text-emerald-400">${fp.tp1}</div></div>
-            <div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-emerald-400">TP2 (1:3)</div><div class="font-bold text-emerald-400">${fp.tp2}</div></div>
-          </div>
-          ${fp2 ? `<div class="text-[11px] text-amber-200/90 pt-1">💡 Plan B (divisa independiente): <strong>${fp2.symbol}</strong> (${fp2.dir_label} · ${fp2.probability}% prob · Entrada ${fp2.entry})</div>` : ''}
-        `;
+      function safeNum(v, fb) {
+        const n = Number(v);
+        return Number.isFinite(n) ? n : (fb || 0);
       }
 
-      const bBar = document.getElementById('pj-baskets-bar');
-      const baskets = appData.correlated_baskets || [];
-      if (bBar) {
-        if (baskets.length) {
-          bBar.classList.remove('hidden');
-          bBar.innerHTML = `<div class="font-bold text-indigo-300">🔗 CESTAS MACROECONÓMICAS ACTIVAS (Elija solo el Foco #1 para no duplicar riesgo):</div>` +
-            baskets.map(bk => `<div class="text-slate-300">• <strong class="text-white">${bk.currency} ${bk.status}:</strong> ${bk.pairs.join(' | ')}</div>`).join('');
+      function decodeBase64Utf8(b64) {
+        const clean = String(b64 || '').split(String.fromCharCode(10)).join('').split(String.fromCharCode(13)).join('').trim();
+        return JSON.parse(decodeURIComponent(escape(atob(clean))));
+      }
+
+      function hideBootScreen() {
+        const bs = document.getElementById('boot-screen');
+        if (bs) bs.style.display = 'none';
+      }
+
+      function togglePanelMode() {
+        isPanelMode = !isPanelMode;
+        const cv = document.getElementById('cockpit-view');
+        const pv = document.getElementById('panel-view');
+        const btn = document.getElementById('mode-toggle-btn');
+        if (cv) cv.classList.toggle('hidden', isPanelMode);
+        if (pv) pv.classList.toggle('hidden', !isPanelMode);
+        if (btn) btn.textContent = isPanelMode ? '◂ CABINA' : 'VER PANEL ▸';
+        if (isPanelMode && currentPanelTab === 'ultron') setTimeout(drawUltronChart, 40);
+      }
+
+      function switchPanelTab(tab) {
+        currentPanelTab = tab;
+        ['jarvis', 'weekly1s', 'ultron', 'friday', 'vision', 'karen'].forEach(function (t) {
+          const el = document.getElementById('ptab-' + t);
+          if (el) el.classList.toggle('hidden', t !== tab);
+        });
+        document.querySelectorAll('.ptab').forEach(function (btn) {
+          const active = btn.getAttribute('data-tab') === tab;
+          btn.className = active
+            ? 'ptab px-3 py-2 rounded-lg bg-amber-500 text-black font-bold'
+            : 'ptab px-3 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300';
+        });
+        if (tab === 'ultron') setTimeout(drawUltronChart, 40);
+      }
+
+      function setVisionSubTab(sub) {
+        ['RESUMEN', 'CUADRANTE', 'BANCOS', 'TASAS', 'NOTICIAS'].forEach(function (s) {
+          const el = document.getElementById('vsub-' + s);
+          if (el) el.classList.toggle('hidden', s !== sub);
+        });
+        document.querySelectorAll('.vtab').forEach(function (btn) {
+          const active = btn.getAttribute('data-vtab') === sub;
+          btn.className = active
+            ? 'vtab shrink-0 px-3 py-1.5 rounded-lg bg-sky-500 text-black font-bold'
+            : 'vtab shrink-0 px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-800 text-slate-300';
+        });
+      }
+
+      function buildAgentBrief(ag) {
+        if (!appData || !Array.isArray(appData.assets)) {
+          return 'Sincronizando telemetría de mercado con GitHub. Un momento, señor.';
+        }
+        const fp = appData.focus_pick && appData.focus_pick.primary;
+        const b = appData.brief || {};
+        if (ag === 'jarvis') {
+          return fp
+            ? 'Foco Principal #1 activo en ' + fp.symbol + ' (' + fp.signal_tag + ' · ' + fp.probability + '% prob). Entrada: ' + fp.entry + ' | SL: ' + fp.sl + ' | TP1: ' + fp.tp1 + '. ' + fp.reason
+            : 'Escáner activo sobre ' + appData.assets.length + ' activos. Esperando bloque OB+FVG limpio para fijar Foco Principal.';
+        }
+        if (ag === 'vision') {
+          return (b.headline || '') + ' - ' + (b.narrative || 'Monitoreando DXY, bonos US10Y y noticias macroeconómicas.');
+        }
+        if (ag === 'ultron') {
+          const a = appData.assets.find(function (x) { return x.symbol === selectedSymbol; }) || appData.assets[0];
+          return a
+            ? 'Estructura ' + a.symbol + ': 1D ' + (a.timeframes && a.timeframes['1d']) + ' | 4H ' + (a.timeframes && a.timeframes['4h']) + ' | 1H ' + (a.timeframes && a.timeframes['1h']) + '. Zona ' + (a.setup && a.setup.signal_tag) + ' en ' + (a.setup && a.setup.entry) + '.'
+            : 'Gráfico estructural listo.';
+        }
+        if (ag === 'edith') {
+          const swings = appData.assets.filter(function (x) { return x.swing_potential && x.swing_potential.active; }).map(function (x) { return x.symbol; });
+          return swings.length
+            ? 'Protocolo Swing activo en: ' + swings.join(', ') + '. Recuerde: proteja en Break Even (+1R) antes de piramidar.'
+            : 'Ningún activo cumple hoy los 8 filtros de Swing. Opere intradía cobrando parciales en TP1.';
+        }
+        if (ag === 'friday') {
+          return 'Academia Institucional: ' + completedLessons.length + '/10 módulos completados. Abra el módulo para repasar reglas OB+FVG y liquidez.';
+        }
+        if (ag === 'karen') {
+          return 'Diario psicológico activo (' + trades.length + ' operaciones registradas). No opere por impulso fuera de Killzone ni sin Stop estructural.';
+        }
+        const h = getHomerMetrics();
+        return 'Rendimiento acumulado: ' + h.winRate + '% de acierto con balance neto de ' + h.pnlR + ' en ' + trades.length + ' operaciones.';
+      }
+
+      function selectAgent(ag, speakNow) {
+        currentAgent = ag;
+        const cfg = AGENTS[ag] || AGENTS.jarvis;
+        document.documentElement.style.setProperty('--agent-color', cfg.color);
+        const titleEl = document.getElementById('agent-title');
+        if (titleEl) {
+          titleEl.textContent = cfg.name;
+          titleEl.style.color = cfg.color;
+        }
+        document.querySelectorAll('.ag-btn').forEach(function (b) {
+          const on = b.getAttribute('data-ag') === ag;
+          b.style.color = on ? cfg.color : '#94a3b8';
+          b.style.fontWeight = on ? '700' : '400';
+        });
+        const msg = buildAgentBrief(ag);
+        const box = document.getElementById('agent-dialogue-box');
+        if (box) box.innerHTML = msg + '<span class="typing-cursor"></span>';
+        renderQuickReplies(ag);
+        if (speakNow && voiceOn) speakText(msg);
+      }
+
+      function renderQuickReplies(ag) {
+        const qr = document.getElementById('quick-replies');
+        if (!qr) return;
+        const presets = {
+          jarvis: ['¿Cuál es el Foco #1 hoy?', 'Ver activos Potencial Swing', 'Abrir Panel Completo'],
+          vision: ['Resumen Macro y DXY', 'Ver noticias explicadas', '¿Qué divisas están fuertes?'],
+          ultron: ['Abrir Gráfico Ultrón', 'Revisar XAUUSD', 'Ver giros semanales 1S'],
+          edith: ['Reglas de Break Even', '¿Cuándo puedo piramidar?'],
+          friday: ['Abrir Academia 10 Módulos'],
+          karen: ['Abrir Diario de Operaciones'],
+          homer: ['Ver mi estadística en R']
+        };
+        qr.innerHTML = (presets[ag] || presets.jarvis).map(function (q) {
+          return '<button type="button" data-quick="' + q + '" class="px-2.5 py-1 rounded-lg bg-[#090d16] border border-slate-700 hover:border-amber-400 text-[11px] text-slate-200">' + q + '</button>';
+        }).join('');
+      }
+
+      function handleQuickChip(q) {
+        if (q.indexOf('Panel Completo') !== -1) { if (!isPanelMode) togglePanelMode(); return; }
+        if (q.indexOf('Gráfico Ultrón') !== -1) { if (!isPanelMode) togglePanelMode(); switchPanelTab('ultron'); return; }
+        if (q.indexOf('semanales 1S') !== -1) { if (!isPanelMode) togglePanelMode(); switchPanelTab('weekly1s'); return; }
+        if (q.indexOf('Academia') !== -1) { if (!isPanelMode) togglePanelMode(); switchPanelTab('friday'); return; }
+        if (q.indexOf('Diario') !== -1) { if (!isPanelMode) togglePanelMode(); switchPanelTab('karen'); return; }
+        if (q.indexOf('noticias explicadas') !== -1) { if (!isPanelMode) togglePanelMode(); switchPanelTab('vision'); setVisionSubTab('NOTICIAS'); return; }
+        const inp = document.getElementById('cockpit-input');
+        if (inp) inp.value = q;
+        processChatText(q);
+      }
+
+      function processChatText(txt) {
+        const low = (txt || '').toLowerCase();
+        if (low.indexOf('swing') !== -1) selectAgent('edith', true);
+        else if (low.indexOf('macro') !== -1 || low.indexOf('dxy') !== -1 || low.indexOf('noticia') !== -1) selectAgent('vision', true);
+        else if (low.indexOf('grafico') !== -1 || low.indexOf('gráfico') !== -1 || low.indexOf('xau') !== -1) {
+          if (low.indexOf('xau') !== -1) selectedSymbol = 'XAUUSD';
+          selectAgent('ultron', true);
         } else {
-          bBar.classList.add('hidden');
+          selectAgent('jarvis', true);
         }
       }
 
-      const grid = document.getElementById('panel-jarvis-grid');
-      if (!grid) return;
-      const list = (appData.assets || []).filter(a => {
-        if (pairSearch && !a.symbol.includes(pairSearch)) return false;
-        if (currentFilter === 'VALID_OB') return a.has_valid_ob;
-        if (currentFilter === 'SWING') return a.swing_potential?.active;
-        if (currentFilter === 'ALIGNED') return a.confluence?.alignment === 'ALIGNED';
-        if (currentFilter === 'NEWS') return a.has_news_today;
-        if (currentFilter === 'BROKEN') return a.confluence?.alignment === 'BROKEN';
-        if (currentFilter === 'AUD') return a.symbol.includes('AUD');
-        if (currentFilter === 'XAU') return a.symbol === 'XAUUSD';
-        return true;
-      });
-
-      grid.innerHTML = list.map(a => {
-        const isBuy = a.setup?.direction === 'BUY';
-        const al = a.confluence?.alignment;
-        const badgeAl = al === 'ALIGNED'
-          ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">✔ VAN JUNTOS</span>'
-          : (al === 'BROKEN'
-            ? '<span class="px-2 py-0.5 rounded bg-red-500/20 text-red-300 text-[10px] font-bold">⛔ SE CONTRADICEN</span>'
-            : '<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">● NEUTRAL</span>');
-        const badgeSw = a.swing_potential?.active
-          ? '<span class="px-2 py-0.5 rounded bg-indigo-500/25 border border-indigo-400/60 text-indigo-200 text-[10px] font-bold">🌊 POTENCIAL SWING</span>'
-          : '';
-        const badgeOb = a.has_valid_ob
-          ? `<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold">💎 ${a.zone_kind.replace('_', '+')}</span>`
-          : '';
-        return `
-          <div class="hud-panel rounded-xl p-3.5 space-y-2.5 border ${a.swing_potential?.active ? 'border-indigo-400/70' : 'border-slate-800'}">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="flex flex-wrap items-center gap-1.5">
-                <strong class="font-hud text-sm text-white">${a.symbol}</strong>
-                <span class="text-xs font-bold text-amber-300">${a.price}</span>
-                ${badgeOb}
-                ${badgeSw}
-              </div>
-              <button type="button" onclick="openChartFor('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#090d16] border border-slate-700 hover:border-amber-400 text-[11px] text-slate-200 font-bold">Gráfico ▸</button>
-            </div>
-            <div class="flex flex-wrap items-center justify-between gap-2 text-[11px]">
-              <span class="font-bold ${isBuy ? 'text-emerald-400' : 'text-red-400'}">${a.setup?.signal_tag}</span>
-              ${badgeAl}
-            </div>
-            <div class="grid grid-cols-4 gap-1.5 text-[10px] bg-[#050811] p-2 rounded-lg border border-slate-800/80">
-              <div><span class="text-slate-400">ENTRADA</span><div class="text-white font-bold">${a.setup?.entry}</div></div>
-              <div><span class="text-slate-400">STOP</span><div class="text-red-400 font-bold">${a.setup?.sl}</div></div>
-              <div><span class="text-slate-400">TP1</span><div class="text-emerald-400 font-bold">${a.setup?.tp1}</div></div>
-              <div><span class="text-slate-400">${a.swing_potential?.active ? 'SWING TP' : 'TP2'}</span><div class="text-indigo-300 font-bold">${a.swing_potential?.active ? a.swing_potential.target : a.setup?.tp2}</div></div>
-            </div>
-            <div class="text-[11px] text-slate-400 flex flex-wrap justify-between gap-1">
-              <span>1D: <strong class="text-slate-200">${a.timeframes?.1d}</strong> · 4H: <strong class="text-slate-200">${a.timeframes?.4h}</strong> · 1H: <strong class="text-slate-200">${a.timeframes?.1h}</strong></span>
-              <span>Confluencia: <strong class="text-amber-300">${a.confluence?.score}%</strong></span>
-            </div>
-          </div>
-        `;
-      }).join('') || '<div class="text-slate-400 text-xs col-span-2 text-center py-6">Ningún activo coincide con el filtro actual.</div>';
-    }
-
-    function renderWeekly1sPanel() {
-      if (!appData) return;
-      const wp = appData.weekly_pivots || [];
-      const badge = document.getElementById('weekly1s-count-badge');
-      const grid = document.getElementById('panel-weekly1s-grid');
-      if (badge) badge.textContent = `${wp.length} NIVELES ACTIVOS`;
-      if (!grid) return;
-      grid.innerHTML = wp.map(p => `
-        <div class="bg-[#050811] border border-cyan-500/40 rounded-xl p-3 space-y-1.5">
-          <div class="flex items-center justify-between">
-            <strong class="font-hud text-sm text-white">${p.symbol}</strong>
-            <span class="px-2 py-0.5 rounded ${p.direction === 'BUY' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300'} font-bold">${p.direction === 'BUY' ? 'COMPRA' : 'VENTA'} 1S (${p.date})</span>
-          </div>
-          <div class="text-slate-300">Entrada 1S: <strong class="text-cyan-300">${p.entry}</strong> · Mecha extrema: <strong class="text-slate-200">${p.extreme}</strong></div>
-          <div class="text-slate-400">Distancia actual: <strong class="text-amber-300">${p.dist_units} ${p.unit_label}</strong> (Precio: ${p.price})</div>
-        </div>
-      `).join('') || '<div class="text-slate-400 col-span-2 text-center py-4">Ningún activo está a &le; 60 pips de un giro semanal limpio pre-2017 hoy.</div>';
-    }
-
-    function renderVisionPanel() {
-      if (!appData) return;
-      const b = appData.brief || {};
-      const hl = document.getElementById('pv-headline');
-      const nar = document.getElementById('pv-narrative');
-      if (hl) hl.textContent = b.headline || 'Radar Macro LATICCE';
-      if (nar) nar.textContent = b.narrative || b.summary || '';
-
-      const wsEl = document.getElementById('pv-wallstreet');
-      if (wsEl) {
-        const ws = appData.wall_street || [];
-        wsEl.innerHTML = ws.map(w => {
-          const pos = safeNum(w.change_pct) >= 0;
-          return `
-            <div class="bg-[#050811] border border-slate-800 rounded-xl p-3">
-              <div class="text-[10px] text-slate-400">${w.name} (${w.symbol})</div>
-              <div class="font-hud font-bold text-sm text-white mt-0.5">${w.price}</div>
-              <div class="text-xs font-bold ${pos ? 'text-emerald-400' : 'text-red-400'}">${pos ? '+' : ''}${w.change_pct}% · ${w.bias}</div>
-            </div>
-          `;
-        }).join('') || '<div class="text-slate-400">Datos de índices actualizándose en el próximo ciclo.</div>';
+      function speakText(t) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(t);
+        u.lang = 'es-ES';
+        window.speechSynthesis.speak(u);
       }
 
-      const vb = document.getElementById('pv-baskets');
-      if (vb) {
-        const baskets = appData.correlated_baskets || [];
-        vb.innerHTML = baskets.map(bk => `
-          <div class="bg-[#050811] border border-indigo-500/40 rounded-xl p-3">
-            <div class="font-bold text-indigo-300">${bk.currency} · ${bk.status}</div>
-            <div class="text-slate-300 mt-1">${bk.pairs.join(' · ')}</div>
-          </div>
-        `).join('') || '<div class="text-slate-400">Sin cestas correlacionadas extremas en este momento.</div>';
-      }
-
-      const qEl = document.getElementById('pv-quadrant');
-      if (qEl) {
-        const raw = appData.currency_strength?.raw || {};
-        const lbls = appData.currency_strength?.labels || {};
-        qEl.innerHTML = Object.keys(lbls).map(ccy => {
-          const st = lbls[ccy];
-          const val = safeNum(raw[ccy]);
-          const cls = st === 'FUERTE' ? 'border-emerald-500/60 text-emerald-300' : (st === 'DEBIL' ? 'border-red-500/60 text-red-300' : 'border-slate-800 text-slate-300');
-          return `
-            <div class="bg-[#050811] border ${cls} rounded-xl p-2.5 text-center">
-              <div class="font-hud font-bold text-sm text-white">${ccy}</div>
-              <div class="font-bold text-[11px] mt-0.5">${st}</div>
-              <div class="text-[10px] text-slate-400">${val >= 0 ? '+' : ''}${val.toFixed(2)}</div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      const banksEl = document.getElementById('pv-banks');
-      if (banksEl) {
-        banksEl.innerHTML = (appData.banks || []).map(bk => {
-          const cls = bk.bias === 'BULLISH' ? 'text-emerald-400' : (bk.bias === 'BEARISH' ? 'text-red-400' : 'text-slate-300');
-          return `
-            <div class="bg-[#050811] border border-slate-800 rounded-xl p-3 space-y-1">
-              <div class="flex items-center justify-between">
-                <strong class="text-white">${bk.bank}</strong>
-                <span class="font-bold ${cls}">${bk.stance}</span>
-              </div>
-              <p class="text-slate-400 text-[11px]">${bk.detail}</p>
-            </div>
-          `;
-        }).join('');
-      }
-
-      const ratesEl = document.getElementById('pv-rates');
-      if (ratesEl) {
-        const dxyC = safeNum(b.dxy_chg);
-        const yC = safeNum(b.us10y_chg);
-        ratesEl.innerHTML = `
-          <div class="bg-[#050811] border border-sky-500/40 rounded-xl p-3.5 space-y-1">
-            <div class="text-[10px] text-sky-400 font-bold">ÍNDICE DEL DÓLAR (DXY)</div>
-            <div class="font-hud text-xl font-black text-white">${b.dxy ?? '--'}</div>
-            <div class="text-xs font-bold ${dxyC >= 0 ? 'text-emerald-400' : 'text-red-400'}">${dxyC >= 0 ? '+' : ''}${dxyC}% (24h)</div>
-          </div>
-          <div class="bg-[#050811] border border-amber-500/40 rounded-xl p-3.5 space-y-1">
-            <div class="text-[10px] text-amber-400 font-bold">BONO TESORO EE.UU. 10 AÑOS (US10Y)</div>
-            <div class="font-hud text-xl font-black text-white">${b.us10y ?? '--'}%</div>
-            <div class="text-xs font-bold ${yC >= 0 ? 'text-emerald-400' : 'text-red-400'}">${yC >= 0 ? '+' : ''}${yC}% (24h)</div>
-          </div>
-        `;
-      }
-
-      const calEl = document.getElementById('pv-calendar');
-      if (calEl) {
-        calEl.innerHTML = (appData.calendar || []).map(ev => `
-          <div class="bg-[#050811] border ${ev.impact === 'ALTO' ? 'border-orange-500/50' : 'border-slate-800'} rounded-lg p-2.5 flex items-center justify-between gap-2">
-            <div>
-              <span class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300 font-bold text-[10px]">${ev.currency}</span>
-              <span class="text-slate-200 ml-1.5">${ev.title}</span>
-            </div>
-            <span class="text-[10px] text-slate-400 shrink-0">${ev.time}</span>
-          </div>
-        `).join('');
-      }
-
-      const newsEl = document.getElementById('pv-news');
-      if (newsEl) {
-        newsEl.innerHTML = (appData.news || []).map(n => `
-          <div class="bg-[#050811] border border-slate-800 rounded-xl p-3 space-y-1.5">
-            <div class="flex flex-wrap items-center justify-between gap-1">
-              <span class="px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 text-[10px] font-bold">${n.category || n.source}</span>
-              <span class="text-[10px] text-amber-300 font-bold">Mueve: ${n.pairs || 'Mercado General'}</span>
-            </div>
-            <a href="${n.link}" target="_blank" rel="noopener" class="block font-bold text-white hover:text-sky-300 leading-snug">${n.title}</a>
-            ${n.plain_es ? `<p class="text-[11px] text-emerald-300/90 bg-emerald-950/30 border border-emerald-500/30 rounded p-2">💡 <strong>En simple:</strong> ${n.plain_es}</p>` : ''}
-          </div>
-        `).join('');
-      }
-    }
-
-    function renderUltronSelector() {
-      const sel = document.getElementById('panel-ultron-selector');
-      if (!sel || !appData) return;
-      sel.innerHTML = (appData.assets || []).map(a => {
-        const on = a.symbol === selectedSymbol;
-        return `<button type="button" onclick="openChartFor('${a.symbol}')" class="px-2 py-1.5 rounded text-[11px] font-bold ${on ? 'bg-red-500 text-white' : 'bg-[#050811] border border-slate-800 text-slate-300'}">${a.symbol}</button>`;
-      }).join('');
-    }
-
-    function setChartTF(tf) {
-      chartTF = tf;
-      document.querySelectorAll('.ctf').forEach(b => {
-        const on = b.dataset.tf === tf;
-        b.className = on ? 'ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold' : 'ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300';
-      });
-      drawUltronChart();
-    }
-
-    function renderUltronMetrics() {
-      if (!appData) return;
-      const a = appData.assets.find(x => x.symbol === selectedSymbol) || appData.assets[0];
-      if (!a) return;
-      selectedSymbol = a.symbol;
-      document.getElementById('pu-sym').textContent = a.symbol;
-      document.getElementById('pu-price').textContent = a.price;
-      document.getElementById('pu-status').textContent = a.setup?.signal_tag || '';
-      document.getElementById('pu-tf-w').textContent = a.timeframes?.1w || '--';
-      document.getElementById('pu-tf-d').textContent = a.timeframes?.1d || '--';
-      document.getElementById('pu-tf-4h').textContent = a.timeframes?.4h || '--';
-      document.getElementById('pu-atr').textContent = a.metrics?.atr_14 ?? '--';
-      document.getElementById('pu-r20').textContent = a.metrics?.range_20d ? `${a.metrics.range_20d.pos_pct}%` : '--';
-      document.getElementById('pu-entry').textContent = a.setup?.entry ?? '--';
-      document.getElementById('pu-sl').textContent = a.setup?.sl ?? '--';
-      document.getElementById('pu-be').textContent = a.setup?.be_trigger ?? '--';
-      document.getElementById('pu-tp1').textContent = a.setup?.tp1 ?? '--';
-      document.getElementById('pu-tp2').textContent = a.swing_potential?.active ? a.swing_potential.target : (a.setup?.tp2 ?? '--');
-      document.getElementById('pu-tp2-lbl').textContent = a.swing_potential?.active ? 'SWING TP (4.2R)' : 'TP2 (1:3)';
-
-      const nb = document.getElementById('pu-news-banner');
-      if (nb) {
-        nb.classList.toggle('hidden', !a.has_news_today);
-        nb.textContent = a.has_news_today ? `⚠️ ALERTA NOTICIA HOY: ${(a.news_today || []).join(' · ')}` : '';
-      }
-      const sb = document.getElementById('pu-swing-banner');
-      if (sb) {
-        sb.classList.toggle('hidden', !a.swing_potential?.active);
-        sb.textContent = a.swing_potential?.active ? `🌊 ${a.swing_potential.note}` : '';
-      }
-    }
-
-    function drawUltronChart() {
-      const canvas = document.getElementById('ultron-canvas');
-      if (!canvas || !appData) return;
-      const a = appData.assets.find(x => x.symbol === selectedSymbol) || appData.assets[0];
-      if (!a) return;
-      const candles = (a.candles && a.candles[chartTF]) || [];
-      const ctx = canvas.getContext('2d');
-      const W = canvas.width = canvas.clientWidth || 640;
-      const H = canvas.height = 360;
-      ctx.fillStyle = '#030509';
-      ctx.fillRect(0, 0, W, H);
-      if (!candles.length) return;
-
-      const levels = [a.setup?.entry, a.setup?.sl, a.setup?.tp1, a.structure?.bsl, a.structure?.ssl].filter(v => typeof v === 'number');
-      let hi = Math.max(...candles.map(c => c.h), ...levels);
-      let lo = Math.min(...candles.map(c => c.l), ...levels);
-      const pad = (hi - lo) * 0.1 || 1;
-      hi += pad; lo -= pad;
-      const padR = 64, padL = 12, padT = 18, padB = 18;
-      const yOf = p => padT + ((hi - p) / (hi - lo)) * (H - padT - padB);
-      const cw = (W - padL - padR) / candles.length;
-
-      if (a.has_valid_ob && a.setup?.zone_top && a.setup?.zone_bottom) {
-        const y1 = yOf(a.setup.zone_top), y2 = yOf(a.setup.zone_bottom);
-        ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.16)' : 'rgba(239,68,68,0.16)';
-        ctx.fillRect(padL, Math.min(y1, y2), W - padL - padR, Math.max(4, Math.abs(y2 - y1)));
-      }
-
-      candles.forEach((c, i) => {
-        const x = padL + i * cw + cw * 0.5;
-        const up = c.c >= c.o;
-        ctx.strokeStyle = up ? '#10b981' : '#ef4444';
-        ctx.fillStyle = up ? '#10b981' : '#ef4444';
-        ctx.beginPath(); ctx.moveTo(x, yOf(c.h)); ctx.lineTo(x, yOf(c.l)); ctx.stroke();
-        const top = yOf(Math.max(c.o, c.c)), bot = yOf(Math.min(c.o, c.c));
-        ctx.fillRect(x - cw * 0.3, top, Math.max(2, cw * 0.6), Math.max(2, bot - top));
-      });
-
-      const drawLine = (val, col, lbl) => {
-        if (typeof val !== 'number') return;
-        const y = yOf(val);
-        ctx.strokeStyle = col; ctx.setLineDash([4, 4]);
-        ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = col; ctx.font = 'bold 9px JetBrains Mono';
-        ctx.fillText(`${lbl} ${val}`, W - padR + 4, y + 3);
-      };
-      drawLine(a.structure?.bsl, '#fb7185', 'BSL');
-      drawLine(a.structure?.ssl, '#2dd4bf', 'SSL');
-      drawLine(a.setup?.entry, '#38bdf8', 'ENT');
-      drawLine(a.setup?.sl, '#ef4444', 'SL');
-      drawLine(a.setup?.tp1, '#34d399', 'TP1');
-    }
-
-    function renderFridayLessons() {
-      const box = document.getElementById('panel-lessons-list');
-      const pct = document.getElementById('panel-course-pct');
-      if (pct) pct.textContent = `${Math.round((completedLessons.length / LESSONS.length) * 100)}% COMPLETADO`;
-      if (!box) return;
-      box.innerHTML = LESSONS.map((l, idx) => {
-        const done = completedLessons.includes(idx);
-        return `
-          <div onclick="toggleLesson(${idx})" class="cursor-pointer bg-[#050811] border ${done ? 'border-purple-400/70' : 'border-slate-800'} rounded-xl p-3 space-y-1">
-            <div class="flex items-center justify-between">
-              <strong class="text-white">${l.t}</strong>
-              <span class="text-xs font-bold ${done ? 'text-emerald-400' : 'text-slate-500'}">${done ? '✔ VISTO' : '○ PENDIENTE'}</span>
-            </div>
-            <p class="text-slate-400 text-[11px]">${l.d}</p>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function toggleLesson(idx) {
-      if (completedLessons.includes(idx)) completedLessons = completedLessons.filter(i => i !== idx);
-      else completedLessons.push(idx);
-      localStorage.setItem('laticce_lessons', JSON.stringify(completedLessons));
-      renderFridayLessons();
-    }
-
-    function getHomerMetrics() {
-      let wins = 0, pnl = 0;
-      trades.forEach(t => {
-        if (t.res === 'WIN') { wins++; pnl += 2.5; }
-        else if (t.res === 'LOSS') { pnl -= 1; }
-      });
-      const rate = trades.length ? Math.round((wins / trades.length) * 100) : 0;
-      return { winRate: rate, pnlR: `${pnl >= 0 ? '+' : ''}${pnl.toFixed(1)}R` };
-    }
-
-    function renderTrades() {
-      const h = getHomerMetrics();
-      const badge = document.getElementById('homer-stats-badge');
-      const list = document.getElementById('journal-list');
-      if (badge) badge.textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
-      if (!list) return;
-      if (!trades.length) {
-        list.innerHTML = '<div class="text-slate-500 text-center py-3">Sin operaciones registradas aún.</div>';
-        return;
-      }
-      list.innerHTML = trades.map((t, i) => `
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between">
-          <div>
-            <strong class="text-white">${t.pair} · ${t.dir}</strong>
-            <span class="${t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-amber-300')} font-bold ml-1">[${t.res}]</span>
-            <span class="text-slate-400"> - ${t.note}</span>
-            ${t.date ? `<span class="text-[10px] text-slate-500 ml-1">(${t.date})</span>` : ''}
-          </div>
-          <button type="button" onclick="deleteTrade(${i})" class="text-red-400 px-2 py-1 font-bold">✕</button>
-        </div>
-      `).join('');
-    }
-
-    function deleteTrade(idx) {
-      trades.splice(idx, 1);
-      saveCloudJournal();
-    }
-
-    function configureCloudToken() {
-      const tk = prompt('Pega tu GitHub Personal Access Token (con permiso repo) para sincronizar journal.json:', ghToken);
-      if (tk !== null) {
-        ghToken = tk.trim();
-        localStorage.setItem('laticce_gh_token', ghToken);
-        updateCloudBadge();
-        if (ghToken) loadCloudJournal(true);
-      }
-    }
-
-    function configureGeminiKey() {
-      const k = prompt('Clave API de Gemini (opcional para análisis IA extra):', geminiKey);
-      if (k !== null) {
-        geminiKey = k.trim();
-        localStorage.setItem('laticce_gemini_key', geminiKey);
-        document.getElementById('ai-toggle-btn').textContent = geminiKey ? '🧠 IA PRO' : '🧠 IA ON';
-      }
-    }
-
-    function updateCloudBadge() {
-      const b = document.getElementById('sync-status-badge');
-      const info = document.getElementById('cloud-token-info');
-      if (b) b.textContent = ghToken ? 'NUBE ACTIVA' : 'LOCAL';
-      if (info) info.textContent = ghToken ? 'Sincronizado con bab9618-hash/ultra' : 'Pulsa VINCULAR NUBE para sincronizar';
-    }
-
-    async function loadCloudJournal(notify) {
-      localStorage.setItem('laticce_trades', JSON.stringify(trades));
-      renderTrades();
-      if (!ghToken) return;
-      try {
-        const res = await fetch(`https://api.github.com/repos/bab9618-hash/ultra/contents/journal.json?ref=principal&t=${Date.now()}`, {
-          headers: { Authorization: `token ${ghToken}` }
-        });
-        if (res.ok) {
-          const d = await res.json();
-          const parsed = decodeBase64Utf8(d.content);
-          if (Array.isArray(parsed)) {
-            trades = parsed;
-            localStorage.setItem('laticce_trades', JSON.stringify(trades));
-            renderTrades();
+      function updateClockAndKillzone() {
+        const now = new Date();
+        const h = now.getUTCHours();
+        const m = String(now.getUTCMinutes()).padStart(2, '0');
+        const s = String(now.getUTCSeconds()).padStart(2, '0');
+        const hh = String(h).padStart(2, '0');
+        const kz = document.getElementById('killzone-badge');
+        const live = document.getElementById('live-feed-badge');
+        if (live) live.textContent = '● LIVE ' + hh + ':' + m + ':' + s + ' UTC';
+        if (kz) {
+          if (h >= 7 && h < 11) {
+            kz.textContent = 'KILLZONE LONDRES · ' + hh + ':' + m + ':' + s + ' UTC';
+            kz.className = 'text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/60 text-emerald-300 font-bold';
+          } else if (h >= 12 && h < 16) {
+            kz.textContent = 'KILLZONE NY · ' + hh + ':' + m + ':' + s + ' UTC';
+            kz.className = 'text-[9px] px-2 py-0.5 rounded bg-amber-500/20 border border-amber-400/60 text-amber-300 font-bold';
+          } else {
+            kz.textContent = 'FUERA KILLZONE · ' + hh + ':' + m + ':' + s + ' UTC';
+            kz.className = 'text-[9px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-bold';
           }
         }
-      } catch (_) {}
-    }
+      }
 
-    async function saveCloudJournal() {
-      localStorage.setItem('laticce_trades', JSON.stringify(trades));
-      renderTrades();
-      if (!ghToken) return;
-      try {
-        let sha = undefined;
-        const getRes = await fetch('https://api.github.com/repos/bab9618-hash/ultra/contents/journal.json?ref=principal', {
-          headers: { Authorization: `token ${ghToken}` }
-        });
-        if (getRes.ok) {
-          const g = await getRes.json();
-          sha = g.sha;
+      function updateTicker() {
+        const el = document.getElementById('live-ticker');
+        if (!el || !appData || !Array.isArray(appData.assets)) return;
+        const items = appData.assets.map(function (a) {
+          const chg = safeNum(a.change_pct, 0);
+          const cls = chg >= 0 ? 'text-emerald-400' : 'text-red-400';
+          const sign = chg >= 0 ? '+' : '';
+          const sw = (a.swing_potential && a.swing_potential.active) ? ' <span class="text-indigo-300 font-bold">🌊SWING</span>' : '';
+          return '<span class="inline-flex items-center gap-1.5">● <strong class="text-white">' + a.symbol + '</strong> <span class="text-amber-300">' + a.price + '</span> <span class="' + cls + '">' + sign + chg.toFixed(2) + '%</span>' + sw + '</span>';
+        }).join('<span class="text-slate-600">|</span>');
+        el.innerHTML = items + '<span class="text-slate-600">|</span>' + items;
+      }
+
+      async function loadData() {
+        const syncLbl = document.getElementById('sync-label');
+        const urls = [
+          './data.json?t=' + Date.now(),
+          'https://raw.githubusercontent.com/bab9618-hash/ultra/principal/data.json?t=' + Date.now()
+        ];
+        for (let i = 0; i < urls.length; i++) {
+          try {
+            const res = await fetch(urls[i], { cache: 'no-store' });
+            if (!res.ok) continue;
+            const json = await res.json();
+            if (json && Array.isArray(json.assets) && json.assets.length > 0) {
+              appData = json;
+              if (syncLbl) syncLbl.textContent = 'ESTRUCTURA: ' + (json.last_updated || 'ACTUALIZADO');
+              renderAll();
+              return;
+            }
+          } catch (err) {}
         }
-        const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(trades, null, 2))));
-        await fetch('https://api.github.com/repos/bab9618-hash/ultra/contents/journal.json', {
-          method: 'PUT',
-          headers: { Authorization: `token ${ghToken}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: 'Actualizar diario Karen', content: contentB64, branch: 'principal', sha })
+        if (syncLbl) syncLbl.textContent = 'Sin conexión a data.json · Reintentando...';
+      }
+
+      async function refreshLivePrices() {
+        if (!appData || !Array.isArray(appData.assets)) return;
+        try {
+          const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+          if (res.ok) {
+            const d = await res.json();
+            const btc = appData.assets.find(function (x) { return x.symbol === 'BTCUSD'; });
+            if (btc && d.price) {
+              btc.price = Number(parseFloat(d.price).toFixed(2));
+              updateTicker();
+            }
+          }
+        } catch (e) {}
+      }
+
+      function renderAll() {
+        if (!appData) return;
+        updateTicker();
+        renderJarvisPanel();
+        renderWeekly1sPanel();
+        renderUltronSelector();
+        renderUltronMetrics();
+        renderFridayLessons();
+        renderVisionPanel();
+
+        const fp = appData.focus_pick && appData.focus_pick.primary;
+        const b = appData.brief || {};
+        const cf = document.getElementById('core-focus-mini');
+        const cm = document.getElementById('core-macro-mini');
+        if (cf) cf.textContent = fp ? ('FOCO #1: ' + fp.symbol + ' (' + fp.dir_label + ' · ' + fp.probability + '%)') : 'FOCO #1: ESCANEANDO ZONAS';
+        if (cm) cm.textContent = 'DXY ' + (b.dxy || '--') + ' · US10Y ' + (b.us10y || '--') + '%';
+        selectAgent(currentAgent, false);
+      }
+
+      function openChartFor(sym) {
+        selectedSymbol = sym;
+        if (!isPanelMode) togglePanelMode();
+        switchPanelTab('ultron');
+        renderUltronSelector();
+        renderUltronMetrics();
+        drawUltronChart();
+      }
+
+      function renderJarvisPanel() {
+        if (!appData) return;
+        const fpCard = document.getElementById('pj-focus-card');
+        const fp = appData.focus_pick && appData.focus_pick.primary;
+        const fp2 = appData.focus_pick && appData.focus_pick.secondary;
+        if (fp && fpCard) {
+          fpCard.classList.remove('hidden');
+          fpCard.innerHTML =
+            '<div class="flex flex-wrap items-center justify-between gap-2">' +
+              '<div class="flex flex-wrap items-center gap-2">' +
+                '<span class="px-2 py-0.5 rounded bg-amber-400 text-black font-bold text-[11px]">🎯 FOCO PRINCIPAL #1 HOY</span>' +
+                '<span class="font-hud font-black text-lg text-white">' + fp.symbol + '</span>' +
+                '<span class="px-2 py-0.5 rounded ' + (fp.direction === 'BUY' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50' : 'bg-red-500/20 text-red-300 border border-red-500/50') + ' text-xs font-bold">' + fp.signal_tag + '</span>' +
+                '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold">' + fp.probability + '% PROBABILIDAD</span>' +
+              '</div>' +
+              '<button type="button" data-chart="' + fp.symbol + '" class="px-3 py-1.5 rounded-lg bg-amber-400 text-black font-bold text-xs">ABRIR GRÁFICO #1 ▸</button>' +
+            '</div>' +
+            '<p class="text-xs text-slate-300">' + fp.reason + ' · A ' + fp.dist_units + ' ' + fp.unit_label + ' de entrada.</p>' +
+            '<div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs pt-1">' +
+              '<div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-sky-400">ENTRADA FIJA</div><div class="font-bold text-white">' + fp.entry + '</div></div>' +
+              '<div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-red-400">STOP ESTRUCTURAL</div><div class="font-bold text-red-400">' + fp.sl + '</div></div>' +
+              '<div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-indigo-300">GATILLO BE (+1R)</div><div class="font-bold text-indigo-300">' + fp.be_trigger + '</div></div>' +
+              '<div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-emerald-400">TP1 PARCIAL</div><div class="font-bold text-emerald-400">' + fp.tp1 + '</div></div>' +
+              '<div class="bg-[#050811] border border-slate-800 rounded p-2"><div class="text-[10px] text-emerald-400">TP2 (1:3)</div><div class="font-bold text-emerald-400">' + fp.tp2 + '</div></div>' +
+            '</div>' +
+            (fp2 ? '<div class="text-[11px] text-amber-200/90 pt-1">💡 Plan B (divisa independiente): <strong>' + fp2.symbol + '</strong> (' + fp2.dir_label + ' · ' + fp2.probability + '% prob · Entrada ' + fp2.entry + ')</div>' : '');
+        }
+
+        const bBar = document.getElementById('pj-baskets-bar');
+        const baskets = appData.correlated_baskets || [];
+        if (bBar) {
+          if (baskets.length) {
+            bBar.classList.remove('hidden');
+            bBar.innerHTML = '<div class="font-bold text-indigo-300">🔗 CESTAS MACROECONÓMICAS ACTIVAS (Elija solo el Foco #1 para no duplicar riesgo):</div>' +
+              baskets.map(function (bk) { return '<div class="text-slate-300">• <strong class="text-white">' + bk.currency + ' ' + bk.status + ':</strong> ' + bk.pairs.join(' | ') + '</div>'; }).join('');
+          } else {
+            bBar.classList.add('hidden');
+          }
+        }
+
+        const grid = document.getElementById('panel-jarvis-grid');
+        if (!grid) return;
+        const list = (appData.assets || []).filter(function (a) {
+          if (pairSearch && a.symbol.indexOf(pairSearch) === -1) return false;
+          if (currentFilter === 'VALID_OB') return a.has_valid_ob;
+          if (currentFilter === 'SWING') return a.swing_potential && a.swing_potential.active;
+          if (currentFilter === 'ALIGNED') return a.confluence && a.confluence.alignment === 'ALIGNED';
+          if (currentFilter === 'NEWS') return a.has_news_today;
+          if (currentFilter === 'BROKEN') return a.confluence && a.confluence.alignment === 'BROKEN';
+          if (currentFilter === 'AUD') return a.symbol.indexOf('AUD') !== -1;
+          if (currentFilter === 'XAU') return a.symbol === 'XAUUSD';
+          return true;
         });
-      } catch (_) {}
-    }
 
-    document.getElementById('journal-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
-      trades.unshift({
-        pair: document.getElementById('j-pair').value,
-        dir: document.getElementById('j-dir').value,
-        res: document.getElementById('j-res').value,
-        note: document.getElementById('j-note').value,
-        date: nowStr
+        grid.innerHTML = list.map(function (a) {
+          const isBuy = a.setup && a.setup.direction === 'BUY';
+          const al = a.confluence && a.confluence.alignment;
+          const badgeAl = al === 'ALIGNED'
+            ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">✔ VAN JUNTOS</span>'
+            : (al === 'BROKEN'
+              ? '<span class="px-2 py-0.5 rounded bg-red-500/20 text-red-300 text-[10px] font-bold">⛔ SE CONTRADICEN</span>'
+              : '<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">● NEUTRAL</span>');
+          const badgeSw = (a.swing_potential && a.swing_potential.active)
+            ? '<span class="px-2 py-0.5 rounded bg-indigo-500/25 border border-indigo-400/60 text-indigo-200 text-[10px] font-bold">🌊 POTENCIAL SWING</span>'
+            : '';
+          const badgeOb = a.has_valid_ob
+            ? '<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold">💎 ' + a.zone_kind.replace('_', '+') + '</span>'
+            : '';
+          return '<div class="hud-panel rounded-xl p-3.5 space-y-2.5 border ' + ((a.swing_potential && a.swing_potential.active) ? 'border-indigo-400/70' : 'border-slate-800') + '">' +
+            '<div class="flex flex-wrap items-center justify-between gap-2">' +
+              '<div class="flex flex-wrap items-center gap-1.5">' +
+                '<strong class="font-hud text-sm text-white">' + a.symbol + '</strong>' +
+                '<span class="text-xs font-bold text-amber-300">' + a.price + '</span>' +
+                badgeOb + badgeSw +
+              '</div>' +
+              '<button type="button" data-chart="' + a.symbol + '" class="px-2.5 py-1 rounded bg-[#090d16] border border-slate-700 hover:border-amber-400 text-[11px] text-slate-200 font-bold">Gráfico ▸</button>' +
+            '</div>' +
+            '<div class="flex flex-wrap items-center justify-between gap-2 text-[11px]">' +
+              '<span class="font-bold ' + (isBuy ? 'text-emerald-400' : 'text-red-400') + '">' + (a.setup && a.setup.signal_tag) + '</span>' +
+              badgeAl +
+            '</div>' +
+            '<div class="grid grid-cols-4 gap-1.5 text-[10px] bg-[#050811] p-2 rounded-lg border border-slate-800/80">' +
+              '<div><span class="text-slate-400">ENTRADA</span><div class="text-white font-bold">' + (a.setup && a.setup.entry) + '</div></div>' +
+              '<div><span class="text-slate-400">STOP</span><div class="text-red-400 font-bold">' + (a.setup && a.setup.sl) + '</div></div>' +
+              '<div><span class="text-slate-400">TP1</span><div class="text-emerald-400 font-bold">' + (a.setup && a.setup.tp1) + '</div></div>' +
+              '<div><span class="text-slate-400">' + ((a.swing_potential && a.swing_potential.active) ? 'SWING TP' : 'TP2') + '</span><div class="text-indigo-300 font-bold">' + ((a.swing_potential && a.swing_potential.active) ? a.swing_potential.target : (a.setup && a.setup.tp2)) + '</div></div>' +
+            '</div>' +
+            '<div class="text-[11px] text-slate-400 flex flex-wrap justify-between gap-1">' +
+              '<span>1D: <strong class="text-slate-200">' + (a.timeframes && a.timeframes['1d']) + '</strong> · 4H: <strong class="text-slate-200">' + (a.timeframes && a.timeframes['4h']) + '</strong> · 1H: <strong class="text-slate-200">' + (a.timeframes && a.timeframes['1h']) + '</strong></span>' +
+              '<span>Confluencia: <strong class="text-amber-300">' + (a.confluence && a.confluence.score) + '%</strong></span>' +
+            '</div>' +
+          '</div>';
+        }).join('') || '<div class="text-slate-400 text-xs col-span-2 text-center py-6">Ningún activo coincide con el filtro actual.</div>';
+      }
+
+      function renderWeekly1sPanel() {
+        if (!appData) return;
+        const wp = appData.weekly_pivots || [];
+        const badge = document.getElementById('weekly1s-count-badge');
+        const grid = document.getElementById('panel-weekly1s-grid');
+        if (badge) badge.textContent = wp.length + ' NIVELES ACTIVOS';
+        if (!grid) return;
+        grid.innerHTML = wp.map(function (p) {
+          return '<div class="bg-[#050811] border border-cyan-500/40 rounded-xl p-3 space-y-1.5">' +
+            '<div class="flex items-center justify-between">' +
+              '<strong class="font-hud text-sm text-white">' + p.symbol + '</strong>' +
+              '<span class="px-2 py-0.5 rounded ' + (p.direction === 'BUY' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300') + ' font-bold">' + (p.direction === 'BUY' ? 'COMPRA' : 'VENTA') + ' 1S (' + p.date + ')</span>' +
+            '</div>' +
+            '<div class="text-slate-300">Entrada 1S: <strong class="text-cyan-300">' + p.entry + '</strong> · Mecha extrema: <strong class="text-slate-200">' + p.extreme + '</strong></div>' +
+            '<div class="text-slate-400">Distancia actual: <strong class="text-amber-300">' + p.dist_units + ' ' + p.unit_label + '</strong> (Precio: ' + p.price + ')</div>' +
+          '</div>';
+        }).join('') || '<div class="text-slate-400 col-span-2 text-center py-4">Ningún activo está a &le; 60 pips de un giro semanal limpio pre-2017 hoy.</div>';
+      }
+
+      function renderVisionPanel() {
+        if (!appData) return;
+        const b = appData.brief || {};
+        const hl = document.getElementById('pv-headline');
+        const nar = document.getElementById('pv-narrative');
+        if (hl) hl.textContent = b.headline || 'Radar Macro LATICCE';
+        if (nar) nar.textContent = b.narrative || b.summary || '';
+
+        const wsEl = document.getElementById('pv-wallstreet');
+        if (wsEl) {
+          const ws = appData.wall_street || [];
+          wsEl.innerHTML = ws.map(function (w) {
+            const pos = safeNum(w.change_pct, 0) >= 0;
+            return '<div class="bg-[#050811] border border-slate-800 rounded-xl p-3">' +
+              '<div class="text-[10px] text-slate-400">' + w.name + ' (' + w.symbol + ')</div>' +
+              '<div class="font-hud font-bold text-sm text-white mt-0.5">' + w.price + '</div>' +
+              '<div class="text-xs font-bold ' + (pos ? 'text-emerald-400' : 'text-red-400') + '">' + (pos ? '+' : '') + w.change_pct + '% · ' + w.bias + '</div>' +
+            '</div>';
+          }).join('') || '<div class="text-slate-400">Datos de índices actualizándose en el próximo ciclo.</div>';
+        }
+
+        const vb = document.getElementById('pv-baskets');
+        if (vb) {
+          const baskets = appData.correlated_baskets || [];
+          vb.innerHTML = baskets.map(function (bk) {
+            return '<div class="bg-[#050811] border border-indigo-500/40 rounded-xl p-3">' +
+              '<div class="font-bold text-indigo-300">' + bk.currency + ' · ' + bk.status + '</div>' +
+              '<div class="text-slate-300 mt-1">' + bk.pairs.join(' · ') + '</div>' +
+            '</div>';
+          }).join('') || '<div class="text-slate-400">Sin cestas correlacionadas extremas en este momento.</div>';
+        }
+
+        const qEl = document.getElementById('pv-quadrant');
+        if (qEl) {
+          const raw = (appData.currency_strength && appData.currency_strength.raw) || {};
+          const lbls = (appData.currency_strength && appData.currency_strength.labels) || {};
+          qEl.innerHTML = Object.keys(lbls).map(function (ccy) {
+            const st = lbls[ccy];
+            const val = safeNum(raw[ccy], 0);
+            const cls = st === 'FUERTE' ? 'border-emerald-500/60 text-emerald-300' : (st === 'DEBIL' ? 'border-red-500/60 text-red-300' : 'border-slate-800 text-slate-300');
+            return '<div class="bg-[#050811] border ' + cls + ' rounded-xl p-2.5 text-center">' +
+              '<div class="font-hud font-bold text-sm text-white">' + ccy + '</div>' +
+              '<div class="font-bold text-[11px] mt-0.5">' + st + '</div>' +
+              '<div class="text-[10px] text-slate-400">' + (val >= 0 ? '+' : '') + val.toFixed(2) + '</div>' +
+            '</div>';
+          }).join('');
+        }
+
+        const banksEl = document.getElementById('pv-banks');
+        if (banksEl) {
+          banksEl.innerHTML = (appData.banks || []).map(function (bk) {
+            const cls = bk.bias === 'BULLISH' ? 'text-emerald-400' : (bk.bias === 'BEARISH' ? 'text-red-400' : 'text-slate-300');
+            return '<div class="bg-[#050811] border border-slate-800 rounded-xl p-3 space-y-1">' +
+              '<div class="flex items-center justify-between">' +
+                '<strong class="text-white">' + bk.bank + '</strong>' +
+                '<span class="font-bold ' + cls + '">' + bk.stance + '</span>' +
+              '</div>' +
+              '<p class="text-slate-400 text-[11px]">' + bk.detail + '</p>' +
+            '</div>';
+          }).join('');
+        }
+
+        const ratesEl = document.getElementById('pv-rates');
+        if (ratesEl) {
+          const dxyC = safeNum(b.dxy_chg, 0);
+          const yC = safeNum(b.us10y_chg, 0);
+          ratesEl.innerHTML =
+            '<div class="bg-[#050811] border border-sky-500/40 rounded-xl p-3.5 space-y-1">' +
+              '<div class="text-[10px] text-sky-400 font-bold">ÍNDICE DEL DÓLAR (DXY)</div>' +
+              '<div class="font-hud text-xl font-black text-white">' + (b.dxy || '--') + '</div>' +
+              '<div class="text-xs font-bold ' + (dxyC >= 0 ? 'text-emerald-400' : 'text-red-400') + '">' + (dxyC >= 0 ? '+' : '') + dxyC + '% (24h)</div>' +
+            '</div>' +
+            '<div class="bg-[#050811] border border-amber-500/40 rounded-xl p-3.5 space-y-1">' +
+              '<div class="text-[10px] text-amber-400 font-bold">BONO TESORO EE.UU. 10 AÑOS (US10Y)</div>' +
+              '<div class="font-hud text-xl font-black text-white">' + (b.us10y || '--') + '%</div>' +
+              '<div class="text-xs font-bold ' + (yC >= 0 ? 'text-emerald-400' : 'text-red-400') + '">' + (yC >= 0 ? '+' : '') + yC + '% (24h)</div>' +
+            '</div>';
+        }
+
+        const calEl = document.getElementById('pv-calendar');
+        if (calEl) {
+          calEl.innerHTML = (appData.calendar || []).map(function (ev) {
+            return '<div class="bg-[#050811] border ' + (ev.impact === 'ALTO' ? 'border-orange-500/50' : 'border-slate-800') + ' rounded-lg p-2.5 flex items-center justify-between gap-2">' +
+              '<div>' +
+                '<span class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300 font-bold text-[10px]">' + ev.currency + '</span>' +
+                '<span class="text-slate-200 ml-1.5">' + ev.title + '</span>' +
+              '</div>' +
+              '<span class="text-[10px] text-slate-400 shrink-0">' + ev.time + '</span>' +
+            '</div>';
+          }).join('');
+        }
+
+        const newsEl = document.getElementById('pv-news');
+        if (newsEl) {
+          newsEl.innerHTML = (appData.news || []).map(function (n) {
+            return '<div class="bg-[#050811] border border-slate-800 rounded-xl p-3 space-y-1.5">' +
+              '<div class="flex flex-wrap items-center justify-between gap-1">' +
+                '<span class="px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 text-[10px] font-bold">' + (n.category || n.source) + '</span>' +
+                '<span class="text-[10px] text-amber-300 font-bold">Mueve: ' + (n.pairs || 'Mercado General') + '</span>' +
+              '</div>' +
+              '<a href="' + n.link + '" target="_blank" rel="noopener" class="block font-bold text-white hover:text-sky-300 leading-snug">' + n.title + '</a>' +
+              (n.plain_es ? '<p class="text-[11px] text-emerald-300/90 bg-emerald-950/30 border border-emerald-500/30 rounded p-2">💡 <strong>En simple:</strong> ' + n.plain_es + '</p>' : '') +
+            '</div>';
+          }).join('');
+        }
+      }
+
+      function renderUltronSelector() {
+        const sel = document.getElementById('panel-ultron-selector');
+        if (!sel || !appData) return;
+        sel.innerHTML = (appData.assets || []).map(function (a) {
+          const on = a.symbol === selectedSymbol;
+          return '<button type="button" data-chart="' + a.symbol + '" class="px-2 py-1.5 rounded text-[11px] font-bold ' + (on ? 'bg-red-500 text-white' : 'bg-[#050811] border border-slate-800 text-slate-300') + '">' + a.symbol + '</button>';
+        }).join('');
+      }
+
+      function renderUltronMetrics() {
+        if (!appData) return;
+        const a = appData.assets.find(function (x) { return x.symbol === selectedSymbol; }) || appData.assets[0];
+        if (!a) return;
+        selectedSymbol = a.symbol;
+        document.getElementById('pu-sym').textContent = a.symbol;
+        document.getElementById('pu-price').textContent = a.price;
+        document.getElementById('pu-status').textContent = (a.setup && a.setup.signal_tag) || '';
+        document.getElementById('pu-tf-w').textContent = (a.timeframes && a.timeframes['1w']) || '--';
+        document.getElementById('pu-tf-d').textContent = (a.timeframes && a.timeframes['1d']) || '--';
+        document.getElementById('pu-tf-4h').textContent = (a.timeframes && a.timeframes['4h']) || '--';
+        document.getElementById('pu-atr').textContent = (a.metrics && a.metrics.atr_14) || '--';
+        document.getElementById('pu-r20').textContent = (a.metrics && a.metrics.range_20d) ? (a.metrics.range_20d.pos_pct + '%') : '--';
+        document.getElementById('pu-entry').textContent = (a.setup && a.setup.entry) || '--';
+        document.getElementById('pu-sl').textContent = (a.setup && a.setup.sl) || '--';
+        document.getElementById('pu-be').textContent = (a.setup && a.setup.be_trigger) || '--';
+        document.getElementById('pu-tp1').textContent = (a.setup && a.setup.tp1) || '--';
+        document.getElementById('pu-tp2').textContent = (a.swing_potential && a.swing_potential.active) ? a.swing_potential.target : ((a.setup && a.setup.tp2) || '--');
+        document.getElementById('pu-tp2-lbl').textContent = (a.swing_potential && a.swing_potential.active) ? 'SWING TP (4.2R)' : 'TP2 (1:3)';
+
+        const nb = document.getElementById('pu-news-banner');
+        if (nb) {
+          nb.classList.toggle('hidden', !a.has_news_today);
+          nb.textContent = a.has_news_today ? ('⚠️ ALERTA NOTICIA HOY: ' + (a.news_today || []).join(' · ')) : '';
+        }
+        const sb = document.getElementById('pu-swing-banner');
+        if (sb) {
+          sb.classList.toggle('hidden', !(a.swing_potential && a.swing_potential.active));
+          sb.textContent = (a.swing_potential && a.swing_potential.active) ? ('🌊 ' + a.swing_potential.note) : '';
+        }
+      }
+
+      function drawUltronChart() {
+        const canvas = document.getElementById('ultron-canvas');
+        if (!canvas || !appData) return;
+        const a = appData.assets.find(function (x) { return x.symbol === selectedSymbol; }) || appData.assets[0];
+        if (!a) return;
+        const candles = (a.candles && a.candles[chartTF]) || [];
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width = canvas.clientWidth || 640;
+        const H = canvas.height = 360;
+        ctx.fillStyle = '#030509';
+        ctx.fillRect(0, 0, W, H);
+        if (!candles.length) return;
+
+        const levels = [a.setup && a.setup.entry, a.setup && a.setup.sl, a.setup && a.setup.tp1, a.structure && a.structure.bsl, a.structure && a.structure.ssl].filter(function (v) { return typeof v === 'number'; });
+        let hi = Math.max.apply(null, candles.map(function (c) { return c.h; }).concat(levels));
+        let lo = Math.min.apply(null, candles.map(function (c) { return c.l; }).concat(levels));
+        const pad = (hi - lo) * 0.1 || 1;
+        hi += pad; lo -= pad;
+        const padR = 64, padL = 12, padT = 18, padB = 18;
+        const yOf = function (p) { return padT + ((hi - p) / (hi - lo)) * (H - padT - padB); };
+        const cw = (W - padL - padR) / candles.length;
+
+        if (a.has_valid_ob && a.setup && a.setup.zone_top && a.setup.zone_bottom) {
+          const y1 = yOf(a.setup.zone_top), y2 = yOf(a.setup.zone_bottom);
+          ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.16)' : 'rgba(239,68,68,0.16)';
+          ctx.fillRect(padL, Math.min(y1, y2), W - padL - padR, Math.max(4, Math.abs(y2 - y1)));
+        }
+
+        candles.forEach(function (c, i) {
+          const x = padL + i * cw + cw * 0.5;
+          const up = c.c >= c.o;
+          ctx.strokeStyle = up ? '#10b981' : '#ef4444';
+          ctx.fillStyle = up ? '#10b981' : '#ef4444';
+          ctx.beginPath(); ctx.moveTo(x, yOf(c.h)); ctx.lineTo(x, yOf(c.l)); ctx.stroke();
+          const top = yOf(Math.max(c.o, c.c)), bot = yOf(Math.min(c.o, c.c));
+          ctx.fillRect(x - cw * 0.3, top, Math.max(2, cw * 0.6), Math.max(2, bot - top));
+        });
+
+        const drawLine = function (val, col, lbl) {
+          if (typeof val !== 'number') return;
+          const y = yOf(val);
+          ctx.strokeStyle = col; ctx.setLineDash([4, 4]);
+          ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = col; ctx.font = 'bold 9px JetBrains Mono';
+          ctx.fillText(lbl + ' ' + val, W - padR + 4, y + 3);
+        };
+        drawLine(a.structure && a.structure.bsl, '#fb7185', 'BSL');
+        drawLine(a.structure && a.structure.ssl, '#2dd4bf', 'SSL');
+        drawLine(a.setup && a.setup.entry, '#38bdf8', 'ENT');
+        drawLine(a.setup && a.setup.sl, '#ef4444', 'SL');
+        drawLine(a.setup && a.setup.tp1, '#34d399', 'TP1');
+      }
+
+      function renderFridayLessons() {
+        const box = document.getElementById('panel-lessons-list');
+        const pct = document.getElementById('panel-course-pct');
+        if (pct) pct.textContent = Math.round((completedLessons.length / LESSONS.length) * 100) + '% COMPLETADO';
+        if (!box) return;
+        box.innerHTML = LESSONS.map(function (l, idx) {
+          const done = completedLessons.indexOf(idx) !== -1;
+          return '<div data-lesson="' + idx + '" class="cursor-pointer bg-[#050811] border ' + (done ? 'border-purple-400/70' : 'border-slate-800') + ' rounded-xl p-3 space-y-1">' +
+            '<div class="flex items-center justify-between">' +
+              '<strong class="text-white">' + l.t + '</strong>' +
+              '<span class="text-xs font-bold ' + (done ? 'text-emerald-400' : 'text-slate-500') + '">' + (done ? '✔ VISTO' : '○ PENDIENTE') + '</span>' +
+            '</div>' +
+            '<p class="text-slate-400 text-[11px]">' + l.d + '</p>' +
+          '</div>';
+        }).join('');
+      }
+
+      function getHomerMetrics() {
+        let wins = 0, pnl = 0;
+        trades.forEach(function (t) {
+          if (t.res === 'WIN') { wins++; pnl += 2.5; }
+          else if (t.res === 'LOSS') { pnl -= 1; }
+        });
+        const rate = trades.length ? Math.round((wins / trades.length) * 100) : 0;
+        return { winRate: rate, pnlR: (pnl >= 0 ? '+' : '') + pnl.toFixed(1) + 'R' };
+      }
+
+      function renderTrades() {
+        const h = getHomerMetrics();
+        const badge = document.getElementById('homer-stats-badge');
+        const list = document.getElementById('journal-list');
+        if (badge) badge.textContent = 'ACIERTO: ' + h.winRate + '% (' + h.pnlR + ')';
+        if (!list) return;
+        if (!trades.length) {
+          list.innerHTML = '<div class="text-slate-500 text-center py-3">Sin operaciones registradas aún.</div>';
+          return;
+        }
+        list.innerHTML = trades.map(function (t, i) {
+          return '<div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex items-center justify-between">' +
+            '<div>' +
+              '<strong class="text-white">' + t.pair + ' · ' + t.dir + '</strong>' +
+              '<span class="' + (t.res === 'WIN' ? 'text-emerald-400' : (t.res === 'LOSS' ? 'text-red-400' : 'text-amber-300')) + ' font-bold ml-1">[' + t.res + ']</span>' +
+              '<span class="text-slate-400"> - ' + t.note + '</span>' +
+              (t.date ? '<span class="text-[10px] text-slate-500 ml-1">(' + t.date + ')</span>' : '') +
+            '</div>' +
+            '<button type="button" data-del-trade="' + i + '" class="text-red-400 px-2 py-1 font-bold">✕</button>' +
+          '</div>';
+        }).join('');
+      }
+
+      function updateCloudBadge() {
+        const b = document.getElementById('sync-status-badge');
+        const info = document.getElementById('cloud-token-info');
+        if (b) b.textContent = ghToken ? 'NUBE ACTIVA' : 'LOCAL';
+        if (info) info.textContent = ghToken ? 'Sincronizado con bab9618-hash/ultra' : 'Pulsa VINCULAR NUBE para sincronizar';
+      }
+
+      async function loadCloudJournal() {
+        try { localStorage.setItem('laticce_trades', JSON.stringify(trades)); } catch (e) {}
+        renderTrades();
+        if (!ghToken) return;
+        try {
+          const res = await fetch('https://api.github.com/repos/bab9618-hash/ultra/contents/journal.json?ref=principal&t=' + Date.now(), {
+            headers: { Authorization: 'token ' + ghToken }
+          });
+          if (res.ok) {
+            const d = await res.json();
+            const parsed = decodeBase64Utf8(d.content);
+            if (Array.isArray(parsed)) {
+              trades = parsed;
+              localStorage.setItem('laticce_trades', JSON.stringify(trades));
+              renderTrades();
+            }
+          }
+        } catch (e) {}
+      }
+
+      async function saveCloudJournal() {
+        try { localStorage.setItem('laticce_trades', JSON.stringify(trades)); } catch (e) {}
+        renderTrades();
+        if (!ghToken) return;
+        try {
+          let sha = undefined;
+          const getRes = await fetch('https://api.github.com/repos/bab9618-hash/ultra/contents/journal.json?ref=principal', {
+            headers: { Authorization: 'token ' + ghToken }
+          });
+          if (getRes.ok) {
+            const g = await getRes.json();
+            sha = g.sha;
+          }
+          const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(trades, null, 2))));
+          await fetch('https://api.github.com/repos/bab9618-hash/ultra/contents/journal.json', {
+            method: 'PUT',
+            headers: { Authorization: 'token ' + ghToken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Actualizar diario Karen', content: contentB64, branch: 'principal', sha: sha })
+          });
+        } catch (e) {}
+      }
+
+      // DELEGACIÓN GLOBAL DE CLICS (GARANTIZA RESPUESTA EN TODOS LOS BOTONES)
+      document.addEventListener('click', function (ev) {
+        const el = ev.target.closest('button, [data-lesson]');
+        if (!el) return;
+
+        const action = el.getAttribute('data-action');
+        if (action === 'enter-boot') { hideBootScreen(); if (!appData) loadData(); return; }
+        if (action === 'toggle-panel') { hideBootScreen(); togglePanelMode(); return; }
+        if (action === 'open-module') { hideBootScreen(); if (!isPanelMode) togglePanelMode(); switchPanelTab((AGENTS[currentAgent] && AGENTS[currentAgent].tab) || 'jarvis'); return; }
+        if (action === 'toggle-voice') { voiceOn = !voiceOn; el.textContent = voiceOn ? 'VOZ ON' : 'VOZ OFF'; if (!voiceOn && 'speechSynthesis' in window) window.speechSynthesis.cancel(); return; }
+        if (action === 'toggle-bell') { bellOn = !bellOn; el.textContent = bellOn ? '🔔 TIMBRE' : '🔕 MUDO'; return; }
+        if (action === 'stop-voice') { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); return; }
+        if (action === 'start-mic') {
+          const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!SR) return;
+          const rec = new SR();
+          rec.lang = 'es-ES';
+          rec.onresult = function (r) { const t = r.results[0][0].transcript; document.getElementById('cockpit-input').value = t; processChatText(t); };
+          rec.start();
+          return;
+        }
+        if (action === 'config-gemini') {
+          const k = prompt('Clave API de Gemini (opcional para análisis IA extra):', geminiKey);
+          if (k !== null) { geminiKey = k.trim(); localStorage.setItem('laticce_gemini_key', geminiKey); el.textContent = geminiKey ? '🧠 IA PRO' : '🧠 IA ON'; }
+          return;
+        }
+        if (action === 'config-cloud') {
+          const tk = prompt('Pega tu GitHub Personal Access Token (permiso repo):', ghToken);
+          if (tk !== null) { ghToken = tk.trim(); localStorage.setItem('laticce_gh_token', ghToken); updateCloudBadge(); if (ghToken) loadCloudJournal(); }
+          return;
+        }
+        if (action === 'sync-cloud') { loadCloudJournal(); return; }
+        if (action === 'clear-search') { pairSearch = ''; document.getElementById('pair-search-input').value = ''; el.classList.add('hidden'); renderJarvisPanel(); return; }
+
+        const ag = el.getAttribute('data-ag');
+        if (ag) { hideBootScreen(); selectAgent(ag, true); return; }
+
+        const tab = el.getAttribute('data-tab');
+        if (tab) { switchPanelTab(tab); return; }
+
+        const vtab = el.getAttribute('data-vtab');
+        if (vtab) { setVisionSubTab(vtab); return; }
+
+        const pf = el.getAttribute('data-pf');
+        if (pf) {
+          currentFilter = pf;
+          document.querySelectorAll('.pf-btn').forEach(function (b) {
+            const on = b.getAttribute('data-pf') === pf;
+            b.className = on ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold' : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+          });
+          renderJarvisPanel();
+          return;
+        }
+
+        const chartSym = el.getAttribute('data-chart');
+        if (chartSym) { openChartFor(chartSym); return; }
+
+        const tf = el.getAttribute('data-tf');
+        if (tf) {
+          chartTF = tf;
+          document.querySelectorAll('.ctf').forEach(function (b) {
+            const on = b.getAttribute('data-tf') === tf;
+            b.className = on ? 'ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold' : 'ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300';
+          });
+          drawUltronChart();
+          return;
+        }
+
+        const quick = el.getAttribute('data-quick');
+        if (quick) { handleQuickChip(quick); return; }
+
+        const lessonIdx = el.getAttribute('data-lesson');
+        if (lessonIdx !== null) {
+          const idx = Number(lessonIdx);
+          if (completedLessons.indexOf(idx) !== -1) completedLessons = completedLessons.filter(function (i) { return i !== idx; });
+          else completedLessons.push(idx);
+          localStorage.setItem('laticce_lessons', JSON.stringify(completedLessons));
+          renderFridayLessons();
+          return;
+        }
+
+        const delIdx = el.getAttribute('data-del-trade');
+        if (delIdx !== null) {
+          trades.splice(Number(delIdx), 1);
+          saveCloudJournal();
+        }
       });
-      e.target.reset();
-      saveCloudJournal();
-    });
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js?v=10.3').catch(() => {});
-    }
+      const searchInp = document.getElementById('pair-search-input');
+      if (searchInp) {
+        searchInp.addEventListener('input', function () {
+          pairSearch = (this.value || '').trim().toUpperCase();
+          const clr = document.getElementById('pair-search-clear');
+          if (clr) clr.classList.toggle('hidden', !pairSearch);
+          renderJarvisPanel();
+        });
+      }
 
-    selectAgent('jarvis', false);
-    renderTrades();
-    updateCloudBadge();
-    updateClockAndKillzone();
-    setInterval(updateClockAndKillzone, 1000);
-    loadCloudJournal(false);
-    loadData();
-    setInterval(refreshLivePrices, 5000);
-    setInterval(() => loadCloudJournal(false), 15000);
-    setInterval(loadData, 120000);
+      const cockpitForm = document.getElementById('cockpit-form');
+      if (cockpitForm) {
+        cockpitForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const inp = document.getElementById('cockpit-input');
+          const txt = (inp && inp.value || '').trim();
+          if (!txt) return;
+          inp.value = '';
+          processChatText(txt);
+        });
+      }
+
+      const journalForm = document.getElementById('journal-form');
+      if (journalForm) {
+        journalForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+          trades.unshift({
+            pair: document.getElementById('j-pair').value,
+            dir: document.getElementById('j-dir').value,
+            res: document.getElementById('j-res').value,
+            note: document.getElementById('j-note').value,
+            date: nowStr
+          });
+          e.target.reset();
+          saveCloudJournal();
+        });
+      }
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js?v=10.4').catch(function () {});
+      }
+
+      selectAgent('jarvis', false);
+      renderTrades();
+      updateCloudBadge();
+      updateClockAndKillzone();
+      setInterval(updateClockAndKillzone, 1000);
+      loadCloudJournal();
+      loadData();
+      setInterval(refreshLivePrices, 5000);
+      setInterval(loadCloudJournal, 15000);
+      setInterval(loadData, 120000);
+    })();
   </script>
 </body>
 </html>
