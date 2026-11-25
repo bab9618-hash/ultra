@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Red Neuronal v11.5</title>
+  <title>LATICCE · Red Neuronal v11.6</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -79,7 +79,7 @@
   <div id="boot-screen" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2.5rem 1.25rem;text-align:center;">
     <canvas id="boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
-    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.5</div>
+    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.6</div>
 
     <div class="relative z-10 w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 320 320" class="w-full h-full overflow-visible">
@@ -339,7 +339,7 @@
       </div>
     </section>
 
-    <!-- SUBPANEL F.R.I.D.A.Y. (16 MÓDULOS + AULA CON EXAMEN) -->
+    <!-- SUBPANEL F.R.I.D.A.Y. -->
     <section id="ptab-friday" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
         <div>
@@ -561,7 +561,6 @@
     let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
     let agentHistories = { jarvis: [], vision: [], ultron: [], friday: [], edith: [], karen: [], homer: [] };
 
-    // TEMARIO COMPLETO DE F.R.I.D.A.Y. (16 MÓDULOS + EXÁMENES DE 3 PREGUNTAS CADA UNO)
     const FRIDAY_CURRICULUM = [
       {
         id: 1, cat: 'TECH', title: '1. Estructura Institucional (BOS y CHoCH)',
@@ -767,7 +766,6 @@
       renderPanelCourse();
     }
 
-    // AULA MODAL + EXAMEN INTERACTIVO DE F.R.I.D.A.Y.
     function openFridayClassroom(id, startInExam = false) {
       const les = FRIDAY_CURRICULUM.find(x => x.id === id);
       if (!les) return;
@@ -1286,6 +1284,62 @@
       return `${macro}\n${focus}\n${jText}\nACTIVOS:\n${rows}`;
     }
 
+    // MOTOR ANALÍTICO LOCAL CON PERSONALIDAD (RESPALDO AUTOMÁTICO SI LA API DE GEMINI ESTÁ EN LÍMITE DE CUOTA)
+    function buildLocalCharacterReply(qRaw, agentKey) {
+      const qUp = qRaw.toUpperCase();
+      if (!data || !data.assets || !data.assets.length) {
+        return 'Sincronizando telemetría de mercado en este momento. Inténtelo de nuevo en unos segundos.';
+      }
+      let asset = data.assets.find(a => qUp.includes(a.symbol));
+      if (!asset && (qUp.includes('ORO') || qUp.includes('GOLD') || qUp.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
+      if (!asset && (qUp.includes('BITCOIN') || qUp.includes('BTC'))) asset = data.assets.find(a => a.symbol === 'BTCUSD');
+      if (!asset && (qUp.includes('NASDAQ') || qUp.includes('USTEC'))) asset = data.assets.find(a => a.symbol === 'USTEC');
+
+      const fp = getFocusPrimary();
+      const nearest = getNearestAsset();
+      const swings = data.assets.filter(a => a.swing_potential && a.swing_potential.active);
+      const target = asset || (fp ? data.assets.find(a => a.symbol === fp.symbol) : nearest) || data.assets[0];
+      const d = getAssetUnitsDist(target);
+      const p = getSetupPips(target);
+      const strength = getCurrencyStrengthText(target);
+      const prob = target.win_prob || target.confluence.score;
+      const newsTxt = target.news_warning?.active ? ` Precaución: tiene noticia hoy (${(target.news_warning.events || []).join(', ')}).` : ' Sin noticias rojas inmediatas.';
+
+      if (agentKey === 'jarvis') {
+        if (qUp.includes('SWING')) {
+          return swings.length
+            ? `A sus órdenes, señor. Actualmente tenemos ${swings.length} activos activos en la Mesa de Swing: ${swings.map(s => `${s.symbol} (${s.win_prob || s.confluence.score}%, ${s.setup.signal_tag})`).join(', ')}. Le sugiero proteger en Break Even al tocar +1R antes de dejar correr hacia TP2.`
+            : `A sus órdenes, señor. En este instante ningún activo cumple los 8 candados estrictos de continuación Swing; conviene operar intradía cobrando parciales en TP1.`;
+        }
+        return `A sus órdenes, señor. Evaluando ${target.symbol} (${strength}): cotiza en ${target.price} con probabilidad del ${prob}% (${target.setup.signal_tag}). La entrada está en ${target.setup.entry} (a ${d.units} ${d.label}), Stop Loss en ${target.setup.sl} (${p.sl} ${p.unitLabel}), Gatillo BE en ${p.be} y TP1 en ${target.setup.tp1}.${newsTxt}`;
+      }
+
+      if (agentKey === 'vision') {
+        return `Desde una perspectiva macroeconómica, el índice DXY se sitúa en ${data.brief?.dxy || '--'} y los bonos US10Y en ${data.brief?.us10y || '--'}%. En ${target.symbol}, el equilibrio de fuerzas muestra ${strength}. ${target.macro_reason}`;
+      }
+
+      if (agentKey === 'ultron') {
+        return `Observa la estructura fría de ${target.symbol} en ${target.price}: jerarquía ${target.tf_bias?.weekly || '--'} en 1S, ${target.tf_bias?.daily} en 1D y ${target.tf_bias?.h4} en 4H. La liquidez superior está en ${target.liquidity?.bsl || '--'} y la inferior en ${target.liquidity?.ssl || '--'}. El bloque institucional está en ${target.setup.entry} (a ${d.units} ${d.label}) con invalidez en ${target.setup.sl}.`;
+      }
+
+      if (agentKey === 'friday') {
+        return `¡Aquí estoy, jefe! En ${target.symbol} tenemos ${target.setup.signal_tag} con ${strength}. Recuerda la regla de oro: entra solo cuando el precio toque ${target.setup.entry}, sube tu Stop a Break Even cuando llegue a ${p.be} (+1R) y asegura parciales en TP1 (${target.setup.tp1}). ¿Quieres repasar algún módulo de la Academia?`;
+      }
+
+      if (agentKey === 'edith') {
+        const pipValApprox = target.symbol.includes('JPY') ? 6.5 : 10;
+        const lot1Pct = Math.max(0.01, Number((10 / (Math.max(1, p.sl) * pipValApprox)).toFixed(2)));
+        return `Coordenadas tácticas fijadas en ${target.symbol}: distancia al bloque de ${d.units} ${d.label}. Con un Stop de ${p.sl} ${p.unitLabel} en tu cuenta de $1,000 USD, arriesgar 1% ($10) equivale aproximadamente a ${lot1Pct} lotes. Gatillo BE en ${p.be} y objetivo TP1 en ${target.setup.tp1}.`;
+      }
+
+      if (agentKey === 'karen') {
+        return `Tienes ${trades.length} operaciones registradas en tu bitácora. Antes de entrar en ${target.symbol} (a ${d.units} ${d.label} de entrada), respira, verifica que no estés duplicando pares de la misma divisa y respeta tu Stop en ${target.setup.sl}.${newsTxt}`;
+      }
+
+      const hm = getHomerMetrics();
+      return `Los números no mienten: tu tasa de acierto histórica es del ${hm.winRate}% (${hm.pnlR}). Hoy ${target.symbol} marca ${prob}% de probabilidad estadística con ratio 1:2 hacia TP1 (${target.setup.tp1}) y 1:3 hacia TP2 (${p.tp2Val}).`;
+    }
+
     async function askGeminiBrain(userQuestion, agentKey) {
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
       const history = agentHistories[agentKey] || [];
@@ -1304,8 +1358,9 @@ ${buildCompactMarketContext()}`;
         { role: 'user', parts: [{ text: `${systemInstruction}\n\nPREGUNTA DEL USUARIO: ${userQuestion}` }] }
       ];
 
-      const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
-      let lastError = 'Sin conexión con el modelo';
+      // Modelos vigentes actuales (2026)
+      const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-3.5-flash-lite'];
+      let lastError = 'Límite temporal de API';
 
       for (const modelName of models) {
         try {
@@ -1341,7 +1396,7 @@ ${buildCompactMarketContext()}`;
 
     async function processQuery(qRaw) {
       const q = qRaw.trim();
-      const qUp = q.toUpperCase();
+      if (!q) return;
 
       if (geminiApiKey) {
         clearInterval(typeTimer);
@@ -1353,21 +1408,15 @@ ${buildCompactMarketContext()}`;
           typeAgentDialogue(aiResponse, true);
           return;
         } catch (err) {
-          typeAgentDialogue(`Señor, la API de Gemini devolvió: "${err.message}". Revise su clave en el botón 🧠 IA ON arriba si expiró o alcanzó su límite por minuto.`, true);
+          // Si la clave gratuita de Gemini alcanza cuota por minuto (429), responde con el motor local del personaje sin mostrar errores técnicos
+          const fallback = buildLocalCharacterReply(q, currentAgent);
+          typeAgentDialogue(fallback, true);
           return;
         }
       }
 
-      if (!data) { typeAgentDialogue('Sincronizando datos del mercado, señor.'); return; }
-      let asset = data.assets.find(a => qUp.includes(a.symbol));
-      if (!asset && (qUp.includes('ORO') || qUp.includes('GOLD') || qUp.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
-      if (asset) {
-        const d = getAssetUnitsDist(asset);
-        const p = getSetupPips(asset);
-        typeAgentDialogue(`${asset.symbol} (${getCurrencyStrengthText(asset)}) está en ${asset.price} (${asset.setup.signal_tag}, probabilidad ${asset.win_prob || asset.confluence.score}%). Entrada en ${asset.setup.entry} (a ${d.units} ${d.label}), SL ${asset.setup.sl} (${p.sl} ${p.unitLabel}), BE ${p.be}, TP1 ${asset.setup.tp1}, TP2 ${p.tp2Val}.`);
-        return;
-      }
-      typeAgentDialogue(`Señor, para que ${AGENTS[currentAgent].name} responda abiertamente a "${q}" con su propia personalidad, pulse el botón 🧠 IA arriba y pegue su clave gratuita de Google AI Studio.`);
+      const localResp = buildLocalCharacterReply(q, currentAgent);
+      typeAgentDialogue(localResp, true);
     }
 
     const YF_MAP = {
@@ -2072,7 +2121,6 @@ ${buildCompactMarketContext()}`;
       });
     }
 
-    // RENDERIZADO DE LA LISTA DE CURSOS DE F.R.I.D.A.Y.
     function renderPanelCourse() {
       const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
       const badge = document.getElementById('panel-course-pct');
