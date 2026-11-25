@@ -1,4 +1,4 @@
-const CACHE_NAME = 'laticce-v11.5';
+const CACHE_NAME = 'laticce-v11.6';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (e) => {
