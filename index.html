@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Red Neuronal v11.2</title>
+  <title>LATICCE · Red Neuronal v11.3</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -79,7 +79,7 @@
   <div id="boot-screen" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2.5rem 1.25rem;text-align:center;">
     <canvas id="boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
-    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.2</div>
+    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.3</div>
 
     <div class="relative z-10 w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 320 320" class="w-full h-full overflow-visible">
@@ -196,18 +196,12 @@
     <section id="ptab-jarvis" class="space-y-3">
       <div id="focus-pick-banner" class="hidden rounded-xl p-3.5 border border-amber-400/70 bg-gradient-to-r from-amber-500/15 via-[#0a0f1a]/90 to-emerald-500/10 flex flex-wrap items-center justify-between gap-3"></div>
 
-      <!-- LEYENDA DE COLORES DE ESTADO -->
       <div class="flex flex-wrap gap-2 text-[10px] font-mono text-slate-300 bg-[#050811]/90 border border-slate-800 rounded-lg px-3 py-2">
-        <span class="text-amber-300 font-bold">🎯 FOCO #1</span>
-        <span>·</span>
-        <span class="text-emerald-400 font-bold">🟢 EN TP1</span>
-        <span>·</span>
-        <span class="text-yellow-300 font-bold">🟡 CERCA ENTRADA</span>
-        <span>·</span>
-        <span class="text-indigo-300 font-bold">🌊 SWING</span>
-        <span>·</span>
-        <span class="text-cyan-300 font-bold">💎 OB/FVG</span>
-        <span>·</span>
+        <span class="text-amber-300 font-bold">🎯 FOCO #1</span><span>·</span>
+        <span class="text-emerald-400 font-bold">🟢 EN TP1</span><span>·</span>
+        <span class="text-yellow-300 font-bold">🟡 CERCA ENTRADA</span><span>·</span>
+        <span class="text-indigo-300 font-bold">🌊 SWING</span><span>·</span>
+        <span class="text-cyan-300 font-bold">💎 OB/FVG</span><span>·</span>
         <span class="text-slate-400">⚪ ESPERAR</span>
       </div>
 
@@ -252,6 +246,8 @@
 
     <!-- SUBPANEL ULTRÓN -->
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
+      <div id="pu-tp1-reentry-banner" class="hidden bg-emerald-500/15 border border-emerald-400/70 rounded-lg p-2.5 text-xs text-emerald-200"></div>
+
       <div class="flex flex-wrap gap-2 text-[10px] font-mono text-slate-300 bg-[#050811] border border-slate-800 rounded-lg px-3 py-2">
         <span class="text-amber-300 font-bold">🎯 FOCO #1</span><span>·</span>
         <span class="text-emerald-400 font-bold">🟢 EN TP1</span><span>·</span>
@@ -276,7 +272,7 @@
         </div>
       </div>
       <div class="w-full bg-[#030509] border border-slate-800 rounded-lg overflow-hidden">
-        <canvas id="ultron-canvas" class="w-full h-[360px] block"></canvas>
+        <canvas id="ultron-canvas" class="w-full h-[380px] block"></canvas>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
@@ -300,7 +296,7 @@
           <div id="pu-r20" class="font-bold text-amber-300 text-sm">--</div>
         </div>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
           <div class="text-[10px] text-sky-400">ENTRADA (OB/FVG)</div>
           <div id="pu-entry" class="font-bold text-white text-sm">--</div>
@@ -311,15 +307,20 @@
           <div id="pu-sl" class="font-bold text-red-400 text-sm">--</div>
           <div id="pu-sl-pips" class="text-[10px] text-red-300">--</div>
         </div>
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+        <div class="bg-[#050811] border border-indigo-500/40 rounded p-2.5">
           <div class="text-[10px] text-indigo-400">GATILLO BE (+1R)</div>
           <div id="pu-be" class="font-bold text-indigo-300 text-sm">--</div>
           <div class="text-[10px] text-slate-400">Subir SL a Entrada</div>
         </div>
-        <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
+        <div class="bg-[#050811] border border-emerald-500/40 rounded p-2.5">
           <div class="text-[10px] text-emerald-400">TP1 (PARCIALES)</div>
           <div id="pu-tp1" class="font-bold text-emerald-400 text-sm">--</div>
           <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
+        </div>
+        <div class="bg-[#050811] border border-teal-500/40 rounded p-2.5">
+          <div class="text-[10px] text-teal-300">TP2 (SWING 1:3)</div>
+          <div id="pu-tp2" class="font-bold text-teal-300 text-sm">--</div>
+          <div id="pu-tp2-pips" class="text-[10px] text-teal-400">--</div>
         </div>
       </div>
     </section>
@@ -378,7 +379,6 @@
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
 
-    // 1. RED NEURONAL ANIMADA EN PANTALLA DE INICIO (#boot-canvas)
     (function initBootNeuralCanvas() {
       const c = document.getElementById('boot-canvas');
       if (!c) return;
@@ -459,7 +459,6 @@
       draw();
     })();
 
-    // 2. RED NEURONAL DINÁMICA EN EL FONDO DE TODOS LOS MÓDULOS (#neural-bg)
     (function initModulesNeuralBg() {
       const c = document.getElementById('neural-bg');
       if (!c) return;
@@ -535,7 +534,6 @@
     let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
     let agentHistories = { jarvis: [], vision: [], ultron: [], friday: [], edith: [], karen: [], homer: [] };
 
-    // NORMALIZADOR DE FOCO PRINCIPAL (EVITA UNDEFINED)
     function getFocusPrimary() {
       if (!data) return null;
       const raw = data.focus_pick?.primary || data.focus_pick;
@@ -551,7 +549,6 @@
           tp1: raw.tp1 ?? assetMatch?.setup?.tp1 ?? '--'
         };
       }
-      // Respaldo automático si data.json no trae focus_pick poblado
       const best = [...(data.assets || [])]
         .filter(a => a.has_valid_ob !== false && !(a.setup?.signal_tag || '').includes('SIN OB'))
         .sort((a, b) => (b.win_prob || b.confluence?.score || 0) - (a.win_prob || a.confluence?.score || 0))[0];
@@ -567,7 +564,15 @@
       };
     }
 
-    // CLASIFICADOR DE COLORES POR ESTADO DE CADA PAR
+    function getCurrencyStrengthText(a) {
+      if (a.economy_short && a.economy_short.includes('/')) return a.economy_short;
+      const labels = data?.currency_strength?.labels;
+      if (labels && a.base && a.quote && labels[a.base] && labels[a.quote]) {
+        return `${a.base} ${labels[a.base]} · ${a.quote} ${labels[a.quote]}`;
+      }
+      return a.economy_short || a.macro_dir || 'NEUTRAL';
+    }
+
     function getAssetColorState(a) {
       const fp = getFocusPrimary();
       const isFocus = fp && fp.symbol === a.symbol;
@@ -585,7 +590,7 @@
 
       if (isFocus) {
         return {
-          code: 'FOCUS', icon: '🎯', label: 'FOCO #1',
+          code: 'FOCUS', icon: '🎯', label: 'FOCO #1', hitTP1,
           cardBorder: 'border-amber-400 shadow-md shadow-amber-500/15',
           selBox: 'bg-amber-500/15 border-amber-400 text-amber-200',
           badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-400'
@@ -593,7 +598,7 @@
       }
       if (hitTP1) {
         return {
-          code: 'TP1', icon: '🟢', label: 'EN TP1',
+          code: 'TP1', icon: '🟢', label: 'EN TP1 · RE-ENTRADA', hitTP1: true,
           cardBorder: 'border-emerald-400/80 shadow-md shadow-emerald-500/10',
           selBox: 'bg-emerald-500/15 border-emerald-400 text-emerald-200',
           badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400'
@@ -601,7 +606,7 @@
       }
       if (nearEntry) {
         return {
-          code: 'NEAR', icon: '🟡', label: 'CERCA ENTRADA',
+          code: 'NEAR', icon: '🟡', label: 'CERCA ENTRADA', hitTP1: false,
           cardBorder: 'border-yellow-400/80 shadow-md shadow-yellow-500/10',
           selBox: 'bg-yellow-500/15 border-yellow-400 text-yellow-200',
           badgeClass: 'bg-yellow-500/20 text-yellow-300 border-yellow-400'
@@ -609,7 +614,7 @@
       }
       if (isSwing) {
         return {
-          code: 'SWING', icon: '🌊', label: 'SWING',
+          code: 'SWING', icon: '🌊', label: 'SWING', hitTP1: false,
           cardBorder: 'border-indigo-400/80',
           selBox: 'bg-indigo-500/15 border-indigo-400 text-indigo-200',
           badgeClass: 'bg-indigo-500/20 text-indigo-300 border-indigo-400'
@@ -617,14 +622,14 @@
       }
       if (hasZone) {
         return {
-          code: 'ZONE', icon: '💎', label: 'OB / FVG',
+          code: 'ZONE', icon: '💎', label: 'OB / FVG', hitTP1: false,
           cardBorder: 'border-cyan-500/50',
           selBox: 'bg-cyan-500/10 border-cyan-500/60 text-cyan-200',
           badgeClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/50'
         };
       }
       return {
-        code: 'WAIT', icon: '⚪', label: 'ESPERAR',
+        code: 'WAIT', icon: '⚪', label: 'ESPERAR', hitTP1: false,
         cardBorder: 'border-slate-800/80 opacity-85',
         selBox: 'bg-[#050811] border-slate-800 text-slate-400',
         badgeClass: 'bg-slate-800/60 text-slate-400 border-slate-700'
@@ -850,7 +855,6 @@
       rec.start();
     }
 
-    // MANEJADOR DEL FORMULARIO DE CHAT (EVITA QUE SE RECARGUE LA PÁGINA AL INICIO)
     function handleCockpitChat(e) {
       if (e) e.preventDefault();
       const inp = document.getElementById('cockpit-input');
@@ -863,7 +867,6 @@
     }
     window.handleCockpitChat = handleCockpitChat;
 
-    // 4. CONEXIÓN REAL A GEMINI IA POR PERSONAJE
     function buildCompactMarketContext() {
       if (!data || !data.assets) return 'Telemetría aún sincronizando.';
       const fp = getFocusPrimary();
@@ -873,7 +876,7 @@
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
         const st = getAssetColorState(a);
-        return `${a.symbol}[${st.label}]:P=${a.price}|Dir=${a.setup.signal_tag}|Prob=${a.win_prob || a.confluence.score}%|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|TP1=${a.setup.tp1}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|Macro:${a.macro_reason}`;
+        return `${a.symbol}[${st.label}|${getCurrencyStrengthText(a)}]:P=${a.price}|Dir=${a.setup.signal_tag}|Prob=${a.win_prob || a.confluence.score}%|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|BE=${p.be}|TP1=${a.setup.tp1}|TP2=${a.setup.tp2}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|Macro:${a.macro_reason}`;
       }).join('\n');
       const jText = trades.length ? `Bitácora (${trades.length}): ` + trades.slice(0, 4).map(t => `${t.pair} ${t.dir} ${t.res}`).join(', ') : 'Bitácora vacía.';
       return `${macro}\n${focus}\n${jText}\nACTIVOS:\n${rows}`;
@@ -957,13 +960,12 @@ ${buildCompactMarketContext()}`;
       if (asset) {
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
-        typeAgentDialogue(`${asset.symbol} está en ${asset.price} (${asset.setup.signal_tag}, probabilidad ${asset.win_prob || asset.confluence.score}%). Entrada en ${asset.setup.entry} (a ${d.units} ${d.label}), SL ${asset.setup.sl} (${p.sl} ${p.unitLabel}), TP1 ${asset.setup.tp1}. ${asset.macro_reason}`);
+        typeAgentDialogue(`${asset.symbol} (${getCurrencyStrengthText(asset)}) está en ${asset.price} (${asset.setup.signal_tag}, probabilidad ${asset.win_prob || asset.confluence.score}%). Entrada en ${asset.setup.entry} (a ${d.units} ${d.label}), SL ${asset.setup.sl} (${p.sl} ${p.unitLabel}), BE ${p.be}, TP1 ${asset.setup.tp1}, TP2 ${asset.setup.tp2}.`);
         return;
       }
       typeAgentDialogue(`Señor, para que ${AGENTS[currentAgent].name} responda abiertamente a "${q}" con su propia personalidad, pulse el botón 🧠 IA arriba y pegue su clave gratuita de Google AI Studio.`);
     }
 
-    // TELEMETRÍA Y FUNCIONES DE DATOS
     const YF_MAP = {
       'XAUUSD': 'GC=F', 'EURUSD': 'EURUSD=X', 'USDJPY': 'JPY=X',
       'GBPUSD': 'GBPUSD=X', 'GBPJPY': 'GBPJPY=X', 'GBPAUD': 'GBPAUD=X',
@@ -1048,8 +1050,10 @@ ${buildCompactMarketContext()}`;
       const pip = a.pip || 0.0001;
       const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
       const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
-      const be = a.setup.be || a.setup.be_trigger || (a.setup.direction === 'BUY' ? Number((a.setup.entry + Math.abs(a.setup.entry - a.setup.sl)).toFixed(a.decimals)) : Number((a.setup.entry - Math.abs(a.setup.entry - a.setup.sl)).toFixed(a.decimals)));
-      return { unitLabel, sl: toU(a.setup.entry - a.setup.sl), tp1: toU(a.setup.tp1 - a.setup.entry), tp2: toU(a.setup.tp2 - a.setup.entry), be };
+      const risk = Math.abs(a.setup.entry - a.setup.sl);
+      const be = a.setup.be || a.setup.be_trigger || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk).toFixed(a.decimals)) : Number((a.setup.entry - risk).toFixed(a.decimals)));
+      const tp2 = a.setup.tp2 || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk * 3).toFixed(a.decimals)) : Number((a.setup.entry - risk * 3).toFixed(a.decimals)));
+      return { unitLabel, sl: toU(risk), tp1: toU(a.setup.tp1 - a.setup.entry), tp2: toU(tp2 - a.setup.entry), be, tp2Val: tp2 };
     }
     function getNearestAsset() {
       if (!data || !data.assets || !data.assets.length) return null;
@@ -1335,6 +1339,7 @@ ${buildCompactMarketContext()}`;
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
         const st = getAssetColorState(a);
+        const strengthTxt = getCurrencyStrengthText(a);
         const prob = a.win_prob || a.confluence.score;
         const probCol = prob >= 80 ? 'text-emerald-400' : (prob >= 65 ? 'text-amber-300' : 'text-slate-300');
         const hasSwing = a.swing_potential && a.swing_potential.active;
@@ -1354,12 +1359,14 @@ ${buildCompactMarketContext()}`;
 
             <div class="grid grid-cols-2 gap-2 text-[11px]">
               <div class="bg-[#050811] border border-slate-800 rounded p-2">
-                <div class="text-[9px] text-sky-400">ECONOMÍA (VISIÓN)</div>
-                <div class="font-bold text-white">${a.confluence.verdict_title}</div>
+                <div class="text-[9px] text-sky-400">🌐 ECONOMÍA (VISIÓN)</div>
+                <div class="font-bold text-white">${strengthTxt}</div>
+                <div class="text-[10px] text-slate-400">${a.confluence.verdict_title}</div>
               </div>
               <div class="bg-[#050811] border border-slate-800 rounded p-2">
-                <div class="text-[9px] text-red-400">SU GRÁFICO (ULTRÓN)</div>
-                <div class="font-bold text-white">${a.chart_bias} (1S:${a.tf_bias?.weekly || '--'} 1D:${a.tf_bias?.daily} 4H:${a.tf_bias?.h4})</div>
+                <div class="text-[9px] text-red-400">🎯 SU GRÁFICO (ULTRÓN)</div>
+                <div class="font-bold text-white">${a.chart_bias}</div>
+                <div class="text-[10px] text-slate-400">1S:${a.tf_bias?.weekly || '--'} · 1D:${a.tf_bias?.daily} · 4H:${a.tf_bias?.h4}</div>
               </div>
             </div>
 
@@ -1374,11 +1381,12 @@ ${buildCompactMarketContext()}`;
               ${hasNews ? `<div><strong class="text-orange-300">Riesgo Noticia:</strong> ${(a.news_warning.events || []).join(' · ')}</div>` : ''}
             </div>
 
-            <div class="grid grid-cols-4 gap-1.5 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[11px]">
-              <div><div class="text-[9px] text-sky-400">${a.setup.signal_tag}</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[9px] text-slate-400">a ${d.units} ${d.label}</div></div>
-              <div><div class="text-[9px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[9px] text-red-300">-${p.sl} ${p.unitLabel}</div></div>
-              <div><div class="text-[9px] text-indigo-400">BE (+1R)</div><div class="font-bold text-indigo-300">${p.be}</div><div class="text-[9px] text-slate-400">Proteger</div></div>
-              <div><div class="text-[9px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[9px] text-emerald-300">+${p.tp1} ${p.unitLabel}</div></div>
+            <div class="grid grid-cols-5 gap-1 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[10px]">
+              <div><div class="text-[8px] text-sky-400">ENTRADA</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[8px] text-slate-400">a ${d.units}${d.label}</div></div>
+              <div><div class="text-[8px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[8px] text-red-300">-${p.sl}${p.unitLabel}</div></div>
+              <div><div class="text-[8px] text-indigo-400">BE (+1R)</div><div class="font-bold text-indigo-300">${p.be}</div><div class="text-[8px] text-slate-400">Proteger</div></div>
+              <div><div class="text-[8px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[8px] text-emerald-300">+${p.tp1}${p.unitLabel}</div></div>
+              <div><div class="text-[8px] text-teal-300">TP2</div><div class="font-bold text-teal-300">${p.tp2Val}</div><div class="text-[8px] text-teal-400">+${p.tp2}${p.unitLabel}</div></div>
             </div>
           </div>`;
       }).join('');
@@ -1406,10 +1414,11 @@ ${buildCompactMarketContext()}`;
             <p class="text-slate-300 leading-relaxed">${data.brief?.summary || ''}</p>
           </div>`;
       } else if (visionSubTab === 'cuadrante') {
-        const ranks = data.currency_ranking || [];
-        box.innerHTML = ranks.length
-          ? `<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${ranks.map(r => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="font-bold text-white">${r.currency}</div><div class="text-[11px] ${r.score >= 0 ? 'text-emerald-400' : 'text-red-400'}">${r.label || r.score}</div></div>`).join('')}</div>`
-          : `<div class="bg-[#050811] border border-slate-800 rounded p-3 text-slate-300">Fuerza relativa de divisas integrada en cada tarjeta de Jarvis según la cesta DXY + US10Y + cruces mayores.</div>`;
+        const labels = data.currency_strength?.labels || {};
+        const entries = Object.entries(labels);
+        box.innerHTML = entries.length
+          ? `<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${entries.map(([ccy, lbl]) => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="font-bold text-white">${ccy}</div><div class="text-[11px] ${lbl === 'FUERTE' ? 'text-emerald-400' : (lbl === 'DEBIL' ? 'text-red-400' : 'text-slate-400')}">${lbl}</div></div>`).join('')}</div>`
+          : `<div class="bg-[#050811] border border-slate-800 rounded p-3 text-slate-300">Fuerza relativa integrada en cada tarjeta de Jarvis según la cesta DXY + US10Y + cruces mayores.</div>`;
       } else if (visionSubTab === 'bancos') {
         const banks = data.banks || [{ bank: 'FED (EE.UU.)', stance: 'VIGILANCIA DE TASAS', bias: 'NEUTRAL', detail: `DXY ${data.brief?.dxy || '--'} · Bonos US10Y ${data.brief?.us10y || '--'}%` }];
         box.innerHTML = banks.map(b => `<div class="bg-[#050811] border border-slate-800 rounded p-3"><div class="flex justify-between font-bold text-white"><span>${b.bank}</span><span class="text-sky-300">${b.stance}</span></div><p class="text-slate-400 mt-1">${b.detail}</p></div>`).join('');
@@ -1450,9 +1459,21 @@ ${buildCompactMarketContext()}`;
       }).join('');
 
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      const st = getAssetColorState(a);
       const d = getAssetUnitsDist(a);
       const p = getSetupPips(a);
-      document.getElementById('pu-sym').textContent = a.symbol;
+
+      const tp1Banner = document.getElementById('pu-tp1-reentry-banner');
+      if (tp1Banner) {
+        if (st.hitTP1) {
+          tp1Banner.classList.remove('hidden');
+          tp1Banner.innerHTML = `<strong>🟢 TP1 ALCANZADO EN ${a.symbol}:</strong> Cierra tus parciales y protege en Break Even. En la próxima actualización de estructura, Ultrón buscará automáticamente un nuevo bloque OB/FVG en retroceso a favor de la tendencia.`;
+        } else {
+          tp1Banner.classList.add('hidden');
+        }
+      }
+
+      document.getElementById('pu-sym').textContent = `${a.symbol} (${getCurrencyStrengthText(a)})`;
       document.getElementById('pu-price').textContent = a.price;
       document.getElementById('pu-status').textContent = `${a.setup.signal_tag} · a ${d.units} ${d.label}`;
       document.getElementById('pu-bias-w').textContent = a.tf_bias?.weekly || a.chart_bias;
@@ -1467,6 +1488,8 @@ ${buildCompactMarketContext()}`;
       document.getElementById('pu-be').textContent = p.be;
       document.getElementById('pu-tp1').textContent = a.setup.tp1;
       document.getElementById('pu-tp1-pips').textContent = `+${p.tp1} ${p.unitLabel}`;
+      document.getElementById('pu-tp2').textContent = p.tp2Val;
+      document.getElementById('pu-tp2-pips').textContent = `+${p.tp2} ${p.unitLabel}`;
       drawUltronChart();
     }
 
@@ -1481,6 +1504,7 @@ ${buildCompactMarketContext()}`;
     function drawUltronChart() {
       if (!data) return;
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      const p = getSetupPips(a);
       const canvas = document.getElementById('ultron-canvas');
       if (!canvas) return;
       const dpr = window.devicePixelRatio || 1;
@@ -1495,14 +1519,18 @@ ${buildCompactMarketContext()}`;
       const tfKey = (a.candles && a.candles[selectedTF]) ? selectedTF : '1d';
       const candles = (a.candles && a.candles[tfKey]) ? a.candles[tfKey].slice(-42) : [];
       if (!candles.length) return;
-      const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp1, a.price];
-      const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp1, a.price];
+
+      const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
+      const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
+      if (a.liquidity?.bsl) highs.push(a.liquidity.bsl);
+      if (a.liquidity?.ssl) lows.push(a.liquidity.ssl);
+
       const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
-      const yOf = p => padT + ((maxP - p) / span) * plotH;
+      const yOf = val => padT + ((maxP - val) / span) * plotH;
 
       const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
       ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
-      ctx.fillRect(padL + plotW * 0.38, yObT, plotW * 0.62, Math.max(5, yObB - yObT));
+      ctx.fillRect(padL + plotW * 0.35, yObT, plotW * 0.65, Math.max(5, yObB - yObT));
 
       const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
       candles.forEach((c, i) => {
@@ -1512,18 +1540,36 @@ ${buildCompactMarketContext()}`;
         ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
       });
 
+      if (a.liquidity?.bsl) {
+        const yB = yOf(a.liquidity.bsl);
+        ctx.strokeStyle = 'rgba(244, 63, 94, 0.55)'; ctx.setLineDash([2, 4]);
+        ctx.beginPath(); ctx.moveTo(padL, yB); ctx.lineTo(W - padR, yB); ctx.stroke();
+        ctx.setLineDash([]); ctx.fillStyle = '#fb7185'; ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(`▲ BSL ${a.liquidity.bsl.toFixed(a.decimals)}`, padL + 4, yB - 3);
+      }
+      if (a.liquidity?.ssl) {
+        const yS = yOf(a.liquidity.ssl);
+        ctx.strokeStyle = 'rgba(45, 212, 191, 0.55)'; ctx.setLineDash([2, 4]);
+        ctx.beginPath(); ctx.moveTo(padL, yS); ctx.lineTo(W - padR, yS); ctx.stroke();
+        ctx.setLineDash([]); ctx.fillStyle = '#2dd4bf'; ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(`▼ SSL ${a.liquidity.ssl.toFixed(a.decimals)}`, padL + 4, yS + 10);
+      }
+
       const drawLvl = (val, lbl, col) => {
         const y = yOf(val);
         ctx.strokeStyle = col; ctx.setLineDash([3, 3]);
-        ctx.beginPath(); ctx.moveTo(padL + plotW * 0.35, y); ctx.lineTo(W - padR, y); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(padL + plotW * 0.32, y); ctx.lineTo(W - padR, y); ctx.stroke();
         ctx.setLineDash([]); ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
         ctx.fillStyle = '#fff'; ctx.font = 'bold 9px JetBrains Mono';
         ctx.fillText(val.toFixed(a.decimals), W - padR + 5, y + 3);
-        ctx.fillText(lbl, padL + plotW * 0.36, y - 4);
+        ctx.fillText(lbl, padL + plotW * 0.33, y - 3);
       };
+
       drawLvl(a.setup.entry, 'ENTRADA', '#0284c7');
       drawLvl(a.setup.sl, 'STOP', '#dc2626');
-      drawLvl(a.setup.tp1, 'TP1', '#059669');
+      drawLvl(p.be, 'GATILLO +1R (BE)', '#6366f1');
+      drawLvl(a.setup.tp1, 'TP1 (1:2)', '#059669');
+      drawLvl(p.tp2Val, 'TP2 (SWING)', '#0d9488');
 
       const yLive = yOf(a.price);
       ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
