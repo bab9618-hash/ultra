@@ -1,27 +1,27 @@
 {
-  "last_updated": "2026-11-25 03:27 UTC",
+  "last_updated": "2026-11-25 03:46 UTC",
   "brief": {
-    "dxy": 103.92,
-    "dxy_chg": -0.38,
+    "dxy": 103.94,
+    "dxy_chg": -0.36,
     "us10y": 4.9,
     "us10y_chg": -0.41,
     "spx_chg": 0.86,
-    "headline": "USD DEBIL (DXY 103.92 · US10Y 4.9%) | GBP FUERTE | AUD DEBIL",
+    "headline": "USD DEBIL (DXY 103.94 · US10Y 4.9%) | GBP FUERTE | AUD DEBIL",
     "summary": "LATICCE v10.2 · Radar Foco Principal + VISIÓN 5 Módulos + Giros 1S (4 niveles) | Foco #1: AUDCHF (95% prob).",
-    "narrative": "DXY en 103.92 (-0.38%) y Bonos US10Y en 4.9% (-0.41%). Divisas liderando fuerza: GBP, EUR, JPY, NZD, CAD, CHF, XAU, BTC. Divisas bajo presion: USD, AUD · Noticias fuertes hoy: AUD, USD."
+    "narrative": "DXY en 103.94 (-0.36%) y Bonos US10Y en 4.9% (-0.41%). Divisas liderando fuerza: GBP, EUR, JPY, NZD, CAD, CHF, XAU, BTC. Divisas bajo presion: USD, AUD · Noticias fuertes hoy: AUD, USD."
   },
   "currency_strength": {
     "raw": {
-      "USD": -0.987,
-      "GBP": 0.339,
-      "AUD": -0.536,
-      "EUR": 0.409,
+      "USD": -0.96,
+      "GBP": 0.335,
+      "AUD": -0.578,
+      "EUR": 0.373,
       "JPY": 0.177,
-      "NZD": 0.468,
-      "CAD": 0.874,
-      "CHF": 1.118,
-      "XAU": 0.889,
-      "BTC": 1.181
+      "NZD": 0.458,
+      "CAD": 0.879,
+      "CHF": 1.11,
+      "XAU": 0.864,
+      "BTC": 1.168
     },
     "labels": {
       "USD": "DEBIL",
@@ -69,13 +69,13 @@
       "dir_label": "VENTA",
       "zone_kind": "OB_FVG",
       "signal_tag": "VENTA OB + FVG",
-      "price": 0.55293,
+      "price": 0.55283,
       "entry": 0.55617,
       "sl": 0.55725,
       "be_trigger": 0.55509,
       "tp1": 0.55401,
       "tp2": 0.55293,
-      "dist_units": 32.4,
+      "dist_units": 33.4,
       "unit_label": "pips",
       "swing_potential": false,
       "reason": "OB + FVG en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA."
@@ -89,13 +89,13 @@
       "dir_label": "VENTA",
       "zone_kind": "FVG",
       "signal_tag": "VENTA FVG",
-      "price": 1.86902,
+      "price": 1.86866,
       "entry": 1.87251,
       "sl": 1.87748,
       "be_trigger": 1.86754,
       "tp1": 1.86257,
       "tp2": 1.8576,
-      "dist_units": 34.9,
+      "dist_units": 38.5,
       "unit_label": "pips",
       "swing_potential": false,
       "reason": "FVG Retroceso en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA."
@@ -103,30 +103,16 @@
   },
   "weekly_pivots": [
     {
-      "symbol": "GBPAUD",
-      "type": "forex",
-      "decimals": 5,
-      "pip": 0.0001,
-      "price": 1.98039,
-      "direction": "BUY",
-      "entry": 1.9784,
-      "extreme": 1.9491,
-      "date": "2009-05-04",
-      "dist_units": 19.9,
-      "unit_label": "pips",
-      "macro_aligned": true
-    },
-    {
       "symbol": "EURUSD",
       "type": "forex",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.09553,
+      "price": 1.09481,
       "direction": "BUY",
       "entry": 1.0926,
       "extreme": 1.0826,
       "date": "2016-02-29",
-      "dist_units": 29.3,
+      "dist_units": 22.1,
       "unit_label": "pips",
       "macro_aligned": true
     },
@@ -135,12 +121,26 @@
       "type": "forex",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.98039,
+      "price": 1.98088,
+      "direction": "BUY",
+      "entry": 1.9784,
+      "extreme": 1.9491,
+      "date": "2009-05-04",
+      "dist_units": 24.8,
+      "unit_label": "pips",
+      "macro_aligned": true
+    },
+    {
+      "symbol": "GBPAUD",
+      "type": "forex",
+      "decimals": 5,
+      "pip": 0.0001,
+      "price": 1.98088,
       "direction": "SELL",
       "entry": 1.98388,
       "extreme": 2.00231,
       "date": "2015-02-09",
-      "dist_units": 34.9,
+      "dist_units": 30.0,
       "unit_label": "pips",
       "macro_aligned": false
     },
@@ -149,12 +149,12 @@
       "type": "forex",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.65621,
+      "price": 1.65598,
       "direction": "BUY",
       "entry": 1.6512,
       "extreme": 1.6439,
       "date": "2006-10-30",
-      "dist_units": 50.1,
+      "dist_units": 47.8,
       "unit_label": "pips",
       "macro_aligned": true
     }
@@ -164,11 +164,11 @@
       "currency": "USD",
       "status": "DEBIL",
       "pairs": [
-        "USDJPY (VENTA)",
         "USDCAD (VENTA)",
         "USDCHF (VENTA)",
         "US30 (COMPRA)",
-        "USTEC (COMPRA)"
+        "USTEC (COMPRA)",
+        "US500 (COMPRA)"
       ]
     },
     {
@@ -180,14 +180,6 @@
         "AUDCAD (VENTA)",
         "AUDNZD (VENTA)",
         "EURAUD (COMPRA)"
-      ]
-    },
-    {
-      "currency": "JPY",
-      "status": "FUERTE",
-      "pairs": [
-        "USDJPY (VENTA)",
-        "AUDJPY (VENTA)"
       ]
     },
     {
@@ -214,7 +206,7 @@
       "currency": "USD",
       "stance": "USD DEBIL",
       "bias": "BEARISH",
-      "detail": "DXY (103.92) + Bonos US10Y (4.9%) en cesta hibrida 4H/1D."
+      "detail": "DXY (103.94) + Bonos US10Y (4.9%) en cesta hibrida 4H/1D."
     },
     {
       "bank": "BCE (Eurozona)",
@@ -428,8 +420,8 @@
       "quote": "USD",
       "pip": 0.1,
       "decimals": 2,
-      "price": 3556.4,
-      "change_pct": -2.6,
+      "price": 3549.7,
+      "change_pct": -2.79,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -443,7 +435,7 @@
         "1w": "BAJA",
         "1d": "BAJA",
         "4h": "BAJA",
-        "1h": "NEUTRAL",
+        "1h": "BAJA",
         "macro": "SUBE"
       },
       "metrics": {
@@ -451,7 +443,7 @@
         "range_20d": {
           "high": 4157.7,
           "low": 3502.9,
-          "pos_pct": 8
+          "pos_pct": 7
         }
       },
       "structure": {
@@ -465,13 +457,13 @@
       },
       "confluence": {
         "alignment": "BROKEN",
-        "score": 63,
+        "score": 67,
         "macro_dir": "SUBE",
         "chart_bias": "BAJA"
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (8%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (7%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -738,7 +730,7 @@
             "o": 3559.3,
             "h": 3573.9,
             "l": 3532.4,
-            "c": 3556.4
+            "c": 3549.7
           }
         ],
         "4h": [
@@ -985,7 +977,7 @@
             "o": 3547.9,
             "h": 3573.9,
             "l": 3532.4,
-            "c": 3556.4
+            "c": 3549.7
           }
         ],
         "1h": [
@@ -1232,7 +1224,7 @@
             "o": 3549.5,
             "h": 3558.7,
             "l": 3546.1,
-            "c": 3556.4
+            "c": 3549.7
           }
         ]
       }
@@ -1244,8 +1236,8 @@
       "quote": "USD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.09553,
-      "change_pct": 0.43,
+      "price": 1.09481,
+      "change_pct": 0.37,
       "has_valid_ob": false,
       "zone_kind": "NONE",
       "is_counter_daily": false,
@@ -1267,7 +1259,7 @@
         "range_20d": {
           "high": 1.12752,
           "low": 1.08844,
-          "pos_pct": 18
+          "pos_pct": 16
         }
       },
       "structure": {
@@ -1287,24 +1279,24 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (18%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (16%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
-        "target": 1.08041,
+        "target": 1.07969,
         "note": ""
       },
       "setup": {
         "direction": "SELL",
         "dir_label": "VENTA",
         "signal_tag": "VENTA · Sin bloque limpio",
-        "entry": 1.09553,
-        "zone_top": 1.09553,
-        "zone_bottom": 1.09553,
-        "sl": 1.09913,
-        "be_trigger": 1.09193,
-        "tp1": 1.08833,
-        "tp2": 1.08473,
+        "entry": 1.09481,
+        "zone_top": 1.09481,
+        "zone_bottom": 1.09481,
+        "sl": 1.09841,
+        "be_trigger": 1.09121,
+        "tp1": 1.08761,
+        "tp2": 1.08401,
         "simple_reason": "Sin bloque limpio en 1H con estructura 1D BAJA / 4H SUBE y flujo macro SUBE.",
         "risk_note": "Noticia fuerte hoy: Core PCE Price Index m/m (1:30pm), Prelim GDP q/q (1:30pm)"
       },
@@ -1314,12 +1306,12 @@
           "type": "forex",
           "decimals": 5,
           "pip": 0.0001,
-          "price": 1.09553,
+          "price": 1.09481,
           "direction": "BUY",
           "entry": 1.0926,
           "extreme": 1.0826,
           "date": "2016-02-29",
-          "dist_units": 29.3,
+          "dist_units": 22.1,
           "unit_label": "pips",
           "macro_aligned": true
         }
@@ -1568,8 +1560,8 @@
             "t": 1795564800,
             "o": 1.09685,
             "h": 1.09697,
-            "l": 1.09553,
-            "c": 1.09553
+            "l": 1.09481,
+            "c": 1.09481
           }
         ],
         "4h": [
@@ -1815,8 +1807,8 @@
             "t": 1795564800,
             "o": 1.09673,
             "h": 1.09697,
-            "l": 1.09553,
-            "c": 1.09553
+            "l": 1.09481,
+            "c": 1.09481
           }
         ],
         "1h": [
@@ -2062,8 +2054,8 @@
             "t": 1795575600,
             "o": 1.09577,
             "h": 1.09577,
-            "l": 1.09553,
-            "c": 1.09553
+            "l": 1.09481,
+            "c": 1.09481
           }
         ]
       }
@@ -2075,11 +2067,11 @@
       "quote": "JPY",
       "pip": 0.01,
       "decimals": 3,
-      "price": 159.225,
-      "change_pct": 0.14,
+      "price": 159.29,
+      "change_pct": 0.18,
       "has_valid_ob": true,
       "zone_kind": "OB",
-      "is_counter_daily": false,
+      "is_counter_daily": true,
       "is_strong_pullback": false,
       "has_news_today": true,
       "news_today": [
@@ -2089,7 +2081,7 @@
       "timeframes": {
         "1w": "SUBE",
         "1d": "BAJA",
-        "4h": "BAJA",
+        "4h": "NEUTRAL",
         "1h": "NEUTRAL",
         "macro": "BAJA"
       },
@@ -2098,7 +2090,7 @@
         "range_20d": {
           "high": 160.176,
           "low": 156.966,
-          "pos_pct": 70
+          "pos_pct": 72
         }
       },
       "structure": {
@@ -2111,10 +2103,10 @@
         "ssl": 158.92
       },
       "confluence": {
-        "alignment": "ALIGNED",
-        "score": 94,
+        "alignment": "NEUTRAL",
+        "score": 70,
         "macro_dir": "BAJA",
-        "chart_bias": "BAJA"
+        "chart_bias": "NEUTRAL"
       },
       "exhaustion": {
         "active": false,
@@ -2136,7 +2128,7 @@
         "be_trigger": 159.061,
         "tp1": 158.878,
         "tp2": 158.695,
-        "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H BAJA y flujo macro BAJA.",
+        "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H NEUTRAL y flujo macro BAJA.",
         "risk_note": "Noticia fuerte hoy: Core PCE Price Index m/m (1:30pm), Prelim GDP q/q (1:30pm)"
       },
       "weekly_pivots": [],
@@ -2385,7 +2377,7 @@
             "o": 159.268,
             "h": 159.348,
             "l": 159.099,
-            "c": 159.226
+            "c": 159.291
           }
         ],
         "4h": [
@@ -2632,7 +2624,7 @@
             "o": 159.256,
             "h": 159.348,
             "l": 159.099,
-            "c": 159.225
+            "c": 159.29
           }
         ],
         "1h": [
@@ -2877,9 +2869,9 @@
           {
             "t": 1795575600,
             "o": 159.116,
-            "h": 159.242,
+            "h": 159.309,
             "l": 159.099,
-            "c": 159.225
+            "c": 159.29
           }
         ]
       }
@@ -2891,8 +2883,8 @@
       "quote": "USD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.30983,
-      "change_pct": 0.49,
+      "price": 1.30931,
+      "change_pct": 0.45,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": false,
@@ -2914,7 +2906,7 @@
         "range_20d": {
           "high": 1.35024,
           "low": 1.30132,
-          "pos_pct": 17
+          "pos_pct": 16
         }
       },
       "structure": {
@@ -2934,7 +2926,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (17%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (16%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -3200,8 +3192,8 @@
             "t": 1795564800,
             "o": 1.31161,
             "h": 1.31168,
-            "l": 1.30983,
-            "c": 1.30983
+            "l": 1.30931,
+            "c": 1.30931
           }
         ],
         "4h": [
@@ -3447,8 +3439,8 @@
             "t": 1795564800,
             "o": 1.31142,
             "h": 1.31153,
-            "l": 1.30983,
-            "c": 1.30983
+            "l": 1.30931,
+            "c": 1.30931
           }
         ],
         "1h": [
@@ -3694,8 +3686,8 @@
             "t": 1795575600,
             "o": 1.31019,
             "h": 1.31019,
-            "l": 1.30983,
-            "c": 1.30983
+            "l": 1.30931,
+            "c": 1.30931
           }
         ]
       }
@@ -3707,7 +3699,7 @@
       "quote": "JPY",
       "pip": 0.01,
       "decimals": 3,
-      "price": 208.556,
+      "price": 208.562,
       "change_pct": 0.63,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -3751,20 +3743,20 @@
       },
       "swing_potential": {
         "active": false,
-        "target": 207.401,
+        "target": 207.495,
         "note": ""
       },
       "setup": {
         "direction": "SELL",
         "dir_label": "VENTA",
         "signal_tag": "VENTA · FVG Retroceso",
-        "entry": 208.632,
+        "entry": 208.65,
         "zone_top": 208.681,
-        "zone_bottom": 208.582,
+        "zone_bottom": 208.619,
         "sl": 208.925,
-        "be_trigger": 208.339,
-        "tp1": 208.046,
-        "tp2": 207.753,
+        "be_trigger": 208.375,
+        "tp1": 208.1,
+        "tp2": 207.825,
         "simple_reason": "FVG Retroceso en 1H con estructura 1D BAJA / 4H SUBE y flujo macro SUBE.",
         "risk_note": "Respetar Stop estructural y proteger en +1R."
       },
@@ -4014,7 +4006,7 @@
             "o": 208.822,
             "h": 208.927,
             "l": 208.41,
-            "c": 208.554
+            "c": 208.562
           }
         ],
         "4h": [
@@ -4261,7 +4253,7 @@
             "o": 208.814,
             "h": 208.882,
             "l": 208.41,
-            "c": 208.556
+            "c": 208.562
           }
         ],
         "1h": [
@@ -4506,9 +4498,9 @@
           {
             "t": 1795575600,
             "o": 208.48,
-            "h": 208.582,
+            "h": 208.619,
             "l": 208.41,
-            "c": 208.556
+            "c": 208.562
           }
         ]
       }
@@ -4520,8 +4512,8 @@
       "quote": "AUD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.98039,
-      "change_pct": 0.73,
+      "price": 1.98088,
+      "change_pct": 0.76,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -4544,7 +4536,7 @@
         "range_20d": {
           "high": 1.9822,
           "low": 1.88582,
-          "pos_pct": 98
+          "pos_pct": 99
         }
       },
       "structure": {
@@ -4564,7 +4556,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en techo del rango (98%) o velas perdiendo cuerpo."
+        "reason": "Precio en techo del rango (99%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -4591,12 +4583,12 @@
           "type": "forex",
           "decimals": 5,
           "pip": 0.0001,
-          "price": 1.98039,
+          "price": 1.98088,
           "direction": "BUY",
           "entry": 1.9784,
           "extreme": 1.9491,
           "date": "2009-05-04",
-          "dist_units": 19.9,
+          "dist_units": 24.8,
           "unit_label": "pips",
           "macro_aligned": true
         },
@@ -4605,12 +4597,12 @@
           "type": "forex",
           "decimals": 5,
           "pip": 0.0001,
-          "price": 1.98039,
+          "price": 1.98088,
           "direction": "SELL",
           "entry": 1.98388,
           "extreme": 2.00231,
           "date": "2015-02-09",
-          "dist_units": 34.9,
+          "dist_units": 30.0,
           "unit_label": "pips",
           "macro_aligned": false
         }
@@ -4860,7 +4852,7 @@
             "o": 1.97326,
             "h": 1.9822,
             "l": 1.96609,
-            "c": 1.98039
+            "c": 1.98088
           }
         ],
         "4h": [
@@ -5107,7 +5099,7 @@
             "o": 1.97637,
             "h": 1.9822,
             "l": 1.96609,
-            "c": 1.98039
+            "c": 1.98088
           }
         ],
         "1h": [
@@ -5354,7 +5346,7 @@
             "o": 1.98128,
             "h": 1.9822,
             "l": 1.97942,
-            "c": 1.98039
+            "c": 1.98088
           }
         ]
       }
@@ -5366,8 +5358,8 @@
       "quote": "NZD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 2.3952,
-      "change_pct": 0.15,
+      "price": 2.39479,
+      "change_pct": 0.14,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": true,
@@ -5377,7 +5369,7 @@
       "timeframes": {
         "1w": "SUBE",
         "1d": "BAJA",
-        "4h": "SUBE",
+        "4h": "NEUTRAL",
         "1h": "SUBE",
         "macro": "BAJA"
       },
@@ -5400,7 +5392,7 @@
       },
       "confluence": {
         "alignment": "BROKEN",
-        "score": 52,
+        "score": 47,
         "macro_dir": "BAJA",
         "chart_bias": "SUBE"
       },
@@ -5424,7 +5416,7 @@
         "be_trigger": 2.39297,
         "tp1": 2.39463,
         "tp2": 2.39629,
-        "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H SUBE y flujo macro BAJA.",
+        "simple_reason": "OB Estructural en 1H con estructura 1D BAJA / 4H NEUTRAL y flujo macro BAJA.",
         "risk_note": "Respetar Stop estructural y proteger en +1R."
       },
       "weekly_pivots": [],
@@ -5673,7 +5665,7 @@
             "o": 2.39236,
             "h": 2.39657,
             "l": 2.38948,
-            "c": 2.3952
+            "c": 2.39479
           }
         ],
         "4h": [
@@ -5920,7 +5912,7 @@
             "o": 2.39388,
             "h": 2.39657,
             "l": 2.39071,
-            "c": 2.3952
+            "c": 2.39479
           }
         ],
         "1h": [
@@ -6166,8 +6158,8 @@
             "t": 1795575600,
             "o": 2.39625,
             "h": 2.39643,
-            "l": 2.39444,
-            "c": 2.3952
+            "l": 2.39413,
+            "c": 2.39479
           }
         ]
       }
@@ -6179,8 +6171,8 @@
       "quote": "CAD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.86902,
-      "change_pct": -0.17,
+      "price": 1.86866,
+      "change_pct": -0.19,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "is_counter_daily": false,
@@ -6195,11 +6187,11 @@
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.00808,
+        "atr_14": 0.00811,
         "range_20d": {
           "high": 1.89942,
           "low": 1.86079,
-          "pos_pct": 21
+          "pos_pct": 20
         }
       },
       "structure": {
@@ -6485,8 +6477,8 @@
             "t": 1795564800,
             "o": 1.87019,
             "h": 1.87163,
-            "l": 1.86881,
-            "c": 1.86902
+            "l": 1.86841,
+            "c": 1.86866
           }
         ],
         "4h": [
@@ -6732,8 +6724,8 @@
             "t": 1795564800,
             "o": 1.87135,
             "h": 1.87157,
-            "l": 1.86881,
-            "c": 1.86902
+            "l": 1.86841,
+            "c": 1.86866
           }
         ],
         "1h": [
@@ -6979,8 +6971,8 @@
             "t": 1795575600,
             "o": 1.86931,
             "h": 1.86977,
-            "l": 1.86881,
-            "c": 1.86902
+            "l": 1.86841,
+            "c": 1.86866
           }
         ]
       }
@@ -6992,8 +6984,8 @@
       "quote": "USD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.66177,
-      "change_pct": -0.18,
+      "price": 0.66124,
+      "change_pct": -0.26,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -7016,7 +7008,7 @@
         "range_20d": {
           "high": 0.70678,
           "low": 0.65997,
-          "pos_pct": 4
+          "pos_pct": 3
         }
       },
       "structure": {
@@ -7036,7 +7028,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (4%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (3%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -7303,7 +7295,7 @@
             "o": 0.66454,
             "h": 0.66627,
             "l": 0.6612,
-            "c": 0.66177
+            "c": 0.66124
           }
         ],
         "4h": [
@@ -7550,7 +7542,7 @@
             "o": 0.66339,
             "h": 0.66627,
             "l": 0.6612,
-            "c": 0.66177
+            "c": 0.66124
           }
         ],
         "1h": [
@@ -7797,7 +7789,7 @@
             "o": 0.66155,
             "h": 0.66181,
             "l": 0.6612,
-            "c": 0.66177
+            "c": 0.66124
           }
         ]
       }
@@ -7809,8 +7801,8 @@
       "quote": "JPY",
       "pip": 0.01,
       "decimals": 3,
-      "price": 105.294,
-      "change_pct": -0.11,
+      "price": 105.278,
+      "change_pct": -0.13,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": false,
@@ -8120,7 +8112,7 @@
             "o": 105.792,
             "h": 106.175,
             "l": 105.139,
-            "c": 105.294
+            "c": 105.278
           }
         ],
         "4h": [
@@ -8367,7 +8359,7 @@
             "o": 105.642,
             "h": 106.175,
             "l": 105.139,
-            "c": 105.294
+            "c": 105.278
           }
         ],
         "1h": [
@@ -8612,9 +8604,9 @@
           {
             "t": 1795575600,
             "o": 105.215,
-            "h": 105.354,
+            "h": 105.373,
             "l": 105.139,
-            "c": 105.294
+            "c": 105.278
           }
         ]
       }
@@ -8626,8 +8618,8 @@
       "quote": "CAD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.94364,
-      "change_pct": -0.91,
+      "price": 0.94334,
+      "change_pct": -0.94,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "is_counter_daily": false,
@@ -8646,11 +8638,11 @@
         "macro": "BAJA"
       },
       "metrics": {
-        "atr_14": 0.00754,
+        "atr_14": 0.00755,
         "range_20d": {
           "high": 0.98734,
-          "low": 0.9425,
-          "pos_pct": 3
+          "low": 0.9424,
+          "pos_pct": 2
         }
       },
       "structure": {
@@ -8670,7 +8662,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (3%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (2%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -8936,8 +8928,8 @@
             "t": 1795564800,
             "o": 0.94748,
             "h": 0.95078,
-            "l": 0.9425,
-            "c": 0.94364
+            "l": 0.9424,
+            "c": 0.94334
           }
         ],
         "4h": [
@@ -9183,8 +9175,8 @@
             "t": 1795564800,
             "o": 0.94674,
             "h": 0.95078,
-            "l": 0.9425,
-            "c": 0.94364
+            "l": 0.9424,
+            "c": 0.94334
           }
         ],
         "1h": [
@@ -9430,8 +9422,8 @@
             "t": 1795575600,
             "o": 0.94337,
             "h": 0.94428,
-            "l": 0.9425,
-            "c": 0.94364
+            "l": 0.9424,
+            "c": 0.94334
           }
         ]
       }
@@ -9443,8 +9435,8 @@
       "quote": "NZD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.20928,
-      "change_pct": -0.58,
+      "price": 1.20891,
+      "change_pct": -0.61,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": false,
@@ -9467,7 +9459,7 @@
         "range_20d": {
           "high": 1.25542,
           "low": 1.20841,
-          "pos_pct": 2
+          "pos_pct": 1
         }
       },
       "structure": {
@@ -9487,7 +9479,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (2%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (1%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -9754,7 +9746,7 @@
             "o": 1.21161,
             "h": 1.21737,
             "l": 1.20841,
-            "c": 1.20928
+            "c": 1.20891
           }
         ],
         "4h": [
@@ -10001,7 +9993,7 @@
             "o": 1.21111,
             "h": 1.21737,
             "l": 1.20841,
-            "c": 1.20928
+            "c": 1.20891
           }
         ],
         "1h": [
@@ -10248,7 +10240,7 @@
             "o": 1.2093,
             "h": 1.20997,
             "l": 1.20841,
-            "c": 1.20928
+            "c": 1.20891
           }
         ]
       }
@@ -10260,8 +10252,8 @@
       "quote": "AUD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.65621,
-      "change_pct": 0.67,
+      "price": 1.65598,
+      "change_pct": 0.65,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -10331,12 +10323,12 @@
           "type": "forex",
           "decimals": 5,
           "pip": 0.0001,
-          "price": 1.65621,
+          "price": 1.65598,
           "direction": "BUY",
           "entry": 1.6512,
           "extreme": 1.6439,
           "date": "2006-10-30",
-          "dist_units": 50.1,
+          "dist_units": 47.8,
           "unit_label": "pips",
           "macro_aligned": true
         }
@@ -10586,7 +10578,7 @@
             "o": 1.65008,
             "h": 1.65742,
             "l": 1.6442,
-            "c": 1.65621
+            "c": 1.65598
           }
         ],
         "4h": [
@@ -10833,7 +10825,7 @@
             "o": 1.6524,
             "h": 1.65742,
             "l": 1.6442,
-            "c": 1.65621
+            "c": 1.65598
           }
         ],
         "1h": [
@@ -11079,8 +11071,8 @@
             "t": 1795575600,
             "o": 1.65661,
             "h": 1.65742,
-            "l": 1.65514,
-            "c": 1.65621
+            "l": 1.65512,
+            "c": 1.65598
           }
         ]
       }
@@ -11092,8 +11084,8 @@
       "quote": "CHF",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.55293,
-      "change_pct": -0.88,
+      "price": 0.55283,
+      "change_pct": -0.89,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -11403,7 +11395,7 @@
             "o": 0.55445,
             "h": 0.5572,
             "l": 0.55193,
-            "c": 0.55293
+            "c": 0.55283
           }
         ],
         "4h": [
@@ -11650,7 +11642,7 @@
             "o": 0.55437,
             "h": 0.5572,
             "l": 0.55193,
-            "c": 0.55293
+            "c": 0.55283
           }
         ],
         "1h": [
@@ -11895,9 +11887,9 @@
           {
             "t": 1795575600,
             "o": 0.55261,
-            "h": 0.55327,
+            "h": 0.55334,
             "l": 0.55193,
-            "c": 0.55293
+            "c": 0.55283
           }
         ]
       }
@@ -11909,8 +11901,8 @@
       "quote": "USD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.54711,
-      "change_pct": 0.38,
+      "price": 0.54684,
+      "change_pct": 0.33,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "is_counter_daily": false,
@@ -11932,7 +11924,7 @@
         "range_20d": {
           "high": 0.56578,
           "low": 0.54346,
-          "pos_pct": 16
+          "pos_pct": 15
         }
       },
       "structure": {
@@ -11952,7 +11944,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (16%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (15%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -12219,7 +12211,7 @@
             "o": 0.54804,
             "h": 0.54852,
             "l": 0.54681,
-            "c": 0.54711
+            "c": 0.54684
           }
         ],
         "4h": [
@@ -12466,7 +12458,7 @@
             "o": 0.54771,
             "h": 0.54852,
             "l": 0.54681,
-            "c": 0.54711
+            "c": 0.54684
           }
         ],
         "1h": [
@@ -12713,7 +12705,7 @@
             "o": 0.54705,
             "h": 0.54711,
             "l": 0.54681,
-            "c": 0.54711
+            "c": 0.54684
           }
         ]
       }
@@ -12725,8 +12717,8 @@
       "quote": "CAD",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 1.42698,
-      "change_pct": -0.66,
+      "price": 1.42728,
+      "change_pct": -0.64,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -12740,7 +12732,7 @@
         "1w": "SUBE",
         "1d": "BAJA",
         "4h": "BAJA",
-        "1h": "NEUTRAL",
+        "1h": "SUBE",
         "macro": "BAJA"
       },
       "metrics": {
@@ -13035,7 +13027,7 @@
             "o": 1.4264,
             "h": 1.42745,
             "l": 1.4256,
-            "c": 1.42698
+            "c": 1.42728
           }
         ],
         "4h": [
@@ -13280,9 +13272,9 @@
           {
             "t": 1795564800,
             "o": 1.42729,
-            "h": 1.42733,
+            "h": 1.42734,
             "l": 1.4256,
-            "c": 1.42698
+            "c": 1.42728
           }
         ],
         "1h": [
@@ -13527,9 +13519,9 @@
           {
             "t": 1795575600,
             "o": 1.42672,
-            "h": 1.42733,
+            "h": 1.42734,
             "l": 1.4263,
-            "c": 1.42698
+            "c": 1.42728
           }
         ]
       }
@@ -13541,8 +13533,8 @@
       "quote": "CHF",
       "pip": 0.0001,
       "decimals": 5,
-      "price": 0.83619,
-      "change_pct": -0.63,
+      "price": 0.83648,
+      "change_pct": -0.59,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "is_counter_daily": false,
@@ -13564,7 +13556,7 @@
         "range_20d": {
           "high": 0.84428,
           "low": 0.81289,
-          "pos_pct": 74
+          "pos_pct": 75
         }
       },
       "structure": {
@@ -13849,9 +13841,9 @@
           {
             "t": 1795564800,
             "o": 0.83491,
-            "h": 0.8365,
+            "h": 0.83652,
             "l": 0.83467,
-            "c": 0.83619
+            "c": 0.83648
           }
         ],
         "4h": [
@@ -14096,9 +14088,9 @@
           {
             "t": 1795564800,
             "o": 0.83576,
-            "h": 0.8365,
+            "h": 0.83652,
             "l": 0.83499,
-            "c": 0.83619
+            "c": 0.83648
           }
         ],
         "1h": [
@@ -14343,9 +14335,9 @@
           {
             "t": 1795575600,
             "o": 0.83577,
-            "h": 0.8363,
+            "h": 0.83652,
             "l": 0.83572,
-            "c": 0.83619
+            "c": 0.83648
           }
         ]
       }
@@ -14357,10 +14349,10 @@
       "quote": "JPY",
       "pip": 0.01,
       "decimals": 3,
-      "price": 174.406,
-      "change_pct": 0.55,
-      "has_valid_ob": true,
-      "zone_kind": "FVG",
+      "price": 174.357,
+      "change_pct": 0.53,
+      "has_valid_ob": false,
+      "zone_kind": "NONE",
       "is_counter_daily": false,
       "is_strong_pullback": false,
       "has_news_today": false,
@@ -14377,7 +14369,7 @@
         "range_20d": {
           "high": 178.465,
           "low": 173.289,
-          "pos_pct": 22
+          "pos_pct": 21
         }
       },
       "structure": {
@@ -14391,7 +14383,7 @@
       },
       "confluence": {
         "alignment": "BROKEN",
-        "score": 49,
+        "score": 42,
         "macro_dir": "SUBE",
         "chart_bias": "BAJA"
       },
@@ -14401,21 +14393,21 @@
       },
       "swing_potential": {
         "active": false,
-        "target": 173.311,
+        "target": 172.081,
         "note": ""
       },
       "setup": {
         "direction": "SELL",
         "dir_label": "VENTA",
-        "signal_tag": "VENTA · FVG Retroceso",
-        "entry": 174.437,
-        "zone_top": 174.454,
-        "zone_bottom": 174.42,
-        "sl": 174.705,
-        "be_trigger": 174.169,
-        "tp1": 173.901,
-        "tp2": 173.633,
-        "simple_reason": "FVG Retroceso en 1H con estructura 1D BAJA / 4H SUBE y flujo macro SUBE.",
+        "signal_tag": "VENTA · Sin bloque limpio",
+        "entry": 174.357,
+        "zone_top": 174.357,
+        "zone_bottom": 174.357,
+        "sl": 174.899,
+        "be_trigger": 173.815,
+        "tp1": 173.273,
+        "tp2": 172.731,
+        "simple_reason": "Sin bloque limpio en 1H con estructura 1D BAJA / 4H SUBE y flujo macro SUBE.",
         "risk_note": "Respetar Stop estructural y proteger en +1R."
       },
       "weekly_pivots": [],
@@ -14664,7 +14656,7 @@
             "o": 174.628,
             "h": 174.676,
             "l": 174.26,
-            "c": 174.406
+            "c": 174.357
           }
         ],
         "4h": [
@@ -14911,7 +14903,7 @@
             "o": 174.574,
             "h": 174.656,
             "l": 174.26,
-            "c": 174.406
+            "c": 174.357
           }
         ],
         "1h": [
@@ -15156,9 +15148,9 @@
           {
             "t": 1795575600,
             "o": 174.313,
-            "h": 174.42,
+            "h": 174.436,
             "l": 174.26,
-            "c": 174.406
+            "c": 174.357
           }
         ]
       }
@@ -15170,8 +15162,8 @@
       "quote": "USD",
       "pip": 1.0,
       "decimals": 2,
-      "price": 59357.27,
-      "change_pct": -3.03,
+      "price": 59400.47,
+      "change_pct": -2.96,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "is_counter_daily": false,
@@ -15193,7 +15185,7 @@
         "range_20d": {
           "high": 80833.62,
           "low": 55149.57,
-          "pos_pct": 16
+          "pos_pct": 17
         }
       },
       "structure": {
@@ -15213,7 +15205,7 @@
       },
       "exhaustion": {
         "active": true,
-        "reason": "Precio en suelo del rango (16%) o velas perdiendo cuerpo."
+        "reason": "Precio en suelo del rango (17%) o velas perdiendo cuerpo."
       },
       "swing_potential": {
         "active": false,
@@ -15480,7 +15472,7 @@
             "o": 59745.65,
             "h": 59745.65,
             "l": 58902.68,
-            "c": 59357.27
+            "c": 59400.47
           }
         ],
         "4h": [
@@ -15727,7 +15719,7 @@
             "o": 59737.3,
             "h": 59745.76,
             "l": 58863.1,
-            "c": 59357.27
+            "c": 59400.47
           }
         ],
         "1h": [
@@ -15974,7 +15966,7 @@
             "o": 59160.81,
             "h": 59571.18,
             "l": 58952.73,
-            "c": 59357.27
+            "c": 59400.47
           }
         ]
       }
