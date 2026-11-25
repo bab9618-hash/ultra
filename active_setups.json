@@ -74,21 +74,6 @@
     "ob_low": 1.20629,
     "locked_at": 1795615577
   },
-  "US30": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "48392.03 - 49545.59",
-    "direction": "BUY",
-    "signal_tag": "COMPRA FVG RETROCESO",
-    "entry": 48968.81,
-    "be_trigger": 49940.76,
-    "sl": 47996.86,
-    "tp1": 50912.71,
-    "tp2": 51884.66,
-    "ob_high": 49545.59,
-    "ob_low": 48392.03,
-    "locked_at": 1795615577
-  },
   "GBPCAD": {
     "valid_ob": true,
     "kind": "FVG",
@@ -119,21 +104,6 @@
     "ob_low": 104.808,
     "locked_at": 1795615577
   },
-  "US500": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "6955.41 - 7241.69",
-    "direction": "BUY",
-    "signal_tag": "COMPRA FVG RETROCESO",
-    "entry": 7098.55,
-    "be_trigger": 7316.44,
-    "sl": 6880.66,
-    "tp1": 7534.33,
-    "tp2": 7752.22,
-    "ob_high": 7241.69,
-    "ob_low": 6955.41,
-    "locked_at": 1795615577
-  },
   "AUDUSD": {
     "valid_ob": true,
     "kind": "FVG",
@@ -162,21 +132,6 @@
     "tp2": 1.09013,
     "ob_high": 1.09577,
     "ob_low": 1.09505,
-    "locked_at": 1795615577
-  },
-  "GBPJPY": {
-    "valid_ob": true,
-    "kind": "OB",
-    "fvg_range": null,
-    "direction": "SELL",
-    "signal_tag": "RIESGO GIRO - PROTEGER",
-    "entry": 208.214,
-    "be_trigger": 208.095,
-    "sl": 208.333,
-    "tp1": 207.976,
-    "tp2": 207.857,
-    "ob_high": 208.313,
-    "ob_low": 208.116,
     "locked_at": 1795615577
   },
   "AUDCAD": {
@@ -238,5 +193,35 @@
     "ob_high": 3560.0,
     "ob_low": 3517.1,
     "locked_at": 1795616444
+  },
+  "USDJPY": {
+    "valid_ob": true,
+    "kind": "FVG",
+    "fvg_range": "159.316 - 159.358",
+    "direction": "SELL",
+    "signal_tag": "VENTA FVG RETROCESO",
+    "entry": 159.337,
+    "be_trigger": 159.158,
+    "sl": 159.516,
+    "tp1": 158.979,
+    "tp2": 158.8,
+    "ob_high": 159.358,
+    "ob_low": 159.316,
+    "locked_at": 1795620551
+  },
+  "EURJPY": {
+    "valid_ob": true,
+    "kind": "FVG",
+    "fvg_range": "174.266 - 174.38",
+    "direction": "SELL",
+    "signal_tag": "VENTA FVG RETROCESO",
+    "entry": 174.323,
+    "be_trigger": 174.017,
+    "sl": 174.629,
+    "tp1": 173.711,
+    "tp2": 173.405,
+    "ob_high": 174.38,
+    "ob_low": 174.266,
+    "locked_at": 1795620551
   }
 }
