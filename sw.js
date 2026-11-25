@@ -1,4 +1,4 @@
-const CACHE_NAME = 'laticce-v10.2';
+const CACHE_NAME = 'laticce-v11.0';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
