@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#030407" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>LATICCE · Cabina Neuronal v10.6</title>
+  <title>LATICCE · Cabina Neuronal v10.7</title>
   <link rel="manifest" href="./manifest.json" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -248,7 +248,7 @@
         <div id="panel-weekly1s-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
       </section>
 
-      <!-- SUBPANEL ULTRÓN (ESTILO INSTITUCIONAL RESTAURADO) -->
+      <!-- SUBPANEL ULTRÓN -->
       <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-b border-slate-800 pb-2">
           <span class="font-bold text-slate-200">CAPAS ESTRUCTURALES:</span>
@@ -490,6 +490,29 @@
         return { units: units !== null ? units : 0, unitLabel: getUnitLabel(a) };
       }
 
+      function stateBadgeClass(st) {
+        if (st === 'FUERTE') return 'text-emerald-300 font-bold';
+        if (st === 'DEBIL' || st === 'DÉBIL') return 'text-red-400 font-bold';
+        return 'text-slate-300 font-semibold';
+      }
+
+      function getPairStrengthParts(a) {
+        const lbls = (appData && appData.currency_strength && appData.currency_strength.labels) || {};
+        if (a.type === 'forex' && a.base && a.quote) {
+          const s1 = lbls[a.base] || 'NEUTRAL';
+          const s2 = lbls[a.quote] || 'NEUTRAL';
+          return [
+            { code: a.base, state: s1 },
+            { code: a.quote, state: s2 }
+          ];
+        }
+        const mDir = (a.timeframes && a.timeframes.macro) || (a.confluence && a.confluence.macro_dir) || 'NEUTRAL';
+        const mLbl = mDir === 'SUBE' ? 'FUERTE' : (mDir === 'BAJA' ? 'DEBIL' : 'NEUTRAL');
+        return [
+          { code: a.symbol, state: mLbl }
+        ];
+      }
+
       function buildEasyReason(a) {
         const isBuy = (a.setup && a.setup.direction) === 'BUY';
         const accion = isBuy ? 'COMPRA' : 'VENTA';
@@ -503,14 +526,12 @@
         const align = (a.confluence && a.confluence.alignment) || 'NEUTRAL';
 
         let fuerzaTxt = '';
-        if (a.type === 'forex' && appData && appData.currency_strength && appData.currency_strength.labels) {
-          const lbls = appData.currency_strength.labels;
-          const bSt = lbls[a.base] || 'NEUTRAL';
-          const qSt = lbls[a.quote] || 'NEUTRAL';
+        const parts = getPairStrengthParts(a);
+        if (parts.length === 2) {
           if (isBuy) {
-            fuerzaTxt = ' Además, el ' + a.base + ' está ' + bSt + ' frente al ' + a.quote + ' (' + qSt + ').';
+            fuerzaTxt = ' Además, ' + parts[0].code + ' está ' + parts[0].state + ' y ' + parts[1].code + ' está ' + parts[1].state + '.';
           } else {
-            fuerzaTxt = ' Además, el ' + a.base + ' está ' + bSt + ' y el ' + a.quote + ' está ' + qSt + ', empujando el par hacia abajo.';
+            fuerzaTxt = ' Además, ' + parts[0].code + ' está ' + parts[0].state + ' y ' + parts[1].code + ' está ' + parts[1].state + ', empujando el par hacia abajo.';
           }
         } else if (align === 'ALIGNED') {
           fuerzaTxt = ' La fuerza macroeconómica acompaña el movimiento.';
@@ -838,6 +859,11 @@
             ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 font-bold">🎯 YA EN ZONA DE ENTRADA</span>'
             : '<span class="px-2 py-0.5 rounded bg-sky-500/15 border border-sky-400/40 text-sky-300 font-bold">📍 A ' + distInfo.units + ' ' + distInfo.unitLabel + ' de entrada</span>';
 
+          const strParts = getPairStrengthParts(a);
+          const strengthHtml = strParts.map(function (p) {
+            return '<span class="' + stateBadgeClass(p.state) + '">' + p.code + ' ' + p.state + '</span>';
+          }).join(' <span class="text-slate-600">·</span> ');
+
           const badgeAl = al === 'ALIGNED'
             ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">✔ VAN JUNTOS</span>'
             : (al === 'BROKEN'
@@ -866,7 +892,10 @@
               '<span class="font-bold ' + (isBuy ? 'text-emerald-400' : 'text-red-400') + '">' + (a.setup && a.setup.signal_tag) + '</span>' +
               badgeAl +
             '</div>' +
-            '<div class="text-[11px]">' + distBadge + '</div>' +
+            '<div class="flex flex-wrap items-center justify-between gap-2 text-[11px] bg-[#050811]/80 border border-slate-800/70 rounded-lg px-2.5 py-1.5">' +
+              distBadge +
+              '<div class="flex items-center gap-1.5">' + strengthHtml + '</div>' +
+            '</div>' +
             '<div class="grid grid-cols-4 gap-1.5 text-[10px] bg-[#050811] p-2 rounded-lg border border-slate-800/80">' +
               '<div><span class="text-slate-400">ENTRADA</span><div class="text-white font-bold">' + (a.setup && a.setup.entry) + '</div></div>' +
               '<div><span class="text-slate-400">STOP</span><div class="text-red-400 font-bold">' + (a.setup && a.setup.sl) + '</div></div>' +
@@ -1063,7 +1092,8 @@
         document.getElementById('pu-r20').textContent = (a.metrics && a.metrics.range_20d) ? (a.metrics.range_20d.pos_pct + '% del rango') : '--';
 
         document.getElementById('pu-entry').textContent = entry || '--';
-        document.getElementById('pu-dist').textContent = 'A ' + distInfo.units + ' ' + distInfo.unitLabel + ' de entrada';
+        const distEl = document.getElementById('pu-dist');
+        if (distEl) distEl.textContent = 'A ' + distInfo.units + ' ' + distInfo.unitLabel + ' de entrada';
 
         document.getElementById('pu-sl').textContent = sl || '--';
         document.getElementById('pu-sl-pips').textContent = slU !== null ? ('Riesgo: ' + slU + ' ' + uLbl) : '--';
@@ -1124,7 +1154,6 @@
         const yOf = function (p) { return padT + ((hi - p) / (hi - lo)) * (H - padT - padB); };
         const cw = plotW / candles.length;
 
-        // Cuadrícula sutil institucional
         ctx.strokeStyle = 'rgba(30, 41, 59, 0.35)';
         ctx.lineWidth = 1;
         for (let g = 1; g <= 4; g++) {
@@ -1132,7 +1161,6 @@
           ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(W - padR, gy); ctx.stroke();
         }
 
-        // Zona sombreada de OB / FVG
         if (a.has_valid_ob && a.setup && typeof a.setup.zone_top === 'number' && typeof a.setup.zone_bottom === 'number') {
           const y1 = yOf(a.setup.zone_top), y2 = yOf(a.setup.zone_bottom);
           ctx.fillStyle = isBuy ? 'rgba(16, 185, 129, 0.18)' : 'rgba(239, 68, 68, 0.18)';
@@ -1141,7 +1169,6 @@
           ctx.strokeRect(padL, Math.min(y1, y2), plotW, Math.max(6, Math.abs(y2 - y1)));
         }
 
-        // Línea EQ-50% del rango visible
         const rHi = Math.max.apply(null, candles.map(function (c) { return c.h; }));
         const rLo = Math.min.apply(null, candles.map(function (c) { return c.l; }));
         const eq50 = (rHi + rLo) / 2;
@@ -1154,7 +1181,6 @@
         ctx.font = '9px JetBrains Mono';
         ctx.fillText('EQ-50%', padL + 6, yEq - 3);
 
-        // Velas japonesas
         candles.forEach(function (c, i) {
           const x = padL + i * cw + cw * 0.5;
           const up = c.c >= c.o;
@@ -1165,7 +1191,6 @@
           ctx.fillRect(x - cw * 0.32, top, Math.max(2, cw * 0.64), Math.max(2, bot - top));
         });
 
-        // Etiqueta CHoCH / BOS
         if (a.structure && a.structure.choch && a.structure.choch !== 'NONE') {
           const bosLbl = (a.structure.choch === 'ALCISTA' ? '⚡ BULLISH BOS/CHoCH' : '⚡ BEARISH BOS/CHoCH');
           const bosY = a.structure.choch === 'ALCISTA' ? padT + 14 : H - padB - 10;
@@ -1174,7 +1199,6 @@
           ctx.fillText(bosLbl, padL + 8, bosY);
         }
 
-        // Niveles horizontales con etiqueta izquierda y placa de precio derecha
         const drawLevel = function (val, col, leftLbl, badgeText) {
           if (typeof val !== 'number') return;
           const y = yOf(val);
@@ -1430,7 +1454,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js?v=10.6').catch(function () {});
+        navigator.serviceWorker.register('./sw.js?v=10.7').catch(function () {});
       }
 
       selectAgent('jarvis', false);
