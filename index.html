@@ -640,6 +640,7 @@
       if (!yf) return null;
       const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yf)}?interval=1m&range=1d&_=${Date.now()}`;
 
+      // Via 1: corsproxy.io (rapido y sin cache)
       const r1 = await fetchWithTimeout(`https://corsproxy.io/?${encodeURIComponent(target)}`, 4000);
       if (r1 && r1.ok) {
         try {
@@ -649,6 +650,7 @@
         } catch (e) {}
       }
 
+      // Via 2: respaldo allorigins
       const r2 = await fetchWithTimeout(`https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`, 4500);
       if (r2 && r2.ok) {
         try {
@@ -665,6 +667,7 @@
       if (!data || !data.assets || !data.assets.length) return;
       let updatedAny = false;
 
+      // Actualiza prioritariamente el activo abierto + Foco #1 + lote rotativo de 5 pares
       const fpSym = data.focus_pick && data.focus_pick.primary ? data.focus_pick.primary.symbol : null;
       const allSyms = data.assets.map(a => a.symbol);
       const batch = allSyms.slice(liveCycleIdx, liveCycleIdx + 5);
@@ -1553,9 +1556,7 @@
     function toggleWhy(sym) {
       openWhyPanels[sym] = !openWhyPanels[sym];
       const el = document.getElementById(`why-${sym}`);
-      const btn = document.getElementById(`why-btn-${sym}`);
       if (el) el.classList.toggle('hidden', !openWhyPanels[sym]);
-      if (btn) btn.textContent = openWhyPanels[sym] ? '💡 ¿Por qué? ▴' : '💡 ¿Por qué? ▾';
     }
 
     function openInPanelChart(sym) {
@@ -1708,7 +1709,7 @@
                 <span class="px-2 py-0.5 rounded bg-amber-400 text-black font-hud font-black text-[10px]">🎯 FOCO PRINCIPAL #1 HOY</span>
                 <span class="font-hud font-black text-white text-base">${fp.symbol}</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isBuy ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400' : 'bg-red-500/20 text-red-300 border border-red-400'}">${fp.dir_label} (${fp.signal_tag})</span>
-                <span class="px-2.5 py-0.5 rounded bg-emerald-500/25 text-emerald-300 border border-emerald-400 font-hud text-sm font-black">${fp.probability}%</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/60 text-[10px] font-bold">${fp.probability}% PROBABILIDAD</span>
               </div>
               <button onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs">ABRIR GRÁFICO #1 →</button>
             </div>
@@ -1776,12 +1777,6 @@
         const hasSwing = a.swing_potential && a.swing_potential.active;
         const bePrice = a.setup.be_trigger || a.setup.entry;
         const isTopFocus = fp && fp.symbol === a.symbol;
-        const sc = Number(a.confluence.score) || 0;
-        const scoreBadgeCls = sc >= 84
-          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400'
-          : (sc >= 70
-            ? 'bg-amber-500/20 text-amber-300 border-amber-400'
-            : 'bg-slate-800/80 text-slate-300 border-slate-600');
 
         const mDir = a.macro_dir || (a.confluence.alignment === 'ALIGNED' ? a.chart_bias : 'NEUTRAL');
         const econColor = mDir === 'SUBE' ? 'text-emerald-300 border-emerald-500/40 bg-emerald-500/10' : (mDir === 'BAJA' ? 'text-red-300 border-red-500/40 bg-red-500/10' : 'text-slate-300 border-slate-700 bg-slate-800/40');
@@ -1792,21 +1787,17 @@
 
         return `
           <div class="hud-panel rounded-xl p-4 space-y-3 border ${isTopFocus ? 'border-amber-400' : (hasSwing ? 'border-indigo-400/70' : (hasNews ? 'border-orange-400/70' : (isBroken ? 'border-red-500/60' : (isAligned ? 'border-emerald-500/40' : 'border-slate-800'))))}">
-            <div class="flex items-start justify-between gap-2">
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="font-hud font-black text-white text-base sm:text-lg tracking-wide">${st.dot} ${a.symbol}</span>
-                <span class="px-2.5 py-0.5 rounded-lg border font-hud font-black text-base sm:text-lg leading-none ${scoreBadgeCls}">${sc}%</span>
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="font-hud font-bold text-white text-sm">${st.dot} ${a.symbol}</span>
                 <span class="text-xs text-cyan-300 font-bold">${a.price}</span>
+                ${isTopFocus ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-400 text-black font-black">🎯 FOCO #1</span>` : ''}
+                ${hasSwing ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400 font-bold">🌊 POTENCIAL SWING</span>` : ''}
+                ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
+                ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA ${a.news_warning.currencies}</span>` : ''}
+                ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">SE CONTRADICEN</span>' : ''}
               </div>
               <button onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400 shrink-0">Gráfico →</button>
-            </div>
-
-            <div class="flex flex-wrap items-center gap-1.5">
-              ${isTopFocus ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-400 text-black font-black">🎯 FOCO #1</span>` : ''}
-              ${hasSwing ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400 font-bold">🌊 POTENCIAL SWING</span>` : ''}
-              ${st.text ? `<span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.text}</span>` : ''}
-              ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA ${a.news_warning.currencies}</span>` : ''}
-              ${isBroken ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400">SE CONTRADICEN</span>' : ''}
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-[10px]">
@@ -1834,12 +1825,12 @@
               </div>
             ` : ''}
 
-            <div class="flex items-center justify-between gap-2 bg-[#050811] border border-slate-800 rounded-lg p-2.5">
-              <div class="text-xs min-w-0">
-                <div class="font-bold text-white truncate">${a.confluence.verdict_title}</div>
-                <div class="text-[10px] text-slate-400 truncate">${a.confluence.verdict_sub}</div>
+            <div class="flex items-center justify-between bg-[#050811] border border-slate-800 rounded-lg p-2.5">
+              <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-full border-2 ${isAligned ? 'border-emerald-400 text-emerald-400' : (isBroken ? 'border-red-400 text-red-400' : 'border-slate-500 text-slate-400')} flex items-center justify-center font-bold text-xs">${a.confluence.score}</div>
+                <div class="text-xs"><div class="font-bold text-white">${a.confluence.verdict_title}</div><div class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</div></div>
               </div>
-              <button id="why-btn-${a.symbol}" type="button" onclick="toggleWhy('${a.symbol}')" class="px-2.5 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold shrink-0">${openWhyPanels[a.symbol] ? '💡 ¿Por qué? ▴' : '💡 ¿Por qué? ▾'}</button>
+              <button onclick="toggleWhy('${a.symbol}')" class="px-2 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">¿Por qué? ▾</button>
             </div>
             <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
               <div><strong class="text-sky-400">VISIÓN (Macro):</strong> ${a.macro_reason}</div>
