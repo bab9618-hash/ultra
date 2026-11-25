@@ -253,5 +253,20 @@
     "ob_high": 59471.96,
     "ob_low": 58881.57,
     "locked_at": 1795630899
+  },
+  "EURJPY": {
+    "valid_ob": true,
+    "kind": "FVG",
+    "fvg_range": "174.635 - 174.761",
+    "direction": "BUY",
+    "signal_tag": "COMPRA FVG RETROCESO",
+    "entry": 174.698,
+    "be_trigger": 175.19,
+    "sl": 174.206,
+    "tp1": 175.682,
+    "tp2": 176.174,
+    "ob_high": 174.761,
+    "ob_low": 174.635,
+    "locked_at": 1795634747
   }
 }
