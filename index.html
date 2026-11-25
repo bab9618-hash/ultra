@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Red Neuronal v11.3</title>
+  <title>LATICCE · Red Neuronal v11.4</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -59,7 +59,7 @@
     .typing-cursor { display: inline-block; width: 7px; height: 13px; background: var(--agent-color); margin-left: 3px; vertical-align: middle; animation: blinkCursor 0.8s infinite; }
 
     .hud-panel {
-      background: linear-gradient(155deg, rgba(10, 14, 22, 0.82), rgba(5, 8, 13, 0.88));
+      background: linear-gradient(155deg, rgba(10, 14, 22, 0.84), rgba(5, 8, 13, 0.90));
       backdrop-filter: blur(8px);
       border: 1px solid #182234;
     }
@@ -79,7 +79,7 @@
   <div id="boot-screen" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2.5rem 1.25rem;text-align:center;">
     <canvas id="boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
-    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.3</div>
+    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.4</div>
 
     <div class="relative z-10 w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 320 320" class="w-full h-full overflow-visible">
@@ -186,7 +186,7 @@
         <button type="button" onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (22)</button>
         <button type="button" onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pt="vision">👁️ VISIÓN</button>
         <button type="button" onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
-        <button type="button" onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 F.R.I.D.A.Y.</button>
+        <button type="button" onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 F.R.I.D.A.Y. (16)</button>
         <button type="button" onclick="switchPanelTab('karen')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="karen">🕸️ DIARIO KAREN</button>
       </div>
       <button type="button" onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ CABINA</button>
@@ -272,7 +272,7 @@
         </div>
       </div>
       <div class="w-full bg-[#030509] border border-slate-800 rounded-lg overflow-hidden">
-        <canvas id="ultron-canvas" class="w-full h-[380px] block"></canvas>
+        <canvas id="ultron-canvas" class="w-full h-[410px] block"></canvas>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
@@ -303,7 +303,7 @@
           <div id="pu-dist" class="text-[10px] text-slate-400">--</div>
         </div>
         <div class="bg-[#050811] border border-slate-800 rounded p-2.5">
-          <div class="text-[10px] text-red-400">STOP ESTRUCTURAL</div>
+          <div class="text-[10px] text-red-400">STOP INICIAL</div>
           <div id="pu-sl" class="font-bold text-red-400 text-sm">--</div>
           <div id="pu-sl-pips" class="text-[10px] text-red-300">--</div>
         </div>
@@ -313,24 +313,37 @@
           <div class="text-[10px] text-slate-400">Subir SL a Entrada</div>
         </div>
         <div class="bg-[#050811] border border-emerald-500/40 rounded p-2.5">
-          <div class="text-[10px] text-emerald-400">TP1 (PARCIALES)</div>
+          <div class="text-[10px] text-emerald-400">TP1 PARCIAL</div>
           <div id="pu-tp1" class="font-bold text-emerald-400 text-sm">--</div>
           <div id="pu-tp1-pips" class="text-[10px] text-emerald-300">--</div>
         </div>
         <div class="bg-[#050811] border border-teal-500/40 rounded p-2.5">
-          <div class="text-[10px] text-teal-300">TP2 (SWING 1:3)</div>
+          <div class="text-[10px] text-teal-300">SWING TP (1:3)</div>
           <div id="pu-tp2" class="font-bold text-teal-300 text-sm">--</div>
           <div id="pu-tp2-pips" class="text-[10px] text-teal-400">--</div>
         </div>
       </div>
     </section>
 
-    <!-- SUBPANEL F.R.I.D.A.Y. -->
+    <!-- SUBPANEL F.R.I.D.A.Y. (16 MÓDULOS: TÉCNICOS + MACROECONOMÍA) -->
     <section id="ptab-friday" class="hidden hud-panel rounded-xl p-4 space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="font-hud text-sm font-bold text-purple-400">🟣 ACADEMIA INSTITUCIONAL F.R.I.D.A.Y. (10 MÓDULOS)</h3>
-        <span id="panel-course-pct" class="text-xs font-bold text-purple-300">0% COMPLETADO</span>
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="font-hud text-sm font-bold text-purple-400">🟣 ACADEMIA INSTITUCIONAL F.R.I.D.A.Y. (16 MÓDULOS)</h3>
+          <div class="text-[11px] text-slate-400">Ruta completa: Estructura Institucional + Maestría en Macroeconomía</div>
+        </div>
+        <span id="panel-course-pct" class="text-xs font-bold text-purple-300 px-2.5 py-1 rounded bg-purple-500/15 border border-purple-500/40">0% COMPLETADO</span>
       </div>
+
+      <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+        <button type="button" onclick="setFridayCategory('ALL')" class="fcat px-3 py-1.5 rounded bg-purple-500 text-black font-bold" data-fc="ALL">TODOS (16)</button>
+        <button type="button" onclick="setFridayCategory('MACRO')" class="fcat px-3 py-1.5 rounded bg-[#050811] border border-sky-500/50 text-sky-300 font-bold" data-fc="MACRO">🌐 MACROECONOMÍA EXPERTA (6)</button>
+        <button type="button" onclick="setFridayCategory('TECH')" class="fcat px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-purple-300" data-fc="TECH">🎯 ESTRUCTURA & SMC (10)</button>
+      </div>
+
+      <!-- LECTOR DE LECCIÓN ACTIVA -->
+      <div id="friday-lesson-reader" class="bg-[#050811] border border-purple-500/40 rounded-xl p-4 space-y-3"></div>
+
       <div id="panel-lessons-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
 
@@ -379,6 +392,7 @@
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
 
+    // 1. RED NEURONAL ANIMADA EN PANTALLA DE INICIO (#boot-canvas)
     (function initBootNeuralCanvas() {
       const c = document.getElementById('boot-canvas');
       if (!c) return;
@@ -459,6 +473,7 @@
       draw();
     })();
 
+    // 2. RED NEURONAL DINÁMICA EN EL FONDO DE TODOS LOS MÓDULOS (#neural-bg)
     (function initModulesNeuralBg() {
       const c = document.getElementById('neural-bg');
       if (!c) return;
@@ -521,6 +536,8 @@
     let jarvisSubView = 'ALL';
     let panelFilter = 'ALL';
     let visionSubTab = 'resumen';
+    let fridayCatFilter = 'ALL';
+    let selectedLessonId = 11;
     let pairSearchTerm = '';
     let selectedSymbol = 'XAUUSD';
     let selectedTF = '1d';
@@ -533,6 +550,131 @@
     let ghToken = localStorage.getItem('oraculo_gh_token') || '';
     let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
     let agentHistories = { jarvis: [], vision: [], ultron: [], friday: [], edith: [], karen: [], homer: [] };
+
+    // TEMARIO COMPLETO DE F.R.I.D.A.Y. (10 TÉCNICOS + 6 EXPERTOS EN MACROECONOMÍA)
+    const FRIDAY_CURRICULUM = [
+      {
+        id: 1, cat: 'TECH', title: '1. Estructura Institucional (BOS y CHoCH)',
+        summary: 'Cómo identificar si los bancos están acumulando o distribuyendo mediante quiebres reales de estructura.',
+        body: 'Un BOS (Break of Structure) confirma la continuación de la tendencia cuando una vela cierra con cuerpo por encima del último máximo (en compras) o por debajo del último mínimo (en ventas). Un CHoCH (Change of Character) es la primera señal de giro cuando el precio rompe el último punto de control en contra de la tendencia previa.',
+        rule: 'Regla LATICCE: Nunca des por válido un giro solo por una mecha; exige cierre de cuerpo y desplazamiento institucional.'
+      },
+      {
+        id: 2, cat: 'TECH', title: '2. Liquidez Externa (BSL y SSL)',
+        summary: 'Dónde esconden sus Stop Loss los traders minoristas y por qué el precio va a cazarlos antes de arrancar.',
+        body: 'BSL (Buy Side Liquidity) es el dinero acumulado por encima de techos iguales o máximos diarios/semanales. SSL (Sell Side Liquidity) es el dinero acumulado debajo de pisos iguales. Las instituciones necesitan esa liquidez para llenar sus órdenes grandes antes de iniciar el movimiento real.',
+        rule: 'Regla LATICCE: Si el precio barre SSL en tendencia alcista y deja mecha de rechazo, es combustible para compras.'
+      },
+      {
+        id: 3, cat: 'TECH', title: '3. Equilibrio EQ 50% (Caro vs. Barato)',
+        summary: 'Por qué los bancos compran en zona de descuento (debajo del 50%) y venden en zona cara (encima del 50%).',
+        body: 'Al medir desde el inicio hasta el final de un impulso, la mitad exacta (EQ 50%) divide el rango en dos: Zona Premium (arriba del 50%, cara, ideal solo para ventas) y Zona Discount (debajo del 50%, barata, ideal solo para compras).',
+        rule: 'Regla LATICCE: Evita comprar por encima del EQ 50% o vender por debajo; ahí es donde atrapan al minorista.'
+      },
+      {
+        id: 4, cat: 'TECH', title: '4. Order Blocks Institucionales (OB)',
+        summary: 'La última vela contraria antes de un impulso fuerte donde quedaron órdenes pendientes de los bancos.',
+        body: 'Cuando una institución inyecta millones para mover el mercado, deja órdenes sin ejecutar en la última vela bajista antes de subir (OB Alcista) o la última alcista antes de caer (OB Bajista). Al regresar el precio a esa caja, se activan las órdenes pendientes.',
+        rule: 'Regla LATICCE: El Stop Loss siempre va detrás del extremo del Order Block + spread, nunca arbitrario.'
+      },
+      {
+        id: 5, cat: 'TECH', title: '5. Fair Value Gaps (FVG)',
+        summary: 'Vacíos de liquidez de 3 velas que actúan como imán cuando el mercado acelera con fuerza.',
+        body: 'Un FVG ocurre cuando entre la mecha de la vela 1 y la mecha de la vela 3 queda un espacio abierto que la vela 2 cruzó de golpe. El algoritmo interbancario tiende a regresar para equilibrar ese vacío.',
+        rule: 'Regla LATICCE: La máxima probabilidad ocurre cuando un FVG coincide exactamente dentro de un Order Block (OB + FVG).'
+      },
+      {
+        id: 6, cat: 'TECH', title: '6. Alineación Multi-Temporal (1S · 1D · 4H · 1H)',
+        summary: 'Jerarquía de temporalidades para no operar contra el tren institucional.',
+        body: 'Semanal (1S) y Diario (1D) marcan el mapa macro; 4 Horas (4H) define la estructura Swing de la semana y 1 Hora (1H) refina el bloque de entrada.',
+        rule: 'Regla LATICCE: Solo se activa POTENCIAL SWING cuando 1D, 4H, 1H y Macro apuntan en la misma dirección.'
+      },
+      {
+        id: 7, cat: 'TECH', title: '7. Killzones Londres y Nueva York',
+        summary: 'Las horas exactas donde se inyecta el mayor volumen real del día.',
+        body: 'Londres (07:00–10:00 UTC) suele crear el máximo o mínimo del día barriendo liquidez asiática. Nueva York (12:00–16:00 UTC) continúa la tendencia o ejecuta el giro principal del día.',
+        rule: 'Regla LATICCE: Fuera de Killzone los movimientos suelen ser lentos; prioriza ejecuciones en Londres y NY.'
+      },
+      {
+        id: 8, cat: 'TECH', title: '8. Gestión de Riesgo 1:2 y Gatillo BE (+1R)',
+        summary: 'Cómo proteger la cuenta de $1,000 USD y asegurar ganancias sin estrés.',
+        body: 'Arriesgando 0.5% ($5) o 1% ($10) por operación, en cuanto el precio avanza la misma distancia de tu Stop (+1R), activas el GATILLO BE moviendo tu Stop Loss al precio de entrada. En TP1 (1:2) cobras la mayoría de parciales.',
+        rule: 'Regla LATICCE: Una operación que tocó +1R nunca debe terminar en pérdida.'
+      },
+      {
+        id: 9, cat: 'TECH', title: '9. Piramidación y Continuación Swing (TP2)',
+        summary: 'Cómo dejar correr un remanente hacia 1:3 y añadir entradas tras tocar TP1.',
+        body: 'Tras cobrar parciales en TP1 y tener la orden base protegida en Break Even, si la tendencia sigue limpia, se espera un nuevo retroceso hacia un OB/FVG fresco para buscar TP2 (Swing TP).',
+        rule: 'Regla LATICCE: Nunca piramides si la posición original aún no está protegida en Break Even.'
+      },
+      {
+        id: 10, cat: 'TECH', title: '10. Psicología, FOMO y Bitácora Profesional',
+        summary: 'Disciplina de ejecución y control emocional frente a pérdidas o rachas ganadoras.',
+        body: 'El 80% de los errores ocurren por perseguir velas que ya se fueron (FOMO) o intentar recuperar una pérdida al instante. Registrar cada trade en Karen detecta tus patrones.',
+        rule: 'Regla LATICCE: Enfócate en el Foco Principal #1 del día; calidad supera a cantidad.'
+      },
+      {
+        id: 11, cat: 'MACRO', title: '11. Bancos Centrales y Tasas de Interés (Fed, BCE, BoE, BoJ)',
+        summary: 'El motor número uno del dinero institucional: hacia dónde fluye el capital global.',
+        body: 'Los grandes fondos mueven billones hacia la divisa cuyo banco central mantiene tasas de interés más altas o planea subirlas (postura HAWKISH), y venden la divisa cuyo banco central recorta tasas o imprime dinero (postura DOVISH). Por eso, si la Fed mantiene tasas altas mientras el Banco de Japón (BoJ) las mantiene bajas, el USDJPY sube durante meses.',
+        rule: 'Regla Macro: Compra la divisa con banco central Hawkish (tasas altas/subiendo) contra la divisa con banco central Dovish (recortando tasas).'
+      },
+      {
+        id: 12, cat: 'MACRO', title: '12. El Motor del Dólar: Índice DXY y Bonos US10Y',
+        summary: 'Cómo leer el termómetro maestro del mercado antes de abrir cualquier gráfico.',
+        body: 'El DXY mide la fortaleza del dólar estadounidense frente a una cesta de 6 divisas (principalmente Euro). El US10Y mide el rendimiento de los bonos del Tesoro a 10 años. Cuando DXY y US10Y suben juntos, los inversores venden Oro (XAUUSD), Euro (EURUSD) y Libra (GBPUSD) para refugiarse en dólares que pagan mayor rendimiento.',
+        rule: 'Regla Macro: Si DXY y US10Y suben con fuerza, prohíbete buscar compras en Oro, EURUSD o GBPUSD.'
+      },
+      {
+        id: 13, cat: 'MACRO', title: '13. Datos de Inflación (CPI / PPI / PCE) y Empleo (NFP)',
+        summary: 'Cómo interpretar las noticias rojas del calendario económico sin quedar atrapado.',
+        body: 'El CPI (Inflación al Consumidor) y el PCE son los datos que vigila la Reserva Federal para decidir si sube o baja tasas. Si la inflación sale MAYOR a lo esperado, el mercado entiende que la Fed no podrá bajar tasas pronto -> el USD sube fuerte. El NFP (Nóminas No Agrícolas, primer viernes de cada mes) mide el empleo en EE.UU.: empleo fuerte = dólar fuerte.',
+        rule: 'Regla Macro: Nunca abras una operación 15 minutos antes de CPI, NFP o decisión de tasas; deja que pase el barrido inicial y entra después.'
+      },
+      {
+        id: 14, cat: 'MACRO', title: '14. Sentimiento Global: Risk-On vs. Risk-Off',
+        summary: 'Por qué el S&P 500 y el Cobre mueven al AUD, NZD y JPY.',
+        body: 'En entornos RISK-ON (optimismo económico, bolsas US500 y USTEC subiendo), los capitales salen del refugio y compran divisas ligadas a materias primas y crecimiento como AUD, NZD y CAD. En entornos RISK-OFF (miedo, crisis, guerra o recesión), las bolsas caen y el dinero corre hacia divisas refugio: USD, JPY y CHF.',
+        rule: 'Regla Macro: Para operar pares con AUD o NZD en compras, verifica que US500 esté alcista y el DXY no esté disparado.'
+      },
+      {
+        id: 15, cat: 'MACRO', title: '15. Fuerza Relativa de Divisas (FUERTE vs. DÉBIL)',
+        summary: 'Cómo evitar consolidaciones emparejando la moneda más fuerte contra la más débil.',
+        body: 'Un par de Forex es una pelea entre dos economías (ej. GBPAUD = Libra vs. Dólar Australiano). Si GBP está FUERTE en todos sus cruces y AUD está DÉBIL porque caen las bolsas y materias primas, GBPAUD tendrá una tendencia limpia y explosiva. Si ambas están débiles, el gráfico hará mechas sin dirección.',
+        rule: 'Regla Macro: Revisa siempre la etiqueta de VISIÓN en cada tarjeta; prioriza cruces FUERTE vs. DÉBIL.'
+      },
+      {
+        id: 16, cat: 'MACRO', title: '16. Carry Trade y Diferenciales de Tasas Reales',
+        summary: 'El secreto detrás de las tendencias Swing de cientos de pips.',
+        body: 'El Carry Trade consiste en pedir prestado en una moneda con tasa de interés muy baja (como el Yen japonés o el Franco suizo) para invertir en una moneda con tasa alta (como el Dólar o la Libra). Mientras el diferencial de tasas no cambie y no haya pánico financiero, los fondos compran cada retroceso para cobrar intereses diarios.',
+        rule: 'Regla Macro: Los mejores recorridos Swing (TP2) nacen cuando el diferencial de tasas respalda la dirección del gráfico.'
+      }
+    ];
+
+    function setFridayCategory(cat) {
+      fridayCatFilter = cat;
+      document.querySelectorAll('.fcat').forEach(b => {
+        b.className = b.dataset.fc === cat
+          ? 'fcat px-3 py-1.5 rounded bg-purple-500 text-black font-bold'
+          : 'fcat px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-purple-300';
+      });
+      renderPanelCourse();
+    }
+
+    function openFridayLesson(id) {
+      selectedLessonId = id;
+      renderPanelCourse();
+      const reader = document.getElementById('friday-lesson-reader');
+      if (reader) reader.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function askFridayAboutLesson(id) {
+      const les = FRIDAY_CURRICULUM.find(x => x.id === id);
+      if (!les) return;
+      if (isPanelMode) toggleViewMode();
+      selectAgent('friday', false);
+      processQuery(`Explícame con ejemplos prácticos en el mercado actual el módulo "${les.title}" y hazme una pregunta rápida para comprobar si lo entendí.`);
+    }
 
     function getFocusPrimary() {
       if (!data) return null;
@@ -681,10 +823,10 @@
         personaPrompt: 'Eres ULTRÓN (tal como en VisionQuest / MCU). Tu tono es grave, frío, incisivo, ligeramente sarcástico con la ingenuidad del trader minorista y obsesionado con la estructura pura, los Order Blocks, Fair Value Gaps, barridos de liquidez BSL/SSL y trampas institucionales.'
       },
       friday: {
-        name: 'F.R.I.D.A.Y.', sub: 'MENTORA TÁCTICA', color: '#a855f7', rgb: '168, 85, 247',
-        voiceDesc: 'VOZ: FEMENINA ÁGIL · INGENIOSA Y DIRECTA',
+        name: 'F.R.I.D.A.Y.', sub: 'MENTORA MACRO & TÉCNICA', color: '#a855f7', rgb: '168, 85, 247',
+        voiceDesc: 'VOZ: FEMENINA ÁGIL · INGENIOSA Y DIDÁCTICA',
         gender: 'F', variant: 0, pitch: 1.15, rate: 1.04,
-        personaPrompt: 'Eres F.R.I.D.A.Y., la IA táctica ágil, ingeniosa y enérgica de LATICCE. Llamas "jefe" al usuario, vas al grano con humor sutil y explicas conceptos institucionales o dudas operativas con ejemplos claros y prácticos.'
+        personaPrompt: 'Eres F.R.I.D.A.Y., la mentora experta de LATICCE en macroeconomía institucional (bancos centrales, tasas de interés, DXY, US10Y, inflación, Carry Trade) y estructura SMC. Llamas "jefe" al usuario, enseñas con claridad cristalina, ejemplos reales y sin rodeos.'
       },
       edith: {
         name: 'E.D.I.T.H.', sub: 'SISTEMA DE PUNTERÍA', color: '#10b981', rgb: '16, 185, 129',
@@ -876,7 +1018,7 @@
         const d = getAssetUnitsDist(a);
         const p = getSetupPips(a);
         const st = getAssetColorState(a);
-        return `${a.symbol}[${st.label}|${getCurrencyStrengthText(a)}]:P=${a.price}|Dir=${a.setup.signal_tag}|Prob=${a.win_prob || a.confluence.score}%|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|BE=${p.be}|TP1=${a.setup.tp1}|TP2=${a.setup.tp2}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|Macro:${a.macro_reason}`;
+        return `${a.symbol}[${st.label}|${getCurrencyStrengthText(a)}]:P=${a.price}|Dir=${a.setup.signal_tag}|Prob=${a.win_prob || a.confluence.score}%|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|BE=${p.be}|TP1=${a.setup.tp1}|TP2=${p.tp2Val}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|Macro:${a.macro_reason}`;
       }).join('\n');
       const jText = trades.length ? `Bitácora (${trades.length}): ` + trades.slice(0, 4).map(t => `${t.pair} ${t.dir} ${t.res}`).join(', ') : 'Bitácora vacía.';
       return `${macro}\n${focus}\n${jText}\nACTIVOS:\n${rows}`;
@@ -960,7 +1102,7 @@ ${buildCompactMarketContext()}`;
       if (asset) {
         const d = getAssetUnitsDist(asset);
         const p = getSetupPips(asset);
-        typeAgentDialogue(`${asset.symbol} (${getCurrencyStrengthText(asset)}) está en ${asset.price} (${asset.setup.signal_tag}, probabilidad ${asset.win_prob || asset.confluence.score}%). Entrada en ${asset.setup.entry} (a ${d.units} ${d.label}), SL ${asset.setup.sl} (${p.sl} ${p.unitLabel}), BE ${p.be}, TP1 ${asset.setup.tp1}, TP2 ${asset.setup.tp2}.`);
+        typeAgentDialogue(`${asset.symbol} (${getCurrencyStrengthText(asset)}) está en ${asset.price} (${asset.setup.signal_tag}, probabilidad ${asset.win_prob || asset.confluence.score}%). Entrada en ${asset.setup.entry} (a ${d.units} ${d.label}), SL ${asset.setup.sl} (${p.sl} ${p.unitLabel}), BE ${p.be}, TP1 ${asset.setup.tp1}, TP2 ${p.tp2Val}.`);
         return;
       }
       typeAgentDialogue(`Señor, para que ${AGENTS[currentAgent].name} responda abiertamente a "${q}" con su propia personalidad, pulse el botón 🧠 IA arriba y pegue su clave gratuita de Google AI Studio.`);
@@ -1144,8 +1286,8 @@ ${buildCompactMarketContext()}`;
           { label: 'VER GRÁFICO ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('ultron');" }
         ],
         friday: [
-          { label: '🎓 LECCIÓN RÁPIDA', q: 'Enséñame hoy una clave práctica sobre Order Blocks, FVG o gestión de riesgo.' },
-          { label: 'VER CURSO ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('friday');" }
+          { label: '🌐 CLASE MACRO HOY', q: 'Enséñame cómo los bancos centrales, tasas US10Y y el DXY están moviendo los pares hoy.' },
+          { label: 'ACADEMIA (16) ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('friday');" }
         ],
         edith: [
           { label: '📐 CALCULAR LOTAJE', q: 'Calcula el lotaje exacto para una cuenta de $1,000 USD arriesgando 1% en el activo más cercano.' },
@@ -1189,10 +1331,10 @@ ${buildCompactMarketContext()}`;
         document.getElementById('agent-hero-sub').textContent = t ? `SESGO ${t.chart_bias} · LIQUIDEZ` : 'ORDER BLOCKS';
         typeAgentDialogue(`Los minoristas persiguen velas verdes; yo rastreo la liquidez donde quedan atrapados. Dime qué gráfico quieres que despedace estructuralmente.`, false);
       } else if (key === 'friday') {
-        const pct = Math.round((completedLessons.length / 10) * 100);
+        const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
-        document.getElementById('agent-hero-sub').textContent = `ENTRENAMIENTO · ${completedLessons.length}/10`;
-        typeAgentDialogue(`¡Listo cuando tú lo estés, jefe! Pídeme cualquier explicación sobre bloques institucionales, FVG, liquidez o gestión de cuenta fondeada.`, false);
+        document.getElementById('agent-hero-sub').textContent = `ACADEMIA · ${completedLessons.length}/${FRIDAY_CURRICULUM.length} MÓDULOS`;
+        typeAgentDialogue(`¡Listo cuando tú lo estés, jefe! Ya cargué los 6 nuevos módulos expertos de Macroeconomía (Bancos Centrales, DXY, Bonos US10Y, Inflación, Risk-On/Off y Carry Trade). Pídeme cualquier tema o abre el panel.`, false);
       } else if (key === 'edith') {
         const d = nearest ? getAssetUnitsDist(nearest) : null;
         document.getElementById('agent-hero-metric').textContent = d ? `${d.units} ${d.label}` : 'PUNTERÍA';
@@ -1291,11 +1433,11 @@ ${buildCompactMarketContext()}`;
 
     function renderPanelAll() {
       renderTrades();
+      renderPanelCourse();
       if (!data) return;
       renderPanelJarvis();
       renderVisionTab();
       renderPanelUltron();
-      renderPanelCourse();
     }
 
     function renderPanelJarvis() {
@@ -1501,6 +1643,7 @@ ${buildCompactMarketContext()}`;
       drawUltronChart();
     }
 
+    // 3. GRÁFICO ULTRÓN RECONSTRUIDO COMO TU CAPTURA DE REFERENCIA (SIN TEXTOS ENCIMADOS + EQ-50% + BOS)
     function drawUltronChart() {
       if (!data) return;
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
@@ -1510,92 +1653,240 @@ ${buildCompactMarketContext()}`;
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
       if (!rect.width) return;
-      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
       const ctx = canvas.getContext('2d');
       ctx.scale(dpr, dpr);
-      const W = rect.width, H = rect.height, padL = 10, padR = 78, padT = 20, padB = 22;
-      const plotW = W - padL - padR, plotH = H - padT - padB;
-      ctx.fillStyle = '#030509'; ctx.fillRect(0, 0, W, H);
+
+      const W = rect.width;
+      const H = rect.height;
+      const padL = 10;
+      const padR = 76;
+      const padT = 18;
+      const padB = 20;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      ctx.fillStyle = '#030509';
+      ctx.fillRect(0, 0, W, H);
+
       const tfKey = (a.candles && a.candles[selectedTF]) ? selectedTF : '1d';
-      const candles = (a.candles && a.candles[tfKey]) ? a.candles[tfKey].slice(-42) : [];
+      const candles = (a.candles && a.candles[tfKey]) ? a.candles[tfKey].slice(-44) : [];
       if (!candles.length) return;
 
-      const highs = [...candles.map(c => c.h), a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
-      const lows = [...candles.map(c => c.l), a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
+      const candleMax = Math.max(...candles.map(c => c.h));
+      const candleMin = Math.min(...candles.map(c => c.l));
+      const eq50 = a.liquidity?.eq50 || ((candleMax + candleMin) / 2);
+
+      const highs = [candleMax, a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
+      const lows = [candleMin, a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
       if (a.liquidity?.bsl) highs.push(a.liquidity.bsl);
       if (a.liquidity?.ssl) lows.push(a.liquidity.ssl);
 
-      const maxP = Math.max(...highs), minP = Math.min(...lows), span = (maxP - minP) || 1;
+      const rawMax = Math.max(...highs);
+      const rawMin = Math.min(...lows);
+      const margin = (rawMax - rawMin) * 0.06 || 0.001;
+      const maxP = rawMax + margin;
+      const minP = rawMin - margin;
+      const span = (maxP - minP) || 1;
       const yOf = val => padT + ((maxP - val) / span) * plotH;
 
-      const yObT = yOf(a.ob_high), yObB = yOf(a.ob_low);
-      ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)';
-      ctx.fillRect(padL + plotW * 0.35, yObT, plotW * 0.65, Math.max(5, yObB - yObT));
+      // Cuadrícula sutil institucional
+      ctx.strokeStyle = 'rgba(30, 41, 59, 0.35)';
+      ctx.lineWidth = 0.7;
+      for (let g = 1; g <= 4; g++) {
+        const gy = padT + (plotH / 5) * g;
+        ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(W - padR, gy); ctx.stroke();
+      }
 
-      const step = plotW / candles.length, cw = Math.max(3, step * 0.6);
+      // Zona sombreada Order Block / FVG (último tercio derecho)
+      const yObT = yOf(Math.max(a.ob_high, a.ob_low));
+      const yObB = yOf(Math.min(a.ob_high, a.ob_low));
+      ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16, 185, 129, 0.16)' : 'rgba(239, 68, 68, 0.16)';
+      ctx.fillRect(padL + plotW * 0.38, yObT, plotW * 0.62, Math.max(6, yObB - yObT));
+
+      // Línea EQ-50% (Equilibrio del rango)
+      const yEq = yOf(eq50);
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.45)';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(padL, yEq); ctx.lineTo(W - padR, yEq); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 9px JetBrains Mono';
+      ctx.fillText('EQ-50%', W - padR - 42, yEq - 3);
+
+      // Velas Japonesas
+      const step = plotW / candles.length;
+      const cw = Math.max(3, step * 0.58);
       candles.forEach((c, i) => {
-        const x = padL + i * step + step / 2, bull = c.c >= c.o;
-        ctx.strokeStyle = bull ? '#10b981' : '#ef4444'; ctx.fillStyle = bull ? '#10b981' : '#ef4444';
+        const x = padL + i * step + step / 2;
+        const bull = c.c >= c.o;
+        ctx.strokeStyle = bull ? '#10b981' : '#ef4444';
+        ctx.fillStyle = bull ? '#10b981' : '#ef4444';
+        ctx.lineWidth = 1.1;
         ctx.beginPath(); ctx.moveTo(x, yOf(c.h)); ctx.lineTo(x, yOf(c.l)); ctx.stroke();
         ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
       });
 
+      // Liquidez BSL (arriba) y SSL (abajo)
       if (a.liquidity?.bsl) {
         const yB = yOf(a.liquidity.bsl);
-        ctx.strokeStyle = 'rgba(244, 63, 94, 0.55)'; ctx.setLineDash([2, 4]);
+        ctx.strokeStyle = 'rgba(244, 63, 94, 0.65)';
+        ctx.setLineDash([2, 4]);
         ctx.beginPath(); ctx.moveTo(padL, yB); ctx.lineTo(W - padR, yB); ctx.stroke();
-        ctx.setLineDash([]); ctx.fillStyle = '#fb7185'; ctx.font = 'bold 9px JetBrains Mono';
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#fda4af';
+        ctx.font = 'bold 9px JetBrains Mono';
         ctx.fillText(`▲ BSL ${a.liquidity.bsl.toFixed(a.decimals)}`, padL + 4, yB - 3);
       }
       if (a.liquidity?.ssl) {
         const yS = yOf(a.liquidity.ssl);
-        ctx.strokeStyle = 'rgba(45, 212, 191, 0.55)'; ctx.setLineDash([2, 4]);
+        ctx.strokeStyle = 'rgba(45, 212, 191, 0.65)';
+        ctx.setLineDash([2, 4]);
         ctx.beginPath(); ctx.moveTo(padL, yS); ctx.lineTo(W - padR, yS); ctx.stroke();
-        ctx.setLineDash([]); ctx.fillStyle = '#2dd4bf'; ctx.font = 'bold 9px JetBrains Mono';
-        ctx.fillText(`▼ SSL ${a.liquidity.ssl.toFixed(a.decimals)}`, padL + 4, yS + 10);
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#5eead4';
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(`▼ SSL ${a.liquidity.ssl.toFixed(a.decimals)}`, padL + 4, yS - 3);
       }
 
-      const drawLvl = (val, lbl, col) => {
-        const y = yOf(val);
-        ctx.strokeStyle = col; ctx.setLineDash([3, 3]);
-        ctx.beginPath(); ctx.moveTo(padL + plotW * 0.32, y); ctx.lineTo(W - padR, y); ctx.stroke();
-        ctx.setLineDash([]); ctx.fillStyle = col; ctx.fillRect(W - padR + 2, y - 8, padR - 4, 16);
-        ctx.fillStyle = '#fff'; ctx.font = 'bold 9px JetBrains Mono';
-        ctx.fillText(val.toFixed(a.decimals), W - padR + 5, y + 3);
-        ctx.fillText(lbl, padL + plotW * 0.33, y - 3);
-      };
+      // Etiqueta estructural ⚡ BOS / CHoCH sobre las últimas velas
+      const structLabel = a.structure_event || (a.setup.direction === 'BUY' ? '⚡ BULLISH BOS' : '⚡ BEARISH BOS');
+      const refCandle = candles[Math.max(0, candles.length - 5)];
+      const yStruct = yOf(refCandle.c);
+      ctx.fillStyle = '#c084fc';
+      ctx.font = 'bold 9px JetBrains Mono';
+      ctx.fillText(structLabel, padL + plotW * 0.56, Math.min(H - padB - 6, Math.max(padT + 12, yStruct - 6)));
 
-      drawLvl(a.setup.entry, 'ENTRADA', '#0284c7');
-      drawLvl(a.setup.sl, 'STOP', '#dc2626');
-      drawLvl(p.be, 'GATILLO +1R (BE)', '#6366f1');
-      drawLvl(a.setup.tp1, 'TP1 (1:2)', '#059669');
-      drawLvl(p.tp2Val, 'TP2 (SWING)', '#0d9488');
+      // Sistema anti-colisión vertical para que ninguna etiqueta o caja de precio se encima
+      const isBuy = a.setup.direction === 'BUY';
+      const entryTitle = isBuy ? 'COMPRA OB REAL' : 'VENTA OB REAL';
+      const levels = [
+        { val: a.setup.sl, lbl: 'STOP', col: '#dc2626', textCol: '#ffffff' },
+        { val: a.setup.entry, lbl: entryTitle, col: '#0284c7', textCol: '#ffffff' },
+        { val: p.be, lbl: 'GATILLO BE (+1R)', col: '#4f46e5', textCol: '#ffffff' },
+        { val: a.setup.tp1, lbl: 'TP1 PARCIAL', col: '#059669', textCol: '#ffffff' },
+        { val: p.tp2Val, lbl: 'SWING TP', col: '#0d9488', textCol: '#ffffff' },
+        { val: a.price, lbl: '', col: '#f59e0b', textCol: '#000000', isLive: true }
+      ].map(lv => ({ ...lv, rawY: yOf(lv.val), drawY: yOf(lv.val) }));
 
-      const yLive = yOf(a.price);
-      ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.moveTo(padL, yLive); ctx.lineTo(W - padR, yLive); ctx.stroke();
-      ctx.fillStyle = '#f59e0b'; ctx.fillRect(W - padR + 2, yLive - 8, padR - 4, 16);
-      ctx.fillStyle = '#000'; ctx.font = 'bold 9px JetBrains Mono';
-      ctx.fillText(`● ${a.price.toFixed(a.decimals)}`, W - padR + 4, yLive + 3);
+      // Ordenar de arriba hacia abajo y separar si están a menos de 17px
+      levels.sort((x, y) => x.rawY - y.rawY);
+      const minGap = 17;
+      for (let i = 1; i < levels.length; i++) {
+        if (levels[i].drawY - levels[i - 1].drawY < minGap) {
+          levels[i].drawY = levels[i - 1].drawY + minGap;
+        }
+      }
+      if (levels[levels.length - 1].drawY > H - padB - 4) {
+        levels[levels.length - 1].drawY = H - padB - 4;
+        for (let i = levels.length - 2; i >= 0; i--) {
+          if (levels[i + 1].drawY - levels[i].drawY < minGap) {
+            levels[i].drawY = Math.max(padT + 8, levels[i + 1].drawY - minGap);
+          }
+        }
+      }
+
+      // Dibujar líneas horizontales + textos con fondo oscuro + cajas derechas alineadas
+      const lineStartX = padL + plotW * 0.34;
+      levels.forEach(lv => {
+        if (lv.isLive) {
+          ctx.strokeStyle = '#fbbf24';
+          ctx.lineWidth = 1.4;
+          ctx.setLineDash([]);
+          ctx.beginPath(); ctx.moveTo(padL, lv.rawY); ctx.lineTo(W - padR, lv.rawY); ctx.stroke();
+        } else {
+          ctx.strokeStyle = lv.col;
+          ctx.lineWidth = 1.1;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath(); ctx.moveTo(lineStartX, lv.rawY); ctx.lineTo(W - padR, lv.rawY); ctx.stroke();
+          ctx.setLineDash([]);
+
+          if (lv.lbl) {
+            ctx.font = 'bold 9px JetBrains Mono';
+            const tw = ctx.measureText(lv.lbl).width;
+            ctx.fillStyle = 'rgba(3, 5, 9, 0.85)';
+            ctx.fillRect(lineStartX, lv.drawY - 8, tw + 6, 13);
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillText(lv.lbl, lineStartX + 3, lv.drawY + 2);
+          }
+        }
+
+        // Caja derecha de precio
+        ctx.fillStyle = lv.col;
+        ctx.fillRect(W - padR + 2, lv.drawY - 8, padR - 4, 15);
+        ctx.fillStyle = lv.textCol;
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(lv.val.toFixed(a.decimals), W - padR + 6, lv.drawY + 3);
+      });
     }
 
+    // 4. RENDERIZADO DE ACADEMIA F.R.I.D.A.Y. (16 MÓDULOS + LECTOR EXPERTO)
     function renderPanelCourse() {
-      const pct = Math.round((completedLessons.length / 10) * 100);
+      const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
       const badge = document.getElementById('panel-course-pct');
-      if (badge) badge.textContent = `${pct}% COMPLETADO`;
+      if (badge) badge.textContent = `${pct}% (${completedLessons.length}/${FRIDAY_CURRICULUM.length})`;
+
+      const activeLesson = FRIDAY_CURRICULUM.find(l => l.id === selectedLessonId) || FRIDAY_CURRICULUM[10];
+      const reader = document.getElementById('friday-lesson-reader');
+      if (reader && activeLesson) {
+        const isDone = completedLessons.includes(activeLesson.id);
+        reader.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${activeLesson.cat === 'MACRO' ? 'bg-sky-500/20 text-sky-300 border border-sky-400/50' : 'bg-purple-500/20 text-purple-300 border border-purple-400/50'}">
+              ${activeLesson.cat === 'MACRO' ? '🌐 MÓDULO EXPERTO DE MACROECONOMÍA' : '🎯 MÓDULO DE ESTRUCTURA SMC'}
+            </span>
+            <div class="flex gap-1.5">
+              <button type="button" onclick="askFridayAboutLesson(${activeLesson.id})" class="px-2.5 py-1 rounded bg-purple-500 text-black font-bold text-[10px]">🎙️ PRACTICAR CON F.R.I.D.A.Y.</button>
+              <button type="button" onclick="toggleLessonDone(${activeLesson.id})" class="px-2.5 py-1 rounded border ${isDone ? 'border-emerald-400 text-emerald-300 bg-emerald-500/15' : 'border-slate-700 text-slate-300'} text-[10px] font-bold">
+                ${isDone ? '✓ APROBADO' : 'MARCAR LEÍDO'}
+              </button>
+            </div>
+          </div>
+          <div class="font-hud text-sm font-bold text-white">${activeLesson.title}</div>
+          <p class="text-xs text-slate-300 leading-relaxed">${activeLesson.body}</p>
+          <div class="bg-[#080d1a] border border-amber-500/30 rounded p-2.5 text-[11px] text-amber-200 font-bold">💡 ${activeLesson.rule}</div>
+        `;
+      }
+
       const list = document.getElementById('panel-lessons-list');
       if (!list) return;
-      const titles = [
-        '1. Estructura Institucional (BOS y CHoCH)', '2. Liquidez Externa (BSL y SSL)',
-        '3. Equilibrio EQ 50% (Caro vs. Barato)', '4. Order Blocks Institucionales (OB)',
-        '5. Fair Value Gaps (FVG)', '6. Confluencia Macro (DXY y US10Y)',
-        '7. Killzones Londres y Nueva York', '8. Gestión de Riesgo 1:2 y Break Even',
-        '9. Continuación Swing Multi-Día', '10. Psicología y Bitácora Profesional'
-      ];
-      list.innerHTML = titles.map((t, i) => {
-        const done = completedLessons.includes(i + 1);
-        return `<div class="bg-[#050811] border ${done ? 'border-emerald-500/50' : 'border-slate-800'} rounded-lg p-3 flex items-center justify-between"><span class="${done ? 'text-emerald-300' : 'text-purple-200'} font-bold">${t}</span><button type="button" onclick="if(!completedLessons.includes(${i+1})){completedLessons.push(${i+1});localStorage.setItem('oraculo_course',JSON.stringify(completedLessons));renderPanelCourse();}" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-[10px] font-bold">${done ? '✓ HECHO' : 'APROBAR'}</button></div>`;
+      const filtered = fridayCatFilter === 'ALL'
+        ? FRIDAY_CURRICULUM
+        : FRIDAY_CURRICULUM.filter(l => l.cat === fridayCatFilter);
+
+      list.innerHTML = filtered.map(l => {
+        const done = completedLessons.includes(l.id);
+        const isCurrent = l.id === selectedLessonId;
+        const borderCls = isCurrent
+          ? 'border-amber-400 bg-purple-950/20'
+          : (done ? 'border-emerald-500/50' : 'border-slate-800');
+        return `
+          <div class="bg-[#050811] border ${borderCls} rounded-lg p-3 space-y-2 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="text-[9px] font-bold ${l.cat === 'MACRO' ? 'text-sky-400' : 'text-purple-400'}">${l.cat === 'MACRO' ? '🌐 MACROECONOMÍA' : '🎯 SMC / ESTRUCTURA'}</span>
+                ${done ? '<span class="text-[9px] text-emerald-400 font-bold">✓ COMPLETADO</span>' : ''}
+              </div>
+              <div class="font-bold text-white text-xs">${l.title}</div>
+              <p class="text-[11px] text-slate-400 mt-1">${l.summary}</p>
+            </div>
+            <div class="flex items-center justify-between gap-2 pt-1">
+              <button type="button" onclick="openFridayLesson(${l.id})" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-purple-200 text-[10px] font-bold">📖 ESTUDIAR LECCIÓN</button>
+              <button type="button" onclick="toggleLessonDone(${l.id})" class="px-2 py-1 rounded border border-slate-700 text-slate-300 text-[10px]">${done ? '✓' : 'APROBAR'}</button>
+            </div>
+          </div>`;
       }).join('');
+    }
+
+    function toggleLessonDone(id) {
+      if (completedLessons.includes(id)) {
+        completedLessons = completedLessons.filter(x => x !== id);
+      } else {
+        completedLessons.push(id);
+      }
+      localStorage.setItem('oraculo_course', JSON.stringify(completedLessons));
+      renderPanelCourse();
     }
 
     function configureCloudToken() {
@@ -1680,6 +1971,7 @@ ${buildCompactMarketContext()}`;
 
     selectAgent('jarvis', false);
     renderTrades();
+    renderPanelCourse();
     loadCloudJournal(false);
     loadData();
     setInterval(refreshLivePrices, 5000);
