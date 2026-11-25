@@ -4,12 +4,12 @@
     "created_at": 1795571183
   },
   "EURAUD": {
-    "sig": "NONE",
-    "created_at": 1795571183
+    "sig": "BUY_1.65351",
+    "created_at": 1795574708
   },
   "BTCUSD": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "XAUUSD": {
     "sig": "SELL_3612.0",
@@ -17,23 +17,23 @@
   },
   "GBPNZD": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "USDCAD": {
     "sig": "SELL_1.4305",
     "created_at": 1795571183
   },
   "AUDNZD": {
-    "sig": "NONE",
-    "created_at": 1795571183
+    "sig": "SELL_1.21008",
+    "created_at": 1795574708
   },
   "AUDCHF": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "US30": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "GBPCAD": {
     "sig": "SELL_1.8733",
@@ -41,50 +41,50 @@
   },
   "AUDJPY": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "US500": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "AUDUSD": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "EURUSD": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "USDJPY": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "GBPUSD": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "GBPJPY": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "AUDCAD": {
-    "sig": "NONE",
-    "created_at": 1795571183
+    "sig": "SELL_0.94529",
+    "created_at": 1795574708
   },
   "NZDUSD": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "USDCHF": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "EURJPY": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   },
   "USTEC": {
     "sig": "NONE",
-    "created_at": 1795571183
+    "created_at": 1795574708
   }
 }
