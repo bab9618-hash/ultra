@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Red Neuronal v11.4</title>
+  <title>LATICCE · Red Neuronal v11.5</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -79,7 +79,7 @@
   <div id="boot-screen" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2.5rem 1.25rem;text-align:center;">
     <canvas id="boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
-    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.4</div>
+    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL EN LÍNEA · v11.5</div>
 
     <div class="relative z-10 w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 320 320" class="w-full h-full overflow-visible">
@@ -111,6 +111,20 @@
           ENTRAR A LA CABINA ▸
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL AULA DEDICADA Y EXAMEN DE F.R.I.D.A.Y. -->
+  <div id="friday-classroom-modal" class="hidden fixed inset-0 z-50 bg-[#030407]/96 backdrop-blur-md overflow-y-auto p-4 sm:p-6">
+    <div class="max-w-2xl mx-auto bg-[#070b14] border border-purple-500/60 rounded-2xl p-5 sm:p-6 space-y-4 shadow-2xl shadow-purple-950/50 my-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-purple-400 animate-pulse"></span>
+          <span class="font-hud text-xs sm:text-sm font-bold text-purple-300 tracking-wider">🟣 AULA INTERACTIVA F.R.I.D.A.Y.</span>
+        </div>
+        <button type="button" onclick="closeFridayClassroom()" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-red-500/30 border border-slate-700 text-xs font-bold text-slate-200">✕ SALIR DEL AULA</button>
+      </div>
+      <div id="friday-modal-body" class="space-y-4 text-xs sm:text-sm"></div>
     </div>
   </div>
 
@@ -325,14 +339,14 @@
       </div>
     </section>
 
-    <!-- SUBPANEL F.R.I.D.A.Y. (16 MÓDULOS: TÉCNICOS + MACROECONOMÍA) -->
+    <!-- SUBPANEL F.R.I.D.A.Y. (16 MÓDULOS + AULA CON EXAMEN) -->
     <section id="ptab-friday" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
         <div>
           <h3 class="font-hud text-sm font-bold text-purple-400">🟣 ACADEMIA INSTITUCIONAL F.R.I.D.A.Y. (16 MÓDULOS)</h3>
-          <div class="text-[11px] text-slate-400">Ruta completa: Estructura Institucional + Maestría en Macroeconomía</div>
+          <div class="text-[11px] text-slate-400">Estudia cada módulo en el Aula y aprueba su examen de 3 preguntas</div>
         </div>
-        <span id="panel-course-pct" class="text-xs font-bold text-purple-300 px-2.5 py-1 rounded bg-purple-500/15 border border-purple-500/40">0% COMPLETADO</span>
+        <span id="panel-course-pct" class="text-xs font-bold text-purple-300 px-2.5 py-1 rounded bg-purple-500/15 border border-purple-500/40">0% APROBADO</span>
       </div>
 
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
@@ -340,9 +354,6 @@
         <button type="button" onclick="setFridayCategory('MACRO')" class="fcat px-3 py-1.5 rounded bg-[#050811] border border-sky-500/50 text-sky-300 font-bold" data-fc="MACRO">🌐 MACROECONOMÍA EXPERTA (6)</button>
         <button type="button" onclick="setFridayCategory('TECH')" class="fcat px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-purple-300" data-fc="TECH">🎯 ESTRUCTURA & SMC (10)</button>
       </div>
-
-      <!-- LECTOR DE LECCIÓN ACTIVA -->
-      <div id="friday-lesson-reader" class="bg-[#050811] border border-purple-500/40 rounded-xl p-4 space-y-3"></div>
 
       <div id="panel-lessons-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
     </section>
@@ -392,7 +403,6 @@
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
 
-    // 1. RED NEURONAL ANIMADA EN PANTALLA DE INICIO (#boot-canvas)
     (function initBootNeuralCanvas() {
       const c = document.getElementById('boot-canvas');
       if (!c) return;
@@ -473,7 +483,6 @@
       draw();
     })();
 
-    // 2. RED NEURONAL DINÁMICA EN EL FONDO DE TODOS LOS MÓDULOS (#neural-bg)
     (function initModulesNeuralBg() {
       const c = document.getElementById('neural-bg');
       if (!c) return;
@@ -537,7 +546,8 @@
     let panelFilter = 'ALL';
     let visionSubTab = 'resumen';
     let fridayCatFilter = 'ALL';
-    let selectedLessonId = 11;
+    let activeExamLessonId = null;
+    let examAnswers = {};
     let pairSearchTerm = '';
     let selectedSymbol = 'XAUUSD';
     let selectedTF = '1d';
@@ -545,109 +555,205 @@
     let openWhyPanels = {};
     let voiceEnabled = localStorage.getItem('oraculo_voice') !== 'off';
     let trades = JSON.parse(localStorage.getItem('oraculo_trades_v6') || '[]');
-    let completedLessons = JSON.parse(localStorage.getItem('oraculo_course') || '[]');
+    let completedLessons = JSON.parse(localStorage.getItem('oraculo_course_v2') || '[]');
     let customVoiceMap = JSON.parse(localStorage.getItem('oraculo_voice_map') || '{}');
     let ghToken = localStorage.getItem('oraculo_gh_token') || '';
     let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
     let agentHistories = { jarvis: [], vision: [], ultron: [], friday: [], edith: [], karen: [], homer: [] };
 
-    // TEMARIO COMPLETO DE F.R.I.D.A.Y. (10 TÉCNICOS + 6 EXPERTOS EN MACROECONOMÍA)
+    // TEMARIO COMPLETO DE F.R.I.D.A.Y. (16 MÓDULOS + EXÁMENES DE 3 PREGUNTAS CADA UNO)
     const FRIDAY_CURRICULUM = [
       {
         id: 1, cat: 'TECH', title: '1. Estructura Institucional (BOS y CHoCH)',
         summary: 'Cómo identificar si los bancos están acumulando o distribuyendo mediante quiebres reales de estructura.',
         body: 'Un BOS (Break of Structure) confirma la continuación de la tendencia cuando una vela cierra con cuerpo por encima del último máximo (en compras) o por debajo del último mínimo (en ventas). Un CHoCH (Change of Character) es la primera señal de giro cuando el precio rompe el último punto de control en contra de la tendencia previa.',
-        rule: 'Regla LATICCE: Nunca des por válido un giro solo por una mecha; exige cierre de cuerpo y desplazamiento institucional.'
+        example: 'Si EURUSD viene subiendo haciendo máximos más altos y una vela bajista cierra con cuerpo debajo del último mínimo válido (HL), se produce un CHoCH bajista avisando posible cambio de flujo.',
+        rule: 'Regla LATICCE: Nunca des por válido un giro solo por una mecha; exige cierre de cuerpo y desplazamiento institucional.',
+        quiz: [
+          { q: '¿Qué confirma realmente un quiebre estructural (BOS o CHoCH)?', opts: ['Una mecha rápida que toca el nivel y regresa', 'El cierre con cuerpo de vela más allá del punto estructural', 'Cualquier vela de 5 minutos'], ans: 1 },
+          { q: '¿Qué indica un CHoCH (Change of Character)?', opts: ['La primera señal de posible giro contra la tendencia previa', 'Que el mercado está cerrado', 'Que debemos doblar el lotaje sin Stop Loss'], ans: 0 },
+          { q: 'En una tendencia alcista limpia, ¿qué significa un BOS hacia arriba?', opts: ['Continuación de la tendencia alcista', 'Fin inmediato de las compras', 'Que el DXY está subiendo fuerte'], ans: 0 }
+        ]
       },
       {
         id: 2, cat: 'TECH', title: '2. Liquidez Externa (BSL y SSL)',
         summary: 'Dónde esconden sus Stop Loss los traders minoristas y por qué el precio va a cazarlos antes de arrancar.',
         body: 'BSL (Buy Side Liquidity) es el dinero acumulado por encima de techos iguales o máximos diarios/semanales. SSL (Sell Side Liquidity) es el dinero acumulado debajo de pisos iguales. Las instituciones necesitan esa liquidez para llenar sus órdenes grandes antes de iniciar el movimiento real.',
-        rule: 'Regla LATICCE: Si el precio barre SSL en tendencia alcista y deja mecha de rechazo, es combustible para compras.'
+        example: 'Cuando el Oro forma un doble piso evidente, miles de minoristas ponen sus Stop Loss justo debajo. El algoritmo barre ese SSL con una mecha y acto seguido dispara el precio al alza.',
+        rule: 'Regla LATICCE: Si el precio barre SSL en tendencia alcista y deja mecha de rechazo, es combustible para compras.',
+        quiz: [
+          { q: '¿Dónde se ubica la liquidez BSL (Buy Side Liquidity)?', opts: ['Por encima de máximos iguales o techos relevantes', 'Por debajo de soportes', 'En la mitad de una vela'], ans: 0 },
+          { q: '¿Por qué los bancos barren SSL antes de subir el precio?', opts: ['Para activar Stop Loss de compradores y llenar sus órdenes institucionales', 'Por error del bróker', 'Porque no hay volumen en Londres'], ans: 0 },
+          { q: '¿Qué ocurre si ves un doble techo muy limpio justo encima de tu entrada en venta?', opts: ['Es probable que el precio barra esa BSL antes de caer', 'Es garantía de que nunca subirá', 'Debes quitar el Stop Loss'], ans: 0 }
+        ]
       },
       {
         id: 3, cat: 'TECH', title: '3. Equilibrio EQ 50% (Caro vs. Barato)',
         summary: 'Por qué los bancos compran en zona de descuento (debajo del 50%) y venden en zona cara (encima del 50%).',
         body: 'Al medir desde el inicio hasta el final de un impulso, la mitad exacta (EQ 50%) divide el rango en dos: Zona Premium (arriba del 50%, cara, ideal solo para ventas) y Zona Discount (debajo del 50%, barata, ideal solo para compras).',
-        rule: 'Regla LATICCE: Evita comprar por encima del EQ 50% o vender por debajo; ahí es donde atrapan al minorista.'
+        example: 'Si GBPUSD sube 200 pips, los institucionales no compran en la cima; esperan que retroceda por debajo de los 100 pips (zona Discount) donde están los Order Blocks baratos.',
+        rule: 'Regla LATICCE: Evita comprar por encima del EQ 50% o vender por debajo; ahí es donde atrapan al minorista.',
+        quiz: [
+          { q: 'En un rango alcista, ¿en qué zona buscan comprar las instituciones?', opts: ['En Zona Discount (por debajo del EQ 50%)', 'En Zona Premium (cerca del techo)', 'Justo en el máximo del día'], ans: 0 },
+          { q: '¿Para qué tipo de operación es ideal la Zona Premium (encima del EQ 50%)?', opts: ['Para buscar ventas a buen precio', 'Para comprar en ruptura', 'Para operar sin estructura'], ans: 0 },
+          { q: '¿Qué representa la línea EQ-50% en el gráfico de Ultrón?', opts: ['El punto medio de equilibrio del rango visible', 'El Stop Loss máximo permitido', 'El cierre semanal'], ans: 0 }
+        ]
       },
       {
         id: 4, cat: 'TECH', title: '4. Order Blocks Institucionales (OB)',
         summary: 'La última vela contraria antes de un impulso fuerte donde quedaron órdenes pendientes de los bancos.',
         body: 'Cuando una institución inyecta millones para mover el mercado, deja órdenes sin ejecutar en la última vela bajista antes de subir (OB Alcista) o la última alcista antes de caer (OB Bajista). Al regresar el precio a esa caja, se activan las órdenes pendientes.',
-        rule: 'Regla LATICCE: El Stop Loss siempre va detrás del extremo del Order Block + spread, nunca arbitrario.'
+        example: 'En GBPCAD bajista, la última vela verde antes de una caída vertical de 4 velas rojas marca el OB Bajista. Al regresar el precio a esa caja, se ejecuta la venta con Stop detrás de la mecha.',
+        rule: 'Regla LATICCE: El Stop Loss siempre va detrás del extremo del Order Block + spread, nunca arbitrario.',
+        quiz: [
+          { q: '¿Qué define un Order Block Alcista válido?', opts: ['La última vela bajista antes de un impulso alcista con quiebre estructural', 'Cualquier vela verde grande', 'Una vela doji en consolidación'], ans: 0 },
+          { q: '¿Dónde debe colocarse el Stop Loss en una entrada por Order Block?', opts: ['Detrás del extremo estructural del bloque + spread', 'A exactamente 5 pips siempre', 'No se usa Stop Loss'], ans: 0 },
+          { q: '¿Por qué el precio reacciona al regresar a un Order Block?', opts: ['Porque los bancos mitigan órdenes pendientes que quedaron abiertas allí', 'Por coincidencia estadística', 'Porque cambia la hora UTC'], ans: 0 }
+        ]
       },
       {
         id: 5, cat: 'TECH', title: '5. Fair Value Gaps (FVG)',
         summary: 'Vacíos de liquidez de 3 velas que actúan como imán cuando el mercado acelera con fuerza.',
         body: 'Un FVG ocurre cuando entre la mecha de la vela 1 y la mecha de la vela 3 queda un espacio abierto que la vela 2 cruzó de golpe. El algoritmo interbancario tiende a regresar para equilibrar ese vacío.',
-        rule: 'Regla LATICCE: La máxima probabilidad ocurre cuando un FVG coincide exactamente dentro de un Order Block (OB + FVG).'
+        example: 'Si la vela 1 tiene mínimo en 1.1050, la vela 2 cae con fuerza hasta 1.1000 y la vela 3 tiene máximo en 1.1030, queda un FVG bajista entre 1.1030 y 1.1050.',
+        rule: 'Regla LATICCE: La máxima probabilidad ocurre cuando un FVG coincide exactamente dentro de un Order Block (OB + FVG).',
+        quiz: [
+          { q: '¿Cuántas velas forman un Fair Value Gap (FVG)?', opts: ['3 velas consecutivas dejando un hueco entre las mechas 1 y 3', '1 sola vela gigante', '10 velas laterales'], ans: 0 },
+          { q: '¿Cuál es el nivel #1 de mayor probabilidad en el escáner de LATICCE?', opts: ['La confluencia OB + FVG juntos', 'Un cruce de medias móviles', 'Una vela aislada sin volumen'], ans: 0 },
+          { q: '¿Qué tiende a hacer el algoritmo con un FVG abierto?', opts: ['Regresar a rellenarlo o equilibrarlo antes de continuar', 'Ignorarlo siempre', 'Cerrar el par por 24 horas'], ans: 0 }
+        ]
       },
       {
         id: 6, cat: 'TECH', title: '6. Alineación Multi-Temporal (1S · 1D · 4H · 1H)',
         summary: 'Jerarquía de temporalidades para no operar contra el tren institucional.',
         body: 'Semanal (1S) y Diario (1D) marcan el mapa macro; 4 Horas (4H) define la estructura Swing de la semana y 1 Hora (1H) refina el bloque de entrada.',
-        rule: 'Regla LATICCE: Solo se activa POTENCIAL SWING cuando 1D, 4H, 1H y Macro apuntan en la misma dirección.'
+        example: 'Si 1S, 1D y 4H son bajistas en USDJPY, buscar compras en 1H es nadar contra corriente; lo profesional es esperar retrocesos en 1H para vender a favor de 1D/4H.',
+        rule: 'Regla LATICCE: Solo se activa POTENCIAL SWING cuando 1D, 4H, 1H y Macro apuntan en la misma dirección.',
+        quiz: [
+          { q: '¿Qué temporalidades marcan la dirección principal en LATICCE?', opts: ['Semanal (1S), Diario (1D) y 4 Horas (4H)', '1 minuto y 5 minutos', 'Solo el tick en vivo'], ans: 0 },
+          { q: '¿Para qué usamos principalmente la temporalidad de 1 Hora (1H)?', opts: ['Para refinar el Order Block o FVG exacto de entrada', 'Para ignorar la tendencia diaria', 'Para ver noticias'], ans: 0 },
+          { q: '¿Qué ocurre si operas en contra de la tendencia diaria (1D)?', opts: ['Es un pullback contra-tendencia de recorrido corto hasta TP1', 'Es el mejor Swing del mes', 'No necesitas Stop Loss'], ans: 0 }
+        ]
       },
       {
         id: 7, cat: 'TECH', title: '7. Killzones Londres y Nueva York',
         summary: 'Las horas exactas donde se inyecta el mayor volumen real del día.',
         body: 'Londres (07:00–10:00 UTC) suele crear el máximo o mínimo del día barriendo liquidez asiática. Nueva York (12:00–16:00 UTC) continúa la tendencia o ejecuta el giro principal del día.',
-        rule: 'Regla LATICCE: Fuera de Killzone los movimientos suelen ser lentos; prioriza ejecuciones en Londres y NY.'
+        example: 'Un bloque OB+FVG tocado a las 13:30 UTC (plena Killzone de Nueva York) tiene mucha más fuerza de desplazamiento que uno tocado a las 21:00 UTC.',
+        rule: 'Regla LATICCE: Fuera de Killzone los movimientos suelen ser lentos; prioriza ejecuciones en Londres y NY.',
+        quiz: [
+          { q: '¿En qué horario UTC opera la Killzone de Londres?', opts: ['Entre 07:00 y 10:00 UTC', 'Entre 22:00 y 01:00 UTC', 'Solo los domingos'], ans: 0 },
+          { q: '¿Qué suele hacer la sesión de Londres con el rango asiático?', opts: ['Barrer la liquidez de Asia para formar el extremo del día', 'Quedarse completamente quieto', 'Cerrar los spreads'], ans: 0 },
+          { q: '¿Cuál es el horario de la Killzone de Nueva York en UTC?', opts: ['12:00 a 16:00 UTC', '02:00 a 04:00 UTC', '19:00 a 21:00 UTC'], ans: 0 }
+        ]
       },
       {
         id: 8, cat: 'TECH', title: '8. Gestión de Riesgo 1:2 y Gatillo BE (+1R)',
         summary: 'Cómo proteger la cuenta de $1,000 USD y asegurar ganancias sin estrés.',
         body: 'Arriesgando 0.5% ($5) o 1% ($10) por operación, en cuanto el precio avanza la misma distancia de tu Stop (+1R), activas el GATILLO BE moviendo tu Stop Loss al precio de entrada. En TP1 (1:2) cobras la mayoría de parciales.',
-        rule: 'Regla LATICCE: Una operación que tocó +1R nunca debe terminar en pérdida.'
+        example: 'Si tu Stop es de 30 pips ($10 de riesgo), al avanzar +30 pips a tu favor subes el SL a entrada (riesgo $0). Al llegar a +60 pips (TP1), cobras el 70-80% de la posición.',
+        rule: 'Regla LATICCE: Una operación que tocó +1R nunca debe terminar en pérdida.',
+        quiz: [
+          { q: '¿Qué debes hacer en cuanto el precio toca el GATILLO BE (+1R)?', opts: ['Mover el Stop Loss al precio de entrada (riesgo cero)', 'Cerrar toda la operación con miedo', 'Subir el Stop Loss más lejos'], ans: 0 },
+          { q: 'En una cuenta de $1,000 USD, ¿cuánto dinero representa arriesgar 1%?', opts: ['$10 USD', '$100 USD', '$250 USD'], ans: 0 },
+          { q: '¿Qué ratio Riesgo/Beneficio representa TP1 en LATICCE?', opts: ['1:2 (el doble de tu riesgo inicial)', '1:0.5', '1:10'], ans: 0 }
+        ]
       },
       {
         id: 9, cat: 'TECH', title: '9. Piramidación y Continuación Swing (TP2)',
         summary: 'Cómo dejar correr un remanente hacia 1:3 y añadir entradas tras tocar TP1.',
         body: 'Tras cobrar parciales en TP1 y tener la orden base protegida en Break Even, si la tendencia sigue limpia, se espera un nuevo retroceso hacia un OB/FVG fresco para buscar TP2 (Swing TP).',
-        rule: 'Regla LATICCE: Nunca piramides si la posición original aún no está protegida en Break Even.'
+        example: 'Vendiste AUDUSD en 0.6760, cobraste parciales en TP1 y moviste SL a 0.6760. Cuando hace un nuevo retroceso limpio en 0.6650, añades una segunda entrada protegida.',
+        rule: 'Regla LATICCE: Nunca piramides si la posición original aún no está protegida en Break Even.',
+        quiz: [
+          { q: '¿Cuál es el requisito obligatorio antes de abrir una re-entrada (piramidar)?', opts: ['Que la orden base ya esté protegida en Break Even sin riesgo', 'Que la primera orden vaya perdiendo', 'Que sea viernes por la tarde'], ans: 0 },
+          { q: '¿Dónde se busca una re-entrada después de tocar TP1?', opts: ['En un nuevo retroceso hacia un OB o FVG fresco a favor de la tendencia', 'Persiguiendo el precio en el punto más lejano', 'En contra de la tendencia diaria'], ans: 0 },
+          { q: '¿Qué objetivo proyecta SWING TP en el gráfico de Ultrón?', opts: ['1:3 o extensión estructural multi-día', '5 pips de scalping', 'El precio de apertura'], ans: 0 }
+        ]
       },
       {
         id: 10, cat: 'TECH', title: '10. Psicología, FOMO y Bitácora Profesional',
         summary: 'Disciplina de ejecución y control emocional frente a pérdidas o rachas ganadoras.',
         body: 'El 80% de los errores ocurren por perseguir velas que ya se fueron (FOMO) o intentar recuperar una pérdida al instante. Registrar cada trade en Karen detecta tus patrones.',
-        rule: 'Regla LATICCE: Enfócate en el Foco Principal #1 del día; calidad supera a cantidad.'
+        example: 'Si pierdes -1R respetando tu plan, cierras la sesión tranquilo. Si abres 4 pares iguales por ansiedad, multiplicas tu riesgo por 4.',
+        rule: 'Regla LATICCE: Enfócate en el Foco Principal #1 del día; calidad supera a cantidad.',
+        quiz: [
+          { q: '¿Qué es el FOMO en trading institucional?', opts: ['Entrar tarde persiguiendo una vela por miedo a quedarse fuera', 'Mover el Stop Loss a Break Even', 'Esperar un retroceso al Order Block'], ans: 0 },
+          { q: '¿Por qué LATICCE destaca un único Foco Principal #1?', opts: ['Para concentrar el capital en la mayor probabilidad y no duplicar riesgo en pares correlacionados', 'Porque los demás pares no funcionan', 'Para operar cada 5 minutos'], ans: 0 },
+          { q: '¿Para qué sirve anotar tus emociones en el Diario de Karen?', opts: ['Para auditar patrones psicológicos y eliminar entradas impulsivas', 'Solo por estética', 'Para predecir noticias'], ans: 0 }
+        ]
       },
       {
         id: 11, cat: 'MACRO', title: '11. Bancos Centrales y Tasas de Interés (Fed, BCE, BoE, BoJ)',
         summary: 'El motor número uno del dinero institucional: hacia dónde fluye el capital global.',
         body: 'Los grandes fondos mueven billones hacia la divisa cuyo banco central mantiene tasas de interés más altas o planea subirlas (postura HAWKISH), y venden la divisa cuyo banco central recorta tasas o imprime dinero (postura DOVISH). Por eso, si la Fed mantiene tasas altas mientras el Banco de Japón (BoJ) las mantiene bajas, el USDJPY sube durante meses.',
-        rule: 'Regla Macro: Compra la divisa con banco central Hawkish (tasas altas/subiendo) contra la divisa con banco central Dovish (recortando tasas).'
+        example: 'Cuando la Fed dice que mantendrá las tasas altas por más tiempo (Hawkish) y el Banco Central Europeo empieza a recortarlas (Dovish), los fondos venden EURUSD.',
+        rule: 'Regla Macro: Compra la divisa con banco central Hawkish (tasas altas/subiendo) contra la divisa con banco central Dovish (recortando tasas).',
+        quiz: [
+          { q: '¿Qué significa que un banco central tenga una postura HAWKISH?', opts: ['Prefiere tasas de interés altas o subirlas para frenar la inflación (fortalece su moneda)', 'Quiere bajar tasas e imprimir dinero', 'No interviene en la economía'], ans: 0 },
+          { q: 'Si la Fed está Hawkish y el Banco de Japón (BoJ) está Dovish, ¿qué tiende a hacer USDJPY?', opts: ['Subir con fuerza a mediano/largo plazo', 'Desplomarse sin parar', 'Quedarse congelado'], ans: 0 },
+          { q: '¿Qué busca el capital institucional global a nivel macroeconómico?', opts: ['Mayor rendimiento real y seguridad de tasas', 'Comprar monedas con inflación descontrolada', 'Operar sin mirar tasas'], ans: 0 }
+        ]
       },
       {
         id: 12, cat: 'MACRO', title: '12. El Motor del Dólar: Índice DXY y Bonos US10Y',
         summary: 'Cómo leer el termómetro maestro del mercado antes de abrir cualquier gráfico.',
         body: 'El DXY mide la fortaleza del dólar estadounidense frente a una cesta de 6 divisas (principalmente Euro). El US10Y mide el rendimiento de los bonos del Tesoro a 10 años. Cuando DXY y US10Y suben juntos, los inversores venden Oro (XAUUSD), Euro (EURUSD) y Libra (GBPUSD) para refugiarse en dólares que pagan mayor rendimiento.',
-        rule: 'Regla Macro: Si DXY y US10Y suben con fuerza, prohíbete buscar compras en Oro, EURUSD o GBPUSD.'
+        example: 'Si ves en VISIÓN que el DXY sube +0.6% y el bono US10Y repunta fuerte, las compras en XAUUSD y EURUSD tienen el viento en contra.',
+        rule: 'Regla Macro: Si DXY y US10Y suben con fuerza, prohíbete buscar compras en Oro, EURUSD o GBPUSD.',
+        quiz: [
+          { q: 'Cuando el DXY y los bonos US10Y suben con fuerza al mismo tiempo, ¿qué suele pasar con el Oro (XAUUSD)?', opts: ['Tiende a caer porque los bonos pagan más rendimiento en dólares', 'Sube verticalmente', 'No tiene ninguna relación'], ans: 0 },
+          { q: '¿Qué mide el índice DXY?', opts: ['La fortaleza del dólar estadounidense frente a una cesta de divisas principales', 'El precio del petróleo', 'Las acciones tecnológicas'], ans: 0 },
+          { q: '¿Qué par suele subir cuando los rendimientos de los bonos US10Y se disparan?', opts: ['USDJPY', 'EURUSD', 'AUDUSD'], ans: 0 }
+        ]
       },
       {
         id: 13, cat: 'MACRO', title: '13. Datos de Inflación (CPI / PPI / PCE) y Empleo (NFP)',
         summary: 'Cómo interpretar las noticias rojas del calendario económico sin quedar atrapado.',
         body: 'El CPI (Inflación al Consumidor) y el PCE son los datos que vigila la Reserva Federal para decidir si sube o baja tasas. Si la inflación sale MAYOR a lo esperado, el mercado entiende que la Fed no podrá bajar tasas pronto -> el USD sube fuerte. El NFP (Nóminas No Agrícolas, primer viernes de cada mes) mide el empleo en EE.UU.: empleo fuerte = dólar fuerte.',
-        rule: 'Regla Macro: Nunca abras una operación 15 minutos antes de CPI, NFP o decisión de tasas; deja que pase el barrido inicial y entra después.'
+        example: 'Se esperaba un CPI de 2.9% y sale en 3.3%. Al instante el DXY salta hacia arriba y EURUSD cae 80 pips barriendo liquidez en segundos.',
+        rule: 'Regla Macro: Nunca abras una operación 15 minutos antes de CPI, NFP o decisión de tasas; deja que pase el barrido inicial y entra después.',
+        quiz: [
+          { q: 'Si el dato de inflación CPI de EE.UU. sale MUCHO MAYOR a lo esperado, ¿cómo reacciona normalmente el Dólar (USD)?', opts: ['Sube fuerte porque la Fed retrasará los recortes de tasas', 'Cae fuerte porque la economía va mal', 'No se mueve'], ans: 0 },
+          { q: '¿Qué mide el reporte NFP que sale el primer viernes de cada mes?', opts: ['La creación de empleo no agrícola en Estados Unidos', 'La producción de oro en Australia', 'La tasa de interés en Japón'], ans: 0 },
+          { q: '¿Cuál es la regla de protección ante noticias de alto impacto (CPI / NFP)?', opts: ['No abrir órdenes 15 minutos antes y esperar a que pase el latigazo inicial', 'Aumentar el lotaje justo 1 minuto antes', 'Quitar el Stop Loss para que no lo toque la mecha'], ans: 0 }
+        ]
       },
       {
         id: 14, cat: 'MACRO', title: '14. Sentimiento Global: Risk-On vs. Risk-Off',
         summary: 'Por qué el S&P 500 y el Cobre mueven al AUD, NZD y JPY.',
         body: 'En entornos RISK-ON (optimismo económico, bolsas US500 y USTEC subiendo), los capitales salen del refugio y compran divisas ligadas a materias primas y crecimiento como AUD, NZD y CAD. En entornos RISK-OFF (miedo, crisis, guerra o recesión), las bolsas caen y el dinero corre hacia divisas refugio: USD, JPY y CHF.',
-        rule: 'Regla Macro: Para operar pares con AUD o NZD en compras, verifica que US500 esté alcista y el DXY no esté disparado.'
+        example: 'En un día de pánico bursátil donde US500 cae -2%, pares como AUDJPY y GBPJPY se desploman porque los inversores venden riesgo (AUD/GBP) y compran refugio (JPY).',
+        rule: 'Regla Macro: Para operar pares con AUD o NZD en compras, verifica que US500 esté alcista y el DXY no esté disparado.',
+        quiz: [
+          { q: 'En un entorno de miedo o crisis financiera (RISK-OFF), ¿qué divisas actúan como refugio?', opts: ['USD, JPY y CHF', 'AUD y NZD', 'Solo criptomonedas'], ans: 0 },
+          { q: '¿Qué divisas se benefician más cuando hay apetito por el riesgo (RISK-ON) y suben las bolsas?', opts: ['AUD, NZD y CAD', 'JPY y CHF', 'Ninguna'], ans: 0 },
+          { q: 'Si las bolsas caen fuerte (Risk-Off), ¿qué suele ocurrir con el par AUDJPY?', opts: ['Cae fuerte (se vende AUD y se compra JPY refugio)', 'Sube verticalmente', 'Se mantiene plano'], ans: 0 }
+        ]
       },
       {
         id: 15, cat: 'MACRO', title: '15. Fuerza Relativa de Divisas (FUERTE vs. DÉBIL)',
         summary: 'Cómo evitar consolidaciones emparejando la moneda más fuerte contra la más débil.',
         body: 'Un par de Forex es una pelea entre dos economías (ej. GBPAUD = Libra vs. Dólar Australiano). Si GBP está FUERTE en todos sus cruces y AUD está DÉBIL porque caen las bolsas y materias primas, GBPAUD tendrá una tendencia limpia y explosiva. Si ambas están débiles, el gráfico hará mechas sin dirección.',
-        rule: 'Regla Macro: Revisa siempre la etiqueta de VISIÓN en cada tarjeta; prioriza cruces FUERTE vs. DÉBIL.'
+        example: 'Si ves en Jarvis que GBP está FUERTE y AUD está DÉBIL, GBPAUD en compra tendrá mucha más limpieza estructural que operar EURUSD si ambos están neutrales.',
+        rule: 'Regla Macro: Revisa siempre la etiqueta de VISIÓN en cada tarjeta; prioriza cruces FUERTE vs. DÉBIL.',
+        quiz: [
+          { q: '¿Cuál es la combinación ideal de divisas para operar una tendencia limpia?', opts: ['Una divisa FUERTE contra una divisa DÉBIL', 'Dos divisas DÉBILES entre sí', 'Dos divisas en NEUTRAL'], ans: 0 },
+          { q: '¿Qué suele pasar en un par donde ambas divisas están débiles al mismo tiempo?', opts: ['El precio consolida y hace mechas erráticas sin recorrido limpio', 'Hace un Swing de 500 pips', 'No cobra spread'], ans: 0 },
+          { q: 'Si buscas COMPRAR el par GBPAUD, ¿cómo deberían estar ambas monedas?', opts: ['GBP FUERTE y AUD DÉBIL', 'GBP DÉBIL y AUD FUERTE', 'Ambas neutrales'], ans: 0 }
+        ]
       },
       {
         id: 16, cat: 'MACRO', title: '16. Carry Trade y Diferenciales de Tasas Reales',
         summary: 'El secreto detrás de las tendencias Swing de cientos de pips.',
         body: 'El Carry Trade consiste en pedir prestado en una moneda con tasa de interés muy baja (como el Yen japonés o el Franco suizo) para invertir en una moneda con tasa alta (como el Dólar o la Libra). Mientras el diferencial de tasas no cambie y no haya pánico financiero, los fondos compran cada retroceso para cobrar intereses diarios.',
-        rule: 'Regla Macro: Los mejores recorridos Swing (TP2) nacen cuando el diferencial de tasas respalda la dirección del gráfico.'
+        example: 'Si EE.UU. paga 4.5% de interés y Japón paga 0.25%, mantener compras en USDJPY genera un flujo constante institucional que sostiene tendencias de semanas.',
+        rule: 'Regla Macro: Los mejores recorridos Swing (TP2) nacen cuando el diferencial de tasas respalda la dirección del gráfico.',
+        quiz: [
+          { q: '¿En qué consiste la estrategia institucional de Carry Trade?', opts: ['Financiarse en una moneda de tasa muy baja (ej. JPY) para comprar una de tasa alta (ej. USD/GBP)', 'Comprar y vender en 10 segundos', 'Operar solo los fines de semana'], ans: 0 },
+          { q: '¿Qué factor puede romper repentinamente un Carry Trade?', opts: ['Un evento de pánico Risk-Off o una subida sorpresa de tasas del banco central de moneda barata', 'Un feriado menor', 'Un cambio de color en el gráfico'], ans: 0 },
+          { q: '¿Por qué el Carry Trade ayuda a proyectar recorridos Swing hasta TP2?', opts: ['Porque los fondos institucionales acumulan compras en cada retroceso para cobrar diferencial de interés', 'Porque elimina el spread', 'Porque garantiza que no haya retrocesos'], ans: 0 }
+        ]
       }
     ];
 
@@ -661,19 +767,175 @@
       renderPanelCourse();
     }
 
-    function openFridayLesson(id) {
-      selectedLessonId = id;
+    // AULA MODAL + EXAMEN INTERACTIVO DE F.R.I.D.A.Y.
+    function openFridayClassroom(id, startInExam = false) {
+      const les = FRIDAY_CURRICULUM.find(x => x.id === id);
+      if (!les) return;
+      activeExamLessonId = id;
+      examAnswers = {};
+      const modal = document.getElementById('friday-classroom-modal');
+      if (modal) modal.classList.remove('hidden');
+      if (startInExam) renderFridayExamView(les);
+      else renderFridayStudyView(les);
+    }
+
+    function closeFridayClassroom() {
+      const modal = document.getElementById('friday-classroom-modal');
+      if (modal) modal.classList.add('hidden');
       renderPanelCourse();
-      const reader = document.getElementById('friday-lesson-reader');
-      if (reader) reader.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function renderFridayStudyView(les) {
+      const bodyEl = document.getElementById('friday-modal-body');
+      if (!bodyEl) return;
+      const isDone = completedLessons.includes(les.id);
+      bodyEl.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="text-[10px] px-2.5 py-1 rounded font-bold ${les.cat === 'MACRO' ? 'bg-sky-500/20 text-sky-300 border border-sky-400/50' : 'bg-purple-500/20 text-purple-300 border border-purple-400/50'}">
+            ${les.cat === 'MACRO' ? '🌐 MACROECONOMÍA INSTITUCIONAL' : '🎯 ESTRUCTURA SMC'}
+          </span>
+          <span class="text-[11px] font-bold ${isDone ? 'text-emerald-400' : 'text-amber-300'}">
+            ${isDone ? '✓ MÓDULO APROBADO' : '⏳ PENDIENTE DE EXAMEN'}
+          </span>
+        </div>
+
+        <h2 class="font-hud text-base sm:text-lg font-black text-white leading-snug">${les.title}</h2>
+
+        <div class="bg-[#04070e] border border-slate-800 rounded-xl p-4 space-y-3 text-slate-200 leading-relaxed">
+          <div>
+            <div class="text-[10px] font-bold text-purple-300 uppercase tracking-wider mb-1">1. Concepto Clave</div>
+            <p>${les.body}</p>
+          </div>
+          <div class="border-t border-slate-800/80 pt-2.5">
+            <div class="text-[10px] font-bold text-cyan-300 uppercase tracking-wider mb-1">2. Ejemplo Real en el Mercado</div>
+            <p class="text-slate-300">${les.example}</p>
+          </div>
+          <div class="bg-amber-500/10 border border-amber-400/40 rounded-lg p-3 text-amber-200 font-bold text-xs">
+            💡 ${les.rule}
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
+          <button type="button" onclick="askFridayAboutLesson(${les.id})" class="px-3.5 py-2.5 rounded-lg border border-purple-400/60 bg-purple-500/15 text-purple-200 font-bold text-xs">
+            🎙️ PREGUNTAR DUDA EN CABINA
+          </button>
+          <button type="button" onclick="renderFridayExamView(FRIDAY_CURRICULUM.find(x=>x.id===${les.id}))" class="px-5 py-2.5 rounded-lg bg-purple-500 hover:bg-purple-400 text-black font-black text-xs tracking-wider shadow-lg shadow-purple-900/40">
+            📝 RENDIR EXAMEN (3 PREGUNTAS) ▸
+          </button>
+        </div>
+      `;
+    }
+
+    function selectExamOption(qIdx, optIdx) {
+      examAnswers[qIdx] = optIdx;
+      const les = FRIDAY_CURRICULUM.find(x => x.id === activeExamLessonId);
+      if (les) renderFridayExamView(les);
+    }
+
+    function renderFridayExamView(les) {
+      const bodyEl = document.getElementById('friday-modal-body');
+      if (!bodyEl) return;
+      const answeredCount = Object.keys(examAnswers).length;
+      bodyEl.innerHTML = `
+        <div class="flex items-center justify-between">
+          <button type="button" onclick="renderFridayStudyView(FRIDAY_CURRICULUM.find(x=>x.id===${les.id}))" class="text-xs text-purple-300 hover:text-white font-bold">◂ VOLVER A LA LECTURA</button>
+          <span class="text-[11px] text-slate-400 font-bold">Respondidas: ${answeredCount}/${les.quiz.length}</span>
+        </div>
+
+        <div class="space-y-1">
+          <div class="text-[10px] font-bold text-amber-300 tracking-wider">📝 EVALUACIÓN DE F.R.I.D.A.Y. (MÍNIMO 2/3 PARA APROBAR)</div>
+          <h3 class="font-hud text-sm sm:text-base font-bold text-white">${les.title}</h3>
+        </div>
+
+        <div class="space-y-4">
+          ${les.quiz.map((item, qIdx) => `
+            <div class="bg-[#04070e] border border-slate-800 rounded-xl p-3.5 space-y-2">
+              <div class="font-bold text-white text-xs sm:text-sm">${qIdx + 1}. ${item.q}</div>
+              <div class="space-y-1.5">
+                ${item.opts.map((opt, oIdx) => {
+                  const chosen = examAnswers[qIdx] === oIdx;
+                  return `
+                    <button type="button" onclick="selectExamOption(${qIdx}, ${oIdx})" class="w-full text-left px-3 py-2 rounded-lg border text-xs transition ${chosen ? 'bg-purple-500/25 border-purple-400 text-white font-bold' : 'bg-[#080d19] border-slate-800 text-slate-300 hover:border-slate-600'}">
+                      ${chosen ? '◉' : '○'} ${opt}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="pt-1 flex justify-end">
+          <button type="button" onclick="submitFridayExam(${les.id})" class="w-full sm:w-auto px-6 py-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs tracking-wider">
+            ✓ ENVIAR EXAMEN A F.R.I.D.A.Y.
+          </button>
+        </div>
+      `;
+    }
+
+    function submitFridayExam(id) {
+      const les = FRIDAY_CURRICULUM.find(x => x.id === id);
+      if (!les) return;
+      if (Object.keys(examAnswers).length < les.quiz.length) {
+        alert('Responde las 3 preguntas antes de entregar el examen a F.R.I.D.A.Y.');
+        return;
+      }
+
+      let score = 0;
+      const reviewHtml = les.quiz.map((item, qIdx) => {
+        const userAns = examAnswers[qIdx];
+        const ok = userAns === item.ans;
+        if (ok) score++;
+        return `
+          <div class="p-3 rounded-lg border ${ok ? 'bg-emerald-950/25 border-emerald-500/50' : 'bg-red-950/25 border-red-500/50'} space-y-1 text-xs">
+            <div class="font-bold ${ok ? 'text-emerald-300' : 'text-red-300'}">${ok ? '✓' : '✕'} ${qIdx + 1}. ${item.q}</div>
+            <div class="text-slate-300">Tu respuesta: <strong>${item.opts[userAns]}</strong></div>
+            ${!ok ? `<div class="text-emerald-300">Correcta: <strong>${item.opts[item.ans]}</strong></div>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      const passed = score >= 2;
+      if (passed && !completedLessons.includes(id)) {
+        completedLessons.push(id);
+        localStorage.setItem('oraculo_course_v2', JSON.stringify(completedLessons));
+      }
+
+      const bodyEl = document.getElementById('friday-modal-body');
+      const nextLes = FRIDAY_CURRICULUM.find(x => x.id === id + 1);
+      bodyEl.innerHTML = `
+        <div class="rounded-xl p-4 border ${passed ? 'bg-emerald-500/15 border-emerald-400 text-emerald-200' : 'bg-red-500/15 border-red-400 text-red-200'} space-y-1.5 text-center">
+          <div class="font-hud text-lg font-black">${passed ? '🎉 ¡MÓDULO APROBADO!' : '⚠️ REPASO NECESARIO'}</div>
+          <div class="text-xs font-bold">Calificación de F.R.I.D.A.Y.: ${score} de ${les.quiz.length} respuestas correctas</div>
+          <p class="text-xs opacity-90">${passed
+            ? '¡Excelente trabajo, jefe! F.R.I.D.A.Y. ha registrado este módulo como completado en tu historial institucional.'
+            : 'Necesitas al menos 2 respuestas correctas para aprobar. Revisa las correcciones abajo y vuelve a intentarlo.'}</p>
+        </div>
+
+        <div class="space-y-2">${reviewHtml}</div>
+
+        <div class="flex flex-wrap justify-between gap-2 pt-2">
+          <button type="button" onclick="openFridayClassroom(${id}, false)" class="px-4 py-2.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-200 font-bold text-xs">
+            ↻ REPASAR Y REPETIR
+          </button>
+          ${passed && nextLes
+            ? `<button type="button" onclick="openFridayClassroom(${nextLes.id}, false)" class="px-5 py-2.5 rounded-lg bg-purple-500 text-black font-black text-xs">SIGUIENTE MÓDULO (${nextLes.id}) ▸</button>`
+            : `<button type="button" onclick="closeFridayClassroom()" class="px-5 py-2.5 rounded-lg bg-amber-500 text-black font-black text-xs">LISTO · VOLVER AL CURSO</button>`}
+        </div>
+      `;
+
+      speakText(passed
+        ? `¡Felicidades jefe! Aprobaste el módulo ${les.id} con ${score} de 3 aciertos.`
+        : `Jefe, sacaste ${score} de 3. Repasa las correcciones y vuelve a intentarlo.`, 'friday');
     }
 
     function askFridayAboutLesson(id) {
       const les = FRIDAY_CURRICULUM.find(x => x.id === id);
       if (!les) return;
+      closeFridayClassroom();
       if (isPanelMode) toggleViewMode();
       selectAgent('friday', false);
-      processQuery(`Explícame con ejemplos prácticos en el mercado actual el módulo "${les.title}" y hazme una pregunta rápida para comprobar si lo entendí.`);
+      processQuery(`Explícame con ejemplos prácticos en el mercado actual el módulo "${les.title}" antes de que rinda mi examen.`);
     }
 
     function getFocusPrimary() {
@@ -1333,8 +1595,8 @@ ${buildCompactMarketContext()}`;
       } else if (key === 'friday') {
         const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
-        document.getElementById('agent-hero-sub').textContent = `ACADEMIA · ${completedLessons.length}/${FRIDAY_CURRICULUM.length} MÓDULOS`;
-        typeAgentDialogue(`¡Listo cuando tú lo estés, jefe! Ya cargué los 6 nuevos módulos expertos de Macroeconomía (Bancos Centrales, DXY, Bonos US10Y, Inflación, Risk-On/Off y Carry Trade). Pídeme cualquier tema o abre el panel.`, false);
+        document.getElementById('agent-hero-sub').textContent = `ACADEMIA · ${completedLessons.length}/${FRIDAY_CURRICULUM.length} APROBADOS`;
+        typeAgentDialogue(`¡Listo cuando tú lo estés, jefe! Entra a mi Academia, abre cualquier módulo con Estudiar Lección y aprueba su examen de 3 preguntas para certificar tu dominio.`, false);
       } else if (key === 'edith') {
         const d = nearest ? getAssetUnitsDist(nearest) : null;
         document.getElementById('agent-hero-metric').textContent = d ? `${d.units} ${d.label}` : 'PUNTERÍA';
@@ -1643,7 +1905,6 @@ ${buildCompactMarketContext()}`;
       drawUltronChart();
     }
 
-    // 3. GRÁFICO ULTRÓN RECONSTRUIDO COMO TU CAPTURA DE REFERENCIA (SIN TEXTOS ENCIMADOS + EQ-50% + BOS)
     function drawUltronChart() {
       if (!data) return;
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
@@ -1691,7 +1952,6 @@ ${buildCompactMarketContext()}`;
       const span = (maxP - minP) || 1;
       const yOf = val => padT + ((maxP - val) / span) * plotH;
 
-      // Cuadrícula sutil institucional
       ctx.strokeStyle = 'rgba(30, 41, 59, 0.35)';
       ctx.lineWidth = 0.7;
       for (let g = 1; g <= 4; g++) {
@@ -1699,13 +1959,11 @@ ${buildCompactMarketContext()}`;
         ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(W - padR, gy); ctx.stroke();
       }
 
-      // Zona sombreada Order Block / FVG (último tercio derecho)
       const yObT = yOf(Math.max(a.ob_high, a.ob_low));
       const yObB = yOf(Math.min(a.ob_high, a.ob_low));
       ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16, 185, 129, 0.16)' : 'rgba(239, 68, 68, 0.16)';
       ctx.fillRect(padL + plotW * 0.38, yObT, plotW * 0.62, Math.max(6, yObB - yObT));
 
-      // Línea EQ-50% (Equilibrio del rango)
       const yEq = yOf(eq50);
       ctx.strokeStyle = 'rgba(148, 163, 184, 0.45)';
       ctx.setLineDash([4, 4]);
@@ -1715,7 +1973,6 @@ ${buildCompactMarketContext()}`;
       ctx.font = 'bold 9px JetBrains Mono';
       ctx.fillText('EQ-50%', W - padR - 42, yEq - 3);
 
-      // Velas Japonesas
       const step = plotW / candles.length;
       const cw = Math.max(3, step * 0.58);
       candles.forEach((c, i) => {
@@ -1728,7 +1985,6 @@ ${buildCompactMarketContext()}`;
         ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
       });
 
-      // Liquidez BSL (arriba) y SSL (abajo)
       if (a.liquidity?.bsl) {
         const yB = yOf(a.liquidity.bsl);
         ctx.strokeStyle = 'rgba(244, 63, 94, 0.65)';
@@ -1750,7 +2006,6 @@ ${buildCompactMarketContext()}`;
         ctx.fillText(`▼ SSL ${a.liquidity.ssl.toFixed(a.decimals)}`, padL + 4, yS - 3);
       }
 
-      // Etiqueta estructural ⚡ BOS / CHoCH sobre las últimas velas
       const structLabel = a.structure_event || (a.setup.direction === 'BUY' ? '⚡ BULLISH BOS' : '⚡ BEARISH BOS');
       const refCandle = candles[Math.max(0, candles.length - 5)];
       const yStruct = yOf(refCandle.c);
@@ -1758,7 +2013,6 @@ ${buildCompactMarketContext()}`;
       ctx.font = 'bold 9px JetBrains Mono';
       ctx.fillText(structLabel, padL + plotW * 0.56, Math.min(H - padB - 6, Math.max(padT + 12, yStruct - 6)));
 
-      // Sistema anti-colisión vertical para que ninguna etiqueta o caja de precio se encima
       const isBuy = a.setup.direction === 'BUY';
       const entryTitle = isBuy ? 'COMPRA OB REAL' : 'VENTA OB REAL';
       const levels = [
@@ -1770,7 +2024,6 @@ ${buildCompactMarketContext()}`;
         { val: a.price, lbl: '', col: '#f59e0b', textCol: '#000000', isLive: true }
       ].map(lv => ({ ...lv, rawY: yOf(lv.val), drawY: yOf(lv.val) }));
 
-      // Ordenar de arriba hacia abajo y separar si están a menos de 17px
       levels.sort((x, y) => x.rawY - y.rawY);
       const minGap = 17;
       for (let i = 1; i < levels.length; i++) {
@@ -1787,7 +2040,6 @@ ${buildCompactMarketContext()}`;
         }
       }
 
-      // Dibujar líneas horizontales + textos con fondo oscuro + cajas derechas alineadas
       const lineStartX = padL + plotW * 0.34;
       levels.forEach(lv => {
         if (lv.isLive) {
@@ -1812,7 +2064,6 @@ ${buildCompactMarketContext()}`;
           }
         }
 
-        // Caja derecha de precio
         ctx.fillStyle = lv.col;
         ctx.fillRect(W - padR + 2, lv.drawY - 8, padR - 4, 15);
         ctx.fillStyle = lv.textCol;
@@ -1821,33 +2072,11 @@ ${buildCompactMarketContext()}`;
       });
     }
 
-    // 4. RENDERIZADO DE ACADEMIA F.R.I.D.A.Y. (16 MÓDULOS + LECTOR EXPERTO)
+    // RENDERIZADO DE LA LISTA DE CURSOS DE F.R.I.D.A.Y.
     function renderPanelCourse() {
       const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
       const badge = document.getElementById('panel-course-pct');
-      if (badge) badge.textContent = `${pct}% (${completedLessons.length}/${FRIDAY_CURRICULUM.length})`;
-
-      const activeLesson = FRIDAY_CURRICULUM.find(l => l.id === selectedLessonId) || FRIDAY_CURRICULUM[10];
-      const reader = document.getElementById('friday-lesson-reader');
-      if (reader && activeLesson) {
-        const isDone = completedLessons.includes(activeLesson.id);
-        reader.innerHTML = `
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${activeLesson.cat === 'MACRO' ? 'bg-sky-500/20 text-sky-300 border border-sky-400/50' : 'bg-purple-500/20 text-purple-300 border border-purple-400/50'}">
-              ${activeLesson.cat === 'MACRO' ? '🌐 MÓDULO EXPERTO DE MACROECONOMÍA' : '🎯 MÓDULO DE ESTRUCTURA SMC'}
-            </span>
-            <div class="flex gap-1.5">
-              <button type="button" onclick="askFridayAboutLesson(${activeLesson.id})" class="px-2.5 py-1 rounded bg-purple-500 text-black font-bold text-[10px]">🎙️ PRACTICAR CON F.R.I.D.A.Y.</button>
-              <button type="button" onclick="toggleLessonDone(${activeLesson.id})" class="px-2.5 py-1 rounded border ${isDone ? 'border-emerald-400 text-emerald-300 bg-emerald-500/15' : 'border-slate-700 text-slate-300'} text-[10px] font-bold">
-                ${isDone ? '✓ APROBADO' : 'MARCAR LEÍDO'}
-              </button>
-            </div>
-          </div>
-          <div class="font-hud text-sm font-bold text-white">${activeLesson.title}</div>
-          <p class="text-xs text-slate-300 leading-relaxed">${activeLesson.body}</p>
-          <div class="bg-[#080d1a] border border-amber-500/30 rounded p-2.5 text-[11px] text-amber-200 font-bold">💡 ${activeLesson.rule}</div>
-        `;
-      }
+      if (badge) badge.textContent = `${pct}% APROBADO (${completedLessons.length}/${FRIDAY_CURRICULUM.length})`;
 
       const list = document.getElementById('panel-lessons-list');
       if (!list) return;
@@ -1857,36 +2086,26 @@ ${buildCompactMarketContext()}`;
 
       list.innerHTML = filtered.map(l => {
         const done = completedLessons.includes(l.id);
-        const isCurrent = l.id === selectedLessonId;
-        const borderCls = isCurrent
-          ? 'border-amber-400 bg-purple-950/20'
-          : (done ? 'border-emerald-500/50' : 'border-slate-800');
         return `
-          <div class="bg-[#050811] border ${borderCls} rounded-lg p-3 space-y-2 flex flex-col justify-between">
+          <div class="bg-[#050811] border ${done ? 'border-emerald-500/60' : 'border-slate-800'} rounded-xl p-3.5 space-y-2.5 flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between gap-2 mb-1">
                 <span class="text-[9px] font-bold ${l.cat === 'MACRO' ? 'text-sky-400' : 'text-purple-400'}">${l.cat === 'MACRO' ? '🌐 MACROECONOMÍA' : '🎯 SMC / ESTRUCTURA'}</span>
-                ${done ? '<span class="text-[9px] text-emerald-400 font-bold">✓ COMPLETADO</span>' : ''}
+                <span class="text-[9px] font-bold ${done ? 'text-emerald-400' : 'text-slate-500'}">${done ? '✓ APROBADO' : '⏳ PENDIENTE'}</span>
               </div>
-              <div class="font-bold text-white text-xs">${l.title}</div>
+              <div class="font-bold text-white text-xs sm:text-sm">${l.title}</div>
               <p class="text-[11px] text-slate-400 mt-1">${l.summary}</p>
             </div>
-            <div class="flex items-center justify-between gap-2 pt-1">
-              <button type="button" onclick="openFridayLesson(${l.id})" class="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-purple-200 text-[10px] font-bold">📖 ESTUDIAR LECCIÓN</button>
-              <button type="button" onclick="toggleLessonDone(${l.id})" class="px-2 py-1 rounded border border-slate-700 text-slate-300 text-[10px]">${done ? '✓' : 'APROBAR'}</button>
+            <div class="flex items-center gap-2 pt-1">
+              <button type="button" onclick="openFridayClassroom(${l.id}, false)" class="flex-1 px-3 py-2 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/60 text-purple-200 text-[11px] font-bold">
+                📖 ESTUDIAR LECCIÓN
+              </button>
+              <button type="button" onclick="openFridayClassroom(${l.id}, true)" class="px-3 py-2 rounded-lg bg-[#0b1222] hover:border-amber-400 border border-slate-700 text-amber-300 text-[11px] font-bold">
+                📝 EXAMEN
+              </button>
             </div>
           </div>`;
       }).join('');
-    }
-
-    function toggleLessonDone(id) {
-      if (completedLessons.includes(id)) {
-        completedLessons = completedLessons.filter(x => x !== id);
-      } else {
-        completedLessons.push(id);
-      }
-      localStorage.setItem('oraculo_course', JSON.stringify(completedLessons));
-      renderPanelCourse();
     }
 
     function configureCloudToken() {
