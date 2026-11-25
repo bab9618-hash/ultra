@@ -1,6 +1,5 @@
 import json
 import os
-import re
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -74,8 +73,7 @@ def send_ntfy_alert(title, message, priority="default", tags="chart_with_upwards
         )
         with urllib.request.urlopen(req, timeout=8) as resp:
             return 200 <= resp.status < 300
-    except Exception as e:
-        print(f"Aviso ntfy: {e}")
+    except Exception:
         return False
 
 
@@ -98,8 +96,7 @@ def get_candles(ticker, period, interval, decimals, max_bars=60):
                 "c": round(float(row["Close"]), decimals),
             })
         return out[-max_bars:] if max_bars else out
-    except Exception as e:
-        print(f"Error {ticker} ({interval}): {e}")
+    except Exception:
         return []
 
 
@@ -169,7 +166,6 @@ def detect_exhaustion(candles, bias):
     recent = candles[-8:]
     c_last = recent[-1]
     c_prev = recent[-2]
-    rng_last = max(1e-9, c_last["h"] - c_last["l"])
     body_last = abs(c_last["c"] - c_last["o"])
     upper_wick = c_last["h"] - max(c_last["o"], c_last["c"])
     lower_wick = min(c_last["o"], c_last["c"]) - c_last["l"]
@@ -181,7 +177,7 @@ def detect_exhaustion(candles, bias):
     else:
         lo_8 = min(x["l"] for x in recent[:-1])
         if c_last["l"] <= lo_8 * 1.0005 and (lower_wick > body_last * 1.4 or c_last["c"] > c_prev["c"]):
-            return True, "Mecha de rechazo en piso reciente (posible rebote técnico)."
+            return True, "Mecha de rechazo en piso reciente (posible rebote tecnico)."
     return False, ""
 
 
@@ -211,7 +207,7 @@ def detect_liquidity_and_structure(candles, dec):
         event_type = "BARRIDO SSL"
         event_dir = "SUBE"
         event_price = ssl
-        event_desc = f"Barrido de liquidez bajo {ssl} con absorción alcista (posible giro alcista)."
+        event_desc = f"Barrido de liquidez bajo {ssl} con absorcion alcista (posible giro alcista)."
     elif last["c"] > bsl and prev["c"] <= bsl:
         event_type = "BOS / CHoCH ALCISTA"
         event_dir = "SUBE"
@@ -234,12 +230,6 @@ def detect_liquidity_and_structure(candles, dec):
 
 
 def scan_institutional_zone(candles, direction, price, atr, pip, dec):
-    """
-    Escáner institucional en cascada de 3 niveles:
-    1. OB + FVG (máxima prioridad)
-    2. OB Estructural limpio
-    3. FVG aislado de retroceso
-    """
     if not candles or len(candles) < 12 or direction not in ("SUBE", "BAJA"):
         return None
 
@@ -332,10 +322,6 @@ def scan_institutional_zone(candles, direction, price, atr, pip, dec):
 
 
 def find_clean_weekly_pivots_pre2017(candles_1w, dec):
-    """
-    Detecta giros semanales limpios históricos anteriores a 2017:
-    1 vela de impulso + 1 vela única de rechazo sin acumulación previa.
-    """
     buys, sells = [], []
     if not candles_1w or len(candles_1w) < 6:
         return buys, sells
@@ -352,7 +338,6 @@ def find_clean_weekly_pivots_pre2017(candles_1w, dec):
         body = abs(c["c"] - c["o"])
         date_str = datetime.fromtimestamp(c["t"], tz=timezone.utc).strftime("%Y-%m-%d")
 
-        # Giro alcista limpio (mecha inferior o envolvente tras caída sin rango lateral)
         if prev1["c"] < prev1["o"] and c["l"] < prev1["l"] and c["l"] < prev2["l"] and nxt["c"] > c["h"]:
             if body / rng >= 0.35 or (min(c["o"], c["c"]) - c["l"]) >= rng * 0.45:
                 buys.append({
@@ -362,7 +347,6 @@ def find_clean_weekly_pivots_pre2017(candles_1w, dec):
                     "date": date_str
                 })
 
-        # Giro bajista limpio (mecha superior o envolvente tras subida sin rango lateral)
         if prev1["c"] > prev1["o"] and c["h"] > prev1["h"] and c["h"] > prev2["h"] and nxt["c"] < c["l"]:
             if body / rng >= 0.35 or (c["h"] - max(c["o"], c["c"])) >= rng * 0.45:
                 sells.append({
@@ -419,7 +403,7 @@ def compute_currency_strength_matrix(c4_map, c1d_map, dxy_4h, dxy_1d, us10y_4h, 
         "CAD": cad_score, "CHF": chf_score, "XAU": xau_score,
         "BTC": spx_chg * 0.8 - usd_score * 0.5,
     }
-    labels = {k: ("FUERTE" if v > 0.14 else ("DÉBIL" if v < -0.14 else "NEUTRAL")) for k, v in raw.items()}
+    labels = {k: ("FUERTE" if v > 0.14 else ("DEBIL" if v < -0.14 else "NEUTRAL")) for k, v in raw.items()}
     return raw, labels, round(spx_chg, 2)
 
 
@@ -455,115 +439,17 @@ def fetch_high_impact_calendar(now_utc):
 
     if not events:
         events = [
-            {"time": "13:30 UTC", "currency": "USD", "impact": "MEDIO", "title": "Apertura Sesión Nueva York / Flujo Institucional", "forecast": "-", "previous": "-"},
-            {"time": "15:00 UTC", "currency": "USD", "impact": "MEDIO", "title": "Fijación de Liquidez Londres / NY", "forecast": "-", "previous": "-"},
+            {"time": "13:30 UTC", "currency": "USD", "impact": "MEDIO", "title": "Apertura Sesion Nueva York / Flujo Institucional", "forecast": "-", "previous": "-"},
+            {"time": "15:00 UTC", "currency": "USD", "impact": "MEDIO", "title": "Fijacion de Liquidez Londres / NY", "forecast": "-", "previous": "-"},
         ]
     return events[:12], high_by_ccy
 
 
-def explain_news_in_plain_spanish(raw_title, source_name):
-    """
-    Traduce y explica de forma clara y pedagógica el titular financiero
-    para saber qué significa y qué activos mueve hoy.
-    """
-    t = raw_title.strip()
-    tl = t.lower()
-
-    # Clasificación temática
-    if any(k in tl for k in ["fed", "powell", "fomc", "ecb", "boe", "boj", "rba", "rate", "rates", "inflation", "cpi", "ppi", "payroll", "jobs", "unemployment", "central bank"]):
-        category = "💱 FOREX & BANCOS"
-    elif any(k in tl for k in ["gold", "xau", "silver", "oil", "crude", "opec", "commodity", "commodities"]):
-        category = "🥇 ORO & COMMODITIES"
-    elif any(k in tl for k in ["bitcoin", "btc", "crypto", "ethereum", "sec"]):
-        category = "₿ CRIPTO & RIESGO"
-    else:
-        category = "🇺🇸 WALL STREET & TASAS"
-
-    # Detección de activos afectados y explicación clara en español
-    impacts = []
-    if any(k in tl for k in ["fed", "powell", "fomc", "dollar", "dxy", "treasury", "yield", "10-year"]):
-        impacts.extend(["EURUSD", "GBPUSD", "USDJPY", "XAUUSD"])
-    if any(k in tl for k in ["ecb", "euro", "eurozone", "germany", "lagarde"]):
-        impacts.extend(["EURUSD", "EURJPY", "EURAUD"])
-    if any(k in tl for k in ["boe", "uk", "britain", "pound", "sterling", "bailey"]):
-        impacts.extend(["GBPUSD", "GBPJPY", "GBPAUD"])
-    if any(k in tl for k in ["boj", "yen", "japan", "ueda"]):
-        impacts.extend(["USDJPY", "GBPJPY", "EURJPY", "AUDJPY"])
-    if any(k in tl for k in ["rba", "australia", "aussie", "china"]):
-        impacts.extend(["AUDUSD", "AUDJPY", "EURAUD"])
-    if any(k in tl for k in ["gold", "xau", "bullion"]):
-        impacts.append("XAUUSD")
-    if any(k in tl for k in ["s&p", "nasdaq", "dow", "nvidia", "tech", "stocks", "wall street", "ai", "earnings"]):
-        impacts.extend(["US500", "USTEC", "US30"])
-    if any(k in tl for k in ["bitcoin", "btc", "crypto"]):
-        impacts.append("BTCUSD")
-    if not impacts:
-        impacts = ["US500", "EURUSD", "XAUUSD"]
-
-    # Deduplicar manteniendo orden
-    seen_imp = []
-    for sym in impacts:
-        if sym not in seen_imp:
-            seen_imp.append(sym)
-
-    # Reglas de interpretación pedagógica en español sencillo
-    if any(k in tl for k in ["inflation", "cpi", "ppi", "hotter", "higher rates", "hawkish", "yields rise", "yields climb"]):
-        plain_es = (
-            "Qué significa: Los precios o los intereses en EE.UU. presionan al alza. "
-            "Efecto en mercado: Suele fortalecer al Dólar (USD) y presionar a la baja al Oro (XAUUSD), EURUSD y a las acciones tecnológicas (USTEC)."
-        )
-        sentiment = "DÓLAR FUERTE / CAUTELA"
-    elif any(k in tl for k in ["rate cut", "dovish", "cooling", "slowdown", "recession", "unemployment rises", "yields fall", "yields drop"]):
-        plain_es = (
-            "Qué significa: Se enfría la economía o aumenta la probabilidad de recortes de tasas. "
-            "Efecto en mercado: Suele debilitar al Dólar (USD) e impulsar al alza al Oro (XAUUSD), EURUSD, GBPUSD e índices como US500."
-        )
-        sentiment = "DÓLAR DÉBIL / IMPULSO RIESGO"
-    elif any(k in tl for k in ["gold", "bullion", "safe haven", "geopolitical", "tariff", "war", "tension"]):
-        plain_es = (
-            "Qué significa: Hay búsqueda de refugio o tensión comercial/geopolítica en los mercados. "
-            "Efecto en mercado: Aumenta la volatilidad en el Oro (XAUUSD), el Yen (JPY) y el Franco Suizo (CHF); evita entrar sin confirmación."
-        )
-        sentiment = "REFUGIO / ALTA VOLATILIDAD"
-    elif any(k in tl for k in ["nvidia", "ai", "tech", "nasdaq", "s&p", "dow", "rally", "surge", "record high"]):
-        plain_es = (
-            "Qué significa: Movimiento fuerte en las grandes tecnológicas y bolsas de Wall Street. "
-            "Efecto en mercado: Marca el apetito por riesgo del día: si Wall Street sube con fuerza, suele apoyar también al AUD y presionar al Yen (JPY)."
-        )
-        sentiment = "APETITO POR RIESGO (WALL ST)"
-    elif any(k in tl for k in ["selloff", "slump", "plunge", "tumble", "drop", "falls", "losses"]):
-        plain_es = (
-            "Qué significa: Toma de ganancias o caída en los mercados financieros. "
-            "Efecto en mercado: Los inversores reducen riesgo; vigila posibles retrocesos en índices (US30, USTEC, US500) y cruces con AUD."
-        )
-        sentiment = "AVERSIÓN AL RIESGO"
-    elif any(k in tl for k in ["yen", "boj", "japan", "intervention"]):
-        plain_es = (
-            "Qué significa: Atención puesta en el Banco de Japón o posible defensa del Yen. "
-            "Efecto en mercado: Puede provocar giros bruscos en todos los pares con JPY (USDJPY, GBPJPY, EURJPY, AUDJPY). Protege posiciones en Break Even."
-        )
-        sentiment = "ALERTA VOLATILIDAD JPY"
-    else:
-        plain_es = (
-            f"Qué significa: Actualización relevante de {source_name} sobre el flujo institucional de la sesión. "
-            f"Efecto en mercado: Revisa si el precio de {', '.join(seen_imp[:3])} confirma estructura antes de ejecutar."
-        )
-        sentiment = "SEGUIMIENTO MACRO"
-
-    return {
-        "category": category,
-        "sentiment": sentiment,
-        "impacts": seen_imp[:4],
-        "plain_es": plain_es,
-    }
-
-
 def fetch_live_news():
     feeds = [
-        ("Wall Street / Yahoo", "https://finance.yahoo.com/news/rssindex"),
-        ("Macro Global", "https://www.investing.com/rss/news_1.rss"),
+        ("Yahoo Finance", "https://finance.yahoo.com/news/rssindex"),
+        ("FXStreet / Macro", "https://www.investing.com/rss/news_1.rss"),
         ("Forex & Divisas", "https://www.investing.com/rss/news_14.rss"),
-        ("Commodities & Oro", "https://www.investing.com/rss/news_11.rss"),
     ]
     news_items = []
     seen = set()
@@ -573,69 +459,27 @@ def fetch_live_news():
             with urllib.request.urlopen(req, timeout=8) as resp:
                 xml_data = resp.read()
             root = ET.fromstring(xml_data)
-            for item in root.findall(".//item")[:6]:
+            for item in root.findall(".//item")[:4]:
                 title_el = item.find("title")
                 link_el = item.find("link")
                 pub_el = item.find("pubDate")
                 if title_el is not None and title_el.text:
-                    title = re.sub(r"\s+", " ", title_el.text).strip()
+                    title = title_el.text.strip()
                     if title in seen:
                         continue
                     seen.add(title)
-                    meta = explain_news_in_plain_spanish(title, source_name)
                     news_items.append({
                         "source": source_name,
                         "title": title,
                         "link": link_el.text.strip() if (link_el is not None and link_el.text) else "#",
-                        "time": (pub_el.text.strip()[:22] if (pub_el is not None and pub_el.text) else "Hoy"),
-                        "category": meta["category"],
-                        "sentiment": meta["sentiment"],
-                        "impacts": meta["impacts"],
-                        "plain_es": meta["plain_es"],
+                        "time": (pub_el.text.strip()[:22] if (pub_el is not None and pub_el.text) else "Hoy")
                     })
         except Exception:
             pass
 
     if not news_items:
-        news_items = [{
-            "source": "Radar Institucional LATICCE",
-            "title": "Flujos de liquidez activos en sesiones principales de Londres y Nueva York.",
-            "link": "#",
-            "time": "En línea",
-            "category": "🇺🇸 WALL STREET & TASAS",
-            "sentiment": "SESIÓN ACTIVA",
-            "impacts": ["EURUSD", "XAUUSD", "US500"],
-            "plain_es": "Qué significa: Mercado operando con flujo normal entre sesiones. Efecto en mercado: Prioriza setups con OB + FVG a favor de la fuerza de divisas."
-        }]
-    return news_items[:18]
-
-
-def build_wall_street_snapshot(c1d_map, dxy_val, us10y_val, ccy_labels):
-    def idx_stat(sym, label):
-        c = c1d_map.get(sym, [])
-        if len(c) >= 2:
-            p0 = c[-2]["c"]
-            p1 = c[-1]["c"]
-            chg = round(((p1 - p0) / p0) * 100.0, 2) if p0 else 0.0
-            return {"symbol": sym, "label": label, "price": p1, "chg_pct": chg}
-        return {"symbol": sym, "label": label, "price": 0.0, "chg_pct": 0.0}
-
-    spx = idx_stat("US500", "S&P 500")
-    ndx = idx_stat("USTEC", "Nasdaq 100")
-    dji = idx_stat("US30", "Dow Jones")
-    xau = idx_stat("XAUUSD", "Oro Spot")
-
-    tone = "ALCISTA EN RIESGO" if spx["chg_pct"] > 0.25 else ("CAUTELA / TOMA DE GANANCIAS" if spx["chg_pct"] < -0.25 else "CONSOLIDACIÓN LATERAL")
-    session_story = (
-        f"Wall Street muestra tono {tone}: S&P 500 ({spx['chg_pct']:+.2f}%), Nasdaq ({ndx['chg_pct']:+.2f}%) y Dow ({dji['chg_pct']:+.2f}%). "
-        f"El índice del dólar (DXY) cotiza en {dxy_val} ({ccy_labels.get('USD', 'NEUTRAL')}) con el bono a 10 años en {us10y_val}%, "
-        f"mientras el Oro marca {xau['chg_pct']:+.2f}%."
-    )
-    return {
-        "tone": tone,
-        "story": session_story,
-        "indices": [spx, ndx, dji, xau],
-    }
+        news_items = [{"source": "Radar Institucional", "title": "Flujos de liquidez activos en sesiones principales.", "link": "#", "time": "En linea"}]
+    return news_items[:8]
 
 
 def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_ccy, now_ts, active_setups):
@@ -657,7 +501,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         b_4h, _ = analyze_tf_bias(c_4h)
         b_1h, _ = analyze_tf_bias(c_1h)
 
-        # Dirección técnica ponderada
         score_tech = 0
         for b, w in [(b_d, 3), (b_4h, 2), (b_1h, 1)]:
             if b == "SUBE":
@@ -667,12 +510,9 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
 
         chart_bias = "SUBE" if score_tech >= 2 else ("BAJA" if score_tech <= -2 else "NEUTRAL")
 
-        # Dirección macroeconómica
         base_c = cfg["base"]
         quote_c = cfg["quote"]
-        if cfg["type"] == "index":
-            m_diff = raw_strength.get("BTC", 0.0)
-        elif cfg["type"] == "crypto":
+        if cfg["type"] in ("index", "crypto"):
             m_diff = raw_strength.get("BTC", 0.0)
         elif cfg["type"] == "metal":
             m_diff = raw_strength.get("XAU", 0.0)
@@ -691,36 +531,33 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         exhausted, ex_reason = detect_exhaustion(c_4h, chart_bias)
         liq = detect_liquidity_and_structure(c_4h, dec)
 
-        # Escáner institucional en cascada (OB + FVG -> OB -> FVG)
         scan_dir = chart_bias if chart_bias in ("SUBE", "BAJA") else (macro_dir if macro_dir in ("SUBE", "BAJA") else "NEUTRAL")
         setup = scan_institutional_zone(c_1h if len(c_1h) >= 16 else c_4h, scan_dir, price, atr_val, pip, dec)
 
-        # Confluencia y veredicto Mesa de Swing
         if macro_dir == "NEUTRAL" or chart_bias == "NEUTRAL":
             alignment = "NEUTRAL"
             score = 52 if setup else 42
-            verdict_title = "SIN DIRECCIÓN CLARA · UNO ESTÁ NEUTRAL"
-            verdict_sub = "Esperar a que Economía y Gráfico definan tendencia limpia."
+            verdict_title = "SIN DIRECCION CLARA - UNO ESTA NEUTRAL"
+            verdict_sub = "Esperar a que Economia y Grafico definan tendencia."
         elif macro_dir == chart_bias:
             alignment = "ALIGNED"
             base_s = 78 + (6 if b_d == chart_bias else 0) + (4 if b_4h == chart_bias else 0) + (4 if setup and setup["tier"] == 1 else 0)
             score = min(96, base_s - (14 if exhausted else 0))
             if exhausted:
-                verdict_title = "AGOTAMIENTO · RIESGO DE GIRO"
+                verdict_title = "AGOTAMIENTO - RIESGO DE GIRO"
                 verdict_sub = ex_reason
             elif setup:
-                verdict_title = f"VAN JUNTOS · BUSCAR {'COMPRAS' if chart_bias == 'SUBE' else 'VENTAS'}"
+                verdict_title = f"VAN JUNTOS - BUSCAR {'COMPRAS' if chart_bias == 'SUBE' else 'VENTAS'}"
                 verdict_sub = f"{setup['signal_tag']} respaldado por flujo macro."
             else:
-                verdict_title = "VAN JUNTOS · SIN OB/FVG LIMPIO AÚN"
-                verdict_sub = "Dirección confirmada; esperar formación de bloque institucional."
+                verdict_title = "VAN JUNTOS - SIN OB/FVG LIMPIO AUN"
+                verdict_sub = "Direccion confirmada; esperar bloque institucional."
         else:
             alignment = "BROKEN"
             score = 35
-            verdict_title = "SE CONTRADICEN · ESPERAR"
-            verdict_sub = f"Economía apunta {macro_dir} pero el gráfico muestra {chart_bias}."
+            verdict_title = "SE CONTRADICEN - ESPERAR"
+            verdict_sub = f"Economia apunta {macro_dir} pero grafico muestra {chart_bias}."
 
-        # Protocolo Swing (8 filtros institucionales)
         swing_potential = None
         if (
             setup
@@ -735,17 +572,15 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "active": True,
                 "swing_tp": setup["swing_tp"],
                 "be_trigger": setup["be_trigger"],
-                "plan": "1) Proteger en BE al tocar +1R. 2) Cobrar parcial en TP1. 3) Piramidar solo en retrocesos limpios hacia Swing TP."
+                "plan": "1) Proteger en BE al tocar +1R. 2) Cobrar parcial en TP1. 3) Piramidar en retrocesos hacia Swing TP."
             }
 
-        # Alertas de noticia fuerte hoy por divisa del par
         affected_news = []
         for ccy in {base_c, quote_c}:
             if ccy in high_impact_by_ccy:
                 affected_news.extend([f"{ccy}: {t}" for t in high_impact_by_ccy[ccy]])
         news_warning = " | ".join(affected_news[:2]) if affected_news else None
 
-        # Giros semanales limpios pre-2017 (<= 60 pips contra-tendencia)
         hist_buys, hist_sells = find_clean_weekly_pivots_pre2017(c_1w, dec)
         nearby_weekly_pivots = []
         current_trend = b_d if b_d in ("SUBE", "BAJA") else chart_bias
@@ -779,7 +614,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                     "macro_aligned": macro_ok,
                 })
 
-        # Sello cronológico estable del setup
         setup_sig = f"{setup['direction']}_{setup['entry']}" if setup else "NONE"
         prev_state = active_setups.get(sym, {})
         if setup and prev_state.get("sig") == setup_sig:
@@ -787,11 +621,6 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
         else:
             created_at = now_ts
             active_setups[sym] = {"sig": setup_sig, "created_at": created_at}
-
-        if cfg["type"] in ("index", "crypto"):
-            macro_pair_str = f"Wall St / Liquidez USD ({ccy_labels.get('USD', 'NEUTRAL')})"
-        else:
-            macro_pair_str = f"{base_c} ({ccy_labels.get(base_c, 'NEUTRAL')}) vs {quote_c} ({ccy_labels.get(quote_c, 'NEUTRAL')})"
 
         return {
             "symbol": sym,
@@ -813,7 +642,7 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
             "intraday_low": round(min(x["l"] for x in c_1h[-12:]), dec),
             "ob_high": setup["ob_high"] if setup else round(max(x["h"] for x in c_1h[-12:]), dec),
             "ob_low": setup["ob_low"] if setup else round(min(x["l"] for x in c_1h[-12:]), dec),
-            "macro_reason": f"{macro_pair_str}. Jerarquía (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}). {verdict_sub}",
+            "macro_reason": f"Jerarquia (1S:{b_w}, 1D:{b_d}, 4H:{b_4h}, 1H:{b_1h}). {verdict_sub}",
             "news_warning": news_warning,
             "swing_potential": swing_potential,
             "weekly_pivots": nearby_weekly_pivots,
@@ -831,55 +660,17 @@ def build_asset(cfg, candles_bundle, raw_strength, ccy_labels, high_impact_by_cc
                 "1h": c_1h[-35:],
             },
         }
-    except Exception as e:
-        print(f"Error construyendo {cfg.get('symbol')}: {e}")
+    except Exception:
         return None
 
 
 def get_central_banks(dxy_val, us10y_val, ccy_labels):
     return [
-        {
-            "bank": "FED (EE.UU.)",
-            "currency": "USD",
-            "stance": f"USD {ccy_labels.get('USD', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("USD") == "FUERTE" else ("BEARISH" if ccy_labels.get("USD") == "DÉBIL" else "NEUTRAL"),
-            "detail": f"Índice Dólar DXY en {dxy_val} y rendimiento Bono 10 años en {us10y_val}%. Manda sobre EURUSD, GBPUSD, USDJPY y Oro.",
-        },
-        {
-            "bank": "BoE (Reino Unido)",
-            "currency": "GBP",
-            "stance": f"GBP {ccy_labels.get('GBP', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("GBP") == "FUERTE" else ("BEARISH" if ccy_labels.get("GBP") == "DÉBIL" else "NEUTRAL"),
-            "detail": "Medido por cesta híbrida GBPUSD + GBPJPY + GBPAUD (60% flujo 4H + 40% estructura 1D).",
-        },
-        {
-            "bank": "RBA (Australia)",
-            "currency": "AUD",
-            "stance": f"AUD {ccy_labels.get('AUD', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("AUD") == "FUERTE" else ("BEARISH" if ccy_labels.get("AUD") == "DÉBIL" else "NEUTRAL"),
-            "detail": "Sensible al apetito por riesgo de Wall Street (S&P 500) y cesta AUDUSD + AUDJPY + AUDNZD.",
-        },
-        {
-            "bank": "BCE (Eurozona)",
-            "currency": "EUR",
-            "stance": f"EUR {ccy_labels.get('EUR', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("EUR") == "FUERTE" else ("BEARISH" if ccy_labels.get("EUR") == "DÉBIL" else "NEUTRAL"),
-            "detail": "Evaluado mediante flujo institucional en EURUSD, EURJPY y EURAUD.",
-        },
-        {
-            "bank": "BoJ (Japón)",
-            "currency": "JPY",
-            "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')}",
-            "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DÉBIL" else "NEUTRAL"),
-            "detail": "Moneda refugio: se fortalece cuando caen las bolsas o bajan los rendimientos de bonos.",
-        },
-        {
-            "bank": "BoC / SNB / RBNZ",
-            "currency": "CAD·CHF·NZD",
-            "stance": f"CAD {ccy_labels.get('CAD', 'NEUTRAL')} · CHF {ccy_labels.get('CHF', 'NEUTRAL')}",
-            "bias": "NEUTRAL",
-            "detail": f"Monitoreo de divisas secundarias: CAD ({ccy_labels.get('CAD')}), CHF ({ccy_labels.get('CHF')}) y NZD ({ccy_labels.get('NZD')}).",
-        },
+        {"bank": "FED (EE.UU.)", "currency": "USD", "stance": f"USD {ccy_labels.get('USD', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("USD") == "FUERTE" else ("BEARISH" if ccy_labels.get("USD") == "DEBIL" else "NEUTRAL"), "detail": f"DXY ({dxy_val}) + Bonos US10Y ({us10y_val}%) en cesta hibrida 4H/1D."},
+        {"bank": "BoE (Reino Unido)", "currency": "GBP", "stance": f"GBP {ccy_labels.get('GBP', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("GBP") == "FUERTE" else ("BEARISH" if ccy_labels.get("GBP") == "DEBIL" else "NEUTRAL"), "detail": "Cesta hibrida GBPUSD + GBPJPY + GBPAUD (60% 4H + 40% 1D)."},
+        {"bank": "RBA (Australia)", "currency": "AUD", "stance": f"AUD {ccy_labels.get('AUD', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("AUD") == "FUERTE" else ("BEARISH" if ccy_labels.get("AUD") == "DEBIL" else "NEUTRAL"), "detail": "Cesta hibrida AUDUSD + AUDJPY + AUDNZD + riesgo US500 (4H/1D)."},
+        {"bank": "BCE (Eurozona)", "currency": "EUR", "stance": f"EUR {ccy_labels.get('EUR', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("EUR") == "FUERTE" else ("BEARISH" if ccy_labels.get("EUR") == "DEBIL" else "NEUTRAL"), "detail": "Cesta hibrida EURUSD + EURJPY + EURAUD (60% 4H + 40% 1D)."},
+        {"bank": "BoJ (Japon)", "currency": "JPY", "stance": f"JPY {ccy_labels.get('JPY', 'NEUTRAL')}", "bias": "BULLISH" if ccy_labels.get("JPY") == "FUERTE" else ("BEARISH" if ccy_labels.get("JPY") == "DEBIL" else "NEUTRAL"), "detail": "Flujo inverso en cruces JPY (60% 4H + 40% 1D)."}
     ]
 
 
@@ -898,21 +689,14 @@ def build_correlated_baskets(assets, ccy_labels):
             suggested = ("COMPRA" if is_base else "VENTA") if st == "FUERTE" else ("VENTA" if is_base else "COMPRA")
             members.append(f"{sym} ({suggested})")
         if members:
-            baskets.append({
-                "currency": ccy,
-                "status": st,
-                "pairs": members[:4],
-                "rule": "No duplicar lote completo en todos: concentrar riesgo en el Foco #1."
-            })
+            baskets.append({"currency": ccy, "status": st, "pairs": members[:4]})
     return baskets
 
 
-def compute_best_focus_pick(assets, baskets):
+def compute_best_focus_pick(assets):
     ranked = []
     for a in assets:
-        if not a.get("setup"):
-            continue
-        if a["confluence"]["alignment"] != "ALIGNED":
+        if not a.get("setup") or a["confluence"]["alignment"] != "ALIGNED":
             continue
         prob = a["confluence"]["score"]
         if a.get("swing_potential"):
@@ -940,11 +724,7 @@ def compute_best_focus_pick(assets, baskets):
             "tp1": s["tp1"],
             "swing_potential": bool(best.get("swing_potential")),
             "reason": best["confluence"]["verdict_sub"],
-        },
-        "alternatives": [
-            {"symbol": a["symbol"], "probability": p, "direction": a["setup"]["direction"]}
-            for p, a in ranked[1:4]
-        ]
+        }
     }
 
 
@@ -959,40 +739,12 @@ def dispatch_push_notifications(assets, now_ts):
         s = a.get("setup")
         if not s:
             continue
-
         if a.get("swing_potential"):
             key = f"SWING_{sym}_{s['direction']}"
             if now_ts - sent_state.get(key, 0) > cooldown:
-                msg = (
-                    f"{sym} ({s['direction']} · {s['signal_tag']})\n"
-                    f"Entrada: {s['entry']} | SL: {s['sl']}\n"
-                    f"Gatillo BE: {s['be_trigger']} | Swing TP: {s['swing_tp']}"
-                )
+                msg = f"{sym} ({s['direction']}) | Entrada: {s['entry']} | SL: {s['sl']} | BE: {s['be_trigger']} | Swing TP: {s['swing_tp']}"
                 if send_ntfy_alert(f"LATICCE SWING: {sym}", msg, priority="high", tags="rocket"):
                     sent_state[key] = now_ts
-
-        dist_pct = abs(a["price"] - s["entry"]) / max(1e-9, a["price"])
-        if a["confluence"]["alignment"] == "ALIGNED" and dist_pct <= 0.0035:
-            key_ob = f"NEAR_{sym}_{s['direction']}"
-            if now_ts - sent_state.get(key_ob, 0) > cooldown:
-                msg = (
-                    f"{sym} cerca de zona {s['signal_tag']}\n"
-                    f"Precio: {a['price']} -> Entrada: {s['entry']} | SL: {s['sl']} | TP1: {s['tp1']}"
-                )
-                if send_ntfy_alert(f"LATICCE ZONA: {sym}", msg, priority="default", tags="dart"):
-                    sent_state[key_ob] = now_ts
-
-        for wp in a.get("weekly_pivots", []):
-            limit_u = 40.0 if a["type"] == "metal" else 25.0
-            if wp["dist_units"] <= limit_u:
-                key_1s = f"1S_{sym}_{wp['date']}_{wp['direction']}"
-                if now_ts - sent_state.get(key_1s, 0) > (24 * 3600):
-                    msg = (
-                        f"Giro Semanal Limpio ({wp['date']}) a {wp['dist_units']} {wp['unit_label']}\n"
-                        f"{wp['direction']} en {wp['entry']} (Mecha: {wp['extreme']})"
-                    )
-                    if send_ntfy_alert(f"LATICCE 1S: {sym}", msg, priority="high", tags="classical_building"):
-                        sent_state[key_1s] = now_ts
 
     save_json_state(ALERTS_STATE_FILE, sent_state)
 
@@ -1039,9 +791,8 @@ def main():
 
     banks = get_central_banks(dxy_val, us10y_val, ccy_labels)
     baskets = build_correlated_baskets(assets, ccy_labels)
-    focus_pick = compute_best_focus_pick(assets, baskets)
+    focus_pick = compute_best_focus_pick(assets)
     news = fetch_live_news()
-    wall_street = build_wall_street_snapshot(c1d_map, dxy_val, us10y_val, ccy_labels)
 
     all_weekly_pivots = []
     for a in assets:
@@ -1051,7 +802,7 @@ def main():
     dispatch_push_notifications(assets, now_ts)
 
     alert_ccys = sorted(high_impact_by_ccy.keys())
-    news_alert_str = f" · Noticias fuertes hoy: {', '.join(alert_ccys)}" if alert_ccys else ""
+    news_alert_str = f" - Noticias fuertes hoy en: {', '.join(alert_ccys)}" if alert_ccys else ""
     focus_str = f" | Foco #1: {focus_pick['primary']['symbol']} ({focus_pick['primary']['probability']}% prob)" if (focus_pick and focus_pick.get("primary")) else ""
 
     payload = {
@@ -1059,9 +810,8 @@ def main():
         "brief": {
             "dxy": dxy_val,
             "us10y": us10y_val,
-            "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} · US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
-            "summary": f"LATICCE v10.1 · Mesa de Swing + Brief Wall Street & Noticias Explicadas + Cascada OB/FVG ({len(all_weekly_pivots)} niveles 1S){focus_str}.",
-            "wall_street": wall_street,
+            "headline": f"USD {ccy_labels.get('USD')} (DXY {dxy_val} - US10Y {us10y_val}%) | GBP {ccy_labels.get('GBP')} | AUD {ccy_labels.get('AUD')}{news_alert_str}",
+            "summary": f"LATICCE v10.0 - Radar Foco Principal + Mesa de Swing + Cascada OB/FVG ({len(all_weekly_pivots)} niveles 1S){focus_str}."
         },
         "focus_pick": focus_pick,
         "weekly_pivots": all_weekly_pivots,
@@ -1069,13 +819,13 @@ def main():
         "banks": banks,
         "news": news,
         "calendar": calendar_events,
-        "assets": assets,
+        "assets": assets
     }
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    print(f"OK: {len(assets)} activos actualizados (LATICCE v10.1).")
+    print(f"OK: {len(assets)} activos actualizados (LATICCE v10.0).")
 
 
 if __name__ == "__main__":
