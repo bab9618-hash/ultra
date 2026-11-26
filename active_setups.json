@@ -1,17 +1,19 @@
 {
   "GBPAUD": {
     "has_valid_ob": true,
-    "has_fvg": false,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
     "direction": "BUY",
-    "entry": 1.97159,
-    "sl": 1.96881,
-    "be_trigger": 1.97437,
-    "tp1": 1.97854,
-    "tp2": 1.9841,
-    "ob_high": 1.97377,
-    "ob_low": 1.96941,
-    "signal_tag": "COMPRA OB REAL (4H)",
-    "created_at": 1795666963
+    "entry": 1.97436,
+    "sl": 1.97223,
+    "be_trigger": 1.97649,
+    "tp1": 1.97968,
+    "tp2": 1.98394,
+    "ob_high": 1.97599,
+    "ob_low": 1.97273,
+    "signal_tag": "COMPRA OB + FVG (4H)",
+    "created_at": 1795681978
   },
   "GBPCAD": {
     "has_valid_ob": true,
@@ -19,15 +21,15 @@
     "is_pure_fvg": false,
     "zone_kind": "OB",
     "direction": "SELL",
-    "entry": 1.86371,
-    "sl": 1.86483,
-    "be_trigger": 1.86259,
-    "tp1": 1.86091,
-    "tp2": 1.85867,
-    "ob_high": 1.86433,
-    "ob_low": 1.86308,
+    "entry": 1.86584,
+    "sl": 1.86797,
+    "be_trigger": 1.86371,
+    "tp1": 1.86051,
+    "tp2": 1.85625,
+    "ob_high": 1.86747,
+    "ob_low": 1.86421,
     "signal_tag": "VENTA OB REAL (1H)",
-    "created_at": 1795672337
+    "created_at": 1795681978
   },
   "EURUSD": {
     "has_valid_ob": true,
@@ -185,5 +187,37 @@
     "ob_low": 174.231,
     "signal_tag": "COMPRA OB REAL (1H)",
     "created_at": 1795676340
+  },
+  "GBPUSD": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": true,
+    "zone_kind": "FVG",
+    "direction": "BUY",
+    "entry": 1.3087,
+    "sl": 1.30537,
+    "be_trigger": 1.31203,
+    "tp1": 1.31703,
+    "tp2": 1.32369,
+    "ob_high": 1.31036,
+    "ob_low": 1.30704,
+    "signal_tag": "COMPRA FVG (1H)",
+    "created_at": 1795681978
+  },
+  "EURAUD": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": true,
+    "zone_kind": "FVG",
+    "direction": "BUY",
+    "entry": 1.65347,
+    "sl": 1.65032,
+    "be_trigger": 1.65662,
+    "tp1": 1.66134,
+    "tp2": 1.66764,
+    "ob_high": 1.65512,
+    "ob_low": 1.65181,
+    "signal_tag": "COMPRA FVG (1H)",
+    "created_at": 1795681978
   }
 }
