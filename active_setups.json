@@ -1,35 +1,19 @@
 {
-  "GBPCAD": {
-    "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
-    "direction": "SELL",
-    "entry": 1.86584,
-    "sl": 1.86797,
-    "be_trigger": 1.86371,
-    "tp1": 1.86051,
-    "tp2": 1.85625,
-    "ob_high": 1.86747,
-    "ob_low": 1.86421,
-    "signal_tag": "VENTA OB REAL (1H)",
-    "created_at": 1795681978
-  },
   "EURUSD": {
     "has_valid_ob": true,
-    "has_fvg": false,
+    "has_fvg": true,
     "is_pure_fvg": false,
-    "zone_kind": "OB",
+    "zone_kind": "OB_FVG",
     "direction": "BUY",
-    "entry": 1.09751,
-    "sl": 1.09659,
-    "be_trigger": 1.09843,
-    "tp1": 1.09981,
-    "tp2": 1.10165,
-    "ob_high": 1.09794,
-    "ob_low": 1.09709,
-    "signal_tag": "COMPRA OB REAL (1H)",
-    "created_at": 1795702130
+    "entry": 1.09649,
+    "sl": 1.09551,
+    "be_trigger": 1.09747,
+    "tp1": 1.09894,
+    "tp2": 1.1009,
+    "ob_high": 1.09697,
+    "ob_low": 1.09601,
+    "signal_tag": "COMPRA OB + FVG (4H)",
+    "created_at": 1795710412
   },
   "AUDNZD": {
     "has_valid_ob": true,
@@ -124,7 +108,7 @@
     "ob_high": 0.66729,
     "ob_low": 0.66582,
     "signal_tag": "VENTA OB + FVG (4H)",
-    "created_at": 1795693384
+    "created_at": 1795710412
   },
   "EURJPY": {
     "has_valid_ob": true,
@@ -253,5 +237,37 @@
     "ob_low": 1.422,
     "signal_tag": "COMPRA OB REAL (1H)",
     "created_at": 1795706126
+  },
+  "AUDCAD": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": true,
+    "zone_kind": "FVG",
+    "direction": "SELL",
+    "entry": 0.9453,
+    "sl": 0.95118,
+    "be_trigger": 0.93942,
+    "tp1": 0.9306,
+    "tp2": 0.91884,
+    "ob_high": 0.94631,
+    "ob_low": 0.94428,
+    "signal_tag": "VENTA FVG (4H)",
+    "created_at": 1795710412
+  },
+  "USDCHF": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
+    "direction": "BUY",
+    "entry": 0.83169,
+    "sl": 0.83084,
+    "be_trigger": 0.83254,
+    "tp1": 0.83382,
+    "tp2": 0.83552,
+    "ob_high": 0.83204,
+    "ob_low": 0.83134,
+    "signal_tag": "COMPRA OB + FVG (1H)",
+    "created_at": 1795710412
   }
 }

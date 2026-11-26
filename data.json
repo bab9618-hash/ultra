@@ -1,24 +1,24 @@
 {
-  "last_updated": "2026-11-26 15:15 UTC",
+  "last_updated": "2026-11-26 16:26 UTC",
   "brief": {
-    "dxy": 103.7,
+    "dxy": 103.76,
     "us10y": 4.85,
-    "headline": "Radar Institucional LATICCE v12.5 · DXY 103.7 · Bonos US10Y 4.85%",
+    "headline": "Radar Institucional LATICCE v12.5 · DXY 103.76 · Bonos US10Y 4.85%",
     "summary": "Escaner en cascada (OB + FVG, OB, FVG) con alerta amarilla en cercania a entrada y diferenciacion entre entrada normal y reentrada swing con precaucion."
   },
   "currency_strength": {
     "scores": {
-      "USD": -0.57,
-      "EUR": 0.33,
-      "GBP": 0.07,
-      "JPY": -0.63,
-      "AUD": -0.12,
-      "NZD": -0.21,
-      "CAD": 0.81,
-      "CHF": 0.33
+      "USD": -0.33,
+      "EUR": 0.28,
+      "GBP": 0.35,
+      "JPY": -0.73,
+      "AUD": -0.42,
+      "NZD": -0.22,
+      "CAD": 0.75,
+      "CHF": 0.32
     },
     "labels": {
-      "USD": "DEBIL",
+      "USD": "NEUTRAL",
       "EUR": "NEUTRAL",
       "GBP": "NEUTRAL",
       "JPY": "DEBIL",
@@ -30,6 +30,27 @@
   },
   "calendar": [],
   "news": [
+    {
+      "title": "Worried About a Market Crash? 2 Gold Mining Stocks to Buy Before 2026 Ends.",
+      "link": "https://www.fool.com/investing/2026/11/26/worried-about-a-market-crash-2-gold-mining-stocks-to-buy-before-2026-ends/?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Thu, 26 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
+      "title": "Before the bell: gold, oil, and Bitcoin skip the Thanksgiving break",
+      "link": "https://www.thestreet.com/crypto/markets/before-the-bell-gold-oil-and-bitcoin-skip-the-thanksgiving-break-?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Thu, 26 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
+      "title": "What Sent Archer Aviation Stock So Much Lower?",
+      "link": "https://www.trefis.com/stock/achr/articles/629323/what-sent-archer-aviation-stock-so-much-lower/2026-11-26?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Thu, 26 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
     {
       "title": "Value per Security",
       "link": "https://finance.yahoo.com/markets/commodities/articles/value-per-security-145300579.html?.tsrc=rss",
@@ -50,38 +71,17 @@
       "source": "Yahoo Finance",
       "time": "Thu, 26 Nov 2026",
       "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "I’m 40 with just $2K saved for retirement because I can’t stop spending. Is there any hope left for me?",
-      "link": "https://finance.yahoo.com/markets/articles/m-40-just-2k-saved-135000621.html?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Thu, 26 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "Minerals 260 chooses NRW for Bullabulling gold project in Australia",
-      "link": "https://www.mining-technology.com/news/minerals-260-chooses-nrw-bullabulling-project/?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Thu, 26 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "Mineros secures $250m in credit to fund gold mining projects",
-      "link": "https://www.mining-technology.com/news/mineros-secures-250m-to-fund-gold-projects/?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Thu, 26 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
     }
   ],
   "focus_pick": {
     "primary": {
-      "symbol": "GBPNZD",
+      "symbol": "EURAUD",
       "dir_label": "COMPRA",
-      "probability": 81,
-      "signal_tag": "COMPRA OB REAL (4H)",
-      "entry": 2.3928,
-      "sl": 2.39012,
-      "tp1": 2.3995,
+      "probability": 78,
+      "signal_tag": "COMPRA FVG (1H)",
+      "entry": 1.65347,
+      "sl": 1.65032,
+      "tp1": 1.66134,
       "is_safe": true,
       "is_swing": false,
       "near_entry": true,
@@ -98,18 +98,17 @@
       "pip": 0.1,
       "price": 3620.4,
       "chg_day": 2.39,
-      "win_prob": 63,
+      "win_prob": 69,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "entry_mode": "ENTRADA_NORMAL",
       "near_entry": true,
       "is_safe_entry": false,
       "caution_reasons": [
-        "4H en NEUTRAL",
-        "Macro en SUBE"
+        "4H en NEUTRAL"
       ],
-      "economy_short": "XAU NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
+      "economy_short": "XAU NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
       "chart_bias": "BAJA",
       "structure_event": "⚡ BEARISH BOS",
       "tf_bias": {
@@ -130,10 +129,10 @@
       "ob_high": 3636.9,
       "ob_low": 3606.4,
       "created_at": 1795672337,
-      "macro_reason": "XAU NEUTRAL / USD DEBIL | Zona: OB + FVG | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 3552.6. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "XAU NEUTRAL / USD NEUTRAL | Zona: OB + FVG | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 3552.6. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 63,
-        "alignment": "OPPOSED",
+        "score": 69,
+        "alignment": "NEUTRAL",
         "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
         "verdict_sub": "OB + FVG · VENTA OB + FVG (4H)"
       },
@@ -470,7 +469,7 @@
             "o": 3570.5,
             "h": 3691.0,
             "l": 3425.2,
-            "c": 3604.4
+            "c": 3604.7
           }
         ],
         "1d": [
@@ -787,13 +786,13 @@
             "o": 3619.8,
             "h": 3634.7,
             "l": 3578.8,
-            "c": 3604.4
+            "c": 3604.7
           }
         ],
         "4h": [
           {
             "t": 1794873600,
-            "o": 3865.5,
+            "o": 3865.0,
             "h": 3882.4,
             "l": 3845.9,
             "c": 3873.2
@@ -814,14 +813,14 @@
           },
           {
             "t": 1794916800,
-            "o": 3871.3,
+            "o": 3871.4,
             "h": 3894.0,
             "l": 3839.2,
-            "c": 3878.7
+            "c": 3878.6
           },
           {
             "t": 1794931200,
-            "o": 3878.7,
+            "o": 3878.2,
             "h": 3878.7,
             "l": 3848.8,
             "c": 3849.8
@@ -845,7 +844,7 @@
             "o": 3789.7,
             "h": 3799.8,
             "l": 3766.5,
-            "c": 3776.0
+            "c": 3776.1
           },
           {
             "t": 1794988800,
@@ -856,10 +855,10 @@
           },
           {
             "t": 1795003200,
-            "o": 3766.3,
+            "o": 3766.1,
             "h": 3792.9,
             "l": 3744.6,
-            "c": 3756.4
+            "c": 3756.5
           },
           {
             "t": 1795017600,
@@ -877,21 +876,21 @@
           },
           {
             "t": 1795046400,
-            "o": 3741.1,
+            "o": 3741.2,
             "h": 3759.5,
             "l": 3694.5,
             "c": 3721.3
           },
           {
             "t": 1795060800,
-            "o": 3721.7,
+            "o": 3721.2,
             "h": 3745.6,
             "l": 3720.9,
-            "c": 3738.6
+            "c": 3738.4
           },
           {
             "t": 1795075200,
-            "o": 3738.3,
+            "o": 3737.7,
             "h": 3743.8,
             "l": 3719.9,
             "c": 3720.1
@@ -901,18 +900,18 @@
             "o": 3720.0,
             "h": 3728.9,
             "l": 3672.6,
-            "c": 3674.4
+            "c": 3674.3
           },
           {
             "t": 1795104000,
-            "o": 3674.5,
+            "o": 3674.3,
             "h": 3693.8,
             "l": 3667.1,
-            "c": 3669.2
+            "c": 3669.1
           },
           {
             "t": 1795118400,
-            "o": 3668.9,
+            "o": 3669.2,
             "h": 3674.6,
             "l": 3591.6,
             "c": 3608.7
@@ -933,7 +932,7 @@
           },
           {
             "t": 1795161600,
-            "o": 3569.3,
+            "o": 3569.7,
             "h": 3596.7,
             "l": 3567.7,
             "c": 3575.7
@@ -947,7 +946,7 @@
           },
           {
             "t": 1795190400,
-            "o": 3551.9,
+            "o": 3551.7,
             "h": 3558.8,
             "l": 3502.9,
             "c": 3524.7
@@ -968,7 +967,7 @@
           },
           {
             "t": 1795392000,
-            "o": 3584.6,
+            "o": 3583.9,
             "h": 3629.6,
             "l": 3567.8,
             "c": 3607.8
@@ -982,17 +981,17 @@
           },
           {
             "t": 1795420800,
-            "o": 3617.5,
+            "o": 3617.6,
             "h": 3627.3,
             "l": 3599.9,
             "c": 3619.4
           },
           {
             "t": 1795435200,
-            "o": 3619.1,
+            "o": 3619.4,
             "h": 3691.0,
             "l": 3611.8,
-            "c": 3669.7
+            "c": 3669.9
           },
           {
             "t": 1795449600,
@@ -1006,11 +1005,11 @@
             "o": 3642.3,
             "h": 3646.8,
             "l": 3618.5,
-            "c": 3631.0
+            "c": 3630.6
           },
           {
             "t": 1795478400,
-            "o": 3630.4,
+            "o": 3630.1,
             "h": 3676.7,
             "l": 3624.8,
             "c": 3632.0
@@ -1020,25 +1019,25 @@
             "o": 3631.4,
             "h": 3639.6,
             "l": 3612.6,
-            "c": 3620.4
+            "c": 3620.1
           },
           {
             "t": 1795507200,
-            "o": 3619.8,
+            "o": 3620.0,
             "h": 3636.9,
             "l": 3606.4,
             "c": 3635.1
           },
           {
             "t": 1795521600,
-            "o": 3635.0,
+            "o": 3635.3,
             "h": 3651.4,
             "l": 3564.5,
-            "c": 3568.1
+            "c": 3567.8
           },
           {
             "t": 1795536000,
-            "o": 3568.6,
+            "o": 3568.5,
             "h": 3574.6,
             "l": 3551.9,
             "c": 3555.4
@@ -1066,7 +1065,7 @@
           },
           {
             "t": 1795593600,
-            "o": 3522.4,
+            "o": 3522.3,
             "h": 3567.4,
             "l": 3511.8,
             "c": 3518.3
@@ -1120,18 +1119,18 @@
             "o": 3622.0,
             "h": 3624.9,
             "l": 3614.4,
-            "c": 3620.4
+            "c": 3620.1
           },
           {
             "t": 1795507200,
-            "o": 3619.8,
+            "o": 3620.0,
             "h": 3628.3,
             "l": 3606.4,
-            "c": 3618.2
+            "c": 3618.0
           },
           {
             "t": 1795510800,
-            "o": 3617.5,
+            "o": 3618.0,
             "h": 3624.2,
             "l": 3614.3,
             "c": 3621.1
@@ -1152,35 +1151,35 @@
           },
           {
             "t": 1795521600,
-            "o": 3635.0,
+            "o": 3635.3,
             "h": 3651.4,
             "l": 3620.9,
             "c": 3641.0
           },
           {
             "t": 1795525200,
-            "o": 3640.9,
+            "o": 3641.2,
             "h": 3641.4,
             "l": 3613.0,
             "c": 3613.6
           },
           {
             "t": 1795528800,
-            "o": 3613.5,
+            "o": 3613.3,
             "h": 3631.3,
             "l": 3612.0,
             "c": 3621.3
           },
           {
             "t": 1795532400,
-            "o": 3620.9,
+            "o": 3621.9,
             "h": 3622.4,
             "l": 3564.5,
-            "c": 3568.1
+            "c": 3567.8
           },
           {
             "t": 1795536000,
-            "o": 3568.6,
+            "o": 3568.5,
             "h": 3574.6,
             "l": 3557.4,
             "c": 3563.5
@@ -1190,11 +1189,11 @@
             "o": 3563.8,
             "h": 3573.2,
             "l": 3560.3,
-            "c": 3566.3
+            "c": 3566.4
           },
           {
             "t": 1795543200,
-            "o": 3565.4,
+            "o": 3566.0,
             "h": 3568.4,
             "l": 3551.9,
             "c": 3554.5
@@ -1215,14 +1214,14 @@
           },
           {
             "t": 1795554000,
-            "o": 3551.4,
+            "o": 3551.1,
             "h": 3555.2,
             "l": 3548.3,
             "c": 3555.1
           },
           {
             "t": 1795561200,
-            "o": 3559.3,
+            "o": 3557.8,
             "h": 3566.8,
             "l": 3546.1,
             "c": 3548.9
@@ -1264,7 +1263,7 @@
           },
           {
             "t": 1795582800,
-            "o": 3548.0,
+            "o": 3548.1,
             "h": 3549.6,
             "l": 3521.2,
             "c": 3521.8
@@ -1285,28 +1284,28 @@
           },
           {
             "t": 1795593600,
-            "o": 3522.4,
+            "o": 3522.3,
             "h": 3567.4,
             "l": 3514.5,
             "c": 3561.0
           },
           {
             "t": 1795597200,
-            "o": 3561.4,
+            "o": 3561.0,
             "h": 3564.5,
             "l": 3550.8,
-            "c": 3556.6
+            "c": 3557.0
           },
           {
             "t": 1795600800,
-            "o": 3557.2,
+            "o": 3557.5,
             "h": 3565.0,
             "l": 3555.1,
             "c": 3560.0
           },
           {
             "t": 1795604400,
-            "o": 3559.7,
+            "o": 3559.6,
             "h": 3560.0,
             "l": 3511.8,
             "c": 3518.3
@@ -1316,14 +1315,14 @@
             "o": 3518.7,
             "h": 3558.8,
             "l": 3517.3,
-            "c": 3549.1
+            "c": 3549.2
           },
           {
             "t": 1795611600,
-            "o": 3549.2,
+            "o": 3549.1,
             "h": 3551.2,
             "l": 3493.8,
-            "c": 3503.1
+            "c": 3503.7
           },
           {
             "t": 1795615200,
@@ -1334,7 +1333,7 @@
           },
           {
             "t": 1795618800,
-            "o": 3499.3,
+            "o": 3498.7,
             "h": 3500.8,
             "l": 3453.8,
             "c": 3472.6
@@ -1344,25 +1343,25 @@
             "o": 3472.4,
             "h": 3496.8,
             "l": 3471.1,
-            "c": 3494.7
+            "c": 3494.3
           },
           {
             "t": 1795626000,
-            "o": 3494.7,
+            "o": 3494.8,
             "h": 3558.0,
             "l": 3492.7,
             "c": 3542.3
           },
           {
             "t": 1795629600,
-            "o": 3542.4,
+            "o": 3543.0,
             "h": 3577.7,
             "l": 3540.3,
             "c": 3564.5
           },
           {
             "t": 1795633200,
-            "o": 3564.9,
+            "o": 3565.0,
             "h": 3585.2,
             "l": 3561.9,
             "c": 3573.9
@@ -1372,18 +1371,18 @@
             "o": 3574.0,
             "h": 3615.2,
             "l": 3571.6,
-            "c": 3602.7
+            "c": 3602.6
           },
           {
             "t": 1795640400,
-            "o": 3602.3,
+            "o": 3602.1,
             "h": 3617.8,
             "l": 3595.3,
             "c": 3617.8
           },
           {
             "t": 1795647600,
-            "o": 3619.8,
+            "o": 3618.5,
             "h": 3619.8,
             "l": 3595.6,
             "c": 3603.8
@@ -1397,21 +1396,21 @@
           },
           {
             "t": 1795654800,
-            "o": 3590.1,
+            "o": 3590.6,
             "h": 3612.2,
             "l": 3578.8,
-            "c": 3597.8
+            "c": 3597.4
           },
           {
             "t": 1795658400,
-            "o": 3597.6,
+            "o": 3597.7,
             "h": 3634.7,
             "l": 3594.6,
             "c": 3615.4
           },
           {
             "t": 1795662000,
-            "o": 3615.2,
+            "o": 3615.5,
             "h": 3618.0,
             "l": 3601.6,
             "c": 3602.1
@@ -1433,26 +1432,24 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.0983,
-      "chg_day": 0.19,
-      "win_prob": 73,
+      "price": 1.09757,
+      "chg_day": 0.12,
+      "win_prob": 75,
       "has_valid_ob": true,
-      "zone_kind": "OB",
+      "zone_kind": "OB_FVG",
       "entry_mode": "ENTRADA_NORMAL",
       "near_entry": true,
-      "is_safe_entry": false,
-      "caution_reasons": [
-        "Zona cara (arriba de EQ-50%)"
-      ],
-      "economy_short": "EUR NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
+      "is_safe_entry": true,
+      "caution_reasons": [],
+      "economy_short": "EUR NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
       "chart_bias": "SUBE",
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
         "weekly": "BAJA",
         "daily": "NEUTRAL",
         "h4": "SUBE",
-        "h1": "SUBE"
+        "h1": "NEUTRAL"
       },
       "volatility": {
         "atr_units": 75.6,
@@ -1463,28 +1460,28 @@
         "ssl": 1.09349,
         "eq50": 1.0965
       },
-      "ob_high": 1.09794,
-      "ob_low": 1.09709,
-      "created_at": 1795702130,
-      "macro_reason": "EUR NEUTRAL / USD DEBIL | Zona: OB estructural | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 1.0965. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "ob_high": 1.09697,
+      "ob_low": 1.09601,
+      "created_at": 1795710412,
+      "macro_reason": "EUR NEUTRAL / USD NEUTRAL | Zona: OB + FVG | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 1.0965. Estado: ENTRADA NORMAL.",
       "confluence": {
-        "score": 73,
-        "alignment": "ALIGNED",
-        "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
-        "verdict_sub": "OB estructural · COMPRA OB REAL (1H)"
+        "score": 75,
+        "alignment": "NEUTRAL",
+        "verdict_title": "ENTRADA NORMAL",
+        "verdict_sub": "OB + FVG · COMPRA OB + FVG (4H)"
       },
       "setup": {
         "direction": "BUY",
-        "signal_tag": "COMPRA OB REAL (1H)",
-        "entry": 1.09751,
-        "sl": 1.09659,
-        "be": 1.09843,
-        "tp1": 1.09981,
-        "tp2": 1.10165
+        "signal_tag": "COMPRA OB + FVG (4H)",
+        "entry": 1.09649,
+        "sl": 1.09551,
+        "be": 1.09747,
+        "tp1": 1.09894,
+        "tp2": 1.1009
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada en 1.09751 con SL estructural en 1.09659. 2) Al tocar 1.09843 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1.09981) y buscar Swing TP (1.10165)."
+        "plan": "1) Entrada en 1.09649 con SL estructural en 1.09551. 2) Al tocar 1.09747 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1.09894) y buscar Swing TP (1.1009)."
       },
       "news_warning": {
         "active": false,
@@ -1806,7 +1803,7 @@
             "o": 1.0973,
             "h": 1.10059,
             "l": 1.08844,
-            "c": 1.0983
+            "c": 1.09757
           }
         ],
         "1d": [
@@ -2123,7 +2120,7 @@
             "o": 1.09782,
             "h": 1.09914,
             "l": 1.09601,
-            "c": 1.0983
+            "c": 1.09757
           }
         ],
         "4h": [
@@ -2439,18 +2436,11 @@
             "t": 1795705200,
             "o": 1.0983,
             "h": 1.09854,
-            "l": 1.09818,
-            "c": 1.0983
+            "l": 1.09745,
+            "c": 1.09757
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 1.09685,
-            "h": 1.09709,
-            "l": 1.09673,
-            "c": 1.09685
-          },
           {
             "t": 1795550400,
             "o": 1.09697,
@@ -2491,7 +2481,7 @@
             "o": 1.09625,
             "h": 1.09637,
             "l": 1.09589,
-            "c": 1.09613
+            "c": 1.09601
           },
           {
             "t": 1795572000,
@@ -2756,8 +2746,15 @@
             "t": 1795705200,
             "o": 1.0983,
             "h": 1.09854,
-            "l": 1.09818,
-            "c": 1.0983
+            "l": 1.09745,
+            "c": 1.09757
+          },
+          {
+            "t": 1795708800,
+            "o": 1.09757,
+            "h": 1.09769,
+            "l": 1.09745,
+            "c": 1.09757
           }
         ]
       }
@@ -2769,29 +2766,30 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 159.22,
-      "chg_day": -0.03,
-      "win_prob": 75,
+      "price": 159.279,
+      "chg_day": 0.01,
+      "win_prob": 77,
       "has_valid_ob": true,
       "zone_kind": "OB",
-      "entry_mode": "ENTRADA_NORMAL",
+      "entry_mode": "REENTRADA_SWING_PRECAUCION",
       "near_entry": true,
       "is_safe_entry": false,
       "caution_reasons": [
-        "Zona cara (arriba de EQ-50%)"
+        "Zona cara (arriba de EQ-50%)",
+        "Validar BE en operacion base Swing antes de reentrar"
       ],
-      "economy_short": "USD DEBIL / JPY DEBIL",
-      "macro_dir": "NEUTRAL",
+      "economy_short": "USD NEUTRAL / JPY DEBIL",
+      "macro_dir": "SUBE",
       "chart_bias": "SUBE",
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
         "weekly": "SUBE",
         "daily": "SUBE",
         "h4": "SUBE",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "volatility": {
-        "atr_units": 88.3,
+        "atr_units": 88.4,
         "range20_units": 321.0
       },
       "liquidity": {
@@ -2802,11 +2800,11 @@
       "ob_high": 159.496,
       "ob_low": 159.358,
       "created_at": 1795668263,
-      "macro_reason": "USD DEBIL / JPY DEBIL | Zona: OB estructural | 1S:SUBE, 1D:SUBE, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 159.076. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "USD NEUTRAL / JPY DEBIL | Zona: OB estructural | 1S:SUBE, 1D:SUBE, 4H:SUBE, 1H:SUBE | EQ-50%: 159.076. Estado: REENTRADA SWING · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 75,
-        "alignment": "NEUTRAL",
-        "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
+        "score": 77,
+        "alignment": "ALIGNED",
+        "verdict_title": "REENTRADA SWING · CON PRECAUCIÓN",
         "verdict_sub": "OB estructural · VENTA OB + FVG (1H)"
       },
       "setup": {
@@ -2819,7 +2817,7 @@
         "tp2": 158.846
       },
       "swing_potential": {
-        "active": false,
+        "active": true,
         "plan": "1) Entrada en 159.427 con SL estructural en 159.556. 2) Al tocar 159.298 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (159.104) y buscar Swing TP (158.846)."
       },
       "news_warning": {
@@ -3142,7 +3140,7 @@
             "o": 158.939,
             "h": 159.567,
             "l": 158.664,
-            "c": 159.217
+            "c": 159.279
           }
         ],
         "1d": [
@@ -3457,9 +3455,9 @@
           {
             "t": 1795651200,
             "o": 159.116,
-            "h": 159.332,
+            "h": 159.338,
             "l": 158.946,
-            "c": 159.217
+            "c": 159.279
           }
         ],
         "4h": [
@@ -3493,7 +3491,7 @@
           },
           {
             "t": 1794956400,
-            "o": 159.42,
+            "o": 159.41,
             "h": 159.652,
             "l": 159.291,
             "c": 159.383
@@ -3559,7 +3557,7 @@
             "o": 159.931,
             "h": 159.97,
             "l": 159.787,
-            "c": 159.887
+            "c": 159.891
           },
           {
             "t": 1795100400,
@@ -3774,19 +3772,12 @@
           {
             "t": 1795705200,
             "o": 159.202,
-            "h": 159.229,
+            "h": 159.338,
             "l": 159.18,
-            "c": 159.22
+            "c": 159.279
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 159.28,
-            "h": 159.296,
-            "l": 159.201,
-            "c": 159.21
-          },
           {
             "t": 1795550400,
             "o": 159.208,
@@ -3873,7 +3864,7 @@
           },
           {
             "t": 1795593600,
-            "o": 159.215,
+            "o": 159.213,
             "h": 159.476,
             "l": 159.2,
             "c": 159.399
@@ -4069,7 +4060,7 @@
           },
           {
             "t": 1795694400,
-            "o": 159.304,
+            "o": 159.299,
             "h": 159.305,
             "l": 159.245,
             "c": 159.251
@@ -4091,9 +4082,16 @@
           {
             "t": 1795705200,
             "o": 159.202,
-            "h": 159.229,
+            "h": 159.313,
             "l": 159.18,
-            "c": 159.22
+            "c": 159.307
+          },
+          {
+            "t": 1795708800,
+            "o": 159.307,
+            "h": 159.338,
+            "l": 159.279,
+            "c": 159.279
           }
         ]
       }
@@ -4105,17 +4103,17 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.3108,
-      "chg_day": -0.03,
-      "win_prob": 76,
+      "price": 1.31135,
+      "chg_day": 0.01,
+      "win_prob": 58,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "entry_mode": "ENTRADA_NORMAL",
-      "near_entry": true,
+      "near_entry": false,
       "is_safe_entry": true,
       "caution_reasons": [],
-      "economy_short": "GBP NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
+      "economy_short": "GBP NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
       "chart_bias": "SUBE",
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
@@ -4136,10 +4134,10 @@
       "ob_high": 1.31036,
       "ob_low": 1.30704,
       "created_at": 1795681978,
-      "macro_reason": "GBP NEUTRAL / USD DEBIL | Zona: FVG limpio | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 1.3088. Estado: ENTRADA NORMAL.",
+      "macro_reason": "GBP NEUTRAL / USD NEUTRAL | Zona: FVG limpio | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 1.3088. Estado: ENTRADA NORMAL.",
       "confluence": {
-        "score": 76,
-        "alignment": "ALIGNED",
+        "score": 58,
+        "alignment": "NEUTRAL",
         "verdict_title": "ENTRADA NORMAL",
         "verdict_sub": "FVG limpio · COMPRA FVG (1H)"
       },
@@ -4476,7 +4474,7 @@
             "o": 1.30967,
             "h": 1.31432,
             "l": 1.30132,
-            "c": 1.3108
+            "c": 1.31135
           }
         ],
         "1d": [
@@ -4793,7 +4791,7 @@
             "o": 1.31191,
             "h": 1.31234,
             "l": 1.30964,
-            "c": 1.3108
+            "c": 1.31135
           }
         ],
         "4h": [
@@ -5108,19 +5106,12 @@
           {
             "t": 1795705200,
             "o": 1.31117,
-            "h": 1.31137,
-            "l": 1.3108,
-            "c": 1.3108
+            "h": 1.31139,
+            "l": 1.31022,
+            "c": 1.31135
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 1.31153,
-            "h": 1.31196,
-            "l": 1.31153,
-            "c": 1.31184
-          },
           {
             "t": 1795550400,
             "o": 1.31189,
@@ -5161,7 +5152,7 @@
             "o": 1.31122,
             "h": 1.31134,
             "l": 1.3106,
-            "c": 1.31074
+            "c": 1.31062
           },
           {
             "t": 1795572000,
@@ -5426,8 +5417,15 @@
             "t": 1795705200,
             "o": 1.31117,
             "h": 1.31137,
-            "l": 1.3108,
-            "c": 1.3108
+            "l": 1.31022,
+            "c": 1.31098
+          },
+          {
+            "t": 1795708800,
+            "o": 1.31105,
+            "h": 1.31139,
+            "l": 1.31091,
+            "c": 1.31135
           }
         ]
       }
@@ -5439,8 +5437,8 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 208.71,
-      "chg_day": -0.05,
+      "price": 208.877,
+      "chg_day": 0.03,
       "win_prob": 70,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -5458,7 +5456,7 @@
         "weekly": "BAJA",
         "daily": "NEUTRAL",
         "h4": "SUBE",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "volatility": {
         "atr_units": 126.7,
@@ -5472,7 +5470,7 @@
       "ob_high": 208.791,
       "ob_low": 208.503,
       "created_at": 1795689815,
-      "macro_reason": "GBP NEUTRAL / JPY DEBIL | Zona: FVG limpio | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 208.275. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "GBP NEUTRAL / JPY DEBIL | Zona: FVG limpio | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 208.275. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 70,
         "alignment": "ALIGNED",
@@ -5812,7 +5810,7 @@
             "o": 208.154,
             "h": 209.157,
             "l": 207.081,
-            "c": 208.704
+            "c": 208.877
           }
         ],
         "1d": [
@@ -6129,7 +6127,7 @@
             "o": 208.662,
             "h": 208.911,
             "l": 208.431,
-            "c": 208.71
+            "c": 208.877
           }
         ],
         "4h": [
@@ -6149,7 +6147,7 @@
           },
           {
             "t": 1794927600,
-            "o": 210.29,
+            "o": 210.291,
             "h": 210.649,
             "l": 210.123,
             "c": 210.604
@@ -6264,7 +6262,7 @@
             "o": 208.771,
             "h": 208.91,
             "l": 207.922,
-            "c": 208.136
+            "c": 208.137
           },
           {
             "t": 1795172400,
@@ -6275,7 +6273,7 @@
           },
           {
             "t": 1795186800,
-            "o": 208.289,
+            "o": 208.287,
             "h": 208.32,
             "l": 207.842,
             "c": 208.001
@@ -6369,14 +6367,14 @@
             "o": 208.893,
             "h": 208.956,
             "l": 208.56,
-            "c": 208.796
+            "c": 208.828
           },
           {
             "t": 1795561200,
             "o": 208.788,
             "h": 208.908,
             "l": 208.468,
-            "c": 208.48
+            "c": 208.479
           },
           {
             "t": 1795575600,
@@ -6397,7 +6395,7 @@
             "o": 208.254,
             "h": 208.332,
             "l": 207.548,
-            "c": 207.892
+            "c": 207.932
           },
           {
             "t": 1795618800,
@@ -6408,14 +6406,14 @@
           },
           {
             "t": 1795633200,
-            "o": 208.804,
+            "o": 208.821,
             "h": 209.003,
             "l": 208.389,
             "c": 208.635
           },
           {
             "t": 1795647600,
-            "o": 208.606,
+            "o": 208.684,
             "h": 208.782,
             "l": 208.435,
             "c": 208.619
@@ -6444,19 +6442,12 @@
           {
             "t": 1795705200,
             "o": 208.726,
-            "h": 208.764,
-            "l": 208.691,
-            "c": 208.71
+            "h": 208.892,
+            "l": 208.617,
+            "c": 208.877
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 208.893,
-            "h": 208.945,
-            "l": 208.813,
-            "c": 208.85
-          },
           {
             "t": 1795550400,
             "o": 208.85,
@@ -6476,7 +6467,7 @@
             "o": 208.811,
             "h": 208.956,
             "l": 208.56,
-            "c": 208.796
+            "c": 208.828
           },
           {
             "t": 1795561200,
@@ -6487,31 +6478,31 @@
           },
           {
             "t": 1795564800,
-            "o": 208.813,
+            "o": 208.814,
             "h": 208.882,
             "l": 208.702,
             "c": 208.835
           },
           {
             "t": 1795568400,
-            "o": 208.825,
+            "o": 208.835,
             "h": 208.845,
             "l": 208.681,
             "c": 208.744
           },
           {
             "t": 1795572000,
-            "o": 208.743,
+            "o": 208.748,
             "h": 208.84,
             "l": 208.468,
-            "c": 208.48
+            "c": 208.479
           },
           {
             "t": 1795575600,
             "o": 208.48,
             "h": 208.619,
             "l": 208.41,
-            "c": 208.519
+            "c": 208.53
           },
           {
             "t": 1795579200,
@@ -6588,7 +6579,7 @@
             "o": 208.164,
             "h": 208.319,
             "l": 207.548,
-            "c": 207.892
+            "c": 207.932
           },
           {
             "t": 1795618800,
@@ -6620,7 +6611,7 @@
           },
           {
             "t": 1795633200,
-            "o": 208.804,
+            "o": 208.821,
             "h": 208.965,
             "l": 208.791,
             "c": 208.894
@@ -6648,7 +6639,7 @@
           },
           {
             "t": 1795647600,
-            "o": 208.606,
+            "o": 208.684,
             "h": 208.782,
             "l": 208.58,
             "c": 208.735
@@ -6761,9 +6752,16 @@
           {
             "t": 1795705200,
             "o": 208.726,
-            "h": 208.764,
-            "l": 208.691,
-            "c": 208.71
+            "h": 208.864,
+            "l": 208.617,
+            "c": 208.838
+          },
+          {
+            "t": 1795708800,
+            "o": 208.838,
+            "h": 208.892,
+            "l": 208.798,
+            "c": 208.877
           }
         ]
       }
@@ -6775,17 +6773,15 @@
       "quote": "AUD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.97592,
-      "chg_day": -0.02,
-      "win_prob": 69,
+      "price": 1.97776,
+      "chg_day": 0.07,
+      "win_prob": 75,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "entry_mode": "ENTRADA_NORMAL",
-      "near_entry": true,
-      "is_safe_entry": false,
-      "caution_reasons": [
-        "4H en NEUTRAL"
-      ],
+      "near_entry": false,
+      "is_safe_entry": true,
+      "caution_reasons": [],
       "economy_short": "GBP NEUTRAL / AUD NEUTRAL",
       "macro_dir": "NEUTRAL",
       "chart_bias": "SUBE",
@@ -6793,7 +6789,7 @@
       "tf_bias": {
         "weekly": "SUBE",
         "daily": "SUBE",
-        "h4": "NEUTRAL",
+        "h4": "SUBE",
         "h1": "NEUTRAL"
       },
       "volatility": {
@@ -6808,11 +6804,11 @@
       "ob_high": 1.97599,
       "ob_low": 1.97273,
       "created_at": 1795693384,
-      "macro_reason": "GBP NEUTRAL / AUD NEUTRAL | Zona: OB + FVG | 1S:SUBE, 1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.97962. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "GBP NEUTRAL / AUD NEUTRAL | Zona: OB + FVG | 1S:SUBE, 1D:SUBE, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 1.97962. Estado: ENTRADA NORMAL.",
       "confluence": {
-        "score": 69,
+        "score": 75,
         "alignment": "NEUTRAL",
-        "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
+        "verdict_title": "ENTRADA NORMAL",
         "verdict_sub": "OB + FVG · COMPRA OB + FVG (4H)"
       },
       "setup": {
@@ -7148,7 +7144,7 @@
             "o": 1.97175,
             "h": 1.99277,
             "l": 1.96373,
-            "c": 1.97592
+            "c": 1.97776
           }
         ],
         "1d": [
@@ -7465,7 +7461,7 @@
             "o": 1.97876,
             "h": 1.97969,
             "l": 1.97041,
-            "c": 1.97592
+            "c": 1.97776
           }
         ],
         "4h": [
@@ -7576,7 +7572,7 @@
           },
           {
             "t": 1795114800,
-            "o": 1.96497,
+            "o": 1.96486,
             "h": 1.9674,
             "l": 1.96226,
             "c": 1.96617
@@ -7611,7 +7607,7 @@
           },
           {
             "t": 1795186800,
-            "o": 1.96532,
+            "o": 1.96534,
             "h": 1.97704,
             "l": 1.96472,
             "c": 1.97513
@@ -7732,8 +7728,8 @@
             "t": 1795604400,
             "o": 1.98914,
             "h": 1.99085,
-            "l": 1.98214,
-            "c": 1.98241
+            "l": 1.9818,
+            "c": 1.98233
           },
           {
             "t": 1795618800,
@@ -7780,19 +7776,12 @@
           {
             "t": 1795705200,
             "o": 1.97438,
-            "h": 1.97592,
+            "h": 1.97808,
             "l": 1.97427,
-            "c": 1.97592
+            "c": 1.97776
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 1.9745,
-            "h": 1.97546,
-            "l": 1.97354,
-            "c": 1.9754
-          },
           {
             "t": 1795550400,
             "o": 1.97543,
@@ -7830,16 +7819,16 @@
           },
           {
             "t": 1795568400,
-            "o": 1.97051,
+            "o": 1.9706,
             "h": 1.97559,
             "l": 1.96926,
             "c": 1.97482
           },
           {
             "t": 1795572000,
-            "o": 1.9749,
+            "o": 1.97488,
             "h": 1.98159,
-            "l": 1.97465,
+            "l": 1.97464,
             "c": 1.98138
           },
           {
@@ -7923,8 +7912,8 @@
             "t": 1795615200,
             "o": 1.98678,
             "h": 1.98707,
-            "l": 1.98214,
-            "c": 1.98241
+            "l": 1.9818,
+            "c": 1.98233
           },
           {
             "t": 1795618800,
@@ -8029,7 +8018,7 @@
             "o": 1.97181,
             "h": 1.97381,
             "l": 1.97129,
-            "c": 1.97265
+            "c": 1.97263
           },
           {
             "t": 1795672800,
@@ -8043,14 +8032,14 @@
             "o": 1.97359,
             "h": 1.9759,
             "l": 1.97305,
-            "c": 1.97475
+            "c": 1.97473
           },
           {
             "t": 1795680000,
             "o": 1.97474,
             "h": 1.97641,
             "l": 1.97382,
-            "c": 1.97415
+            "c": 1.97418
           },
           {
             "t": 1795683600,
@@ -8071,7 +8060,7 @@
             "o": 1.97759,
             "h": 1.97759,
             "l": 1.97535,
-            "c": 1.97591
+            "c": 1.97593
           },
           {
             "t": 1795694400,
@@ -8097,9 +8086,16 @@
           {
             "t": 1795705200,
             "o": 1.97438,
-            "h": 1.97592,
+            "h": 1.9777,
             "l": 1.97427,
-            "c": 1.97592
+            "c": 1.97746
+          },
+          {
+            "t": 1795708800,
+            "o": 1.97736,
+            "h": 1.97808,
+            "l": 1.97655,
+            "c": 1.97776
           }
         ]
       }
@@ -8111,13 +8107,13 @@
       "quote": "NZD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 2.39481,
-      "chg_day": 0.04,
-      "win_prob": 81,
+      "price": 2.39597,
+      "chg_day": 0.09,
+      "win_prob": 71,
       "has_valid_ob": true,
       "zone_kind": "OB",
       "entry_mode": "ENTRADA_NORMAL",
-      "near_entry": true,
+      "near_entry": false,
       "is_safe_entry": true,
       "caution_reasons": [],
       "economy_short": "GBP NEUTRAL / NZD NEUTRAL",
@@ -8131,7 +8127,7 @@
         "h1": "SUBE"
       },
       "volatility": {
-        "atr_units": 128.2,
+        "atr_units": 129.5,
         "range20_units": 458.7
       },
       "liquidity": {
@@ -8144,7 +8140,7 @@
       "created_at": 1795706126,
       "macro_reason": "GBP NEUTRAL / NZD NEUTRAL | Zona: OB estructural | 1S:NEUTRAL, 1D:SUBE, 4H:SUBE, 1H:SUBE | EQ-50%: 2.39328. Estado: ENTRADA NORMAL.",
       "confluence": {
-        "score": 81,
+        "score": 71,
         "alignment": "NEUTRAL",
         "verdict_title": "ENTRADA NORMAL",
         "verdict_sub": "OB estructural · COMPRA OB REAL (4H)"
@@ -8482,7 +8478,7 @@
             "o": 2.39071,
             "h": 2.40012,
             "l": 2.38728,
-            "c": 2.39481
+            "c": 2.39613
           }
         ],
         "1d": [
@@ -8797,9 +8793,9 @@
           {
             "t": 1795651200,
             "o": 2.38978,
-            "h": 2.39489,
+            "h": 2.39662,
             "l": 2.38728,
-            "c": 2.39481
+            "c": 2.39613
           }
         ],
         "4h": [
@@ -8945,7 +8941,7 @@
           },
           {
             "t": 1795186800,
-            "o": 2.38458,
+            "o": 2.38463,
             "h": 2.39093,
             "l": 2.38404,
             "c": 2.39002
@@ -8987,7 +8983,7 @@
           },
           {
             "t": 1795446000,
-            "o": 2.39168,
+            "o": 2.39165,
             "h": 2.39523,
             "l": 2.39072,
             "c": 2.39241
@@ -9036,7 +9032,7 @@
           },
           {
             "t": 1795546800,
-            "o": 2.39167,
+            "o": 2.39166,
             "h": 2.39421,
             "l": 2.38848,
             "c": 2.39207
@@ -9099,7 +9095,7 @@
           },
           {
             "t": 1795676400,
-            "o": 2.39042,
+            "o": 2.3904,
             "h": 2.39337,
             "l": 2.38826,
             "c": 2.39264
@@ -9109,24 +9105,17 @@
             "o": 2.39262,
             "h": 2.39327,
             "l": 2.39048,
-            "c": 2.39251
+            "c": 2.39252
           },
           {
             "t": 1795705200,
             "o": 2.39237,
-            "h": 2.39481,
+            "h": 2.39662,
             "l": 2.39219,
-            "c": 2.39481
+            "c": 2.39597
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 2.39167,
-            "h": 2.39185,
-            "l": 2.39055,
-            "c": 2.39157
-          },
           {
             "t": 1795550400,
             "o": 2.3917,
@@ -9171,7 +9160,7 @@
           },
           {
             "t": 1795572000,
-            "o": 2.39436,
+            "o": 2.39438,
             "h": 2.39657,
             "l": 2.39071,
             "c": 2.39628
@@ -9199,7 +9188,7 @@
           },
           {
             "t": 1795586400,
-            "o": 2.39451,
+            "o": 2.39421,
             "h": 2.39791,
             "l": 2.39421,
             "c": 2.39697
@@ -9304,7 +9293,7 @@
           },
           {
             "t": 1795640400,
-            "o": 2.39024,
+            "o": 2.3904,
             "h": 2.39094,
             "l": 2.38881,
             "c": 2.38937
@@ -9374,7 +9363,7 @@
           },
           {
             "t": 1795676400,
-            "o": 2.39042,
+            "o": 2.3904,
             "h": 2.39218,
             "l": 2.38935,
             "c": 2.39031
@@ -9416,7 +9405,7 @@
           },
           {
             "t": 1795698000,
-            "o": 2.39191,
+            "o": 2.39206,
             "h": 2.3929,
             "l": 2.39048,
             "c": 2.39274
@@ -9426,14 +9415,21 @@
             "o": 2.39273,
             "h": 2.39327,
             "l": 2.39053,
-            "c": 2.39251
+            "c": 2.39252
           },
           {
             "t": 1795705200,
             "o": 2.39237,
-            "h": 2.39481,
+            "h": 2.39654,
             "l": 2.39219,
-            "c": 2.39481
+            "c": 2.39636
+          },
+          {
+            "t": 1795708800,
+            "o": 2.39621,
+            "h": 2.39662,
+            "l": 2.3951,
+            "c": 2.39597
           }
         ]
       }
@@ -9445,17 +9441,15 @@
       "quote": "CAD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.86688,
-      "chg_day": -0.24,
-      "win_prob": 73,
-      "has_valid_ob": true,
-      "zone_kind": "OB",
-      "entry_mode": "ENTRADA_NORMAL",
-      "near_entry": true,
+      "price": 1.86838,
+      "chg_day": -0.16,
+      "win_prob": 53,
+      "has_valid_ob": false,
+      "zone_kind": "NONE",
+      "entry_mode": "ESPERAR",
+      "near_entry": false,
       "is_safe_entry": false,
-      "caution_reasons": [
-        "4H en NEUTRAL"
-      ],
+      "caution_reasons": [],
       "economy_short": "GBP NEUTRAL / CAD FUERTE",
       "macro_dir": "BAJA",
       "chart_bias": "BAJA",
@@ -9471,32 +9465,32 @@
         "range20_units": 425.7
       },
       "liquidity": {
-        "bsl": 1.87193,
+        "bsl": 1.87182,
         "ssl": 1.85645,
-        "eq50": 1.86419
+        "eq50": 1.86414
       },
-      "ob_high": 1.86747,
-      "ob_low": 1.86421,
-      "created_at": 1795681978,
-      "macro_reason": "GBP NEUTRAL / CAD FUERTE | Zona: OB estructural | 1S:NEUTRAL, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.86419. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "ob_high": 1.86878,
+      "ob_low": 1.86798,
+      "created_at": 1795710412,
+      "macro_reason": "GBP NEUTRAL / CAD FUERTE | Zona: Sin zona | 1S:NEUTRAL, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.86414. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
-        "score": 73,
+        "score": 53,
         "alignment": "ALIGNED",
-        "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
-        "verdict_sub": "OB estructural · VENTA OB REAL (1H)"
+        "verdict_title": "ESPERAR",
+        "verdict_sub": "Sin zona · SIN ZONA - ESPERAR"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "VENTA OB REAL (1H)",
-        "entry": 1.86584,
-        "sl": 1.86797,
-        "be": 1.86371,
-        "tp1": 1.86051,
-        "tp2": 1.85625
+        "signal_tag": "SIN ZONA - ESPERAR",
+        "entry": 1.86838,
+        "sl": 1.87395,
+        "be": 1.86281,
+        "tp1": 1.85445,
+        "tp2": 1.84331
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada en 1.86584 con SL estructural en 1.86797. 2) Al tocar 1.86371 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1.86051) y buscar Swing TP (1.85625)."
+        "plan": "1) Entrada en 1.86838 con SL estructural en 1.87395. 2) Al tocar 1.86281 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1.85445) y buscar Swing TP (1.84331)."
       },
       "news_warning": {
         "active": false,
@@ -9818,7 +9812,7 @@
             "o": 1.87759,
             "h": 1.88153,
             "l": 1.85685,
-            "c": 1.86715
+            "c": 1.86838
           }
         ],
         "1d": [
@@ -10133,9 +10127,9 @@
           {
             "t": 1795651200,
             "o": 1.86274,
-            "h": 1.86731,
+            "h": 1.86839,
             "l": 1.86212,
-            "c": 1.86715
+            "c": 1.86838
           }
         ],
         "4h": [
@@ -10214,7 +10208,7 @@
             "o": 1.88334,
             "h": 1.88516,
             "l": 1.8827,
-            "c": 1.88451
+            "c": 1.8845
           },
           {
             "t": 1795057200,
@@ -10277,7 +10271,7 @@
             "o": 1.87664,
             "h": 1.87838,
             "l": 1.87421,
-            "c": 1.87727
+            "c": 1.87726
           },
           {
             "t": 1795186800,
@@ -10450,19 +10444,12 @@
           {
             "t": 1795705200,
             "o": 1.86648,
-            "h": 1.86731,
-            "l": 1.8663,
-            "c": 1.86688
+            "h": 1.86838,
+            "l": 1.86623,
+            "c": 1.86838
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 1.87156,
-            "h": 1.87216,
-            "l": 1.87102,
-            "c": 1.87188
-          },
           {
             "t": 1795550400,
             "o": 1.87187,
@@ -10507,7 +10494,7 @@
           },
           {
             "t": 1795572000,
-            "o": 1.87017,
+            "o": 1.87018,
             "h": 1.87033,
             "l": 1.86906,
             "c": 1.86933
@@ -10640,7 +10627,7 @@
           },
           {
             "t": 1795640400,
-            "o": 1.86452,
+            "o": 1.86425,
             "h": 1.86522,
             "l": 1.86314,
             "c": 1.86349
@@ -10699,7 +10686,7 @@
             "o": 1.86264,
             "h": 1.8634,
             "l": 1.86239,
-            "c": 1.86314
+            "c": 1.86313
           },
           {
             "t": 1795672800,
@@ -10767,9 +10754,16 @@
           {
             "t": 1795705200,
             "o": 1.86648,
-            "h": 1.86731,
-            "l": 1.8663,
-            "c": 1.86688
+            "h": 1.86778,
+            "l": 1.86623,
+            "c": 1.86759
+          },
+          {
+            "t": 1795708800,
+            "o": 1.86759,
+            "h": 1.86838,
+            "l": 1.86748,
+            "c": 1.86838
           }
         ]
       }
@@ -10781,20 +10775,19 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.66379,
-      "chg_day": 0.06,
-      "win_prob": 53,
+      "price": 0.66317,
+      "chg_day": -0.03,
+      "win_prob": 59,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "entry_mode": "ENTRADA_NORMAL",
       "near_entry": false,
       "is_safe_entry": false,
       "caution_reasons": [
-        "4H en NEUTRAL",
-        "Macro en SUBE"
+        "4H en NEUTRAL"
       ],
-      "economy_short": "AUD NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
+      "economy_short": "AUD NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
       "chart_bias": "BAJA",
       "structure_event": "⚡ BEARISH BOS",
       "tf_bias": {
@@ -10814,11 +10807,11 @@
       },
       "ob_high": 0.66729,
       "ob_low": 0.66582,
-      "created_at": 1795693384,
-      "macro_reason": "AUD NEUTRAL / USD DEBIL | Zona: OB + FVG | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.66122. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "created_at": 1795710412,
+      "macro_reason": "AUD NEUTRAL / USD NEUTRAL | Zona: OB + FVG | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.66122. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 53,
-        "alignment": "OPPOSED",
+        "score": 59,
+        "alignment": "NEUTRAL",
         "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
         "verdict_sub": "OB + FVG · VENTA OB + FVG (4H)"
       },
@@ -11155,7 +11148,7 @@
             "o": 0.66417,
             "h": 0.66628,
             "l": 0.65598,
-            "c": 0.66379
+            "c": 0.66317
           }
         ],
         "1d": [
@@ -11472,7 +11465,7 @@
             "o": 0.66273,
             "h": 0.66507,
             "l": 0.66269,
-            "c": 0.66379
+            "c": 0.66317
           }
         ],
         "4h": [
@@ -11788,18 +11781,11 @@
             "t": 1795705200,
             "o": 0.66414,
             "h": 0.66414,
-            "l": 0.66375,
-            "c": 0.66379
+            "l": 0.66309,
+            "c": 0.66317
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 0.66445,
-            "h": 0.66481,
-            "l": 0.66423,
-            "c": 0.66428
-          },
           {
             "t": 1795550400,
             "o": 0.66423,
@@ -11840,11 +11826,11 @@
             "o": 0.66578,
             "h": 0.66578,
             "l": 0.66366,
-            "c": 0.66397
+            "c": 0.66379
           },
           {
             "t": 1795572000,
-            "o": 0.66392,
+            "o": 0.66379,
             "h": 0.66392,
             "l": 0.66146,
             "c": 0.66146
@@ -12105,8 +12091,15 @@
             "t": 1795705200,
             "o": 0.66414,
             "h": 0.66414,
-            "l": 0.66375,
-            "c": 0.66379
+            "l": 0.66313,
+            "c": 0.66313
+          },
+          {
+            "t": 1795708800,
+            "o": 0.66313,
+            "h": 0.66335,
+            "l": 0.66309,
+            "c": 0.66317
           }
         ]
       }
@@ -12118,8 +12111,8 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 105.641,
-      "chg_day": -0.0,
+      "price": 105.606,
+      "chg_day": -0.03,
       "win_prob": 67,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
@@ -12493,7 +12486,7 @@
             "o": 105.557,
             "h": 106.107,
             "l": 104.43,
-            "c": 105.622
+            "c": 105.606
           }
         ],
         "1d": [
@@ -12810,7 +12803,7 @@
             "o": 105.4,
             "h": 105.802,
             "l": 105.332,
-            "c": 105.622
+            "c": 105.606
           }
         ],
         "4h": [
@@ -12980,11 +12973,11 @@
             "o": 105.457,
             "h": 105.663,
             "l": 105.428,
-            "c": 105.628
+            "c": 105.634
           },
           {
             "t": 1795417200,
-            "o": 105.634,
+            "o": 105.628,
             "h": 105.955,
             "l": 105.593,
             "c": 105.66
@@ -13071,18 +13064,18 @@
             "o": 104.75,
             "h": 104.89,
             "l": 104.375,
-            "c": 104.693
+            "c": 104.687
           },
           {
             "t": 1795604400,
             "o": 104.688,
             "h": 104.94,
             "l": 104.529,
-            "c": 104.878
+            "c": 104.886
           },
           {
             "t": 1795618800,
-            "o": 104.878,
+            "o": 104.874,
             "h": 105.553,
             "l": 104.496,
             "c": 105.459
@@ -13126,18 +13119,11 @@
             "t": 1795705200,
             "o": 105.709,
             "h": 105.715,
-            "l": 105.635,
-            "c": 105.641
+            "l": 105.59,
+            "c": 105.606
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 105.789,
-            "h": 105.857,
-            "l": 105.716,
-            "c": 105.719
-          },
           {
             "t": 1795550400,
             "o": 105.719,
@@ -13182,7 +13168,7 @@
           },
           {
             "t": 1795572000,
-            "o": 105.701,
+            "o": 105.7,
             "h": 105.734,
             "l": 105.208,
             "c": 105.219
@@ -13192,7 +13178,7 @@
             "o": 105.215,
             "h": 105.373,
             "l": 105.139,
-            "c": 105.223
+            "c": 105.228
           },
           {
             "t": 1795579200,
@@ -13241,7 +13227,7 @@
             "o": 104.681,
             "h": 104.754,
             "l": 104.595,
-            "c": 104.693
+            "c": 104.687
           },
           {
             "t": 1795604400,
@@ -13269,11 +13255,11 @@
             "o": 104.774,
             "h": 104.94,
             "l": 104.529,
-            "c": 104.878
+            "c": 104.886
           },
           {
             "t": 1795618800,
-            "o": 104.878,
+            "o": 104.874,
             "h": 104.956,
             "l": 104.586,
             "c": 104.704
@@ -13315,7 +13301,7 @@
           },
           {
             "t": 1795640400,
-            "o": 105.533,
+            "o": 105.534,
             "h": 105.563,
             "l": 105.448,
             "c": 105.448
@@ -13395,7 +13381,7 @@
             "o": 105.61,
             "h": 105.685,
             "l": 105.534,
-            "c": 105.65
+            "c": 105.649
           },
           {
             "t": 1795683600,
@@ -13443,8 +13429,15 @@
             "t": 1795705200,
             "o": 105.709,
             "h": 105.715,
-            "l": 105.635,
-            "c": 105.641
+            "l": 105.598,
+            "c": 105.609
+          },
+          {
+            "t": 1795708800,
+            "o": 105.607,
+            "h": 105.645,
+            "l": 105.59,
+            "c": 105.606
           }
         ]
       }
@@ -13456,15 +13449,17 @@
       "quote": "CAD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.94492,
-      "chg_day": -0.2,
-      "win_prob": 53,
-      "has_valid_ob": false,
-      "zone_kind": "NONE",
-      "entry_mode": "ESPERAR",
-      "near_entry": false,
+      "price": 0.9446,
+      "chg_day": -0.23,
+      "win_prob": 70,
+      "has_valid_ob": true,
+      "zone_kind": "FVG",
+      "entry_mode": "ENTRADA_NORMAL",
+      "near_entry": true,
       "is_safe_entry": false,
-      "caution_reasons": [],
+      "caution_reasons": [
+        "4H en NEUTRAL"
+      ],
       "economy_short": "AUD NEUTRAL / CAD FUERTE",
       "macro_dir": "BAJA",
       "chart_bias": "BAJA",
@@ -13484,28 +13479,28 @@
         "ssl": 0.93483,
         "eq50": 0.94281
       },
-      "ob_high": 0.94532,
-      "ob_low": 0.94452,
-      "created_at": 1795706126,
-      "macro_reason": "AUD NEUTRAL / CAD FUERTE | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 0.94281. Sin bloque cercano dentro del rango permitido.",
+      "ob_high": 0.94631,
+      "ob_low": 0.94428,
+      "created_at": 1795710412,
+      "macro_reason": "AUD NEUTRAL / CAD FUERTE | Zona: FVG limpio | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 0.94281. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 53,
+        "score": 70,
         "alignment": "ALIGNED",
-        "verdict_title": "ESPERAR",
-        "verdict_sub": "Sin zona · SIN ZONA - ESPERAR"
+        "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
+        "verdict_sub": "FVG limpio · VENTA FVG (4H)"
       },
       "setup": {
         "direction": "SELL",
-        "signal_tag": "SIN ZONA - ESPERAR",
-        "entry": 0.94492,
-        "sl": 0.94942,
-        "be": 0.94042,
-        "tp1": 0.93367,
-        "tp2": 0.92467
+        "signal_tag": "VENTA FVG (4H)",
+        "entry": 0.9453,
+        "sl": 0.95118,
+        "be": 0.93942,
+        "tp1": 0.9306,
+        "tp2": 0.91884
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada en 0.94492 con SL estructural en 0.94942. 2) Al tocar 0.94042 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.93367) y buscar Swing TP (0.92467)."
+        "plan": "1) Entrada en 0.9453 con SL estructural en 0.95118. 2) Al tocar 0.93942 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.9306) y buscar Swing TP (0.91884)."
       },
       "news_warning": {
         "active": false,
@@ -13827,7 +13822,7 @@
             "o": 0.95226,
             "h": 0.95494,
             "l": 0.93567,
-            "c": 0.94492
+            "c": 0.9446
           }
         ],
         "1d": [
@@ -14144,7 +14139,7 @@
             "o": 0.94121,
             "h": 0.94547,
             "l": 0.94058,
-            "c": 0.94492
+            "c": 0.9446
           }
         ],
         "4h": [
@@ -14192,7 +14187,7 @@
           },
           {
             "t": 1794985200,
-            "o": 0.96217,
+            "o": 0.96222,
             "h": 0.96348,
             "l": 0.96105,
             "c": 0.96321
@@ -14283,17 +14278,17 @@
           },
           {
             "t": 1795172400,
-            "o": 0.95408,
+            "o": 0.95409,
             "h": 0.95516,
             "l": 0.95205,
             "c": 0.95498
           },
           {
             "t": 1795186800,
-            "o": 0.9551,
+            "o": 0.95511,
             "h": 0.95521,
             "l": 0.94838,
-            "c": 0.95003
+            "c": 0.95005
           },
           {
             "t": 1795201200,
@@ -14314,7 +14309,7 @@
             "o": 0.95091,
             "h": 0.95192,
             "l": 0.9497,
-            "c": 0.95122
+            "c": 0.95123
           },
           {
             "t": 1795417200,
@@ -14388,10 +14383,10 @@
           },
           {
             "t": 1795561200,
-            "o": 0.94688,
+            "o": 0.94674,
             "h": 0.95078,
             "l": 0.9426,
-            "c": 0.94339
+            "c": 0.94342
           },
           {
             "t": 1795575600,
@@ -14402,7 +14397,7 @@
           },
           {
             "t": 1795590000,
-            "o": 0.93923,
+            "o": 0.93929,
             "h": 0.93996,
             "l": 0.93678,
             "c": 0.9383
@@ -14426,7 +14421,7 @@
             "o": 0.9411,
             "h": 0.94253,
             "l": 0.94008,
-            "c": 0.94112
+            "c": 0.94106
           },
           {
             "t": 1795647600,
@@ -14460,18 +14455,11 @@
             "t": 1795705200,
             "o": 0.94528,
             "h": 0.94547,
-            "l": 0.94406,
-            "c": 0.94492
+            "l": 0.94354,
+            "c": 0.9446
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 0.94781,
-            "h": 0.94824,
-            "l": 0.94671,
-            "c": 0.94755
-          },
           {
             "t": 1795550400,
             "o": 0.94756,
@@ -14481,7 +14469,7 @@
           },
           {
             "t": 1795554000,
-            "o": 0.94758,
+            "o": 0.94757,
             "h": 0.94775,
             "l": 0.94661,
             "c": 0.94729
@@ -14495,7 +14483,7 @@
           },
           {
             "t": 1795561200,
-            "o": 0.94688,
+            "o": 0.94674,
             "h": 0.94741,
             "l": 0.94561,
             "c": 0.94678
@@ -14516,10 +14504,10 @@
           },
           {
             "t": 1795572000,
-            "o": 0.94696,
-            "h": 0.94701,
+            "o": 0.94693,
+            "h": 0.94706,
             "l": 0.9426,
-            "c": 0.94339
+            "c": 0.94342
           },
           {
             "t": 1795575600,
@@ -14551,7 +14539,7 @@
           },
           {
             "t": 1795590000,
-            "o": 0.93923,
+            "o": 0.93929,
             "h": 0.93996,
             "l": 0.93684,
             "c": 0.93812
@@ -14649,7 +14637,7 @@
           },
           {
             "t": 1795640400,
-            "o": 0.94184,
+            "o": 0.94183,
             "h": 0.94253,
             "l": 0.94095,
             "c": 0.94173
@@ -14659,7 +14647,7 @@
             "o": 0.94157,
             "h": 0.94183,
             "l": 0.94052,
-            "c": 0.94112
+            "c": 0.94106
           },
           {
             "t": 1795647600,
@@ -14777,8 +14765,15 @@
             "t": 1795705200,
             "o": 0.94528,
             "h": 0.94547,
-            "l": 0.94406,
-            "c": 0.94492
+            "l": 0.94354,
+            "c": 0.94443
+          },
+          {
+            "t": 1795708800,
+            "o": 0.94444,
+            "h": 0.94489,
+            "l": 0.94358,
+            "c": 0.9446
           }
         ]
       }
@@ -14790,8 +14785,8 @@
       "quote": "NZD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.21197,
-      "chg_day": 0.07,
+      "price": 1.21138,
+      "chg_day": 0.02,
       "win_prob": 65,
       "has_valid_ob": true,
       "zone_kind": "OB",
@@ -14812,7 +14807,7 @@
         "h1": "SUBE"
       },
       "volatility": {
-        "atr_units": 89.2,
+        "atr_units": 89.7,
         "range20_units": 504.8
       },
       "liquidity": {
@@ -15163,7 +15158,7 @@
             "o": 1.21249,
             "h": 1.2187,
             "l": 1.2016,
-            "c": 1.21191
+            "c": 1.21138
           }
         ],
         "1d": [
@@ -15478,9 +15473,9 @@
           {
             "t": 1795651200,
             "o": 1.2068,
-            "h": 1.21202,
+            "h": 1.21265,
             "l": 1.20538,
-            "c": 1.21191
+            "c": 1.21138
           }
         ],
         "4h": [
@@ -15642,7 +15637,7 @@
             "t": 1795388400,
             "o": 1.21271,
             "h": 1.21388,
-            "l": 1.21155,
+            "l": 1.21138,
             "c": 1.21319
           },
           {
@@ -15675,7 +15670,7 @@
           },
           {
             "t": 1795460400,
-            "o": 1.21681,
+            "o": 1.21677,
             "h": 1.21722,
             "l": 1.21264,
             "c": 1.21661
@@ -15752,7 +15747,7 @@
           },
           {
             "t": 1795618800,
-            "o": 1.20598,
+            "o": 1.20603,
             "h": 1.20753,
             "l": 1.20481,
             "c": 1.20695
@@ -15795,19 +15790,12 @@
           {
             "t": 1795705200,
             "o": 1.21166,
-            "h": 1.21201,
+            "h": 1.21265,
             "l": 1.21105,
-            "c": 1.21197
+            "c": 1.21138
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 1.21124,
-            "h": 1.21139,
-            "l": 1.21033,
-            "c": 1.21067
-          },
           {
             "t": 1795550400,
             "o": 1.21067,
@@ -15848,12 +15836,12 @@
             "o": 1.21429,
             "h": 1.21557,
             "l": 1.21187,
-            "c": 1.21228
+            "c": 1.21231
           },
           {
             "t": 1795572000,
-            "o": 1.21232,
-            "h": 1.21238,
+            "o": 1.21228,
+            "h": 1.21247,
             "l": 1.20871,
             "c": 1.20933
           },
@@ -15943,7 +15931,7 @@
           },
           {
             "t": 1795618800,
-            "o": 1.20598,
+            "o": 1.20603,
             "h": 1.20669,
             "l": 1.20497,
             "c": 1.20596
@@ -16112,9 +16100,16 @@
           {
             "t": 1795705200,
             "o": 1.21166,
-            "h": 1.21201,
+            "h": 1.21265,
             "l": 1.21105,
-            "c": 1.21197
+            "c": 1.2118
+          },
+          {
+            "t": 1795708800,
+            "o": 1.21175,
+            "h": 1.21193,
+            "l": 1.21105,
+            "c": 1.21138
           }
         ]
       }
@@ -16126,8 +16121,8 @@
       "quote": "AUD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.6548,
-      "chg_day": 0.15,
+      "price": 1.65508,
+      "chg_day": 0.17,
       "win_prob": 78,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -16497,7 +16492,7 @@
             "o": 1.65207,
             "h": 1.66727,
             "l": 1.6427,
-            "c": 1.6548
+            "c": 1.65508
           }
         ],
         "1d": [
@@ -16814,7 +16809,7 @@
             "o": 1.65582,
             "h": 1.6567,
             "l": 1.64823,
-            "c": 1.6548
+            "c": 1.65508
           }
         ],
         "4h": [
@@ -16848,7 +16843,7 @@
           },
           {
             "t": 1794956400,
-            "o": 1.63285,
+            "o": 1.63282,
             "h": 1.63573,
             "l": 1.62987,
             "c": 1.63425
@@ -16918,7 +16913,7 @@
           },
           {
             "t": 1795100400,
-            "o": 1.63973,
+            "o": 1.63966,
             "h": 1.64821,
             "l": 1.6387,
             "c": 1.64596
@@ -16960,7 +16955,7 @@
           },
           {
             "t": 1795186800,
-            "o": 1.64639,
+            "o": 1.64638,
             "h": 1.6566,
             "l": 1.64595,
             "c": 1.65447
@@ -17016,7 +17011,7 @@
           },
           {
             "t": 1795474800,
-            "o": 1.64321,
+            "o": 1.64326,
             "h": 1.64756,
             "l": 1.64313,
             "c": 1.64716
@@ -17068,11 +17063,11 @@
             "o": 1.65661,
             "h": 1.66309,
             "l": 1.65512,
-            "c": 1.66279
+            "c": 1.66283
           },
           {
             "t": 1795590000,
-            "o": 1.66281,
+            "o": 1.66275,
             "h": 1.66751,
             "l": 1.66176,
             "c": 1.66489
@@ -17129,19 +17124,12 @@
           {
             "t": 1795705200,
             "o": 1.65352,
-            "h": 1.65489,
-            "l": 1.65336,
-            "c": 1.6548
+            "h": 1.65563,
+            "l": 1.65325,
+            "c": 1.65508
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 1.65094,
-            "h": 1.6514,
-            "l": 1.64982,
-            "c": 1.65137
-          },
           {
             "t": 1795550400,
             "o": 1.65138,
@@ -17186,7 +17174,7 @@
           },
           {
             "t": 1795572000,
-            "o": 1.65113,
+            "o": 1.65118,
             "h": 1.65696,
             "l": 1.65072,
             "c": 1.65661
@@ -17217,21 +17205,21 @@
             "o": 1.6602,
             "h": 1.66309,
             "l": 1.65897,
-            "c": 1.66279
+            "c": 1.66283
           },
           {
             "t": 1795590000,
-            "o": 1.66281,
+            "o": 1.66275,
             "h": 1.66682,
             "l": 1.66176,
             "c": 1.66596
           },
           {
             "t": 1795593600,
-            "o": 1.66573,
+            "o": 1.6658,
             "h": 1.66751,
             "l": 1.66292,
-            "c": 1.66469
+            "c": 1.66468
           },
           {
             "t": 1795597200,
@@ -17284,7 +17272,7 @@
           },
           {
             "t": 1795622400,
-            "o": 1.66384,
+            "o": 1.66385,
             "h": 1.66545,
             "l": 1.66141,
             "c": 1.66405
@@ -17312,14 +17300,14 @@
           },
           {
             "t": 1795636800,
-            "o": 1.65667,
+            "o": 1.65669,
             "h": 1.65671,
             "l": 1.65489,
             "c": 1.65597
           },
           {
             "t": 1795640400,
-            "o": 1.65589,
+            "o": 1.65596,
             "h": 1.65622,
             "l": 1.65493,
             "c": 1.65536
@@ -17378,7 +17366,7 @@
             "o": 1.64958,
             "h": 1.65134,
             "l": 1.64886,
-            "c": 1.65027
+            "c": 1.65024
           },
           {
             "t": 1795672800,
@@ -17446,9 +17434,16 @@
           {
             "t": 1795705200,
             "o": 1.65352,
-            "h": 1.65489,
-            "l": 1.65336,
-            "c": 1.6548
+            "h": 1.65534,
+            "l": 1.65325,
+            "c": 1.65519
+          },
+          {
+            "t": 1795708800,
+            "o": 1.65513,
+            "h": 1.65563,
+            "l": 1.65408,
+            "c": 1.65508
           }
         ]
       }
@@ -17460,8 +17455,8 @@
       "quote": "CHF",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.55324,
-      "chg_day": -0.21,
+      "price": 0.55293,
+      "chg_day": -0.27,
       "win_prob": 45,
       "has_valid_ob": false,
       "zone_kind": "NONE",
@@ -17488,9 +17483,9 @@
         "ssl": 0.5438,
         "eq50": 0.5505
       },
-      "ob_high": 0.55364,
-      "ob_low": 0.55284,
-      "created_at": 1795706126,
+      "ob_high": 0.55333,
+      "ob_low": 0.55253,
+      "created_at": 1795710412,
       "macro_reason": "AUD NEUTRAL / CHF NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.5505. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
         "score": 45,
@@ -17501,15 +17496,15 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN ZONA - ESPERAR",
-        "entry": 0.55324,
-        "sl": 0.55665,
-        "be": 0.54983,
-        "tp1": 0.54471,
-        "tp2": 0.53789
+        "entry": 0.55293,
+        "sl": 0.55634,
+        "be": 0.54952,
+        "tp1": 0.54441,
+        "tp2": 0.53759
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada en 0.55324 con SL estructural en 0.55665. 2) Al tocar 0.54983 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.54471) y buscar Swing TP (0.53789)."
+        "plan": "1) Entrada en 0.55293 con SL estructural en 0.55634. 2) Al tocar 0.54952 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.54441) y buscar Swing TP (0.53759)."
       },
       "news_warning": {
         "active": false,
@@ -17831,7 +17826,7 @@
             "o": 0.55841,
             "h": 0.55982,
             "l": 0.54446,
-            "c": 0.55316
+            "c": 0.55293
           }
         ],
         "1d": [
@@ -18146,9 +18141,9 @@
           {
             "t": 1795651200,
             "o": 0.54984,
-            "h": 0.55362,
+            "h": 0.55366,
             "l": 0.54924,
-            "c": 0.55316
+            "c": 0.55293
           }
         ],
         "4h": [
@@ -18185,7 +18180,7 @@
             "o": 0.56621,
             "h": 0.5674,
             "l": 0.56392,
-            "c": 0.56506
+            "c": 0.56504
           },
           {
             "t": 1794970800,
@@ -18290,11 +18285,11 @@
             "o": 0.56079,
             "h": 0.56101,
             "l": 0.55767,
-            "c": 0.56026
+            "c": 0.56029
           },
           {
             "t": 1795186800,
-            "o": 0.5602,
+            "o": 0.56013,
             "h": 0.56048,
             "l": 0.55515,
             "c": 0.55694
@@ -18420,7 +18415,7 @@
           },
           {
             "t": 1795618800,
-            "o": 0.54747,
+            "o": 0.54745,
             "h": 0.55076,
             "l": 0.54571,
             "c": 0.55027
@@ -18451,7 +18446,7 @@
             "o": 0.55201,
             "h": 0.55348,
             "l": 0.5511,
-            "c": 0.5523
+            "c": 0.55228
           },
           {
             "t": 1795690800,
@@ -18463,19 +18458,12 @@
           {
             "t": 1795705200,
             "o": 0.55343,
-            "h": 0.55356,
-            "l": 0.55243,
-            "c": 0.55324
+            "h": 0.55366,
+            "l": 0.55215,
+            "c": 0.55293
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 0.55487,
-            "h": 0.55511,
-            "l": 0.55404,
-            "c": 0.55462
-          },
           {
             "t": 1795550400,
             "o": 0.55463,
@@ -18520,7 +18508,7 @@
           },
           {
             "t": 1795572000,
-            "o": 0.55472,
+            "o": 0.55471,
             "h": 0.55482,
             "l": 0.55198,
             "c": 0.55261
@@ -18611,7 +18599,7 @@
           },
           {
             "t": 1795618800,
-            "o": 0.54747,
+            "o": 0.54745,
             "h": 0.54794,
             "l": 0.54571,
             "c": 0.54701
@@ -18653,7 +18641,7 @@
           },
           {
             "t": 1795640400,
-            "o": 0.55071,
+            "o": 0.55069,
             "h": 0.55091,
             "l": 0.54987,
             "c": 0.55064
@@ -18747,7 +18735,7 @@
             "o": 0.55277,
             "h": 0.55348,
             "l": 0.55165,
-            "c": 0.5523
+            "c": 0.55228
           },
           {
             "t": 1795690800,
@@ -18780,9 +18768,16 @@
           {
             "t": 1795705200,
             "o": 0.55343,
-            "h": 0.55356,
+            "h": 0.55366,
             "l": 0.55243,
-            "c": 0.55324
+            "c": 0.55304
+          },
+          {
+            "t": 1795708800,
+            "o": 0.55304,
+            "h": 0.55311,
+            "l": 0.55215,
+            "c": 0.55293
           }
         ]
       }
@@ -18794,30 +18789,30 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.54768,
-      "chg_day": -0.01,
-      "win_prob": 73,
+      "price": 0.54735,
+      "chg_day": -0.07,
+      "win_prob": 63,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "entry_mode": "ENTRADA_NORMAL",
       "near_entry": true,
       "is_safe_entry": false,
       "caution_reasons": [
-        "4H en NEUTRAL",
-        "Macro en SUBE"
+        "Zona barata (debajo de EQ-50%)",
+        "4H en NEUTRAL"
       ],
-      "economy_short": "NZD NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
-      "chart_bias": "NEUTRAL",
-      "structure_event": "⚡ BULLISH BOS",
+      "economy_short": "NZD NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
+      "chart_bias": "BAJA",
+      "structure_event": "⚡ BEARISH BOS",
       "tf_bias": {
         "weekly": "BAJA",
-        "daily": "NEUTRAL",
+        "daily": "BAJA",
         "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h1": "BAJA"
       },
       "volatility": {
-        "atr_units": 47.5,
+        "atr_units": 47.8,
         "range20_units": 223.2
       },
       "liquidity": {
@@ -18828,15 +18823,15 @@
       "ob_high": 0.54624,
       "ob_low": 0.54543,
       "created_at": 1795702130,
-      "macro_reason": "NZD NEUTRAL / USD DEBIL | Zona: OB + FVG | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.5473. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "NZD NEUTRAL / USD NEUTRAL | Zona: OB + FVG | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 0.5473. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 73,
+        "score": 63,
         "alignment": "NEUTRAL",
         "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
         "verdict_sub": "OB + FVG · COMPRA OB + FVG (1H)"
       },
       "setup": {
-        "direction": "BUY",
+        "direction": "SELL",
         "signal_tag": "COMPRA OB + FVG (1H)",
         "entry": 0.54584,
         "sl": 0.54493,
@@ -19168,7 +19163,7 @@
             "o": 0.54777,
             "h": 0.5493,
             "l": 0.54346,
-            "c": 0.54768
+            "c": 0.54735
           }
         ],
         "1d": [
@@ -19484,8 +19479,8 @@
             "t": 1795651200,
             "o": 0.54879,
             "h": 0.5493,
-            "l": 0.54765,
-            "c": 0.54768
+            "l": 0.5472,
+            "c": 0.54735
           }
         ],
         "4h": [
@@ -19767,7 +19762,7 @@
             "o": 0.5493,
             "h": 0.54951,
             "l": 0.54846,
-            "c": 0.54873
+            "c": 0.54867
           },
           {
             "t": 1795647600,
@@ -19801,18 +19796,11 @@
             "t": 1795705200,
             "o": 0.54807,
             "h": 0.54807,
-            "l": 0.54768,
-            "c": 0.54768
+            "l": 0.5472,
+            "c": 0.54735
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 0.54855,
-            "h": 0.54879,
-            "l": 0.54852,
-            "c": 0.54861
-          },
           {
             "t": 1795550400,
             "o": 0.54855,
@@ -19853,11 +19841,11 @@
             "o": 0.5478,
             "h": 0.54792,
             "l": 0.54738,
-            "c": 0.54756
+            "c": 0.54747
           },
           {
             "t": 1795572000,
-            "o": 0.54771,
+            "o": 0.54777,
             "h": 0.54852,
             "l": 0.5469,
             "c": 0.5469
@@ -20000,7 +19988,7 @@
             "o": 0.54879,
             "h": 0.54879,
             "l": 0.54846,
-            "c": 0.54873
+            "c": 0.54867
           },
           {
             "t": 1795647600,
@@ -20118,8 +20106,15 @@
             "t": 1795705200,
             "o": 0.54807,
             "h": 0.54807,
-            "l": 0.54768,
-            "c": 0.54768
+            "l": 0.5472,
+            "c": 0.5472
+          },
+          {
+            "t": 1795708800,
+            "o": 0.54726,
+            "h": 0.54741,
+            "l": 0.5472,
+            "c": 0.54735
           }
         ]
       }
@@ -20131,8 +20126,8 @@
       "quote": "CAD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.42461,
-      "chg_day": -0.19,
+      "price": 1.4249,
+      "chg_day": -0.17,
       "win_prob": 59,
       "has_valid_ob": true,
       "zone_kind": "OB",
@@ -20143,7 +20138,7 @@
         "4H en NEUTRAL",
         "Macro en BAJA"
       ],
-      "economy_short": "USD DEBIL / CAD FUERTE",
+      "economy_short": "USD NEUTRAL / CAD FUERTE",
       "macro_dir": "BAJA",
       "chart_bias": "SUBE",
       "structure_event": "⚡ BULLISH BOS",
@@ -20165,7 +20160,7 @@
       "ob_high": 1.42334,
       "ob_low": 1.422,
       "created_at": 1795706126,
-      "macro_reason": "USD DEBIL / CAD FUERTE | Zona: OB estructural | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.42401. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "USD NEUTRAL / CAD FUERTE | Zona: OB estructural | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.42401. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 59,
         "alignment": "OPPOSED",
@@ -20505,7 +20500,7 @@
             "o": 1.43383,
             "h": 1.43738,
             "l": 1.4205,
-            "c": 1.4243
+            "c": 1.4249
           }
         ],
         "1d": [
@@ -20820,9 +20815,9 @@
           {
             "t": 1795651200,
             "o": 1.4211,
-            "h": 1.42464,
+            "h": 1.42516,
             "l": 1.4205,
-            "c": 1.42461
+            "c": 1.4249
           }
         ],
         "4h": [
@@ -20849,7 +20844,7 @@
           },
           {
             "t": 1794942000,
-            "o": 1.42878,
+            "o": 1.42877,
             "h": 1.42994,
             "l": 1.4283,
             "c": 1.42933
@@ -20968,7 +20963,7 @@
           },
           {
             "t": 1795186800,
-            "o": 1.43219,
+            "o": 1.43218,
             "h": 1.43364,
             "l": 1.4309,
             "c": 1.43314
@@ -21080,7 +21075,7 @@
           },
           {
             "t": 1795590000,
-            "o": 1.42815,
+            "o": 1.42809,
             "h": 1.42941,
             "l": 1.42741,
             "c": 1.42833
@@ -21125,7 +21120,7 @@
             "o": 1.42225,
             "h": 1.42334,
             "l": 1.4213,
-            "c": 1.4223
+            "c": 1.42252
           },
           {
             "t": 1795690800,
@@ -21137,19 +21132,12 @@
           {
             "t": 1795705200,
             "o": 1.42384,
-            "h": 1.42461,
+            "h": 1.42516,
             "l": 1.4235,
-            "c": 1.42461
+            "c": 1.4249
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 1.42722,
-            "h": 1.42755,
-            "l": 1.4262,
-            "c": 1.42711
-          },
           {
             "t": 1795550400,
             "o": 1.42714,
@@ -21194,7 +21182,7 @@
           },
           {
             "t": 1795572000,
-            "o": 1.42693,
+            "o": 1.42688,
             "h": 1.42701,
             "l": 1.4256,
             "c": 1.42671
@@ -21229,7 +21217,7 @@
           },
           {
             "t": 1795590000,
-            "o": 1.42815,
+            "o": 1.42809,
             "h": 1.42939,
             "l": 1.42806,
             "c": 1.42937
@@ -21316,7 +21304,7 @@
             "o": 1.41981,
             "h": 1.42051,
             "l": 1.419,
-            "c": 1.42043
+            "c": 1.42045
           },
           {
             "t": 1795636800,
@@ -21421,7 +21409,7 @@
             "o": 1.42278,
             "h": 1.42334,
             "l": 1.422,
-            "c": 1.4223
+            "c": 1.42252
           },
           {
             "t": 1795690800,
@@ -21454,9 +21442,16 @@
           {
             "t": 1795705200,
             "o": 1.42384,
-            "h": 1.42461,
+            "h": 1.42493,
             "l": 1.4235,
-            "c": 1.42461
+            "c": 1.42491
+          },
+          {
+            "t": 1795708800,
+            "o": 1.42488,
+            "h": 1.42516,
+            "l": 1.4242,
+            "c": 1.4249
           }
         ]
       }
@@ -21468,24 +21463,26 @@
       "quote": "CHF",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.83389,
-      "chg_day": -0.23,
-      "win_prob": 55,
-      "has_valid_ob": false,
-      "zone_kind": "NONE",
-      "entry_mode": "ESPERAR",
-      "near_entry": false,
+      "price": 0.83397,
+      "chg_day": -0.22,
+      "win_prob": 69,
+      "has_valid_ob": true,
+      "zone_kind": "OB_FVG",
+      "entry_mode": "ENTRADA_NORMAL",
+      "near_entry": true,
       "is_safe_entry": false,
-      "caution_reasons": [],
-      "economy_short": "USD DEBIL / CHF NEUTRAL",
-      "macro_dir": "BAJA",
-      "chart_bias": "NEUTRAL",
+      "caution_reasons": [
+        "4H en NEUTRAL"
+      ],
+      "economy_short": "USD NEUTRAL / CHF NEUTRAL",
+      "macro_dir": "NEUTRAL",
+      "chart_bias": "SUBE",
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
         "weekly": "SUBE",
         "daily": "NEUTRAL",
         "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "volatility": {
         "atr_units": 73.8,
@@ -21496,28 +21493,28 @@
         "ssl": 0.82846,
         "eq50": 0.83279
       },
-      "ob_high": 0.83429,
-      "ob_low": 0.83349,
-      "created_at": 1795706126,
-      "macro_reason": "USD DEBIL / CHF NEUTRAL | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.83279. Sin bloque cercano dentro del rango permitido.",
+      "ob_high": 0.83204,
+      "ob_low": 0.83134,
+      "created_at": 1795710412,
+      "macro_reason": "USD NEUTRAL / CHF NEUTRAL | Zona: OB + FVG | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 0.83279. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 55,
+        "score": 69,
         "alignment": "NEUTRAL",
-        "verdict_title": "ESPERAR",
-        "verdict_sub": "Sin zona · SIN ZONA - ESPERAR"
+        "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
+        "verdict_sub": "OB + FVG · COMPRA OB + FVG (1H)"
       },
       "setup": {
         "direction": "BUY",
-        "signal_tag": "SIN ZONA - ESPERAR",
-        "entry": 0.83389,
-        "sl": 0.82946,
-        "be": 0.83832,
-        "tp1": 0.84497,
-        "tp2": 0.85383
+        "signal_tag": "COMPRA OB + FVG (1H)",
+        "entry": 0.83169,
+        "sl": 0.83084,
+        "be": 0.83254,
+        "tp1": 0.83382,
+        "tp2": 0.83552
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada en 0.83389 con SL estructural en 0.82946. 2) Al tocar 0.83832 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.84497) y buscar Swing TP (0.85383)."
+        "plan": "1) Entrada en 0.83169 con SL estructural en 0.83084. 2) Al tocar 0.83254 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.83382) y buscar Swing TP (0.83552)."
       },
       "news_warning": {
         "active": false,
@@ -21839,7 +21836,7 @@
             "o": 0.84078,
             "h": 0.844,
             "l": 0.82858,
-            "c": 0.83389
+            "c": 0.83397
           }
         ],
         "1d": [
@@ -22156,7 +22153,7 @@
             "o": 0.83062,
             "h": 0.83489,
             "l": 0.8301,
-            "c": 0.83389
+            "c": 0.83397
           }
         ],
         "4h": [
@@ -22228,7 +22225,7 @@
             "o": 0.84288,
             "h": 0.84421,
             "l": 0.84137,
-            "c": 0.84246
+            "c": 0.84204
           },
           {
             "t": 1795042800,
@@ -22302,7 +22299,7 @@
           },
           {
             "t": 1795186800,
-            "o": 0.84007,
+            "o": 0.84009,
             "h": 0.84044,
             "l": 0.83803,
             "c": 0.84012
@@ -22471,19 +22468,12 @@
           {
             "t": 1795705200,
             "o": 0.83351,
-            "h": 0.83393,
+            "h": 0.8346,
             "l": 0.83348,
-            "c": 0.83389
+            "c": 0.83397
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 0.83543,
-            "h": 0.8355,
-            "l": 0.83513,
-            "c": 0.83531
-          },
           {
             "t": 1795550400,
             "o": 0.8353,
@@ -22528,7 +22518,7 @@
           },
           {
             "t": 1795572000,
-            "o": 0.83587,
+            "o": 0.83592,
             "h": 0.83601,
             "l": 0.83499,
             "c": 0.83577
@@ -22661,7 +22651,7 @@
           },
           {
             "t": 1795640400,
-            "o": 0.83091,
+            "o": 0.83093,
             "h": 0.83106,
             "l": 0.83074,
             "c": 0.83087
@@ -22788,9 +22778,16 @@
           {
             "t": 1795705200,
             "o": 0.83351,
-            "h": 0.83393,
+            "h": 0.8346,
             "l": 0.83348,
-            "c": 0.83389
+            "c": 0.83432
+          },
+          {
+            "t": 1795708800,
+            "o": 0.83429,
+            "h": 0.83432,
+            "l": 0.83385,
+            "c": 0.83397
           }
         ]
       }
@@ -22802,7 +22799,7 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 174.793,
+      "price": 174.791,
       "chg_day": 0.12,
       "win_prob": 70,
       "has_valid_ob": true,
@@ -23175,7 +23172,7 @@
             "o": 174.401,
             "h": 175.041,
             "l": 173.289,
-            "c": 174.793
+            "c": 174.791
           }
         ],
         "1d": [
@@ -23492,7 +23489,7 @@
             "o": 174.656,
             "h": 174.924,
             "l": 174.361,
-            "c": 174.793
+            "c": 174.791
           }
         ],
         "4h": [
@@ -23533,7 +23530,7 @@
           },
           {
             "t": 1794970800,
-            "o": 175.143,
+            "o": 175.144,
             "h": 175.246,
             "l": 174.856,
             "c": 174.877
@@ -23554,7 +23551,7 @@
           },
           {
             "t": 1795014000,
-            "o": 174.77,
+            "o": 174.783,
             "h": 174.941,
             "l": 174.51,
             "c": 174.835
@@ -23585,7 +23582,7 @@
             "o": 175.031,
             "h": 176.072,
             "l": 175.018,
-            "c": 176.029
+            "c": 176.034
           },
           {
             "t": 1795086000,
@@ -23610,7 +23607,7 @@
           },
           {
             "t": 1795129200,
-            "o": 175.069,
+            "o": 175.038,
             "h": 175.344,
             "l": 174.56,
             "c": 174.719
@@ -23638,7 +23635,7 @@
           },
           {
             "t": 1795186800,
-            "o": 174.496,
+            "o": 174.495,
             "h": 174.524,
             "l": 174.124,
             "c": 174.235
@@ -23808,18 +23805,11 @@
             "t": 1795705200,
             "o": 174.803,
             "h": 174.85,
-            "l": 174.782,
-            "c": 174.793
+            "l": 174.719,
+            "c": 174.791
           }
         ],
         "1h": [
-          {
-            "t": 1795546800,
-            "o": 174.659,
-            "h": 174.69,
-            "l": 174.581,
-            "c": 174.588
-          },
           {
             "t": 1795550400,
             "o": 174.587,
@@ -23864,7 +23854,7 @@
           },
           {
             "t": 1795572000,
-            "o": 174.53,
+            "o": 174.526,
             "h": 174.625,
             "l": 174.3,
             "c": 174.314
@@ -23972,7 +23962,7 @@
             "o": 174.236,
             "h": 174.635,
             "l": 174.226,
-            "c": 174.537
+            "c": 174.54
           },
           {
             "t": 1795629600,
@@ -24018,7 +24008,7 @@
           },
           {
             "t": 1795651200,
-            "o": 174.642,
+            "o": 174.64,
             "h": 174.68,
             "l": 174.433,
             "c": 174.452
@@ -24046,7 +24036,7 @@
           },
           {
             "t": 1795665600,
-            "o": 174.441,
+            "o": 174.45,
             "h": 174.466,
             "l": 174.383,
             "c": 174.448
@@ -24125,8 +24115,15 @@
             "t": 1795705200,
             "o": 174.803,
             "h": 174.85,
-            "l": 174.782,
-            "c": 174.793
+            "l": 174.719,
+            "c": 174.804
+          },
+          {
+            "t": 1795708800,
+            "o": 174.804,
+            "h": 174.838,
+            "l": 174.759,
+            "c": 174.791
           }
         ]
       }
@@ -24138,20 +24135,19 @@
       "quote": "USD",
       "decimals": 2,
       "pip": 1.0,
-      "price": 60149.52,
-      "chg_day": -0.38,
-      "win_prob": 46,
+      "price": 60409.64,
+      "chg_day": 0.05,
+      "win_prob": 52,
       "has_valid_ob": true,
       "zone_kind": "FVG",
       "entry_mode": "ENTRADA_NORMAL",
       "near_entry": false,
       "is_safe_entry": false,
       "caution_reasons": [
-        "4H en NEUTRAL",
-        "Macro en SUBE"
+        "4H en NEUTRAL"
       ],
-      "economy_short": "BTC NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
+      "economy_short": "BTC NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
       "chart_bias": "BAJA",
       "structure_event": "⚡ BEARISH BOS",
       "tf_bias": {
@@ -24161,21 +24157,21 @@
         "h1": "NEUTRAL"
       },
       "volatility": {
-        "atr_units": 3309.6,
+        "atr_units": 3319.6,
         "range20_units": 20989.1
       },
       "liquidity": {
-        "bsl": 61456.35,
-        "ssl": 57214.47,
-        "eq50": 59335.41
+        "bsl": 61476.37,
+        "ssl": 57228.75,
+        "eq50": 59352.56
       },
       "ob_high": 60689.57,
       "ob_low": 60586.44,
       "created_at": 1795706126,
-      "macro_reason": "BTC NEUTRAL / USD DEBIL | Zona: FVG limpio | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 59335.41. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "BTC NEUTRAL / USD NEUTRAL | Zona: FVG limpio | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 59352.56. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 46,
-        "alignment": "OPPOSED",
+        "score": 52,
+        "alignment": "NEUTRAL",
         "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
         "verdict_sub": "FVG limpio · VENTA FVG (1H)"
       },
@@ -24512,7 +24508,7 @@
             "o": 61161.91,
             "h": 64478.36,
             "l": 57241.84,
-            "c": 60149.52
+            "c": 60409.64
           }
         ],
         "1d": [
@@ -24828,184 +24824,177 @@
             "t": 1795651200,
             "o": 60378.57,
             "h": 61040.95,
-            "l": 60179.72,
-            "c": 60149.52
+            "l": 60040.08,
+            "c": 60409.64
           }
         ],
         "4h": [
           {
-            "t": 1795060800,
-            "o": 63141.95,
-            "h": 63803.96,
-            "l": 63132.02,
-            "c": 63669.05
-          },
-          {
             "t": 1795075200,
-            "o": 63651.72,
-            "h": 64010.57,
+            "o": 63654.32,
+            "h": 64006.71,
             "l": 63494.39,
-            "c": 63877.87
+            "c": 63878.75
           },
           {
             "t": 1795089600,
-            "o": 63868.13,
-            "h": 64011.58,
-            "l": 62706.83,
-            "c": 63038.32
+            "o": 63870.13,
+            "h": 64011.1,
+            "l": 62722.79,
+            "c": 63041.04
           },
           {
             "t": 1795104000,
-            "o": 63036.03,
-            "h": 63333.02,
-            "l": 62181.31,
-            "c": 62299.69
+            "o": 63031.58,
+            "h": 63308.51,
+            "l": 62176.2,
+            "c": 62295.0
           },
           {
             "t": 1795118400,
-            "o": 62270.64,
-            "h": 62384.33,
-            "l": 61363.56,
-            "c": 61911.47
+            "o": 62286.4,
+            "h": 62384.71,
+            "l": 61370.38,
+            "c": 61911.17
           },
           {
             "t": 1795132800,
-            "o": 61903.64,
-            "h": 62533.66,
-            "l": 61220.0,
-            "c": 62082.32
+            "o": 61906.9,
+            "h": 62541.98,
+            "l": 61230.42,
+            "c": 62082.33
           },
           {
             "t": 1795147200,
-            "o": 62074.63,
-            "h": 62074.63,
-            "l": 61318.59,
+            "o": 62084.22,
+            "h": 62084.22,
+            "l": 61330.29,
             "c": 61799.17
           },
           {
             "t": 1795161600,
-            "o": 61803.61,
-            "h": 62273.59,
-            "l": 61485.41,
+            "o": 61786.11,
+            "h": 62261.77,
+            "l": 61485.72,
             "c": 61739.61
           },
           {
             "t": 1795176000,
-            "o": 61730.62,
-            "h": 62110.66,
-            "l": 59328.0,
-            "c": 59383.21
+            "o": 61730.64,
+            "h": 62106.69,
+            "l": 59329.57,
+            "c": 59382.32
           },
           {
             "t": 1795190400,
-            "o": 59390.95,
-            "h": 59757.53,
-            "l": 57676.29,
-            "c": 58473.95
+            "o": 59391.15,
+            "h": 59730.4,
+            "l": 57680.1,
+            "c": 58484.04
           },
           {
             "t": 1795204800,
-            "o": 58450.18,
-            "h": 59278.92,
-            "l": 58079.64,
-            "c": 58811.55
+            "o": 58447.28,
+            "h": 59278.93,
+            "l": 58075.34,
+            "c": 58811.77
           },
           {
             "t": 1795219200,
             "o": 58808.37,
-            "h": 59108.24,
-            "l": 56390.16,
-            "c": 56653.05
+            "h": 59108.28,
+            "l": 56370.0,
+            "c": 56648.49
           },
           {
             "t": 1795233600,
-            "o": 56632.83,
-            "h": 58530.81,
-            "l": 55138.06,
+            "o": 56628.75,
+            "h": 58533.61,
+            "l": 55180.67,
             "c": 57875.47
           },
           {
             "t": 1795248000,
-            "o": 57893.83,
-            "h": 58500.95,
-            "l": 57271.62,
-            "c": 58112.46
+            "o": 57896.35,
+            "h": 58494.79,
+            "l": 57274.3,
+            "c": 58112.47
           },
           {
             "t": 1795262400,
             "o": 58110.52,
-            "h": 60838.08,
+            "h": 60861.99,
             "l": 58038.79,
-            "c": 59826.32
+            "c": 59826.31
           },
           {
             "t": 1795276800,
-            "o": 59820.14,
-            "h": 60313.78,
-            "l": 59663.63,
+            "o": 59821.21,
+            "h": 60312.64,
+            "l": 59663.62,
             "c": 60231.46
           },
           {
             "t": 1795291200,
-            "o": 60229.26,
-            "h": 60392.39,
-            "l": 59861.12,
+            "o": 60218.37,
+            "h": 60393.25,
+            "l": 59859.27,
             "c": 60086.0
           },
           {
             "t": 1795305600,
-            "o": 60082.62,
-            "h": 60217.77,
-            "l": 59001.74,
-            "c": 59225.97
+            "o": 60086.0,
+            "h": 60217.01,
+            "l": 58996.94,
+            "c": 59216.86
           },
           {
             "t": 1795320000,
-            "o": 59218.96,
-            "h": 59534.23,
-            "l": 58657.42,
+            "o": 59224.62,
+            "h": 59523.04,
+            "l": 58656.26,
             "c": 59052.66
           },
           {
             "t": 1795334400,
-            "o": 59032.05,
-            "h": 61229.37,
+            "o": 59037.83,
+            "h": 61211.37,
             "l": 58965.66,
-            "c": 60958.41
+            "c": 60958.4
           },
           {
             "t": 1795348800,
-            "o": 60949.35,
-            "h": 61543.31,
-            "l": 60358.25,
-            "c": 60799.91
+            "o": 60949.32,
+            "h": 61545.78,
+            "l": 60379.93,
+            "c": 60799.9
           },
           {
             "t": 1795363200,
             "o": 60794.15,
-            "h": 61302.68,
-            "l": 60488.2,
+            "h": 61303.86,
+            "l": 60495.85,
             "c": 60635.72
           },
           {
             "t": 1795377600,
             "o": 60635.72,
-            "h": 61283.27,
-            "l": 60488.75,
-            "c": 61163.02
+            "h": 61274.27,
+            "l": 60485.55,
+            "c": 61160.7
           },
           {
             "t": 1795392000,
-            "o": 61163.27,
-            "h": 61819.9,
-            "l": 60287.47,
-            "c": 61190.72
+            "o": 61178.78,
+            "h": 61778.05,
+            "l": 60296.53,
+            "c": 61188.95
           },
           {
             "t": 1795406400,
-            "o": 61190.49,
-            "h": 61728.54,
-            "l": 60973.56,
+            "o": 61190.72,
+            "h": 61726.68,
+            "l": 60971.11,
             "c": 61365.92
           },
           {
@@ -25017,35 +25006,35 @@
           },
           {
             "t": 1795435200,
-            "o": 61361.27,
-            "h": 64451.6,
-            "l": 61007.08,
-            "c": 62822.8
+            "o": 61367.88,
+            "h": 64469.84,
+            "l": 61005.45,
+            "c": 62822.53
           },
           {
             "t": 1795449600,
-            "o": 62825.0,
-            "h": 62865.99,
-            "l": 60716.57,
-            "c": 61190.87
+            "o": 62828.86,
+            "h": 62855.29,
+            "l": 60710.34,
+            "c": 61189.57
           },
           {
             "t": 1795464000,
-            "o": 61237.43,
-            "h": 61515.0,
-            "l": 60979.9,
-            "c": 61196.28
+            "o": 61228.38,
+            "h": 61512.55,
+            "l": 60983.94,
+            "c": 61206.75
           },
           {
             "t": 1795478400,
-            "o": 61188.88,
-            "h": 61588.82,
-            "l": 59369.95,
-            "c": 60257.27
+            "o": 61176.41,
+            "h": 61597.44,
+            "l": 59373.22,
+            "c": 60257.28
           },
           {
             "t": 1795492800,
-            "o": 60266.83,
+            "o": 60248.43,
             "h": 60694.46,
             "l": 60200.76,
             "c": 60364.14
@@ -25054,133 +25043,133 @@
             "t": 1795507200,
             "o": 60335.88,
             "h": 60484.13,
-            "l": 59316.98,
+            "l": 59316.99,
             "c": 60346.67
           },
           {
             "t": 1795521600,
             "o": 60362.62,
-            "h": 60609.0,
-            "l": 59556.22,
+            "h": 60612.66,
+            "l": 59556.21,
             "c": 59647.86
           },
           {
             "t": 1795536000,
             "o": 59621.29,
-            "h": 60207.19,
+            "h": 60203.22,
             "l": 59199.02,
-            "c": 59597.07
+            "c": 59594.82
           },
           {
             "t": 1795550400,
-            "o": 59607.35,
-            "h": 60012.65,
-            "l": 59391.63,
+            "o": 59603.94,
+            "h": 60005.77,
+            "l": 59389.17,
             "c": 59740.87
           },
           {
             "t": 1795564800,
             "o": 59737.3,
-            "h": 59745.75,
-            "l": 58868.88,
-            "c": 59330.78
+            "h": 59745.76,
+            "l": 58863.1,
+            "c": 59334.64
           },
           {
             "t": 1795579200,
-            "o": 59313.27,
-            "h": 59325.24,
-            "l": 58564.98,
-            "c": 58660.21
+            "o": 59317.46,
+            "h": 59331.84,
+            "l": 58552.28,
+            "c": 58645.1
           },
           {
             "t": 1795593600,
-            "o": 58684.66,
-            "h": 59376.96,
-            "l": 58373.0,
-            "c": 58551.4
+            "o": 58685.71,
+            "h": 59397.18,
+            "l": 58376.81,
+            "c": 58549.05
           },
           {
             "t": 1795608000,
-            "o": 58553.71,
-            "h": 58843.54,
-            "l": 57214.47,
-            "c": 58277.2
+            "o": 58549.47,
+            "h": 58842.44,
+            "l": 57228.75,
+            "c": 58256.86
           },
           {
             "t": 1795622400,
-            "o": 58254.7,
-            "h": 60326.47,
-            "l": 58041.43,
-            "c": 59808.92
+            "o": 58255.92,
+            "h": 60319.25,
+            "l": 58047.2,
+            "c": 59811.47
           },
           {
             "t": 1795636800,
-            "o": 59839.92,
-            "h": 60486.22,
-            "l": 59729.92,
-            "c": 60381.07
+            "o": 59820.78,
+            "h": 60480.98,
+            "l": 59720.21,
+            "c": 60384.14
           },
           {
             "t": 1795651200,
-            "o": 60349.36,
-            "h": 61456.35,
+            "o": 60328.16,
+            "h": 61476.37,
             "l": 60297.06,
             "c": 60690.79
           },
           {
             "t": 1795665600,
             "o": 60691.65,
-            "h": 61013.43,
-            "l": 60297.75,
+            "h": 61018.95,
+            "l": 60301.12,
             "c": 60446.45
           },
           {
             "t": 1795680000,
-            "o": 60446.42,
-            "h": 60986.3,
-            "l": 60389.18,
-            "c": 60635.55
+            "o": 60446.45,
+            "h": 60979.75,
+            "l": 60386.67,
+            "c": 60636.77
           },
           {
             "t": 1795694400,
-            "o": 60627.69,
-            "h": 60890.5,
-            "l": 59846.37,
-            "c": 60149.52
+            "o": 60626.1,
+            "h": 60909.95,
+            "l": 59863.05,
+            "c": 60542.41
+          },
+          {
+            "t": 1795708800,
+            "o": 60565.47,
+            "h": 60770.78,
+            "l": 60352.94,
+            "c": 60409.64
           }
         ],
         "1h": [
           {
-            "t": 1795546800,
-            "o": 59803.38,
-            "h": 59994.72,
-            "l": 59591.69,
-            "c": 59597.07
-          },
-          {
             "t": 1795550400,
-            "o": 59607.35,
+            "o": 59603.94,
             "h": 59821.1,
-            "l": 59391.63,
-            "c": 59703.15
+            "l": 59389.17,
+            "c": 59693.65
           },
           {
             "t": 1795554000,
-            "o": 59662.32,
-            "h": 59885.69,
-            "l": 59621.55,
+            "o": 59662.33,
+            "h": 59884.71,
+            "l": 59623.07,
             "c": 59821.17
           },
           {
             "t": 1795557600,
             "o": 59815.43,
-            "h": 60012.65,
+            "h": 60005.77,
             "l": 59798.88,
             "c": 59887.4
           },
           {
             "t": 1795561200,
-            "o": 59889.7,
+            "o": 59889.69,
             "h": 59976.39,
             "l": 59689.63,
             "c": 59740.87
@@ -25188,43 +25177,43 @@
           {
             "t": 1795564800,
             "o": 59737.3,
-            "h": 59745.75,
+            "h": 59745.76,
             "l": 59361.46,
-            "c": 59569.92
+            "c": 59558.64
           },
           {
             "t": 1795568400,
-            "o": 59598.6,
-            "h": 59664.17,
-            "l": 59001.7,
-            "c": 59172.63
+            "o": 59572.44,
+            "h": 59662.84,
+            "l": 58995.64,
+            "c": 59174.1
           },
           {
             "t": 1795572000,
-            "o": 59174.1,
-            "h": 59264.49,
-            "l": 58868.88,
-            "c": 59142.31
+            "o": 59170.33,
+            "h": 59282.01,
+            "l": 58863.1,
+            "c": 59144.69
           },
           {
             "t": 1795575600,
-            "o": 59154.45,
-            "h": 59573.35,
-            "l": 58949.97,
-            "c": 59330.78
+            "o": 59160.81,
+            "h": 59571.18,
+            "l": 58952.73,
+            "c": 59334.64
           },
           {
             "t": 1795579200,
-            "o": 59313.27,
+            "o": 59317.46,
             "h": 59317.73,
-            "l": 58885.07,
-            "c": 59132.2
+            "l": 58885.15,
+            "c": 59134.05
           },
           {
             "t": 1795582800,
-            "o": 59139.48,
-            "h": 59218.67,
-            "l": 58924.1,
+            "o": 59140.66,
+            "h": 59217.48,
+            "l": 58922.92,
             "c": 59070.95
           },
           {
@@ -25237,233 +25226,240 @@
           {
             "t": 1795590000,
             "o": 59146.51,
-            "h": 59325.24,
-            "l": 58564.98,
-            "c": 58660.21
+            "h": 59331.84,
+            "l": 58552.28,
+            "c": 58645.1
           },
           {
             "t": 1795593600,
-            "o": 58684.66,
-            "h": 59376.96,
-            "l": 58641.27,
+            "o": 58685.71,
+            "h": 59397.18,
+            "l": 58641.19,
             "c": 59347.76
           },
           {
             "t": 1795597200,
-            "o": 59344.85,
-            "h": 59344.85,
-            "l": 58742.32,
-            "c": 58984.79
+            "o": 59345.63,
+            "h": 59348.37,
+            "l": 58740.85,
+            "c": 58988.41
           },
           {
             "t": 1795600800,
             "o": 58991.34,
             "h": 59118.72,
-            "l": 58701.89,
-            "c": 58818.06
+            "l": 58701.88,
+            "c": 58818.07
           },
           {
             "t": 1795604400,
             "o": 58821.7,
             "h": 58821.7,
-            "l": 58373.0,
-            "c": 58551.4
+            "l": 58376.81,
+            "c": 58549.05
           },
           {
             "t": 1795608000,
-            "o": 58553.71,
-            "h": 58688.45,
-            "l": 58377.92,
+            "o": 58549.47,
+            "h": 58687.14,
+            "l": 58377.73,
             "c": 58668.09
           },
           {
             "t": 1795611600,
-            "o": 58668.67,
-            "h": 58843.54,
-            "l": 57934.54,
-            "c": 57997.97
+            "o": 58673.92,
+            "h": 58842.44,
+            "l": 57931.07,
+            "c": 57991.29
           },
           {
             "t": 1795615200,
-            "o": 57968.06,
-            "h": 58374.39,
-            "l": 57214.47,
-            "c": 58148.81
+            "o": 57997.98,
+            "h": 58372.0,
+            "l": 57228.75,
+            "c": 58147.34
           },
           {
             "t": 1795618800,
-            "o": 58124.9,
-            "h": 58607.79,
-            "l": 57604.89,
-            "c": 58277.2
+            "o": 58105.17,
+            "h": 58613.47,
+            "l": 57608.3,
+            "c": 58256.86
           },
           {
             "t": 1795622400,
-            "o": 58254.7,
-            "h": 58883.93,
-            "l": 58041.43,
-            "c": 58514.81
+            "o": 58255.92,
+            "h": 58881.57,
+            "l": 58047.2,
+            "c": 58534.0
           },
           {
             "t": 1795626000,
-            "o": 58522.23,
-            "h": 59848.08,
-            "l": 58385.29,
-            "c": 59518.86
+            "o": 58499.96,
+            "h": 59856.48,
+            "l": 58382.3,
+            "c": 59517.85
           },
           {
             "t": 1795629600,
-            "o": 59526.42,
-            "h": 59994.05,
-            "l": 59411.03,
-            "c": 59657.23
+            "o": 59502.65,
+            "h": 60016.82,
+            "l": 59411.39,
+            "c": 59666.39
           },
           {
             "t": 1795633200,
-            "o": 59641.19,
-            "h": 60326.47,
-            "l": 59626.15,
-            "c": 59808.92
+            "o": 59647.67,
+            "h": 60319.25,
+            "l": 59618.69,
+            "c": 59811.47
           },
           {
             "t": 1795636800,
-            "o": 59839.92,
-            "h": 60315.27,
-            "l": 59729.92,
-            "c": 60176.62
+            "o": 59820.78,
+            "h": 60309.62,
+            "l": 59720.21,
+            "c": 60171.79
           },
           {
             "t": 1795640400,
-            "o": 60216.36,
-            "h": 60418.0,
-            "l": 60099.62,
-            "c": 60161.94
+            "o": 60195.23,
+            "h": 60417.32,
+            "l": 60107.16,
+            "c": 60161.82
           },
           {
             "t": 1795644000,
-            "o": 60145.47,
-            "h": 60193.94,
-            "l": 59952.6,
-            "c": 60026.93
+            "o": 60145.45,
+            "h": 60190.13,
+            "l": 59951.93,
+            "c": 60028.32
           },
           {
             "t": 1795647600,
-            "o": 60022.26,
-            "h": 60486.22,
-            "l": 59864.4,
-            "c": 60381.07
+            "o": 60019.05,
+            "h": 60480.98,
+            "l": 59861.51,
+            "c": 60384.14
           },
           {
             "t": 1795651200,
-            "o": 60349.36,
-            "h": 61456.35,
+            "o": 60328.16,
+            "h": 61476.37,
             "l": 60297.06,
-            "c": 60437.3
+            "c": 60423.53
           },
           {
             "t": 1795654800,
-            "o": 60400.38,
-            "h": 60888.76,
-            "l": 60378.32,
-            "c": 60770.43
+            "o": 60429.07,
+            "h": 60888.75,
+            "l": 60379.79,
+            "c": 60770.42
           },
           {
             "t": 1795658400,
-            "o": 60779.68,
+            "o": 60783.96,
             "h": 60998.99,
-            "l": 60531.72,
+            "l": 60535.87,
             "c": 60622.91
           },
           {
             "t": 1795662000,
             "o": 60622.92,
-            "h": 60858.47,
-            "l": 60551.53,
+            "h": 60858.25,
+            "l": 60550.01,
             "c": 60690.79
           },
           {
             "t": 1795665600,
             "o": 60691.65,
-            "h": 61013.43,
+            "h": 61018.95,
             "l": 60691.65,
-            "c": 60907.22
+            "c": 60890.77
           },
           {
             "t": 1795669200,
-            "o": 60887.83,
-            "h": 60986.17,
-            "l": 60689.57,
+            "o": 60881.88,
+            "h": 60986.92,
+            "l": 60689.58,
             "c": 60730.84
           },
           {
             "t": 1795672800,
-            "o": 60736.25,
-            "h": 60736.25,
-            "l": 60297.75,
-            "c": 60480.16
+            "o": 60731.89,
+            "h": 60731.89,
+            "l": 60301.12,
+            "c": 60480.17
           },
           {
             "t": 1795676400,
-            "o": 60474.9,
-            "h": 60586.44,
+            "o": 60462.98,
+            "h": 60586.45,
             "l": 60335.02,
             "c": 60446.45
           },
           {
             "t": 1795680000,
-            "o": 60446.42,
-            "h": 60986.3,
-            "l": 60446.42,
-            "c": 60836.69
+            "o": 60446.45,
+            "h": 60979.75,
+            "l": 60446.45,
+            "c": 60833.85
           },
           {
             "t": 1795683600,
-            "o": 60824.63,
-            "h": 60912.8,
+            "o": 60826.39,
+            "h": 60908.05,
             "l": 60676.7,
             "c": 60858.64
           },
           {
             "t": 1795687200,
-            "o": 60858.64,
+            "o": 60858.63,
             "h": 60919.53,
-            "l": 60389.18,
-            "c": 60433.72
+            "l": 60386.67,
+            "c": 60438.24
           },
           {
             "t": 1795690800,
-            "o": 60434.8,
-            "h": 60705.05,
-            "l": 60408.55,
-            "c": 60635.55
+            "o": 60435.21,
+            "h": 60709.52,
+            "l": 60409.93,
+            "c": 60636.77
           },
           {
             "t": 1795694400,
-            "o": 60627.69,
-            "h": 60890.5,
+            "o": 60626.1,
+            "h": 60909.95,
             "l": 60514.81,
-            "c": 60770.97
+            "c": 60777.79
           },
           {
             "t": 1795698000,
-            "o": 60735.56,
-            "h": 60879.02,
-            "l": 60712.05,
-            "c": 60797.4
+            "o": 60734.99,
+            "h": 60880.46,
+            "l": 60713.76,
+            "c": 60797.41
           },
           {
             "t": 1795701600,
             "o": 60793.64,
-            "h": 60882.02,
-            "l": 60629.37,
-            "c": 60653.07
+            "h": 60880.8,
+            "l": 60629.36,
+            "c": 60651.85
           },
           {
             "t": 1795705200,
-            "o": 60641.48,
-            "h": 60641.48,
-            "l": 59846.37,
-            "c": 60149.52
+            "o": 60640.27,
+            "h": 60640.27,
+            "l": 59863.05,
+            "c": 60542.41
+          },
+          {
+            "t": 1795708800,
+            "o": 60565.47,
+            "h": 60770.78,
+            "l": 60352.94,
+            "c": 60409.64
           }
         ]
       }
@@ -25477,15 +25473,15 @@
       "pip": 1.0,
       "price": 50180.34,
       "chg_day": 0.32,
-      "win_prob": 55,
+      "win_prob": 63,
       "has_valid_ob": false,
       "zone_kind": "NONE",
       "entry_mode": "ESPERAR",
       "near_entry": false,
       "is_safe_entry": false,
       "caution_reasons": [],
-      "economy_short": "US30 NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
+      "economy_short": "US30 NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
       "chart_bias": "NEUTRAL",
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
@@ -25505,10 +25501,10 @@
       },
       "ob_high": 50184.34,
       "ob_low": 50176.34,
-      "created_at": 1795706126,
-      "macro_reason": "US30 NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 49396.15. Sin bloque cercano dentro del rango permitido.",
+      "created_at": 1795710412,
+      "macro_reason": "US30 NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 49396.15. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
-        "score": 55,
+        "score": 63,
         "alignment": "NEUTRAL",
         "verdict_title": "ESPERAR",
         "verdict_sub": "Sin zona · SIN ZONA - ESPERAR"
@@ -26811,15 +26807,15 @@
       "pip": 1.0,
       "price": 23580.62,
       "chg_day": -0.64,
-      "win_prob": 55,
+      "win_prob": 63,
       "has_valid_ob": false,
       "zone_kind": "NONE",
       "entry_mode": "ESPERAR",
       "near_entry": false,
       "is_safe_entry": false,
       "caution_reasons": [],
-      "economy_short": "USTEC NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
+      "economy_short": "USTEC NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
       "chart_bias": "NEUTRAL",
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
@@ -26839,10 +26835,10 @@
       },
       "ob_high": 23584.62,
       "ob_low": 23576.62,
-      "created_at": 1795706126,
-      "macro_reason": "USTEC NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 23724.53. Sin bloque cercano dentro del rango permitido.",
+      "created_at": 1795710412,
+      "macro_reason": "USTEC NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 23724.53. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
-        "score": 55,
+        "score": 63,
         "alignment": "NEUTRAL",
         "verdict_title": "ESPERAR",
         "verdict_sub": "Sin zona · SIN ZONA - ESPERAR"
@@ -28145,15 +28141,15 @@
       "pip": 1.0,
       "price": 7182.73,
       "chg_day": -0.25,
-      "win_prob": 55,
+      "win_prob": 63,
       "has_valid_ob": false,
       "zone_kind": "NONE",
       "entry_mode": "ESPERAR",
       "near_entry": false,
       "is_safe_entry": false,
       "caution_reasons": [],
-      "economy_short": "US500 NEUTRAL / USD DEBIL",
-      "macro_dir": "SUBE",
+      "economy_short": "US500 NEUTRAL / USD NEUTRAL",
+      "macro_dir": "NEUTRAL",
       "chart_bias": "NEUTRAL",
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
@@ -28173,10 +28169,10 @@
       },
       "ob_high": 7186.73,
       "ob_low": 7178.73,
-      "created_at": 1795706126,
-      "macro_reason": "US500 NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 7149.15. Sin bloque cercano dentro del rango permitido.",
+      "created_at": 1795710412,
+      "macro_reason": "US500 NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 7149.15. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
-        "score": 55,
+        "score": 63,
         "alignment": "NEUTRAL",
         "verdict_title": "ESPERAR",
         "verdict_sub": "Sin zona · SIN ZONA - ESPERAR"
