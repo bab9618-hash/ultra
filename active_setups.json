@@ -17,17 +17,19 @@
   },
   "EURUSD": {
     "has_valid_ob": true,
-    "has_fvg": true,
-    "direction": "SELL",
-    "entry": 1.09933,
-    "sl": 1.10107,
-    "be_trigger": 1.09759,
-    "tp1": 1.09498,
-    "tp2": 1.0915,
-    "ob_high": 1.10047,
-    "ob_low": 1.09818,
-    "signal_tag": "VENTA OB + FVG (4H)",
-    "created_at": 1795666963
+    "has_fvg": false,
+    "is_pure_fvg": false,
+    "zone_kind": "OB",
+    "direction": "BUY",
+    "entry": 1.09751,
+    "sl": 1.09659,
+    "be_trigger": 1.09843,
+    "tp1": 1.09981,
+    "tp2": 1.10165,
+    "ob_high": 1.09794,
+    "ob_low": 1.09709,
+    "signal_tag": "COMPRA OB REAL (1H)",
+    "created_at": 1795702130
   },
   "AUDCAD": {
     "has_valid_ob": true,
@@ -251,5 +253,21 @@
     "ob_low": 2.38826,
     "signal_tag": "COMPRA OB REAL (1H)",
     "created_at": 1795693384
+  },
+  "NZDUSD": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
+    "direction": "BUY",
+    "entry": 0.54584,
+    "sl": 0.54493,
+    "be_trigger": 0.54675,
+    "tp1": 0.54811,
+    "tp2": 0.54993,
+    "ob_high": 0.54624,
+    "ob_low": 0.54543,
+    "signal_tag": "COMPRA OB + FVG (1H)",
+    "created_at": 1795702130
   }
 }
