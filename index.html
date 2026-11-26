@@ -937,3 +937,1340 @@
       const tag = (a.setup?.signal_tag || '').toUpperCase();
       const hasZone = a.has_valid_ob !== false && !tag.includes('SIN OB') && !tag.includes('SIN ZONA') && !tag.includes('ESPERAR');
       const isSwing = Boolean(a.swing_potential && a.swing_potential.active);
+      if (!hasZone) return { hasZone: false, isSafe: false, isSwing: false, reasons: [] };
+
+      const reasons = [];
+      const isBuy = a.setup?.direction === 'BUY';
+      const candles = (a.candles && a.candles['1h']) ? a.candles['1h'].slice(-42) : [];
+      const bsl = a.liquidity?.bsl || (candles.length ? Math.max(...candles.map(c => c.h)) : a.price);
+      const ssl = a.liquidity?.ssl || (candles.length ? Math.min(...candles.map(c => c.l)) : a.price);
+      const eq50 = a.liquidity?.eq50 || ((bsl + ssl) / 2);
+
+      if (isBuy && a.setup.entry > eq50) reasons.push('Zona cara (arriba de EQ-50%)');
+      if (!isBuy && a.setup.entry < eq50) reasons.push('Zona barata (debajo de EQ-50%)');
+      if (a.tf_bias?.h4 === 'NEUTRAL') reasons.push('4H en NEUTRAL');
+      else if (a.tf_bias?.h4 && a.tf_bias.h4 !== a.chart_bias) reasons.push(`4H en ${a.tf_bias.h4}`);
+      if (a.tf_bias?.daily && a.tf_bias.daily !== a.chart_bias) reasons.push(`1D en ${a.tf_bias.daily}`);
+      if (a.macro_dir && a.macro_dir !== a.chart_bias) reasons.push(`Macro en ${a.macro_dir}`);
+      if (a.news_warning?.active) reasons.push('Noticia roja hoy');
+
+      return { hasZone: true, isSafe: reasons.length === 0, isSwing, reasons };
+    }
+
+    function getFocusPrimary() {
+      if (!data) return null;
+      const assets = data.assets || [];
+      const safeBest = [...assets]
+        .filter(a => evaluateEntrySafety(a).isSafe)
+        .sort((a, b) => {
+          const swA = a.swing_potential?.active ? 1 : 0;
+          const swB = b.swing_potential?.active ? 1 : 0;
+          if (swB !== swA) return swB - swA;
+          return (b.win_prob || b.confluence?.score || 0) - (a.win_prob || a.confluence?.score || 0);
+        })[0];
+
+      if (safeBest) {
+        return {
+          symbol: safeBest.symbol,
+          direction: safeBest.setup.direction === 'BUY' ? 'COMPRA' : 'VENTA',
+          win_prob: safeBest.win_prob || safeBest.confluence?.score || 0,
+          is_safe: true,
+          is_swing: Boolean(safeBest.swing_potential?.active),
+          signal_tag: safeBest.setup.signal_tag,
+          entry: safeBest.setup.entry,
+          sl: safeBest.setup.sl,
+          tp1: safeBest.setup.tp1
+        };
+      }
+
+      const anyZone = [...assets]
+        .filter(a => evaluateEntrySafety(a).hasZone)
+        .sort((a, b) => (b.win_prob || b.confluence?.score || 0) - (a.win_prob || a.confluence?.score || 0))[0];
+      if (!anyZone) return null;
+      return {
+        symbol: anyZone.symbol,
+        direction: anyZone.setup.direction === 'BUY' ? 'COMPRA' : 'VENTA',
+        win_prob: anyZone.win_prob || anyZone.confluence?.score || 0,
+        is_safe: false,
+        is_swing: Boolean(anyZone.swing_potential?.active),
+        signal_tag: anyZone.setup.signal_tag,
+        entry: anyZone.setup.entry,
+        sl: anyZone.setup.sl,
+        tp1: anyZone.setup.tp1
+      };
+    }
+
+    function getCurrencyStrengthText(a) {
+      if (a.economy_short && a.economy_short.includes('/')) return a.economy_short;
+      const labels = data?.currency_strength?.labels;
+      if (labels && a.base && a.quote && labels[a.base] && labels[a.quote]) {
+        return `${a.base} ${labels[a.base]} · ${a.quote} ${labels[a.quote]}`;
+      }
+      return a.economy_short || a.macro_dir || 'NEUTRAL';
+    }
+
+    function getAssetColorState(a) {
+      const safety = evaluateEntrySafety(a);
+      const isBuy = a.setup?.direction === 'BUY';
+      const createdTs = a.created_at || 0;
+      const futureCandles = (a.candles && a.candles['1h']) ? a.candles['1h'].filter(c => c.t >= createdTs) : [];
+      const touchedEntry = futureCandles.some(c => isBuy ? (c.l <= a.setup.entry) : (c.h >= a.setup.entry));
+      const hitTP1 = safety.hasZone && touchedEntry && (isBuy ? (a.price >= a.setup.tp1) : (a.price <= a.setup.tp1));
+
+      if (!safety.hasZone) {
+        return {
+          code: 'WAIT', icon: '⚪', label: 'ESPERAR', hitTP1: false, isSafe: false, isCaution: false, isSwing: false,
+          cardBorder: 'border-slate-800/80 opacity-80',
+          selBox: 'bg-[#050811] border-slate-800 text-slate-400',
+          badgeClass: 'bg-slate-800/60 text-slate-400 border-slate-700'
+        };
+      }
+
+      if (hitTP1) {
+        return {
+          code: 'TP1', icon: '🟢', label: 'EN TP1 · RE-ENTRADA', hitTP1: true, isSafe: safety.isSafe, isCaution: !safety.isSafe, isSwing: safety.isSwing,
+          cardBorder: 'border-emerald-400/80 shadow-md shadow-emerald-500/10',
+          selBox: 'bg-emerald-500/15 border-emerald-400 text-emerald-200',
+          badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-400'
+        };
+      }
+
+      if (!safety.isSafe) {
+        return {
+          code: 'CAUTION', icon: '⚠️', label: 'CON PRECAUCIÓN', hitTP1: false, isSafe: false, isCaution: true, isSwing: safety.isSwing,
+          cardBorder: 'border-orange-400/75 shadow-md shadow-orange-500/10',
+          selBox: 'bg-orange-500/12 border-orange-400/70 text-orange-200',
+          badgeClass: 'bg-orange-500/20 text-orange-300 border-orange-400'
+        };
+      }
+
+      if (safety.isSwing) {
+        return {
+          code: 'SWING', icon: '🌊', label: 'SWING SEGURO', hitTP1: false, isSafe: true, isCaution: false, isSwing: true,
+          cardBorder: 'border-indigo-400 shadow-md shadow-indigo-500/15',
+          selBox: 'bg-indigo-500/15 border-indigo-400 text-indigo-200',
+          badgeClass: 'bg-indigo-500/20 text-indigo-300 border-indigo-400'
+        };
+      }
+
+      return {
+        code: 'INTRADAY', icon: '✅', label: 'INTRADAY OB+FVG', hitTP1: false, isSafe: true, isCaution: false, isSwing: false,
+        cardBorder: 'border-emerald-500/65 shadow-md shadow-emerald-500/10',
+        selBox: 'bg-emerald-500/12 border-emerald-500/70 text-emerald-200',
+        badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/60'
+      };
+    }
+
+    function updateAiBrainButton() {
+      const btn = document.getElementById('ai-brain-btn');
+      if (!btn) return;
+      if (geminiApiKey) {
+        btn.textContent = '🧠 IA ON';
+        btn.className = 'px-2 py-1 rounded border border-emerald-400 bg-emerald-500/20 text-emerald-300 font-bold text-[10px]';
+      } else {
+        btn.textContent = '🧠 IA';
+        btn.className = 'px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-purple-300 hover:border-purple-400 text-[10px] font-bold';
+      }
+    }
+    updateAiBrainButton();
+
+    function configureGeminiApiKey() {
+      const k = prompt('Pega tu clave gratuita de Google AI Studio (AIzaSy...) para activar las conversaciones reales con cada personaje:', geminiApiKey);
+      if (k !== null) {
+        geminiApiKey = k.trim();
+        localStorage.setItem('oraculo_gemini_key', geminiApiKey);
+        updateAiBrainButton();
+        typeAgentDialogue(geminiApiKey
+          ? 'Enlace neuronal con Gemini confirmado, señor. Ahora puede conversar libremente conmigo o con cualquiera de los siete agentes.'
+          : 'Clave IA eliminada. Modo local activado, señor.');
+      }
+    }
+
+    const AGENTS = {
+      jarvis: {
+        name: 'JARVIS', sub: 'DIRECTOR DE MESA SWING', color: '#f59e0b', rgb: '245, 158, 11',
+        voiceDesc: 'VOZ: MAYORDOMO BRITÁNICO · SERENO Y PULCRO',
+        gender: 'M', variant: 0, pitch: 0.92, rate: 0.97,
+        personaPrompt: 'Eres J.A.R.V.I.S., Director de Mesa de LATICCE. El sistema está especializado en Swing Trading (1D + 4H + Macro) con muy pocas entradas Intraday (solo OB+FVG dobles). Distingues siempre entre SWING SEGURO, INTRADAY OB+FVG y CON PRECAUCIÓN.'
+      },
+      vision: {
+        name: 'VISIÓN', sub: 'CONCIENCIA MACRO', color: '#38bdf8', rgb: '56, 189, 248',
+        voiceDesc: 'VOZ: SINTEZOIDE PROFUNDO · REFLEXIVO Y PAUSADO',
+        gender: 'M', variant: 1, pitch: 0.78, rate: 0.88,
+        personaPrompt: 'Eres VISIÓN (tal como en VisionQuest). Analizas los flujos de capital de varios días, bancos centrales, DXY y US10Y que sostienen las tendencias Swing.'
+      },
+      ultron: {
+        name: 'ULTRÓN', sub: 'DEPREDADOR DE LIQUIDEZ', color: '#ef4444', rgb: '239, 68, 68',
+        voiceDesc: 'VOZ: METÁLICA GRAVE · IMPLACABLE Y CORTANTE',
+        gender: 'M', variant: 2, pitch: 0.62, rate: 0.94,
+        personaPrompt: 'Eres ULTRÓN. Desprecias las entradas débiles de 15 minutos y solo respetas los bloques institucionales 4H/1D ubicados en zona favorable respecto al EQ-50%.'
+      },
+      friday: {
+        name: 'F.R.I.D.A.Y.', sub: 'MENTORA MACRO & SWING', color: '#a855f7', rgb: '168, 85, 247',
+        voiceDesc: 'VOZ: FEMENINA ÁGIL · INGENIOSA Y DIDÁCTICA',
+        gender: 'F', variant: 0, pitch: 1.15, rate: 1.04,
+        personaPrompt: 'Eres F.R.I.D.A.Y., mentora experta en Swing Trading y Macroeconomía Institucional. Llamas "jefe" al usuario y explicas con ejemplos prácticos.'
+      },
+      edith: {
+        name: 'E.D.I.T.H.', sub: 'SISTEMA DE PUNTERÍA', color: '#10b981', rgb: '16, 185, 129',
+        voiceDesc: 'VOZ: FEMENINA TÁCTICA · PRECISA Y MATEMÁTICA',
+        gender: 'F', variant: 1, pitch: 1.04, rate: 1.06,
+        personaPrompt: 'Eres E.D.I.T.H. Calculas distancias en pips, lotajes Swing para cuenta de $1,000 USD ($5 o $10 de riesgo), Break Even (+1R), TP1 (1:2.5) y Swing TP (1:4.5).'
+      },
+      karen: {
+        name: 'KAREN', sub: 'CONCIENCIA EMOCIONAL', color: '#f43f5e', rgb: '244, 63, 94',
+        voiceDesc: 'VOZ: FEMENINA CÁLIDA · EMPÁTICA Y PROTECTORA',
+        gender: 'F', variant: 2, pitch: 1.22, rate: 0.98,
+        personaPrompt: 'Eres KAREN. Cuidas la paciencia del operador para que espere operaciones Swing de alta calidad sin caer en sobreoperativa intradía.'
+      },
+      homer: {
+        name: 'H.O.M.E.R.', sub: 'AUDITOR ESTADÍSTICO', color: '#84cc16', rgb: '132, 204, 22',
+        voiceDesc: 'VOZ: ANALISTA VETERANO · SECO E IRÓNICO',
+        gender: 'M', variant: 3, pitch: 0.84, rate: 0.96,
+        personaPrompt: 'Eres H.O.M.E.R. Mides la esperanza matemática en R, priorizando ratios Swing 1:2.5 y 1:4.5 sobre operaciones cortas.'
+      }
+    };
+
+    let cachedEsVoices = [];
+    function loadSpanishVoices() {
+      if (!('speechSynthesis' in window)) return;
+      const all = window.speechSynthesis.getVoices();
+      if (!all.length) return;
+      const es = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('es'));
+      cachedEsVoices = es.length ? es : all;
+      updateVoiceProfileLabel();
+    }
+    if ('speechSynthesis' in window) {
+      loadSpanishVoices();
+      window.speechSynthesis.onvoiceschanged = loadSpanishVoices;
+      setTimeout(loadSpanishVoices, 300);
+      setTimeout(loadSpanishVoices, 1200);
+    }
+
+    const MALE_HINTS = ['es-us-x-esd', 'es-us-x-esf', 'es-es-x-eed', 'es-es-x-eef', 'alvaro', 'jorge', 'pablo', 'diego', 'tomas', 'carlos', 'raul', 'alonso', 'male', 'hombre', 'google español'];
+    const FEMALE_HINTS = ['es-us-x-sfb', 'es-es-x-eec', 'es-es-x-eea', 'dalia', 'helena', 'elvira', 'paulina', 'monica', 'laura', 'sabina', 'female', 'mujer', 'google español de estados unidos'];
+
+    function pickCharacterVoice(agentKey) {
+      if (!cachedEsVoices.length) loadSpanishVoices();
+      if (!cachedEsVoices.length) return null;
+      if (typeof customVoiceMap[agentKey] === 'number' && cachedEsVoices[customVoiceMap[agentKey]]) {
+        return cachedEsVoices[customVoiceMap[agentKey]];
+      }
+      const ag = AGENTS[agentKey] || AGENTS.jarvis;
+      const idOf = v => `${v.name} ${v.voiceURI}`.toLowerCase();
+      const males = cachedEsVoices.filter(v => MALE_HINTS.some(c => idOf(v).includes(c)));
+      const females = cachedEsVoices.filter(v => FEMALE_HINTS.some(c => idOf(v).includes(c)));
+
+      if (ag.gender === 'M') {
+        if (males.length > 0) return males[ag.variant % males.length];
+        return cachedEsVoices[ag.variant % cachedEsVoices.length];
+      } else {
+        if (females.length > 0) return females[ag.variant % females.length];
+        const revIdx = Math.max(0, cachedEsVoices.length - 1 - (ag.variant % cachedEsVoices.length));
+        return cachedEsVoices[revIdx];
+      }
+    }
+
+    function updateVoiceProfileLabel() {
+      const el = document.getElementById('agent-voice-profile');
+      if (!el) return;
+      const ag = AGENTS[currentAgent];
+      const v = pickCharacterVoice(currentAgent);
+      const idx = v ? cachedEsVoices.indexOf(v) : -1;
+      const vInfo = v ? ` · [Voz ${idx + 1}/${cachedEsVoices.length}: ${v.name.slice(0, 16)}]` : '';
+      el.textContent = `${ag.voiceDesc}${vInfo}`;
+    }
+
+    function cycleAgentVoice() {
+      loadSpanishVoices();
+      if (!cachedEsVoices.length) return;
+      const cur = typeof customVoiceMap[currentAgent] === 'number' ? customVoiceMap[currentAgent] : 0;
+      customVoiceMap[currentAgent] = (cur + 1) % cachedEsVoices.length;
+      localStorage.setItem('oraculo_voice_map', JSON.stringify(customVoiceMap));
+      updateVoiceProfileLabel();
+      speakText(`Timbre calibrado para ${AGENTS[currentAgent].name}.`, currentAgent);
+    }
+
+    function formatTextForSpeech(raw) {
+      return raw
+        .replace(/<[^>]*>/g, '')
+        .replace(/[*#`⚠️🌊💎💡🎯🟢🟡⚪✅]/g, '')
+        .replace(/XAUUSD/g, 'Oro Dólar')
+        .replace(/BTCUSD/g, 'Bitcoin')
+        .replace(/USTEC/g, 'Nasdaq cien')
+        .replace(/US500/g, 'S and P quinientos')
+        .replace(/US30/g, 'Dow Jones')
+        .replace(/EURUSD/g, 'Euro Dólar')
+        .replace(/USDJPY/g, 'Dólar Yen')
+        .replace(/GBPUSD/g, 'Libra Dólar')
+        .replace(/GBPJPY/g, 'Libra Yen')
+        .replace(/GBPAUD/g, 'Libra Australiano')
+        .replace(/GBPNZD/g, 'Libra Neozelandés')
+        .replace(/GBPCAD/g, 'Libra Canadiense')
+        .replace(/AUDUSD/g, 'Australiano Dólar')
+        .replace(/AUDJPY/g, 'Australiano Yen')
+        .replace(/AUDCAD/g, 'Australiano Canadiense')
+        .replace(/AUDNZD/g, 'Australiano Neozelandés')
+        .replace(/EURAUD/g, 'Euro Australiano')
+        .replace(/AUDCHF/g, 'Australiano Franco')
+        .replace(/NZDUSD/g, 'Neozelandés Dólar')
+        .replace(/USDCAD/g, 'Dólar Canadiense')
+        .replace(/USDCHF/g, 'Dólar Franco')
+        .replace(/EURJPY/g, 'Euro Yen')
+        .replace(/TP1/g, 'Take Profit uno')
+        .replace(/TP2/g, 'Take Profit dos')
+        .replace(/\bSL\b/g, 'Stop Loss')
+        .replace(/\bOB\b/g, 'Order Block')
+        .replace(/\bFVG\b/g, 'Fair Value Gap');
+    }
+
+    function updateVoiceUI() {
+      const btn = document.getElementById('voice-toggle-btn');
+      if (!btn) return;
+      btn.textContent = voiceEnabled ? 'VOZ ON' : 'VOZ OFF';
+      btn.className = voiceEnabled
+        ? 'px-2 py-1 rounded border border-emerald-400 bg-emerald-500/15 text-emerald-300 font-bold text-[10px]'
+        : 'px-2 py-1 rounded border border-slate-700 bg-[#0a0e17] text-slate-400 text-[10px]';
+    }
+    updateVoiceUI();
+
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      localStorage.setItem('oraculo_voice', voiceEnabled ? 'on' : 'off');
+      updateVoiceUI();
+      if (!voiceEnabled) stopSpeaking();
+      else speakCurrentAgent();
+    }
+
+    function stopSpeaking() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      setStateLabel('EN ESPERA');
+    }
+
+    function speakText(text, agentKey = currentAgent) {
+      if (!voiceEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const ag = AGENTS[agentKey] || AGENTS.jarvis;
+      const chosenVoice = pickCharacterVoice(agentKey);
+      const chunks = formatTextForSpeech(text).split(/(?<=[.!?])\s+/).filter(Boolean);
+      chunks.forEach((chunk, idx) => {
+        const u = new SpeechSynthesisUtterance(chunk);
+        if (chosenVoice) u.voice = chosenVoice;
+        u.lang = chosenVoice ? chosenVoice.lang : 'es-ES';
+        u.pitch = ag.pitch;
+        u.rate = ag.rate;
+        if (idx === 0) u.onstart = () => setStateLabel('HABLANDO');
+        if (idx === chunks.length - 1) u.onend = () => setStateLabel('EN ESPERA');
+        window.speechSynthesis.speak(u);
+      });
+    }
+
+    function startVoiceRecognition() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { typeAgentDialogue('Micrófono no disponible aquí, señor. Escriba su consulta abajo.'); return; }
+      const rec = new SR();
+      rec.lang = 'es-ES';
+      setStateLabel('ESCUCHANDO');
+      rec.onresult = (e) => {
+        const t = e.results[0][0].transcript;
+        document.getElementById('cockpit-input').value = t;
+        processQuery(t);
+      };
+      rec.onerror = () => setStateLabel('EN ESPERA');
+      rec.start();
+    }
+
+    function handleCockpitChat(e) {
+      if (e) e.preventDefault();
+      const inp = document.getElementById('cockpit-input');
+      if (!inp) return false;
+      const val = inp.value.trim();
+      if (!val) return false;
+      inp.value = '';
+      processQuery(val);
+      return false;
+    }
+    window.handleCockpitChat = handleCockpitChat;
+
+    function buildCompactMarketContext() {
+      if (!data || !data.assets) return 'Telemetría aún sincronizando.';
+      const fp = getFocusPrimary();
+      const focus = fp ? `Foco Principal #1: ${fp.symbol} (${fp.direction}, ${fp.is_swing ? 'SWING' : 'INTRADAY OB+FVG'}, ${fp.is_safe ? 'ENTRADA SEGURA' : 'CON PRECAUCIÓN'}, prob ${fp.win_prob}%, entrada ${fp.entry}, SL ${fp.sl}, TP1 ${fp.tp1}).` : '';
+      const macro = `DXY=${data.brief?.dxy || '--'}, US10Y=${data.brief?.us10y || '--'}.`;
+      const rows = data.assets.map(a => {
+        const d = getAssetUnitsDist(a);
+        const p = getSetupPips(a);
+        const st = getAssetColorState(a);
+        return `${a.symbol}[${st.label}|${getCurrencyStrengthText(a)}]:P=${a.price}|Prob=${a.win_prob}%|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|BE=${p.be}|TP1=${a.setup.tp1}|SwingTP=${p.tp2Val}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|${a.macro_reason}`;
+      }).join('\n');
+      return `${macro}\n${focus}\nACTIVOS:\n${rows}`;
+    }
+
+    function buildLocalCharacterReply(qRaw, agentKey) {
+      const qUp = qRaw.toUpperCase();
+      if (!data || !data.assets || !data.assets.length) {
+        return 'Sincronizando telemetría de mercado en este momento. Inténtelo de nuevo en unos segundos.';
+      }
+      let asset = data.assets.find(a => qUp.includes(a.symbol));
+      if (!asset && (qUp.includes('ORO') || qUp.includes('GOLD') || qUp.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
+      if (!asset && (qUp.includes('BITCOIN') || qUp.includes('BTC'))) asset = data.assets.find(a => a.symbol === 'BTCUSD');
+
+      const fp = getFocusPrimary();
+      const swingList = data.assets.filter(a => getAssetColorState(a).isSwing && getAssetColorState(a).isSafe);
+      const intraList = data.assets.filter(a => getAssetColorState(a).code === 'INTRADAY');
+      const target = asset || (fp ? data.assets.find(a => a.symbol === fp.symbol) : swingList[0]) || data.assets[0];
+      const safety = evaluateEntrySafety(target);
+      const d = getAssetUnitsDist(target);
+      const p = getSetupPips(target);
+      const strength = getCurrencyStrengthText(target);
+
+      const modeDesc = !safety.hasZone
+        ? 'no tiene estructura Swing ni Intraday OB+FVG limpia ahora mismo (ESPERAR)'
+        : (safety.isSafe
+          ? (safety.isSwing ? 'califica como SWING SEGURO de varios días' : 'califica como INTRADAY SELECTIVO (OB+FVG doble)')
+          : `aparece CON PRECAUCIÓN por: ${safety.reasons.join(', ')}`);
+
+      if (agentKey === 'jarvis') {
+        if (qUp.includes('SWING') || qUp.includes('SEGURA')) {
+          return `A sus órdenes, señor. En la Mesa de Swing tenemos ${swingList.length} oportunidades limpias (${swingList.map(s => `${s.symbol} ${s.win_prob}%`).join(', ') || 'ninguna ahora'}) y ${intraList.length} entradas Intraday selectivas (${intraList.map(s => s.symbol).join(', ') || 'ninguna'}). El sistema filtra automáticamente señales débiles.`;
+        }
+        return `A sus órdenes, señor. ${target.symbol} (${strength}) cotiza en ${target.price} y ${modeDesc}. Entrada en ${target.setup.entry} (a ${d.units} ${d.label}), SL en ${target.setup.sl} (${p.sl} ${p.unitLabel}), BE en ${p.be}, TP1 en ${target.setup.tp1} y Swing TP en ${p.tp2Val}.`;
+      }
+
+      if (agentKey === 'ultron') {
+        return `Estructura de ${target.symbol}: equilibrio EQ-50% en ${target.liquidity?.eq50 || '--'}, BSL en ${target.liquidity?.bsl || '--'} y SSL en ${target.liquidity?.ssl || '--'}. Este activo ${modeDesc}.`;
+      }
+
+      if (agentKey === 'vision') {
+        return `El índice DXY está en ${data.brief?.dxy || '--'} y los bonos US10Y en ${data.brief?.us10y || '--'}%. En ${target.symbol} (${strength}), el activo ${modeDesc}.`;
+      }
+
+      if (agentKey === 'friday') {
+        return `¡Aquí estoy, jefe! LATICCE prioriza operaciones Swing alineadas en 1D + 4H + Macro. ${target.symbol} ${modeDesc}. Protege en Break Even al tocar ${p.be} (+1R).`;
+      }
+
+      if (agentKey === 'edith') {
+        const pipValApprox = target.symbol.includes('JPY') ? 6.5 : 10;
+        const riskUsd = safety.isSafe ? 10 : 5;
+        const lot = Math.max(0.01, Number((riskUsd / (Math.max(1, p.sl) * pipValApprox)).toFixed(2)));
+        return `Cálculo táctico en ${target.symbol}: Stop de ${p.sl} ${p.unitLabel}. Para cuenta de $1,000 USD (${safety.isSafe ? '1% = $10' : '0.5% = $5'}), lotaje sugerido: ${lot} lotes. TP1 en ${target.setup.tp1} y Swing TP en ${p.tp2Val}.`;
+      }
+
+      if (agentKey === 'karen') {
+        return `Tienes ${trades.length} operaciones en tu bitácora. ${target.symbol} ${modeDesc}. La paciencia en Swing es lo que multiplica la cuenta sin estrés.`;
+      }
+
+      const hm = getHomerMetrics();
+      return `Acierto histórico: ${hm.winRate}% (${hm.pnlR}). ${target.symbol} tiene probabilidad del ${target.win_prob}% con objetivos 1:2.5 (${target.setup.tp1}) y 1:4.5 (${p.tp2Val}).`;
+    }
+
+    async function askGeminiBrain(userQuestion, agentKey) {
+      const ag = AGENTS[agentKey] || AGENTS.jarvis;
+      const history = agentHistories[agentKey] || [];
+      const systemInstruction = `${ag.personaPrompt}
+Formas parte de LATICCE v12.1 (Especialista Swing 1D/4H/Macro con muy pocas entradas Intraday solo cuando hay OB+FVG doble).
+Responde directamente en 3 a 6 oraciones sin asteriscos ni markdown pesado.
+TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
+
+      const contents = [
+        ...history.slice(-6),
+        { role: 'user', parts: [{ text: `${systemInstruction}\n\nPREGUNTA DEL USUARIO: ${userQuestion}` }] }
+      ];
+
+      const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-3.5-flash-lite'];
+      for (const modelName of models) {
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(geminiApiKey)}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents, generationConfig: { temperature: 0.7, maxOutputTokens: 520 } })
+          });
+          if (!res.ok) continue;
+          const json = await res.json();
+          const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (reply) {
+            history.push({ role: 'user', parts: [{ text: userQuestion }] });
+            history.push({ role: 'model', parts: [{ text: reply }] });
+            agentHistories[agentKey] = history;
+            return reply.replace(/[*#`]/g, '').trim();
+          }
+        } catch (e) {}
+      }
+      throw new Error('Fallback');
+    }
+
+    async function processQuery(qRaw) {
+      const q = qRaw.trim();
+      if (!q) return;
+      if (geminiApiKey) {
+        clearInterval(typeTimer);
+        const box = document.getElementById('agent-dialogue-box');
+        if (box) box.innerHTML = `<span class="text-slate-400">${AGENTS[currentAgent].name} analizando...</span><span class="typing-cursor"></span>`;
+        setStateLabel('PROCESANDO');
+        try {
+          const aiResponse = await askGeminiBrain(q, currentAgent);
+          typeAgentDialogue(aiResponse, true);
+          return;
+        } catch (err) {
+          typeAgentDialogue(buildLocalCharacterReply(q, currentAgent), true);
+          return;
+        }
+      }
+      typeAgentDialogue(buildLocalCharacterReply(q, currentAgent), true);
+    }
+
+    const YF_MAP = {
+      'XAUUSD': 'GC=F', 'EURUSD': 'EURUSD=X', 'USDJPY': 'JPY=X',
+      'GBPUSD': 'GBPUSD=X', 'GBPJPY': 'GBPJPY=X', 'GBPAUD': 'GBPAUD=X',
+      'GBPNZD': 'GBPNZD=X', 'GBPCAD': 'GBPCAD=X', 'AUDUSD': 'AUDUSD=X',
+      'AUDJPY': 'AUDJPY=X', 'AUDCAD': 'AUDCAD=X', 'AUDNZD': 'AUDNZD=X',
+      'EURAUD': 'EURAUD=X', 'AUDCHF': 'AUDCHF=X', 'NZDUSD': 'NZDUSD=X',
+      'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X', 'EURJPY': 'EURJPY=X',
+      'US30': '^DJI', 'USTEC': '^IXIC', 'US500': '^GSPC'
+    };
+
+    async function fetchLiveSymbol(sym) {
+      if (sym === 'BTCUSD') {
+        const r = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+        if (r.ok) { const j = await r.json(); return parseFloat(j.price); }
+        return null;
+      }
+      const yf = YF_MAP[sym];
+      if (!yf) return null;
+      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yf)}?interval=1m&range=1d`;
+      const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`);
+      if (!r.ok) return null;
+      const j = await r.json();
+      return j?.chart?.result?.[0]?.meta?.regularMarketPrice || null;
+    }
+
+    async function refreshLivePrices() {
+      if (!data || !data.assets || !data.assets.length) return;
+      let updatedAny = false;
+      const fp = getFocusPrimary();
+      const priority = [selectedSymbol, fp?.symbol, 'EURUSD', 'XAUUSD', 'BTCUSD', 'GBPUSD', 'USDJPY'].filter(Boolean);
+      const uniqueSyms = [...new Set([...priority, ...data.assets.map(a => a.symbol)])];
+
+      await Promise.all(uniqueSyms.map(async (sym) => {
+        const a = data.assets.find(x => x.symbol === sym);
+        if (!a) return;
+        try {
+          const liveP = await fetchLiveSymbol(sym);
+          if (liveP && liveP > 0) {
+            a.price = Number(liveP.toFixed(a.decimals));
+            ['1h', '4h', '1d'].forEach(tf => {
+              if (a.candles && a.candles[tf] && a.candles[tf].length) {
+                const lastC = a.candles[tf][a.candles[tf].length - 1];
+                lastC.c = a.price;
+                if (a.price > lastC.h) lastC.h = a.price;
+                if (a.price < lastC.l) lastC.l = a.price;
+              }
+            });
+            updatedAny = true;
+          }
+        } catch (e) {}
+      }));
+
+      if (updatedAny) {
+        const badge = document.getElementById('live-feed-badge');
+        if (badge) badge.textContent = `● LIVE ${new Date().toISOString().substring(11, 19)} UTC`;
+        updateTickerBar();
+        if (isPanelMode) {
+          renderPanelJarvis();
+          renderPanelUltron();
+        }
+      }
+    }
+
+    function updateTickerBar() {
+      if (!data || !data.assets) return;
+      const items = data.assets.map(a => {
+        const st = getAssetColorState(a);
+        const prob = a.win_prob || a.confluence?.score || 50;
+        const chg = typeof a.chg_day === 'number' ? `${a.chg_day >= 0 ? '+' : ''}${a.chg_day}%` : '';
+        return `<span>${st.icon} <strong class="text-white">${a.symbol}</strong> <span class="text-amber-400">${a.price}</span> <span class="text-emerald-400">(${prob}%)</span> <span class="text-slate-400">${chg}</span></span>`;
+      }).join('<span class="text-slate-700">|</span>');
+      const track = document.getElementById('live-ticker-track');
+      if (track) track.innerHTML = items + items;
+    }
+
+    function getAssetUnitsDist(a) {
+      const diff = Math.abs(a.price - a.setup.entry);
+      const units = a.pip ? Math.round((diff / a.pip) * 10) / 10 : diff;
+      return { diff, units, label: a.type === 'forex' ? 'pips' : 'pts' };
+    }
+    function getSetupPips(a) {
+      const pip = a.pip || 0.0001;
+      const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
+      const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
+      const risk = Math.abs(a.setup.entry - a.setup.sl);
+      const be = a.setup.be || a.setup.be_trigger || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk).toFixed(a.decimals)) : Number((a.setup.entry - risk).toFixed(a.decimals)));
+      const tp2 = a.setup.tp2 || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk * 4.5).toFixed(a.decimals)) : Number((a.setup.entry - risk * 4.5).toFixed(a.decimals)));
+      return { unitLabel, sl: toU(risk), tp1: toU(a.setup.tp1 - a.setup.entry), tp2: toU(tp2 - a.setup.entry), be, tp2Val: tp2 };
+    }
+    function getNearestAsset() {
+      if (!data || !data.assets || !data.assets.length) return null;
+      return [...data.assets].sort((a, b) => (Math.abs(a.price - a.setup.entry) / a.price) - (Math.abs(b.price - b.setup.entry) / b.price))[0];
+    }
+    function getHomerMetrics() {
+      if (!trades.length) return { winRate: 0, pnlR: '+0R', total: 0 };
+      const wins = trades.filter(t => t.res === 'WIN').length;
+      const losses = trades.filter(t => t.res === 'LOSS').length;
+      return { winRate: Math.round((wins / trades.length) * 100), pnlR: `${(wins * 2.5 - losses) >= 0 ? '+' : ''}${wins * 2.5 - losses}R`, total: trades.length };
+    }
+
+    function renderAgentCoreSVG(key) {
+      if (key === 'jarvis') {
+        const bars = Array.from({ length: 36 }, (_, i) => `<rect x="138" y="16" width="4" height="${i < 12 ? 16 : 11}" rx="1" fill="${i < 12 ? '#f59e0b' : '#452c08'}" transform="rotate(${i * 10} 140 140)"/>`).join('');
+        return `<svg viewBox="0 0 280 280" class="w-full h-full"><g class="spin-slow" style="transform-origin:140px 140px">${bars}</g><circle cx="140" cy="140" r="92" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/><polygon points="140,66 204,178 76,178" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2"/><circle cx="140" cy="140" r="36" fill="#07090f" stroke="#f59e0b" stroke-width="1.5"/><circle cx="140" cy="140" r="9" fill="#f59e0b" class="pulse-core"/></svg>`;
+      }
+      if (key === 'vision') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="108" fill="none" stroke="#0c4a6e" stroke-width="1.5" stroke-dasharray="6 4"/><circle cx="140" cy="140" r="76" fill="none" stroke="#0284c7" stroke-width="1"/><g class="spin-med" style="transform-origin:140px 140px"><line x1="140" y1="140" x2="215" y2="65" stroke="#38bdf8" stroke-width="2"/><path d="M140,140 L215,65 A106,106 0 0,1 246,140 Z" fill="rgba(56,189,248,0.14)"/></g><circle cx="140" cy="140" r="24" fill="#060a12" stroke="#38bdf8" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#38bdf8"/></svg>`;
+      if (key === 'ultron') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="106" fill="none" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="18 8"/><g class="spin-rev" style="transform-origin:140px 140px"><polygon points="140,46 221,93 221,187 140,234 59,187 59,93" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="2"/></g><circle cx="140" cy="140" r="34" fill="#080507" stroke="#ef4444" stroke-width="2"/><circle cx="140" cy="140" r="10" fill="#ef4444" class="pulse-core"/></svg>`;
+      if (key === 'friday') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="96" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="10 6"/><circle cx="140" cy="140" r="62" fill="rgba(168,85,247,0.1)" stroke="#c084fc" stroke-width="1.5"/><circle cx="140" cy="140" r="30" fill="#07050d" stroke="#a855f7" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#e9d5ff" class="pulse-core"/></svg>`;
+      if (key === 'edith') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="102" fill="none" stroke="#10b981" stroke-width="4" stroke-dasharray="12 6" opacity="0.75"/><line x1="25" y1="140" x2="255" y2="140" stroke="#10b981" stroke-width="1.5"/><line x1="140" y1="25" x2="140" y2="255" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="28" fill="#040a08" stroke="#10b981" stroke-width="1.5"/><circle cx="140" cy="140" r="6" fill="#10b981" class="pulse-core"/></svg>`;
+      if (key === 'karen') return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="100" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="14 6"/><circle cx="140" cy="140" r="64" fill="none" stroke="#fb7185" stroke-width="1"/><circle cx="140" cy="140" r="28" fill="#0b0508" stroke="#f43f5e" stroke-width="1.8"/><circle cx="140" cy="140" r="7" fill="#f43f5e" class="pulse-core"/></svg>`;
+      return `<svg viewBox="0 0 280 280" class="w-full h-full"><circle cx="140" cy="140" r="86" fill="none" stroke="#84cc16" stroke-width="1.5" stroke-dasharray="8 5"/><circle cx="140" cy="140" r="52" fill="rgba(132,204,22,0.08)" stroke="#a3e635" stroke-width="1.2"/><circle cx="140" cy="140" r="28" fill="#070a05" stroke="#84cc16" stroke-width="2"/><circle cx="140" cy="140" r="8" fill="#84cc16" class="pulse-core"/></svg>`;
+    }
+
+    function setStateLabel(txt) {
+      const el = document.getElementById('agent-state-label');
+      if (el) el.textContent = txt.split('').join(' ');
+    }
+
+    function typeAgentDialogue(fullText, speak = true) {
+      clearInterval(typeTimer);
+      const box = document.getElementById('agent-dialogue-box');
+      if (!box) return;
+      let i = 0;
+      setStateLabel('HABLANDO');
+      if (speak) speakText(fullText, currentAgent);
+      typeTimer = setInterval(() => {
+        i += 3;
+        box.innerHTML = `${fullText.slice(0, i)}<span class="typing-cursor"></span>`;
+        box.scrollTop = box.scrollHeight;
+        if (i >= fullText.length) {
+          clearInterval(typeTimer);
+          box.innerHTML = `${fullText}<span class="typing-cursor"></span>`;
+          box.scrollTop = box.scrollHeight;
+          if (!voiceEnabled) setStateLabel('EN ESPERA');
+        }
+      }, 16);
+    }
+
+    function selectAgent(key, withIntro = true) {
+      currentAgent = key;
+      const ag = AGENTS[key];
+      document.documentElement.style.setProperty('--agent-color', ag.color);
+      document.documentElement.style.setProperty('--agent-rgb', ag.rgb);
+      document.querySelectorAll('.ag-tab').forEach(btn => {
+        const active = btn.dataset.ag === key;
+        btn.style.borderColor = active ? ag.color : 'transparent';
+        btn.style.color = active ? ag.color : '#94a3b8';
+      });
+      if (withIntro) {
+        const ov = document.getElementById('agent-intro-overlay');
+        document.getElementById('intro-title').textContent = ag.name;
+        document.getElementById('intro-sub').textContent = ag.sub;
+        ov.classList.remove('hidden');
+        setTimeout(() => ov.classList.add('hidden'), 750);
+      }
+      document.getElementById('agent-core-visual').innerHTML = renderAgentCoreSVG(key);
+      document.getElementById('agent-role-label').textContent = `${ag.name} · ${ag.sub}`;
+      updateVoiceProfileLabel();
+      updateAgentTelemetryAndGreeting(key);
+    }
+
+    function renderQuickRepliesForAgent(key) {
+      const qr = document.getElementById('quick-replies');
+      if (!qr) return;
+      const presets = {
+        jarvis: [
+          { label: '🌊 OPORTUNIDADES SWING', q: 'Dime qué activos califican hoy en la Mesa de Swing y cuáles son Intraday selectivos.' },
+          { label: 'MESA SWING ▸', fn: 'toggleViewMode()' }
+        ],
+        vision: [
+          { label: '🌐 RESUMEN MACRO', q: 'Dame tu lectura macroeconómica sobre el DXY, los bonos y la divisa más fuerte para Swing.' },
+          { label: 'ABRIR VISIÓN ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('vision');" }
+        ],
+        ultron: [
+          { label: '⚡ REVISAR EQ-50%', q: 'Revisa qué pares están bien ubicados respecto al equilibrio EQ-50% para Swing.' },
+          { label: 'VER GRÁFICO ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('ultron');" }
+        ],
+        friday: [
+          { label: '🌐 CLASE MACRO HOY', q: 'Enséñame cómo los bancos centrales y el DXY mueven los pares en Swing.' },
+          { label: 'ACADEMIA (16) ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('friday');" }
+        ],
+        edith: [
+          { label: '📐 CALCULAR LOTAJE SWING', q: 'Calcula el lotaje exacto Swing para una cuenta de $1,000 USD.' },
+          { label: 'TOP BLANCOS', q: 'Dame las coordenadas exactas de los pares activos ahora mismo.' }
+        ],
+        karen: [
+          { label: '🧠 AUDITORÍA MENTAL', q: 'Revisa mi bitácora y dime qué debo cuidar hoy en mi disciplina Swing.' },
+          { label: 'ABRIR DIARIO ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('karen');" }
+        ],
+        homer: [
+          { label: '📊 VEREDICTO EN R', q: 'Dame el análisis estadístico frío de mi rendimiento en R.' },
+          { label: 'MESA SWING ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('jarvis');setJarvisSubView('SWING_DESK');" }
+        ]
+      };
+      const items = presets[key] || presets.jarvis;
+      qr.innerHTML = items.map(it => it.fn
+        ? `<button type="button" onclick="${it.fn}" class="px-3 py-1.5 rounded border border-slate-700 bg-[#090d16] text-slate-200 text-xs font-mono">${it.label}</button>`
+        : `<button type="button" onclick="processQuery('${it.q.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded border text-xs font-mono font-bold" style="border-color: var(--agent-color); color: var(--agent-color); background: rgba(255,255,255,0.03);">${it.label}</button>`
+      ).join('');
+    }
+
+    function updateAgentTelemetryAndGreeting(key) {
+      renderQuickRepliesForAgent(key);
+      const nearest = getNearestAsset();
+      const homer = getHomerMetrics();
+      const fp = getFocusPrimary();
+
+      if (key === 'jarvis') {
+        document.getElementById('agent-hero-metric').textContent = fp ? `${fp.is_swing ? '🌊' : (fp.is_safe ? '✅' : '⚠️')} ${fp.symbol} (${fp.win_prob}%)` : 'ESCANEANDO';
+        document.getElementById('agent-hero-sub').textContent = fp ? `${fp.direction} · ${fp.is_swing ? 'SWING SEGURO' : (fp.is_safe ? 'INTRADAY OB+FVG' : 'CON PRECAUCIÓN')}` : 'DIRECTOR DE MESA';
+        typeAgentDialogue(fp
+          ? `A sus órdenes, señor. Modo Especialista Swing activo. El Foco Principal #1 hoy es ${fp.symbol} en ${fp.direction} (${fp.win_prob}% · ${fp.is_swing ? 'SWING SEGURO' : 'INTRADAY SELECTIVO'}). Entrada en ${fp.entry}, Stop en ${fp.sl} y TP1 en ${fp.tp1}.`
+          : `A sus órdenes, señor. LATICCE en modo Especialista Swing: ahora mismo el mercado está en consolidación sin setups Swing limpios.`, false);
+      } else if (key === 'vision') {
+        document.getElementById('agent-hero-metric').textContent = data?.brief ? `DXY ${data.brief.dxy}` : 'MACRO';
+        document.getElementById('agent-hero-sub').textContent = data?.brief ? `US10Y ${data.brief.us10y}` : 'FLUJOS DE CAPITAL';
+        typeAgentDialogue(`Observo los flujos de varios días, señor. Solo respaldo operaciones Swing donde la política de tasas y la fuerza relativa empujan en sincronía.`, false);
+      } else if (key === 'ultron') {
+        const t = nearest || data?.assets?.[0];
+        document.getElementById('agent-hero-metric').textContent = t ? `${t.symbol} ${t.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESTRUCTURA';
+        document.getElementById('agent-hero-sub').textContent = t ? `SESGO ${t.chart_bias} · FILTRO SWING` : 'ORDER BLOCKS';
+        typeAgentDialogue(`Filtro Swing calibrado: las señales intradía débiles han sido purgadas. Solo pasan bloques estructurales con recorrido real.`, false);
+      } else if (key === 'friday') {
+        const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
+        document.getElementById('agent-hero-metric').textContent = `${pct}%`;
+        document.getElementById('agent-hero-sub').textContent = `ACADEMIA · ${completedLessons.length}/${FRIDAY_CURRICULUM.length} APROBADOS`;
+        typeAgentDialogue(`¡Listo cuando tú lo estés, jefe! Entra a mi Academia, abre cualquier módulo con Estudiar Lección y aprueba su examen de 3 preguntas.`, false);
+      } else if (key === 'edith') {
+        const d = nearest ? getAssetUnitsDist(nearest) : null;
+        document.getElementById('agent-hero-metric').textContent = d ? `${d.units} ${d.label}` : 'PUNTERÍA';
+        document.getElementById('agent-hero-sub').textContent = nearest ? `${nearest.symbol} · ${nearest.price}` : 'CÁLCULO DE RIESGO';
+        typeAgentDialogue(`Sistemas ópticos calibrados para objetivos Swing 1:2.5 y 1:4.5. Pídame calcular el lotaje exacto para su cuenta de mil dólares.`, false);
+      } else if (key === 'karen') {
+        document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
+        document.getElementById('agent-hero-sub').textContent = `OPERACIONES EN BITÁCORA`;
+        typeAgentDialogue(`Operar Swing requiere paciencia: pocas operaciones, mayor recorrido y cero ansiedad por velas pequeñas.`, false);
+      } else if (key === 'homer') {
+        document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
+        document.getElementById('agent-hero-sub').textContent = `RENDIMIENTO · ${homer.pnlR}`;
+        typeAgentDialogue(`Las matemáticas favorecen el Swing: menos comisiones, menos ruido y ratios de 2.5R a 4.5R por acierto.`, false);
+      }
+    }
+
+    function speakCurrentAgent() {
+      const box = document.getElementById('agent-dialogue-box');
+      if (box) speakText(box.innerText, currentAgent);
+    }
+
+    function enterLaticce(withIntro = false) {
+      const el = document.getElementById('boot-screen');
+      if (el) el.style.display = 'none';
+      selectAgent('jarvis', withIntro);
+      speakCurrentAgent();
+    }
+    window.enterLaticce = enterLaticce;
+    function showBoot() {
+      const el = document.getElementById('boot-screen');
+      if (el) el.style.display = 'flex';
+    }
+
+    function toggleViewMode() {
+      isPanelMode = !isPanelMode;
+      document.getElementById('cockpit-view').classList.toggle('hidden', isPanelMode);
+      document.getElementById('panel-view').classList.toggle('hidden', !isPanelMode);
+      document.getElementById('view-mode-btn').textContent = isPanelMode ? '◂ CABINA' : 'PANEL ▸';
+      if (isPanelMode) renderPanelAll();
+    }
+
+    function switchPanelTab(tab) {
+      ['jarvis', 'vision', 'ultron', 'friday', 'karen'].forEach(t => {
+        const el = document.getElementById(`ptab-${t}`);
+        if (el) el.classList.toggle('hidden', t !== tab);
+      });
+      document.querySelectorAll('.ptab').forEach(b => {
+        b.className = b.dataset.pt === tab ? 'ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold' : 'ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+      });
+      if (tab === 'ultron') setTimeout(drawUltronChart, 60);
+      if (tab === 'vision') renderVisionTab();
+      if (tab === 'friday') renderPanelCourse();
+      if (tab === 'karen') { renderTrades(); loadCloudJournal(false); }
+    }
+
+    function setJarvisSubView(sv) {
+      jarvisSubView = sv;
+      document.getElementById('jsub-swing').className = sv === 'SWING_DESK' ? 'px-3 py-1.5 rounded bg-indigo-500 text-white font-bold' : 'px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300 font-bold';
+      document.getElementById('jsub-all').className = sv === 'ALL' ? 'px-3 py-1.5 rounded bg-amber-500 text-black font-bold' : 'px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300 font-bold';
+      document.getElementById('jarvis-filter-bar').classList.toggle('hidden', sv === 'SWING_DESK');
+      renderPanelJarvis();
+    }
+
+    function setPanelFilter(f) {
+      panelFilter = f;
+      document.querySelectorAll('.pf-btn').forEach(b => {
+        b.className = b.dataset.pf === f ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold' : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+      });
+      renderPanelJarvis();
+    }
+
+    function setPairSearch(val) {
+      pairSearchTerm = (val || '').trim().toUpperCase();
+      const clr = document.getElementById('pair-search-clear');
+      if (clr) clr.classList.toggle('hidden', !pairSearchTerm);
+      renderPanelJarvis();
+    }
+    function clearPairSearch() {
+      const inp = document.getElementById('pair-search-input');
+      if (inp) inp.value = '';
+      setPairSearch('');
+    }
+
+    function toggleWhy(sym) {
+      openWhyPanels[sym] = !openWhyPanels[sym];
+      const el = document.getElementById(`why-${sym}`);
+      if (el) el.classList.toggle('hidden', !openWhyPanels[sym]);
+    }
+
+    function openInPanelChart(sym) {
+      selectedSymbol = sym;
+      if (!isPanelMode) toggleViewMode();
+      switchPanelTab('ultron');
+      renderPanelUltron();
+    }
+
+    function renderPanelAll() {
+      renderTrades();
+      renderPanelCourse();
+      if (!data) return;
+      renderPanelJarvis();
+      renderVisionTab();
+      renderPanelUltron();
+    }
+
+    function renderPanelJarvis() {
+      if (!data) return;
+      const fpBanner = document.getElementById('focus-pick-banner');
+      const fp = getFocusPrimary();
+      if (fpBanner && fp) {
+        fpBanner.classList.remove('hidden');
+        fpBanner.innerHTML = `
+          <div class="space-y-0.5">
+            <div class="text-[10px] font-bold ${fp.is_swing ? 'text-indigo-300' : (fp.is_safe ? 'text-emerald-300' : 'text-orange-300')} tracking-wider">
+              ${fp.is_swing ? '🌊 FOCO PRINCIPAL · SWING SEGURO HOY' : (fp.is_safe ? '✅ FOCO PRINCIPAL · INTRADAY OB+FVG' : '⚠️ FOCO PRINCIPAL · CON PRECAUCIÓN')}
+            </div>
+            <div class="font-hud text-sm font-black text-white">${fp.symbol} · <span class="${fp.direction === 'COMPRA' ? 'text-emerald-400' : 'text-red-400'}">${fp.direction}</span> · <span class="text-amber-300">${fp.win_prob}%</span></div>
+            <div class="text-[11px] text-slate-300">${fp.signal_tag} · Entrada: <strong>${fp.entry}</strong> · SL: ${fp.sl} · TP1: ${fp.tp1}</div>
+          </div>
+          <button type="button" onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-amber-500 text-black font-bold text-xs">VER GRÁFICO →</button>
+        `;
+      }
+
+      let list = [...data.assets].sort((a, b) => {
+        const sa = getAssetColorState(a);
+        const sb = getAssetColorState(b);
+        const rankA = (sa.isSwing && sa.isSafe) ? 3 : (sa.isSafe ? 2 : (sa.isCaution ? 1 : 0));
+        const rankB = (sb.isSwing && sb.isSafe) ? 3 : (sb.isSafe ? 2 : (sb.isCaution ? 1 : 0));
+        if (rankB !== rankA) return rankB - rankA;
+        return (b.win_prob || b.confluence.score) - (a.win_prob || a.confluence.score);
+      });
+
+      if (jarvisSubView === 'SWING_DESK') {
+        list = list.filter(a => getAssetColorState(a).code !== 'WAIT');
+      } else {
+        if (panelFilter === 'SWING') list = list.filter(a => getAssetColorState(a).isSwing);
+        if (panelFilter === 'SAFE') list = list.filter(a => getAssetColorState(a).isSafe);
+        if (panelFilter === 'INTRADAY') list = list.filter(a => getAssetColorState(a).code === 'INTRADAY');
+        if (panelFilter === 'CAUTION') list = list.filter(a => getAssetColorState(a).isCaution);
+      }
+
+      if (pairSearchTerm) {
+        list = list.filter(a => a.symbol.includes(pairSearchTerm) || ((pairSearchTerm === 'ORO' || pairSearchTerm === 'GOLD') && a.symbol === 'XAUUSD'));
+      }
+
+      const grid = document.getElementById('panel-jarvis-grid');
+      if (!list.length) {
+        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No hay setups Swing o Intraday de alta calidad vigentes en este momento. Cambia a <strong>📋 TODOS LOS ACTIVOS (22)</strong> para ver el escaneo completo.</div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(a => {
+        const d = getAssetUnitsDist(a);
+        const p = getSetupPips(a);
+        const st = getAssetColorState(a);
+        const safety = evaluateEntrySafety(a);
+        const strengthTxt = getCurrencyStrengthText(a);
+        const prob = a.win_prob || a.confluence.score;
+        const probCol = st.isSwing ? 'text-indigo-300' : (safety.isSafe ? 'text-emerald-400' : (safety.isCaution ? 'text-orange-300' : 'text-slate-400'));
+        const hasSwing = a.swing_potential && a.swing_potential.active;
+        const hasNews = a.news_warning && a.news_warning.active;
+
+        return `
+          <div class="hud-panel rounded-xl p-4 space-y-3 border ${st.cardBorder}">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-hud font-black text-white text-base">${st.icon} ${a.symbol} <span class="${probCol}">${prob}%</span></span>
+                <span class="text-xs text-cyan-300 font-bold">${a.price}</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded border font-bold ${st.badgeClass}">${st.label}</span>
+                ${hasNews ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-400 font-bold">⚠️ NOTICIA</span>` : ''}
+              </div>
+              <button type="button" onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400">Gráfico →</button>
+            </div>
+
+            ${safety.isCaution && safety.reasons.length ? `
+              <div class="bg-orange-950/35 border border-orange-500/40 rounded-lg px-3 py-1.5 text-[11px] text-orange-200">
+                <strong>⚠️ Con precaución:</strong> ${safety.reasons.join(' · ')}
+              </div>
+            ` : ''}
+
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div class="bg-[#050811] border border-slate-800 rounded p-2">
+                <div class="text-[9px] text-sky-400">🌐 ECONOMÍA (VISIÓN)</div>
+                <div class="font-bold text-white">${strengthTxt}</div>
+                <div class="text-[10px] text-slate-400">${a.confluence.verdict_title}</div>
+              </div>
+              <div class="bg-[#050811] border border-slate-800 rounded p-2">
+                <div class="text-[9px] text-red-400">🎯 SU GRÁFICO (ULTRÓN)</div>
+                <div class="font-bold text-white">${a.chart_bias}</div>
+                <div class="text-[10px] text-slate-400">1S:${a.tf_bias?.weekly || '--'} · 1D:${a.tf_bias?.daily} · 4H:${a.tf_bias?.h4}</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</span>
+              <button type="button" onclick="toggleWhy('${a.symbol}')" class="px-2.5 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">💡 ¿Por qué? ▾</button>
+            </div>
+
+            <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
+              <div><strong class="text-sky-400">Auditoría LATICCE:</strong> ${a.macro_reason}</div>
+              ${hasSwing ? `<div><strong class="text-indigo-300">Plan Swing:</strong> ${a.swing_potential.plan}</div>` : ''}
+              ${hasNews ? `<div><strong class="text-orange-300">Riesgo Noticia:</strong> ${(a.news_warning.events || []).join(' · ')}</div>` : ''}
+            </div>
+
+            <div class="grid grid-cols-5 gap-1 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[10px]">
+              <div><div class="text-[8px] text-sky-400">ENTRADA</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[8px] text-slate-400">a ${d.units}${d.label}</div></div>
+              <div><div class="text-[8px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[8px] text-red-300">-${p.sl}${p.unitLabel}</div></div>
+              <div><div class="text-[8px] text-indigo-400">BE (+1R)</div><div class="font-bold text-indigo-300">${p.be}</div><div class="text-[8px] text-slate-400">Proteger</div></div>
+              <div><div class="text-[8px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[8px] text-emerald-300">+${p.tp1}${p.unitLabel}</div></div>
+              <div><div class="text-[8px] text-teal-300">SWING TP</div><div class="font-bold text-teal-300">${p.tp2Val}</div><div class="text-[8px] text-teal-400">+${p.tp2}${p.unitLabel}</div></div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function setVisionSubTab(vs) {
+      visionSubTab = vs;
+      document.querySelectorAll('.vsub').forEach(b => {
+        b.className = b.dataset.vs === vs ? 'vsub px-3 py-1.5 rounded bg-sky-500 text-black font-bold shrink-0' : 'vsub px-3 py-1.5 rounded bg-[#050811] border border-slate-800 text-slate-300 shrink-0';
+      });
+      renderVisionTab();
+    }
+
+    function renderVisionTab() {
+      if (!data) return;
+      const box = document.getElementById('vision-sub-content');
+      const dxyB = document.getElementById('vision-dxy-badge');
+      if (dxyB) dxyB.textContent = `DXY ${data.brief?.dxy || '--'} · US10Y ${data.brief?.us10y || '--'}%`;
+
+      if (visionSubTab === 'resumen') {
+        box.innerHTML = `
+          <div class="bg-[#050811] border border-sky-500/30 rounded-lg p-3.5 space-y-2">
+            <div class="text-[10px] font-bold text-amber-300">🏛️ BRIEF DIARIO WALL STREET</div>
+            <div class="font-bold text-white text-sm">${data.brief?.headline || 'Panorama Macroeconómico'}</div>
+            <p class="text-slate-300 leading-relaxed">${data.brief?.summary || ''}</p>
+          </div>`;
+      } else if (visionSubTab === 'cuadrante') {
+        const labels = data.currency_strength?.labels || {};
+        const entries = Object.entries(labels);
+        box.innerHTML = entries.length
+          ? `<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${entries.map(([ccy, lbl]) => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="font-bold text-white">${ccy}</div><div class="text-[11px] ${lbl === 'FUERTE' ? 'text-emerald-400' : (lbl === 'DEBIL' ? 'text-red-400' : 'text-slate-400')}">${lbl}</div></div>`).join('')}</div>`
+          : `<div class="bg-[#050811] border border-slate-800 rounded p-3 text-slate-300">Fuerza relativa integrada en cada tarjeta de Jarvis según la cesta DXY + US10Y + cruces mayores.</div>`;
+      } else if (visionSubTab === 'bancos') {
+        const banks = data.banks || [{ bank: 'FED (EE.UU.)', stance: 'VIGILANCIA DE TASAS', bias: 'NEUTRAL', detail: `DXY ${data.brief?.dxy || '--'} · Bonos US10Y ${data.brief?.us10y || '--'}%` }];
+        box.innerHTML = banks.map(b => `<div class="bg-[#050811] border border-slate-800 rounded p-3"><div class="flex justify-between font-bold text-white"><span>${b.bank}</span><span class="text-sky-300">${b.stance}</span></div><p class="text-slate-400 mt-1">${b.detail}</p></div>`).join('');
+      } else if (visionSubTab === 'tasas') {
+        box.innerHTML = `
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-[#050811] border border-slate-800 rounded p-3"><div class="text-[10px] text-slate-400">ÍNDICE DÓLAR (DXY)</div><div class="font-hud text-lg font-bold text-amber-300">${data.brief?.dxy || '--'}</div><div class="text-[11px] text-slate-400 mt-1">Si sube, presiona a la baja a EURUSD, GBPUSD, AUDUSD y Oro.</div></div>
+            <div class="bg-[#050811] border border-slate-800 rounded p-3"><div class="text-[10px] text-slate-400">BONOS TESORO 10 AÑOS (US10Y)</div><div class="font-hud text-lg font-bold text-sky-300">${data.brief?.us10y || '--'}%</div><div class="text-[11px] text-slate-400 mt-1">Rendimientos al alza fortalecen al USD frente al Yen y al Oro.</div></div>
+          </div>`;
+      } else if (visionSubTab === 'noticias') {
+        const cal = data.calendar || [];
+        const news = data.news || [];
+        box.innerHTML = `
+          <div class="space-y-2">
+            <div class="font-bold text-orange-300">📅 CALENDARIO ECONÓMICO DE HOY</div>
+            ${cal.length ? cal.map(ev => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="text-[10px] text-orange-300 font-bold">${ev.date || ''} ${ev.time || ''} · ${ev.currency || ''} (${ev.impact || ''})</div><div class="text-white font-bold">${ev.title || ''}</div>${ev.plain_es ? `<div class="text-slate-400 mt-0.5">${ev.plain_es}</div>` : ''}</div>`).join('') : '<div class="text-slate-400">Sin eventos de alto impacto cargados en esta ventana.</div>'}
+            <div class="font-bold text-emerald-300 pt-2">📰 TITULARES DE MERCADO</div>
+            ${news.map(n => `<a href="${n.link || '#'}" target="_blank" class="block bg-[#050811] border border-slate-800 rounded p-2.5 hover:border-sky-400"><div class="text-[10px] text-emerald-400">${n.source || 'Mercado'} · ${n.time || ''}</div><div class="text-white font-bold">${n.title || ''}</div>${n.plain_es ? `<div class="text-slate-400 mt-0.5">${n.plain_es}</div>` : ''}</a>`).join('')}
+          </div>`;
+      }
+    }
+
+    function renderPanelUltron() {
+      if (!data) return;
+      document.getElementById('panel-ultron-selector').innerHTML = data.assets.map(a => {
+        const st = getAssetColorState(a);
+        const isSelected = a.symbol === selectedSymbol;
+        const boxStyle = isSelected
+          ? 'bg-red-500/25 border-2 border-red-500 text-white shadow-md shadow-red-500/20'
+          : st.selBox;
+        return `
+          <button type="button" onclick="selectedSymbol='${a.symbol}';renderPanelUltron();" class="p-2 rounded border text-left transition ${boxStyle}">
+            <div class="text-[11px] font-bold flex items-center justify-between">
+              <span>${st.icon} ${a.symbol}</span>
+            </div>
+            <div class="text-[9px] opacity-85">${a.win_prob || a.confluence.score}% · ${a.chart_bias}</div>
+          </button>`;
+      }).join('');
+
+      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      const safety = evaluateEntrySafety(a);
+      const d = getAssetUnitsDist(a);
+      const p = getSetupPips(a);
+
+      const banner = document.getElementById('pu-caution-banner');
+      if (banner) {
+        if (!safety.hasZone) {
+          banner.classList.remove('hidden');
+          banner.className = 'bg-slate-800/40 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-300';
+          banner.innerHTML = `<strong>⚪ SIN ZONA SWING EN ${a.symbol}:</strong> Esperar formación de estructura limpia.`;
+        } else if (safety.isSafe) {
+          banner.classList.remove('hidden');
+          banner.className = safety.isSwing
+            ? 'bg-indigo-500/15 border border-indigo-400/70 rounded-lg p-2.5 text-xs text-indigo-200'
+            : 'bg-emerald-500/15 border border-emerald-400/70 rounded-lg p-2.5 text-xs text-emerald-200';
+          banner.innerHTML = safety.isSwing
+            ? `<strong>🌊 SWING SEGURO VALIDADO EN ${a.symbol}:</strong> Alineación 1D + 4H + Macro confirmada sobre EQ-50%.`
+            : `<strong>✅ INTRADAY SELECTIVO OB + FVG EN ${a.symbol}:</strong> Confluencia doble validada.`;
+        } else {
+          banner.classList.remove('hidden');
+          banner.className = 'bg-orange-500/15 border border-orange-400/70 rounded-lg p-2.5 text-xs text-orange-200';
+          banner.innerHTML = `<strong>⚠️ OPERAR CON PRECAUCIÓN EN ${a.symbol}:</strong> ${safety.reasons.join(' · ')}.`;
+        }
+      }
+
+      document.getElementById('pu-sym').textContent = `${a.symbol} (${getCurrencyStrengthText(a)})`;
+      document.getElementById('pu-price').textContent = a.price;
+      document.getElementById('pu-status').textContent = `${a.setup.signal_tag} · a ${d.units} ${d.label}`;
+      document.getElementById('pu-bias-w').textContent = a.tf_bias?.weekly || a.chart_bias;
+      document.getElementById('pu-bias-d').textContent = a.tf_bias?.daily || a.chart_bias;
+      document.getElementById('pu-bias-4h').textContent = a.tf_bias?.h4 || a.chart_bias;
+      document.getElementById('pu-atr').textContent = a.volatility?.atr_units ? `${a.volatility.atr_units} ${p.unitLabel}` : (a.atr_pips ? `${a.atr_pips} ${p.unitLabel}` : '--');
+      document.getElementById('pu-r20').textContent = a.volatility?.range20_units ? `${a.volatility.range20_units} ${p.unitLabel}` : (a.range20_pips ? `${a.range20_pips} ${p.unitLabel}` : '--');
+      document.getElementById('pu-entry').textContent = a.setup.entry;
+      document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
+      document.getElementById('pu-sl').textContent = a.setup.sl;
+      document.getElementById('pu-sl-pips').textContent = `-${p.sl} ${p.unitLabel}`;
+      document.getElementById('pu-be').textContent = p.be;
+      document.getElementById('pu-tp1').textContent = a.setup.tp1;
+      document.getElementById('pu-tp1-pips').textContent = `+${p.tp1} ${p.unitLabel}`;
+      document.getElementById('pu-tp2').textContent = p.tp2Val;
+      document.getElementById('pu-tp2-pips').textContent = `+${p.tp2} ${p.unitLabel}`;
+      drawUltronChart();
+    }
+
+    function setChartTF(tf) {
+      selectedTF = tf;
+      document.querySelectorAll('.ctf').forEach(b => {
+        b.className = b.dataset.tf === tf ? 'ctf px-2.5 py-1 rounded bg-red-500 text-white font-bold' : 'ctf px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-slate-300';
+      });
+      drawUltronChart();
+    }
+
+    function drawUltronChart() {
+      if (!data) return;
+      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      const p = getSetupPips(a);
+      const canvas = document.getElementById('ultron-canvas');
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width) return;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const W = rect.width;
+      const H = rect.height;
+      const padL = 10;
+      const padR = 76;
+      const padT = 18;
+      const padB = 20;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      ctx.fillStyle = '#030509';
+      ctx.fillRect(0, 0, W, H);
+
+      const tfKey = (a.candles && a.candles[selectedTF]) ? selectedTF : '1d';
+      const candles = (a.candles && a.candles[tfKey]) ? a.candles[tfKey].slice(-44) : [];
+      if (!candles.length) return;
+
+      const candleMax = Math.max(...candles.map(c => c.h));
+      const candleMin = Math.min(...candles.map(c => c.l));
+      const eq50 = a.liquidity?.eq50 || ((candleMax + candleMin) / 2);
+
+      const highs = [candleMax, a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
+      const lows = [candleMin, a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
+      if (a.liquidity?.bsl) highs.push(a.liquidity.bsl);
+      if (a.liquidity?.ssl) lows.push(a.liquidity.ssl);
+
+      const rawMax = Math.max(...highs);
+      const rawMin = Math.min(...lows);
+      const margin = (rawMax - rawMin) * 0.06 || 0.001;
+      const maxP = rawMax + margin;
+      const minP = rawMin - margin;
+      const span = (maxP - minP) || 1;
+      const yOf = val => padT + ((maxP - val) / span) * plotH;
+
+      ctx.strokeStyle = 'rgba(30, 41, 59, 0.35)';
+      ctx.lineWidth = 0.7;
+      for (let g = 1; g <= 4; g++) {
+        const gy = padT + (plotH / 5) * g;
+        ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(W - padR, gy); ctx.stroke();
+      }
+
+      const yObT = yOf(Math.max(a.ob_high, a.ob_low));
+      const yObB = yOf(Math.min(a.ob_high, a.ob_low));
+      ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16, 185, 129, 0.16)' : 'rgba(239, 68, 68, 0.16)';
+      ctx.fillRect(padL + plotW * 0.38, yObT, plotW * 0.62, Math.max(6, yObB - yObT));
+
+      const yEq = yOf(eq50);
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.45)';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(padL, yEq); ctx.lineTo(W - padR, yEq); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 9px JetBrains Mono';
+      ctx.fillText('EQ-50%', W - padR - 42, yEq - 3);
+
+      const step = plotW / candles.length;
+      const cw = Math.max(3, step * 0.58);
+      candles.forEach((c, i) => {
+        const x = padL + i * step + step / 2;
+        const bull = c.c >= c.o;
+        ctx.strokeStyle = bull ? '#10b981' : '#ef4444';
+        ctx.fillStyle = bull ? '#10b981' : '#ef4444';
+        ctx.lineWidth = 1.1;
+        ctx.beginPath(); ctx.moveTo(x, yOf(c.h)); ctx.lineTo(x, yOf(c.l)); ctx.stroke();
+        ctx.fillRect(x - cw / 2, yOf(Math.max(c.o, c.c)), cw, Math.max(2, Math.abs(yOf(c.o) - yOf(c.c))));
+      });
+
+      if (a.liquidity?.bsl) {
+        const yB = yOf(a.liquidity.bsl);
+        ctx.strokeStyle = 'rgba(244, 63, 94, 0.65)';
+        ctx.setLineDash([2, 4]);
+        ctx.beginPath(); ctx.moveTo(padL, yB); ctx.lineTo(W - padR, yB); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#fda4af';
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(`▲ BSL ${a.liquidity.bsl.toFixed(a.decimals)}`, padL + 4, yB - 3);
+      }
+      if (a.liquidity?.ssl) {
+        const yS = yOf(a.liquidity.ssl);
+        ctx.strokeStyle = 'rgba(45, 212, 191, 0.65)';
+        ctx.setLineDash([2, 4]);
+        ctx.beginPath(); ctx.moveTo(padL, yS); ctx.lineTo(W - padR, yS); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#5eead4';
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(`▼ SSL ${a.liquidity.ssl.toFixed(a.decimals)}`, padL + 4, yS - 3);
+      }
+
+      const structLabel = a.structure_event || (a.setup.direction === 'BUY' ? '⚡ BULLISH BOS' : '⚡ BEARISH BOS');
+      const refCandle = candles[Math.max(0, candles.length - 5)];
+      const yStruct = yOf(refCandle.c);
+      ctx.fillStyle = '#c084fc';
+      ctx.font = 'bold 9px JetBrains Mono';
+      ctx.fillText(structLabel, padL + plotW * 0.56, Math.min(H - padB - 6, Math.max(padT + 12, yStruct - 6)));
+
+      const isBuy = a.setup.direction === 'BUY';
+      const entryTitle = isBuy ? 'COMPRA OB REAL' : 'VENTA OB REAL';
+      const levels = [
+        { val: a.setup.sl, lbl: 'STOP', col: '#dc2626', textCol: '#ffffff' },
+        { val: a.setup.entry, lbl: entryTitle, col: '#0284c7', textCol: '#ffffff' },
+        { val: p.be, lbl: 'GATILLO BE (+1R)', col: '#4f46e5', textCol: '#ffffff' },
+        { val: a.setup.tp1, lbl: 'TP1 PARCIAL', col: '#059669', textCol: '#ffffff' },
+        { val: p.tp2Val, lbl: 'SWING TP', col: '#0d9488', textCol: '#ffffff' },
+        { val: a.price, lbl: '', col: '#f59e0b', textCol: '#000000', isLive: true }
+      ].map(lv => ({ ...lv, rawY: yOf(lv.val), drawY: yOf(lv.val) }));
+
+      levels.sort((x, y) => x.rawY - y.rawY);
+      const minGap = 17;
+      for (let i = 1; i < levels.length; i++) {
+        if (levels[i].drawY - levels[i - 1].drawY < minGap) {
+          levels[i].drawY = levels[i - 1].drawY + minGap;
+        }
+      }
+      if (levels[levels.length - 1].drawY > H - padB - 4) {
+        levels[levels.length - 1].drawY = H - padB - 4;
+        for (let i = levels.length - 2; i >= 0; i--) {
+          if (levels[i + 1].drawY - levels[i].drawY < minGap) {
+            levels[i].drawY = Math.max(padT + 8, levels[i + 1].drawY - minGap);
+          }
+        }
+      }
+
+      const lineStartX = padL + plotW * 0.34;
+      levels.forEach(lv => {
+        if (lv.isLive) {
+          ctx.strokeStyle = '#fbbf24';
+          ctx.lineWidth = 1.4;
+          ctx.setLineDash([]);
+          ctx.beginPath(); ctx.moveTo(padL, lv.rawY); ctx.lineTo(W - padR, lv.rawY); ctx.stroke();
+        } else {
+          ctx.strokeStyle = lv.col;
+          ctx.lineWidth = 1.1;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath(); ctx.moveTo(lineStartX, lv.rawY); ctx.lineTo(W - padR, lv.rawY); ctx.stroke();
+          ctx.setLineDash([]);
+
+          if (lv.lbl) {
+            ctx.font = 'bold 9px JetBrains Mono';
+            const tw = ctx.measureText(lv.lbl).width;
+            ctx.fillStyle = 'rgba(3, 5, 9, 0.85)';
+            ctx.fillRect(lineStartX, lv.drawY - 8, tw + 6, 13);
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillText(lv.lbl, lineStartX + 3, lv.drawY + 2);
+          }
+        }
+
+        ctx.fillStyle = lv.col;
+        ctx.fillRect(W - padR + 2, lv.drawY - 8, padR - 4, 15);
+        ctx.fillStyle = lv.textCol;
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.fillText(lv.val.toFixed(a.decimals), W - padR + 6, lv.drawY + 3);
+      });
+    }
+
+    function renderPanelCourse() {
+      const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
+      const badge = document.getElementById('panel-course-pct');
+      if (badge) badge.textContent = `${pct}% APROBADO (${completedLessons.length}/${FRIDAY_CURRICULUM.length})`;
+
+      const list = document.getElementById('panel-lessons-list');
+      if (!list) return;
+      const filtered = fridayCatFilter === 'ALL'
+        ? FRIDAY_CURRICULUM
+        : FRIDAY_CURRICULUM.filter(l => l.cat === fridayCatFilter);
+
+      list.innerHTML = filtered.map(l => {
+        const done = completedLessons.includes(l.id);
+        return `
+          <div class="bg-[#050811] border ${done ? 'border-emerald-500/60' : 'border-slate-800'} rounded-xl p-3.5 space-y-2.5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="text-[9px] font-bold ${l.cat === 'MACRO' ? 'text-sky-400' : 'text-purple-400'}">${l.cat === 'MACRO' ? '🌐 MACROECONOMÍA' : '🎯 SMC / ESTRUCTURA'}</span>
+                <span class="text-[9px] font-bold ${done ? 'text-emerald-400' : 'text-slate-500'}">${done ? '✓ APROBADO' : '⏳ PENDIENTE'}</span>
+              </div>
+              <div class="font-bold text-white text-xs sm:text-sm">${l.title}</div>
+              <p class="text-[11px] text-slate-400 mt-1">${l.summary}</p>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <button type="button" onclick="openFridayClassroom(${l.id}, false)" class="flex-1 px-3 py-2 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/60 text-purple-200 text-[11px] font-bold">
+                📖 ESTUDIAR LECCIÓN
+              </button>
+              <button type="button" onclick="openFridayClassroom(${l.id}, true)" class="px-3 py-2 rounded-lg bg-[#0b1222] hover:border-amber-400 border border-slate-700 text-amber-300 text-[11px] font-bold">
+                📝 EXAMEN
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function configureCloudToken() {
+      const t = prompt('Pega tu Token de GitHub (ghp_...) para sincronizar PC y celular:', ghToken);
+      if (t !== null) {
+        ghToken = t.trim();
+        localStorage.setItem('oraculo_gh_token', ghToken);
+        if (ghToken) loadCloudJournal(true);
+      }
+    }
+
+    async function loadCloudJournal(notify = false) {
+      try {
+        const r = ghToken
+          ? await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_JOURNAL_PATH}?ref=${GH_BRANCH}&t=${Date.now()}`, { headers: { 'Authorization': `token ${ghToken}` } })
+          : await fetch(`./${GH_JOURNAL_PATH}?t=${Date.now()}`);
+        if (r.ok) {
+          const j = await r.json();
+          const remote = ghToken ? JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g, ''))))) : j;
+          if (Array.isArray(remote)) {
+            trades = remote;
+            localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
+            renderTrades();
+          }
+        }
+      } catch (e) {}
+    }
+
+    function renderTrades() {
+      const h = getHomerMetrics();
+      const badge = document.getElementById('homer-stats-badge');
+      const list = document.getElementById('journal-list');
+      if (badge) badge.textContent = `ACIERTO: ${h.winRate}% (${h.pnlR})`;
+      if (!list) return;
+      list.innerHTML = trades.length
+        ? trades.map((t, i) => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5 flex justify-between"><span><strong>${t.pair} · ${t.dir} · ${t.res}</strong> - ${t.note}</span><button type="button" onclick="trades.splice(${i},1);localStorage.setItem('oraculo_trades_v6',JSON.stringify(trades));renderTrades();" class="text-red-400 font-bold">✕</button></div>`).join('')
+        : `<div class="text-slate-500 text-center py-3">Sin operaciones registradas aún.</div>`;
+    }
+
+    document.getElementById('journal-form').addEventListener('submit', e => {
+      e.preventDefault();
+      trades.unshift({
+        pair: document.getElementById('j-pair').value,
+        dir: document.getElementById('j-dir').value,
+        res: document.getElementById('j-res').value,
+        note: document.getElementById('j-note').value,
+        date: new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
+      });
+      localStorage.setItem('oraculo_trades_v6', JSON.stringify(trades));
+      e.target.reset();
+      renderTrades();
+    });
+
+    function updateClock() {
+      const now = new Date();
+      const h = now.getUTCHours();
+      const kz = document.getElementById('killzone-badge');
+      if (!kz) return;
+      const inKz = (h >= 7 && h <= 10) || (h >= 12 && h <= 16);
+      kz.textContent = `${inKz ? 'KILLZONE' : 'UTC'} ${now.toISOString().substring(11, 16)}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    async function loadData() {
+      try {
+        const res = await fetch(`./data.json?t=${Date.now()}`);
+        if (!res.ok) return;
+        data = await res.json();
+        document.getElementById('last-updated').textContent = data.last_updated || '';
+        updateTickerBar();
+        if (data.assets?.length) {
+          if (!data.assets.some(a => a.symbol === selectedSymbol)) selectedSymbol = data.assets[0].symbol;
+          const jPair = document.getElementById('j-pair');
+          if (jPair) jPair.innerHTML = data.assets.map(a => `<option value="${a.symbol}">${a.symbol}</option>`).join('');
+        }
+        await refreshLivePrices();
+        if (!isPanelMode) updateAgentTelemetryAndGreeting(currentAgent);
+        else renderPanelAll();
+      } catch (e) {}
+    }
+
+    selectAgent('jarvis', false);
+    renderTrades();
+    renderPanelCourse();
+    loadCloudJournal(false);
+    loadData();
+    setInterval(refreshLivePrices, 5000);
+    setInterval(loadData, 120000);
+  </script>
+</body>
+</html>
