@@ -205,49 +205,97 @@ def compute_currency_strength(dfs_1d, dfs_4h):
     return {"scores": {k: round(v, 2) for k, v in scores.items()}, "labels": labels}
 
 
-def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals):
-    """Escáner en cascada priorizando 4H (Swing) y 1H (OB + FVG doble)."""
+def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq50):
+    """Cascada de 3 niveles: 1) OB + FVG, 2) OB estructural, 3) FVG limpio de retroceso."""
+    ob_candidates = []
+    fvg_candidates = []
+
     for tf_name, df in [("4H", df_4h), ("1H", df_1h)]:
         if df is None or len(df) < 20:
             continue
-        sub = df.tail(35).reset_index(drop=True)
+        sub = df.tail(38).reset_index(drop=True)
         for i in range(len(sub) - 4, 2, -1):
             c0 = sub.iloc[i]
             c1 = sub.iloc[i + 1]
             c2 = sub.iloc[i + 2]
             body0 = abs(float(c0["Close"]) - float(c0["Open"]))
             body1 = abs(float(c1["Close"]) - float(c1["Open"]))
-            if body1 < max(body0 * 1.3, pip * 6):
-                continue
 
-            if direction == "BUY" and float(c0["Close"]) < float(c0["Open"]) and float(c1["Close"]) > float(c1["Open"]):
-                ob_low = float(c0["Low"])
-                ob_high = float(c0["High"])
-                has_fvg = float(c2["Low"]) > float(c0["High"])
-                entry = round((ob_high + ob_low) / 2.0, decimals)
-                if entry < price and (price - entry) / price <= 0.025:
-                    sl = round(ob_low - pip * 6, decimals)
-                    tag = f"COMPRA OB + FVG ({tf_name})" if has_fvg else f"COMPRA OB REAL ({tf_name})"
-                    return {
-                        "valid": True, "has_fvg": has_fvg, "tf": tf_name,
-                        "entry": entry, "sl": sl, "ob_high": round(ob_high, decimals),
-                        "ob_low": round(ob_low, decimals), "signal_tag": tag,
-                    }
+            # Nivel 1 y 2: Order Block (con o sin FVG)
+            if body1 >= max(body0 * 1.25, pip * 6):
+                if direction == "BUY" and float(c0["Close"]) < float(c0["Open"]) and float(c1["Close"]) > float(c1["Open"]):
+                    ob_low = float(c0["Low"])
+                    ob_high = float(c0["High"])
+                    has_fvg = float(c2["Low"]) > float(c0["High"])
+                    entry = round((ob_high + ob_low) / 2.0, decimals)
+                    if entry < price and (price - entry) / price <= 0.025:
+                        sl = round(ob_low - pip * 6, decimals)
+                        tag = f"COMPRA OB + FVG ({tf_name})" if has_fvg else f"COMPRA OB REAL ({tf_name})"
+                        ob_candidates.append({
+                            "valid": True, "has_fvg": has_fvg, "is_pure_fvg": False, "tf": tf_name,
+                            "entry": entry, "sl": sl, "ob_high": round(ob_high, decimals),
+                            "ob_low": round(ob_low, decimals), "signal_tag": tag,
+                            "safe_eq": entry <= eq50, "dist": abs(price - entry),
+                        })
 
-            if direction == "SELL" and float(c0["Close"]) > float(c0["Open"]) and float(c1["Close"]) < float(c1["Open"]):
-                ob_low = float(c0["Low"])
-                ob_high = float(c0["High"])
-                has_fvg = float(c2["High"]) < float(c0["Low"])
-                entry = round((ob_high + ob_low) / 2.0, decimals)
-                if entry > price and (entry - price) / price <= 0.025:
-                    sl = round(ob_high + pip * 6, decimals)
-                    tag = f"VENTA OB + FVG ({tf_name})" if has_fvg else f"VENTA OB REAL ({tf_name})"
-                    return {
-                        "valid": True, "has_fvg": has_fvg, "tf": tf_name,
-                        "entry": entry, "sl": sl, "ob_high": round(ob_high, decimals),
-                        "ob_low": round(ob_low, decimals), "signal_tag": tag,
-                    }
-    return {"valid": False}
+                if direction == "SELL" and float(c0["Close"]) > float(c0["Open"]) and float(c1["Close"]) < float(c1["Open"]):
+                    ob_low = float(c0["Low"])
+                    ob_high = float(c0["High"])
+                    has_fvg = float(c2["High"]) < float(c0["Low"])
+                    entry = round((ob_high + ob_low) / 2.0, decimals)
+                    if entry > price and (entry - price) / price <= 0.025:
+                        sl = round(ob_high + pip * 6, decimals)
+                        tag = f"VENTA OB + FVG ({tf_name})" if has_fvg else f"VENTA OB REAL ({tf_name})"
+                        ob_candidates.append({
+                            "valid": True, "has_fvg": has_fvg, "is_pure_fvg": False, "tf": tf_name,
+                            "entry": entry, "sl": sl, "ob_high": round(ob_high, decimals),
+                            "ob_low": round(ob_low, decimals), "signal_tag": tag,
+                            "safe_eq": entry >= eq50, "dist": abs(price - entry),
+                        })
+
+            # Nivel 3: FVG aislado de retroceso (hueco limpio entre c0 y c2)
+            if direction == "BUY" and float(c2["Low"]) > float(c0["High"]) + pip * 2:
+                fvg_low = float(c0["High"])
+                fvg_high = float(c2["Low"])
+                entry = round((fvg_high + fvg_low) / 2.0, decimals)
+                if entry < price and (price - entry) / price <= 0.02:
+                    sl = round(float(c1["Low"]) - pip * 5, decimals)
+                    fvg_candidates.append({
+                        "valid": True, "has_fvg": True, "is_pure_fvg": True, "tf": tf_name,
+                        "entry": entry, "sl": sl, "ob_high": round(fvg_high, decimals),
+                        "ob_low": round(fvg_low, decimals), "signal_tag": f"COMPRA FVG RETROCESO ({tf_name})",
+                        "safe_eq": entry <= eq50, "dist": abs(price - entry),
+                    })
+
+            if direction == "SELL" and float(c2["High"]) < float(c0["Low"]) - pip * 2:
+                fvg_high = float(c0["Low"])
+                fvg_low = float(c2["High"])
+                entry = round((fvg_high + fvg_low) / 2.0, decimals)
+                if entry > price and (entry - price) / price <= 0.02:
+                    sl = round(float(c1["High"]) + pip * 5, decimals)
+                    fvg_candidates.append({
+                        "valid": True, "has_fvg": True, "is_pure_fvg": True, "tf": tf_name,
+                        "entry": entry, "sl": sl, "ob_high": round(fvg_high, decimals),
+                        "ob_low": round(fvg_low, decimals), "signal_tag": f"VENTA FVG RETROCESO ({tf_name})",
+                        "safe_eq": entry >= eq50, "dist": abs(price - entry),
+                    })
+
+    # Priorizar primero zonas que respeten EQ-50% y tengan OB+FVG, luego OB limpio, luego FVG limpio
+    all_zones = ob_candidates + fvg_candidates
+    if not all_zones:
+        return {"valid": False}
+
+    all_zones.sort(
+        key=lambda z: (
+            1 if z["safe_eq"] else 0,
+            1 if (not z["is_pure_fvg"] and z["has_fvg"]) else 0,
+            1 if not z["is_pure_fvg"] else 0,
+            1 if z["tf"] == "4H" else 0,
+            -z["dist"],
+        ),
+        reverse=True,
+    )
+    return all_zones[0]
 
 
 def main():
@@ -322,7 +370,7 @@ def main():
         ev_today = [e["title"] for e in calendar if e["currency"] in (item["base"], item["quote"])]
         has_news = len(ev_today) > 0
 
-        # Verificar si existe setup congelado vigente (que no haya tocado SL ni TP1)
+        # Congelamiento vigente mientras el precio esté entre SL y TP1
         saved = active_store.get(sym)
         use_saved = False
         if saved and saved.get("has_valid_ob"):
@@ -345,9 +393,10 @@ def main():
             signal_tag = saved["signal_tag"]
             has_valid_ob = True
             has_fvg = saved.get("has_fvg", False)
+            is_pure_fvg = saved.get("is_pure_fvg", False)
             created_at = saved.get("created_at", int(now_utc.timestamp()))
         else:
-            zone = detect_institutional_zone(h4, h1, direction, price, pip, dec)
+            zone = detect_institutional_zone(h4, h1, direction, price, pip, dec, eq50)
             if zone["valid"] and chart_bias in ("SUBE", "BAJA"):
                 entry = zone["entry"]
                 sl = zone["sl"]
@@ -360,11 +409,13 @@ def main():
                 signal_tag = zone["signal_tag"]
                 has_valid_ob = True
                 has_fvg = zone["has_fvg"]
+                is_pure_fvg = zone["is_pure_fvg"]
                 created_at = int(now_utc.timestamp())
                 active_store[sym] = {
-                    "has_valid_ob": True, "has_fvg": has_fvg, "direction": direction,
-                    "entry": entry, "sl": sl, "be_trigger": be_trigger, "tp1": tp1, "tp2": tp2,
-                    "ob_high": ob_high, "ob_low": ob_low, "signal_tag": signal_tag, "created_at": created_at,
+                    "has_valid_ob": True, "has_fvg": has_fvg, "is_pure_fvg": is_pure_fvg,
+                    "direction": direction, "entry": entry, "sl": sl, "be_trigger": be_trigger,
+                    "tp1": tp1, "tp2": tp2, "ob_high": ob_high, "ob_low": ob_low,
+                    "signal_tag": signal_tag, "created_at": created_at,
                 }
             else:
                 entry = price
@@ -375,9 +426,10 @@ def main():
                 tp2 = round(entry + risk * 4.5 if direction == "BUY" else entry - risk * 4.5, dec)
                 ob_high = round(price + pip * 4, dec)
                 ob_low = round(price - pip * 4, dec)
-                signal_tag = "SIN ZONA SWING - ESPERAR"
+                signal_tag = "SIN OB NI FVG - ESPERAR"
                 has_valid_ob = False
                 has_fvg = False
+                is_pure_fvg = False
                 created_at = int(now_utc.timestamp())
                 active_store.pop(sym, None)
 
@@ -401,17 +453,17 @@ def main():
 
         is_safe_entry = has_valid_ob and len(caution_reasons) == 0
 
-        # Especialización Swing (1D + 4H + Macro + Zona segura) vs Intraday selectivo (solo OB + FVG doble)
+        # Especialización Swing (1D + 4H + Macro + Zona segura) vs Intraday selectivo (OB+FVG doble o FVG seguro en EQ-50%)
         swing_active = is_safe_entry and (bias_d == chart_bias) and (bias_4h == chart_bias) and (macro_dir == chart_bias)
-        intraday_selective = is_safe_entry and (not swing_active) and has_fvg
+        intraday_selective = is_safe_entry and (not swing_active) and (has_fvg or is_pure_fvg)
 
         if not swing_active and not intraday_selective and is_safe_entry:
-            caution_reasons.append("Sin confluencia doble OB+FVG para Intraday")
+            caution_reasons.append("Sin confluencia FVG para Intraday")
             is_safe_entry = False
 
         score = 45
         if has_valid_ob:
-            score += 20
+            score += 18 if not is_pure_fvg else 14
         if has_fvg:
             score += 10
         if bias_d == bias_4h == chart_bias:
@@ -429,13 +481,13 @@ def main():
         macro_reason = (
             f"{economy_short} en cesta híbrida 4H/1D. Jerarquía (1S:{bias_w}, 1D:{bias_d}, 4H:{bias_4h}, 1H:{bias_1h}). "
             f"Equilibrio EQ-50% en {eq50}. "
-            + ("SWING SEGURO validado para recorrido multi-día." if swing_active else ("INTRADAY SELECTIVO OB+FVG validado." if intraday_selective else ("CON PRECAUCIÓN: " + ", ".join(caution_reasons) if caution_reasons else "Sin bloque institucional vigente.")))
+            + ("SWING SEGURO validado para recorrido multi-día." if swing_active else ("INTRADAY SELECTIVO OB/FVG validado." if intraday_selective else ("CON PRECAUCIÓN: " + ", ".join(caution_reasons) if caution_reasons else "Sin bloque institucional vigente.")))
         )
 
         swing_plan = (
             f"1) Entrada base en {entry} con SL estructural en {sl}. "
             f"2) Al tocar {be_trigger} (+1R), sube SL a Break Even. "
-            f"3) Cobra 75% de parciales en TP1 ({tp1}) y deja correr el resto hacia Swing TP ({tp2})."
+            f"3) Cobra parciales en TP1 ({tp1}) y deja correr el resto hacia Swing TP ({tp2})."
         )
 
         assets_out.append({
@@ -465,7 +517,7 @@ def main():
             "confluence": {
                 "score": win_prob,
                 "alignment": alignment,
-                "verdict_title": "SWING SEGURO" if swing_active else ("INTRADAY OB+FVG" if intraday_selective else ("CON PRECAUCIÓN" if has_valid_ob else "ESPERAR")),
+                "verdict_title": "SWING SEGURO" if swing_active else ("INTRADAY OB/FVG" if intraday_selective else ("CON PRECAUCIÓN" if has_valid_ob else "ESPERAR")),
                 "verdict_sub": signal_tag,
             },
             "setup": {
@@ -489,7 +541,6 @@ def main():
 
     save_active_setups(active_store)
 
-    # Elegir Foco Principal #1 priorizando SWING SEGURO
     ranked = sorted(
         assets_out,
         key=lambda x: (1 if x["swing_potential"]["active"] else 0, 1 if x["is_safe_entry"] else 0, x["win_prob"]),
@@ -523,7 +574,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"Radar Swing Institucional · DXY {dxy_val} · Bonos US10Y {us10y_val}%",
-            "summary": "LATICCE opera en modo Especialista Swing (1D + 4H + Macro + EQ-50%) con entradas Intraday selectivas únicamente en confluencias dobles OB + FVG.",
+            "summary": "LATICCE opera en modo Especialista Swing (1D + 4H + Macro + EQ-50%) con entradas Intraday selectivas en OB+FVG o FVG limpios.",
         },
         "currency_strength": strength,
         "calendar": calendar,
@@ -534,7 +585,7 @@ def main():
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
-    print(f"Actualizado LATICCE v12.1 ({len(assets_out)} activos)")
+    print(f"Actualizado LATICCE v12.3 ({len(assets_out)} activos)")
 
 
 if __name__ == "__main__":
