@@ -37,6 +37,20 @@ ASSETS = [
 ]
 
 
+def is_within_max_distance(asset_type, price, entry, pip):
+    """Evita entradas lejanas de 80-150+ pips con baja probabilidad de llegada."""
+    diff = abs(price - entry)
+    if diff <= 0:
+        return False
+    if asset_type == "forex":
+        units = diff / pip if pip else diff
+        return 4.0 <= units <= 35.0
+    if asset_type == "metal":
+        units = diff / pip if pip else diff
+        return 10.0 <= units <= 180.0
+    return (diff / max(price, 1e-9)) <= 0.01
+
+
 def load_active_setups():
     if os.path.exists(ACTIVE_SETUPS_FILE):
         try:
@@ -205,15 +219,14 @@ def compute_currency_strength(dfs_1d, dfs_4h):
     return {"scores": {k: round(v, 2) for k, v in scores.items()}, "labels": labels}
 
 
-def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq50):
-    """Cascada de 3 niveles: 1) OB + FVG, 2) OB estructural, 3) FVG limpio de retroceso."""
-    ob_candidates = []
-    fvg_candidates = []
+def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq50, asset_type):
+    """Cascada de 3 niveles con filtro de distancia realista (<= 35 pips en Forex)."""
+    candidates = []
 
-    for tf_name, df in [("4H", df_4h), ("1H", df_1h)]:
+    for tf_name, df in [("1H", df_1h), ("4H", df_4h)]:
         if df is None or len(df) < 20:
             continue
-        sub = df.tail(38).reset_index(drop=True)
+        sub = df.tail(36).reset_index(drop=True)
         for i in range(len(sub) - 4, 2, -1):
             c0 = sub.iloc[i]
             c1 = sub.iloc[i + 1]
@@ -222,16 +235,16 @@ def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq5
             body1 = abs(float(c1["Close"]) - float(c1["Open"]))
 
             # Nivel 1 y 2: Order Block (con o sin FVG)
-            if body1 >= max(body0 * 1.25, pip * 6):
+            if body1 >= max(body0 * 1.2, pip * 4):
                 if direction == "BUY" and float(c0["Close"]) < float(c0["Open"]) and float(c1["Close"]) > float(c1["Open"]):
                     ob_low = float(c0["Low"])
                     ob_high = float(c0["High"])
                     has_fvg = float(c2["Low"]) > float(c0["High"])
                     entry = round((ob_high + ob_low) / 2.0, decimals)
-                    if entry < price and (price - entry) / price <= 0.025:
-                        sl = round(ob_low - pip * 6, decimals)
+                    if entry < price and is_within_max_distance(asset_type, price, entry, pip):
+                        sl = round(ob_low - pip * 5, decimals)
                         tag = f"COMPRA OB + FVG ({tf_name})" if has_fvg else f"COMPRA OB REAL ({tf_name})"
-                        ob_candidates.append({
+                        candidates.append({
                             "valid": True, "has_fvg": has_fvg, "is_pure_fvg": False, "tf": tf_name,
                             "entry": entry, "sl": sl, "ob_high": round(ob_high, decimals),
                             "ob_low": round(ob_low, decimals), "signal_tag": tag,
@@ -243,59 +256,57 @@ def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq5
                     ob_high = float(c0["High"])
                     has_fvg = float(c2["High"]) < float(c0["Low"])
                     entry = round((ob_high + ob_low) / 2.0, decimals)
-                    if entry > price and (entry - price) / price <= 0.025:
-                        sl = round(ob_high + pip * 6, decimals)
+                    if entry > price and is_within_max_distance(asset_type, price, entry, pip):
+                        sl = round(ob_high + pip * 5, decimals)
                         tag = f"VENTA OB + FVG ({tf_name})" if has_fvg else f"VENTA OB REAL ({tf_name})"
-                        ob_candidates.append({
+                        candidates.append({
                             "valid": True, "has_fvg": has_fvg, "is_pure_fvg": False, "tf": tf_name,
                             "entry": entry, "sl": sl, "ob_high": round(ob_high, decimals),
                             "ob_low": round(ob_low, decimals), "signal_tag": tag,
                             "safe_eq": entry >= eq50, "dist": abs(price - entry),
                         })
 
-            # Nivel 3: FVG aislado de retroceso (hueco limpio entre c0 y c2)
-            if direction == "BUY" and float(c2["Low"]) > float(c0["High"]) + pip * 2:
+            # Nivel 3: FVG aislado de retroceso
+            if direction == "BUY" and float(c2["Low"]) > float(c0["High"]) + pip * 1.5:
                 fvg_low = float(c0["High"])
                 fvg_high = float(c2["Low"])
                 entry = round((fvg_high + fvg_low) / 2.0, decimals)
-                if entry < price and (price - entry) / price <= 0.02:
-                    sl = round(float(c1["Low"]) - pip * 5, decimals)
-                    fvg_candidates.append({
+                if entry < price and is_within_max_distance(asset_type, price, entry, pip):
+                    sl = round(float(c1["Low"]) - pip * 4, decimals)
+                    candidates.append({
                         "valid": True, "has_fvg": True, "is_pure_fvg": True, "tf": tf_name,
                         "entry": entry, "sl": sl, "ob_high": round(fvg_high, decimals),
                         "ob_low": round(fvg_low, decimals), "signal_tag": f"COMPRA FVG RETROCESO ({tf_name})",
                         "safe_eq": entry <= eq50, "dist": abs(price - entry),
                     })
 
-            if direction == "SELL" and float(c2["High"]) < float(c0["Low"]) - pip * 2:
+            if direction == "SELL" and float(c2["High"]) < float(c0["Low"]) - pip * 1.5:
                 fvg_high = float(c0["Low"])
                 fvg_low = float(c2["High"])
                 entry = round((fvg_high + fvg_low) / 2.0, decimals)
-                if entry > price and (entry - price) / price <= 0.02:
-                    sl = round(float(c1["High"]) + pip * 5, decimals)
-                    fvg_candidates.append({
+                if entry > price and is_within_max_distance(asset_type, price, entry, pip):
+                    sl = round(float(c1["High"]) + pip * 4, decimals)
+                    candidates.append({
                         "valid": True, "has_fvg": True, "is_pure_fvg": True, "tf": tf_name,
                         "entry": entry, "sl": sl, "ob_high": round(fvg_high, decimals),
                         "ob_low": round(fvg_low, decimals), "signal_tag": f"VENTA FVG RETROCESO ({tf_name})",
                         "safe_eq": entry >= eq50, "dist": abs(price - entry),
                     })
 
-    # Priorizar primero zonas que respeten EQ-50% y tengan OB+FVG, luego OB limpio, luego FVG limpio
-    all_zones = ob_candidates + fvg_candidates
-    if not all_zones:
+    if not candidates:
         return {"valid": False}
 
-    all_zones.sort(
+    # Priorizar cercanía realista al precio + confluencia OB+FVG + respeto de EQ-50%
+    candidates.sort(
         key=lambda z: (
             1 if z["safe_eq"] else 0,
             1 if (not z["is_pure_fvg"] and z["has_fvg"]) else 0,
             1 if not z["is_pure_fvg"] else 0,
-            1 if z["tf"] == "4H" else 0,
             -z["dist"],
         ),
         reverse=True,
     )
-    return all_zones[0]
+    return candidates[0]
 
 
 def main():
@@ -370,10 +381,10 @@ def main():
         ev_today = [e["title"] for e in calendar if e["currency"] in (item["base"], item["quote"])]
         has_news = len(ev_today) > 0
 
-        # Congelamiento vigente mientras el precio esté entre SL y TP1
+        # Congelamiento vigente mientras el precio esté entre SL y TP1 y siga dentro de distancia realista
         saved = active_store.get(sym)
         use_saved = False
-        if saved and saved.get("has_valid_ob"):
+        if saved and saved.get("has_valid_ob") and is_within_max_distance(item["type"], price, saved["entry"], pip):
             s_dir = saved["direction"]
             s_sl = saved["sl"]
             s_tp1 = saved["tp1"]
@@ -396,7 +407,7 @@ def main():
             is_pure_fvg = saved.get("is_pure_fvg", False)
             created_at = saved.get("created_at", int(now_utc.timestamp()))
         else:
-            zone = detect_institutional_zone(h4, h1, direction, price, pip, dec, eq50)
+            zone = detect_institutional_zone(h4, h1, direction, price, pip, dec, eq50, item["type"])
             if zone["valid"] and chart_bias in ("SUBE", "BAJA"):
                 entry = zone["entry"]
                 sl = zone["sl"]
@@ -433,7 +444,6 @@ def main():
                 created_at = int(now_utc.timestamp())
                 active_store.pop(sym, None)
 
-        # Filtro estricto de seguridad (EQ-50% + 1D + 4H + Macro + Noticias)
         caution_reasons = []
         if has_valid_ob:
             if direction == "BUY" and entry > eq50:
@@ -452,8 +462,6 @@ def main():
                 caution_reasons.append("Noticia roja hoy")
 
         is_safe_entry = has_valid_ob and len(caution_reasons) == 0
-
-        # Especialización Swing (1D + 4H + Macro + Zona segura) vs Intraday selectivo (OB+FVG doble o FVG seguro en EQ-50%)
         swing_active = is_safe_entry and (bias_d == chart_bias) and (bias_4h == chart_bias) and (macro_dir == chart_bias)
         intraday_selective = is_safe_entry and (not swing_active) and (has_fvg or is_pure_fvg)
 
@@ -517,7 +525,7 @@ def main():
             "confluence": {
                 "score": win_prob,
                 "alignment": alignment,
-                "verdict_title": "SWING SEGURO" if swing_active else ("INTRADAY OB/FVG" if intraday_selective else ("CON PRECAUCIÓN" if has_valid_ob else "ESPERAR")),
+                "verdict_title": "SWING SEGURO" if swing_active else ("INTRADAY OB+FVG" if intraday_selective else ("CON PRECAUCIÓN" if has_valid_ob else "ESPERAR")),
                 "verdict_sub": signal_tag,
             },
             "setup": {
@@ -574,7 +582,7 @@ def main():
             "dxy": dxy_val,
             "us10y": us10y_val,
             "headline": f"Radar Swing Institucional · DXY {dxy_val} · Bonos US10Y {us10y_val}%",
-            "summary": "LATICCE opera en modo Especialista Swing (1D + 4H + Macro + EQ-50%) con entradas Intraday selectivas en OB+FVG o FVG limpios.",
+            "summary": "LATICCE opera con filtro de distancia realista (<=35 pips en Forex) y prioridad en bloques cercanos de alta probabilidad.",
         },
         "currency_strength": strength,
         "calendar": calendar,
@@ -585,7 +593,7 @@ def main():
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
-    print(f"Actualizado LATICCE v12.3 ({len(assets_out)} activos)")
+    print(f"Actualizado LATICCE v12.4 ({len(assets_out)} activos)")
 
 
 if __name__ == "__main__":
