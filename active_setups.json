@@ -170,23 +170,23 @@
     "ob_high": 0.66729,
     "ob_low": 0.66582,
     "signal_tag": "VENTA OB + FVG (4H)",
-    "created_at": 1795676340
+    "created_at": 1795686317
   },
   "EURJPY": {
     "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
+    "has_fvg": true,
+    "is_pure_fvg": true,
+    "zone_kind": "FVG",
     "direction": "BUY",
-    "entry": 174.326,
-    "sl": 174.181,
-    "be_trigger": 174.471,
-    "tp1": 174.688,
-    "tp2": 174.978,
-    "ob_high": 174.421,
-    "ob_low": 174.231,
-    "signal_tag": "COMPRA OB REAL (1H)",
-    "created_at": 1795676340
+    "entry": 174.405,
+    "sl": 174.186,
+    "be_trigger": 174.624,
+    "tp1": 174.952,
+    "tp2": 175.39,
+    "ob_high": 174.535,
+    "ob_low": 174.274,
+    "signal_tag": "COMPRA FVG (1H)",
+    "created_at": 1795686317
   },
   "GBPUSD": {
     "has_valid_ob": true,
@@ -219,5 +219,37 @@
     "ob_low": 1.65181,
     "signal_tag": "COMPRA FVG (1H)",
     "created_at": 1795681978
+  },
+  "GBPNZD": {
+    "has_valid_ob": true,
+    "has_fvg": false,
+    "is_pure_fvg": false,
+    "zone_kind": "OB",
+    "direction": "BUY",
+    "entry": 2.38913,
+    "sl": 2.38712,
+    "be_trigger": 2.39114,
+    "tp1": 2.39416,
+    "tp2": 2.39818,
+    "ob_high": 2.39064,
+    "ob_low": 2.38762,
+    "signal_tag": "COMPRA OB REAL (1H)",
+    "created_at": 1795686317
+  },
+  "USDCHF": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
+    "direction": "BUY",
+    "entry": 0.83169,
+    "sl": 0.83084,
+    "be_trigger": 0.83254,
+    "tp1": 0.83382,
+    "tp2": 0.83552,
+    "ob_high": 0.83204,
+    "ob_low": 0.83134,
+    "signal_tag": "COMPRA OB + FVG (1H)",
+    "created_at": 1795686317
   }
 }
