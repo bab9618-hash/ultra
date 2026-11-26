@@ -65,18 +65,18 @@
   "BTCUSD": {
     "has_valid_ob": true,
     "has_fvg": true,
-    "is_pure_fvg": true,
-    "zone_kind": "FVG",
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
     "direction": "SELL",
-    "entry": 60638.01,
-    "sl": 60740.25,
-    "be_trigger": 60535.77,
-    "tp1": 60382.41,
-    "tp2": 60177.93,
-    "ob_high": 60689.57,
-    "ob_low": 60586.44,
-    "signal_tag": "VENTA FVG (1H)",
-    "created_at": 1795706126
+    "entry": 60797.11,
+    "sl": 60885.46,
+    "be_trigger": 60708.76,
+    "tp1": 60576.24,
+    "tp2": 60399.54,
+    "ob_high": 60880.46,
+    "ob_low": 60713.76,
+    "signal_tag": "VENTA OB + FVG (1H)",
+    "created_at": 1795714229
   },
   "GBPJPY": {
     "has_valid_ob": true,
@@ -268,7 +268,7 @@
     "ob_high": 0.83204,
     "ob_low": 0.83134,
     "signal_tag": "COMPRA OB + FVG (1H)",
-    "created_at": 1795714175
+    "created_at": 1795714229
   },
   "GBPCAD": {
     "has_valid_ob": true,
