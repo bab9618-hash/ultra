@@ -122,22 +122,6 @@
     "signal_tag": "VENTA OB + FVG (4H)",
     "created_at": 1795672337
   },
-  "EURAUD": {
-    "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
-    "direction": "SELL",
-    "entry": 1.65173,
-    "sl": 1.65334,
-    "be_trigger": 1.65012,
-    "tp1": 1.6477,
-    "tp2": 1.64448,
-    "ob_high": 1.65284,
-    "ob_low": 1.65062,
-    "signal_tag": "VENTA OB REAL (1H)",
-    "created_at": 1795672337
-  },
   "BTCUSD": {
     "has_valid_ob": true,
     "has_fvg": true,
@@ -153,5 +137,53 @@
     "ob_low": 60694.46,
     "signal_tag": "VENTA FVG (4H)",
     "created_at": 1795672337
+  },
+  "GBPJPY": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": true,
+    "zone_kind": "FVG",
+    "direction": "BUY",
+    "entry": 208.466,
+    "sl": 208.259,
+    "be_trigger": 208.673,
+    "tp1": 208.984,
+    "tp2": 209.398,
+    "ob_high": 208.511,
+    "ob_low": 208.422,
+    "signal_tag": "COMPRA FVG (4H)",
+    "created_at": 1795676340
+  },
+  "AUDUSD": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
+    "direction": "SELL",
+    "entry": 0.66656,
+    "sl": 0.66779,
+    "be_trigger": 0.66533,
+    "tp1": 0.66349,
+    "tp2": 0.66103,
+    "ob_high": 0.66729,
+    "ob_low": 0.66582,
+    "signal_tag": "VENTA OB + FVG (4H)",
+    "created_at": 1795676340
+  },
+  "EURJPY": {
+    "has_valid_ob": true,
+    "has_fvg": false,
+    "is_pure_fvg": false,
+    "zone_kind": "OB",
+    "direction": "BUY",
+    "entry": 174.326,
+    "sl": 174.181,
+    "be_trigger": 174.471,
+    "tp1": 174.688,
+    "tp2": 174.978,
+    "ob_high": 174.421,
+    "ob_low": 174.231,
+    "signal_tag": "COMPRA OB REAL (1H)",
+    "created_at": 1795676340
   }
 }
