@@ -202,7 +202,7 @@
     "ob_high": 0.83204,
     "ob_low": 0.83134,
     "signal_tag": "COMPRA OB + FVG (1H)",
-    "created_at": 1795693384
+    "created_at": 1795697444
   },
   "AUDJPY": {
     "has_valid_ob": true,

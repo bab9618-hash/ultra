@@ -1,21 +1,21 @@
 {
-  "last_updated": "2026-11-26 11:43 UTC",
+  "last_updated": "2026-11-26 12:50 UTC",
   "brief": {
-    "dxy": 103.79,
+    "dxy": 103.74,
     "us10y": 4.85,
-    "headline": "Radar Institucional LATICCE v12.5 · DXY 103.79 · Bonos US10Y 4.85%",
+    "headline": "Radar Institucional LATICCE v12.5 · DXY 103.74 · Bonos US10Y 4.85%",
     "summary": "Escaner en cascada (OB + FVG, OB, FVG) con alerta amarilla en cercania a entrada y diferenciacion entre entrada normal y reentrada swing con precaucion."
   },
   "currency_strength": {
     "scores": {
-      "USD": -0.18,
-      "EUR": 0.07,
-      "GBP": -0.28,
-      "JPY": -0.58,
-      "AUD": -0.41,
-      "NZD": -0.08,
-      "CAD": 1.22,
-      "CHF": 0.24
+      "USD": -0.37,
+      "EUR": 0.2,
+      "GBP": -0.17,
+      "JPY": -0.65,
+      "AUD": -0.34,
+      "NZD": -0.09,
+      "CAD": 1.15,
+      "CHF": 0.28
     },
     "labels": {
       "USD": "NEUTRAL",
@@ -31,6 +31,27 @@
   "calendar": [],
   "news": [
     {
+      "title": "The Stock Market Is Still on Track for Its Best Thanksgiving Week Since 2008",
+      "link": "https://247wallst.com/investing/2026/11/26/the-stock-market-is-still-on-track-for-its-best-thanksgiving-week-since-2008/?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Thu, 26 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
+      "title": "JZR Gold Provides Update on Gold Processing and  Metallurgical Optimization on the Vila Nova Gold Project",
+      "link": "https://finance.yahoo.com/markets/commodities/articles/jzr-gold-provides-gold-processing-120200609.html?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Thu, 26 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
+      "title": "Elizabeth Warren is ‘ready to go’ on Trump’s 10% credit card cap. With rates averaging 22%, are you overpaying?",
+      "link": "https://finance.yahoo.com/economy/policy/articles/elizabeth-warren-ready-trump-10-114500907.html?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Thu, 26 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
       "title": "Fed official issues new warning for US savers after ‘distressing’ report — nest eggs now in danger from disturbing data",
       "link": "https://finance.yahoo.com/economy/policy/articles/fed-official-issues-warning-us-113000686.html?.tsrc=rss",
       "source": "Yahoo Finance",
@@ -38,36 +59,15 @@
       "plain_es": "Titular institucional de seguimiento macro en vivo."
     },
     {
+      "title": "Could Flex Stock's Winning Streak Be Luck?",
+      "link": "https://www.trefis.com/stock/flex/articles/629227/only-6-of-489-stocks-matched-flex-s-five-year-streak/2026-11-26?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Thu, 26 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
       "title": "The government can reduce your Social Security without consent: Mom stunned by $60K repayment demand. Protect your check",
       "link": "https://finance.yahoo.com/economy/policy/articles/government-reduce-social-security-without-111500254.html?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Thu, 26 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "Holding GLD For Stock Falls? Gold Missed This One",
-      "link": "https://www.trefis.com/stock/gld/articles/629222/holding-gld-for-stock-falls-gold-missed-this-one/2026-11-26?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Thu, 26 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "Stock market flaws and why they matter to long-term investors",
-      "link": "https://financialpost.com/investing/stock-market-flaws-matter-long-term-investors/?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Thu, 26 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "There’s one proven way not to lose during a market downturn. Ignore it and risk blowing up your entire financial future",
-      "link": "https://finance.yahoo.com/news/one-proven-way-not-lose-103000392.html?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Thu, 26 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "Gold Prices Mixed as Stronger US Dollar Pressures Spot Bullion While Futures Advance",
-      "link": "https://investorshub.advfn.com/market-news/article/40751/gold-prices-mixed-as-stronger-us-dollar-pressures-spot-bullion-while-futures-advance?.tsrc=rss",
       "source": "Yahoo Finance",
       "time": "Thu, 26 Nov 2026",
       "plain_es": "Titular institucional de seguimiento macro en vivo."
@@ -469,7 +469,7 @@
             "o": 3570.5,
             "h": 3691.0,
             "l": 3425.2,
-            "c": 3594.4
+            "c": 3595.7
           }
         ],
         "1d": [
@@ -786,7 +786,7 @@
             "o": 3619.8,
             "h": 3634.7,
             "l": 3578.8,
-            "c": 3594.4
+            "c": 3596.1
           }
         ],
         "4h": [
@@ -1432,8 +1432,8 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.09721,
-      "chg_day": 0.09,
+      "price": 1.09782,
+      "chg_day": 0.15,
       "win_prob": 65,
       "has_valid_ob": true,
       "zone_kind": "OB",
@@ -1451,7 +1451,7 @@
         "weekly": "BAJA",
         "daily": "NEUTRAL",
         "h4": "SUBE",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "volatility": {
         "atr_units": 75.1,
@@ -1465,7 +1465,7 @@
       "ob_high": 1.10047,
       "ob_low": 1.09818,
       "created_at": 1795666963,
-      "macro_reason": "EUR NEUTRAL / USD NEUTRAL | Zona: OB estructural | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 1.0965. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "EUR NEUTRAL / USD NEUTRAL | Zona: OB estructural | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 1.0965. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 65,
         "alignment": "NEUTRAL",
@@ -1805,7 +1805,7 @@
             "o": 1.0973,
             "h": 1.10059,
             "l": 1.08844,
-            "c": 1.09721
+            "c": 1.09782
           }
         ],
         "1d": [
@@ -2122,7 +2122,7 @@
             "o": 1.09782,
             "h": 1.09842,
             "l": 1.09601,
-            "c": 1.09721
+            "c": 1.09782
           }
         ],
         "4h": [
@@ -2438,18 +2438,11 @@
             "t": 1795690800,
             "o": 1.09769,
             "h": 1.09794,
-            "l": 1.09721,
-            "c": 1.09721
+            "l": 1.09709,
+            "c": 1.09782
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 1.09757,
-            "h": 1.09757,
-            "l": 1.09625,
-            "c": 1.09745
-          },
           {
             "t": 1795536000,
             "o": 1.09721,
@@ -2755,8 +2748,15 @@
             "t": 1795690800,
             "o": 1.09769,
             "h": 1.09794,
+            "l": 1.09709,
+            "c": 1.09733
+          },
+          {
+            "t": 1795694400,
+            "o": 1.09733,
+            "h": 1.09794,
             "l": 1.09721,
-            "c": 1.09721
+            "c": 1.09782
           }
         ]
       }
@@ -2768,8 +2768,8 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 159.308,
-      "chg_day": 0.03,
+      "price": 159.277,
+      "chg_day": 0.01,
       "win_prob": 77,
       "has_valid_ob": true,
       "zone_kind": "OB",
@@ -3142,7 +3142,7 @@
             "o": 158.939,
             "h": 159.567,
             "l": 158.664,
-            "c": 159.308
+            "c": 159.277
           }
         ],
         "1d": [
@@ -3459,7 +3459,7 @@
             "o": 159.116,
             "h": 159.332,
             "l": 158.946,
-            "c": 159.306
+            "c": 159.277
           }
         ],
         "4h": [
@@ -3775,18 +3775,11 @@
             "t": 1795690800,
             "o": 159.28,
             "h": 159.332,
-            "l": 159.25,
-            "c": 159.308
+            "l": 159.245,
+            "c": 159.277
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 159.227,
-            "h": 159.35,
-            "l": 159.069,
-            "c": 159.078
-          },
           {
             "t": 1795536000,
             "o": 159.076,
@@ -4093,7 +4086,14 @@
             "o": 159.28,
             "h": 159.332,
             "l": 159.25,
-            "c": 159.308
+            "c": 159.299
+          },
+          {
+            "t": 1795694400,
+            "o": 159.299,
+            "h": 159.305,
+            "l": 159.245,
+            "c": 159.277
           }
         ]
       }
@@ -4105,8 +4105,8 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.31014,
-      "chg_day": -0.08,
+      "price": 1.31056,
+      "chg_day": -0.05,
       "win_prob": 74,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -4479,7 +4479,7 @@
             "o": 1.30967,
             "h": 1.31432,
             "l": 1.30132,
-            "c": 1.31014
+            "c": 1.31056
           }
         ],
         "1d": [
@@ -4795,8 +4795,8 @@
             "t": 1795651200,
             "o": 1.31191,
             "h": 1.31196,
-            "l": 1.30967,
-            "c": 1.31014
+            "l": 1.30964,
+            "c": 1.31056
           }
         ],
         "4h": [
@@ -5112,18 +5112,11 @@
             "t": 1795690800,
             "o": 1.31105,
             "h": 1.31105,
-            "l": 1.30967,
-            "c": 1.31014
+            "l": 1.30964,
+            "c": 1.31056
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 1.31132,
-            "h": 1.3116,
-            "l": 1.31005,
-            "c": 1.3116
-          },
           {
             "t": 1795536000,
             "o": 1.31139,
@@ -5429,8 +5422,15 @@
             "t": 1795690800,
             "o": 1.31105,
             "h": 1.31105,
-            "l": 1.30967,
-            "c": 1.31014
+            "l": 1.30964,
+            "c": 1.30989
+          },
+          {
+            "t": 1795694400,
+            "o": 1.30996,
+            "h": 1.31093,
+            "l": 1.30996,
+            "c": 1.31056
           }
         ]
       }
@@ -5442,8 +5442,8 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 208.694,
-      "chg_day": -0.06,
+      "price": 208.744,
+      "chg_day": -0.03,
       "win_prob": 70,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -5815,7 +5815,7 @@
             "o": 208.154,
             "h": 209.157,
             "l": 207.081,
-            "c": 208.694
+            "c": 208.744
           }
         ],
         "1d": [
@@ -6132,7 +6132,7 @@
             "o": 208.662,
             "h": 208.911,
             "l": 208.431,
-            "c": 208.694
+            "c": 208.744
           }
         ],
         "4h": [
@@ -6448,18 +6448,11 @@
             "t": 1795690800,
             "o": 208.837,
             "h": 208.844,
-            "l": 208.636,
-            "c": 208.694
+            "l": 208.618,
+            "c": 208.744
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 208.808,
-            "h": 208.926,
-            "l": 208.577,
-            "c": 208.65
-          },
           {
             "t": 1795536000,
             "o": 208.649,
@@ -6765,8 +6758,15 @@
             "t": 1795690800,
             "o": 208.837,
             "h": 208.844,
-            "l": 208.636,
-            "c": 208.694
+            "l": 208.618,
+            "c": 208.651
+          },
+          {
+            "t": 1795694400,
+            "o": 208.653,
+            "h": 208.792,
+            "l": 208.625,
+            "c": 208.744
           }
         ]
       }
@@ -6778,8 +6778,8 @@
       "quote": "AUD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.97548,
-      "chg_day": -0.04,
+      "price": 1.97565,
+      "chg_day": -0.03,
       "win_prob": 69,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
@@ -6797,7 +6797,7 @@
         "weekly": "SUBE",
         "daily": "SUBE",
         "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h1": "BAJA"
       },
       "volatility": {
         "atr_units": 128.1,
@@ -6811,7 +6811,7 @@
       "ob_high": 1.97599,
       "ob_low": 1.97273,
       "created_at": 1795693384,
-      "macro_reason": "GBP NEUTRAL / AUD NEUTRAL | Zona: OB + FVG | 1S:SUBE, 1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.97962. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "GBP NEUTRAL / AUD NEUTRAL | Zona: OB + FVG | 1S:SUBE, 1D:SUBE, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 1.97962. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 69,
         "alignment": "NEUTRAL",
@@ -7151,7 +7151,7 @@
             "o": 1.97175,
             "h": 1.99277,
             "l": 1.96373,
-            "c": 1.97548
+            "c": 1.97565
           }
         ],
         "1d": [
@@ -7468,7 +7468,7 @@
             "o": 1.97876,
             "h": 1.97969,
             "l": 1.97041,
-            "c": 1.97548
+            "c": 1.97565
           }
         ],
         "4h": [
@@ -7784,18 +7784,11 @@
             "t": 1795690800,
             "o": 1.97759,
             "h": 1.97759,
-            "l": 1.97542,
-            "c": 1.97548
+            "l": 1.97535,
+            "c": 1.97565
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 1.96945,
-            "h": 1.97705,
-            "l": 1.9694,
-            "c": 1.97615
-          },
           {
             "t": 1795536000,
             "o": 1.97614,
@@ -8101,8 +8094,15 @@
             "t": 1795690800,
             "o": 1.97759,
             "h": 1.97759,
-            "l": 1.97542,
-            "c": 1.97548
+            "l": 1.97535,
+            "c": 1.97593
+          },
+          {
+            "t": 1795694400,
+            "o": 1.9759,
+            "h": 1.97671,
+            "l": 1.9754,
+            "c": 1.97565
           }
         ]
       }
@@ -8114,8 +8114,8 @@
       "quote": "NZD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 2.39162,
-      "chg_day": -0.09,
+      "price": 2.39211,
+      "chg_day": -0.07,
       "win_prob": 65,
       "has_valid_ob": true,
       "zone_kind": "OB",
@@ -8131,9 +8131,9 @@
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
         "weekly": "NEUTRAL",
-        "daily": "NEUTRAL",
+        "daily": "SUBE",
         "h4": "NEUTRAL",
-        "h1": "SUBE"
+        "h1": "NEUTRAL"
       },
       "volatility": {
         "atr_units": 127.4,
@@ -8147,7 +8147,7 @@
       "ob_high": 2.39249,
       "ob_low": 2.38826,
       "created_at": 1795693384,
-      "macro_reason": "GBP NEUTRAL / NZD NEUTRAL | Zona: OB estructural | 1S:NEUTRAL, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 2.39328. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "GBP NEUTRAL / NZD NEUTRAL | Zona: OB estructural | 1S:NEUTRAL, 1D:SUBE, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 2.39328. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 65,
         "alignment": "NEUTRAL",
@@ -8487,7 +8487,7 @@
             "o": 2.39071,
             "h": 2.40012,
             "l": 2.38728,
-            "c": 2.39162
+            "c": 2.39211
           }
         ],
         "1d": [
@@ -8804,7 +8804,7 @@
             "o": 2.38978,
             "h": 2.39337,
             "l": 2.38728,
-            "c": 2.39162
+            "c": 2.39211
           }
         ],
         "4h": [
@@ -9119,19 +9119,12 @@
           {
             "t": 1795690800,
             "o": 2.39262,
-            "h": 2.39271,
+            "h": 2.39273,
             "l": 2.39074,
-            "c": 2.39162
+            "c": 2.39211
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 2.38838,
-            "h": 2.39343,
-            "l": 2.38821,
-            "c": 2.39319
-          },
           {
             "t": 1795536000,
             "o": 2.39308,
@@ -9438,7 +9431,14 @@
             "o": 2.39262,
             "h": 2.39271,
             "l": 2.39074,
-            "c": 2.39162
+            "c": 2.39207
+          },
+          {
+            "t": 1795694400,
+            "o": 2.39201,
+            "h": 2.39273,
+            "l": 2.3915,
+            "c": 2.39211
           }
         ]
       }
@@ -9450,8 +9450,8 @@
       "quote": "CAD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.86396,
-      "chg_day": -0.39,
+      "price": 1.86469,
+      "chg_day": -0.35,
       "win_prob": 67,
       "has_valid_ob": true,
       "zone_kind": "OB",
@@ -9477,14 +9477,14 @@
         "range20_units": 425.7
       },
       "liquidity": {
-        "bsl": 1.87775,
+        "bsl": 1.87668,
         "ssl": 1.85645,
-        "eq50": 1.8671
+        "eq50": 1.86657
       },
       "ob_high": 1.86747,
       "ob_low": 1.86421,
       "created_at": 1795681978,
-      "macro_reason": "GBP NEUTRAL / CAD FUERTE | Zona: OB estructural | 1S:NEUTRAL, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.8671. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "GBP NEUTRAL / CAD FUERTE | Zona: OB estructural | 1S:NEUTRAL, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.86657. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 67,
         "alignment": "ALIGNED",
@@ -9824,7 +9824,7 @@
             "o": 1.87759,
             "h": 1.88153,
             "l": 1.85685,
-            "c": 1.86393
+            "c": 1.86478
           }
         ],
         "1d": [
@@ -10141,7 +10141,7 @@
             "o": 1.86274,
             "h": 1.86622,
             "l": 1.86212,
-            "c": 1.86393
+            "c": 1.86478
           }
         ],
         "4h": [
@@ -10456,19 +10456,12 @@
           {
             "t": 1795690800,
             "o": 1.86489,
-            "h": 1.86493,
-            "l": 1.86359,
-            "c": 1.86396
+            "h": 1.86548,
+            "l": 1.86347,
+            "c": 1.86469
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 1.87387,
-            "h": 1.87743,
-            "l": 1.87336,
-            "c": 1.87685
-          },
           {
             "t": 1795536000,
             "o": 1.87689,
@@ -10774,8 +10767,15 @@
             "t": 1795690800,
             "o": 1.86489,
             "h": 1.86493,
-            "l": 1.86359,
-            "c": 1.86396
+            "l": 1.86347,
+            "c": 1.86378
+          },
+          {
+            "t": 1795694400,
+            "o": 1.86379,
+            "h": 1.86548,
+            "l": 1.86379,
+            "c": 1.86469
           }
         ]
       }
@@ -10787,8 +10787,8 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.66331,
-      "chg_day": -0.01,
+      "price": 0.66353,
+      "chg_day": 0.02,
       "win_prob": 59,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
@@ -10806,7 +10806,7 @@
         "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "volatility": {
         "atr_units": 64.1,
@@ -10820,7 +10820,7 @@
       "ob_high": 0.66729,
       "ob_low": 0.66582,
       "created_at": 1795693384,
-      "macro_reason": "AUD NEUTRAL / USD NEUTRAL | Zona: OB + FVG | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.66122. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "AUD NEUTRAL / USD NEUTRAL | Zona: OB + FVG | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 0.66122. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 59,
         "alignment": "NEUTRAL",
@@ -11160,7 +11160,7 @@
             "o": 0.66417,
             "h": 0.66628,
             "l": 0.65598,
-            "c": 0.66331
+            "c": 0.66353
           }
         ],
         "1d": [
@@ -11477,7 +11477,7 @@
             "o": 0.66273,
             "h": 0.66507,
             "l": 0.66269,
-            "c": 0.66331
+            "c": 0.66353
           }
         ],
         "4h": [
@@ -11792,19 +11792,12 @@
           {
             "t": 1795690800,
             "o": 0.66322,
-            "h": 0.66331,
+            "h": 0.6637,
             "l": 0.66304,
-            "c": 0.66331
+            "c": 0.66353
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 0.66556,
-            "h": 0.66556,
-            "l": 0.66353,
-            "c": 0.66392
-          },
           {
             "t": 1795536000,
             "o": 0.66383,
@@ -12111,7 +12104,14 @@
             "o": 0.66322,
             "h": 0.66331,
             "l": 0.66304,
-            "c": 0.66331
+            "c": 0.66304
+          },
+          {
+            "t": 1795694400,
+            "o": 0.66331,
+            "h": 0.6637,
+            "l": 0.66317,
+            "c": 0.66353
           }
         ]
       }
@@ -12123,9 +12123,9 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 105.637,
-      "chg_day": -0.0,
-      "win_prob": 67,
+      "price": 105.654,
+      "chg_day": 0.01,
+      "win_prob": 71,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
       "entry_mode": "ENTRADA_NORMAL",
@@ -12133,18 +12133,17 @@
       "is_safe_entry": false,
       "caution_reasons": [
         "Zona cara (arriba de EQ-50%)",
-        "4H en NEUTRAL",
-        "Macro en SUBE"
+        "4H en NEUTRAL"
       ],
       "economy_short": "AUD NEUTRAL / JPY DEBIL",
       "macro_dir": "SUBE",
-      "chart_bias": "NEUTRAL",
+      "chart_bias": "SUBE",
       "structure_event": "⚡ BULLISH BOS",
       "tf_bias": {
         "weekly": "BAJA",
         "daily": "NEUTRAL",
         "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "volatility": {
         "atr_units": 103.3,
@@ -12158,10 +12157,10 @@
       "ob_high": 105.637,
       "ob_low": 105.37,
       "created_at": 1795689815,
-      "macro_reason": "AUD NEUTRAL / JPY DEBIL | Zona: OB + FVG | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 105.275. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "AUD NEUTRAL / JPY DEBIL | Zona: OB + FVG | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 105.275. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 67,
-        "alignment": "NEUTRAL",
+        "score": 71,
+        "alignment": "ALIGNED",
         "verdict_title": "ENTRADA NORMAL · CON PRECAUCIÓN",
         "verdict_sub": "OB + FVG · COMPRA OB + FVG (1H)"
       },
@@ -12498,7 +12497,7 @@
             "o": 105.557,
             "h": 106.107,
             "l": 104.43,
-            "c": 105.637
+            "c": 105.654
           }
         ],
         "1d": [
@@ -12815,7 +12814,7 @@
             "o": 105.4,
             "h": 105.802,
             "l": 105.332,
-            "c": 105.637
+            "c": 105.654
           }
         ],
         "4h": [
@@ -13130,19 +13129,12 @@
           {
             "t": 1795690800,
             "o": 105.601,
-            "h": 105.644,
-            "l": 105.573,
-            "c": 105.637
+            "h": 105.677,
+            "l": 105.571,
+            "c": 105.654
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 105.943,
-            "h": 106.016,
-            "l": 105.52,
-            "c": 105.584
-          },
           {
             "t": 1795536000,
             "o": 105.58,
@@ -13449,7 +13441,14 @@
             "o": 105.601,
             "h": 105.644,
             "l": 105.573,
-            "c": 105.637
+            "c": 105.591
+          },
+          {
+            "t": 1795694400,
+            "o": 105.591,
+            "h": 105.677,
+            "l": 105.571,
+            "c": 105.654
           }
         ]
       }
@@ -13461,8 +13460,8 @@
       "quote": "CAD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.94347,
-      "chg_day": -0.35,
+      "price": 0.94379,
+      "chg_day": -0.31,
       "win_prob": 70,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -13480,7 +13479,7 @@
         "weekly": "BAJA",
         "daily": "BAJA",
         "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "volatility": {
         "atr_units": 75.0,
@@ -13494,7 +13493,7 @@
       "ob_high": 0.94566,
       "ob_low": 0.94428,
       "created_at": 1795672337,
-      "macro_reason": "AUD NEUTRAL / CAD FUERTE | Zona: FVG limpio | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.94281. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "AUD NEUTRAL / CAD FUERTE | Zona: FVG limpio | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 0.94281. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 70,
         "alignment": "ALIGNED",
@@ -13834,7 +13833,7 @@
             "o": 0.95226,
             "h": 0.95494,
             "l": 0.93567,
-            "c": 0.94347
+            "c": 0.94379
           }
         ],
         "1d": [
@@ -14151,7 +14150,7 @@
             "o": 0.94121,
             "h": 0.94521,
             "l": 0.94058,
-            "c": 0.94347
+            "c": 0.94379
           }
         ],
         "4h": [
@@ -14466,19 +14465,12 @@
           {
             "t": 1795690800,
             "o": 0.94292,
-            "h": 0.94355,
+            "h": 0.94406,
             "l": 0.94217,
-            "c": 0.94347
+            "c": 0.94379
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 0.95102,
-            "h": 0.95117,
-            "l": 0.94825,
-            "c": 0.94973
-          },
           {
             "t": 1795536000,
             "o": 0.94975,
@@ -14785,7 +14777,14 @@
             "o": 0.94292,
             "h": 0.94355,
             "l": 0.94217,
-            "c": 0.94347
+            "c": 0.9432
+          },
+          {
+            "t": 1795694400,
+            "o": 0.9432,
+            "h": 0.94406,
+            "l": 0.94236,
+            "c": 0.94379
           }
         ]
       }
@@ -14797,8 +14796,8 @@
       "quote": "NZD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.21055,
-      "chg_day": -0.05,
+      "price": 1.21076,
+      "chg_day": -0.03,
       "win_prob": 65,
       "has_valid_ob": true,
       "zone_kind": "OB",
@@ -14816,7 +14815,7 @@
         "weekly": "NEUTRAL",
         "daily": "BAJA",
         "h4": "NEUTRAL",
-        "h1": "NEUTRAL"
+        "h1": "SUBE"
       },
       "volatility": {
         "atr_units": 89.2,
@@ -14830,7 +14829,7 @@
       "ob_high": 1.21351,
       "ob_low": 1.21007,
       "created_at": 1795672337,
-      "macro_reason": "AUD NEUTRAL / NZD NEUTRAL | Zona: OB estructural | 1S:NEUTRAL, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.20974. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "AUD NEUTRAL / NZD NEUTRAL | Zona: OB estructural | 1S:NEUTRAL, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.20974. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 65,
         "alignment": "NEUTRAL",
@@ -15170,7 +15169,7 @@
             "o": 1.21249,
             "h": 1.2187,
             "l": 1.2016,
-            "c": 1.21055
+            "c": 1.21076
           }
         ],
         "1d": [
@@ -15487,7 +15486,7 @@
             "o": 1.2068,
             "h": 1.212,
             "l": 1.20538,
-            "c": 1.21055
+            "c": 1.21076
           }
         ],
         "4h": [
@@ -15802,19 +15801,12 @@
           {
             "t": 1795690800,
             "o": 1.20983,
-            "h": 1.21059,
+            "h": 1.21084,
             "l": 1.20949,
-            "c": 1.21055
+            "c": 1.21076
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 1.21251,
-            "h": 1.21271,
-            "l": 1.20995,
-            "c": 1.21103
-          },
           {
             "t": 1795536000,
             "o": 1.21104,
@@ -16119,9 +16111,16 @@
           {
             "t": 1795690800,
             "o": 1.20983,
-            "h": 1.21059,
+            "h": 1.21075,
             "l": 1.20949,
-            "c": 1.21055
+            "c": 1.21049
+          },
+          {
+            "t": 1795694400,
+            "o": 1.2105,
+            "h": 1.21084,
+            "l": 1.20995,
+            "c": 1.21076
           }
         ]
       }
@@ -16133,8 +16132,8 @@
       "quote": "AUD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.65422,
-      "chg_day": 0.11,
+      "price": 1.65465,
+      "chg_day": 0.14,
       "win_prob": 62,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -16506,7 +16505,7 @@
             "o": 1.65207,
             "h": 1.66727,
             "l": 1.6427,
-            "c": 1.65422
+            "c": 1.65465
           }
         ],
         "1d": [
@@ -16823,7 +16822,7 @@
             "o": 1.65582,
             "h": 1.6567,
             "l": 1.64823,
-            "c": 1.65422
+            "c": 1.65465
           }
         ],
         "4h": [
@@ -17139,18 +17138,11 @@
             "t": 1795690800,
             "o": 1.65515,
             "h": 1.65539,
-            "l": 1.65388,
-            "c": 1.65422
+            "l": 1.65356,
+            "c": 1.65465
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 1.64873,
-            "h": 1.65438,
-            "l": 1.64847,
-            "c": 1.65288
-          },
           {
             "t": 1795536000,
             "o": 1.65294,
@@ -17456,8 +17448,15 @@
             "t": 1795690800,
             "o": 1.65515,
             "h": 1.65539,
-            "l": 1.65388,
-            "c": 1.65422
+            "l": 1.6538,
+            "c": 1.65482
+          },
+          {
+            "t": 1795694400,
+            "o": 1.65482,
+            "h": 1.65507,
+            "l": 1.65356,
+            "c": 1.65465
           }
         ]
       }
@@ -17469,8 +17468,8 @@
       "quote": "CHF",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.55336,
-      "chg_day": -0.19,
+      "price": 0.55333,
+      "chg_day": -0.2,
       "win_prob": 45,
       "has_valid_ob": false,
       "zone_kind": "NONE",
@@ -17497,9 +17496,9 @@
         "ssl": 0.5438,
         "eq50": 0.5505
       },
-      "ob_high": 0.55376,
-      "ob_low": 0.55296,
-      "created_at": 1795693384,
+      "ob_high": 0.55373,
+      "ob_low": 0.55293,
+      "created_at": 1795697444,
       "macro_reason": "AUD NEUTRAL / CHF NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 0.5505. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
         "score": 45,
@@ -17510,15 +17509,15 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN ZONA - ESPERAR",
-        "entry": 0.55336,
-        "sl": 0.55677,
-        "be": 0.54995,
-        "tp1": 0.54483,
-        "tp2": 0.53801
+        "entry": 0.55333,
+        "sl": 0.55674,
+        "be": 0.54992,
+        "tp1": 0.5448,
+        "tp2": 0.53798
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada en 0.55336 con SL estructural en 0.55677. 2) Al tocar 0.54995 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.54483) y buscar Swing TP (0.53801)."
+        "plan": "1) Entrada en 0.55333 con SL estructural en 0.55674. 2) Al tocar 0.54992 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.5448) y buscar Swing TP (0.53798)."
       },
       "news_warning": {
         "active": false,
@@ -17840,7 +17839,7 @@
             "o": 0.55841,
             "h": 0.55982,
             "l": 0.54446,
-            "c": 0.55338
+            "c": 0.55333
           }
         ],
         "1d": [
@@ -18155,9 +18154,9 @@
           {
             "t": 1795651200,
             "o": 0.54984,
-            "h": 0.55348,
+            "h": 0.55354,
             "l": 0.54924,
-            "c": 0.55335
+            "c": 0.55333
           }
         ],
         "4h": [
@@ -18472,19 +18471,12 @@
           {
             "t": 1795690800,
             "o": 0.55228,
-            "h": 0.5534,
+            "h": 0.55354,
             "l": 0.55169,
-            "c": 0.55336
+            "c": 0.55333
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 0.55628,
-            "h": 0.55668,
-            "l": 0.55339,
-            "c": 0.55442
-          },
           {
             "t": 1795536000,
             "o": 0.55442,
@@ -18789,9 +18781,16 @@
           {
             "t": 1795690800,
             "o": 0.55228,
-            "h": 0.5534,
+            "h": 0.55343,
             "l": 0.55169,
-            "c": 0.55336
+            "c": 0.55316
+          },
+          {
+            "t": 1795694400,
+            "o": 0.55317,
+            "h": 0.55354,
+            "l": 0.55237,
+            "c": 0.55333
           }
         ]
       }
@@ -18803,8 +18802,8 @@
       "quote": "USD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.54792,
-      "chg_day": 0.03,
+      "price": 0.54795,
+      "chg_day": 0.04,
       "win_prob": 63,
       "has_valid_ob": false,
       "zone_kind": "NONE",
@@ -18831,9 +18830,9 @@
         "ssl": 0.54508,
         "eq50": 0.5473
       },
-      "ob_high": 0.54832,
-      "ob_low": 0.54752,
-      "created_at": 1795693384,
+      "ob_high": 0.54835,
+      "ob_low": 0.54755,
+      "created_at": 1795697444,
       "macro_reason": "NZD NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.5473. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
         "score": 63,
@@ -18844,15 +18843,15 @@
       "setup": {
         "direction": "BUY",
         "signal_tag": "SIN ZONA - ESPERAR",
-        "entry": 0.54792,
-        "sl": 0.54507,
-        "be": 0.55077,
-        "tp1": 0.55504,
-        "tp2": 0.56074
+        "entry": 0.54795,
+        "sl": 0.5451,
+        "be": 0.5508,
+        "tp1": 0.55508,
+        "tp2": 0.56078
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada en 0.54792 con SL estructural en 0.54507. 2) Al tocar 0.55077 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.55504) y buscar Swing TP (0.56074)."
+        "plan": "1) Entrada en 0.54795 con SL estructural en 0.5451. 2) Al tocar 0.5508 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (0.55508) y buscar Swing TP (0.56078)."
       },
       "news_warning": {
         "active": false,
@@ -19174,7 +19173,7 @@
             "o": 0.54777,
             "h": 0.5493,
             "l": 0.54346,
-            "c": 0.54792
+            "c": 0.54795
           }
         ],
         "1d": [
@@ -19490,8 +19489,8 @@
             "t": 1795651200,
             "o": 0.54879,
             "h": 0.5493,
-            "l": 0.54774,
-            "c": 0.54792
+            "l": 0.54765,
+            "c": 0.54795
           }
         ],
         "4h": [
@@ -19807,18 +19806,11 @@
             "t": 1795690800,
             "o": 0.54807,
             "h": 0.5481,
-            "l": 0.54774,
-            "c": 0.54792
+            "l": 0.54765,
+            "c": 0.54795
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 0.54876,
-            "h": 0.54876,
-            "l": 0.54774,
-            "c": 0.54822
-          },
           {
             "t": 1795536000,
             "o": 0.5481,
@@ -20124,8 +20116,15 @@
             "t": 1795690800,
             "o": 0.54807,
             "h": 0.5481,
-            "l": 0.54774,
-            "c": 0.54792
+            "l": 0.54765,
+            "c": 0.54771
+          },
+          {
+            "t": 1795694400,
+            "o": 0.54777,
+            "h": 0.5481,
+            "l": 0.54777,
+            "c": 0.54795
           }
         ]
       }
@@ -20137,7 +20136,7 @@
       "quote": "CAD",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 1.42307,
+      "price": 1.42302,
       "chg_day": -0.3,
       "win_prob": 55,
       "has_valid_ob": false,
@@ -20161,14 +20160,14 @@
         "range20_units": 443.6
       },
       "liquidity": {
-        "bsl": 1.43246,
+        "bsl": 1.4314,
         "ssl": 1.4186,
-        "eq50": 1.42553
+        "eq50": 1.425
       },
-      "ob_high": 1.42347,
-      "ob_low": 1.42267,
-      "created_at": 1795693384,
-      "macro_reason": "USD NEUTRAL / CAD FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.42553. Sin bloque cercano dentro del rango permitido.",
+      "ob_high": 1.42342,
+      "ob_low": 1.42262,
+      "created_at": 1795697444,
+      "macro_reason": "USD NEUTRAL / CAD FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.425. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
         "score": 55,
         "alignment": "NEUTRAL",
@@ -20178,15 +20177,15 @@
       "setup": {
         "direction": "BUY",
         "signal_tag": "SIN ZONA - ESPERAR",
-        "entry": 1.42307,
-        "sl": 1.41835,
-        "be": 1.42779,
-        "tp1": 1.43487,
-        "tp2": 1.44431
+        "entry": 1.42302,
+        "sl": 1.4183,
+        "be": 1.42774,
+        "tp1": 1.43482,
+        "tp2": 1.44426
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada en 1.42307 con SL estructural en 1.41835. 2) Al tocar 1.42779 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1.43487) y buscar Swing TP (1.44431)."
+        "plan": "1) Entrada en 1.42302 con SL estructural en 1.4183. 2) Al tocar 1.42774 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1.43482) y buscar Swing TP (1.44426)."
       },
       "news_warning": {
         "active": false,
@@ -20508,7 +20507,7 @@
             "o": 1.43383,
             "h": 1.43738,
             "l": 1.4205,
-            "c": 1.42318
+            "c": 1.42302
           }
         ],
         "1d": [
@@ -20823,9 +20822,9 @@
           {
             "t": 1795651200,
             "o": 1.4211,
-            "h": 1.42343,
+            "h": 1.42373,
             "l": 1.4205,
-            "c": 1.42318
+            "c": 1.42302
           }
         ],
         "4h": [
@@ -21140,19 +21139,12 @@
           {
             "t": 1795690800,
             "o": 1.42253,
-            "h": 1.42343,
+            "h": 1.42373,
             "l": 1.422,
-            "c": 1.42307
+            "c": 1.42302
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 1.42906,
-            "h": 1.43201,
-            "l": 1.4286,
-            "c": 1.43112
-          },
           {
             "t": 1795536000,
             "o": 1.43116,
@@ -21459,7 +21451,14 @@
             "o": 1.42253,
             "h": 1.42343,
             "l": 1.422,
-            "c": 1.42307
+            "c": 1.42315
+          },
+          {
+            "t": 1795694400,
+            "o": 1.42318,
+            "h": 1.42373,
+            "l": 1.4226,
+            "c": 1.42302
           }
         ]
       }
@@ -21471,8 +21470,8 @@
       "quote": "CHF",
       "decimals": 5,
       "pip": 0.0001,
-      "price": 0.83459,
-      "chg_day": -0.14,
+      "price": 0.83425,
+      "chg_day": -0.18,
       "win_prob": 59,
       "has_valid_ob": true,
       "zone_kind": "OB_FVG",
@@ -21503,7 +21502,7 @@
       },
       "ob_high": 0.83204,
       "ob_low": 0.83134,
-      "created_at": 1795693384,
+      "created_at": 1795697444,
       "macro_reason": "USD NEUTRAL / CHF NEUTRAL | Zona: OB + FVG | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 0.83279. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 59,
@@ -21844,7 +21843,7 @@
             "o": 0.84078,
             "h": 0.844,
             "l": 0.82858,
-            "c": 0.83459
+            "c": 0.83425
           }
         ],
         "1d": [
@@ -22159,9 +22158,9 @@
           {
             "t": 1795651200,
             "o": 0.83062,
-            "h": 0.83476,
+            "h": 0.83489,
             "l": 0.8301,
-            "c": 0.83459
+            "c": 0.83425
           }
         ],
         "4h": [
@@ -22476,19 +22475,12 @@
           {
             "t": 1795690800,
             "o": 0.83312,
-            "h": 0.83476,
+            "h": 0.83489,
             "l": 0.83307,
-            "c": 0.83459
+            "c": 0.83425
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 0.83583,
-            "h": 0.8371,
-            "l": 0.83527,
-            "c": 0.83537
-          },
           {
             "t": 1795536000,
             "o": 0.83539,
@@ -22793,9 +22785,16 @@
           {
             "t": 1795690800,
             "o": 0.83312,
-            "h": 0.83476,
+            "h": 0.83489,
             "l": 0.83307,
-            "c": 0.83459
+            "c": 0.83456
+          },
+          {
+            "t": 1795694400,
+            "o": 0.8346,
+            "h": 0.83475,
+            "l": 0.83382,
+            "c": 0.83425
           }
         ]
       }
@@ -22807,8 +22806,8 @@
       "quote": "JPY",
       "decimals": 3,
       "pip": 0.01,
-      "price": 174.74,
-      "chg_day": 0.09,
+      "price": 174.823,
+      "chg_day": 0.14,
       "win_prob": 70,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -23180,7 +23179,7 @@
             "o": 174.401,
             "h": 175.041,
             "l": 173.289,
-            "c": 174.74
+            "c": 174.817
           }
         ],
         "1d": [
@@ -23497,7 +23496,7 @@
             "o": 174.656,
             "h": 174.855,
             "l": 174.361,
-            "c": 174.74
+            "c": 174.817
           }
         ],
         "4h": [
@@ -23812,19 +23811,12 @@
           {
             "t": 1795690800,
             "o": 174.788,
-            "h": 174.823,
-            "l": 174.715,
-            "c": 174.74
+            "h": 174.826,
+            "l": 174.709,
+            "c": 174.823
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 174.736,
-            "h": 174.802,
-            "l": 174.501,
-            "c": 174.522
-          },
           {
             "t": 1795536000,
             "o": 174.524,
@@ -24130,8 +24122,15 @@
             "t": 1795690800,
             "o": 174.788,
             "h": 174.823,
-            "l": 174.715,
-            "c": 174.74
+            "l": 174.709,
+            "c": 174.744
+          },
+          {
+            "t": 1795694400,
+            "o": 174.745,
+            "h": 174.826,
+            "l": 174.718,
+            "c": 174.823
           }
         ]
       }
@@ -24143,8 +24142,8 @@
       "quote": "USD",
       "decimals": 2,
       "pip": 1.0,
-      "price": 60691.68,
-      "chg_day": 0.52,
+      "price": 60763.16,
+      "chg_day": 0.64,
       "win_prob": 62,
       "has_valid_ob": true,
       "zone_kind": "FVG",
@@ -24152,7 +24151,7 @@
       "near_entry": true,
       "is_safe_entry": false,
       "caution_reasons": [
-        "4H en NEUTRAL"
+        "4H en SUBE"
       ],
       "economy_short": "BTC NEUTRAL / USD NEUTRAL",
       "macro_dir": "NEUTRAL",
@@ -24161,7 +24160,7 @@
       "tf_bias": {
         "weekly": "BAJA",
         "daily": "BAJA",
-        "h4": "NEUTRAL",
+        "h4": "SUBE",
         "h1": "NEUTRAL"
       },
       "volatility": {
@@ -24176,7 +24175,7 @@
       "ob_high": 60983.94,
       "ob_low": 60694.46,
       "created_at": 1795672337,
-      "macro_reason": "BTC NEUTRAL / USD NEUTRAL | Zona: FVG limpio | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 59352.56. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
+      "macro_reason": "BTC NEUTRAL / USD NEUTRAL | Zona: FVG limpio | 1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 59352.56. Estado: ENTRADA NORMAL · CON PRECAUCIÓN.",
       "confluence": {
         "score": 62,
         "alignment": "NEUTRAL",
@@ -24516,7 +24515,7 @@
             "o": 61161.91,
             "h": 64478.36,
             "l": 57241.84,
-            "c": 60691.68
+            "c": 60763.16
           }
         ],
         "1d": [
@@ -24833,17 +24832,10 @@
             "o": 60378.57,
             "h": 61040.95,
             "l": 60324.98,
-            "c": 60691.68
+            "c": 60763.16
           }
         ],
         "4h": [
-          {
-            "t": 1795046400,
-            "o": 62976.84,
-            "h": 63226.12,
-            "l": 62330.89,
-            "c": 63135.27
-          },
           {
             "t": 1795060800,
             "o": 63141.95,
@@ -25150,17 +25142,17 @@
             "o": 60446.45,
             "h": 60979.75,
             "l": 60386.67,
-            "c": 60691.68
+            "c": 60636.77
+          },
+          {
+            "t": 1795694400,
+            "o": 60626.1,
+            "h": 60909.95,
+            "l": 60514.81,
+            "c": 60763.16
           }
         ],
         "1h": [
-          {
-            "t": 1795532400,
-            "o": 60371.52,
-            "h": 60435.62,
-            "l": 59556.21,
-            "c": 59647.86
-          },
           {
             "t": 1795536000,
             "o": 59621.29,
@@ -25465,9 +25457,16 @@
           {
             "t": 1795690800,
             "o": 60435.21,
-            "h": 60691.68,
+            "h": 60709.52,
             "l": 60409.93,
-            "c": 60691.68
+            "c": 60636.77
+          },
+          {
+            "t": 1795694400,
+            "o": 60626.1,
+            "h": 60909.95,
+            "l": 60514.81,
+            "c": 60763.16
           }
         ]
       }
@@ -25509,7 +25508,7 @@
       },
       "ob_high": 50184.34,
       "ob_low": 50176.34,
-      "created_at": 1795693384,
+      "created_at": 1795697444,
       "macro_reason": "US30 NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 49396.15. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
         "score": 63,
@@ -26843,7 +26842,7 @@
       },
       "ob_high": 23584.62,
       "ob_low": 23576.62,
-      "created_at": 1795693384,
+      "created_at": 1795697444,
       "macro_reason": "USTEC NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 23724.53. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
         "score": 63,
@@ -28177,7 +28176,7 @@
       },
       "ob_high": 7186.73,
       "ob_low": 7178.73,
-      "created_at": 1795693384,
+      "created_at": 1795697444,
       "macro_reason": "US500 NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 7149.15. Sin bloque cercano dentro del rango permitido.",
       "confluence": {
         "score": 63,
