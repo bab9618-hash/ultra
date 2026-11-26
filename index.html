@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Especialista Swing v12.1</title>
+  <title>LATICCE · Especialista Swing v12.3</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -79,7 +79,7 @@
   <div id="boot-screen" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2.5rem 1.25rem;text-align:center;">
     <canvas id="boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
-    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL SWING · v12.1</div>
+    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL SWING · v12.3</div>
 
     <div class="relative z-10 w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 320 320" class="w-full h-full overflow-visible">
@@ -111,6 +111,56 @@
           ENTRAR A LA CABINA ▸
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL FIJAR MI OPERACIÓN EN GRÁFICO DE ULTRÓN -->
+  <div id="pin-trade-modal" class="hidden fixed inset-0 z-50 bg-[#030407]/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-[#070b14] border border-amber-400/70 rounded-2xl p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <span class="font-hud text-sm font-bold text-amber-300">📌 FIJAR MI OPERACIÓN (<span id="pin-modal-sym">GBPCAD</span>)</span>
+        <button type="button" onclick="closePinModal()" class="px-2.5 py-1 rounded bg-slate-800 text-xs text-slate-300 font-bold">✕</button>
+      </div>
+      <p class="text-[11px] text-slate-300 leading-relaxed">Congela tus niveles reales abiertos en tu bróker para que ninguna actualización automática te los cambie, y detecta si un bloque superior del escáner sirve como re-entrada.</p>
+      <form onsubmit="savePinnedTrade(event)" class="space-y-2.5 text-xs">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[10px] text-slate-400">DIRECCIÓN</label>
+            <select id="pin-dir" class="w-full mt-1 bg-[#04070e] border border-slate-700 rounded px-2.5 py-2 text-white">
+              <option value="SELL">VENTA (SELL)</option>
+              <option value="BUY">COMPRA (BUY)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[10px] text-sky-400">PRECIO ENTRADA</label>
+            <input id="pin-entry" type="number" step="any" required class="w-full mt-1 bg-[#04070e] border border-slate-700 rounded px-2.5 py-2 text-white" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[10px] text-red-400">STOP LOSS (SL)</label>
+            <input id="pin-sl" type="number" step="any" required class="w-full mt-1 bg-[#04070e] border border-slate-700 rounded px-2.5 py-2 text-white" />
+          </div>
+          <div>
+            <label class="text-[10px] text-indigo-400">GATILLO BE (+1R)</label>
+            <input id="pin-be" type="number" step="any" required class="w-full mt-1 bg-[#04070e] border border-slate-700 rounded px-2.5 py-2 text-white" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[10px] text-emerald-400">TP1 PARCIAL</label>
+            <input id="pin-tp1" type="number" step="any" required class="w-full mt-1 bg-[#04070e] border border-slate-700 rounded px-2.5 py-2 text-white" />
+          </div>
+          <div>
+            <label class="text-[10px] text-teal-300">SWING TP (TP2)</label>
+            <input id="pin-tp2" type="number" step="any" required class="w-full mt-1 bg-[#04070e] border border-slate-700 rounded px-2.5 py-2 text-white" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closePinModal()" class="px-3.5 py-2 rounded border border-slate-700 text-slate-300 font-bold">CANCELAR</button>
+          <button type="submit" class="px-4 py-2 rounded bg-amber-500 text-black font-black">📌 CONGELAR NIVELES</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -210,25 +260,20 @@
     <section id="ptab-jarvis" class="space-y-3">
       <div id="focus-pick-banner" class="hidden rounded-xl p-3.5 border border-amber-400/70 bg-gradient-to-r from-amber-500/15 via-[#0a0f1a]/90 to-emerald-500/10 flex flex-wrap items-center justify-between gap-3"></div>
 
-      <div class="flex flex-wrap gap-2 text-[10px] font-mono text-slate-300 bg-[#050811]/90 border border-slate-800 rounded-lg px-3 py-2">
-        <span class="text-indigo-300 font-bold">🌊 SWING SEGURO</span><span>·</span>
-        <span class="text-emerald-400 font-bold">✅ INTRADAY OB+FVG</span><span>·</span>
-        <span class="text-orange-300 font-bold">⚠️ CON PRECAUCIÓN</span><span>·</span>
-        <span class="text-emerald-300 font-bold">🟢 EN TP1</span><span>·</span>
-        <span class="text-slate-400">⚪ ESPERAR</span>
-      </div>
-
       <div class="flex gap-2 border-b border-slate-800 pb-2 text-xs font-mono">
         <button type="button" onclick="setJarvisSubView('SWING_DESK')" id="jsub-swing" class="px-3 py-1.5 rounded bg-indigo-500 text-white font-bold">🌊 MESA DE SWING (PRINCIPAL)</button>
         <button type="button" onclick="setJarvisSubView('ALL')" id="jsub-all" class="px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300 font-bold">📋 TODOS LOS ACTIVOS (22)</button>
       </div>
 
-      <div id="jarvis-filter-bar" class="hidden flex flex-wrap gap-1.5 text-xs font-mono">
+      <!-- BARRA COMPLETA DE FILTROS SIEMPRE VISIBLE -->
+      <div id="jarvis-filter-bar" class="flex flex-wrap gap-1.5 text-xs font-mono">
         <button type="button" onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
-        <button type="button" onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-indigo-500/40 text-indigo-300" data-pf="SWING">🌊 SOLO SWING</button>
-        <button type="button" onclick="setPanelFilter('SAFE')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-emerald-500/40 text-emerald-300" data-pf="SAFE">✅ ENTRADA SEGURA</button>
-        <button type="button" onclick="setPanelFilter('INTRADAY')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-cyan-500/40 text-cyan-300" data-pf="INTRADAY">💎 INTRADAY OB+FVG</button>
-        <button type="button" onclick="setPanelFilter('CAUTION')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-orange-500/40 text-orange-300" data-pf="CAUTION">⚠️ CON PRECAUCIÓN</button>
+        <button type="button" onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-indigo-500/40 text-indigo-300" data-pf="SWING">🌊 POTENCIAL SWING</button>
+        <button type="button" onclick="setPanelFilter('OBFVG')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-cyan-500/40 text-cyan-300" data-pf="OBFVG">💎 OB / FVG</button>
+        <button type="button" onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-emerald-500/40 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
+        <button type="button" onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-orange-500/40 text-orange-300" data-pf="NEWS">⚠️ NOTICIA HOY</button>
+        <button type="button" onclick="setPanelFilter('CAUTION')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-amber-500/40 text-amber-300" data-pf="CAUTION">⚠️ CON PRECAUCIÓN</button>
+        <button type="button" onclick="setPanelFilter('BROKEN')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-red-500/40 text-red-400" data-pf="BROKEN">⛔ TESIS ROTA</button>
       </div>
 
       <div class="relative flex items-center">
@@ -260,11 +305,15 @@
     <section id="ptab-ultron" class="hidden hud-panel rounded-xl p-4 space-y-4">
       <div id="pu-caution-banner" class="hidden rounded-lg p-2.5 text-xs"></div>
 
-      <div class="flex flex-wrap gap-2 text-[10px] font-mono text-slate-300 bg-[#050811] border border-slate-800 rounded-lg px-3 py-2">
-        <span class="text-indigo-300 font-bold">🌊 SWING SEGURO</span><span>·</span>
-        <span class="text-emerald-400 font-bold">✅ INTRADAY OB+FVG</span><span>·</span>
-        <span class="text-orange-300 font-bold">⚠️ CON PRECAUCIÓN</span><span>·</span>
-        <span class="text-slate-400">⚪ ESPERAR</span>
+      <div class="flex flex-wrap items-center justify-between gap-2 bg-[#050811] border border-slate-800 rounded-lg px-3 py-2 text-[10px] font-mono">
+        <div class="flex flex-wrap gap-2 text-slate-300">
+          <span class="text-amber-300 font-bold">📌 FIJADA</span><span>·</span>
+          <span class="text-indigo-300 font-bold">🌊 SWING</span><span>·</span>
+          <span class="text-emerald-400 font-bold">✅ INTRADAY OB/FVG</span><span>·</span>
+          <span class="text-orange-300 font-bold">⚠️ CON PRECAUCIÓN</span><span>·</span>
+          <span class="text-slate-400">⚪ ESPERAR</span>
+        </div>
+        <div id="pu-pin-controls" class="flex gap-1.5"></div>
       </div>
 
       <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5" id="panel-ultron-selector"></div>
@@ -551,11 +600,104 @@
     let openWhyPanels = {};
     let voiceEnabled = localStorage.getItem('oraculo_voice') !== 'off';
     let trades = JSON.parse(localStorage.getItem('oraculo_trades_v6') || '[]');
+    let pinnedTrades = JSON.parse(localStorage.getItem('oraculo_pinned_trades') || '{}');
     let completedLessons = JSON.parse(localStorage.getItem('oraculo_course_v2') || '[]');
     let customVoiceMap = JSON.parse(localStorage.getItem('oraculo_voice_map') || '{}');
     let ghToken = localStorage.getItem('oraculo_gh_token') || '';
     let geminiApiKey = localStorage.getItem('oraculo_gemini_key') || '';
     let agentHistories = { jarvis: [], vision: [], ultron: [], friday: [], edith: [], karen: [], homer: [] };
+
+    // FUNCIONES PARA FIJAR / CONGELAR OPERACIÓN ABIERTA DEL USUARIO
+    function openPinModal() {
+      if (!data) return;
+      const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
+      const existing = pinnedTrades[a.symbol];
+      const p = getSetupPips(a);
+      document.getElementById('pin-modal-sym').textContent = a.symbol;
+      document.getElementById('pin-dir').value = existing ? existing.direction : a.setup.direction;
+      document.getElementById('pin-entry').value = existing ? existing.entry : a.setup.entry;
+      document.getElementById('pin-sl').value = existing ? existing.sl : a.setup.sl;
+      document.getElementById('pin-be').value = existing ? existing.be : p.be;
+      document.getElementById('pin-tp1').value = existing ? existing.tp1 : a.setup.tp1;
+      document.getElementById('pin-tp2').value = existing ? existing.tp2 : p.tp2Val;
+      document.getElementById('pin-trade-modal').classList.remove('hidden');
+    }
+
+    function closePinModal() {
+      document.getElementById('pin-trade-modal').classList.add('hidden');
+    }
+
+    function savePinnedTrade(e) {
+      e.preventDefault();
+      const sym = selectedSymbol;
+      pinnedTrades[sym] = {
+        direction: document.getElementById('pin-dir').value,
+        entry: parseFloat(document.getElementById('pin-entry').value),
+        sl: parseFloat(document.getElementById('pin-sl').value),
+        be: parseFloat(document.getElementById('pin-be').value),
+        tp1: parseFloat(document.getElementById('pin-tp1').value),
+        tp2: parseFloat(document.getElementById('pin-tp2').value),
+      };
+      localStorage.setItem('oraculo_pinned_trades', JSON.stringify(pinnedTrades));
+      closePinModal();
+      renderPanelJarvis();
+      renderPanelUltron();
+    }
+
+    function clearPinnedTrade(sym) {
+      delete pinnedTrades[sym];
+      localStorage.setItem('oraculo_pinned_trades', JSON.stringify(pinnedTrades));
+      renderPanelJarvis();
+      renderPanelUltron();
+    }
+
+    function getEffectiveLevels(a) {
+      const pin = pinnedTrades[a.symbol];
+      const pip = a.pip || 0.0001;
+      const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
+      const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
+
+      if (pin) {
+        const risk = Math.abs(pin.entry - pin.sl);
+        const isBaseInBE = pin.direction === 'BUY' ? (a.price >= pin.be) : (a.price <= pin.be);
+        return {
+          isPinned: true,
+          direction: pin.direction,
+          entry: pin.entry,
+          sl: pin.sl,
+          be: pin.be,
+          tp1: pin.tp1,
+          tp2: pin.tp2,
+          slUnits: toU(risk),
+          tp1Units: toU(pin.tp1 - pin.entry),
+          tp2Units: toU(pin.tp2 - pin.entry),
+          unitLabel,
+          scannerEntry: a.setup.entry,
+          scannerTag: a.setup.signal_tag,
+          isBaseInBE
+        };
+      }
+
+      const risk = Math.abs(a.setup.entry - a.setup.sl);
+      const be = a.setup.be || a.setup.be_trigger || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk).toFixed(a.decimals)) : Number((a.setup.entry - risk).toFixed(a.decimals)));
+      const tp2 = a.setup.tp2 || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk * 4.5).toFixed(a.decimals)) : Number((a.setup.entry - risk * 4.5).toFixed(a.decimals)));
+      return {
+        isPinned: false,
+        direction: a.setup.direction,
+        entry: a.setup.entry,
+        sl: a.setup.sl,
+        be,
+        tp1: a.setup.tp1,
+        tp2,
+        slUnits: toU(risk),
+        tp1Units: toU(a.setup.tp1 - a.setup.entry),
+        tp2Units: toU(tp2 - a.setup.entry),
+        unitLabel,
+        scannerEntry: a.setup.entry,
+        scannerTag: a.setup.signal_tag,
+        isBaseInBE: false
+      };
+    }
 
     const FRIDAY_CURRICULUM = [
       {
@@ -1010,6 +1152,15 @@
     }
 
     function getAssetColorState(a) {
+      if (pinnedTrades[a.symbol]) {
+        return {
+          code: 'PINNED', icon: '📌', label: 'OPERACIÓN FIJADA', hitTP1: false, isSafe: true, isCaution: false, isSwing: true,
+          cardBorder: 'border-amber-400 shadow-md shadow-amber-500/20',
+          selBox: 'bg-amber-500/20 border-amber-400 text-amber-200',
+          badgeClass: 'bg-amber-500/25 text-amber-300 border-amber-400'
+        };
+      }
+
       const safety = evaluateEntrySafety(a);
       const isBuy = a.setup?.direction === 'BUY';
       const createdTs = a.created_at || 0;
@@ -1054,7 +1205,7 @@
       }
 
       return {
-        code: 'INTRADAY', icon: '✅', label: 'INTRADAY OB+FVG', hitTP1: false, isSafe: true, isCaution: false, isSwing: false,
+        code: 'INTRADAY', icon: '✅', label: 'INTRADAY OB/FVG', hitTP1: false, isSafe: true, isCaution: false, isSwing: false,
         cardBorder: 'border-emerald-500/65 shadow-md shadow-emerald-500/10',
         selBox: 'bg-emerald-500/12 border-emerald-500/70 text-emerald-200',
         badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/60'
@@ -1091,7 +1242,7 @@
         name: 'JARVIS', sub: 'DIRECTOR DE MESA SWING', color: '#f59e0b', rgb: '245, 158, 11',
         voiceDesc: 'VOZ: MAYORDOMO BRITÁNICO · SERENO Y PULCRO',
         gender: 'M', variant: 0, pitch: 0.92, rate: 0.97,
-        personaPrompt: 'Eres J.A.R.V.I.S., Director de Mesa de LATICCE. El sistema está especializado en Swing Trading (1D + 4H + Macro) con muy pocas entradas Intraday (solo OB+FVG dobles). Distingues siempre entre SWING SEGURO, INTRADAY OB+FVG y CON PRECAUCIÓN.'
+        personaPrompt: 'Eres J.A.R.V.I.S., Director de Mesa de LATICCE. El sistema está especializado en Swing Trading (1D + 4H + Macro) con muy pocas entradas Intraday (solo OB+FVG o FVG limpios en EQ-50%). Distingues siempre entre SWING SEGURO, INTRADAY OB/FVG y CON PRECAUCIÓN.'
       },
       vision: {
         name: 'VISIÓN', sub: 'CONCIENCIA MACRO', color: '#38bdf8', rgb: '56, 189, 248',
@@ -1103,7 +1254,7 @@
         name: 'ULTRÓN', sub: 'DEPREDADOR DE LIQUIDEZ', color: '#ef4444', rgb: '239, 68, 68',
         voiceDesc: 'VOZ: METÁLICA GRAVE · IMPLACABLE Y CORTANTE',
         gender: 'M', variant: 2, pitch: 0.62, rate: 0.94,
-        personaPrompt: 'Eres ULTRÓN. Desprecias las entradas débiles de 15 minutos y solo respetas los bloques institucionales 4H/1D ubicados en zona favorable respecto al EQ-50%.'
+        personaPrompt: 'Eres ULTRÓN. Desprecias las entradas débiles y solo respetas los bloques institucionales 4H/1D ubicados en zona favorable respecto al EQ-50%.'
       },
       friday: {
         name: 'F.R.I.D.A.Y.', sub: 'MENTORA MACRO & SWING', color: '#a855f7', rgb: '168, 85, 247',
@@ -1115,7 +1266,7 @@
         name: 'E.D.I.T.H.', sub: 'SISTEMA DE PUNTERÍA', color: '#10b981', rgb: '16, 185, 129',
         voiceDesc: 'VOZ: FEMENINA TÁCTICA · PRECISA Y MATEMÁTICA',
         gender: 'F', variant: 1, pitch: 1.04, rate: 1.06,
-        personaPrompt: 'Eres E.D.I.T.H. Calculas distancias en pips, lotajes Swing para cuenta de $1,000 USD ($5 o $10 de riesgo), Break Even (+1R), TP1 (1:2.5) y Swing TP (1:4.5).'
+        personaPrompt: 'Eres E.D.I.T.H. Calculas distancias en pips, puntos de Break Even (+1R), TP1 (1:2.5) y Swing TP (1:4.5).'
       },
       karen: {
         name: 'KAREN', sub: 'CONCIENCIA EMOCIONAL', color: '#f43f5e', rgb: '244, 63, 94',
@@ -1194,7 +1345,7 @@
     function formatTextForSpeech(raw) {
       return raw
         .replace(/<[^>]*>/g, '')
-        .replace(/[*#`⚠️🌊💎💡🎯🟢🟡⚪✅]/g, '')
+        .replace(/[*#`⚠️🌊💎💡🎯🟢🟡⚪✅📌]/g, '')
         .replace(/XAUUSD/g, 'Oro Dólar')
         .replace(/BTCUSD/g, 'Bitcoin')
         .replace(/USTEC/g, 'Nasdaq cien')
@@ -1295,13 +1446,12 @@
     function buildCompactMarketContext() {
       if (!data || !data.assets) return 'Telemetría aún sincronizando.';
       const fp = getFocusPrimary();
-      const focus = fp ? `Foco Principal #1: ${fp.symbol} (${fp.direction}, ${fp.is_swing ? 'SWING' : 'INTRADAY OB+FVG'}, ${fp.is_safe ? 'ENTRADA SEGURA' : 'CON PRECAUCIÓN'}, prob ${fp.win_prob}%, entrada ${fp.entry}, SL ${fp.sl}, TP1 ${fp.tp1}).` : '';
+      const focus = fp ? `Foco Principal #1: ${fp.symbol} (${fp.direction}, ${fp.is_swing ? 'SWING' : 'INTRADAY OB/FVG'}, ${fp.is_safe ? 'ENTRADA SEGURA' : 'CON PRECAUCIÓN'}, prob ${fp.win_prob}%, entrada ${fp.entry}, SL ${fp.sl}, TP1 ${fp.tp1}).` : '';
       const macro = `DXY=${data.brief?.dxy || '--'}, US10Y=${data.brief?.us10y || '--'}.`;
       const rows = data.assets.map(a => {
-        const d = getAssetUnitsDist(a);
-        const p = getSetupPips(a);
+        const eff = getEffectiveLevels(a);
         const st = getAssetColorState(a);
-        return `${a.symbol}[${st.label}|${getCurrencyStrengthText(a)}]:P=${a.price}|Prob=${a.win_prob}%|Ent=${a.setup.entry}(a ${d.units}${d.label})|SL=${a.setup.sl}(${p.sl}${p.unitLabel})|BE=${p.be}|TP1=${a.setup.tp1}|SwingTP=${p.tp2Val}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|${a.macro_reason}`;
+        return `${a.symbol}[${st.label}|${getCurrencyStrengthText(a)}]:P=${a.price}|Prob=${a.win_prob}%|Ent=${eff.entry}|SL=${eff.sl}|BE=${eff.be}|TP1=${eff.tp1}|SwingTP=${eff.tp2}|1S:${a.tf_bias?.weekly || '--'},1D:${a.tf_bias?.daily},4H:${a.tf_bias?.h4}|${a.macro_reason}`;
       }).join('\n');
       return `${macro}\n${focus}\nACTIVOS:\n${rows}`;
     }
@@ -1320,21 +1470,23 @@
       const intraList = data.assets.filter(a => getAssetColorState(a).code === 'INTRADAY');
       const target = asset || (fp ? data.assets.find(a => a.symbol === fp.symbol) : swingList[0]) || data.assets[0];
       const safety = evaluateEntrySafety(target);
+      const eff = getEffectiveLevels(target);
       const d = getAssetUnitsDist(target);
-      const p = getSetupPips(target);
       const strength = getCurrencyStrengthText(target);
 
-      const modeDesc = !safety.hasZone
-        ? 'no tiene estructura Swing ni Intraday OB+FVG limpia ahora mismo (ESPERAR)'
-        : (safety.isSafe
-          ? (safety.isSwing ? 'califica como SWING SEGURO de varios días' : 'califica como INTRADAY SELECTIVO (OB+FVG doble)')
-          : `aparece CON PRECAUCIÓN por: ${safety.reasons.join(', ')}`);
+      const modeDesc = eff.isPinned
+        ? `tiene una OPERACIÓN FIJADA por usted en ${eff.entry} (SL ${eff.sl}, BE ${eff.be}, TP1 ${eff.tp1})`
+        : (!safety.hasZone
+          ? 'no tiene estructura Swing ni Intraday OB/FVG limpia ahora mismo (ESPERAR)'
+          : (safety.isSafe
+            ? (safety.isSwing ? 'califica como SWING SEGURO de varios días' : 'califica como INTRADAY SELECTIVO (OB/FVG)')
+            : `aparece CON PRECAUCIÓN por: ${safety.reasons.join(', ')}`));
 
       if (agentKey === 'jarvis') {
         if (qUp.includes('SWING') || qUp.includes('SEGURA')) {
-          return `A sus órdenes, señor. En la Mesa de Swing tenemos ${swingList.length} oportunidades limpias (${swingList.map(s => `${s.symbol} ${s.win_prob}%`).join(', ') || 'ninguna ahora'}) y ${intraList.length} entradas Intraday selectivas (${intraList.map(s => s.symbol).join(', ') || 'ninguna'}). El sistema filtra automáticamente señales débiles.`;
+          return `A sus órdenes, señor. En la Mesa de Swing tenemos ${swingList.length} oportunidades limpias (${swingList.map(s => `${s.symbol} ${s.win_prob}%`).join(', ') || 'ninguna ahora'}) y ${intraList.length} entradas Intraday selectivas (${intraList.map(s => s.symbol).join(', ') || 'ninguna'}).`;
         }
-        return `A sus órdenes, señor. ${target.symbol} (${strength}) cotiza en ${target.price} y ${modeDesc}. Entrada en ${target.setup.entry} (a ${d.units} ${d.label}), SL en ${target.setup.sl} (${p.sl} ${p.unitLabel}), BE en ${p.be}, TP1 en ${target.setup.tp1} y Swing TP en ${p.tp2Val}.`;
+        return `A sus órdenes, señor. ${target.symbol} (${strength}) cotiza en ${target.price} y ${modeDesc}. Entrada en ${eff.entry} (a ${d.units} ${d.label}), SL en ${eff.sl} (${eff.slUnits} ${eff.unitLabel}), BE en ${eff.be}, TP1 en ${eff.tp1} y Swing TP en ${eff.tp2}.`;
       }
 
       if (agentKey === 'ultron') {
@@ -1346,14 +1498,11 @@
       }
 
       if (agentKey === 'friday') {
-        return `¡Aquí estoy, jefe! LATICCE prioriza operaciones Swing alineadas en 1D + 4H + Macro. ${target.symbol} ${modeDesc}. Protege en Break Even al tocar ${p.be} (+1R).`;
+        return `¡Aquí estoy, jefe! LATICCE prioriza operaciones Swing alineadas en 1D + 4H + Macro. ${target.symbol} ${modeDesc}. Protege en Break Even al tocar ${eff.be} (+1R).`;
       }
 
       if (agentKey === 'edith') {
-        const pipValApprox = target.symbol.includes('JPY') ? 6.5 : 10;
-        const riskUsd = safety.isSafe ? 10 : 5;
-        const lot = Math.max(0.01, Number((riskUsd / (Math.max(1, p.sl) * pipValApprox)).toFixed(2)));
-        return `Cálculo táctico en ${target.symbol}: Stop de ${p.sl} ${p.unitLabel}. Para cuenta de $1,000 USD (${safety.isSafe ? '1% = $10' : '0.5% = $5'}), lotaje sugerido: ${lot} lotes. TP1 en ${target.setup.tp1} y Swing TP en ${p.tp2Val}.`;
+        return `Coordenadas tácticas en ${target.symbol}: entrada ${eff.entry} (a ${d.units} ${d.label}), Stop ${eff.sl} (${eff.slUnits} ${eff.unitLabel}), Gatillo BE en ${eff.be}, TP1 en ${eff.tp1} y Swing TP en ${eff.tp2}.`;
       }
 
       if (agentKey === 'karen') {
@@ -1361,14 +1510,14 @@
       }
 
       const hm = getHomerMetrics();
-      return `Acierto histórico: ${hm.winRate}% (${hm.pnlR}). ${target.symbol} tiene probabilidad del ${target.win_prob}% con objetivos 1:2.5 (${target.setup.tp1}) y 1:4.5 (${p.tp2Val}).`;
+      return `Acierto histórico: ${hm.winRate}% (${hm.pnlR}). ${target.symbol} tiene probabilidad del ${target.win_prob}% con objetivos 1:2.5 (${eff.tp1}) y 1:4.5 (${eff.tp2}).`;
     }
 
     async function askGeminiBrain(userQuestion, agentKey) {
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
       const history = agentHistories[agentKey] || [];
       const systemInstruction = `${ag.personaPrompt}
-Formas parte de LATICCE v12.1 (Especialista Swing 1D/4H/Macro con muy pocas entradas Intraday solo cuando hay OB+FVG doble).
+Formas parte de LATICCE v12.3 (Especialista Swing 1D/4H/Macro con entradas Intraday selectivas en OB+FVG o FVG limpios).
 Responde directamente en 3 a 6 oraciones sin asteriscos ni markdown pesado.
 TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
 
@@ -1496,22 +1645,18 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
     }
 
     function getAssetUnitsDist(a) {
-      const diff = Math.abs(a.price - a.setup.entry);
+      const eff = getEffectiveLevels(a);
+      const diff = Math.abs(a.price - eff.entry);
       const units = a.pip ? Math.round((diff / a.pip) * 10) / 10 : diff;
       return { diff, units, label: a.type === 'forex' ? 'pips' : 'pts' };
     }
     function getSetupPips(a) {
-      const pip = a.pip || 0.0001;
-      const unitLabel = a.type === 'forex' ? 'pips' : 'pts';
-      const toU = v => Math.round((Math.abs(v) / pip) * 10) / 10;
-      const risk = Math.abs(a.setup.entry - a.setup.sl);
-      const be = a.setup.be || a.setup.be_trigger || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk).toFixed(a.decimals)) : Number((a.setup.entry - risk).toFixed(a.decimals)));
-      const tp2 = a.setup.tp2 || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk * 4.5).toFixed(a.decimals)) : Number((a.setup.entry - risk * 4.5).toFixed(a.decimals)));
-      return { unitLabel, sl: toU(risk), tp1: toU(a.setup.tp1 - a.setup.entry), tp2: toU(tp2 - a.setup.entry), be, tp2Val: tp2 };
+      const eff = getEffectiveLevels(a);
+      return { unitLabel: eff.unitLabel, sl: eff.slUnits, tp1: eff.tp1Units, tp2: eff.tp2Units, be: eff.be, tp2Val: eff.tp2 };
     }
     function getNearestAsset() {
       if (!data || !data.assets || !data.assets.length) return null;
-      return [...data.assets].sort((a, b) => (Math.abs(a.price - a.setup.entry) / a.price) - (Math.abs(b.price - b.setup.entry) / b.price))[0];
+      return [...data.assets].sort((a, b) => (Math.abs(a.price - getEffectiveLevels(a).entry) / a.price) - (Math.abs(b.price - getEffectiveLevels(b).entry) / b.price))[0];
     }
     function getHomerMetrics() {
       if (!trades.length) return { winRate: 0, pnlR: '+0R', total: 0 };
@@ -1602,7 +1747,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
           { label: 'ACADEMIA (16) ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('friday');" }
         ],
         edith: [
-          { label: '📐 CALCULAR LOTAJE SWING', q: 'Calcula el lotaje exacto Swing para una cuenta de $1,000 USD.' },
+          { label: '📐 PUNTOS Y PIPS', q: 'Dame las distancias en pips y puntos de Break Even y TP1 de los pares activos.' },
           { label: 'TOP BLANCOS', q: 'Dame las coordenadas exactas de los pares activos ahora mismo.' }
         ],
         karen: [
@@ -1629,7 +1774,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
 
       if (key === 'jarvis') {
         document.getElementById('agent-hero-metric').textContent = fp ? `${fp.is_swing ? '🌊' : (fp.is_safe ? '✅' : '⚠️')} ${fp.symbol} (${fp.win_prob}%)` : 'ESCANEANDO';
-        document.getElementById('agent-hero-sub').textContent = fp ? `${fp.direction} · ${fp.is_swing ? 'SWING SEGURO' : (fp.is_safe ? 'INTRADAY OB+FVG' : 'CON PRECAUCIÓN')}` : 'DIRECTOR DE MESA';
+        document.getElementById('agent-hero-sub').textContent = fp ? `${fp.direction} · ${fp.is_swing ? 'SWING SEGURO' : (fp.is_safe ? 'INTRADAY OB/FVG' : 'CON PRECAUCIÓN')}` : 'DIRECTOR DE MESA';
         typeAgentDialogue(fp
           ? `A sus órdenes, señor. Modo Especialista Swing activo. El Foco Principal #1 hoy es ${fp.symbol} en ${fp.direction} (${fp.win_prob}% · ${fp.is_swing ? 'SWING SEGURO' : 'INTRADAY SELECTIVO'}). Entrada en ${fp.entry}, Stop en ${fp.sl} y TP1 en ${fp.tp1}.`
           : `A sus órdenes, señor. LATICCE en modo Especialista Swing: ahora mismo el mercado está en consolidación sin setups Swing limpios.`, false);
@@ -1641,7 +1786,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         const t = nearest || data?.assets?.[0];
         document.getElementById('agent-hero-metric').textContent = t ? `${t.symbol} ${t.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESTRUCTURA';
         document.getElementById('agent-hero-sub').textContent = t ? `SESGO ${t.chart_bias} · FILTRO SWING` : 'ORDER BLOCKS';
-        typeAgentDialogue(`Filtro Swing calibrado: las señales intradía débiles han sido purgadas. Solo pasan bloques estructurales con recorrido real.`, false);
+        typeAgentDialogue(`Filtro Swing calibrado: puedes fijar tus propias operaciones abiertas en el gráfico con el botón 📌 FIJAR MI OPERACIÓN.`, false);
       } else if (key === 'friday') {
         const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
@@ -1650,8 +1795,8 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       } else if (key === 'edith') {
         const d = nearest ? getAssetUnitsDist(nearest) : null;
         document.getElementById('agent-hero-metric').textContent = d ? `${d.units} ${d.label}` : 'PUNTERÍA';
-        document.getElementById('agent-hero-sub').textContent = nearest ? `${nearest.symbol} · ${nearest.price}` : 'CÁLCULO DE RIESGO';
-        typeAgentDialogue(`Sistemas ópticos calibrados para objetivos Swing 1:2.5 y 1:4.5. Pídame calcular el lotaje exacto para su cuenta de mil dólares.`, false);
+        document.getElementById('agent-hero-sub').textContent = nearest ? `${nearest.symbol} · ${nearest.price}` : 'COORDENADAS';
+        typeAgentDialogue(`Sistemas ópticos calibrados para objetivos Swing 1:2.5 y 1:4.5. Pídame medir cualquier par activo.`, false);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES EN BITÁCORA`;
@@ -1706,7 +1851,6 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       jarvisSubView = sv;
       document.getElementById('jsub-swing').className = sv === 'SWING_DESK' ? 'px-3 py-1.5 rounded bg-indigo-500 text-white font-bold' : 'px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300 font-bold';
       document.getElementById('jsub-all').className = sv === 'ALL' ? 'px-3 py-1.5 rounded bg-amber-500 text-black font-bold' : 'px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300 font-bold';
-      document.getElementById('jarvis-filter-bar').classList.toggle('hidden', sv === 'SWING_DESK');
       renderPanelJarvis();
     }
 
@@ -1761,7 +1905,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         fpBanner.innerHTML = `
           <div class="space-y-0.5">
             <div class="text-[10px] font-bold ${fp.is_swing ? 'text-indigo-300' : (fp.is_safe ? 'text-emerald-300' : 'text-orange-300')} tracking-wider">
-              ${fp.is_swing ? '🌊 FOCO PRINCIPAL · SWING SEGURO HOY' : (fp.is_safe ? '✅ FOCO PRINCIPAL · INTRADAY OB+FVG' : '⚠️ FOCO PRINCIPAL · CON PRECAUCIÓN')}
+              ${fp.is_swing ? '🌊 FOCO PRINCIPAL · SWING SEGURO HOY' : (fp.is_safe ? '✅ FOCO PRINCIPAL · INTRADAY OB/FVG' : '⚠️ FOCO PRINCIPAL · CON PRECAUCIÓN')}
             </div>
             <div class="font-hud text-sm font-black text-white">${fp.symbol} · <span class="${fp.direction === 'COMPRA' ? 'text-emerald-400' : 'text-red-400'}">${fp.direction}</span> · <span class="text-amber-300">${fp.win_prob}%</span></div>
             <div class="text-[11px] text-slate-300">${fp.signal_tag} · Entrada: <strong>${fp.entry}</strong> · SL: ${fp.sl} · TP1: ${fp.tp1}</div>
@@ -1773,20 +1917,22 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       let list = [...data.assets].sort((a, b) => {
         const sa = getAssetColorState(a);
         const sb = getAssetColorState(b);
-        const rankA = (sa.isSwing && sa.isSafe) ? 3 : (sa.isSafe ? 2 : (sa.isCaution ? 1 : 0));
-        const rankB = (sb.isSwing && sb.isSafe) ? 3 : (sb.isSafe ? 2 : (sb.isCaution ? 1 : 0));
+        const rankA = sa.code === 'PINNED' ? 4 : ((sa.isSwing && sa.isSafe) ? 3 : (sa.isSafe ? 2 : (sa.isCaution ? 1 : 0)));
+        const rankB = sb.code === 'PINNED' ? 4 : ((sb.isSwing && sb.isSafe) ? 3 : (sb.isSafe ? 2 : (sb.isCaution ? 1 : 0)));
         if (rankB !== rankA) return rankB - rankA;
         return (b.win_prob || b.confluence.score) - (a.win_prob || a.confluence.score);
       });
 
-      if (jarvisSubView === 'SWING_DESK') {
+      if (jarvisSubView === 'SWING_DESK' && panelFilter === 'ALL') {
         list = list.filter(a => getAssetColorState(a).code !== 'WAIT');
-      } else {
-        if (panelFilter === 'SWING') list = list.filter(a => getAssetColorState(a).isSwing);
-        if (panelFilter === 'SAFE') list = list.filter(a => getAssetColorState(a).isSafe);
-        if (panelFilter === 'INTRADAY') list = list.filter(a => getAssetColorState(a).code === 'INTRADAY');
-        if (panelFilter === 'CAUTION') list = list.filter(a => getAssetColorState(a).isCaution);
       }
+
+      if (panelFilter === 'SWING') list = list.filter(a => getAssetColorState(a).isSwing);
+      if (panelFilter === 'OBFVG') list = list.filter(a => a.has_valid_ob !== false && !(a.setup.signal_tag || '').includes('SIN OB'));
+      if (panelFilter === 'ALIGNED') list = list.filter(a => a.confluence.alignment === 'ALIGNED');
+      if (panelFilter === 'NEWS') list = list.filter(a => a.news_warning && a.news_warning.active);
+      if (panelFilter === 'CAUTION') list = list.filter(a => getAssetColorState(a).isCaution);
+      if (panelFilter === 'BROKEN') list = list.filter(a => a.confluence.alignment === 'OPPOSED');
 
       if (pairSearchTerm) {
         list = list.filter(a => a.symbol.includes(pairSearchTerm) || ((pairSearchTerm === 'ORO' || pairSearchTerm === 'GOLD') && a.symbol === 'XAUUSD'));
@@ -1794,18 +1940,18 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
 
       const grid = document.getElementById('panel-jarvis-grid');
       if (!list.length) {
-        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No hay setups Swing o Intraday de alta calidad vigentes en este momento. Cambia a <strong>📋 TODOS LOS ACTIVOS (22)</strong> para ver el escaneo completo.</div>`;
+        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No hay activos que coincidan con este filtro.</div>`;
         return;
       }
 
       grid.innerHTML = list.map(a => {
         const d = getAssetUnitsDist(a);
-        const p = getSetupPips(a);
+        const eff = getEffectiveLevels(a);
         const st = getAssetColorState(a);
         const safety = evaluateEntrySafety(a);
         const strengthTxt = getCurrencyStrengthText(a);
         const prob = a.win_prob || a.confluence.score;
-        const probCol = st.isSwing ? 'text-indigo-300' : (safety.isSafe ? 'text-emerald-400' : (safety.isCaution ? 'text-orange-300' : 'text-slate-400'));
+        const probCol = eff.isPinned ? 'text-amber-300' : (st.isSwing ? 'text-indigo-300' : (safety.isSafe ? 'text-emerald-400' : (safety.isCaution ? 'text-orange-300' : 'text-slate-400')));
         const hasSwing = a.swing_potential && a.swing_potential.active;
         const hasNews = a.news_warning && a.news_warning.active;
 
@@ -1821,7 +1967,13 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
               <button type="button" onclick="openInPanelChart('${a.symbol}')" class="px-2.5 py-1 rounded bg-[#050811] border border-slate-700 text-[11px] text-slate-300 hover:border-amber-400">Gráfico →</button>
             </div>
 
-            ${safety.isCaution && safety.reasons.length ? `
+            ${eff.isPinned && a.has_valid_ob && eff.scannerEntry !== eff.entry ? `
+              <div class="bg-amber-950/35 border border-amber-400/50 rounded-lg px-3 py-1.5 text-[11px] text-amber-200">
+                <strong>🔄 RE-ENTRADA DETECTADA (${eff.scannerEntry}):</strong> ${eff.isBaseInBE ? 'Tu orden base ya está en BE (+1R); puedes evaluar este bloque superior.' : 'NO abrir aún: espera a que tu operación fijada toque BE (+1R).'}
+              </div>
+            ` : ''}
+
+            ${!eff.isPinned && safety.isCaution && safety.reasons.length ? `
               <div class="bg-orange-950/35 border border-orange-500/40 rounded-lg px-3 py-1.5 text-[11px] text-orange-200">
                 <strong>⚠️ Con precaución:</strong> ${safety.reasons.join(' · ')}
               </div>
@@ -1841,7 +1993,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
             </div>
 
             <div class="flex items-center justify-between">
-              <span class="text-[10px] text-slate-400">${a.confluence.verdict_sub}</span>
+              <span class="text-[10px] text-slate-400">${eff.isPinned ? 'NIVELES CONGELADOS POR USUARIO' : a.confluence.verdict_sub}</span>
               <button type="button" onclick="toggleWhy('${a.symbol}')" class="px-2.5 py-1 rounded border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">💡 ¿Por qué? ▾</button>
             </div>
 
@@ -1852,11 +2004,11 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
             </div>
 
             <div class="grid grid-cols-5 gap-1 bg-[#050811] border border-slate-800 rounded-lg p-2 text-center text-[10px]">
-              <div><div class="text-[8px] text-sky-400">ENTRADA</div><div class="font-bold text-white">${a.setup.entry}</div><div class="text-[8px] text-slate-400">a ${d.units}${d.label}</div></div>
-              <div><div class="text-[8px] text-red-400">STOP</div><div class="font-bold text-red-400">${a.setup.sl}</div><div class="text-[8px] text-red-300">-${p.sl}${p.unitLabel}</div></div>
-              <div><div class="text-[8px] text-indigo-400">BE (+1R)</div><div class="font-bold text-indigo-300">${p.be}</div><div class="text-[8px] text-slate-400">Proteger</div></div>
-              <div><div class="text-[8px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${a.setup.tp1}</div><div class="text-[8px] text-emerald-300">+${p.tp1}${p.unitLabel}</div></div>
-              <div><div class="text-[8px] text-teal-300">SWING TP</div><div class="font-bold text-teal-300">${p.tp2Val}</div><div class="text-[8px] text-teal-400">+${p.tp2}${p.unitLabel}</div></div>
+              <div><div class="text-[8px] text-sky-400">ENTRADA</div><div class="font-bold text-white">${eff.entry}</div><div class="text-[8px] text-slate-400">a ${d.units}${d.label}</div></div>
+              <div><div class="text-[8px] text-red-400">STOP</div><div class="font-bold text-red-400">${eff.sl}</div><div class="text-[8px] text-red-300">-${eff.slUnits}${eff.unitLabel}</div></div>
+              <div><div class="text-[8px] text-indigo-400">BE (+1R)</div><div class="font-bold text-indigo-300">${eff.be}</div><div class="text-[8px] text-slate-400">Proteger</div></div>
+              <div><div class="text-[8px] text-emerald-400">TP1</div><div class="font-bold text-emerald-400">${eff.tp1}</div><div class="text-[8px] text-emerald-300">+${eff.tp1Units}${eff.unitLabel}</div></div>
+              <div><div class="text-[8px] text-teal-300">SWING TP</div><div class="font-bold text-teal-300">${eff.tp2}</div><div class="text-[8px] text-teal-400">+${eff.tp2Units}${eff.unitLabel}</div></div>
             </div>
           </div>`;
       }).join('');
@@ -1930,12 +2082,27 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
 
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
       const safety = evaluateEntrySafety(a);
+      const eff = getEffectiveLevels(a);
       const d = getAssetUnitsDist(a);
-      const p = getSetupPips(a);
+
+      const pinCtrl = document.getElementById('pu-pin-controls');
+      if (pinCtrl) {
+        pinCtrl.innerHTML = eff.isPinned
+          ? `<button type="button" onclick="openPinModal()" class="px-2.5 py-1 rounded bg-amber-500/20 border border-amber-400 text-amber-200 font-bold">✏️ EDITAR FIJADA</button>
+             <button type="button" onclick="clearPinnedTrade('${a.symbol}')" class="px-2.5 py-1 rounded bg-red-500/20 border border-red-400 text-red-200 font-bold">🔓 LIBERAR</button>`
+          : `<button type="button" onclick="openPinModal()" class="px-2.5 py-1 rounded bg-amber-500 text-black font-bold">📌 FIJAR MI OPERACIÓN</button>`;
+      }
 
       const banner = document.getElementById('pu-caution-banner');
       if (banner) {
-        if (!safety.hasZone) {
+        if (eff.isPinned) {
+          banner.classList.remove('hidden');
+          banner.className = 'bg-amber-500/15 border border-amber-400/70 rounded-lg p-2.5 text-xs text-amber-200';
+          const reentryInfo = (a.has_valid_ob && eff.scannerEntry !== eff.entry)
+            ? ` · Bloque superior del escáner en <strong>${eff.scannerEntry}</strong> (${eff.isBaseInBE ? '🔄 RE-ENTRADA HABILITADA' : '🔄 RE-ENTRADA BLOQUEADA HASTA QUE BASE TOQUE BE'}).`
+            : '';
+          banner.innerHTML = `<strong>📌 OPERACIÓN FIJADA POR USUARIO EN ${a.symbol}:</strong> Entrada ${eff.entry} · SL ${eff.sl} · BE ${eff.be} · TP1 ${eff.tp1}${reentryInfo}`;
+        } else if (!safety.hasZone) {
           banner.classList.remove('hidden');
           banner.className = 'bg-slate-800/40 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-300';
           banner.innerHTML = `<strong>⚪ SIN ZONA SWING EN ${a.symbol}:</strong> Esperar formación de estructura limpia.`;
@@ -1946,7 +2113,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
             : 'bg-emerald-500/15 border border-emerald-400/70 rounded-lg p-2.5 text-xs text-emerald-200';
           banner.innerHTML = safety.isSwing
             ? `<strong>🌊 SWING SEGURO VALIDADO EN ${a.symbol}:</strong> Alineación 1D + 4H + Macro confirmada sobre EQ-50%.`
-            : `<strong>✅ INTRADAY SELECTIVO OB + FVG EN ${a.symbol}:</strong> Confluencia doble validada.`;
+            : `<strong>✅ INTRADAY SELECTIVO OB / FVG EN ${a.symbol}:</strong> Confluencia validada.`;
         } else {
           banner.classList.remove('hidden');
           banner.className = 'bg-orange-500/15 border border-orange-400/70 rounded-lg p-2.5 text-xs text-orange-200';
@@ -1956,21 +2123,21 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
 
       document.getElementById('pu-sym').textContent = `${a.symbol} (${getCurrencyStrengthText(a)})`;
       document.getElementById('pu-price').textContent = a.price;
-      document.getElementById('pu-status').textContent = `${a.setup.signal_tag} · a ${d.units} ${d.label}`;
+      document.getElementById('pu-status').textContent = `${eff.isPinned ? '📌 OPERACIÓN FIJADA' : a.setup.signal_tag} · a ${d.units} ${d.label}`;
       document.getElementById('pu-bias-w').textContent = a.tf_bias?.weekly || a.chart_bias;
       document.getElementById('pu-bias-d').textContent = a.tf_bias?.daily || a.chart_bias;
       document.getElementById('pu-bias-4h').textContent = a.tf_bias?.h4 || a.chart_bias;
-      document.getElementById('pu-atr').textContent = a.volatility?.atr_units ? `${a.volatility.atr_units} ${p.unitLabel}` : (a.atr_pips ? `${a.atr_pips} ${p.unitLabel}` : '--');
-      document.getElementById('pu-r20').textContent = a.volatility?.range20_units ? `${a.volatility.range20_units} ${p.unitLabel}` : (a.range20_pips ? `${a.range20_pips} ${p.unitLabel}` : '--');
-      document.getElementById('pu-entry').textContent = a.setup.entry;
+      document.getElementById('pu-atr').textContent = a.volatility?.atr_units ? `${a.volatility.atr_units} ${eff.unitLabel}` : '--';
+      document.getElementById('pu-r20').textContent = a.volatility?.range20_units ? `${a.volatility.range20_units} ${eff.unitLabel}` : '--';
+      document.getElementById('pu-entry').textContent = eff.entry;
       document.getElementById('pu-dist').textContent = `A ${d.units} ${d.label}`;
-      document.getElementById('pu-sl').textContent = a.setup.sl;
-      document.getElementById('pu-sl-pips').textContent = `-${p.sl} ${p.unitLabel}`;
-      document.getElementById('pu-be').textContent = p.be;
-      document.getElementById('pu-tp1').textContent = a.setup.tp1;
-      document.getElementById('pu-tp1-pips').textContent = `+${p.tp1} ${p.unitLabel}`;
-      document.getElementById('pu-tp2').textContent = p.tp2Val;
-      document.getElementById('pu-tp2-pips').textContent = `+${p.tp2} ${p.unitLabel}`;
+      document.getElementById('pu-sl').textContent = eff.sl;
+      document.getElementById('pu-sl-pips').textContent = `-${eff.slUnits} ${eff.unitLabel}`;
+      document.getElementById('pu-be').textContent = eff.be;
+      document.getElementById('pu-tp1').textContent = eff.tp1;
+      document.getElementById('pu-tp1-pips').textContent = `+${eff.tp1Units} ${eff.unitLabel}`;
+      document.getElementById('pu-tp2').textContent = eff.tp2;
+      document.getElementById('pu-tp2-pips').textContent = `+${eff.tp2Units} ${eff.unitLabel}`;
       drawUltronChart();
     }
 
@@ -1985,7 +2152,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
     function drawUltronChart() {
       if (!data) return;
       const a = data.assets.find(x => x.symbol === selectedSymbol) || data.assets[0];
-      const p = getSetupPips(a);
+      const eff = getEffectiveLevels(a);
       const canvas = document.getElementById('ultron-canvas');
       if (!canvas) return;
       const dpr = window.devicePixelRatio || 1;
@@ -2016,10 +2183,14 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       const candleMin = Math.min(...candles.map(c => c.l));
       const eq50 = a.liquidity?.eq50 || ((candleMax + candleMin) / 2);
 
-      const highs = [candleMax, a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
-      const lows = [candleMin, a.setup.sl, a.setup.tp1, p.tp2Val, p.be, a.price];
+      const highs = [candleMax, eff.sl, eff.tp1, eff.tp2, eff.be, a.price];
+      const lows = [candleMin, eff.sl, eff.tp1, eff.tp2, eff.be, a.price];
       if (a.liquidity?.bsl) highs.push(a.liquidity.bsl);
       if (a.liquidity?.ssl) lows.push(a.liquidity.ssl);
+      if (eff.isPinned && a.has_valid_ob) {
+        highs.push(eff.scannerEntry);
+        lows.push(eff.scannerEntry);
+      }
 
       const rawMax = Math.max(...highs);
       const rawMin = Math.min(...lows);
@@ -2036,10 +2207,12 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(W - padR, gy); ctx.stroke();
       }
 
-      const yObT = yOf(Math.max(a.ob_high, a.ob_low));
-      const yObB = yOf(Math.min(a.ob_high, a.ob_low));
-      ctx.fillStyle = a.setup.direction === 'BUY' ? 'rgba(16, 185, 129, 0.16)' : 'rgba(239, 68, 68, 0.16)';
-      ctx.fillRect(padL + plotW * 0.38, yObT, plotW * 0.62, Math.max(6, yObB - yObT));
+      if (!eff.isPinned) {
+        const yObT = yOf(Math.max(a.ob_high, a.ob_low));
+        const yObB = yOf(Math.min(a.ob_high, a.ob_low));
+        ctx.fillStyle = eff.direction === 'BUY' ? 'rgba(16, 185, 129, 0.16)' : 'rgba(239, 68, 68, 0.16)';
+        ctx.fillRect(padL + plotW * 0.38, yObT, plotW * 0.62, Math.max(6, yObB - yObT));
+      }
 
       const yEq = yOf(eq50);
       ctx.strokeStyle = 'rgba(148, 163, 184, 0.45)';
@@ -2083,42 +2256,52 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         ctx.fillText(`▼ SSL ${a.liquidity.ssl.toFixed(a.decimals)}`, padL + 4, yS - 3);
       }
 
-      const structLabel = a.structure_event || (a.setup.direction === 'BUY' ? '⚡ BULLISH BOS' : '⚡ BEARISH BOS');
+      const structLabel = a.structure_event || (eff.direction === 'BUY' ? '⚡ BULLISH BOS' : '⚡ BEARISH BOS');
       const refCandle = candles[Math.max(0, candles.length - 5)];
       const yStruct = yOf(refCandle.c);
       ctx.fillStyle = '#c084fc';
       ctx.font = 'bold 9px JetBrains Mono';
       ctx.fillText(structLabel, padL + plotW * 0.56, Math.min(H - padB - 6, Math.max(padT + 12, yStruct - 6)));
 
-      const isBuy = a.setup.direction === 'BUY';
-      const entryTitle = isBuy ? 'COMPRA OB REAL' : 'VENTA OB REAL';
+      const isBuy = eff.direction === 'BUY';
+      const entryTitle = eff.isPinned ? '📌 MI ENTRADA' : (isBuy ? 'COMPRA OB REAL' : 'VENTA OB REAL');
       const levels = [
-        { val: a.setup.sl, lbl: 'STOP', col: '#dc2626', textCol: '#ffffff' },
-        { val: a.setup.entry, lbl: entryTitle, col: '#0284c7', textCol: '#ffffff' },
-        { val: p.be, lbl: 'GATILLO BE (+1R)', col: '#4f46e5', textCol: '#ffffff' },
-        { val: a.setup.tp1, lbl: 'TP1 PARCIAL', col: '#059669', textCol: '#ffffff' },
-        { val: p.tp2Val, lbl: 'SWING TP', col: '#0d9488', textCol: '#ffffff' },
+        { val: eff.sl, lbl: 'STOP', col: '#dc2626', textCol: '#ffffff' },
+        { val: eff.entry, lbl: entryTitle, col: '#0284c7', textCol: '#ffffff' },
+        { val: eff.be, lbl: 'GATILLO BE (+1R)', col: '#4f46e5', textCol: '#ffffff' },
+        { val: eff.tp1, lbl: 'TP1 PARCIAL', col: '#059669', textCol: '#ffffff' },
+        { val: eff.tp2, lbl: 'SWING TP', col: '#0d9488', textCol: '#ffffff' },
         { val: a.price, lbl: '', col: '#f59e0b', textCol: '#000000', isLive: true }
-      ].map(lv => ({ ...lv, rawY: yOf(lv.val), drawY: yOf(lv.val) }));
+      ];
 
-      levels.sort((x, y) => x.rawY - y.rawY);
+      if (eff.isPinned && a.has_valid_ob && eff.scannerEntry !== eff.entry) {
+        levels.push({
+          val: eff.scannerEntry,
+          lbl: eff.isBaseInBE ? '🔄 RE-ENTRADA (BE OK)' : '🔄 RE-ENTRADA (ESPERAR BE)',
+          col: '#d97706',
+          textCol: '#ffffff'
+        });
+      }
+
+      const mapped = levels.map(lv => ({ ...lv, rawY: yOf(lv.val), drawY: yOf(lv.val) }));
+      mapped.sort((x, y) => x.rawY - y.rawY);
       const minGap = 17;
-      for (let i = 1; i < levels.length; i++) {
-        if (levels[i].drawY - levels[i - 1].drawY < minGap) {
-          levels[i].drawY = levels[i - 1].drawY + minGap;
+      for (let i = 1; i < mapped.length; i++) {
+        if (mapped[i].drawY - mapped[i - 1].drawY < minGap) {
+          mapped[i].drawY = mapped[i - 1].drawY + minGap;
         }
       }
-      if (levels[levels.length - 1].drawY > H - padB - 4) {
-        levels[levels.length - 1].drawY = H - padB - 4;
-        for (let i = levels.length - 2; i >= 0; i--) {
-          if (levels[i + 1].drawY - levels[i].drawY < minGap) {
-            levels[i].drawY = Math.max(padT + 8, levels[i + 1].drawY - minGap);
+      if (mapped[mapped.length - 1].drawY > H - padB - 4) {
+        mapped[mapped.length - 1].drawY = H - padB - 4;
+        for (let i = mapped.length - 2; i >= 0; i--) {
+          if (mapped[i + 1].drawY - mapped[i].drawY < minGap) {
+            mapped[i].drawY = Math.max(padT + 8, mapped[i + 1].drawY - minGap);
           }
         }
       }
 
-      const lineStartX = padL + plotW * 0.34;
-      levels.forEach(lv => {
+      const lineStartX = padL + plotW * 0.30;
+      mapped.forEach(lv => {
         if (lv.isLive) {
           ctx.strokeStyle = '#fbbf24';
           ctx.lineWidth = 1.4;
