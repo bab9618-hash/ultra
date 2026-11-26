@@ -38,7 +38,6 @@ ASSETS = [
 
 
 def is_within_max_distance(asset_type, price, entry, pip):
-    """Evita entradas lejanas de 80-150+ pips con baja probabilidad de llegada."""
     diff = abs(price - entry)
     if diff <= 0:
         return False
@@ -52,7 +51,6 @@ def is_within_max_distance(asset_type, price, entry, pip):
 
 
 def is_near_entry(asset_type, price, entry, pip):
-    """Determina si el precio esta cerca de su entrada (resaltado amarillo)."""
     diff = abs(price - entry)
     if asset_type == "forex":
         units = diff / pip if pip else diff
@@ -480,55 +478,49 @@ def main():
                 created_at = int(now_utc.timestamp())
                 active_store.pop(sym, None)
 
+        # Precaucion reservada a casos criticos reales: choque de estructura/macro, noticia roja o reentrada swing
         caution_reasons = []
         if has_valid_ob:
-            if direction == "BUY" and entry > eq50:
-                caution_reasons.append("Zona cara (arriba de EQ-50%)")
-            if direction == "SELL" and entry < eq50:
-                caution_reasons.append("Zona barata (debajo de EQ-50%)")
-            if bias_4h == "NEUTRAL":
-                caution_reasons.append("4H en NEUTRAL")
-            elif bias_4h != "NEUTRAL" and bias_4h != chart_bias:
-                caution_reasons.append(f"4H en {bias_4h}")
+            if bias_4h != "NEUTRAL" and bias_4h != chart_bias:
+                caution_reasons.append(f"4H en contra ({bias_4h})")
             if bias_d != "NEUTRAL" and bias_d != chart_bias:
-                caution_reasons.append(f"1D en {bias_d}")
+                caution_reasons.append(f"1D en contra ({bias_d})")
             if macro_dir != "NEUTRAL" and macro_dir != chart_bias:
-                caution_reasons.append(f"Macro en {macro_dir}")
+                caution_reasons.append(f"Macro en contra ({macro_dir})")
             if has_news:
                 caution_reasons.append("Noticia roja hoy")
 
         swing_active = has_valid_ob and (bias_d == chart_bias) and (bias_4h == chart_bias) and (macro_dir == chart_bias) and (not has_news)
         near_entry = has_valid_ob and is_near_entry(item["type"], price, entry, pip)
 
-        # Clasificacion solicitada: si ya esta en Swing -> reentrada swing con precaucion; si no -> entrada normal
         if not has_valid_ob:
             entry_mode = "ESPERAR"
             verdict_title = "ESPERAR"
         elif swing_active and use_saved:
             entry_mode = "REENTRADA_SWING_PRECAUCION"
             verdict_title = "REENTRADA SWING · CON PRECAUCIÓN"
-            if "Validar BE en operacion base Swing antes de reentrar" not in caution_reasons:
-                caution_reasons.append("Validar BE en operacion base Swing antes de reentrar")
+            if "Reentrada Swing: validar BE en operacion base" not in caution_reasons:
+                caution_reasons.append("Reentrada Swing: validar BE en operacion base")
         elif swing_active:
             entry_mode = "SWING_ENTRADA_NORMAL"
-            verdict_title = "SWING · ENTRADA NORMAL"
+            verdict_title = "ENTRADA NORMAL · SWING"
         else:
             entry_mode = "ENTRADA_NORMAL"
             verdict_title = "ENTRADA NORMAL" if not caution_reasons else "ENTRADA NORMAL · CON PRECAUCIÓN"
 
         is_safe_entry = has_valid_ob and len(caution_reasons) == 0
 
-        score = 45
+        score = 55
         if has_valid_ob:
             score += 20 if zone_kind == "OB_FVG" else (16 if zone_kind == "OB" else 13)
         if near_entry:
             score += 10
         if bias_d == bias_4h == chart_bias:
-            score += 10
-        if macro_dir == chart_bias:
             score += 8
+        if macro_dir == chart_bias:
+            score += 6
         if caution_reasons:
-            score -= min(22, len(caution_reasons) * 6)
+            score -= min(20, len(caution_reasons) * 6)
         win_prob = max(35, min(96, score))
 
         alignment = "ALIGNED" if (macro_dir == chart_bias and chart_bias != "NEUTRAL") else ("OPPOSED" if (macro_dir != "NEUTRAL" and chart_bias != "NEUTRAL" and macro_dir != chart_bias) else "NEUTRAL")
@@ -633,8 +625,8 @@ def main():
         "brief": {
             "dxy": dxy_val,
             "us10y": us10y_val,
-            "headline": f"Radar Institucional LATICCE v12.5 · DXY {dxy_val} · Bonos US10Y {us10y_val}%",
-            "summary": "Escaner en cascada (OB + FVG, OB, FVG) con alerta amarilla en cercania a entrada y diferenciacion entre entrada normal y reentrada swing con precaucion.",
+            "headline": f"Radar Institucional LATICCE v12.6 · DXY {dxy_val} · Bonos US10Y {us10y_val}%",
+            "summary": "Escaner en cascada (OB + FVG, OB, FVG) con alerta amarilla en cercania a entrada y precaucion enfocada en riesgos reales.",
         },
         "currency_strength": strength,
         "calendar": calendar,
@@ -647,7 +639,7 @@ def main():
     with open(tmp_data, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     os.replace(tmp_data, "data.json")
-    print(f"Actualizado LATICCE v12.5 ({len(assets_out)} activos)")
+    print(f"Actualizado LATICCE v12.6 ({len(assets_out)} activos)")
 
 
 if __name__ == "__main__":
