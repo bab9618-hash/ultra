@@ -74,21 +74,6 @@
     "ob_low": 0.8309,
     "locked_at": 1795615577
   },
-  "XAUUSD": {
-    "valid_ob": true,
-    "kind": "FVG",
-    "fvg_range": "3585.2 - 3595.3",
-    "direction": "BUY",
-    "signal_tag": "COMPRA FVG RETROCESO",
-    "entry": 3590.25,
-    "be_trigger": 3618.8,
-    "sl": 3561.7,
-    "tp1": 3647.35,
-    "tp2": 3675.9,
-    "ob_high": 3595.3,
-    "ob_low": 3585.2,
-    "locked_at": 1795645686
-  },
   "US30": {
     "valid_ob": true,
     "kind": "FVG",
