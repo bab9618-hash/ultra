@@ -15,17 +15,18 @@
   },
   "GBPCAD": {
     "has_valid_ob": true,
-    "has_fvg": false,
+    "has_fvg": true,
+    "is_pure_fvg": false,
     "direction": "SELL",
-    "entry": 1.87747,
-    "sl": 1.8788,
-    "be_trigger": 1.87614,
-    "tp1": 1.87414,
-    "tp2": 1.87148,
-    "ob_high": 1.8782,
-    "ob_low": 1.87674,
-    "signal_tag": "VENTA OB REAL (4H)",
-    "created_at": 1795666963
+    "entry": 1.8827,
+    "sl": 1.88544,
+    "be_trigger": 1.87996,
+    "tp1": 1.87585,
+    "tp2": 1.87037,
+    "ob_high": 1.88484,
+    "ob_low": 1.88055,
+    "signal_tag": "VENTA OB + FVG (4H)",
+    "created_at": 1795668263
   },
   "GBPNZD": {
     "has_valid_ob": true,
@@ -96,5 +97,20 @@
     "ob_low": 1.21478,
     "signal_tag": "VENTA OB REAL (4H)",
     "created_at": 1795666963
+  },
+  "USDJPY": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "direction": "SELL",
+    "entry": 159.427,
+    "sl": 159.556,
+    "be_trigger": 159.298,
+    "tp1": 159.104,
+    "tp2": 158.846,
+    "ob_high": 159.496,
+    "ob_low": 159.358,
+    "signal_tag": "VENTA OB + FVG (1H)",
+    "created_at": 1795668263
   }
 }
