@@ -21,15 +21,15 @@
     "is_pure_fvg": false,
     "zone_kind": "OB",
     "direction": "SELL",
-    "entry": 1.21238,
-    "sl": 1.21574,
-    "be_trigger": 1.20902,
-    "tp1": 1.20398,
-    "tp2": 1.19726,
-    "ob_high": 1.21524,
-    "ob_low": 1.20953,
+    "entry": 1.21406,
+    "sl": 1.21602,
+    "be_trigger": 1.2121,
+    "tp1": 1.20916,
+    "tp2": 1.20524,
+    "ob_high": 1.21552,
+    "ob_low": 1.21259,
     "signal_tag": "VENTA OB REAL (4H)",
-    "created_at": 1795706126
+    "created_at": 1795721451
   },
   "USDJPY": {
     "has_valid_ob": true,
@@ -76,7 +76,7 @@
     "ob_high": 60879.02,
     "ob_low": 60712.05,
     "signal_tag": "VENTA OB + FVG (1H)",
-    "created_at": 1795717320
+    "created_at": 1795721451
   },
   "GBPJPY": {
     "has_valid_ob": true,
