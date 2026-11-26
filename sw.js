@@ -1,4 +1,4 @@
-const CACHE_NAME = 'laticce-v12.3';
+const CACHE_NAME = 'laticce-v12.5';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (e) => {
@@ -15,7 +15,15 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  if (e.request.url.includes('data.json') || e.request.url.includes('api.') || e.request.url.includes('generativelanguage') || e.request.url.includes('yahoo') || e.request.url.includes('binance')) {
+  if (
+    e.request.url.includes('data.json') ||
+    e.request.url.includes('active_setups.json') ||
+    e.request.url.includes('journal.json') ||
+    e.request.url.includes('api.') ||
+    e.request.url.includes('generativelanguage') ||
+    e.request.url.includes('yahoo') ||
+    e.request.url.includes('binance')
+  ) {
     return;
   }
   e.respondWith(
