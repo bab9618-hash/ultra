@@ -100,15 +100,15 @@
     "is_pure_fvg": false,
     "zone_kind": "OB_FVG",
     "direction": "SELL",
-    "entry": 0.66408,
-    "sl": 0.66491,
-    "be_trigger": 0.66325,
-    "tp1": 0.662,
-    "tp2": 0.66034,
-    "ob_high": 0.66441,
-    "ob_low": 0.66375,
-    "signal_tag": "VENTA OB + FVG (1H)",
-    "created_at": 1795714175
+    "entry": 0.66656,
+    "sl": 0.66779,
+    "be_trigger": 0.66533,
+    "tp1": 0.66349,
+    "tp2": 0.66103,
+    "ob_high": 0.66729,
+    "ob_low": 0.66582,
+    "signal_tag": "VENTA OB + FVG (4H)",
+    "created_at": 1795728369
   },
   "EURJPY": {
     "has_valid_ob": true,
@@ -268,6 +268,6 @@
     "ob_high": 0.83204,
     "ob_low": 0.83134,
     "signal_tag": "COMPRA OB + FVG (1H)",
-    "created_at": 1795724947
+    "created_at": 1795728369
   }
 }
