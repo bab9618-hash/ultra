@@ -21,15 +21,15 @@
     "is_pure_fvg": false,
     "zone_kind": "OB",
     "direction": "BUY",
-    "entry": 1.21608,
-    "sl": 1.21443,
-    "be_trigger": 1.21773,
-    "tp1": 1.22021,
-    "tp2": 1.22351,
-    "ob_high": 1.21723,
-    "ob_low": 1.21493,
-    "signal_tag": "COMPRA OB REAL (4H)",
-    "created_at": 1795773020
+    "entry": 1.21482,
+    "sl": 1.21358,
+    "be_trigger": 1.21606,
+    "tp1": 1.21792,
+    "tp2": 1.2204,
+    "ob_high": 1.21557,
+    "ob_low": 1.21408,
+    "signal_tag": "COMPRA OB REAL (1H)",
+    "created_at": 1795779635
   },
   "USDJPY": {
     "has_valid_ob": true,
@@ -207,22 +207,6 @@
     "signal_tag": "VENTA OB + FVG (4H)",
     "created_at": 1795769157
   },
-  "AUDCHF": {
-    "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
-    "direction": "SELL",
-    "entry": 0.55714,
-    "sl": 0.55848,
-    "be_trigger": 0.5558,
-    "tp1": 0.55379,
-    "tp2": 0.55111,
-    "ob_high": 0.55798,
-    "ob_low": 0.55631,
-    "signal_tag": "VENTA OB REAL (4H)",
-    "created_at": 1795744577
-  },
   "GBPAUD": {
     "has_valid_ob": true,
     "has_fvg": false,
@@ -255,20 +239,36 @@
     "signal_tag": "COMPRA OB REAL (4H)",
     "created_at": 1795759503
   },
-  "USDCHF": {
+  "GBPJPY": {
     "has_valid_ob": true,
-    "has_fvg": false,
+    "has_fvg": true,
     "is_pure_fvg": false,
-    "zone_kind": "OB",
+    "zone_kind": "OB_FVG",
     "direction": "BUY",
-    "entry": 0.83501,
-    "sl": 0.83375,
-    "be_trigger": 0.83627,
-    "tp1": 0.83816,
-    "tp2": 0.84068,
-    "ob_high": 0.83577,
-    "ob_low": 0.83425,
-    "signal_tag": "COMPRA OB REAL (4H)",
-    "created_at": 1795769157
+    "entry": 209.068,
+    "sl": 208.904,
+    "be_trigger": 209.232,
+    "tp1": 209.478,
+    "tp2": 209.806,
+    "ob_high": 209.183,
+    "ob_low": 208.954,
+    "signal_tag": "COMPRA OB + FVG (1H)",
+    "created_at": 1795779635
+  },
+  "GBPCAD": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": true,
+    "zone_kind": "FVG",
+    "direction": "SELL",
+    "entry": 1.87277,
+    "sl": 1.87815,
+    "be_trigger": 1.86739,
+    "tp1": 1.85932,
+    "tp2": 1.84856,
+    "ob_high": 1.87337,
+    "ob_low": 1.87216,
+    "signal_tag": "VENTA FVG (4H)",
+    "created_at": 1795779635
   }
 }
