@@ -126,5 +126,37 @@
     "ob_low": 174.144,
     "signal_tag": "SWING COMPRA OB (4H)",
     "created_at": 1795810530
+  },
+  "GBPUSD": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
+    "direction": "BUY",
+    "entry": 1.30632,
+    "sl": 1.30355,
+    "be_trigger": 1.30909,
+    "tp1": 1.31324,
+    "tp2": 1.31878,
+    "ob_high": 1.30801,
+    "ob_low": 1.30463,
+    "signal_tag": "SWING COMPRA OB + FVG (4H)",
+    "created_at": 1795814188
+  },
+  "USDCAD": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
+    "direction": "SELL",
+    "entry": 1.42841,
+    "sl": 1.43049,
+    "be_trigger": 1.42633,
+    "tp1": 1.42321,
+    "tp2": 1.41905,
+    "ob_high": 1.42941,
+    "ob_low": 1.42741,
+    "signal_tag": "SWING VENTA OB + FVG (4H)",
+    "created_at": 1795814188
   }
 }
