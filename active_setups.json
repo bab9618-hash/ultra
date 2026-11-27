@@ -21,15 +21,15 @@
     "is_pure_fvg": false,
     "zone_kind": "OB",
     "direction": "BUY",
-    "entry": 1.21312,
-    "sl": 1.21143,
-    "be_trigger": 1.21481,
-    "tp1": 1.21734,
-    "tp2": 1.22072,
-    "ob_high": 1.21431,
-    "ob_low": 1.21193,
+    "entry": 1.21608,
+    "sl": 1.21443,
+    "be_trigger": 1.21773,
+    "tp1": 1.22021,
+    "tp2": 1.22351,
+    "ob_high": 1.21723,
+    "ob_low": 1.21493,
     "signal_tag": "COMPRA OB REAL (4H)",
-    "created_at": 1795769157
+    "created_at": 1795773020
   },
   "USDJPY": {
     "has_valid_ob": true,
@@ -45,7 +45,7 @@
     "ob_high": 159.209,
     "ob_low": 159.082,
     "signal_tag": "COMPRA OB + FVG (1H)",
-    "created_at": 1795769157
+    "created_at": 1795773020
   },
   "XAUUSD": {
     "has_valid_ob": true,
@@ -78,22 +78,6 @@
     "ob_low": 61051.82,
     "signal_tag": "COMPRA OB REAL (4H)",
     "created_at": 1795759503
-  },
-  "GBPJPY": {
-    "has_valid_ob": true,
-    "has_fvg": true,
-    "is_pure_fvg": true,
-    "zone_kind": "FVG",
-    "direction": "BUY",
-    "entry": 209.0,
-    "sl": 208.861,
-    "be_trigger": 209.139,
-    "tp1": 209.348,
-    "tp2": 209.626,
-    "ob_high": 209.067,
-    "ob_low": 208.932,
-    "signal_tag": "COMPRA FVG (1H)",
-    "created_at": 1795769157
   },
   "AUDUSD": {
     "has_valid_ob": true,
@@ -244,16 +228,16 @@
     "has_fvg": false,
     "is_pure_fvg": false,
     "zone_kind": "OB",
-    "direction": "SELL",
-    "entry": 1.967,
-    "sl": 1.9696,
-    "be_trigger": 1.9644,
-    "tp1": 1.9605,
-    "tp2": 1.9553,
-    "ob_high": 1.9691,
-    "ob_low": 1.96489,
-    "signal_tag": "VENTA OB REAL (4H)",
-    "created_at": 1795769157
+    "direction": "BUY",
+    "entry": 1.96546,
+    "sl": 1.96232,
+    "be_trigger": 1.9686,
+    "tp1": 1.97331,
+    "tp2": 1.97959,
+    "ob_high": 1.96809,
+    "ob_low": 1.96282,
+    "signal_tag": "COMPRA OB REAL (4H)",
+    "created_at": 1795773020
   },
   "AUDJPY": {
     "has_valid_ob": true,
