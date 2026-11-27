@@ -31,22 +31,6 @@
     "signal_tag": "SWING VENTA OB + FVG (4H)",
     "created_at": 1795806124
   },
-  "GBPAUD": {
-    "has_valid_ob": true,
-    "has_fvg": true,
-    "is_pure_fvg": false,
-    "zone_kind": "OB_FVG",
-    "direction": "BUY",
-    "entry": 1.96738,
-    "sl": 1.96403,
-    "be_trigger": 1.97073,
-    "tp1": 1.97575,
-    "tp2": 1.98245,
-    "ob_high": 1.96965,
-    "ob_low": 1.96511,
-    "signal_tag": "SWING COMPRA OB + FVG (4H)",
-    "created_at": 1795810530
-  },
   "AUDJPY": {
     "has_valid_ob": true,
     "has_fvg": true,
@@ -125,22 +109,6 @@
     "ob_high": 1.30801,
     "ob_low": 1.30463,
     "signal_tag": "SWING COMPRA OB + FVG (4H)",
-    "created_at": 1795814188
-  },
-  "USDCAD": {
-    "has_valid_ob": true,
-    "has_fvg": true,
-    "is_pure_fvg": false,
-    "zone_kind": "OB_FVG",
-    "direction": "SELL",
-    "entry": 1.42841,
-    "sl": 1.43049,
-    "be_trigger": 1.42633,
-    "tp1": 1.42321,
-    "tp2": 1.41905,
-    "ob_high": 1.42941,
-    "ob_low": 1.42741,
-    "signal_tag": "SWING VENTA OB + FVG (4H)",
     "created_at": 1795814188
   }
 }
