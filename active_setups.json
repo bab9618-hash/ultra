@@ -111,22 +111,6 @@
     "signal_tag": "SWING COMPRA OB + FVG (4H)",
     "created_at": 1795806124
   },
-  "EURJPY": {
-    "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
-    "direction": "BUY",
-    "entry": 174.31,
-    "sl": 174.036,
-    "be_trigger": 174.584,
-    "tp1": 174.995,
-    "tp2": 175.543,
-    "ob_high": 174.475,
-    "ob_low": 174.144,
-    "signal_tag": "SWING COMPRA OB (4H)",
-    "created_at": 1795810530
-  },
   "GBPUSD": {
     "has_valid_ob": true,
     "has_fvg": true,
