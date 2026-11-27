@@ -37,17 +37,34 @@ ASSETS = [
 ]
 
 
+def is_geometry_valid(direction, entry, sl, tp1):
+    if direction == "BUY":
+        return sl < entry < tp1
+    if direction == "SELL":
+        return sl > entry > tp1
+    return False
+
+
+def has_min_stop_margin(asset_type, entry, sl, pip):
+    diff = abs(entry - sl)
+    if asset_type == "forex":
+        return (diff / max(pip, 1e-9)) >= 18.0
+    if asset_type == "metal":
+        return (diff / max(pip, 1e-9)) >= 35.0
+    return (diff / max(abs(entry), 1e-9)) >= 0.0025
+
+
 def is_within_max_distance(asset_type, price, entry, pip):
     diff = abs(price - entry)
     if diff <= 0:
         return False
     if asset_type == "forex":
         units = diff / pip if pip else diff
-        return 4.0 <= units <= 35.0
+        return 4.0 <= units <= 40.0
     if asset_type == "metal":
         units = diff / pip if pip else diff
-        return 10.0 <= units <= 180.0
-    return (diff / max(price, 1e-9)) <= 0.01
+        return 10.0 <= units <= 200.0
+    return (diff / max(price, 1e-9)) <= 0.012
 
 
 def is_near_entry(asset_type, price, entry, pip):
@@ -57,8 +74,8 @@ def is_near_entry(asset_type, price, entry, pip):
         return units <= 25.0
     if asset_type == "metal":
         units = diff / pip if pip else diff
-        return units <= 40.0
-    return (diff / max(price, 1e-9)) <= 0.0025
+        return units <= 45.0
+    return (diff / max(price, 1e-9)) <= 0.003
 
 
 def load_active_setups():
@@ -225,7 +242,7 @@ def compute_currency_strength(dfs_1d, dfs_4h):
             try:
                 chg_d = (float(d1["Close"].iloc[-1]) - float(d1["Close"].iloc[-4])) / float(d1["Close"].iloc[-4])
                 chg_h = (float(h4["Close"].iloc[-1]) - float(h4["Close"].iloc[-6])) / float(h4["Close"].iloc[-6])
-                combo = (chg_d * 0.6 + chg_h * 0.4) * 100
+                combo = (chg_d * 0.65 + chg_h * 0.35) * 100
                 scores[b] += combo
                 scores[q] -= combo
             except Exception:
@@ -242,14 +259,22 @@ def compute_currency_strength(dfs_1d, dfs_4h):
     return {"scores": {k: round(v, 2) for k, v in scores.items()}, "labels": labels}
 
 
-def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq50, asset_type):
-    """Cascada de 3 niveles: 1) OB + FVG, 2) OB estructural, 3) FVG limpio de retroceso."""
-    candidates = []
+def detect_swing_zone(df_4h, df_1h, direction, price, pip, decimals, eq50, asset_type):
+    """
+    Escanner Swing (prioriza 4H antes que 1H) con filtros bloqueantes:
+    1) EQ-50% estricto (BUY <= eq50, SELL >= eq50).
+    2) Margen minimo de SL estructural (>= 18 pips forex, >= 35 pts metal).
+    """
+    if direction not in ("BUY", "SELL"):
+        return {"valid": False}
 
-    for tf_name, df in [("1H", df_1h), ("4H", df_4h)]:
+    candidates = []
+    min_sl_units = 18.0 if asset_type == "forex" else (35.0 if asset_type == "metal" else 4.0)
+
+    for tf_name, df, tf_weight in [("4H", df_4h, 1.3), ("1H", df_1h, 1.0)]:
         if df is None or len(df) < 20:
             continue
-        sub = df.tail(36).reset_index(drop=True)
+        sub = df.tail(40).reset_index(drop=True)
         for i in range(len(sub) - 4, 2, -1):
             c0 = sub.iloc[i]
             c1 = sub.iloc[i + 1]
@@ -257,21 +282,22 @@ def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq5
             body0 = abs(float(c0["Close"]) - float(c0["Open"]))
             body1 = abs(float(c1["Close"]) - float(c1["Open"]))
 
-            if body1 >= max(body0 * 1.2, pip * 4):
+            if body1 >= max(body0 * 1.25, pip * 5):
                 if direction == "BUY" and float(c0["Close"]) < float(c0["Open"]) and float(c1["Close"]) > float(c1["Open"]):
                     ob_low = float(c0["Low"])
                     ob_high = float(c0["High"])
                     has_fvg = float(c2["Low"]) > float(c0["High"])
                     entry = round((ob_high + ob_low) / 2.0, decimals)
-                    if entry < price and is_within_max_distance(asset_type, price, entry, pip):
-                        sl = round(ob_low - pip * 5, decimals)
-                        tag = f"COMPRA OB + FVG ({tf_name})" if has_fvg else f"COMPRA OB REAL ({tf_name})"
+                    sl_pad = max(pip * 6, min_sl_units * pip * 0.6)
+                    sl = round(min(ob_low - sl_pad, entry - min_sl_units * pip), decimals)
+                    if entry < price and entry <= eq50 and is_within_max_distance(asset_type, price, entry, pip):
+                        tag = f"SWING COMPRA OB + FVG ({tf_name})" if has_fvg else f"SWING COMPRA OB ({tf_name})"
                         kind = "OB_FVG" if has_fvg else "OB"
                         candidates.append({
                             "valid": True, "has_fvg": has_fvg, "is_pure_fvg": False, "kind": kind, "tf": tf_name,
                             "entry": entry, "sl": sl, "ob_high": round(ob_high, decimals),
                             "ob_low": round(ob_low, decimals), "signal_tag": tag,
-                            "safe_eq": entry <= eq50, "dist": abs(price - entry),
+                            "safe_eq": True, "dist": abs(price - entry), "tf_weight": tf_weight,
                         })
 
                 if direction == "SELL" and float(c0["Close"]) > float(c0["Open"]) and float(c1["Close"]) < float(c1["Open"]):
@@ -279,41 +305,42 @@ def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq5
                     ob_high = float(c0["High"])
                     has_fvg = float(c2["High"]) < float(c0["Low"])
                     entry = round((ob_high + ob_low) / 2.0, decimals)
-                    if entry > price and is_within_max_distance(asset_type, price, entry, pip):
-                        sl = round(ob_high + pip * 5, decimals)
-                        tag = f"VENTA OB + FVG ({tf_name})" if has_fvg else f"VENTA OB REAL ({tf_name})"
+                    sl_pad = max(pip * 6, min_sl_units * pip * 0.6)
+                    sl = round(max(ob_high + sl_pad, entry + min_sl_units * pip), decimals)
+                    if entry > price and entry >= eq50 and is_within_max_distance(asset_type, price, entry, pip):
+                        tag = f"SWING VENTA OB + FVG ({tf_name})" if has_fvg else f"SWING VENTA OB ({tf_name})"
                         kind = "OB_FVG" if has_fvg else "OB"
                         candidates.append({
                             "valid": True, "has_fvg": has_fvg, "is_pure_fvg": False, "kind": kind, "tf": tf_name,
                             "entry": entry, "sl": sl, "ob_high": round(ob_high, decimals),
                             "ob_low": round(ob_low, decimals), "signal_tag": tag,
-                            "safe_eq": entry >= eq50, "dist": abs(price - entry),
+                            "safe_eq": True, "dist": abs(price - entry), "tf_weight": tf_weight,
                         })
 
-            if direction == "BUY" and float(c2["Low"]) > float(c0["High"]) + pip * 1.5:
+            if direction == "BUY" and float(c2["Low"]) > float(c0["High"]) + pip * 2.0:
                 fvg_low = float(c0["High"])
                 fvg_high = float(c2["Low"])
                 entry = round((fvg_high + fvg_low) / 2.0, decimals)
-                if entry < price and is_within_max_distance(asset_type, price, entry, pip):
-                    sl = round(float(c1["Low"]) - pip * 4, decimals)
+                sl = round(min(float(c1["Low"]) - pip * 5, entry - min_sl_units * pip), decimals)
+                if entry < price and entry <= eq50 and is_within_max_distance(asset_type, price, entry, pip):
                     candidates.append({
                         "valid": True, "has_fvg": True, "is_pure_fvg": True, "kind": "FVG", "tf": tf_name,
                         "entry": entry, "sl": sl, "ob_high": round(fvg_high, decimals),
-                        "ob_low": round(fvg_low, decimals), "signal_tag": f"COMPRA FVG ({tf_name})",
-                        "safe_eq": entry <= eq50, "dist": abs(price - entry),
+                        "ob_low": round(fvg_low, decimals), "signal_tag": f"SWING COMPRA FVG ({tf_name})",
+                        "safe_eq": True, "dist": abs(price - entry), "tf_weight": tf_weight,
                     })
 
-            if direction == "SELL" and float(c2["High"]) < float(c0["Low"]) - pip * 1.5:
+            if direction == "SELL" and float(c2["High"]) < float(c0["Low"]) - pip * 2.0:
                 fvg_high = float(c0["Low"])
                 fvg_low = float(c2["High"])
                 entry = round((fvg_high + fvg_low) / 2.0, decimals)
-                if entry > price and is_within_max_distance(asset_type, price, entry, pip):
-                    sl = round(float(c1["High"]) + pip * 4, decimals)
+                sl = round(max(float(c1["High"]) + pip * 5, entry + min_sl_units * pip), decimals)
+                if entry > price and entry >= eq50 and is_within_max_distance(asset_type, price, entry, pip):
                     candidates.append({
                         "valid": True, "has_fvg": True, "is_pure_fvg": True, "kind": "FVG", "tf": tf_name,
                         "entry": entry, "sl": sl, "ob_high": round(fvg_high, decimals),
-                        "ob_low": round(fvg_low, decimals), "signal_tag": f"VENTA FVG ({tf_name})",
-                        "safe_eq": entry >= eq50, "dist": abs(price - entry),
+                        "ob_low": round(fvg_low, decimals), "signal_tag": f"SWING VENTA FVG ({tf_name})",
+                        "safe_eq": True, "dist": abs(price - entry), "tf_weight": tf_weight,
                     })
 
     if not candidates:
@@ -321,8 +348,8 @@ def detect_institutional_zone(df_4h, df_1h, direction, price, pip, decimals, eq5
 
     candidates.sort(
         key=lambda z: (
-            1 if z["safe_eq"] else 0,
-            1 if z["kind"] == "OB_FVG" else (0.6 if z["kind"] == "OB" else 0.4),
+            z["tf_weight"],
+            1 if z["kind"] == "OB_FVG" else (0.7 if z["kind"] == "OB" else 0.45),
             -z["dist"],
         ),
         reverse=True,
@@ -393,19 +420,21 @@ def main():
         else:
             macro_dir = "NEUTRAL"
 
-        chart_bias = bias_d if bias_d != "NEUTRAL" else (bias_4h if bias_4h != "NEUTRAL" else bias_1h)
+        # Prioridad Swing: 4H y 1D mandan sobre el ruido de 1H
+        swing_bias = bias_4h if bias_4h != "NEUTRAL" else (bias_d if bias_d != "NEUTRAL" else bias_1h)
+        chart_bias = swing_bias if swing_bias != "NEUTRAL" else macro_dir
         direction = "BUY" if chart_bias == "SUBE" else ("SELL" if chart_bias == "BAJA" else "BUY")
 
         atr_val = compute_atr(d1 if d1 is not None else ref_df, 14)
         if atr_val <= 0:
-            atr_val = max(price * 0.004, pip * 15)
+            atr_val = max(price * 0.004, pip * 20)
         atr_units = round(atr_val / pip, 1) if pip else 0
 
         r_df = d1 if (d1 is not None and len(d1) >= 20) else ref_df
         r20_val = float(r_df["High"].tail(20).max() - r_df["Low"].tail(20).min())
         r20_units = round(r20_val / pip, 1) if pip else 0
 
-        recent_h1 = ref_df.tail(44)
+        recent_h1 = ref_df.tail(48)
         bsl = round(float(recent_h1["High"].max()), dec)
         ssl = round(float(recent_h1["Low"].min()), dec)
         eq50 = round((bsl + ssl) / 2.0, dec)
@@ -413,18 +442,35 @@ def main():
         ev_today = [e["title"] for e in calendar if e["currency"] in (item["base"], item["quote"])]
         has_news = len(ev_today) > 0
 
+        # Condiciones bloqueantes de calidad Swing
+        both_neutral = (b_lbl == "NEUTRAL" and q_lbl == "NEUTRAL")
+        opposes_d1 = (bias_d != "NEUTRAL" and bias_d != chart_bias)
+        opposes_h4 = (bias_4h != "NEUTRAL" and bias_4h != chart_bias)
+        opposes_macro = (macro_dir != "NEUTRAL" and macro_dir != chart_bias)
+        quality_ok = (not both_neutral) and (not opposes_d1) and (not opposes_h4) and (not opposes_macro) and (chart_bias in ("SUBE", "BAJA"))
+
         saved = active_store.get(sym)
         use_saved = False
-        if saved and saved.get("has_valid_ob") and is_within_max_distance(item["type"], price, saved["entry"], pip):
-            s_dir = saved["direction"]
-            s_sl = saved["sl"]
-            s_tp1 = saved["tp1"]
-            if s_dir == "BUY" and s_sl < price < s_tp1:
-                use_saved = True
-            elif s_dir == "SELL" and s_tp1 < price < s_sl:
-                use_saved = True
+        if quality_ok and saved and saved.get("has_valid_ob"):
+            s_dir = saved.get("direction", "")
+            s_entry = saved.get("entry", 0)
+            s_sl = saved.get("sl", 0)
+            s_tp1 = saved.get("tp1", 0)
+            eq_ok = (s_entry <= eq50) if s_dir == "BUY" else (s_entry >= eq50)
+            if (
+                s_dir == direction
+                and eq_ok
+                and is_geometry_valid(s_dir, s_entry, s_sl, s_tp1)
+                and has_min_stop_margin(item["type"], s_entry, s_sl, pip)
+                and is_within_max_distance(item["type"], price, s_entry, pip)
+            ):
+                if s_dir == "BUY" and s_sl < price < s_tp1:
+                    use_saved = True
+                elif s_dir == "SELL" and s_tp1 < price < s_sl:
+                    use_saved = True
 
         if use_saved:
+            direction = saved["direction"]
             entry = saved["entry"]
             sl = saved["sl"]
             be_trigger = saved["be_trigger"]
@@ -439,11 +485,11 @@ def main():
             is_pure_fvg = saved.get("is_pure_fvg", False)
             created_at = saved.get("created_at", int(now_utc.timestamp()))
         else:
-            zone = detect_institutional_zone(h4, h1, direction, price, pip, dec, eq50, item["type"])
-            if zone["valid"] and chart_bias in ("SUBE", "BAJA"):
+            zone = detect_swing_zone(h4, h1, direction, price, pip, dec, eq50, item["type"]) if quality_ok else {"valid": False}
+            if zone["valid"] and has_min_stop_margin(item["type"], zone["entry"], zone["sl"], pip):
                 entry = zone["entry"]
                 sl = zone["sl"]
-                risk = max(pip * 4, abs(entry - sl))
+                risk = abs(entry - sl)
                 be_trigger = round(entry + risk if direction == "BUY" else entry - risk, dec)
                 tp1 = round(entry + risk * 2.5 if direction == "BUY" else entry - risk * 2.5, dec)
                 tp2 = round(entry + risk * 4.5 if direction == "BUY" else entry - risk * 4.5, dec)
@@ -463,14 +509,14 @@ def main():
                 }
             else:
                 entry = price
-                sl = round(price - atr_val * 0.6 if direction == "BUY" else price + atr_val * 0.6, dec)
-                risk = max(pip * 4, abs(entry - sl))
+                sl = round(price - atr_val * 0.75 if direction == "BUY" else price + atr_val * 0.75, dec)
+                risk = max(pip * 20, abs(entry - sl))
                 be_trigger = round(entry + risk if direction == "BUY" else entry - risk, dec)
                 tp1 = round(entry + risk * 2.5 if direction == "BUY" else entry - risk * 2.5, dec)
                 tp2 = round(entry + risk * 4.5 if direction == "BUY" else entry - risk * 4.5, dec)
-                ob_high = round(price + pip * 4, dec)
-                ob_low = round(price - pip * 4, dec)
-                signal_tag = "SIN ZONA - ESPERAR"
+                ob_high = round(price + pip * 6, dec)
+                ob_low = round(price - pip * 6, dec)
+                signal_tag = "SIN ZONA SWING - ESPERAR"
                 zone_kind = "NONE"
                 has_valid_ob = False
                 has_fvg = False
@@ -478,63 +524,66 @@ def main():
                 created_at = int(now_utc.timestamp())
                 active_store.pop(sym, None)
 
-        # Precaucion reservada a casos criticos reales: choque de estructura/macro, noticia roja o reentrada swing
+        if tp1 < entry < sl:
+            direction = "SELL"
+        elif sl < entry < tp1:
+            direction = "BUY"
+
         caution_reasons = []
         if has_valid_ob:
-            if bias_4h != "NEUTRAL" and bias_4h != chart_bias:
-                caution_reasons.append(f"4H en contra ({bias_4h})")
-            if bias_d != "NEUTRAL" and bias_d != chart_bias:
-                caution_reasons.append(f"1D en contra ({bias_d})")
-            if macro_dir != "NEUTRAL" and macro_dir != chart_bias:
-                caution_reasons.append(f"Macro en contra ({macro_dir})")
             if has_news:
                 caution_reasons.append("Noticia roja hoy")
+            if bias_1h != "NEUTRAL" and bias_1h != chart_bias:
+                caution_reasons.append(f"Retroceso temporal 1H ({bias_1h})")
 
-        swing_active = has_valid_ob and (bias_d == chart_bias) and (bias_4h == chart_bias) and (macro_dir == chart_bias) and (not has_news)
+        swing_active = has_valid_ob and (bias_4h == chart_bias or bias_d == chart_bias) and (macro_dir == chart_bias)
         near_entry = has_valid_ob and is_near_entry(item["type"], price, entry, pip)
 
         if not has_valid_ob:
             entry_mode = "ESPERAR"
-            verdict_title = "ESPERAR"
+            verdict_title = "ESPERAR · FILTRO SWING"
         elif swing_active and use_saved:
             entry_mode = "REENTRADA_SWING_PRECAUCION"
             verdict_title = "REENTRADA SWING · CON PRECAUCIÓN"
             if "Reentrada Swing: validar BE en operacion base" not in caution_reasons:
                 caution_reasons.append("Reentrada Swing: validar BE en operacion base")
         elif swing_active:
-            entry_mode = "SWING_ENTRADA_NORMAL"
-            verdict_title = "ENTRADA NORMAL · SWING"
+            entry_mode = "SWING_PRINCIPAL"
+            verdict_title = "SWING PRINCIPAL" if not caution_reasons else "SWING PRINCIPAL · CON PRECAUCIÓN"
         else:
-            entry_mode = "ENTRADA_NORMAL"
-            verdict_title = "ENTRADA NORMAL" if not caution_reasons else "ENTRADA NORMAL · CON PRECAUCIÓN"
+            entry_mode = "SWING_SECUNDARIO"
+            verdict_title = "SWING" if not caution_reasons else "SWING · CON PRECAUCIÓN"
 
         is_safe_entry = has_valid_ob and len(caution_reasons) == 0
 
-        score = 55
+        score = 60
         if has_valid_ob:
-            score += 20 if zone_kind == "OB_FVG" else (16 if zone_kind == "OB" else 13)
-        if near_entry:
+            score += 22 if zone_kind == "OB_FVG" else (17 if zone_kind == "OB" else 13)
+        if swing_active:
             score += 10
-        if bias_d == bias_4h == chart_bias:
-            score += 8
-        if macro_dir == chart_bias:
+        if near_entry:
             score += 6
         if caution_reasons:
-            score -= min(20, len(caution_reasons) * 6)
+            score -= min(18, len(caution_reasons) * 6)
         win_prob = max(35, min(96, score))
 
         alignment = "ALIGNED" if (macro_dir == chart_bias and chart_bias != "NEUTRAL") else ("OPPOSED" if (macro_dir != "NEUTRAL" and chart_bias != "NEUTRAL" and macro_dir != chart_bias) else "NEUTRAL")
 
         zone_desc = "OB + FVG" if zone_kind == "OB_FVG" else ("FVG limpio" if zone_kind == "FVG" else ("OB estructural" if zone_kind == "OB" else "Sin zona"))
+        reason_detail = (
+            "Doble divisa NEUTRAL." if both_neutral else
+            ("Choque con 1D/4H o Macro." if (opposes_d1 or opposes_h4 or opposes_macro) else
+             "Sin bloque valido en zona EQ-50% con margen de SL.")
+        )
         macro_reason = (
             f"{economy_short} | Zona: {zone_desc} | 1S:{bias_w}, 1D:{bias_d}, 4H:{bias_4h}, 1H:{bias_1h} | EQ-50%: {eq50}. "
-            + (f"Estado: {verdict_title}." if has_valid_ob else "Sin bloque cercano dentro del rango permitido.")
+            + (f"Estado: {verdict_title}." if has_valid_ob else f"ESPERAR: {reason_detail}")
         )
 
         swing_plan = (
-            f"1) Entrada en {entry} con SL estructural en {sl}. "
+            f"1) Entrada Swing en {entry} con SL estructural en {sl}. "
             f"2) Al tocar {be_trigger} (+1R), mover SL a Break Even. "
-            f"3) Asegurar parciales en TP1 ({tp1}) y buscar Swing TP ({tp2})."
+            f"3) Asegurar parciales en TP1 (1:2.5 en {tp1}) y buscar Swing TP (1:4.5 en {tp2})."
         )
 
         assets_out.append({
@@ -591,9 +640,15 @@ def main():
 
     save_active_setups(active_store)
 
+    # Prioridad Swing antes que day trading/cercania
     ranked = sorted(
         assets_out,
-        key=lambda x: (1 if x["near_entry"] else 0, 1 if x["has_valid_ob"] else 0, x["win_prob"]),
+        key=lambda x: (
+            1 if x["swing_potential"]["active"] else 0,
+            1 if x["has_valid_ob"] else 0,
+            1 if x["near_entry"] else 0,
+            x["win_prob"],
+        ),
         reverse=True,
     )
     top = ranked[0] if ranked else None
@@ -616,7 +671,7 @@ def main():
         }
         if top["has_valid_ob"] and not use_saved:
             send_push(
-                f"LATICCE: {top['symbol']} ({top['win_prob']}%)",
+                f"LATICCE SWING: {top['symbol']} ({top['win_prob']}%)",
                 f"{top['confluence']['verdict_title']} | {top['setup']['signal_tag']} | Ent: {top['setup']['entry']} | SL: {top['setup']['sl']} | TP1: {top['setup']['tp1']}",
             )
 
@@ -625,8 +680,8 @@ def main():
         "brief": {
             "dxy": dxy_val,
             "us10y": us10y_val,
-            "headline": f"Radar Institucional LATICCE v12.6 · DXY {dxy_val} · Bonos US10Y {us10y_val}%",
-            "summary": "Escaner en cascada (OB + FVG, OB, FVG) con alerta amarilla en cercania a entrada y precaucion enfocada en riesgos reales.",
+            "headline": f"Radar Swing LATICCE v12.8 · DXY {dxy_val} · Bonos US10Y {us10y_val}%",
+            "summary": "Plataforma enfocada en Swing: filtros bloqueantes de EQ-50%, coherencia 1D/4H/Macro, sin doble neutral y margen minimo de SL.",
         },
         "currency_strength": strength,
         "calendar": calendar,
@@ -639,7 +694,7 @@ def main():
     with open(tmp_data, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     os.replace(tmp_data, "data.json")
-    print(f"Actualizado LATICCE v12.6 ({len(assets_out)} activos)")
+    print(f"Actualizado LATICCE v12.8 Swing First ({len(assets_out)} activos)")
 
 
 if __name__ == "__main__":
