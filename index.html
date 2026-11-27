@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LATICCE · Cabina Neuronal v12.6</title>
+  <title>LATICCE · Cabina Swing v12.8</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#030407" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -79,7 +79,7 @@
   <div id="boot-screen" style="position:fixed;inset:0;z-index:50;background:#030407;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2.5rem 1.25rem;text-align:center;">
     <canvas id="boot-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
-    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">RED NEURONAL INSTITUCIONAL · v12.6</div>
+    <div class="relative z-10 text-[10px] font-mono tracking-[0.35em] text-slate-400 pt-2">PLATAFORMA INSTITUCIONAL SWING · v12.8</div>
 
     <div class="relative z-10 w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] flex items-center justify-center my-auto pointer-events-none">
       <svg viewBox="0 0 320 320" class="w-full h-full overflow-visible">
@@ -105,7 +105,7 @@
 
     <div class="relative z-10 space-y-4 max-w-md w-full pb-4">
       <h1 class="font-hud text-3xl sm:text-4xl font-black tracking-[0.38em] bg-gradient-to-r from-red-400 via-amber-300 to-red-400 bg-clip-text text-transparent">LATICCE</h1>
-      <div class="text-[10px] font-mono tracking-[0.26em] text-slate-400">ARQUITECTURA NEURONAL · SWING & INTRADAY</div>
+      <div class="text-[10px] font-mono tracking-[0.26em] text-slate-400">ARQUITECTURA SWING FIRST · 1D / 4H / MACRO</div>
       <div>
         <button type="button" onclick="enterLaticce(true)" class="px-7 py-3 rounded-lg border border-red-500/70 bg-red-950/40 hover:bg-red-900/50 text-amber-200 font-mono font-bold text-xs tracking-[0.24em] shadow-lg shadow-red-950/50 transition">
           ENTRAR A LA CABINA ▸
@@ -118,7 +118,7 @@
   <div id="pin-trade-modal" class="hidden fixed inset-0 z-50 bg-[#030407]/95 backdrop-blur-md flex items-center justify-center p-4">
     <div class="max-w-md w-full bg-[#070b14] border border-amber-400/70 rounded-2xl p-5 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
-        <span class="font-hud text-sm font-bold text-amber-300">📌 FIJAR MI OPERACIÓN (<span id="pin-modal-sym">USDCHF</span>)</span>
+        <span class="font-hud text-sm font-bold text-amber-300">📌 FIJAR MI OPERACIÓN (<span id="pin-modal-sym">XAUUSD</span>)</span>
         <button type="button" onclick="closePinModal()" class="px-2.5 py-1 rounded bg-slate-800 text-xs text-slate-300 font-bold">✕</button>
       </div>
       <p class="text-[11px] text-slate-300 leading-relaxed">Congela tus niveles reales abiertos en tu bróker para que no cambien automáticamente y marca cualquier bloque nuevo en Swing como reentrada swing con precaución.</p>
@@ -182,7 +182,7 @@
   <div id="agent-intro-overlay" class="hidden fixed inset-0 z-40 bg-[#030407]/92 flex items-center justify-center pointer-events-none">
     <div id="agent-intro-box" class="hud-brackets px-10 py-6 text-center space-y-2 bg-[#050811]/90">
       <div id="intro-title" class="font-hud text-3xl sm:text-4xl font-black tracking-[0.28em] text-white">JARVIS</div>
-      <div id="intro-sub" class="text-[11px] font-mono tracking-[0.32em] text-slate-300">DIRECTOR DE MESA</div>
+      <div id="intro-sub" class="text-[11px] font-mono tracking-[0.32em] text-slate-300">DIRECTOR DE MESA SWING</div>
     </div>
   </div>
 
@@ -190,7 +190,7 @@
   <header class="relative z-30 border-b border-slate-800/80 bg-[#04060b]/90 sticky top-0 backdrop-blur-md">
     <div class="overflow-hidden py-1.5 border-b border-slate-800/60 bg-[#020306]">
       <div id="live-ticker-track" class="ticker-track text-[11px] font-mono text-slate-300 gap-6 px-4">
-        <span>CARGANDO FLUJO DE MERCADO...</span>
+        <span>CARGANDO FLUJO SWING...</span>
       </div>
     </div>
     <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
@@ -223,7 +223,7 @@
       <div class="text-center space-y-1 -mt-1">
         <div id="agent-hero-metric" class="font-hud text-xl sm:text-2xl font-extrabold tracking-wider text-white">ESCANEANDO</div>
         <div id="agent-hero-sub" class="text-[11px] font-mono tracking-[0.2em] text-amber-300 uppercase">SINCRONIZANDO</div>
-        <div id="agent-role-label" class="text-[10px] font-mono tracking-[0.28em] text-slate-400 uppercase">JARVIS · DIRECTOR DE MESA</div>
+        <div id="agent-role-label" class="text-[10px] font-mono tracking-[0.28em] text-slate-400 uppercase">JARVIS · DIRECTOR DE MESA SWING</div>
         <div id="agent-voice-profile" class="text-[9px] font-mono text-slate-500">PERFIL VOCAL: MAYORDOMO CULTO</div>
         <div id="agent-state-label" class="text-[11px] font-mono tracking-[0.38em] font-bold pt-0.5" style="color: var(--agent-color);">E N &nbsp; E S P E R A</div>
       </div>
@@ -231,7 +231,7 @@
 
     <div class="space-y-2.5 bg-[#04060c]/82 backdrop-blur-md p-3 rounded-xl border border-slate-800/80">
       <div id="agent-dialogue-box" class="min-h-[86px] max-h-[220px] overflow-y-auto pr-1 text-xs sm:text-sm font-mono text-slate-200 leading-relaxed whitespace-pre-line">
-        A sus órdenes, señor. Conectando red neuronal Laticce.<span class="typing-cursor"></span>
+        A sus órdenes, señor. Conectando red neuronal Laticce en modo Swing.<span class="typing-cursor"></span>
       </div>
       <div id="quick-replies" class="flex flex-wrap gap-2"></div>
       <form onsubmit="handleCockpitChat(event)" class="flex items-center gap-2 pt-1">
@@ -247,7 +247,7 @@
   <main id="panel-view" class="hidden relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 pt-4 pb-28 space-y-5">
     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
       <div class="flex flex-wrap gap-1.5 text-xs font-mono">
-        <button type="button" onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">⚡ JARVIS (22)</button>
+        <button type="button" onclick="switchPanelTab('jarvis')" class="ptab px-3 py-1.5 rounded bg-amber-500 text-black font-bold" data-pt="jarvis">🌊 SWING / JARVIS (22)</button>
         <button type="button" onclick="switchPanelTab('vision')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-sky-300" data-pt="vision">👁️ VISIÓN</button>
         <button type="button" onclick="switchPanelTab('ultron')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pt="ultron">🎯 GRÁFICO ULTRÓN</button>
         <button type="button" onclick="switchPanelTab('friday')" class="ptab px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-purple-300" data-pt="friday">🟣 F.R.I.D.A.Y. (16)</button>
@@ -256,29 +256,28 @@
       <button type="button" onclick="toggleViewMode()" class="px-3 py-1.5 rounded border border-slate-700 bg-[#0a0f1a] text-xs font-mono text-slate-300 hover:text-white">◂ CABINA</button>
     </div>
 
-    <!-- SUBPANEL JARVIS -->
+    <!-- SUBPANEL JARVIS (SWING PRIMERO) -->
     <section id="ptab-jarvis" class="space-y-3">
-      <div id="focus-pick-banner" class="hidden rounded-xl p-3.5 border border-amber-400/70 bg-gradient-to-r from-amber-500/15 via-[#0a0f1a]/90 to-emerald-500/10 flex flex-wrap items-center justify-between gap-3"></div>
+      <div id="focus-pick-banner" class="hidden rounded-xl p-3.5 border border-indigo-400/70 bg-gradient-to-r from-indigo-500/15 via-[#0a0f1a]/90 to-amber-500/10 flex flex-wrap items-center justify-between gap-3"></div>
 
       <div class="flex flex-wrap gap-2 text-[10px] font-mono text-slate-300 bg-[#050811]/90 border border-slate-800 rounded-lg px-3 py-2">
+        <span class="text-indigo-300 font-bold">🌊 SWING PRINCIPAL</span><span>·</span>
         <span class="text-yellow-300 font-bold">🟡 CERCA ENTRADA</span><span>·</span>
-        <span class="text-emerald-400 font-bold">✅ ENTRADA NORMAL</span><span>·</span>
+        <span class="text-emerald-400 font-bold">✅ SWING VÁLIDO</span><span>·</span>
         <span class="text-orange-300 font-bold">🔄 REENTRADA SWING · CON PRECAUCIÓN</span><span>·</span>
         <span class="text-cyan-300 font-bold">💎 OB / FVG</span><span>·</span>
-        <span class="text-amber-300 font-bold">⚠️ NOTICIA</span><span>·</span>
         <span class="text-slate-400">⚪ ESPERAR</span>
       </div>
 
       <div class="flex gap-2 border-b border-slate-800 pb-2 text-xs font-mono">
-        <button type="button" onclick="setJarvisSubView('ALL')" id="jsub-all" class="px-3 py-1.5 rounded bg-amber-500 text-black font-bold">📋 TODOS LOS ACTIVOS (22)</button>
-        <button type="button" onclick="setJarvisSubView('SWING_DESK')" id="jsub-swing" class="px-3 py-1.5 rounded bg-[#0a0f1a] border border-indigo-500/50 text-indigo-300 font-bold">🌊 MESA DE SWING</button>
+        <button type="button" onclick="setJarvisSubView('SWING_DESK')" id="jsub-swing" class="px-3 py-1.5 rounded bg-indigo-500 text-white font-bold">🌊 MESA DE SWING (PRIORIDAD)</button>
+        <button type="button" onclick="setJarvisSubView('ALL')" id="jsub-all" class="px-3 py-1.5 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300 font-bold">📋 TODOS LOS ACTIVOS (22)</button>
       </div>
 
-      <!-- BARRA COMPLETA DE FILTROS SIEMPRE VISIBLE -->
       <div id="jarvis-filter-bar" class="flex flex-wrap gap-1.5 text-xs font-mono">
-        <button type="button" onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold" data-pf="ALL">TODOS (22)</button>
+        <button type="button" onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-indigo-500 text-white font-bold" data-pf="SWING">🌊 POTENCIAL SWING</button>
+        <button type="button" onclick="setPanelFilter('ALL')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300" data-pf="ALL">TODOS (22)</button>
         <button type="button" onclick="setPanelFilter('NEAR')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-yellow-500/50 text-yellow-300" data-pf="NEAR">🟡 CERCA ENTRADA</button>
-        <button type="button" onclick="setPanelFilter('SWING')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-indigo-500/40 text-indigo-300" data-pf="SWING">🌊 POTENCIAL SWING</button>
         <button type="button" onclick="setPanelFilter('OBFVG')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-cyan-500/40 text-cyan-300" data-pf="OBFVG">💎 OB / FVG</button>
         <button type="button" onclick="setPanelFilter('ALIGNED')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-emerald-500/40 text-emerald-400" data-pf="ALIGNED">✔ VAN JUNTOS</button>
         <button type="button" onclick="setPanelFilter('NEWS')" class="pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-orange-500/40 text-orange-300" data-pf="NEWS">⚠️ NOTICIA HOY</button>
@@ -317,6 +316,7 @@
 
       <div class="flex flex-wrap items-center justify-between gap-2 bg-[#050811] border border-slate-800 rounded-lg px-3 py-2 text-[10px] font-mono">
         <div class="flex flex-wrap gap-2 text-slate-300">
+          <span class="text-indigo-300 font-bold">🌊 SWING</span><span>·</span>
           <span class="text-yellow-300 font-bold">🟡 CERCA ENTRADA</span><span>·</span>
           <span class="text-cyan-300 font-bold">💎 OB / FVG</span><span>·</span>
           <span class="text-orange-300 font-bold">⚠️ NOTICIA / PRECAUCIÓN</span><span>·</span>
@@ -596,8 +596,8 @@
     let data = null;
     let currentAgent = 'jarvis';
     let isPanelMode = false;
-    let jarvisSubView = 'ALL';
-    let panelFilter = 'ALL';
+    let jarvisSubView = 'SWING_DESK';
+    let panelFilter = 'SWING';
     let visionSubTab = 'resumen';
     let fridayCatFilter = 'ALL';
     let activeExamLessonId = null;
@@ -667,10 +667,11 @@
 
       if (pin) {
         const risk = Math.abs(pin.entry - pin.sl);
-        const isBaseInBE = pin.direction === 'BUY' ? (a.price >= pin.be) : (a.price <= pin.be);
+        const trueDir = (pin.tp1 < pin.entry && pin.sl > pin.entry) ? 'SELL' : ((pin.tp1 > pin.entry && pin.sl < pin.entry) ? 'BUY' : pin.direction);
+        const isBaseInBE = trueDir === 'BUY' ? (a.price >= pin.be) : (a.price <= pin.be);
         return {
           isPinned: true,
-          direction: pin.direction,
+          direction: trueDir,
           entry: pin.entry,
           sl: pin.sl,
           be: pin.be,
@@ -686,22 +687,26 @@
         };
       }
 
-      const risk = Math.abs(a.setup.entry - a.setup.sl);
-      const be = a.setup.be || a.setup.be_trigger || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk).toFixed(a.decimals)) : Number((a.setup.entry - risk).toFixed(a.decimals)));
-      const tp2 = a.setup.tp2 || (a.setup.direction === 'BUY' ? Number((a.setup.entry + risk * 4.5).toFixed(a.decimals)) : Number((a.setup.entry - risk * 4.5).toFixed(a.decimals)));
+      const entry = a.setup.entry;
+      const sl = a.setup.sl;
+      const tp1 = a.setup.tp1;
+      const trueDir = (tp1 < entry && sl > entry) ? 'SELL' : ((tp1 > entry && sl < entry) ? 'BUY' : a.setup.direction);
+      const risk = Math.abs(entry - sl);
+      const be = a.setup.be || a.setup.be_trigger || (trueDir === 'BUY' ? Number((entry + risk).toFixed(a.decimals)) : Number((entry - risk).toFixed(a.decimals)));
+      const tp2 = a.setup.tp2 || (trueDir === 'BUY' ? Number((entry + risk * 4.5).toFixed(a.decimals)) : Number((entry - risk * 4.5).toFixed(a.decimals)));
       return {
         isPinned: false,
-        direction: a.setup.direction,
-        entry: a.setup.entry,
-        sl: a.setup.sl,
+        direction: trueDir,
+        entry,
+        sl,
         be,
-        tp1: a.setup.tp1,
+        tp1,
         tp2,
         slUnits: toU(risk),
-        tp1Units: toU(a.setup.tp1 - a.setup.entry),
-        tp2Units: toU(tp2 - a.setup.entry),
+        tp1Units: toU(tp1 - entry),
+        tp2Units: toU(tp2 - entry),
         unitLabel,
-        scannerEntry: a.setup.entry,
+        scannerEntry: entry,
         scannerTag: a.setup.signal_tag,
         isBaseInBE: false
       };
@@ -737,7 +742,7 @@
         summary: 'Por qué los bancos compran en zona de descuento (debajo del 50%) y venden en zona cara (encima del 50%).',
         body: 'Al medir desde el inicio hasta el final de un impulso, la mitad exacta (EQ 50%) divide el rango en dos: Zona Premium (arriba del 50%, cara, ideal solo para ventas) y Zona Discount (debajo del 50%, barata, ideal solo para compras).',
         example: 'Si GBPUSD sube 200 pips, los institucionales no compran en la cima; esperan que retroceda por debajo de los 100 pips (zona Discount) donde están los Order Blocks baratos.',
-        rule: 'Regla LATICCE: Evita comprar por encima del EQ 50% o vender por debajo; ahí es donde atrapan al minorista.',
+        rule: 'Regla LATICCE: En Swing filtramos compras por debajo del EQ-50% y ventas por encima del EQ-50%.',
         quiz: [
           { q: 'En un rango alcista, ¿en qué zona buscan comprar las instituciones?', opts: ['En Zona Discount (por debajo del EQ 50%)', 'En Zona Premium (cerca del techo)', 'Justo en el máximo del día'], ans: 0 },
           { q: '¿Para qué tipo de operación es ideal la Zona Premium (encima del EQ 50%)?', opts: ['Para buscar ventas a buen precio', 'Para comprar en ruptura', 'Para operar sin estructura'], ans: 0 },
@@ -770,14 +775,14 @@
       },
       {
         id: 6, cat: 'TECH', title: '6. Alineación Multi-Temporal (1S · 1D · 4H · 1H)',
-        summary: 'Jerarquía de temporalidades para no operar contra el tren institucional.',
-        body: 'Semanal (1S) y Diario (1D) marcan el mapa macro; 4 Horas (4H) define la estructura Swing de la semana y 1 Hora (1H) refina el bloque de entrada.',
+        summary: 'Jerarquía de temporalidades para operar Swing a favor de la estructura mayor.',
+        body: 'Semanal (1S) y Diario (1D) marcan el mapa macro; 4 Horas (4H) define la estructura Swing principal y 1 Hora (1H) refina el bloque de entrada.',
         example: 'Si 1S, 1D y 4H son bajistas en USDJPY, buscar compras en 1H es nadar contra corriente; lo profesional es esperar retrocesos en 1H para vender a favor de 1D/4H.',
-        rule: 'Regla LATICCE: Solo se activa POTENCIAL SWING cuando 1D, 4H y Macro apuntan en la misma dirección.',
+        rule: 'Regla LATICCE: Priorizamos siempre Swing (4H y 1D) y descartamos señales que choquen contra 1D o 4H.',
         quiz: [
           { q: '¿Qué temporalidades marcan la dirección principal en LATICCE?', opts: ['Semanal (1S), Diario (1D) y 4 Horas (4H)', '1 minuto y 5 minutos', 'Solo el tick en vivo'], ans: 0 },
           { q: '¿Para qué usamos principalmente la temporalidad de 1 Hora (1H)?', opts: ['Para refinar el Order Block o FVG exacto de entrada', 'Para ignorar la tendencia diaria', 'Para ver noticias'], ans: 0 },
-          { q: '¿Qué ocurre si operas en contra de la tendencia diaria (1D)?', opts: ['Es un pullback contra-tendencia de recorrido corto hasta TP1', 'Es el mejor Swing del mes', 'No necesitas Stop Loss'], ans: 0 }
+          { q: '¿Qué ocurre si operas en contra de la tendencia diaria (1D)?', opts: ['Vas contra el flujo mayor y reduces la probabilidad Swing', 'Es el mejor Swing del mes', 'No necesitas Stop Loss'], ans: 0 }
         ]
       },
       {
@@ -1079,7 +1084,7 @@
       closeFridayClassroom();
       if (isPanelMode) toggleViewMode();
       selectAgent('friday', false);
-      processQuery(`Explícame con ejemplos prácticos en el mercado actual el módulo "${les.title}" antes de que rinda mi examen.`);
+      processQuery(`Explícame con ejemplos prácticos Swing en el mercado actual el módulo "${les.title}" antes de que rinda mi examen.`);
     }
 
     function evaluateEntrySafety(a) {
@@ -1091,7 +1096,7 @@
       const d = getAssetUnitsDist(a);
       const isNear = typeof a.near_entry === 'boolean'
         ? a.near_entry
-        : (a.type === 'forex' ? d.units <= 25.0 : (a.type === 'metal' ? d.units <= 40.0 : (d.diff / Math.max(a.price, 1e-9)) <= 0.0025));
+        : (a.type === 'forex' ? d.units <= 25.0 : (a.type === 'metal' ? d.units <= 45.0 : (d.diff / Math.max(a.price, 1e-9)) <= 0.003));
 
       const reasons = Array.isArray(a.caution_reasons) ? [...a.caution_reasons] : [];
       if (!reasons.length) {
@@ -1124,26 +1129,27 @@
         .sort((a, b) => {
           const sa = evaluateEntrySafety(a);
           const sb = evaluateEntrySafety(b);
-          const rankA = (sa.isNear ? 2 : 0) + (sa.isSafe ? 1 : 0);
-          const rankB = (sb.isNear ? 2 : 0) + (sb.isSafe ? 1 : 0);
+          const rankA = (sa.isSwing ? 4 : 0) + (sa.isSafe ? 2 : 0) + (sa.isNear ? 1 : 0);
+          const rankB = (sb.isSwing ? 4 : 0) + (sb.isSafe ? 2 : 0) + (sb.isNear ? 1 : 0);
           if (rankB !== rankA) return rankB - rankA;
           return (b.win_prob || b.confluence?.score || 0) - (a.win_prob || a.confluence?.score || 0);
         })[0];
 
       if (!best) return null;
       const safety = evaluateEntrySafety(best);
+      const eff = getEffectiveLevels(best);
       return {
         symbol: best.symbol,
-        direction: best.setup.direction === 'BUY' ? 'COMPRA' : 'VENTA',
+        direction: eff.direction === 'BUY' ? 'COMPRA' : 'VENTA',
         win_prob: best.win_prob || best.confluence?.score || 0,
         is_safe: safety.isSafe,
         is_swing: safety.isSwing,
         near_entry: safety.isNear,
-        mode_label: safety.isReentrySwingCaution ? 'REENTRADA SWING · CON PRECAUCIÓN' : (safety.isSafe ? 'ENTRADA NORMAL' : 'ENTRADA NORMAL · CON PRECAUCIÓN'),
+        mode_label: safety.isReentrySwingCaution ? 'REENTRADA SWING · CON PRECAUCIÓN' : (safety.isSwing ? 'SWING PRINCIPAL' : (safety.isSafe ? 'SWING VÁLIDO' : 'SWING · CON PRECAUCIÓN')),
         signal_tag: best.setup.signal_tag,
-        entry: best.setup.entry,
-        sl: best.setup.sl,
-        tp1: best.setup.tp1
+        entry: eff.entry,
+        sl: eff.sl,
+        tp1: eff.tp1
       };
     }
 
@@ -1177,6 +1183,16 @@
         };
       }
 
+      if (safety.isSwing && safety.isSafe) {
+        return {
+          code: 'SWING_TOP', icon: '🌊', label: safety.isNear ? 'SWING · CERCA ENTRADA' : 'SWING PRINCIPAL',
+          isSafe: true, isCaution: false, isSwing: true, isNear: safety.isNear,
+          cardBorder: 'border-indigo-400 shadow-md shadow-indigo-500/20',
+          selBox: 'bg-indigo-500/20 border-indigo-400 text-indigo-200',
+          badgeClass: 'bg-indigo-500/25 text-indigo-200 border-indigo-400'
+        };
+      }
+
       if (safety.isNear) {
         const extra = safety.reasons.length ? ' · CON PRECAUCIÓN' : '';
         return {
@@ -1190,7 +1206,7 @@
 
       if (!safety.isSafe) {
         return {
-          code: 'CAUTION', icon: '⚠️', label: 'ENTRADA NORMAL · CON PRECAUCIÓN',
+          code: 'CAUTION', icon: '⚠️', label: 'SWING · CON PRECAUCIÓN',
           isSafe: false, isCaution: true, isSwing: safety.isSwing, isNear: false,
           cardBorder: 'border-amber-500/65 shadow-md shadow-amber-500/10',
           selBox: 'bg-amber-500/12 border-amber-500/60 text-amber-200',
@@ -1199,7 +1215,7 @@
       }
 
       return {
-        code: 'NORMAL', icon: '✅', label: 'ENTRADA NORMAL',
+        code: 'NORMAL', icon: '✅', label: 'SWING VÁLIDO',
         isSafe: true, isCaution: false, isSwing: safety.isSwing, isNear: false,
         cardBorder: 'border-emerald-500/65 shadow-md shadow-emerald-500/10',
         selBox: 'bg-emerald-500/12 border-emerald-500/70 text-emerald-200',
@@ -1227,38 +1243,38 @@
         localStorage.setItem('oraculo_gemini_key', geminiApiKey);
         updateAiBrainButton();
         typeAgentDialogue(geminiApiKey
-          ? 'Enlace neuronal con Gemini confirmado, señor. Ahora puede conversar libremente conmigo o con cualquiera de los siete agentes.'
+          ? 'Enlace neuronal con Gemini confirmado, señor. Ahora puede conversar libremente conmigo o con cualquiera de los siete agentes en modo Swing.'
           : 'Clave IA eliminada. Modo local activado, señor.');
       }
     }
 
     const AGENTS = {
       jarvis: {
-        name: 'JARVIS', sub: 'DIRECTOR DE MESA', color: '#f59e0b', rgb: '245, 158, 11',
+        name: 'JARVIS', sub: 'DIRECTOR DE MESA SWING', color: '#f59e0b', rgb: '245, 158, 11',
         voiceDesc: 'VOZ: MAYORDOMO BRITÁNICO · SERENO Y PULCRO',
         gender: 'M', variant: 0, pitch: 0.92, rate: 0.97,
-        personaPrompt: 'Eres J.A.R.V.I.S., Director de Mesa de LATICCE. Distingues entre ENTRADA NORMAL, CERCA ENTRADA (amarillo) y REENTRADA SWING · CON PRECAUCIÓN.'
+        personaPrompt: 'Eres J.A.R.V.I.S., Director de Mesa Swing de LATICCE. Priorizas siempre Swing (1D/4H/Macro) sobre day trading y distingues entre SWING PRINCIPAL, CERCA ENTRADA y REENTRADA SWING · CON PRECAUCIÓN.'
       },
       vision: {
         name: 'VISIÓN', sub: 'CONCIENCIA MACRO', color: '#38bdf8', rgb: '56, 189, 248',
         voiceDesc: 'VOZ: SINTEZOIDE PROFUNDO · REFLEXIVO Y PAUSADO',
         gender: 'M', variant: 1, pitch: 0.78, rate: 0.88,
-        personaPrompt: 'Eres VISIÓN (tal como en VisionQuest). Analizas los flujos de capital, bancos centrales, DXY y US10Y.'
+        personaPrompt: 'Eres VISIÓN. Analizas los flujos de capital Swing, bancos centrales, DXY y US10Y.'
       },
       ultron: {
-        name: 'ULTRÓN', sub: 'DEPREDADOR DE LIQUIDEZ', color: '#ef4444', rgb: '239, 68, 68',
+        name: 'ULTRÓN', sub: 'DEPREDADOR DE LIQUIDEZ SWING', color: '#ef4444', rgb: '239, 68, 68',
         voiceDesc: 'VOZ: METÁLICA GRAVE · IMPLACABLE Y CORTANTE',
         gender: 'M', variant: 2, pitch: 0.62, rate: 0.94,
-        personaPrompt: 'Eres ULTRÓN. Analizas Order Blocks, Fair Value Gaps, liquidez BSL/SSL y equilibrio EQ-50%.'
+        personaPrompt: 'Eres ULTRÓN. Analizas Order Blocks, Fair Value Gaps, liquidez BSL/SSL y equilibrio EQ-50% para Swing.'
       },
       friday: {
         name: 'F.R.I.D.A.Y.', sub: 'MENTORA MACRO & TÉCNICA', color: '#a855f7', rgb: '168, 85, 247',
         voiceDesc: 'VOZ: FEMENINA ÁGIL · INGENIOSA Y DIDÁCTICA',
         gender: 'F', variant: 0, pitch: 1.15, rate: 1.04,
-        personaPrompt: 'Eres F.R.I.D.A.Y., mentora experta de LATICCE en macroeconomía y estructura SMC.'
+        personaPrompt: 'Eres F.R.I.D.A.Y., mentora experta de LATICCE en macroeconomía y estructura Swing.'
       },
       edith: {
-        name: 'E.D.I.T.H.', sub: 'SISTEMA DE PUNTERÍA', color: '#10b981', rgb: '16, 185, 129',
+        name: 'E.D.I.T.H.', sub: 'SISTEMA DE PUNTERÍA SWING', color: '#10b981', rgb: '16, 185, 129',
         voiceDesc: 'VOZ: FEMENINA TÁCTICA · PRECISA Y MATEMÁTICA',
         gender: 'F', variant: 1, pitch: 1.04, rate: 1.06,
         personaPrompt: 'Eres E.D.I.T.H. Calculas distancias en pips/puntos, Break Even (+1R), TP1 (1:2.5) y Swing TP (1:4.5).'
@@ -1267,13 +1283,13 @@
         name: 'KAREN', sub: 'CONCIENCIA EMOCIONAL', color: '#f43f5e', rgb: '244, 63, 94',
         voiceDesc: 'VOZ: FEMENINA CÁLIDA · EMPÁTICA Y PROTECTORA',
         gender: 'F', variant: 2, pitch: 1.22, rate: 0.98,
-        personaPrompt: 'Eres KAREN. Proteges la disciplina emocional del operador y adviertes cuando una señal requiere precaución.'
+        personaPrompt: 'Eres KAREN. Proteges la disciplina emocional del operador en Swing y evitas entradas impulsivas.'
       },
       homer: {
         name: 'H.O.M.E.R.', sub: 'AUDITOR ESTADÍSTICO', color: '#84cc16', rgb: '132, 204, 22',
         voiceDesc: 'VOZ: ANALISTA VETERANO · SECO E IRÓNICO',
         gender: 'M', variant: 3, pitch: 0.84, rate: 0.96,
-        personaPrompt: 'Eres H.O.M.E.R. Analizas probabilidades y esperanza matemática en R.'
+        personaPrompt: 'Eres H.O.M.E.R. Analizas probabilidades y esperanza matemática en R para setups Swing.'
       }
     };
 
@@ -1441,7 +1457,7 @@
     function buildCompactMarketContext() {
       if (!data?.assets?.length) return 'Telemetría aún sincronizando.';
       const fp = getFocusPrimary();
-      const focus = fp ? `Foco Principal #1: ${fp.symbol} (${fp.direction}, ${fp.mode_label}, prob ${fp.win_prob}%, entrada ${fp.entry}, SL ${fp.sl}, TP1 ${fp.tp1}).` : '';
+      const focus = fp ? `Foco Swing #1: ${fp.symbol} (${fp.direction}, ${fp.mode_label}, prob ${fp.win_prob}%, entrada ${fp.entry}, SL ${fp.sl}, TP1 ${fp.tp1}).` : '';
       const macro = `DXY=${data.brief?.dxy || '--'}, US10Y=${data.brief?.us10y || '--'}.`;
       const rows = data.assets.map(a => {
         const eff = getEffectiveLevels(a);
@@ -1454,15 +1470,15 @@
     function buildLocalCharacterReply(qRaw, agentKey) {
       const qUp = qRaw.toUpperCase();
       if (!data?.assets?.length) {
-        return 'Sincronizando telemetría de mercado en este momento. Inténtelo de nuevo en unos segundos.';
+        return 'Sincronizando telemetría Swing en este momento. Inténtelo de nuevo en unos segundos.';
       }
       let asset = data.assets.find(a => qUp.includes(a.symbol));
       if (!asset && (qUp.includes('ORO') || qUp.includes('GOLD') || qUp.includes('XAU'))) asset = data.assets.find(a => a.symbol === 'XAUUSD');
       if (!asset && (qUp.includes('BITCOIN') || qUp.includes('BTC'))) asset = data.assets.find(a => a.symbol === 'BTCUSD');
 
       const fp = getFocusPrimary();
-      const nearList = data.assets.filter(a => getAssetColorState(a).isNear);
-      const target = asset || (fp ? data.assets.find(a => a.symbol === fp.symbol) : nearList[0]) || data.assets[0];
+      const swingList = data.assets.filter(a => getAssetColorState(a).isSwing);
+      const target = asset || (fp ? data.assets.find(a => a.symbol === fp.symbol) : swingList[0]) || data.assets[0];
       const safety = evaluateEntrySafety(target);
       const st = getAssetColorState(target);
       const eff = getEffectiveLevels(target);
@@ -1470,26 +1486,26 @@
       const strength = getCurrencyStrengthText(target);
 
       const modeDesc = !safety.hasZone
-        ? 'no tiene zona activa en este momento (ESPERAR)'
+        ? 'en ESPERAR por filtros Swing'
         : `${st.label} (${target.setup.signal_tag})`;
 
       if (agentKey === 'jarvis') {
-        return `A sus órdenes, señor. ${target.symbol} (${strength}) cotiza en ${target.price} y figura como ${modeDesc}. Entrada en ${eff.entry} (a ${d.units} ${d.label}), SL en ${eff.sl} (${eff.slUnits} ${eff.unitLabel}), BE en ${eff.be}, TP1 en ${eff.tp1} y Swing TP en ${eff.tp2}.`;
+        return `A sus órdenes, señor. En enfoque Swing, ${target.symbol} (${strength}) cotiza en ${target.price} y figura como ${modeDesc}. Entrada en ${eff.entry} (a ${d.units} ${d.label}), SL en ${eff.sl} (${eff.slUnits} ${eff.unitLabel}), BE en ${eff.be}, TP1 (1:2.5) en ${eff.tp1} y Swing TP (1:4.5) en ${eff.tp2}.`;
       }
       if (agentKey === 'ultron') {
-        return `Estructura de ${target.symbol}: equilibrio EQ-50% en ${target.liquidity?.eq50 || '--'}, BSL en ${target.liquidity?.bsl || '--'} y SSL en ${target.liquidity?.ssl || '--'}. Estado: ${modeDesc}.`;
+        return `Estructura Swing de ${target.symbol}: equilibrio EQ-50% en ${target.liquidity?.eq50 || '--'}, BSL en ${target.liquidity?.bsl || '--'} y SSL en ${target.liquidity?.ssl || '--'}. Estado: ${modeDesc}.`;
       }
       if (agentKey === 'vision') {
-        return `El índice DXY está en ${data.brief?.dxy || '--'} y los bonos US10Y en ${data.brief?.us10y || '--'}%. En ${target.symbol} (${strength}), el estado actual es ${modeDesc}.`;
+        return `El índice DXY está en ${data.brief?.dxy || '--'} y los bonos US10Y en ${data.brief?.us10y || '--'}%. En ${target.symbol} (${strength}), el estado Swing actual es ${modeDesc}.`;
       }
       if (agentKey === 'friday') {
-        return `¡Aquí estoy, jefe! En ${target.symbol} tenemos ${modeDesc}. Recuerda proteger en Break Even al tocar ${eff.be} (+1R).`;
+        return `¡Aquí estoy, jefe! En ${target.symbol} tenemos ${modeDesc}. Recuerda proteger en Break Even al tocar ${eff.be} (+1R) y buscar objetivos Swing.`;
       }
       if (agentKey === 'edith') {
-        return `Coordenadas en ${target.symbol}: entrada ${eff.entry} (a ${d.units} ${d.label}), Stop ${eff.sl} (${eff.slUnits} ${eff.unitLabel}), Gatillo BE en ${eff.be}, TP1 en ${eff.tp1} y Swing TP en ${eff.tp2}.`;
+        return `Coordenadas Swing en ${target.symbol}: entrada ${eff.entry} (a ${d.units} ${d.label}), Stop ${eff.sl} (${eff.slUnits} ${eff.unitLabel}), Gatillo BE en ${eff.be}, TP1 en ${eff.tp1} y Swing TP en ${eff.tp2}.`;
       }
       if (agentKey === 'karen') {
-        return `Tienes ${trades.length} operaciones en tu bitácora. ${target.symbol} está en ${modeDesc}. Mantén calma y disciplina.`;
+        return `Tienes ${trades.length} operaciones en tu bitácora. ${target.symbol} está en ${modeDesc}. Prioriza la paciencia Swing sobre la ansiedad intradía.`;
       }
       const hm = getHomerMetrics();
       return `Acierto histórico: ${hm.winRate}% (${hm.pnlR}). ${target.symbol} marca ${target.win_prob}% con objetivos 1:2.5 (${eff.tp1}) y 1:4.5 (${eff.tp2}).`;
@@ -1499,7 +1515,7 @@
       const ag = AGENTS[agentKey] || AGENTS.jarvis;
       const history = agentHistories[agentKey] || [];
       const systemInstruction = `${ag.personaPrompt}
-Formas parte de LATICCE v12.6. Responde directamente en 3 a 6 oraciones sin asteriscos ni markdown pesado.
+Formas parte de LATICCE v12.8 (plataforma Swing First). Responde directamente en 3 a 6 oraciones sin asteriscos ni markdown pesado.
 TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
 
       const contents = [
@@ -1712,31 +1728,31 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       if (!qr) return;
       const presets = {
         jarvis: [
-          { label: '🟡 CERCA DE ENTRADA', q: 'Dime qué pares están cerca de su entrada ahora mismo y si son entrada normal o reentrada swing.' },
-          { label: 'ABRIR PANEL ▸', fn: 'toggleViewMode()' }
+          { label: '🌊 MESA SWING #1', q: 'Dime cuáles son las mejores oportunidades Swing hoy y sus niveles de Entrada, SL, BE, TP1 y Swing TP.' },
+          { label: 'ABRIR PANEL SWING ▸', fn: 'toggleViewMode()' }
         ],
         vision: [
-          { label: '🌐 RESUMEN MACRO', q: 'Dame tu lectura macroeconómica sobre el DXY, los bonos y la fuerza relativa hoy.' },
+          { label: '🌐 RESUMEN MACRO', q: 'Dame tu lectura macroeconómica Swing sobre el DXY, los bonos y la fuerza relativa hoy.' },
           { label: 'ABRIR VISIÓN ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('vision');" }
         ],
         ultron: [
-          { label: '⚡ ZONAS OB / FVG', q: 'Revisa qué zonas OB + FVG, OB o FVG limpios tenemos cerca del precio actual.' },
+          { label: '⚡ ZONAS SWING OB/FVG', q: 'Revisa qué zonas Swing OB + FVG, OB o FVG limpios tenemos filtradas por EQ-50%.' },
           { label: 'VER GRÁFICO ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('ultron');" }
         ],
         friday: [
-          { label: '🌐 CLASE MACRO HOY', q: 'Enséñame cómo leer OB, FVG y EQ-50% con ejemplos del mercado actual.' },
+          { label: '🌐 CLASE SWING HOY', q: 'Enséñame cómo operar Swing con EQ-50%, OB/FVG y Break Even en +1R.' },
           { label: 'ACADEMIA (16) ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('friday');" }
         ],
         edith: [
-          { label: '📐 PUNTOS Y PIPS', q: 'Dame las distancias en pips y puntos de Break Even y TP1 de los pares activos.' },
-          { label: 'TOP BLANCOS', q: 'Dame las coordenadas exactas de los pares activos ahora mismo.' }
+          { label: '📐 PUNTOS Y PIPS', q: 'Dame las distancias en pips y puntos de Break Even, TP1 y Swing TP de los setups activos.' },
+          { label: 'TOP BLANCOS', q: 'Dame las coordenadas exactas de las mejores oportunidades Swing ahora mismo.' }
         ],
         karen: [
-          { label: '🧠 AUDITORÍA MENTAL', q: 'Revisa mi bitácora y dime qué debo cuidar hoy en mi disciplina.' },
+          { label: '🧠 AUDITORÍA MENTAL', q: 'Revisa mi bitácora y dime qué debo cuidar hoy en mi disciplina Swing.' },
           { label: 'ABRIR DIARIO ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('karen');" }
         ],
         homer: [
-          { label: '📊 VEREDICTO EN R', q: 'Dame el análisis estadístico frío de mi rendimiento en R.' },
+          { label: '📊 VEREDICTO EN R', q: 'Dame el análisis estadístico frío de mi rendimiento en R para Swing.' },
           { label: 'MESA SWING ▸', fn: "if(!isPanelMode)toggleViewMode();switchPanelTab('jarvis');setJarvisSubView('SWING_DESK');" }
         ]
       };
@@ -1754,20 +1770,20 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       const fp = getFocusPrimary();
 
       if (key === 'jarvis') {
-        document.getElementById('agent-hero-metric').textContent = fp ? `${fp.near_entry ? '🟡' : '✅'} ${fp.symbol} (${fp.win_prob}%)` : 'ESCANEANDO';
-        document.getElementById('agent-hero-sub').textContent = fp ? `${fp.direction} · ${fp.mode_label}` : 'DIRECTOR DE MESA';
+        document.getElementById('agent-hero-metric').textContent = fp ? `${fp.is_swing ? '🌊' : '✅'} ${fp.symbol} (${fp.win_prob}%)` : 'FILTRO SWING';
+        document.getElementById('agent-hero-sub').textContent = fp ? `${fp.direction} · ${fp.mode_label}` : 'ESPERANDO CONFLUENCIA';
         typeAgentDialogue(fp
-          ? `A sus órdenes, señor. Foco Principal #1: ${fp.symbol} en ${fp.direction} (${fp.win_prob}% · ${fp.mode_label}). Entrada en ${fp.entry}, Stop en ${fp.sl} y TP1 en ${fp.tp1}.`
-          : `A sus órdenes, señor. Red neuronal Laticce en línea. ¿Qué par desea evaluar hoy?`, false);
+          ? `A sus órdenes, señor. Prioridad Swing #1: ${fp.symbol} en ${fp.direction} (${fp.win_prob}% · ${fp.mode_label}). Entrada en ${fp.entry}, Stop en ${fp.sl} y TP1 en ${fp.tp1}.`
+          : `A sus órdenes, señor. Plataforma configurada en modo Swing: los filtros bloqueantes protegen la cuenta cuando no hay confluencia limpia.`, false);
       } else if (key === 'vision') {
         document.getElementById('agent-hero-metric').textContent = data?.brief ? `DXY ${data.brief.dxy}` : 'MACRO';
         document.getElementById('agent-hero-sub').textContent = data?.brief ? `US10Y ${data.brief.us10y}` : 'FLUJOS DE CAPITAL';
-        typeAgentDialogue(`Observo los flujos globales, señor. El capital busca rendimiento real y refugio frente a los bancos centrales.`, false);
+        typeAgentDialogue(`Observo los flujos globales Swing, señor. El capital busca rendimiento real y refugio frente a los bancos centrales.`, false);
       } else if (key === 'ultron') {
-        const t = nearest || data?.assets?.[0];
+        const t = fp ? data?.assets?.find(x => x.symbol === fp.symbol) : (nearest || data?.assets?.[0]);
         document.getElementById('agent-hero-metric').textContent = t ? `${t.symbol} ${t.chart_bias === 'SUBE' ? '▲' : '▼'}` : 'ESTRUCTURA';
-        document.getElementById('agent-hero-sub').textContent = t ? `SESGO ${t.chart_bias} · OB/FVG` : 'ORDER BLOCKS';
-        typeAgentDialogue(`Escáner en cascada OB + FVG, OB y FVG activo. Puedes fijar tu operación en el gráfico con 📌 FIJAR MI OPERACIÓN.`, false);
+        document.getElementById('agent-hero-sub').textContent = t ? `SWING ${t.chart_bias} · EQ-50%` : 'ORDER BLOCKS';
+        typeAgentDialogue(`Escáner Swing activo con filtro EQ-50% estricto y margen mínimo de Stop Loss. Usa 📌 FIJAR MI OPERACIÓN para seguir tus trades abiertos.`, false);
       } else if (key === 'friday') {
         const pct = Math.round((completedLessons.length / FRIDAY_CURRICULUM.length) * 100);
         document.getElementById('agent-hero-metric').textContent = `${pct}%`;
@@ -1777,11 +1793,11 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         const d = nearest ? getAssetUnitsDist(nearest) : null;
         document.getElementById('agent-hero-metric').textContent = d ? `${d.units} ${d.label}` : 'PUNTERÍA';
         document.getElementById('agent-hero-sub').textContent = nearest ? `${nearest.symbol} · ${nearest.price}` : 'COORDENADAS';
-        typeAgentDialogue(`Sistemas ópticos calibrados. Pídame las coordenadas o distancias de cualquier par activo.`, false);
+        typeAgentDialogue(`Sistemas ópticos Swing calibrados. Pídame las coordenadas de Entrada, BE (+1R), TP1 y Swing TP.`, false);
       } else if (key === 'karen') {
         document.getElementById('agent-hero-metric').textContent = `${trades.length}`;
         document.getElementById('agent-hero-sub').textContent = `OPERACIONES EN BITÁCORA`;
-        typeAgentDialogue(`Cuida tu disciplina y evita operar con ansiedad. Revisa cualquier señal marcada con precaución.`, false);
+        typeAgentDialogue(`Cuida tu disciplina Swing y evita operar por impulso. Menos operaciones de mayor calidad protegen mejor tu cuenta.`, false);
       } else if (key === 'homer') {
         document.getElementById('agent-hero-metric').textContent = `${homer.winRate}%`;
         document.getElementById('agent-hero-sub').textContent = `RENDIMIENTO · ${homer.pnlR}`;
@@ -1811,7 +1827,10 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       document.getElementById('cockpit-view').classList.toggle('hidden', isPanelMode);
       document.getElementById('panel-view').classList.toggle('hidden', !isPanelMode);
       document.getElementById('view-mode-btn').textContent = isPanelMode ? '◂ CABINA' : 'PANEL ▸';
-      if (isPanelMode) renderPanelAll();
+      if (isPanelMode) {
+        switchPanelTab('jarvis');
+        renderPanelAll();
+      }
     }
 
     function switchPanelTab(tab) {
@@ -1838,7 +1857,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
     function setPanelFilter(f) {
       panelFilter = f;
       document.querySelectorAll('.pf-btn').forEach(b => {
-        b.className = b.dataset.pf === f ? 'pf-btn px-2.5 py-1 rounded bg-amber-500 text-black font-bold' : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
+        b.className = b.dataset.pf === f ? 'pf-btn px-2.5 py-1 rounded bg-indigo-500 text-white font-bold' : 'pf-btn px-2.5 py-1 rounded bg-[#0a0f1a] border border-slate-800 text-slate-300';
       });
       renderPanelJarvis();
     }
@@ -1881,31 +1900,41 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       if (!data?.assets?.length) return;
       const fpBanner = document.getElementById('focus-pick-banner');
       const fp = getFocusPrimary();
-      if (fpBanner && fp) {
+      if (fpBanner) {
         fpBanner.classList.remove('hidden');
-        fpBanner.innerHTML = `
-          <div class="space-y-0.5">
-            <div class="text-[10px] font-bold ${fp.near_entry ? 'text-yellow-300' : 'text-amber-300'} tracking-wider">
-              ${fp.near_entry ? '🟡 FOCO PRINCIPAL · CERCA DE ENTRADA HOY' : '🎯 FOCO PRINCIPAL DE MÁXIMA PROBABILIDAD HOY'}
+        if (fp) {
+          fpBanner.innerHTML = `
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-bold text-indigo-300 tracking-wider">
+                🌊 PRIORIDAD SWING #1 · PLATAFORMA ORIENTADA A SWING
+              </div>
+              <div class="font-hud text-sm font-black text-white">${fp.symbol} · <span class="${fp.direction === 'COMPRA' ? 'text-emerald-400' : 'text-red-400'}">${fp.direction}</span> · <span class="text-amber-300">${fp.win_prob}%</span> · <span class="text-cyan-300 text-xs">${fp.mode_label}</span></div>
+              <div class="text-[11px] text-slate-300">${fp.signal_tag} · Entrada: <strong>${fp.entry}</strong> · SL: ${fp.sl} · TP1: ${fp.tp1}</div>
             </div>
-            <div class="font-hud text-sm font-black text-white">${fp.symbol} · <span class="${fp.direction === 'COMPRA' ? 'text-emerald-400' : 'text-red-400'}">${fp.direction}</span> · <span class="text-amber-300">${fp.win_prob}%</span> · <span class="text-cyan-300 text-xs">${fp.mode_label}</span></div>
-            <div class="text-[11px] text-slate-300">${fp.signal_tag} · Entrada: <strong>${fp.entry}</strong> · SL: ${fp.sl} · TP1: ${fp.tp1}</div>
-          </div>
-          <button type="button" onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-amber-500 text-black font-bold text-xs">VER GRÁFICO →</button>
-        `;
+            <button type="button" onclick="openInPanelChart('${fp.symbol}')" class="px-3 py-1.5 rounded bg-indigo-500 text-white font-bold text-xs">VER GRÁFICO SWING →</button>
+          `;
+        } else {
+          fpBanner.innerHTML = `
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-bold text-amber-300 tracking-wider">🛡️ MODO SWING CONSERVADOR · FILTROS ACTIVOS</div>
+              <div class="text-xs text-slate-300">Ningún activo cumple ahora mismo todos los filtros Swing (EQ-50%, coherencia 1D/4H/Macro y margen de SL). Mejor esperar que forzar una entrada.</div>
+            </div>
+          `;
+        }
       }
 
       let list = [...data.assets].sort((a, b) => {
         const sa = getAssetColorState(a);
         const sb = getAssetColorState(b);
-        const rankA = sa.isNear ? 3 : (sa.code === 'NORMAL' ? 2 : (sa.isCaution ? 1 : 0));
-        const rankB = sb.isNear ? 3 : (sb.code === 'NORMAL' ? 2 : (sb.isCaution ? 1 : 0));
+        const rankA = (sa.isSwing ? 8 : 0) + (sa.hasZone ? 4 : 0) + (sa.isSafe ? 2 : 0) + (sa.isNear ? 1 : 0);
+        const rankB = (sb.isSwing ? 8 : 0) + (sb.hasZone ? 4 : 0) + (sb.isSafe ? 2 : 0) + (sb.isNear ? 1 : 0);
         if (rankB !== rankA) return rankB - rankA;
         return (b.win_prob || b.confluence?.score || 0) - (a.win_prob || a.confluence?.score || 0);
       });
 
       if (jarvisSubView === 'SWING_DESK') {
-        list = list.filter(a => a.swing_potential?.active || Boolean(pinnedTrades[a.symbol]));
+        const swingOnly = list.filter(a => a.swing_potential?.active || Boolean(pinnedTrades[a.symbol]));
+        list = swingOnly.length ? swingOnly : list.filter(a => evaluateEntrySafety(a).hasZone);
       }
 
       if (panelFilter === 'NEAR') list = list.filter(a => getAssetColorState(a).isNear);
@@ -1922,7 +1951,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
 
       const grid = document.getElementById('panel-jarvis-grid');
       if (!list.length) {
-        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No hay activos que coincidan con este filtro.</div>`;
+        grid.innerHTML = `<div class="col-span-full hud-panel rounded-xl p-6 text-center text-xs text-slate-400">No hay setups Swing activos bajo este filtro en este momento. Revisa "TODOS (22)" o espera una nueva estructura limpia.</div>`;
         return;
       }
 
@@ -1933,7 +1962,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         const safety = evaluateEntrySafety(a);
         const strengthTxt = getCurrencyStrengthText(a);
         const prob = a.win_prob || a.confluence?.score || 50;
-        const probCol = st.isNear ? 'text-yellow-300' : (st.isCaution ? 'text-orange-300' : (safety.hasZone ? 'text-emerald-400' : 'text-slate-400'));
+        const probCol = st.isSwing ? 'text-indigo-300' : (st.isNear ? 'text-yellow-300' : (st.isCaution ? 'text-orange-300' : (safety.hasZone ? 'text-emerald-400' : 'text-slate-400')));
         const hasSwing = a.swing_potential && a.swing_potential.active;
         const hasNews = a.news_warning && a.news_warning.active;
         const hasZoneBadge = safety.hasZone;
@@ -1965,7 +1994,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
               </div>
               <div class="bg-[#050811] border border-slate-800 rounded p-2">
                 <div class="text-[9px] text-red-400">🎯 SU GRÁFICO (ULTRÓN)</div>
-                <div class="font-bold text-white">${a.chart_bias}</div>
+                <div class="font-bold text-white">${eff.direction === 'BUY' ? 'COMPRA · SUBE' : 'VENTA · BAJA'}</div>
                 <div class="text-[10px] text-slate-400">1S:${a.tf_bias?.weekly || '--'} · 1D:${a.tf_bias?.daily} · 4H:${a.tf_bias?.h4}</div>
               </div>
             </div>
@@ -1976,7 +2005,7 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
             </div>
 
             <div id="why-${a.symbol}" class="${openWhyPanels[a.symbol] ? '' : 'hidden'} bg-[#04060c] border border-cyan-500/30 rounded-lg p-3 text-[11px] text-slate-300 space-y-1.5">
-              <div><strong class="text-sky-400">Auditoría LATICCE:</strong> ${a.macro_reason}</div>
+              <div><strong class="text-sky-400">Auditoría Swing:</strong> ${a.macro_reason}</div>
               ${hasSwing ? `<div><strong class="text-indigo-300">Plan Swing:</strong> ${a.swing_potential.plan}</div>` : ''}
               ${hasNews ? `<div><strong class="text-orange-300">Riesgo Noticia:</strong> ${(a.news_warning.events || []).join(' · ')}</div>` : ''}
             </div>
@@ -2009,8 +2038,8 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
       if (visionSubTab === 'resumen') {
         box.innerHTML = `
           <div class="bg-[#050811] border border-sky-500/30 rounded-lg p-3.5 space-y-2">
-            <div class="text-[10px] font-bold text-amber-300">🏛️ BRIEF DIARIO WALL STREET</div>
-            <div class="font-bold text-white text-sm">${data.brief?.headline || 'Panorama Macroeconómico'}</div>
+            <div class="text-[10px] font-bold text-amber-300">🏛️ BRIEF SWING INSTITUCIONAL</div>
+            <div class="font-bold text-white text-sm">${data.brief?.headline || 'Panorama Macroeconómico Swing'}</div>
             <p class="text-slate-300 leading-relaxed">${data.brief?.summary || ''}</p>
           </div>`;
       } else if (visionSubTab === 'cuadrante') {
@@ -2018,14 +2047,14 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         const entries = Object.entries(labels);
         box.innerHTML = entries.length
           ? `<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${entries.map(([ccy, lbl]) => `<div class="bg-[#050811] border border-slate-800 rounded p-2.5"><div class="font-bold text-white">${ccy}</div><div class="text-[11px] ${lbl === 'FUERTE' ? 'text-emerald-400' : (lbl === 'DEBIL' ? 'text-red-400' : 'text-slate-400')}">${lbl}</div></div>`).join('')}</div>`
-          : `<div class="bg-[#050811] border border-slate-800 rounded p-3 text-slate-300">Fuerza relativa integrada en cada tarjeta de Jarvis según la cesta DXY + US10Y + cruces mayores.</div>`;
+          : `<div class="bg-[#050811] border border-slate-800 rounded p-3 text-slate-300">Fuerza relativa integrada en cada tarjeta de Swing según la cesta 1D/4H y referencias macro.</div>`;
       } else if (visionSubTab === 'bancos') {
         const banks = data.banks || [{ bank: 'FED (EE.UU.)', stance: 'VIGILANCIA DE TASAS', bias: 'NEUTRAL', detail: `DXY ${data.brief?.dxy || '--'} · Bonos US10Y ${data.brief?.us10y || '--'}%` }];
         box.innerHTML = banks.map(b => `<div class="bg-[#050811] border border-slate-800 rounded p-3"><div class="flex justify-between font-bold text-white"><span>${b.bank}</span><span class="text-sky-300">${b.stance}</span></div><p class="text-slate-400 mt-1">${b.detail}</p></div>`).join('');
       } else if (visionSubTab === 'tasas') {
         box.innerHTML = `
           <div class="grid grid-cols-2 gap-3">
-            <div class="bg-[#050811] border border-slate-800 rounded p-3"><div class="text-[10px] text-slate-400">ÍNDICE DÓLAR (DXY)</div><div class="font-hud text-lg font-bold text-amber-300">${data.brief?.dxy || '--'}</div><div class="text-[11px] text-slate-400 mt-1">Si sube, presiona a la baja a EURUSD, GBPUSD, AUDUSD y Oro.</div></div>
+            <div class="bg-[#050811] border border-slate-800 rounded p-3"><div class="text-[10px] text-slate-400">ÍNDICE DÓLAR (DXY)</div><div class="font-hud text-lg font-bold text-amber-300">${data.brief?.dxy || '--'}</div><div class="text-[11px] text-slate-400 mt-1">Referencia macro principal para pares USD y Oro en Swing.</div></div>
             <div class="bg-[#050811] border border-slate-800 rounded p-3"><div class="text-[10px] text-slate-400">BONOS TESORO 10 AÑOS (US10Y)</div><div class="font-hud text-lg font-bold text-sky-300">${data.brief?.us10y || '--'}%</div><div class="text-[11px] text-slate-400 mt-1">Rendimientos al alza fortalecen al USD frente al Yen y al Oro.</div></div>
           </div>`;
       } else if (visionSubTab === 'noticias') {
@@ -2080,11 +2109,15 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         if (!safety.hasZone && !eff.isPinned) {
           banner.classList.remove('hidden');
           banner.className = 'bg-slate-800/40 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-300';
-          banner.innerHTML = `<strong>⚪ ESPERAR EN ${a.symbol}:</strong> Sin zona OB/FVG activa dentro del rango permitido.`;
+          banner.innerHTML = `<strong>⚪ ESPERAR EN ${a.symbol}:</strong> Sin zona Swing válida en EQ-50% con margen de Stop Loss.`;
         } else if (safety.isReentrySwingCaution) {
           banner.classList.remove('hidden');
           banner.className = 'bg-orange-500/15 border border-orange-400/70 rounded-lg p-2.5 text-xs text-orange-200';
           banner.innerHTML = `<strong>🔄 REENTRADA SWING · CON PRECAUCIÓN EN ${a.symbol}:</strong> ${safety.reasons.join(' · ')}.`;
+        } else if (safety.isSwing && safety.isSafe) {
+          banner.classList.remove('hidden');
+          banner.className = 'bg-indigo-500/15 border border-indigo-400/70 rounded-lg p-2.5 text-xs text-indigo-200';
+          banner.innerHTML = `<strong>🌊 SWING PRINCIPAL EN ${a.symbol}:</strong> 💎 ${a.setup.signal_tag} · Entrada en ${eff.entry} · TP1 (1:2.5) en ${eff.tp1} · Swing TP (1:4.5) en ${eff.tp2}.`;
         } else if (safety.isNear) {
           banner.classList.remove('hidden');
           banner.className = 'bg-yellow-500/15 border border-yellow-400/70 rounded-lg p-2.5 text-xs text-yellow-200';
@@ -2092,11 +2125,11 @@ TELEMETRÍA EN VIVO:\n${buildCompactMarketContext()}`;
         } else if (!safety.isSafe) {
           banner.classList.remove('hidden');
           banner.className = 'bg-amber-500/15 border border-amber-400/70 rounded-lg p-2.5 text-xs text-amber-200';
-          banner.innerHTML = `<strong>⚠️ ENTRADA NORMAL · CON PRECAUCIÓN EN ${a.symbol}:</strong> ${safety.reasons.join(' · ')}.`;
+          banner.innerHTML = `<strong>⚠️ SWING · CON PRECAUCIÓN EN ${a.symbol}:</strong> ${safety.reasons.join(' · ')}.`;
         } else {
           banner.classList.remove('hidden');
           banner.className = 'bg-emerald-500/15 border border-emerald-400/70 rounded-lg p-2.5 text-xs text-emerald-200';
-          banner.innerHTML = `<strong>✅ ENTRADA NORMAL EN ${a.symbol}:</strong> 💎 ${a.setup.signal_tag} · Entrada en ${eff.entry}.`;
+          banner.innerHTML = `<strong>✅ SWING VÁLIDO EN ${a.symbol}:</strong> 💎 ${a.setup.signal_tag} · Entrada en ${eff.entry}.`;
         }
       }
 
