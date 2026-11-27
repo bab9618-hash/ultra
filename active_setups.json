@@ -253,5 +253,21 @@
     "ob_low": 1.96511,
     "signal_tag": "COMPRA OB + FVG (4H)",
     "created_at": 1795748057
+  },
+  "AUDJPY": {
+    "has_valid_ob": true,
+    "has_fvg": true,
+    "is_pure_fvg": false,
+    "zone_kind": "OB_FVG",
+    "direction": "BUY",
+    "entry": 105.687,
+    "sl": 105.581,
+    "be_trigger": 105.793,
+    "tp1": 105.952,
+    "tp2": 106.164,
+    "ob_high": 105.743,
+    "ob_low": 105.631,
+    "signal_tag": "COMPRA OB + FVG (1H)",
+    "created_at": 1795751686
   }
 }
