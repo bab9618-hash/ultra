@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-28 14:28 UTC",
+  "last_updated": "2026-11-28 15:20 UTC",
   "brief": {
     "dxy": 104.01,
     "us10y": 4.94,
@@ -126,7 +126,7 @@
       },
       "ob_high": 3675.3,
       "ob_low": 3674.1,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "XAU NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:SUBE | EQ-50%: 3564.85. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -1460,7 +1460,7 @@
       },
       "ob_high": 1.09445,
       "ob_low": 1.09325,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "EUR NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:BAJA, 1H:NEUTRAL | EQ-50%: 1.09625. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -2794,7 +2794,7 @@
       },
       "ob_high": 159.575,
       "ob_low": 159.455,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "USD NEUTRAL / JPY NEUTRAL | Zona: Sin zona | 1S:SUBE, 1D:SUBE, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 159.27. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -4128,7 +4128,7 @@
       },
       "ob_high": 1.31049,
       "ob_low": 1.30929,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "GBP NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.31136. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -5462,7 +5462,7 @@
       },
       "ob_high": 209.056,
       "ob_low": 208.936,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "GBP NEUTRAL / JPY NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 208.959. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -8132,7 +8132,7 @@
       },
       "ob_high": 2.39831,
       "ob_low": 2.39711,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "GBP NEUTRAL / NZD DEBIL | Zona: Sin zona | 1S:NEUTRAL, 1D:SUBE, 4H:SUBE, 1H:SUBE | EQ-50%: 2.39129. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -14806,7 +14806,7 @@
       },
       "ob_high": 1.21733,
       "ob_low": 1.21613,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "AUD FUERTE / NZD DEBIL | Zona: Sin zona | 1S:NEUTRAL, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 1.21253. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -16140,7 +16140,7 @@
       },
       "ob_high": 1.64491,
       "ob_low": 1.64371,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "EUR NEUTRAL / AUD FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 1.64862. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -20144,7 +20144,7 @@
       },
       "ob_high": 1.4254,
       "ob_low": 1.4242,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "USD NEUTRAL / CAD FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.42339. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -21478,7 +21478,7 @@
       },
       "ob_high": 0.8363,
       "ob_low": 0.8351,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "USD NEUTRAL / CHF NEUTRAL | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.83374. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -22812,7 +22812,7 @@
       },
       "ob_high": 174.539,
       "ob_low": 174.419,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "EUR NEUTRAL / JPY NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 174.669. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -24116,8 +24116,8 @@
       "quote": "USD",
       "decimals": 2,
       "pip": 1.0,
-      "price": 59224.14,
-      "chg_day": -1.07,
+      "price": 59335.47,
+      "chg_day": -0.89,
       "win_prob": 60,
       "has_valid_ob": false,
       "zone_kind": "NONE",
@@ -24144,9 +24144,9 @@
         "ssl": 58758.63,
         "eq50": 60429.31
       },
-      "ob_high": 59230.14,
-      "ob_low": 59218.14,
-      "created_at": 1795876082,
+      "ob_high": 59341.47,
+      "ob_low": 59329.47,
+      "created_at": 1795879250,
       "macro_reason": "BTC NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:NEUTRAL | EQ-50%: 60429.31. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -24157,15 +24157,15 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN ZONA SWING - ESPERAR",
-        "entry": 59224.14,
-        "sl": 61522.69,
-        "be": 56925.59,
-        "tp1": 53477.76,
-        "tp2": 48880.66
+        "entry": 59335.47,
+        "sl": 61634.02,
+        "be": 57036.92,
+        "tp1": 53589.1,
+        "tp2": 48992.0
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada Swing en 59224.14 con SL estructural en 61522.69. 2) Al tocar 56925.59 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 53477.76) y buscar Swing TP (1:4.5 en 48880.66)."
+        "plan": "1) Entrada Swing en 59335.47 con SL estructural en 61634.02. 2) Al tocar 57036.92 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 53589.1) y buscar Swing TP (1:4.5 en 48992.0)."
       },
       "news_warning": {
         "active": false,
@@ -24487,7 +24487,7 @@
             "o": 61161.91,
             "h": 64478.36,
             "l": 57241.84,
-            "c": 59224.14
+            "c": 59335.47
           }
         ],
         "1d": [
@@ -24804,7 +24804,7 @@
             "o": 59866.07,
             "h": 60164.19,
             "l": 58906.45,
-            "c": 59224.14
+            "c": 59335.47
           }
         ],
         "4h": [
@@ -25119,19 +25119,12 @@
           {
             "t": 1795867200,
             "o": 59174.49,
-            "h": 59367.05,
+            "h": 59393.28,
             "l": 58895.27,
-            "c": 59224.14
+            "c": 59335.47
           }
         ],
         "1h": [
-          {
-            "t": 1795716000,
-            "o": 60455.42,
-            "h": 60653.75,
-            "l": 60319.79,
-            "c": 60401.02
-          },
           {
             "t": 1795719600,
             "o": 60401.62,
@@ -25436,9 +25429,16 @@
           {
             "t": 1795874400,
             "o": 59044.75,
-            "h": 59256.69,
+            "h": 59393.28,
             "l": 59040.0,
-            "c": 59224.14
+            "c": 59263.43
+          },
+          {
+            "t": 1795878000,
+            "o": 59261.0,
+            "h": 59351.19,
+            "l": 59255.0,
+            "c": 59335.47
           }
         ]
       }
@@ -25480,7 +25480,7 @@
       },
       "ob_high": 50770.52,
       "ob_low": 50758.52,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "US30 NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 49486.19. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -26814,7 +26814,7 @@
       },
       "ob_high": 24043.92,
       "ob_low": 24031.92,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "USTEC NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 23724.53. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -28148,7 +28148,7 @@
       },
       "ob_high": 7290.08,
       "ob_low": 7278.08,
-      "created_at": 1795876082,
+      "created_at": 1795879250,
       "macro_reason": "US500 NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 7149.15. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
