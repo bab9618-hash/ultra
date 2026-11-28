@@ -1,20 +1,4 @@
 {
-  "USDJPY": {
-    "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
-    "direction": "BUY",
-    "entry": 159.257,
-    "sl": 159.027,
-    "be_trigger": 159.487,
-    "tp1": 159.832,
-    "tp2": 160.292,
-    "ob_high": 159.379,
-    "ob_low": 159.135,
-    "signal_tag": "SWING COMPRA OB (4H)",
-    "created_at": 1795806124
-  },
   "AUDCAD": {
     "has_valid_ob": true,
     "has_fvg": true,
@@ -45,22 +29,6 @@
     "ob_high": 105.965,
     "ob_low": 105.722,
     "signal_tag": "SWING COMPRA FVG (4H)",
-    "created_at": 1795806124
-  },
-  "GBPJPY": {
-    "has_valid_ob": true,
-    "has_fvg": true,
-    "is_pure_fvg": false,
-    "zone_kind": "OB_FVG",
-    "direction": "BUY",
-    "entry": 208.649,
-    "sl": 208.4,
-    "be_trigger": 208.898,
-    "tp1": 209.272,
-    "tp2": 209.769,
-    "ob_high": 208.791,
-    "ob_low": 208.508,
-    "signal_tag": "SWING COMPRA OB + FVG (4H)",
     "created_at": 1795806124
   },
   "GBPCAD": {
@@ -95,53 +63,21 @@
     "signal_tag": "SWING COMPRA OB + FVG (4H)",
     "created_at": 1795806124
   },
-  "GBPUSD": {
+  "AUDCHF": {
     "has_valid_ob": true,
     "has_fvg": true,
     "is_pure_fvg": false,
     "zone_kind": "OB_FVG",
     "direction": "BUY",
-    "entry": 1.30632,
-    "sl": 1.30355,
-    "be_trigger": 1.30909,
-    "tp1": 1.31324,
-    "tp2": 1.31878,
-    "ob_high": 1.30801,
-    "ob_low": 1.30463,
+    "entry": 0.55268,
+    "sl": 0.55063,
+    "be_trigger": 0.55473,
+    "tp1": 0.5578,
+    "tp2": 0.5619,
+    "ob_high": 0.55364,
+    "ob_low": 0.55171,
     "signal_tag": "SWING COMPRA OB + FVG (4H)",
-    "created_at": 1795814188
-  },
-  "EURAUD": {
-    "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
-    "direction": "BUY",
-    "entry": 1.64368,
-    "sl": 1.63946,
-    "be_trigger": 1.6479,
-    "tp1": 1.65423,
-    "tp2": 1.66267,
-    "ob_high": 1.64683,
-    "ob_low": 1.64054,
-    "signal_tag": "SWING COMPRA OB (4H)",
-    "created_at": 1795824543
-  },
-  "AUDCHF": {
-    "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
-    "direction": "SELL",
-    "entry": 0.55685,
-    "sl": 0.55968,
-    "be_trigger": 0.55402,
-    "tp1": 0.54977,
-    "tp2": 0.54411,
-    "ob_high": 0.5586,
-    "ob_low": 0.55509,
-    "signal_tag": "SWING VENTA OB (4H)",
-    "created_at": 1795824543
+    "created_at": 1795844329
   },
   "NZDUSD": {
     "has_valid_ob": true,
@@ -158,5 +94,21 @@
     "ob_low": 0.549,
     "signal_tag": "SWING VENTA OB + FVG (4H)",
     "created_at": 1795824543
+  },
+  "GBPAUD": {
+    "has_valid_ob": true,
+    "has_fvg": false,
+    "is_pure_fvg": false,
+    "zone_kind": "OB",
+    "direction": "SELL",
+    "entry": 1.97238,
+    "sl": 1.97477,
+    "be_trigger": 1.96999,
+    "tp1": 1.96641,
+    "tp2": 1.96163,
+    "ob_high": 1.97369,
+    "ob_low": 1.97106,
+    "signal_tag": "SWING VENTA OB (1H)",
+    "created_at": 1795844329
   }
 }
