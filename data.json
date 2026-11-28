@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-28 11:31 UTC",
+  "last_updated": "2026-11-28 12:27 UTC",
   "brief": {
     "dxy": 104.01,
     "us10y": 4.94,
@@ -31,6 +31,34 @@
   "calendar": [],
   "news": [
     {
+      "title": "Stocks are chasing a rare buy signal as markets brace for a potential Fed hike: Chart of the Day",
+      "link": "https://finance.yahoo.com/markets/article/stocks-are-chasing-a-rare-buy-signal-as-markets-brace-for-a-potential-fed-hike-chart-of-the-day-120524657.html?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Sat, 28 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
+      "title": "Vanguard and Fidelity expect lower returns from US stocks for years to come. Is your 401(k) built for a slower decade?",
+      "link": "https://finance.yahoo.com/markets/stocks/articles/vanguard-fidelity-expect-lower-returns-114500964.html?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Sat, 28 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
+      "title": "BCA Research Awaits Sustained US Dollar Peak Before Returning to Gold",
+      "link": "https://investorshub.advfn.com/market-news/article/40810/bca-research-awaits-sustained-us-dollar-peak-before-returning-to-gold?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Sat, 28 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
+      "title": "The Stock Market Just Dropped Into a Correction. History Is Crystal Clear About What Happens Next.",
+      "link": "https://www.fool.com/investing/2026/11/28/stock-market-correction-history-what-happens-next/?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Sat, 28 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
       "title": "S&P 500 Market Correction: 3 “Safe” Stocks to Buy Now",
       "link": "https://www.fool.com/investing/2026/11/28/s-and-p-500-market-correction-3-safe-stocks-to-buy-now/?.tsrc=rss",
       "source": "Yahoo Finance",
@@ -42,34 +70,6 @@
       "link": "https://www.fool.com/investing/2026/11/28/if-a-stock-market-crash-is-coming-warren-buffett-s/?.tsrc=rss",
       "source": "Yahoo Finance",
       "time": "Sat, 28 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "After an S&P 500 Correction, Your Money Could Double in 4 Years. Stock Market History Shows Reasons for Hope.",
-      "link": "https://www.fool.com/investing/2026/11/28/after-an-s-and-p-500-correction-your-money-could-double-in-4-years-stock-market-history-shows-reasons-for-hope/?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Sat, 28 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "The Federal Reserve sends a troubling signal to S&P 500 investors",
-      "link": "https://www.thestreet.com/investing/stocks/the-federal-reserve-sends-a-troubling-signal-to-sp-500-investors?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Sat, 28 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "i-80 Gold (TSX:IAU) Moved Today, What Is Behind The Attention?",
-      "link": "https://finance.yahoo.com/markets/stocks/articles/80-gold-tsx-iau-moved-001252144.html?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Sat, 28 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "Take This Quick Test to See How Much You Could Lose if the Stock Market Returns to 'Normal'",
-      "link": "https://www.barchart.com/story/news/9037341/take-this-quick-test-to-see-how-much-you-could-lose-if-the-stock-market-returns-to-normal?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Fri, 27 Nov 2026",
       "plain_es": "Titular institucional de seguimiento macro en vivo."
     }
   ],
@@ -126,7 +126,7 @@
       },
       "ob_high": 3675.2,
       "ob_low": 3674.0,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "XAU NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:SUBE, 1H:SUBE | EQ-50%: 3564.85. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -1460,7 +1460,7 @@
       },
       "ob_high": 1.09445,
       "ob_low": 1.09325,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "EUR NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:BAJA, 1H:NEUTRAL | EQ-50%: 1.09625. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -2794,7 +2794,7 @@
       },
       "ob_high": 159.575,
       "ob_low": 159.455,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "USD NEUTRAL / JPY NEUTRAL | Zona: Sin zona | 1S:SUBE, 1D:SUBE, 4H:SUBE, 1H:NEUTRAL | EQ-50%: 159.27. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -4128,7 +4128,7 @@
       },
       "ob_high": 1.31049,
       "ob_low": 1.30929,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "GBP NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 1.31136. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -5462,7 +5462,7 @@
       },
       "ob_high": 209.056,
       "ob_low": 208.936,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "GBP NEUTRAL / JPY NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 208.959. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -8132,7 +8132,7 @@
       },
       "ob_high": 2.39831,
       "ob_low": 2.39711,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "GBP NEUTRAL / NZD DEBIL | Zona: Sin zona | 1S:NEUTRAL, 1D:SUBE, 4H:SUBE, 1H:SUBE | EQ-50%: 2.39129. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -14806,7 +14806,7 @@
       },
       "ob_high": 1.21733,
       "ob_low": 1.21613,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "AUD FUERTE / NZD DEBIL | Zona: Sin zona | 1S:NEUTRAL, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 1.21253. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -16140,7 +16140,7 @@
       },
       "ob_high": 1.64491,
       "ob_low": 1.64371,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "EUR NEUTRAL / AUD FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 1.64862. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -20144,7 +20144,7 @@
       },
       "ob_high": 1.4254,
       "ob_low": 1.4242,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "USD NEUTRAL / CAD FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.42339. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -21478,7 +21478,7 @@
       },
       "ob_high": 0.8363,
       "ob_low": 0.8351,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "USD NEUTRAL / CHF NEUTRAL | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.83374. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -22812,7 +22812,7 @@
       },
       "ob_high": 174.539,
       "ob_low": 174.419,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "EUR NEUTRAL / JPY NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 174.669. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -24116,8 +24116,8 @@
       "quote": "USD",
       "decimals": 2,
       "pip": 1.0,
-      "price": 59073.04,
-      "chg_day": -1.33,
+      "price": 59205.49,
+      "chg_day": -1.1,
       "win_prob": 60,
       "has_valid_ob": false,
       "zone_kind": "NONE",
@@ -24144,9 +24144,9 @@
         "ssl": 58723.88,
         "eq50": 60411.93
       },
-      "ob_high": 59079.04,
-      "ob_low": 59067.04,
-      "created_at": 1795865500,
+      "ob_high": 59211.49,
+      "ob_low": 59199.49,
+      "created_at": 1795868870,
       "macro_reason": "BTC NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:BAJA, 4H:BAJA, 1H:BAJA | EQ-50%: 60411.93. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -24157,15 +24157,15 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN ZONA SWING - ESPERAR",
-        "entry": 59073.04,
-        "sl": 61361.92,
-        "be": 56784.16,
-        "tp1": 53350.84,
-        "tp2": 48773.08
+        "entry": 59205.49,
+        "sl": 61494.37,
+        "be": 56916.61,
+        "tp1": 53483.29,
+        "tp2": 48905.53
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada Swing en 59073.04 con SL estructural en 61361.92. 2) Al tocar 56784.16 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 53350.84) y buscar Swing TP (1:4.5 en 48773.08)."
+        "plan": "1) Entrada Swing en 59205.49 con SL estructural en 61494.37. 2) Al tocar 56916.61 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 53483.29) y buscar Swing TP (1:4.5 en 48905.53)."
       },
       "news_warning": {
         "active": false,
@@ -24487,7 +24487,7 @@
             "o": 61161.91,
             "h": 64478.36,
             "l": 57241.84,
-            "c": 59073.04
+            "c": 59205.49
           }
         ],
         "1d": [
@@ -24804,17 +24804,10 @@
             "o": 59866.07,
             "h": 60164.19,
             "l": 59086.85,
-            "c": 59073.04
+            "c": 59205.49
           }
         ],
         "4h": [
-          {
-            "t": 1795219200,
-            "o": 58808.37,
-            "h": 59108.28,
-            "l": 56370.0,
-            "c": 56648.49
-          },
           {
             "t": 1795233600,
             "o": 56628.75,
@@ -25121,17 +25114,17 @@
             "o": 59761.09,
             "h": 59796.06,
             "l": 58999.0,
-            "c": 59073.04
+            "c": 59177.68
+          },
+          {
+            "t": 1795867200,
+            "o": 59174.5,
+            "h": 59316.5,
+            "l": 59174.49,
+            "c": 59205.49
           }
         ],
         "1h": [
-          {
-            "t": 1795705200,
-            "o": 60640.27,
-            "h": 60640.27,
-            "l": 59863.05,
-            "c": 60542.41
-          },
           {
             "t": 1795708800,
             "o": 60565.47,
@@ -25437,8 +25430,15 @@
             "t": 1795863600,
             "o": 59169.69,
             "h": 59230.81,
-            "l": 59073.04,
-            "c": 59073.04
+            "l": 59030.19,
+            "c": 59177.68
+          },
+          {
+            "t": 1795867200,
+            "o": 59174.5,
+            "h": 59316.5,
+            "l": 59174.49,
+            "c": 59205.49
           }
         ]
       }
@@ -25480,7 +25480,7 @@
       },
       "ob_high": 50770.52,
       "ob_low": 50758.52,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "US30 NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 49486.19. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -26814,7 +26814,7 @@
       },
       "ob_high": 24043.92,
       "ob_low": 24031.92,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "USTEC NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 23724.53. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -28148,7 +28148,7 @@
       },
       "ob_high": 7290.08,
       "ob_low": 7278.08,
-      "created_at": 1795865500,
+      "created_at": 1795868870,
       "macro_reason": "US500 NEUTRAL / USD NEUTRAL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 7149.15. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
