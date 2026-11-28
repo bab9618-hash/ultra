@@ -158,21 +158,5 @@
     "ob_low": 0.549,
     "signal_tag": "SWING VENTA OB + FVG (4H)",
     "created_at": 1795824543
-  },
-  "BTCUSD": {
-    "has_valid_ob": true,
-    "has_fvg": false,
-    "is_pure_fvg": false,
-    "zone_kind": "OB",
-    "direction": "BUY",
-    "entry": 59701.12,
-    "sl": 59193.02,
-    "be_trigger": 60209.22,
-    "tp1": 60971.37,
-    "tp2": 61987.57,
-    "ob_high": 60203.22,
-    "ob_low": 59199.02,
-    "signal_tag": "SWING COMPRA OB (4H)",
-    "created_at": 1795824543
   }
 }
