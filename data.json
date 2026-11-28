@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-28 00:09 UTC",
+  "last_updated": "2026-11-28 01:28 UTC",
   "brief": {
     "dxy": 104.01,
     "us10y": 4.94,
@@ -30,6 +30,13 @@
   },
   "calendar": [],
   "news": [
+    {
+      "title": "i-80 Gold (TSX:IAU) Moved Today, What Is Behind The Attention?",
+      "link": "https://finance.yahoo.com/markets/stocks/articles/80-gold-tsx-iau-moved-001252144.html?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Sat, 28 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
     {
       "title": "S&P 500, Nasdaq End Best Week In Over A Year As AI Optimism Makes Comeback — VZ, ANT, ADBE, TSLA In Focus",
       "link": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-nasdaq-end-best-week-in-over-a-year-as-ai-optimism-makes-comeback/cNb6EtcR9VK?.tsrc=rss",
@@ -64,28 +71,21 @@
       "source": "Yahoo Finance",
       "time": "Fri, 27 Nov 2026",
       "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "S&P 500 Posts Year's Largest Weekly Gain Led by Materials, Technology",
-      "link": "https://finance.yahoo.com/markets/stocks/articles/p-500-posts-apos-largest-183955223.html?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Fri, 27 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
     }
   ],
   "focus_pick": {
     "primary": {
-      "symbol": "AUDCHF",
-      "dir_label": "VENTA",
-      "probability": 93,
-      "signal_tag": "SWING VENTA OB (4H)",
-      "entry": 0.55685,
-      "sl": 0.55968,
-      "tp1": 0.54977,
-      "is_safe": true,
+      "symbol": "AUDUSD",
+      "dir_label": "COMPRA",
+      "probability": 92,
+      "signal_tag": "SWING COMPRA OB + FVG (4H)",
+      "entry": 0.66364,
+      "sl": 0.66184,
+      "tp1": 0.66814,
+      "is_safe": false,
       "is_swing": true,
       "near_entry": true,
-      "entry_mode": "SWING_PRINCIPAL"
+      "entry_mode": "REENTRADA_SWING_PRECAUCION"
     }
   },
   "assets": [
@@ -126,7 +126,7 @@
       },
       "ob_high": 3675.2,
       "ob_low": 3674.0,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "XAU NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 3564.85. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -1091,16 +1091,16 @@
           },
           {
             "t": 1795780800,
-            "o": 3664.6,
+            "o": 3670.8,
             "h": 3672.5,
             "l": 3642.7,
-            "c": 3652.9
+            "c": 3654.1
           },
           {
             "t": 1795795200,
-            "o": 3652.8,
+            "o": 3654.1,
             "h": 3675.9,
-            "l": 3648.7,
+            "l": 3645.2,
             "c": 3674.6
           }
         ],
@@ -1394,28 +1394,28 @@
           },
           {
             "t": 1795789800,
-            "o": 3664.6,
+            "o": 3670.8,
             "h": 3672.5,
-            "l": 3650.6,
-            "c": 3655.6
+            "l": 3651.9,
+            "c": 3664.4
           },
           {
             "t": 1795793400,
-            "o": 3654.9,
-            "h": 3661.3,
+            "o": 3663.2,
+            "h": 3665.2,
             "l": 3642.7,
-            "c": 3652.9
+            "c": 3654.1
           },
           {
             "t": 1795797000,
-            "o": 3652.8,
-            "h": 3667.7,
-            "l": 3648.7,
-            "c": 3666.6
+            "o": 3654.1,
+            "h": 3664.9,
+            "l": 3645.2,
+            "c": 3661.0
           },
           {
             "t": 1795800600,
-            "o": 3667.0,
+            "o": 3661.0,
             "h": 3675.9,
             "l": 3655.0,
             "c": 3674.6
@@ -1460,7 +1460,7 @@
       },
       "ob_high": 1.09445,
       "ob_low": 1.09325,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "EUR FUERTE / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:BAJA, 1H:NEUTRAL | EQ-50%: 1.09625. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -6796,7 +6796,7 @@
       },
       "ob_high": 1.97077,
       "ob_low": 1.96957,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "GBP NEUTRAL / AUD NEUTRAL | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:BAJA, 1H:NEUTRAL | EQ-50%: 1.97193. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -8130,7 +8130,7 @@
       },
       "ob_high": 2.39831,
       "ob_low": 2.39711,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "GBP NEUTRAL / NZD DEBIL | Zona: Sin zona | 1S:NEUTRAL, 1D:SUBE, 4H:SUBE, 1H:SUBE | EQ-50%: 2.39129. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -14806,7 +14806,7 @@
       },
       "ob_high": 1.21733,
       "ob_low": 1.21613,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "AUD NEUTRAL / NZD DEBIL | Zona: Sin zona | 1S:NEUTRAL, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 1.21253. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -16112,14 +16112,15 @@
       "pip": 0.0001,
       "price": 1.64431,
       "chg_day": -0.65,
-      "win_prob": 87,
+      "win_prob": 81,
       "has_valid_ob": true,
       "zone_kind": "OB",
-      "entry_mode": "SWING_PRINCIPAL",
+      "entry_mode": "REENTRADA_SWING_PRECAUCION",
       "near_entry": true,
       "is_safe_entry": false,
       "caution_reasons": [
-        "Retroceso temporal 1H (BAJA)"
+        "Retroceso temporal 1H (BAJA)",
+        "Reentrada Swing: validar BE en operacion base"
       ],
       "economy_short": "EUR FUERTE / AUD NEUTRAL",
       "macro_dir": "SUBE",
@@ -16143,11 +16144,11 @@
       "ob_high": 1.64683,
       "ob_low": 1.64054,
       "created_at": 1795824543,
-      "macro_reason": "EUR FUERTE / AUD NEUTRAL | Zona: OB estructural | 1S:SUBE, 1D:SUBE, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 1.64862. Estado: SWING PRINCIPAL · CON PRECAUCIÓN.",
+      "macro_reason": "EUR FUERTE / AUD NEUTRAL | Zona: OB estructural | 1S:SUBE, 1D:SUBE, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 1.64862. Estado: REENTRADA SWING · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 87,
+        "score": 81,
         "alignment": "ALIGNED",
-        "verdict_title": "SWING PRINCIPAL · CON PRECAUCIÓN",
+        "verdict_title": "REENTRADA SWING · CON PRECAUCIÓN",
         "verdict_sub": "OB estructural · SWING COMPRA OB (4H)"
       },
       "setup": {
@@ -17448,13 +17449,15 @@
       "pip": 0.0001,
       "price": 0.55513,
       "chg_day": 0.77,
-      "win_prob": 93,
+      "win_prob": 87,
       "has_valid_ob": true,
       "zone_kind": "OB",
-      "entry_mode": "SWING_PRINCIPAL",
+      "entry_mode": "REENTRADA_SWING_PRECAUCION",
       "near_entry": true,
-      "is_safe_entry": true,
-      "caution_reasons": [],
+      "is_safe_entry": false,
+      "caution_reasons": [
+        "Reentrada Swing: validar BE en operacion base"
+      ],
       "economy_short": "AUD NEUTRAL / CHF FUERTE",
       "macro_dir": "BAJA",
       "chart_bias": "BAJA",
@@ -17477,11 +17480,11 @@
       "ob_high": 0.5586,
       "ob_low": 0.55509,
       "created_at": 1795824543,
-      "macro_reason": "AUD NEUTRAL / CHF FUERTE | Zona: OB estructural | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.55392. Estado: SWING PRINCIPAL.",
+      "macro_reason": "AUD NEUTRAL / CHF FUERTE | Zona: OB estructural | 1S:BAJA, 1D:BAJA, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.55392. Estado: REENTRADA SWING · CON PRECAUCIÓN.",
       "confluence": {
-        "score": 93,
+        "score": 87,
         "alignment": "ALIGNED",
-        "verdict_title": "SWING PRINCIPAL",
+        "verdict_title": "REENTRADA SWING · CON PRECAUCIÓN",
         "verdict_sub": "OB estructural · SWING VENTA OB (4H)"
       },
       "setup": {
@@ -20144,7 +20147,7 @@
       },
       "ob_high": 1.4254,
       "ob_low": 1.4242,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "USD DEBIL / CAD FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.42339. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -21478,7 +21481,7 @@
       },
       "ob_high": 0.8363,
       "ob_low": 0.8351,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "USD DEBIL / CHF FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.83374. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -22812,7 +22815,7 @@
       },
       "ob_high": 174.539,
       "ob_low": 174.419,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "EUR FUERTE / JPY DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 174.669. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -24116,8 +24119,8 @@
       "quote": "USD",
       "decimals": 2,
       "pip": 1.0,
-      "price": 59925.91,
-      "chg_day": -0.94,
+      "price": 60061.38,
+      "chg_day": -0.72,
       "win_prob": 77,
       "has_valid_ob": true,
       "zone_kind": "OB",
@@ -24136,7 +24139,7 @@
         "h1": "NEUTRAL"
       },
       "volatility": {
-        "atr_units": 3141.4,
+        "atr_units": 3143.4,
         "range20_units": 20947.1
       },
       "liquidity": {
@@ -24487,7 +24490,7 @@
             "o": 61161.91,
             "h": 64478.36,
             "l": 57241.84,
-            "c": 59925.91
+            "c": 60061.38
           }
         ],
         "1d": [
@@ -24802,19 +24805,12 @@
           {
             "t": 1795824000,
             "o": 59866.07,
-            "h": 59929.52,
-            "l": 59866.07,
-            "c": 59925.91
+            "h": 60140.58,
+            "l": 59838.65,
+            "c": 60061.38
           }
         ],
         "4h": [
-          {
-            "t": 1795176000,
-            "o": 61730.64,
-            "h": 62106.69,
-            "l": 59329.57,
-            "c": 59382.32
-          },
           {
             "t": 1795190400,
             "o": 59391.15,
@@ -25114,52 +25110,24 @@
             "o": 60038.35,
             "h": 60464.37,
             "l": 59459.05,
-            "c": 59873.61
+            "c": 59834.1
+          },
+          {
+            "t": 1795809600,
+            "o": 59834.51,
+            "h": 59860.89,
+            "l": 59555.16,
+            "c": 59858.49
           },
           {
             "t": 1795824000,
             "o": 59859.28,
-            "h": 59937.59,
-            "l": 59858.15,
-            "c": 59925.91
+            "h": 60140.86,
+            "l": 59770.68,
+            "c": 60061.38
           }
         ],
         "1h": [
-          {
-            "t": 1795651200,
-            "o": 60328.16,
-            "h": 61476.37,
-            "l": 60297.06,
-            "c": 60423.53
-          },
-          {
-            "t": 1795654800,
-            "o": 60429.07,
-            "h": 60888.75,
-            "l": 60379.79,
-            "c": 60770.42
-          },
-          {
-            "t": 1795658400,
-            "o": 60783.96,
-            "h": 60998.99,
-            "l": 60535.87,
-            "c": 60622.91
-          },
-          {
-            "t": 1795662000,
-            "o": 60622.92,
-            "h": 60858.25,
-            "l": 60550.01,
-            "c": 60690.79
-          },
-          {
-            "t": 1795665600,
-            "o": 60691.65,
-            "h": 61018.95,
-            "l": 60691.65,
-            "c": 60890.77
-          },
           {
             "t": 1795669200,
             "o": 60881.88,
@@ -25429,16 +25397,51 @@
           {
             "t": 1795806000,
             "o": 59843.27,
-            "h": 59924.86,
+            "h": 59979.14,
             "l": 59756.96,
-            "c": 59873.61
+            "c": 59834.1
+          },
+          {
+            "t": 1795809600,
+            "o": 59834.51,
+            "h": 59834.51,
+            "l": 59636.36,
+            "c": 59733.1
+          },
+          {
+            "t": 1795813200,
+            "o": 59734.2,
+            "h": 59806.48,
+            "l": 59698.32,
+            "c": 59721.92
+          },
+          {
+            "t": 1795816800,
+            "o": 59713.6,
+            "h": 59792.63,
+            "l": 59555.16,
+            "c": 59674.85
+          },
+          {
+            "t": 1795820400,
+            "o": 59694.01,
+            "h": 59860.89,
+            "l": 59694.01,
+            "c": 59858.49
           },
           {
             "t": 1795824000,
             "o": 59859.28,
-            "h": 59937.59,
-            "l": 59858.15,
-            "c": 59925.91
+            "h": 59952.15,
+            "l": 59833.8,
+            "c": 59833.8
+          },
+          {
+            "t": 1795827600,
+            "o": 59826.92,
+            "h": 60140.86,
+            "l": 59770.68,
+            "c": 60061.38
           }
         ]
       }
@@ -25480,7 +25483,7 @@
       },
       "ob_high": 50813.39,
       "ob_low": 50801.39,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "US30 NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 49414.53. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -26814,7 +26817,7 @@
       },
       "ob_high": 24155.09,
       "ob_low": 24143.09,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "USTEC NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 23724.53. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -28148,7 +28151,7 @@
       },
       "ob_high": 7310.1,
       "ob_low": 7298.1,
-      "created_at": 1795824543,
+      "created_at": 1795829303,
       "macro_reason": "US500 NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 7149.15. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
