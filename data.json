@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-28 02:33 UTC",
+  "last_updated": "2026-11-28 03:31 UTC",
   "brief": {
     "dxy": 104.01,
     "us10y": 4.94,
@@ -31,6 +31,13 @@
   "calendar": [],
   "news": [
     {
+      "title": "The Federal Reserve sends a troubling signal to S&P 500 investors",
+      "link": "https://www.thestreet.com/investing/stocks/the-federal-reserve-sends-a-troubling-signal-to-sp-500-investors?.tsrc=rss",
+      "source": "Yahoo Finance",
+      "time": "Sat, 28 Nov 2026",
+      "plain_es": "Titular institucional de seguimiento macro en vivo."
+    },
+    {
       "title": "i-80 Gold (TSX:IAU) Moved Today, What Is Behind The Attention?",
       "link": "https://finance.yahoo.com/markets/stocks/articles/80-gold-tsx-iau-moved-001252144.html?.tsrc=rss",
       "source": "Yahoo Finance",
@@ -61,13 +68,6 @@
     {
       "title": "Update: Equities Climb as Dow Posts Biggest Weekly Jump Since October 2022",
       "link": "https://finance.yahoo.com/markets/stocks/articles/equities-climb-dow-posts-biggest-192733253.html?.tsrc=rss",
-      "source": "Yahoo Finance",
-      "time": "Fri, 27 Nov 2026",
-      "plain_es": "Titular institucional de seguimiento macro en vivo."
-    },
-    {
-      "title": "How major US stock indexes fared Friday 11/27/2026",
-      "link": "https://finance.yahoo.com/markets/world-indices/articles/major-us-stock-indexes-fared-184551517.html?.tsrc=rss",
       "source": "Yahoo Finance",
       "time": "Fri, 27 Nov 2026",
       "plain_es": "Titular institucional de seguimiento macro en vivo."
@@ -126,7 +126,7 @@
       },
       "ob_high": 3675.2,
       "ob_low": 3674.0,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "XAU NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 3564.85. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -1460,7 +1460,7 @@
       },
       "ob_high": 1.09445,
       "ob_low": 1.09325,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "EUR FUERTE / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:BAJA, 1H:NEUTRAL | EQ-50%: 1.09625. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -6796,7 +6796,7 @@
       },
       "ob_high": 1.97077,
       "ob_low": 1.96957,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "GBP NEUTRAL / AUD NEUTRAL | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:BAJA, 1H:NEUTRAL | EQ-50%: 1.97193. ESPERAR: Doble divisa NEUTRAL.",
       "confluence": {
         "score": 60,
@@ -8130,7 +8130,7 @@
       },
       "ob_high": 2.39831,
       "ob_low": 2.39711,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "GBP NEUTRAL / NZD DEBIL | Zona: Sin zona | 1S:NEUTRAL, 1D:SUBE, 4H:SUBE, 1H:SUBE | EQ-50%: 2.39129. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -14806,7 +14806,7 @@
       },
       "ob_high": 1.21733,
       "ob_low": 1.21613,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "AUD NEUTRAL / NZD DEBIL | Zona: Sin zona | 1S:NEUTRAL, 1D:NEUTRAL, 4H:SUBE, 1H:SUBE | EQ-50%: 1.21253. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -20147,7 +20147,7 @@
       },
       "ob_high": 1.4254,
       "ob_low": 1.4242,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "USD DEBIL / CAD FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 1.42339. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -21481,7 +21481,7 @@
       },
       "ob_high": 0.8363,
       "ob_low": 0.8351,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "USD DEBIL / CHF FUERTE | Zona: Sin zona | 1S:SUBE, 1D:NEUTRAL, 4H:NEUTRAL, 1H:NEUTRAL | EQ-50%: 0.83374. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -22815,7 +22815,7 @@
       },
       "ob_high": 174.539,
       "ob_low": 174.419,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "EUR FUERTE / JPY DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:BAJA | EQ-50%: 174.669. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -24119,8 +24119,8 @@
       "quote": "USD",
       "decimals": 2,
       "pip": 1.0,
-      "price": 60019.12,
-      "chg_day": -0.79,
+      "price": 59867.4,
+      "chg_day": -1.04,
       "win_prob": 60,
       "has_valid_ob": false,
       "zone_kind": "NONE",
@@ -24147,9 +24147,9 @@
         "ssl": 58723.88,
         "eq50": 60411.93
       },
-      "ob_high": 60025.12,
-      "ob_low": 60013.12,
-      "created_at": 1795833229,
+      "ob_high": 59873.4,
+      "ob_low": 59861.4,
+      "created_at": 1795836713,
       "macro_reason": "BTC NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:BAJA, 1H:NEUTRAL | EQ-50%: 60411.93. ESPERAR: Choque con 1D/4H o Macro.",
       "confluence": {
         "score": 60,
@@ -24160,15 +24160,15 @@
       "setup": {
         "direction": "SELL",
         "signal_tag": "SIN ZONA SWING - ESPERAR",
-        "entry": 60019.12,
-        "sl": 62376.65,
-        "be": 57661.59,
-        "tp1": 54125.3,
-        "tp2": 49410.24
+        "entry": 59867.4,
+        "sl": 62224.93,
+        "be": 57509.87,
+        "tp1": 53973.58,
+        "tp2": 49258.52
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada Swing en 60019.12 con SL estructural en 62376.65. 2) Al tocar 57661.59 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 54125.3) y buscar Swing TP (1:4.5 en 49410.24)."
+        "plan": "1) Entrada Swing en 59867.4 con SL estructural en 62224.93. 2) Al tocar 57509.87 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 53973.58) y buscar Swing TP (1:4.5 en 49258.52)."
       },
       "news_warning": {
         "active": false,
@@ -24490,7 +24490,7 @@
             "o": 61161.91,
             "h": 64478.36,
             "l": 57241.84,
-            "c": 60019.12
+            "c": 59867.4
           }
         ],
         "1d": [
@@ -24807,7 +24807,7 @@
             "o": 59866.07,
             "h": 60164.19,
             "l": 59838.65,
-            "c": 60019.12
+            "c": 59867.4
           }
         ],
         "4h": [
@@ -25124,17 +25124,10 @@
             "o": 59859.28,
             "h": 60197.01,
             "l": 59770.68,
-            "c": 60019.12
+            "c": 59867.4
           }
         ],
         "1h": [
-          {
-            "t": 1795672800,
-            "o": 60731.89,
-            "h": 60731.89,
-            "l": 60301.12,
-            "c": 60480.17
-          },
           {
             "t": 1795676400,
             "o": 60462.98,
@@ -25440,8 +25433,15 @@
             "t": 1795831200,
             "o": 60119.78,
             "h": 60197.01,
-            "l": 60006.14,
-            "c": 60019.12
+            "l": 59848.8,
+            "c": 59891.3
+          },
+          {
+            "t": 1795834800,
+            "o": 59887.49,
+            "h": 59950.74,
+            "l": 59821.64,
+            "c": 59867.4
           }
         ]
       }
@@ -25453,8 +25453,8 @@
       "quote": "USD",
       "decimals": 2,
       "pip": 1.0,
-      "price": 50807.39,
-      "chg_day": 1.24,
+      "price": 50764.52,
+      "chg_day": 1.16,
       "win_prob": 60,
       "has_valid_ob": false,
       "zone_kind": "NONE",
@@ -25477,14 +25477,14 @@
         "range20_units": 5711.8
       },
       "liquidity": {
-        "bsl": 50830.19,
+        "bsl": 50973.52,
         "ssl": 47998.86,
-        "eq50": 49414.53
+        "eq50": 49486.19
       },
-      "ob_high": 50813.39,
-      "ob_low": 50801.39,
-      "created_at": 1795833229,
-      "macro_reason": "US30 NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 49414.53. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
+      "ob_high": 50770.52,
+      "ob_low": 50758.52,
+      "created_at": 1795836713,
+      "macro_reason": "US30 NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 49486.19. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
         "alignment": "ALIGNED",
@@ -25494,15 +25494,15 @@
       "setup": {
         "direction": "BUY",
         "signal_tag": "SIN ZONA SWING - ESPERAR",
-        "entry": 50807.39,
-        "sl": 50095.91,
-        "be": 51518.87,
-        "tp1": 52586.09,
-        "tp2": 54009.05
+        "entry": 50764.52,
+        "sl": 50053.04,
+        "be": 51476.0,
+        "tp1": 52543.22,
+        "tp2": 53966.18
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada Swing en 50807.39 con SL estructural en 50095.91. 2) Al tocar 51518.87 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 52586.09) y buscar Swing TP (1:4.5 en 54009.05)."
+        "plan": "1) Entrada Swing en 50764.52 con SL estructural en 50053.04. 2) Al tocar 51476.0 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 52543.22) y buscar Swing TP (1:4.5 en 53966.18)."
       },
       "news_warning": {
         "active": false,
@@ -26457,11 +26457,18 @@
             "t": 1795795200,
             "o": 50677.35,
             "h": 50830.19,
-            "l": 50647.21,
-            "c": 50807.39
+            "l": 50677.35,
+            "c": 50764.52
           }
         ],
         "1h": [
+          {
+            "t": 1795012200,
+            "o": 50627.36,
+            "h": 50637.7,
+            "l": 50210.49,
+            "c": 50311.51
+          },
           {
             "t": 1795015800,
             "o": 50311.53,
@@ -26769,13 +26776,6 @@
             "h": 50830.19,
             "l": 50677.35,
             "c": 50764.52
-          },
-          {
-            "t": 1795800600,
-            "o": 50766.41,
-            "h": 50807.39,
-            "l": 50647.21,
-            "c": 50807.39
           }
         ]
       }
@@ -26817,7 +26817,7 @@
       },
       "ob_high": 24043.92,
       "ob_low": 24031.92,
-      "created_at": 1795833229,
+      "created_at": 1795836713,
       "macro_reason": "USTEC NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 23724.53. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -28121,8 +28121,8 @@
       "quote": "USD",
       "decimals": 2,
       "pip": 1.0,
-      "price": 7304.1,
-      "chg_day": 1.69,
+      "price": 7284.08,
+      "chg_day": 1.41,
       "win_prob": 60,
       "has_valid_ob": false,
       "zone_kind": "NONE",
@@ -28149,9 +28149,9 @@
         "ssl": 6882.66,
         "eq50": 7149.15
       },
-      "ob_high": 7310.1,
-      "ob_low": 7298.1,
-      "created_at": 1795833229,
+      "ob_high": 7290.08,
+      "ob_low": 7278.08,
+      "created_at": 1795836713,
       "macro_reason": "US500 NEUTRAL / USD DEBIL | Zona: Sin zona | 1S:BAJA, 1D:NEUTRAL, 4H:NEUTRAL, 1H:SUBE | EQ-50%: 7149.15. ESPERAR: Sin bloque valido en zona EQ-50% con margen de SL.",
       "confluence": {
         "score": 60,
@@ -28162,15 +28162,15 @@
       "setup": {
         "direction": "BUY",
         "signal_tag": "SIN ZONA SWING - ESPERAR",
-        "entry": 7304.1,
-        "sl": 7175.74,
-        "be": 7432.46,
-        "tp1": 7625.0,
-        "tp2": 7881.72
+        "entry": 7284.08,
+        "sl": 7155.72,
+        "be": 7412.44,
+        "tp1": 7604.98,
+        "tp2": 7861.7
       },
       "swing_potential": {
         "active": false,
-        "plan": "1) Entrada Swing en 7304.1 con SL estructural en 7175.74. 2) Al tocar 7432.46 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 7625.0) y buscar Swing TP (1:4.5 en 7881.72)."
+        "plan": "1) Entrada Swing en 7284.08 con SL estructural en 7155.72. 2) Al tocar 7412.44 (+1R), mover SL a Break Even. 3) Asegurar parciales en TP1 (1:2.5 en 7604.98) y buscar Swing TP (1:4.5 en 7861.7)."
       },
       "news_warning": {
         "active": false,
@@ -29124,12 +29124,19 @@
           {
             "t": 1795795200,
             "o": 7269.05,
-            "h": 7304.1,
+            "h": 7295.35,
             "l": 7268.44,
-            "c": 7304.1
+            "c": 7284.08
           }
         ],
         "1h": [
+          {
+            "t": 1795012200,
+            "o": 7355.69,
+            "h": 7367.68,
+            "l": 7303.22,
+            "c": 7335.67
+          },
           {
             "t": 1795015800,
             "o": 7336.17,
@@ -29437,13 +29444,6 @@
             "h": 7295.35,
             "l": 7268.44,
             "c": 7284.08
-          },
-          {
-            "t": 1795800600,
-            "o": 7284.39,
-            "h": 7304.1,
-            "l": 7269.55,
-            "c": 7304.1
           }
         ]
       }
